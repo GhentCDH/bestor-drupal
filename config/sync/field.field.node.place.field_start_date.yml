@@ -1,0 +1,21 @@
+uuid: 5814f307-a8af-4210-83f5-613a888601bd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_date
+    - node.type.place
+  module:
+    - datetime
+id: node.place.field_start_date
+field_name: field_start_date
+entity_type: node
+bundle: place
+label: 'Start date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

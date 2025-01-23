@@ -1,0 +1,43 @@
+uuid: 9e1e436f-21bc-482e-b762-1f15f4d5c086
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_media
+    - media.type.audio
+    - media.type.document
+    - media.type.iframe
+    - media.type.image
+    - media.type.remote_video
+    - media.type.slideshow
+    - media.type.soundcloud
+    - media.type.video
+    - paragraphs.paragraphs_type.media
+id: paragraph.media.field_media
+field_name: field_media
+entity_type: paragraph
+bundle: media
+label: media
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      audio: audio
+      document: document
+      image: image
+      remote_video: remote_video
+      slideshow: slideshow
+      soundcloud: soundcloud
+      video: video
+      iframe: iframe
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: audio
+field_type: entity_reference

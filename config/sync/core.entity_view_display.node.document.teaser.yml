@@ -1,0 +1,33 @@
+uuid: 22086fe5-2f66-48c0-b34a-8a2beeef6adb
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.document.field_alternative_name
+    - field.field.node.document.field_description
+    - field.field.node.document.field_discipline
+    - field.field.node.document.field_end_date
+    - field.field.node.document.field_specialisation
+    - field.field.node.document.field_start_date
+    - node.type.document
+  module:
+    - user
+id: node.document.teaser
+targetEntityType: node
+bundle: document
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_alternative_name: true
+  field_description: true
+  field_discipline: true
+  field_end_date: true
+  field_specialisation: true
+  field_start_date: true
+  langcode: true

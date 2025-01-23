@@ -1,0 +1,90 @@
+services:
+  bestor-drupal:
+    container_name: bestor-drupal
+    build: 
+      path: .
+    ports:
+      - 8091:80
+    env_file:
+      - dev.env
+    depends_on:
+      bestor-drupal-db:
+          condition: service_healthy
+      bestor-memcache:
+          condition: service_started
+  
+  bestor-drupal-prd:
+    container_name: bestor-drupal-prd
+    image: drupal:10.4.1-php8.3-apache-bullseye
+    ports:
+      - 8090:80
+    volumes:
+      - ./web/modules:/opt/drupal/web/modules
+      - ./web/sites:/opt/drupal/web/sites
+      - ./web/themes:/opt/drupal/web/themes
+      - ./web/profiles:/opt/drupal/web/profiles
+      - ./config:/opt/drupal/config
+      - ./composer.json:/opt/drupal/composer.json
+      - ./composer.lock:/opt/drupal/composer.lock
+      - ./startup_script.sh:/opt/drupal/startup_script.sh
+      - ./docker_data/drupal/vendor:/opt/drupal/vendor
+    entrypoint: /opt/drupal/startup_script.sh
+    env_file:
+      - dev.env
+    depends_on:
+      bestor-drupal-db:
+          condition: service_healthy
+      bestor-memcache:
+          condition: service_started
+
+  bestor-drupal-db:
+    container_name: bestor-drupal-db
+    image: mariadb:10.11.10
+    ports:
+      - 3307:3306
+    env_file:
+      - dev.env
+    volumes:
+      - ./docker_data/db/data:/var/lib/mysql
+      - ./docker_data/db/initdb:/docker-entrypoint-initdb.d
+      - ./docker_data/db/my.cnf:/etc/mysql/my.cnf
+    restart: always
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  bestor-memcache:
+    container_name: bestor-memcache
+    image: memcached:1.6.32-bookworm
+
+
+## uncomment the following block to use elasticsearch
+
+  # bestor-elastic:
+  #   image: elasticsearch:8.15.3
+  #   environment:
+  #     discovery.type: single-node
+  #     network.host: 0.0.0.0
+  #     http.port: 9200
+  #     transport.host: localhost
+  #     cluster.name: docker-cluster
+  #     bootstrap.memory_lock: "true"
+  #     xpack.security.enabled: "false"
+  #     cluster.routing.allocation.disk.threshold_enabled: "false"
+  #     ES_JAVA_OPTS: -Xms2g -Xmx2g
+  #     TAKE_FILE_OWNERSHIP: 1
+  #   env_file:
+  #     - dev.env
+  #   volumes:
+  #     - ./docker_data/elastic/data:/usr/share/elasticsearch/data
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #     nofile:
+  #       soft: 65536
+  #       hard: 65536
+

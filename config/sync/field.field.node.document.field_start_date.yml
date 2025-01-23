@@ -1,0 +1,21 @@
+uuid: d3508fda-85b4-4199-a528-b2993ec12f6f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_date
+    - node.type.document
+  module:
+    - datetime
+id: node.document.field_start_date
+field_name: field_start_date
+entity_type: node
+bundle: document
+label: 'Date of establishment'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,16 @@
+uuid: 11053086-d74a-4d81-ac58-5d1bb449be19
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.specialisation
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.specialisation
+target_entity_type_id: taxonomy_term
+target_bundle: specialisation
+default_langcode: current_interface
+language_alterable: true

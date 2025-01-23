@@ -1,0 +1,24 @@
+uuid: c58ead02-f4c8-4d6e-b1a5-063db208a3a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_table
+    - filter.format.full_html
+    - paragraphs.paragraphs_type.table
+  module:
+    - text
+id: paragraph.table.field_table
+field_name: field_table
+entity_type: paragraph
+bundle: table
+label: table
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - full_html
+field_type: text_long

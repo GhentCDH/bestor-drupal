@@ -1,0 +1,41 @@
+uuid: e2ab2c8d-a4cc-43f8-9a99-872c8ab41a6f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.text_media.field_formatted_text
+    - field.field.paragraph.text_media.field_media
+    - field.field.paragraph.text_media.field_paragraph_layout
+    - paragraphs.paragraphs_type.text_media
+  module:
+    - text
+id: paragraph.text_media.default
+targetEntityType: paragraph
+bundle: text_media
+mode: default
+content:
+  field_formatted_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_media:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_paragraph_layout:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden: {  }

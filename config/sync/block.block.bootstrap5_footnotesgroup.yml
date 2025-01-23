@@ -1,0 +1,23 @@
+uuid: 8e2d9914-be78-432a-944d-5029a236d121
+langcode: nl
+status: true
+dependencies:
+  module:
+    - footnotes
+  theme:
+    - bootstrap5
+id: bootstrap5_footnotesgroup
+theme: bootstrap5
+region: content
+weight: 0
+provider: null
+plugin: footnotes_group
+settings:
+  id: footnotes_group
+  label: 'Footnotes Group'
+  label_display: visible
+  provider: footnotes
+  context_mapping:
+    entity: '@node.node_route_context:node'
+  group_via_js: false
+visibility: {  }

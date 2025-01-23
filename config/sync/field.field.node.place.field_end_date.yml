@@ -1,0 +1,21 @@
+uuid: f53906a3-3cc0-4ce6-853f-cc142e491502
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_end_date
+    - node.type.place
+  module:
+    - datetime
+id: node.place.field_end_date
+field_name: field_end_date
+entity_type: node
+bundle: place
+label: 'End date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

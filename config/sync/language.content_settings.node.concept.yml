@@ -1,0 +1,16 @@
+uuid: 473576fe-95c6-48d9-af15-bd452b126b5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.concept
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: node.concept
+target_entity_type_id: node
+target_bundle: concept
+default_langcode: current_interface
+language_alterable: true

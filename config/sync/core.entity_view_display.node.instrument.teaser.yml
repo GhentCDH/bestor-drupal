@@ -1,0 +1,43 @@
+uuid: 38346fee-d287-4ca0-a280-a7b2d4dbbe6e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.instrument.body
+    - field.field.node.instrument.field_alternative_name
+    - field.field.node.instrument.field_description
+    - field.field.node.instrument.field_discipline
+    - field.field.node.instrument.field_end_date
+    - field.field.node.instrument.field_specialisation
+    - field.field.node.instrument.field_start_date
+    - node.type.instrument
+  module:
+    - text
+    - user
+id: node.instrument.teaser
+targetEntityType: node
+bundle: instrument
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_alternative_name: true
+  field_description: true
+  field_discipline: true
+  field_end_date: true
+  field_specialisation: true
+  field_start_date: true
+  langcode: true

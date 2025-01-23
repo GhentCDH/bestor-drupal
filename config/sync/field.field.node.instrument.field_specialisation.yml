@@ -1,0 +1,29 @@
+uuid: e0539d80-6a4f-43e0-8772-4d26361e7d60
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_specialisation
+    - node.type.instrument
+    - taxonomy.vocabulary.specialisation
+id: node.instrument.field_specialisation
+field_name: field_specialisation
+entity_type: node
+bundle: instrument
+label: Specialisation
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      specialisation: specialisation
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

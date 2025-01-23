@@ -1,0 +1,21 @@
+uuid: b4e49740-11de-4d95-b278-b5528be33bd6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_date
+    - node.type.institution
+  module:
+    - datetime
+id: node.institution.field_start_date
+field_name: field_start_date
+entity_type: node
+bundle: institution
+label: 'Date of establishment'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

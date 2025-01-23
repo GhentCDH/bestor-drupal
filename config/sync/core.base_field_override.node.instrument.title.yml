@@ -1,0 +1,18 @@
+uuid: 48d772df-e11c-421a-8fab-06893aa0fba5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.instrument
+id: node.instrument.title
+field_name: title
+entity_type: node
+bundle: instrument
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

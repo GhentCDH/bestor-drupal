@@ -1,0 +1,38 @@
+uuid: 713d40ec-3fe0-4494-a880-df21a944acac
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.iframe.field_media_inline_frame
+    - media.type.iframe
+  module:
+    - iframe
+id: media.iframe.default
+targetEntityType: media
+bundle: iframe
+mode: default
+content:
+  field_media_inline_frame:
+    type: iframe_default
+    label: visually_hidden
+    settings:
+      url: ''
+      title: ''
+      headerlevel: '3'
+      class: ''
+      frameborder: '0'
+      scrolling: ''
+      transparency: '0'
+      allowfullscreen: '0'
+      tokensupport: '0'
+      width: ''
+      height: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  thumbnail: true
+  uid: true

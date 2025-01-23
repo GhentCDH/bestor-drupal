@@ -1,0 +1,11 @@
+uuid: 47ffb829-a5c1-46c2-afd7-a47e1b902238
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.soundcloud
+id: media.soundcloud
+target_entity_type_id: media
+target_bundle: soundcloud
+default_langcode: site_default
+language_alterable: false

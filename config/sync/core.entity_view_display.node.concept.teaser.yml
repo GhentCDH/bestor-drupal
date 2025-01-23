@@ -1,0 +1,33 @@
+uuid: b0593f2e-33e9-4183-973c-2e59a869fb57
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.concept.field_alternative_name
+    - field.field.node.concept.field_description
+    - field.field.node.concept.field_discipline
+    - field.field.node.concept.field_end_date
+    - field.field.node.concept.field_specialisation
+    - field.field.node.concept.field_start_date
+    - node.type.concept
+  module:
+    - user
+id: node.concept.teaser
+targetEntityType: node
+bundle: concept
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_alternative_name: true
+  field_description: true
+  field_discipline: true
+  field_end_date: true
+  field_specialisation: true
+  field_start_date: true
+  langcode: true

@@ -1,0 +1,33 @@
+uuid: e76775a5-a44c-4fa5-b907-ec44f6f6a438
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.iframe.field_media_inline_frame
+    - image.style.medium
+    - media.type.iframe
+  module:
+    - image
+id: media.iframe.media_library
+targetEntityType: media
+bundle: iframe
+mode: media_library
+content:
+  thumbnail:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: medium
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_media_inline_frame: true
+  langcode: true
+  name: true
+  uid: true

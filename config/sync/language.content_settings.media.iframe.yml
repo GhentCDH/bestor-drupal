@@ -1,0 +1,11 @@
+uuid: 625012f0-ba29-495f-b820-77f5f084fbe9
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.iframe
+id: media.iframe
+target_entity_type_id: media
+target_bundle: iframe
+default_langcode: site_default
+language_alterable: false

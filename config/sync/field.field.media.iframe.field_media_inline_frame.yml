@@ -1,0 +1,31 @@
+uuid: 28c02a04-a4df-44cd-9fe1-4cbca07c8bb5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_media_inline_frame
+    - media.type.iframe
+  module:
+    - iframe
+id: media.iframe.field_media_inline_frame
+field_name: field_media_inline_frame
+entity_type: media
+bundle: iframe
+label: 'Inline Frame URL'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: null
+  headerlevel: null
+  class: null
+  frameborder: null
+  scrolling: null
+  transparency: null
+  allowfullscreen: null
+  tokensupport: null
+  width: null
+  height: null
+field_type: iframe
