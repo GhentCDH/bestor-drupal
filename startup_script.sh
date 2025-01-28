@@ -14,12 +14,23 @@ cd /opt/drupal
 # run composer install
 composer install
 
-# run drush dbup
-./vendor/drush/drush/drush updb -y
-./vendor/drush/drush/drush cr -y
-
 # link drush
 ln -s /opt/drupal/vendor/drush/drush/drush /usr/local/bin/drush
+
+# run drush
+
+
+drush -y updatedb
+drush -y cache:rebuild
+
+
+if [ "$DRUPAL_RUN_CONFIG_IMPORT" = true ]; then
+    drush -y config:import
+    drush -y cache:rebuild
+fi
+
+# run deploy hook
+drush deploy:hook
 
 # start apache in the foreground
 apache2-foreground

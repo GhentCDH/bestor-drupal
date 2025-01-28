@@ -13,9 +13,11 @@ dependencies:
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_start_date
     - field.field.node.person.field_typology
+    - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
     - datetime
+    - link
     - media_library
     - paragraphs
     - path
@@ -126,6 +128,14 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_wikidata_entry:
+    type: link_default
+    weight: 136
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   langcode:
     type: language_select

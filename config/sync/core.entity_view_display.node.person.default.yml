@@ -13,10 +13,12 @@ dependencies:
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_start_date
     - field.field.node.person.field_typology
+    - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
     - datetime
     - entity_reference_revisions
+    - link
     - user
 id: node.person.default
 targetEntityType: node
@@ -30,7 +32,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 10
+    weight: 11
     region: content
   field_discipline:
     type: entity_reference_label
@@ -106,6 +108,18 @@ content:
       link: true
     third_party_settings: {  }
     weight: 9
+    region: content
+  field_wikidata_entry:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 10
     region: content
   links:
     settings: {  }

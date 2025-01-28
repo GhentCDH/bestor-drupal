@@ -898,7 +898,7 @@ $settings['memcache']['servers'] = [
   getenv('MEMCACHE_HOST') => 'default',
 ];
 
-$settings['cache']['default'] = 'cache.backend.memcache'; 
+$settings['cache']['default'] = 'cache.backend.memory'; 
 $settings['config_exclude_modules'] = ['devel','devel_generate'];
 
 $config['system.site']['name'] = getenv('DRUPAL_SITE_NAME');

@@ -77,9 +77,6 @@ docker_data/drupal/vendor/*
 docker_data/elastic/data/*
 !docker_data/elastic/data/.gitkeep
 
-docker_data/db/initdb/*
-!docker_data/db/initdbt/.gitkeep
-
 .DS_Store
 Thumbs.db
 web/modules/custom/bestor_migration/source/output.json

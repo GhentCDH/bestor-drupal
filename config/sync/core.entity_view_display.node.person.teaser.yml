@@ -14,6 +14,7 @@ dependencies:
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_start_date
     - field.field.node.person.field_typology
+    - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
     - user
@@ -38,4 +39,6 @@ hidden:
   field_specialisation: true
   field_start_date: true
   field_typology: true
+  field_wikidata_entry: true
+  footnotes_group: true
   langcode: true
