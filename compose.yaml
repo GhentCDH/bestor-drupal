@@ -11,8 +11,6 @@ services:
     depends_on:
       bestor-drupal-db:
           condition: service_healthy
-      bestor-memcache:
-          condition: service_started
     volumes:
       - ./web/modules:/opt/drupal/web/modules
       - ./web/sites:/opt/drupal/web/sites
@@ -23,7 +21,19 @@ services:
       - ./composer.lock:/opt/drupal/composer.lock
       - ./startup_script.sh:/opt/drupal/startup_script.sh
       - ./docker_data/drupal/vendor:/opt/drupal/vendor
-      
+
+  bestor-drupal-prd:
+    container_name: bestor-drupal-prd
+    build: 
+      context: .
+      target: prd
+    ports:
+      - 8097:80
+    env_file:
+      - dev.env
+    depends_on:
+      bestor-drupal-db:
+          condition: service_healthy
 
   bestor-drupal-db:
     container_name: bestor-drupal-db
