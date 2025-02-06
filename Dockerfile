@@ -1,4 +1,7 @@
-FROM  drupal:10.4.1-php8.3-apache-bullseye as base
+FROM  drupal:10.4.1-php8.3-apache-bullseye AS base
+
+# add a basic editor
+RUN apt-get update  && apt-get install -y nano micro
 
 ## Install memcache
 RUN apt-get update  && apt-get install -y curl
@@ -15,7 +18,7 @@ CMD ["/opt/drupal/startup_script.sh"]
 # run composer install
 WORKDIR /opt/drupal
 
-FROM base as prd
+FROM base AS prd
 
 # Copy local Drupal files to the container
 COPY web/sites                    /opt/drupal/web/sites
@@ -30,7 +33,7 @@ COPY docker_data/drupal/vendor    /opt/drupal/vendor
 RUN composer install
 
 
-FROM base as dev
+FROM base AS dev
 
 ## install xdebug
 #RUN pecl install xdebug
