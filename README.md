@@ -76,15 +76,11 @@ MARIADB_PASSWORD=bestor_db_password
 MARIADB_DATABASE=drupal_bestor_dev
 MARIADB_RANDOM_ROOT_PASSWORD=yes
 
-#memcache config
-MEMCACHE_KEY_PREFIX=bestor_dev_
-MEMCACHE_HOST=bestor-memcache:11211
-
 #drupal config
 DRUPAL_SITE_NAME=Bestor Docker DEV
 
-#elasticsearch config
-ELASTIC_PASSWORD=elastic
+#Run the yaml import script on startup or not
+DRUPAL_RUN_CONFIG_IMPORT=true
 `````
 
 ## Credits
