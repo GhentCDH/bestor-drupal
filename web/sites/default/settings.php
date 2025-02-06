@@ -891,17 +891,26 @@ $databases['default']['default'] = array (
   'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 );
 
+// Configure caching. If the memcache host variable is set, use memcache as the
+// default cache backend. Otherwise, use the memory cache.
 
-$settings['memcache']['key_prefix'] =getenv('MEMCACHE_KEY_PREFIX');
-// Specify the Memcache server(s).
-$settings['memcache']['servers'] = [
-  getenv('MEMCACHE_HOST') => 'default',
-];
 
-$settings['cache']['default'] = 'cache.backend.memory'; 
+if (getenv('MEMCACHE_HOST')) {
+  $settings['cache']['default'] = 'cache.backend.memcache';
+  $settings['memcache']['key_prefix'] = getenv('MEMCACHE_KEY_PREFIX');
+  // Specify the Memcache server(s) with port.
+  $settings['memcache']['servers'] = [
+    getenv('MEMCACHE_HOST') . ':' . (getenv('MEMCACHE_PORT') ?: '11211') => 'default',
+  ];
+} else {
+  $settings['cache']['default'] = 'cache.backend.memory';
+}
+
 $settings['config_exclude_modules'] = ['devel','devel_generate'];
 
 $config['system.site']['name'] = getenv('DRUPAL_SITE_NAME');
+
+## Latest version tag
 
 /**
  * Load local development override configuration, if available.
