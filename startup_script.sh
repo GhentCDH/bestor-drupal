@@ -1,28 +1,22 @@
 #!/bin/sh
 
-if php -m | grep -q 'memcache'; then
-    echo "Memcache extension is installed."
-else
-    echo "Memcache extension is not installed."
-    ## install memcache extension
-    ( curl -sSLf https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o - || echo 'return 1' ) | sh -s  memcache
-    sudo /etc/init.d/apache2 reload
-fi
-
 cd /opt/drupal
 
-# run composer install
-composer install
+# run composer install only if the environment variable is set
+if [ -n "$DRUPAL_RUN_COMPOSER" ]; then
+    composer install
+    # link drush
+    ln -s /opt/drupal/vendor/drush/drush/drush /usr/local/bin/drush
+fi
 
-# link drush
-ln -s /opt/drupal/vendor/drush/drush/drush /usr/local/bin/drush
+
+
+# Standard drupal deploy configuration,
+# See https://www.drush.org/12.x/deploycommand/
 
 # run drush
-
-
 drush -y updatedb
 drush -y cache:rebuild
-
 
 if [ "$DRUPAL_RUN_CONFIG_IMPORT" = true ]; then
     drush -y config:import
