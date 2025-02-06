@@ -9,8 +9,6 @@ if [ -n "$DRUPAL_RUN_COMPOSER" ]; then
     ln -s /opt/drupal/vendor/drush/drush/drush /usr/local/bin/drush
 fi
 
-
-
 # Standard drupal deploy configuration,
 # See https://www.drush.org/12.x/deploycommand/
 
