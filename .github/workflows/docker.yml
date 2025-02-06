@@ -36,4 +36,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=registry,ref=ghentcdh/bestor:buildcache
           cache-to: type=registry,ref=ghentcdh/bestor:buildcache,mode=max
+          target: prd
           
