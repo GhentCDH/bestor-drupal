@@ -1,4 +1,4 @@
-FROM  drupal:10.4.1-php8.3-apache-bookworm AS drupal-base
+FROM  drupal:10.4.1-php8.3-fpm-bookworm AS drupal-base
 
 # add a basic editor
 RUN apt-get update  && apt-get install -y nano micro 
