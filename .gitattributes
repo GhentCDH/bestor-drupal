@@ -1,0 +1,9 @@
+# Ensure shell scripts use LF
+*.sh text eol=lf
+
+# Force Dockerfiles to use LF
+
+Dockerfile text eol=lf
+
+# Force all text files to use LF
+* text=auto eol=lf
