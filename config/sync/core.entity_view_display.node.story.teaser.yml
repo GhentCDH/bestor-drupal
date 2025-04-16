@@ -26,4 +26,5 @@ hidden:
   field_description: true
   field_discipline: true
   field_specialisation: true
+  footnotes_group: true
   langcode: true

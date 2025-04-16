@@ -38,4 +38,5 @@ hidden:
   field_specialisation: true
   field_start_date: true
   field_typology: true
+  footnotes_group: true
   langcode: true

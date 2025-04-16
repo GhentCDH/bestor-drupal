@@ -34,6 +34,8 @@
         "drupal/paragraphs": "^1.18",
         "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
         "drupal/rabbit_hole": "^1.0",
+        "drupal/ruhi": "^10.2",
+        "drupal/thex": "^10.0",
         "drush/drush": "^12.5"
     },
     "conflict": {

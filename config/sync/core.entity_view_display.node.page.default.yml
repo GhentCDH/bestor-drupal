@@ -26,4 +26,5 @@ content:
     weight: 101
     region: content
 hidden:
+  footnotes_group: true
   langcode: true

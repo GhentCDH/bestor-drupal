@@ -30,4 +30,5 @@ hidden:
   field_end_date: true
   field_specialisation: true
   field_start_date: true
+  footnotes_group: true
   langcode: true
