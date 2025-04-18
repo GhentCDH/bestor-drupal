@@ -1,0 +1,259 @@
+<?php
+
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\node\Entity\Node;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Form\SubformState;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Field\Plugin\Field\FieldWidget\MirrorSelectWidget;
+use Drupal\relationship_nodes\Service\RelationshipInfoService;
+use Drupal\relationship_nodes\Form\MirrorRelationshipEntityInlineForm;
+
+global $relationship_node_bundle_prefix, $related_entity_fields, $relationship_type_field, $relationship_taxonomy_prefixes, $mirror_fields;
+$config = \Drupal::config('relationship_nodes.settings');
+$relationship_node_bundle_prefix = $config->get('relationship_node_bundle_prefix');
+$related_entity_fields = $config->get('related_entity_fields');
+$relationship_type_field = $config->get('relationship_type_field');
+$relationship_taxonomy_prefixes = $config->get('relationship_taxonomy_prefixes');
+$mirror_fields = $config->get('mirror_fields');
+
+ 
+function relationship_nodes_entity_bundle_info_alter(&$bundles) {
+  if (isset($bundles['node'])) {  
+    foreach($bundles['node'] as $bundle_id => $bundle){ 
+      $bundles['node'][$bundle_id]['relationship_info_bundle'] = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipNodeInfo($bundle_id);
+    }
+  }
+}
+
+
+function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) {
+  if($entity_type->id() == 'node'){
+
+    $relationships = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipInfoForRelatedItemNodeType($entity_type, $bundle);
+    if($relationships != null){
+      foreach($relationships as $relationship){
+        $new_referencing_relationship_field = BaseFieldDefinition::create('entity_reference')
+          ->setName('computed_relationshipfield__' .$relationship['this_bundle'] .'__' . $relationship['related_bundle'])
+          ->setLabel('Relationships with ' . $relationship['related_bundle'])//
+          ->setDescription(t('This computed field lists all the relationships between ' . $relationship['this_bundle'] . ' and ' . $relationship['related_bundle'] . '.'))   
+          ->setClass(ReferencingRelationshipItemList::class)
+          ->setComputed(TRUE)
+          ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+          ->setTargetEntityTypeId('node')
+          ->setTargetBundle($relationship['relationship_bundle'])
+          ->setDisplayConfigurable('form', TRUE)
+          ->setDisplayConfigurable('view', TRUE)
+          ->setSetting('handler_settings', ['target_bundles' => [$relationship['relationship_bundle'] => $relationship['relationship_bundle']]])
+          ->setSetting('join_field', $relationship['join_fields'])
+          ->setRevisionable(FALSE);
+        
+      $fields['computed_relationshipfield__' .$relationship['this_bundle'] .'__' . $relationship['related_bundle']] =  $new_referencing_relationship_field;
+      }
+    }
+   
+  }
+
+  if ($entity_type->id() === 'taxonomy_term') {
+    $vocabulary_info = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipTaxonomyVocabularyInfo($bundle, $fields);
+    if(isset($vocabulary_info) && isset($vocabulary_info['relationtypevocabulary']) && isset($vocabulary_info['mirrorfieldtype'])){
+      if($vocabulary_info['mirrorfieldtype'] == 'entity_reference_selfreferencing' && isset($fields[$vocabulary_info['mirrorfieldname']])){
+        $fields[$vocabulary_info['mirrorfieldname']]->addConstraint(Relationship_nodesAvailableMirrorTermConstraint::class);
+      }
+    }
+  }
+  return $fields;
+} 
+
+function relationship_nodes_entity_type_build(array &$entity_types) {
+  if (isset($entity_types['node'])) {
+    $entity_types['node']->setHandlerClass('inline_form', MirrorRelationshipEntityInlineForm::class);
+  }
+}
+
+function relationship_nodes_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  global $relationship_node_bundle_prefix, $related_entity_fields;
+  if(strpos($entity->getType(), $relationship_node_bundle_prefix) === 0) {
+    $related_entities = [];
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    foreach($related_entity_fields as $related_entity_field){
+      if($entity->$related_entity_field != null){
+        if($entity->$related_entity_field->target_id != null){
+          $related_entities[] = $node_storage->load($entity->$related_entity_field->target_id)->getTitle() ;
+        }
+      }
+    }
+    $entity->set('title','Relationship ' . implode(' - ', $related_entities));
+  }
+}
+
+
+function relationship_nodes_taxonomy_term_insert($entity) {
+  setMirrorTermLink($entity, 'insert');
+}
+
+
+function relationship_nodes_taxonomy_term_update($entity) {
+  setMirrorTermLink($entity, 'update');
+}
+
+
+function relationship_nodes_taxonomy_term_delete($entity) {
+  setMirrorTermLink($entity, 'delete');
+}
+
+
+function setMirrorTermLink($entity, $hook){
+  $relationship_type_vocabulary_info = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipTaxonomyVocabularyInfo($entity->bundle());
+  if(isset($relationship_type_vocabulary_info['relationtypevocabulary'])){
+    $mirror_reference_field_type = isset($relationship_type_vocabulary_info['mirrorfieldtype']) ? $relationship_type_vocabulary_info['mirrorfieldtype'] : '';
+    if($mirror_reference_field_type == 'entity_reference_selfreferencing'){
+      global $mirror_fields;
+      $mirror_reference_field = $mirror_fields['mirror_reference_field'];
+      $mirror_id = $entity->$mirror_reference_field->target_id;
+      $original_mirror_id = null;
+      $term_id = null;
+      if($hook != 'delete'){
+        $term_id = $entity->id();
+        if ($entity->original){
+          $original_mirror_id = $entity->original->$mirror_reference_field->target_id;
+        }
+      } 
+      if($mirror_id != $original_mirror_id){
+        $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+        if($mirror_id == null){
+          $original_mirror_term = $taxonomy_storage->load($original_mirror_id);
+          if($original_mirror_term){
+            $original_mirror_term->$mirror_reference_field->target_id = null;
+            $original_mirror_term->save();
+          }
+        } else if ($original_mirror_id == null){
+          $mirror_term = $taxonomy_storage->load($mirror_id);
+          $mirror_term->$mirror_reference_field->target_id = $term_id;
+          $mirror_term->save();
+        } else{
+          $original_mirror_term = $taxonomy_storage->load($original_mirror_id);
+          $original_mirror_term->$mirror_reference_field->target_id = null;      
+          $original_mirror_term->save();
+          $mirror_term = $taxonomy_storage->load($mirror_id);
+          $mirror_term->$mirror_reference_field->target_id = $term_id;
+          $mirror_term->save();
+        }
+      }
+    } 
+  }
+}
+
+
+/*
+function relationship_nodes_theme($existing, $type, $theme, $path) {
+  return [
+      'views_view_table__relationship_mirror_self' => [
+        'template' => 'views-view-table--relationship-mirror-self',
+        'base hook' => 'views_view_table',
+      ], 
+      'my_custom_container' => [
+        'template' => 'my-custom-container',
+        'base hook' => 'container',
+    ]
+  ];
+
+}
+
+function relationship_nodes_theme_suggestions_views_view_table($variables) {
+  $view = $variables['view'];
+  if (strpos($view->id(), 'relationship_type_self__') === 0 && $view->build_info['query']->getUnion() != null) {
+    $suggestions[] = 'views_view_table__relationship_mirror_self';
+    return $suggestions;
+  }
+}
+
+function relationship_nodes_preprocess_views_view_fields(&$variables) {
+  $view = $variables['view'];
+  if (strpos($view->id(), 'relationship_type_self__') === 0 && $view->build_info['query']->getUnion() != null){
+    if($view->argument){
+      if($view->argument['nid']){
+        $contextual_filter_nid = $view->argument['nid']->value[0];
+        if ($contextual_filter_nid) {
+          if($variables['row']->_entity->field_related_entity_1->target_id == $contextual_filter_nid){
+            $join_field = 'field_related_entity_1';
+            unset($variables['fields']['form_field_field_related_entity_1']);
+          } else if($variables['row']->_entity->field_related_entity_2->target_id == $contextual_filter_nid){
+            unset($variables['fields']['form_field_field_related_entity_2']);
+          }
+        }
+      }
+    }
+  }
+}
+
+function adjustRelationSubforms(array $form, FormStateInterface $form_state) {
+  global $related_entity_fields, $relationship_type_field;
+  $node = $form_state->getFormObject()->getEntity();
+  foreach($form as $field_name => $form_field){
+    if (strpos($field_name, 'computed_relationshipfield__') === 0 && $node->hasField($field_name)) {
+      $join_fields = $node->getFieldDefinition($field_name)->getSetting('join_field');
+      if(count($join_fields) > 0){
+        foreach($form_field['widget'] as $key => $relationship_entry){
+          if(is_int($key) && isset($relationship_entry['inline_entity_form']['#process'])){
+              foreach($relationship_entry['inline_entity_form']['#process'] as $process){
+                if(gettype($process[0]) == 'object' && $process[0]->getEntityTypeId()!= null && $process[0]->getEntityTypeId() == 'entity_form_display'){
+
+                // dpm($process[0]->get('plugins')[$relationship_type_field]['#type'] = 'mirror_select_widget');
+                }
+              }
+             // dpm($relationship_entry);
+              //dpm($form[$field_name]['widget'][$key]['inline_entity_form']);
+            switch($join_fields[0]){
+              case $related_entity_fields['related_entity_field_1' ]:
+                
+                break;
+              case $related_entity_fields['related_entity_field_2' ]:
+                
+                break;
+            }
+               
+             // dpm($form_state);
+          }
+        }
+      }
+    }
+  }
+  return $form;
+}
+
+function mirrorSelectOptions(array $default_taxonomy_term_select_options){
+  global $mirror_fields;
+  $mirror_reference_field = $mirror_fields['mirror_reference_field'];
+  $mirror_string_field = $mirror_fields['mirror_string_field'];
+  $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $select_options = isset($default_taxonomy_term_select_options) ? $default_taxonomy_term_select_options : [];
+  foreach($default_taxonomy_term_select_options as $tid => $term_name){
+    $term = $taxonomy_storage->load($tid);
+    if($term){
+      if($term->$mirror_reference_field->target_id){
+        $select_options[$tid] =  $taxonomy_storage->load($term->$mirror_reference_field->target_id)->getName();
+      } else if($term->$mirror_string_field->value){
+        $select_options[$tid] =  $term->get($mirror_string_field)->value;
+      } else {
+      $select_options[$tid] =  $term_name;
+      }
+    }
+  }
+  return $select_options;
+}
+*/
+

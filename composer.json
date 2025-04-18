@@ -26,6 +26,7 @@
         "drupal/entity_reference_modal": "^1.0",
         "drupal/footnotes": "^4.0@beta",
         "drupal/geofield": "^1.61",
+        "drupal/inline_entity_form": "^3.0@RC",
         "drupal/media_entity_slideshow": "^2.5",
         "drupal/media_entity_soundcloud": "^3.2",
         "drupal/media_iframe": "^1.0",

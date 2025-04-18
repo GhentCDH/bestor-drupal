@@ -1,0 +1,4 @@
+relationship-nodes-style:
+  css:
+    theme:
+      css/relationship-nodes.css: {}
