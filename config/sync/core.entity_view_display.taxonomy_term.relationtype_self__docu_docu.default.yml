@@ -1,0 +1,31 @@
+uuid: 8092829e-eaf6-4b24-b21e-a264f781b239
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_self__docu_docu.field_term_mirror_ref
+    - taxonomy.vocabulary.relationtype_self__docu_docu
+  module:
+    - text
+id: taxonomy_term.relationtype_self__docu_docu.default
+targetEntityType: taxonomy_term
+bundle: relationtype_self__docu_docu
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_term_mirror_ref:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

@@ -1,0 +1,57 @@
+uuid: efd3bbc7-a1e0-4d2b-b6e4-9c066a41ada5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__inst_plac.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__inst_plac
+  module:
+    - path
+id: taxonomy_term.relationtype_cross__inst_plac.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__inst_plac
+mode: default
+content:
+  field_term_mirror_str:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  translation:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  description: true

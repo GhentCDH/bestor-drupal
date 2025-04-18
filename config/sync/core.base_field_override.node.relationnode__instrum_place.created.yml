@@ -1,0 +1,18 @@
+uuid: 3d7aacc1-95d9-493c-87c2-8deaea861289
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_place
+id: node.relationnode__instrum_place.created
+field_name: created
+entity_type: node
+bundle: relationnode__instrum_place
+label: 'Authored on'
+description: 'The date and time that the content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

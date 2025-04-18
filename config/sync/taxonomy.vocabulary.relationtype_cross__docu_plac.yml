@@ -1,0 +1,9 @@
+uuid: 777ec48f-ff41-4129-9f89-2070b2ecf97b
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between a document and a place'
+vid: relationtype_cross__docu_plac
+description: null
+weight: 0
+new_revision: false

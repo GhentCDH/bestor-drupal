@@ -1,0 +1,18 @@
+uuid: e6e60404-40a5-4a89-a676-47df6111541c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_instrum
+id: node.relationnode__instrum_instrum.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__instrum_instrum
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

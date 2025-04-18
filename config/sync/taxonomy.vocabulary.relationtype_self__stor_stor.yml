@@ -1,0 +1,9 @@
+uuid: 350c851f-65c2-483a-ae9f-a3e2d74e3426
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between stories'
+vid: relationtype_self__stor_stor
+description: null
+weight: 0
+new_revision: false

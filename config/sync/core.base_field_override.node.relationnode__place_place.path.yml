@@ -1,0 +1,20 @@
+uuid: bbe637c3-5b84-4bc4-8e3c-159b0f3ef3fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_place
+  module:
+    - path
+id: node.relationnode__place_place.path
+field_name: path
+entity_type: node
+bundle: relationnode__place_place
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

@@ -1,0 +1,22 @@
+uuid: 0471d103-8a8d-4c5f-81d6-b3f9551e0e30
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_concept
+id: node.relationnode__concept_concept.status
+field_name: status
+entity_type: node
+bundle: relationnode__concept_concept
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

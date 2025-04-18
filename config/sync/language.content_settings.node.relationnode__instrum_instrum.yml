@@ -1,0 +1,18 @@
+uuid: f6cd244a-763c-4313-8aab-7aa9524ca1f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_instrum
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__instrum_instrum
+target_entity_type_id: node
+target_bundle: relationnode__instrum_instrum
+default_langcode: current_interface
+language_alterable: false

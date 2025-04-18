@@ -1,0 +1,9 @@
+uuid: 66c477cb-e183-4f4a-bc0f-4d331764fcbe
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between a place and a story'
+vid: relationtype_cross__plac_stor
+description: null
+weight: 0
+new_revision: false

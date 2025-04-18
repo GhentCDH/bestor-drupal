@@ -1,0 +1,22 @@
+uuid: 69b8ee6c-55ec-4d5a-b58a-070159b02753
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_place
+id: node.relationnode__concept_place.status
+field_name: status
+entity_type: node
+bundle: relationnode__concept_place
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

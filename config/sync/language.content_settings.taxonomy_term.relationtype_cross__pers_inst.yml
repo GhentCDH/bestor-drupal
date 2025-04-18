@@ -1,0 +1,18 @@
+uuid: b67e7b21-6609-4e54-99d8-00be9a27b31e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__pers_inst
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.relationtype_cross__pers_inst
+target_entity_type_id: taxonomy_term
+target_bundle: relationtype_cross__pers_inst
+default_langcode: current_interface
+language_alterable: true

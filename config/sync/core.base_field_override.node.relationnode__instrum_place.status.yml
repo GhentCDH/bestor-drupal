@@ -1,0 +1,22 @@
+uuid: 4249d107-1045-44d3-b156-88f31036b678
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_place
+id: node.relationnode__instrum_place.status
+field_name: status
+entity_type: node
+bundle: relationnode__instrum_place
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,57 @@
+uuid: 7caf9702-0a86-474b-b5e0-251e66e02c07
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__orga_stor.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__orga_stor
+  module:
+    - path
+id: taxonomy_term.relationtype_cross__orga_stor.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__orga_stor
+mode: default
+content:
+  field_term_mirror_str:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  translation:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  description: true

@@ -1,0 +1,31 @@
+uuid: ae9ea86f-e8a7-4921-936a-438b6e35f299
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__pers_plac.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__pers_plac
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__pers_plac.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__pers_plac
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_term_mirror_str:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

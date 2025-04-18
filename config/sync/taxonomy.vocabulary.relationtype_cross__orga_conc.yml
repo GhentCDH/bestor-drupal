@@ -1,0 +1,9 @@
+uuid: 52e7036f-de93-4c6e-85cd-6ab6a5ae2e32
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between an institution and a concept'
+vid: relationtype_cross__orga_conc
+description: null
+weight: 0
+new_revision: false

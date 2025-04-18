@@ -1,0 +1,18 @@
+uuid: ab27d53f-bf60-45a3-93a4-6e549f7e0322
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_place
+id: node.relationnode__instrum_place.title
+field_name: title
+entity_type: node
+bundle: relationnode__instrum_place
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

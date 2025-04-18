@@ -1,0 +1,17 @@
+uuid: 2f21e1a7-2e29-4353-8a10-10f45cbf4204
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Relationship between persons'
+type: relationnode__person_person
+description: 'This content type describes the relationship between an entities of the person type (related item 1 and 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

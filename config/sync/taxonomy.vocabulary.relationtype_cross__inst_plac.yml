@@ -1,0 +1,9 @@
+uuid: 10890efb-d79e-4040-95bc-b86ffd3dd9a2
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between an instrument and a place'
+vid: relationtype_cross__inst_plac
+description: null
+weight: 0
+new_revision: false

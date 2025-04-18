@@ -1,0 +1,9 @@
+uuid: 73a1a862-3710-485f-886d-1c1223449b81
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between places'
+vid: relationtype_self__plac_plac
+description: null
+weight: 0
+new_revision: false

@@ -1,0 +1,18 @@
+uuid: adb18a26-9e45-4a84-a1f8-28abebfc1c54
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_story
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__concept_story
+target_entity_type_id: node
+target_bundle: relationnode__concept_story
+default_langcode: current_interface
+language_alterable: false

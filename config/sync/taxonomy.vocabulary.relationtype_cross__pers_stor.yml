@@ -1,0 +1,9 @@
+uuid: f845b4f3-48e1-4004-b8e1-e3776d9c49e6
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between a person and a story'
+vid: relationtype_cross__pers_stor
+description: null
+weight: 0
+new_revision: false

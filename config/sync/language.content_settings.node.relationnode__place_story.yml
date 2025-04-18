@@ -1,0 +1,18 @@
+uuid: 6fc16c4a-7cfc-4d1a-b0ae-352e647398b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_story
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__place_story
+target_entity_type_id: node
+target_bundle: relationnode__place_story
+default_langcode: current_interface
+language_alterable: false

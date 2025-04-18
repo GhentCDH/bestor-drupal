@@ -1,0 +1,19 @@
+uuid: fd196dc4-5b30-4c98-b43f-2f77b9d01c9b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__conc_plac
+id: taxonomy_term.relationtype_cross__conc_plac.field_term_mirror_str
+field_name: field_term_mirror_str
+entity_type: taxonomy_term
+bundle: relationtype_cross__conc_plac
+label: 'Mirror term'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

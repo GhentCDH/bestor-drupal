@@ -1,0 +1,45 @@
+uuid: 11db45ee-3f0d-4ba1-88a5-6bc3517a8e93
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.relationnode__concept_instrument.field_related_entity_1
+    - field.field.node.relationnode__concept_instrument.field_related_entity_2
+    - field.field.node.relationnode__concept_instrument.field_relation_type
+    - node.type.relationnode__concept_instrument
+  module:
+    - user
+id: node.relationnode__concept_instrument.teaser
+targetEntityType: node
+bundle: relationnode__concept_instrument
+mode: teaser
+content:
+  field_related_entity_1:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_related_entity_2:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_relation_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  footnotes_group: true
+  langcode: true
+  links: true

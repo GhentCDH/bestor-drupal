@@ -1,0 +1,18 @@
+uuid: d3bb50ac-bfd6-4b0a-8fb2-06a418875ed6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_story
+id: node.relationnode__concept_story.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__concept_story
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

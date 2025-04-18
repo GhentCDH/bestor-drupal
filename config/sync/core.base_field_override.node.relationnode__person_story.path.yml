@@ -1,0 +1,20 @@
+uuid: 60242a44-bd04-495a-9330-8d47d7e77541
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_story
+  module:
+    - path
+id: node.relationnode__person_story.path
+field_name: path
+entity_type: node
+bundle: relationnode__person_story
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

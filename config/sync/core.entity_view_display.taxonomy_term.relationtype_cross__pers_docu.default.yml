@@ -1,0 +1,31 @@
+uuid: d20bcbea-d01f-48b4-a08c-080974fbb349
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__pers_docu.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__pers_docu
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__pers_docu.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__pers_docu
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_term_mirror_str:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

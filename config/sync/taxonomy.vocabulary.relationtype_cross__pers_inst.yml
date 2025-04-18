@@ -1,0 +1,9 @@
+uuid: fd3e6832-c0a1-44ea-87b6-fb558c66031b
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between a person and an instrument'
+vid: relationtype_cross__pers_inst
+description: null
+weight: 0
+new_revision: false

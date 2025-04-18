@@ -1,0 +1,9 @@
+uuid: 013d5d34-d680-4eda-83dd-cdf9a618e3b5
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between an institution and a document'
+vid: relationtype_cross__orga_docu
+description: null
+weight: 0
+new_revision: false

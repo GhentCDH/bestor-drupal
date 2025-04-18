@@ -1,0 +1,18 @@
+uuid: a01400bd-39b8-4920-8f9f-9afc773b3356
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_story
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__institut_story
+target_entity_type_id: node
+target_bundle: relationnode__institut_story
+default_langcode: current_interface
+language_alterable: false

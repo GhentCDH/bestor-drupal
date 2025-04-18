@@ -1,0 +1,29 @@
+uuid: a190ef6b-322f-4821-9a6e-c1ffc767023c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_related_entity_1
+    - node.type.person
+    - node.type.relationnode__person_institut
+id: node.relationnode__person_institut.field_related_entity_1
+field_name: field_related_entity_1
+entity_type: node
+bundle: relationnode__person_institut
+label: 'Related entity 1'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      person: person
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

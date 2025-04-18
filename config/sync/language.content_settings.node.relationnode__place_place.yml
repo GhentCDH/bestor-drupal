@@ -1,0 +1,18 @@
+uuid: ac9826d5-55ef-47a2-85ed-871ca2c5ce58
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_place
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__place_place
+target_entity_type_id: node
+target_bundle: relationnode__place_place
+default_langcode: current_interface
+language_alterable: false

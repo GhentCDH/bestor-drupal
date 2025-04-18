@@ -1,0 +1,18 @@
+uuid: a98209a8-c375-4f80-a7ca-9b65656feae2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_strory
+id: node.relationnode__document_strory.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__document_strory
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

@@ -1,0 +1,22 @@
+uuid: 0cb06b50-8498-43c9-a659-ee491d5a65dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_story
+id: node.relationnode__person_story.sticky
+field_name: sticky
+entity_type: node
+bundle: relationnode__person_story
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

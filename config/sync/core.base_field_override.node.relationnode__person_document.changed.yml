@@ -1,0 +1,18 @@
+uuid: 78c7417f-f1d6-480b-ba57-576fd4adab1c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_document
+id: node.relationnode__person_document.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__person_document
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

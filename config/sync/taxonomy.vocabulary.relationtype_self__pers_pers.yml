@@ -1,0 +1,9 @@
+uuid: 8bf4a188-f3d7-4004-8ac6-15bb389c56ce
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between persons'
+vid: relationtype_self__pers_pers
+description: null
+weight: 0
+new_revision: false

@@ -1,0 +1,17 @@
+uuid: e7c60729-e7c2-4ebd-b7dd-77d0f555901b
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Relationship between a person and  an instrument'
+type: relationnode__person_instrum
+description: 'This content type describes the relationship between an entity of the person type (related item 1) and an entity of the instrument type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

@@ -1,0 +1,29 @@
+uuid: 8e43c8d1-28ca-432f-8b42-4b0e471095a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_related_entity_2
+    - node.type.institution
+    - node.type.relationnode__institut_institut
+id: node.relationnode__institut_institut.field_related_entity_2
+field_name: field_related_entity_2
+entity_type: node
+bundle: relationnode__institut_institut
+label: 'Related entity 2'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      institution: institution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

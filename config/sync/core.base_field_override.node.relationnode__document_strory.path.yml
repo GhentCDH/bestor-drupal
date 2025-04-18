@@ -1,0 +1,20 @@
+uuid: 9c12ce8e-0d91-4d0b-bf15-67d92ed01f82
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_strory
+  module:
+    - path
+id: node.relationnode__document_strory.path
+field_name: path
+entity_type: node
+bundle: relationnode__document_strory
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

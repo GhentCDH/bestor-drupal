@@ -1,0 +1,18 @@
+uuid: 49be8126-3273-40d2-ac1b-c829b802bc23
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_place
+id: node.relationnode__concept_place.created
+field_name: created
+entity_type: node
+bundle: relationnode__concept_place
+label: 'Authored on'
+description: 'The date and time that the content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

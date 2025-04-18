@@ -1,0 +1,29 @@
+uuid: 9a98f076-1786-4e69-bd08-7859dd389307
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_relation_type
+    - node.type.relationnode__person_person
+    - taxonomy.vocabulary.relationtype_self__pers_pers
+id: node.relationnode__person_person.field_relation_type
+field_name: field_relation_type
+entity_type: node
+bundle: relationnode__person_person
+label: 'Relation type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      relationtype_self__pers_pers: relationtype_self__pers_pers
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

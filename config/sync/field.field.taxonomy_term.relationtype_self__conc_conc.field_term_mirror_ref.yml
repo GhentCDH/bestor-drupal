@@ -1,0 +1,28 @@
+uuid: f783ace9-1c82-4203-81e6-79dd80c747c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_term_mirror_ref
+    - taxonomy.vocabulary.relationtype_self__conc_conc
+id: taxonomy_term.relationtype_self__conc_conc.field_term_mirror_ref
+field_name: field_term_mirror_ref
+entity_type: taxonomy_term
+bundle: relationtype_self__conc_conc
+label: 'Mirror term'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      relationtype_self__conc_conc: relationtype_self__conc_conc
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,29 @@
+uuid: 38d2056c-6854-4066-86ca-4c21e4951718
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_relation_type
+    - node.type.relationnode__story_story
+    - taxonomy.vocabulary.relationtype_self__stor_stor
+id: node.relationnode__story_story.field_relation_type
+field_name: field_relation_type
+entity_type: node
+bundle: relationnode__story_story
+label: 'Relation type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      relationtype_self__stor_stor: relationtype_self__stor_stor
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

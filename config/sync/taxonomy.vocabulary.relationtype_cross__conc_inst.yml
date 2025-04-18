@@ -1,0 +1,9 @@
+uuid: 6f743ba5-a7a1-4684-95a4-b80db862b02f
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between a concept and an instrument'
+vid: relationtype_cross__conc_inst
+description: null
+weight: 0
+new_revision: false

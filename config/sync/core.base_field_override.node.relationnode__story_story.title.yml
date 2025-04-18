@@ -1,0 +1,18 @@
+uuid: 67781d43-4e68-488a-b1fa-3897713af75e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__story_story
+id: node.relationnode__story_story.title
+field_name: title
+entity_type: node
+bundle: relationnode__story_story
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

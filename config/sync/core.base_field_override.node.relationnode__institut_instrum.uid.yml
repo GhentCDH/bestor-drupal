@@ -1,0 +1,20 @@
+uuid: 9e1273f3-9e9b-41ba-a1d0-212ddbced4d2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_instrum
+id: node.relationnode__institut_instrum.uid
+field_name: uid
+entity_type: node
+bundle: relationnode__institut_instrum
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

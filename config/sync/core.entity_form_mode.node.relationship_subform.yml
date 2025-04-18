@@ -1,0 +1,11 @@
+uuid: 3eb2b9c6-35ba-4438-bdcb-da0e1cf7e4b5
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.relationship_subform
+label: 'Relationship subform'
+description: ''
+targetEntityType: node
+cache: true

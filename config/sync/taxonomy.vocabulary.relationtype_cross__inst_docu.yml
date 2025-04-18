@@ -1,0 +1,9 @@
+uuid: 91cdb080-9f2c-466b-9489-22fe9ac343af
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between an instrument and a document'
+vid: relationtype_cross__inst_docu
+description: null
+weight: 0
+new_revision: false

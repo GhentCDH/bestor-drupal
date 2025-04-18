@@ -1,0 +1,21 @@
+uuid: 8dff4c0b-7ac2-47e3-bedb-22827cd31ea3
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_term_mirror_str
+field_name: field_term_mirror_str
+entity_type: taxonomy_term
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

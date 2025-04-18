@@ -1,0 +1,17 @@
+uuid: eb2889b9-3e03-4d17-b8e4-c601856d3a1f
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Relationship between a concept and a story'
+type: relationnode__concept_story
+description: 'This content type describes the relationship between an entity of the concept type (related item 1) and an entity of the story type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

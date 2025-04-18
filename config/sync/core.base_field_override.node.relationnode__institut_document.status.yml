@@ -1,0 +1,22 @@
+uuid: 93bfe3c4-2374-4493-a5b4-4feed9a73422
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_document
+id: node.relationnode__institut_document.status
+field_name: status
+entity_type: node
+bundle: relationnode__institut_document
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

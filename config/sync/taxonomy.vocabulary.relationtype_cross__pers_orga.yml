@@ -1,0 +1,9 @@
+uuid: 753a38aa-b94d-4098-bf15-921e82d2f1df
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between a person and an institution'
+vid: relationtype_cross__pers_orga
+description: null
+weight: 0
+new_revision: false

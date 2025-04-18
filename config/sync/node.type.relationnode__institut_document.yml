@@ -1,0 +1,17 @@
+uuid: 3691ddde-6ccf-45aa-a62d-2c79668931d3
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Relationship between an institution and a document'
+type: relationnode__institut_document
+description: 'This content type describes the relationship between an entity of the institution type (related item 1) and an entity of the document type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

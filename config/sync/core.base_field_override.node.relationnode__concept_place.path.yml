@@ -1,0 +1,20 @@
+uuid: ad98d5e3-7dd0-49b8-bd05-183a0c66595c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_place
+  module:
+    - path
+id: node.relationnode__concept_place.path
+field_name: path
+entity_type: node
+bundle: relationnode__concept_place
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

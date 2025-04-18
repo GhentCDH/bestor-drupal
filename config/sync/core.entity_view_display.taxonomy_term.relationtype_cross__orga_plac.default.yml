@@ -1,0 +1,31 @@
+uuid: 6be1b704-e6aa-44e9-aeab-08c8d424d9f6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__orga_plac.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__orga_plac
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__orga_plac.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__orga_plac
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_term_mirror_str:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

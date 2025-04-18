@@ -1,0 +1,18 @@
+uuid: e55c6b27-6dbc-4a6d-b15c-7be58b5f052a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__docu_docu
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.relationtype_self__docu_docu
+target_entity_type_id: taxonomy_term
+target_bundle: relationtype_self__docu_docu
+default_langcode: current_interface
+language_alterable: true

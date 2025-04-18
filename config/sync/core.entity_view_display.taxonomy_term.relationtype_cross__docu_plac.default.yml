@@ -1,0 +1,31 @@
+uuid: 0360c91c-5076-406b-9bb1-7f988bc7e6b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__docu_plac.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__docu_plac
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__docu_plac.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__docu_plac
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_term_mirror_str:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

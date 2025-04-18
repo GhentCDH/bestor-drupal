@@ -1,0 +1,71 @@
+uuid: 2e4b2c38-e29e-4917-ada6-a08466d6e745
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.relationship_subform
+    - field.field.node.relationnode__institut_institut.field_related_entity_1
+    - field.field.node.relationnode__institut_institut.field_related_entity_2
+    - field.field.node.relationnode__institut_institut.field_relation_type
+    - node.type.relationnode__institut_institut
+  module:
+    - entity_reference_modal
+id: node.relationnode__institut_institut.relationship_subform
+targetEntityType: node
+bundle: relationnode__institut_institut
+mode: relationship_subform
+content:
+  field_related_entity_1:
+    type: entity_reference_modal
+    weight: 0
+    region: content
+    settings:
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_related_entity_2:
+    type: entity_reference_modal
+    weight: 1
+    region: content
+    settings:
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_relation_type:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  title: true
+  uid: true

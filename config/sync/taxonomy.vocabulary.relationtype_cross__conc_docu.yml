@@ -1,0 +1,9 @@
+uuid: 7ccb0ed2-b558-488c-8c9c-fbbd63eb124d
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between a concept and a document'
+vid: relationtype_cross__conc_docu
+description: null
+weight: 0
+new_revision: false

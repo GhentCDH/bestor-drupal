@@ -1,0 +1,9 @@
+uuid: ae128f05-29c1-45d1-a802-1b813f9bebeb
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between instruments'
+vid: relationtype_self__inst_inst
+description: null
+weight: 0
+new_revision: false

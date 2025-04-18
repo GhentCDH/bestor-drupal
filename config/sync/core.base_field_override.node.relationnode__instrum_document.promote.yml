@@ -1,0 +1,22 @@
+uuid: 5a889786-80e0-493f-8837-bdc3e14a00a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_document
+id: node.relationnode__instrum_document.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__instrum_document
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

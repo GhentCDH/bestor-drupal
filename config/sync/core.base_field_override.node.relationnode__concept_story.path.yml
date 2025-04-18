@@ -1,0 +1,20 @@
+uuid: fe825aaf-fd80-407d-be27-893c1485d86b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_story
+  module:
+    - path
+id: node.relationnode__concept_story.path
+field_name: path
+entity_type: node
+bundle: relationnode__concept_story
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

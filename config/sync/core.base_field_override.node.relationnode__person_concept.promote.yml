@@ -1,0 +1,22 @@
+uuid: 418dc487-d394-4ee9-b198-e9849247999b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_concept
+id: node.relationnode__person_concept.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__person_concept
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

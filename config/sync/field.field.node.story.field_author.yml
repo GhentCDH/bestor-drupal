@@ -1,0 +1,29 @@
+uuid: 674e24f1-f55e-4c96-99ad-8a301c176e91
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_author
+    - node.type.story
+    - taxonomy.vocabulary.author
+id: node.story.field_author
+field_name: field_author
+entity_type: node
+bundle: story
+label: Author
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      author: author
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

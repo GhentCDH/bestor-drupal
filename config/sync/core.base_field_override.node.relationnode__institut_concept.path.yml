@@ -1,0 +1,20 @@
+uuid: 4cb940d7-f156-455e-8d6f-6d6bd02f4545
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_concept
+  module:
+    - path
+id: node.relationnode__institut_concept.path
+field_name: path
+entity_type: node
+bundle: relationnode__institut_concept
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

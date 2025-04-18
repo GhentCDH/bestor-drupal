@@ -1,0 +1,31 @@
+uuid: 9f60d400-155b-49b0-810d-fd70a4d287e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__conc_inst.field_term_mirror_str
+    - taxonomy.vocabulary.relationtype_cross__conc_inst
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__conc_inst.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__conc_inst
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_term_mirror_str:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

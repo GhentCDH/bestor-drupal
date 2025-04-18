@@ -1,0 +1,29 @@
+uuid: 4d911444-c387-4f42-995d-a485053c6bb8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_related_entity_1
+    - node.type.relationnode__story_story
+    - node.type.story
+id: node.relationnode__story_story.field_related_entity_1
+field_name: field_related_entity_1
+entity_type: node
+bundle: relationnode__story_story
+label: 'Related entity 1'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      story: story
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,9 @@
+uuid: a4b64483-0f97-4a06-9b02-702ccee0e1e9
+langcode: en
+status: true
+dependencies: {  }
+name: 'Types of relationships between concepts'
+vid: relationtype_self__conc_conc
+description: null
+weight: 0
+new_revision: false

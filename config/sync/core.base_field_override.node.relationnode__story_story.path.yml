@@ -1,0 +1,20 @@
+uuid: 291de540-3cf0-45d3-a99a-1d4909c2cf7a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__story_story
+  module:
+    - path
+id: node.relationnode__story_story.path
+field_name: path
+entity_type: node
+bundle: relationnode__story_story
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path
