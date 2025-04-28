@@ -15,6 +15,9 @@ display:
                 title: Publié
               2:
                 title: 'Non publié'
+        name:
+          expose:
+            label: Nom
         langcode:
           expose:
             label: Langue
@@ -25,3 +28,18 @@ display:
           text: Modifier
         delete_media:
           text: Supprimer
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nom
+  widget_table:
+    display_options:
+      fields:
+        name:
+          label: Nom
+      filters:
+        name:
+          expose:
+            label: Nom

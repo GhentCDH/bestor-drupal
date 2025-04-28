@@ -3,6 +3,8 @@ display:
     display_title: 'Par défaut'
     display_options:
       fields:
+        filename:
+          label: Nom
         filemime:
           label: 'Type MIME'
         status:
