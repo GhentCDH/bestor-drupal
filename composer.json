@@ -61,8 +61,7 @@
   	   	"patches": {
   	    	"drupal/core":{
                 "Sort out and fix language fallback inconsistencies":"https://www.drupal.org/files/issues/2023-01-30/drupal-fix_fallback-2951294-58.patch"
-            }
-    	        	            	                                                           
+            }      	            	                                                           
     	},
         "drupal-scaffold": {
             "locations": {
