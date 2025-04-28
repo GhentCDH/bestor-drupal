@@ -1,7 +1,9 @@
+label: Commentaires
 display:
   default:
     display_title: 'Par défaut'
     display_options:
+      title: Commentaires
       fields:
         subject:
           label: Objet
@@ -19,6 +21,10 @@ display:
         langcode:
           expose:
             label: Langue
+  page_published:
+    display_options:
+      menu:
+        title: Commentaires
   page_unapproved:
     display_options:
       fields:

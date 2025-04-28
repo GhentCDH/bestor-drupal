@@ -1,0 +1,16 @@
+uuid: 2eb0f7a5-1579-4e8f-a375-7e0cafeb6349
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.frontpage_search
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: block_content.frontpage_search
+target_entity_type_id: block_content
+target_bundle: frontpage_search
+default_langcode: site_default
+language_alterable: false

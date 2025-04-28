@@ -1,0 +1,33 @@
+uuid: 5d4d7930-a238-4800-b13a-a4970dabbc58
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.frontpage_search
+    - field.field.block_content.frontpage_search.field_banner_image
+    - field.field.block_content.frontpage_search.field_search_box_text
+id: block_content.frontpage_search.default
+targetEntityType: block_content
+bundle: frontpage_search
+mode: default
+content:
+  field_banner_image:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_search_box_text:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

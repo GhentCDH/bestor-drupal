@@ -58,7 +58,6 @@ module:
   path_alias: 0
   rabbit_hole: 0
   relationship_nodes: 0
-  search: 0
   search_api: 0
   shortcut: 0
   standard: 0
@@ -66,6 +65,7 @@ module:
   taxonomy: 0
   text: 0
   toolbar: 0
+  twig_tweak: 0
   user: 0
   views_ui: 0
   content_translation: 10

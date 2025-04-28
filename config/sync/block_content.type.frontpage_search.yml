@@ -1,0 +1,8 @@
+uuid: 25afcf62-616e-4e35-affe-6c0ca70bf1ee
+langcode: en
+status: true
+dependencies: {  }
+id: frontpage_search
+label: frontpage_search
+revision: false
+description: null

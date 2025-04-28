@@ -18,6 +18,11 @@ display:
         name:
           expose:
             label: Nom
+        bundle:
+          expose:
+            label: 'Type de média'
+          group_info:
+            label: 'Type de média'
         langcode:
           expose:
             label: Langue

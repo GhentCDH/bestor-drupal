@@ -1,0 +1,18 @@
+:root {
+    --primary: #DC143C !important;
+    --secondary: #07bae4 !important;
+    --dark: #212736;
+    --light: #ffbebf !important;
+    --border: #ff9a9e !important;
+    --text-color: #383549;
+    --color-text: #383549;
+    --bold-color: #212736;
+    --color-heading: #212736;
+    --content-bg: none !important;
+    --body-font: "Noto Sans", sans-serif;
+    --heading-font: "Josefin Sans", sans-serif;
+  }
+
+body{
+    background-color: unset !important;
+}
