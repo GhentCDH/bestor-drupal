@@ -1,3 +1,7 @@
 .header {
     background-image: unset !important;
   }
+
+  .header .frontpage-search-block{
+    height: 300px;
+  }

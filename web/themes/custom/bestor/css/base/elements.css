@@ -16,3 +16,7 @@
 body{
     background-color: unset !important;
 }
+
+.sf-dump, .sf-dump * {
+    background-color: black !important;
+}
