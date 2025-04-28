@@ -10,7 +10,7 @@ _core:
   default_config_hash: Lvb2Z7X05mC4iCNQC49-7RywhCNRP-HJ-ugcUrSv-jY
 id: bestor_search
 theme: bestor
-region: header
+region: search_box
 weight: -6
 provider: null
 plugin: search_form_block

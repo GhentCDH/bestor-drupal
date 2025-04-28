@@ -10,8 +10,8 @@ _core:
   default_config_hash: 3Axi0P3qQP2BYHA-a_DQfCspgbHNvcT8BlKbO_ufvog
 id: bestor_branding
 theme: bestor
-region: header
-weight: 0
+region: hidden
+weight: -6
 provider: null
 plugin: system_branding_block
 settings:

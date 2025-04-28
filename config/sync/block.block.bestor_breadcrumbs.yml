@@ -10,7 +10,7 @@ _core:
   default_config_hash: bkXrlEqyl1SXlHWCtpnGKex7fy_CbrZUV9yrnpZhe3s
 id: bestor_breadcrumbs
 theme: bestor
-region: header
+region: page_header
 weight: -5
 provider: null
 plugin: system_breadcrumb_block

@@ -3,9 +3,12 @@ display:
     display_title: 'Par défaut'
     display_options:
       fields:
+        bundle:
+          label: Type
         status:
           label: État
           settings:
+            format_custom_false: 'Non publié'
             format_custom_true: Publié
         operations:
           label: Actions
@@ -15,6 +18,9 @@ display:
           reset_button_label: Réinitialiser
           exposed_sorts_label: 'Trier par'
       filters:
+        bundle:
+          expose:
+            label: Type
         status:
           expose:
             label: Vrai
@@ -22,6 +28,8 @@ display:
             group_items:
               1:
                 title: Publié
+              2:
+                title: 'Non publié'
         langcode:
           expose:
             label: Langue

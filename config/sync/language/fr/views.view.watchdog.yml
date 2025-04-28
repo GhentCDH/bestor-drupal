@@ -3,6 +3,8 @@ display:
     display_title: 'Par défaut'
     display_options:
       fields:
+        type:
+          label: Type
         timestamp:
           label: Date
         message:
@@ -16,3 +18,7 @@ display:
           submit_button: Filtrer
           reset_button_label: Réinitialiser
           exposed_sorts_label: 'Trier par'
+      filters:
+        type:
+          expose:
+            label: Type

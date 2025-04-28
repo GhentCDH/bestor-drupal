@@ -10,6 +10,7 @@ display:
         status:
           label: État
           settings:
+            format_custom_false: 'Non publié'
             format_custom_true: Publié
         langcode:
           label: Langue
@@ -31,6 +32,8 @@ display:
             group_items:
               1:
                 title: Publié
+              2:
+                title: 'Non publié'
         langcode:
           expose:
             label: Langue

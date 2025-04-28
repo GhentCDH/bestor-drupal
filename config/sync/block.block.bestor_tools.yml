@@ -12,8 +12,8 @@ _core:
   default_config_hash: wF_Kav8YdiYzHYj1-kAzBaEMowL4WnpDg8GU7InizaQ
 id: bestor_tools
 theme: bestor
-region: header
-weight: -3
+region: footer_three
+weight: -6
 provider: null
 plugin: 'system_menu_block:tools'
 settings:

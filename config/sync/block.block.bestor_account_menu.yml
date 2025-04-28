@@ -12,8 +12,8 @@ _core:
   default_config_hash: I0Gb7i8U3Tw5U97Mc0eb9NISB2udoraGw0SBbfRrOow
 id: bestor_account_menu
 theme: bestor
-region: header
-weight: -5
+region: footer_two
+weight: -6
 provider: null
 plugin: 'system_menu_block:account'
 settings:

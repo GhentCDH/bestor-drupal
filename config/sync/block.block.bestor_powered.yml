@@ -10,8 +10,8 @@ _core:
   default_config_hash: jlpOhP_Tu6SpGCUa8kX68orsno4ywq_x5zFHj6M1QVQ
 id: bestor_powered
 theme: bestor
-region: header
-weight: -4
+region: hidden
+weight: -5
 provider: null
 plugin: system_powered_by_block
 settings:

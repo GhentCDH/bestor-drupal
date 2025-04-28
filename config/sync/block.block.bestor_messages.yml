@@ -10,7 +10,7 @@ _core:
   default_config_hash: '-XVizLHAsOW5B_cHrBPWjug4zSFAVPbqe1qD7rvtvj0'
 id: bestor_messages
 theme: bestor
-region: header
+region: highlighted
 weight: -6
 provider: null
 plugin: system_messages_block
