@@ -1,3 +1,26 @@
+/* debugging*/
+
+.message-status {
+    background: unset;
+}
+
+.sf-dump * {
+    background-color:  unset 
+}
+
+.sf-dump samp{
+  font-size:unset;
+  line-height: unset;
+}
+.sf-dump .sf-dump-expanded{
+  display: block;
+}
+
+.sf-dump .sf-dump-expanded{
+  color:unset;
+}
+
+/* elements */
 :root {
     --primary: #DC143C !important;
     --secondary: #07bae4 !important;
@@ -17,6 +40,3 @@ body{
     background-color: unset !important;
 }
 
-.sf-dump, .sf-dump * {
-    background-color: black !important;
-}

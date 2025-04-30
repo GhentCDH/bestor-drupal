@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Theme override to display a block.
+ * Default theme implementation to display a block.
  *
  * Available variables:
  * - plugin_id: The ID of the block implementation.
@@ -11,6 +11,7 @@
  *   - label_display: The display settings for the label.
  *   - provider: The module or other provider that provided this block plugin.
  *   - Block plugin specific settings will also be stored here.
+ * - in_preview: Whether the plugin is being rendered in preview mode.
  * - content: The content of this block.
  * - attributes: array of HTML attributes populated by modules, intended to
  *   be added to the main container tag of this template.
@@ -23,16 +24,12 @@
  *   displayed after the main title tag that appears in the template.
  *
  * @see template_preprocess_block()
+ *
+ * @ingroup themeable
  */
 #}
-<div{{ attributes.addClass('block') }}>
-  {{ title_suffix }}
-  <div class="block-content frontpage-search-block" style="background-color: #DC143C; background-image: url('{{ file_url(content.field_banner_image.0['#media'].field_media_image.0.entity.uri.value) }}');">
-    <div class='h1 frontpage-banner'>{{content.field_search_box_text}}</div>
-    <div class="container">
-      <div class='frontpage-search-form'>
-        {{drupal_block('views_exposed_filter_block:search-page_1')}}
-      </div>
-    </div>  
-  </div>
+<div{{ attributes }}>
+  {% block content %}
+    {{ content }}
+  {% endblock %}
 </div>
