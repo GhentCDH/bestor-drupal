@@ -57,3 +57,7 @@
   height:50px;
   border-radius:unset;
 }
+
+.header-top-right{
+  margin-left: auto;
+}

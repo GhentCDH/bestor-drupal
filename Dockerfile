@@ -51,3 +51,7 @@ FROM drupal-base AS dev
 
 #Adds some network diagnostic tools to the dev container
 RUN apt-get update  && apt-get install -y iputils-ping telnet
+# Create custom configuration to disable opcache
+RUN echo "opcache.enable=0" > /usr/local/etc/php/conf.d/disable-opcache.ini
+# Upscale memory limit to 512M
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/set_mem_limit.ini 

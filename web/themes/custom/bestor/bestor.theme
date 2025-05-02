@@ -7,8 +7,9 @@ function bestor_form_alter(&$form, &$form_state, $form_id) {
         $form['#attributes']['class'][] = 'searchForm';
         $form['actions']['submit']['#attributes']['class'][] = 'icon-search';
         $form['actions']['submit']['#value'] = html_entity_decode("&#xe001;");
-        dpm($form);
-    }
-    
-    
+    }  
+}
+
+function bestor_preprocess_block(&$variables) {
+    dpm($variables);
 }
