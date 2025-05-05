@@ -17,8 +17,13 @@
         {% if page.content_top %}
           {% include '@thex/template-parts/content-parts/content_top.html.twig' %}
         {% endif %}
-        <div class="node-content">
-          {{ page.content }}
+        <div class="node-content frontpage-content">
+          <div class="frontpage-blocks">
+            {{drupal_block('views_block:frontpage-block_1')}}
+            {{drupal_block('views_block:frontpage-block_2')}}
+            {{drupal_block('views_block:frontpage-block_3')}}
+            {{drupal_block('views_block:frontpage-block_4')}}
+          </div>
         </div>
         {% if page.content_bottom %}
           {% include '@thex/template-parts/content-parts/content_bottom.html.twig' %}
