@@ -1,0 +1,18 @@
+uuid: bd3b4ce6-8149-45dc-bb37-c4b1a765a511
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.publication
+id: node.publication.title
+field_name: title
+entity_type: node
+bundle: publication
+label: 'Bibliographical reference'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

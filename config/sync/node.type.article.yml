@@ -1,12 +1,19 @@
 uuid: b896a7cf-8ca0-4855-9880-c1f0aadd4437
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
 _core:
   default_config_hash: Fe3N1uqaAyyKJbVkqT-btXy3t98puW8GCRD822xjl10
-name: Article
+name: 'News and events'
 type: article
-description: 'Use <em>articles</em> for time-sensitive content like news, press releases or blog posts.'
+description: 'Use <em>news and events</em> for time-sensitive content like news, press releases or blog posts.'
 help: null
 new_revision: true
 preview_mode: 1
