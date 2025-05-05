@@ -22,7 +22,6 @@ dependencies:
     - field.storage.paragraph.field_title
     - search_api.server.s_api_elasticserver_bestor
   module:
-    - ''
     - elasticsearch_connector
     - node
     - paragraphs
