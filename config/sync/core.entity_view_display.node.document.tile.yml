@@ -1,0 +1,91 @@
+uuid: 4e3358c6-698f-4b3a-865c-e8aa896b37ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.tile
+    - field.field.node.document.field_alternative_name
+    - field.field.node.document.field_author
+    - field.field.node.document.field_description
+    - field.field.node.document.field_discipline
+    - field.field.node.document.field_end_date
+    - field.field.node.document.field_specialisation
+    - field.field.node.document.field_start_date
+    - node.type.document
+  module:
+    - datetime
+    - entity_reference_revisions
+    - user
+id: node.document.tile
+targetEntityType: node
+bundle: document
+mode: tile
+content:
+  field_alternative_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_description:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_discipline:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 115
+    region: content
+  field_end_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_specialisation:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 110
+    region: content
+  field_start_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 113
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  computed_relationshipfield__document__concept: true
+  computed_relationshipfield__document__document: true
+  computed_relationshipfield__document__institution: true
+  computed_relationshipfield__document__instrument: true
+  computed_relationshipfield__document__person: true
+  computed_relationshipfield__document__place: true
+  computed_relationshipfield__document__story: true
+  field_author: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

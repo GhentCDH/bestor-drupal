@@ -1,7 +1,31 @@
+/* Logo */
 #block-bestor-branding img{
   min-width:100px;
 }
 
+/* Language Switcher */
+#block-bestor-languageswitcher ul.links{
+  gap:3px;
+}
+
+#block-bestor-languageswitcher ul.links li a{
+  font-size:12px;
+  padding:2.5px
+}
+
+#block-bestor-languageswitcher ul.links li.is-active a{
+  background-color: #DC143C;
+  color:white;
+  border-radius:20px;
+}
+
+#block-bestor-languageswitcher ul.links li a:hover{
+  background-color: #07bae4;
+  color:white;
+  border-radius:20px;
+}
+
+/* Homepage banner */
 .homepage.slider-page .header {
   min-height: unset !important;
 }
@@ -32,7 +56,10 @@
 .searchForm > form{
   display: flex;
   align-items: stretch;
-  border:solid 1px #DC143C
+  border:solid 1px #DC143C;
+  max-width:1100px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .searchForm > form > div{
@@ -60,4 +87,19 @@
 
 .header-top-right{
   margin-left: auto;
+}
+
+/* Search box - NOT front page */
+.search-box.open {
+  z-index: 502;
+  background-color: var(--dark);
+}
+
+.header-right .search-box.open .block-region.region-search-box{
+  margin-right:40px !important;
+}
+
+.search-box.open .header-search-close{
+  border-color: white;
+  color: white;
 }

@@ -22,6 +22,8 @@ dependencies:
     - field.storage.paragraph.field_title
     - search_api.server.s_api_elasticserver_bestor
   module:
+    - ''
+    - elasticsearch_connector
     - node
     - paragraphs
     - taxonomy
@@ -56,6 +58,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  computed_relationshipfield__concept__concept:
+    label: 'Relationships with concept'
+    datasource_id: 'entity:node'
+    property_path: computed_relationshipfield__concept__concept
+    type: integer
+    dependencies:
+      module:
+        - null
   content_type__ft:
     label: 'Content type [fulltext]'
     datasource_id: 'entity:node'
@@ -144,6 +154,13 @@ field_settings:
     dependencies:
       module:
         - node
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
   paragraph_text__ft:
     label: 'Paragraph text [fulltext]'
     datasource_id: 'entity:node'
@@ -194,6 +211,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_start_date
+  status:
+    label: Boolean
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
   tax_author__int:
     label: 'Author tax [int]'
     datasource_id: 'entity:node'
@@ -266,6 +293,14 @@ field_settings:
     dependencies:
       module:
         - node
+  title__str:
+    label: 'Title [str]'
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - node
   typology_name__ft:
     label: 'Typology name [ft]'
     datasource_id: 'entity:node'
@@ -276,6 +311,16 @@ field_settings:
         - field.storage.node.field_typology
       module:
         - taxonomy
+  uid:
+    label: 'Entity reference'
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
   uuid__str:
     label: 'UUID [str]'
     datasource_id: 'entity:node'
@@ -303,10 +348,44 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
   custom_value: {  }
+  elasticsearch_highlight:
+    weights:
+      postprocess_query: 0
+      preprocess_query: 0
+    boundary_scanner: sentence
+    boundary_scanner_locale: system
+    encoder: default
+    fields:
+      - alternative_name__ft
+      - author_name__ft
+      - body__ft
+      - content_type__ft
+      - country_name__ft
+      - discipline_name__ft
+      - gender_name__ft
+      - municipality_name__ft
+      - paragraph_text__ft
+      - paragraph_title__ft
+      - place_end_name__ft
+      - specialisation_name__ft
+      - typology_name__ft
+    fragment_size: 60
+    fragmenter: span
+    no_match_size: 0
+    number_of_fragments: 5
+    order: none
+    pre_tag: '<em class="placeholder">'
+    require_field_match: true
+    snippet_joiner: ' … '
+    type: unified
   entity_type: {  }
   language_with_fallback: {  }
   rendered_item: {  }
+  reverse_entity_references: {  }
 tracker_settings:
   default:
     indexing_order: fifo

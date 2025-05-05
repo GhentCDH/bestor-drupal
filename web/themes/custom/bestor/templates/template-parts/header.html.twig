@@ -22,7 +22,7 @@
         {% if page.primary_menu %}
           {% include '@thex/template-parts/header/header-primary-menu.html.twig' %}
         {% endif %}        
-        {% if page.search_box %}
+        {% if page.search_box and not is_front %}
           {% include '@thex/template-parts/header/search.html.twig' %}
         {% endif %}
       </div> <!-- /.header-right -->

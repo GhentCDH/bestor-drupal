@@ -30,3 +30,7 @@ display:
           label: Entité
         type:
           label: "Type d'entité"
+      arguments:
+        fid:
+          exception:
+            title: Tout

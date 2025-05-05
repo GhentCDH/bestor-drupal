@@ -11,5 +11,9 @@ function bestor_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function bestor_preprocess_block(&$variables) {
-    dpm($variables);
+    if($variables['base_plugin_id'] === 'language_block'){
+        foreach($variables['content']['#links'] as $lang_id => $link){
+            $variables['content']['#links'][$lang_id]['title'] = strtoupper($lang_id);
+        }
+    }   
 }

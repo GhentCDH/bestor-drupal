@@ -39,6 +39,7 @@
         "drupal/rabbit_hole": "^1.0",
         "drupal/ruhi": "^10.2",
         "drupal/search_api": "^1.38",
+        "drupal/search_api_glossary": "^4.2",
         "drupal/thex": "^10.0",
         "drupal/twig_tweak": "^3.4",
         "drush/drush": "^12.5"

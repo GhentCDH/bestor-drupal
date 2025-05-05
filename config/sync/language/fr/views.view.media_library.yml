@@ -34,7 +34,12 @@ display:
         delete_media:
           text: Supprimer
   widget:
+    display_title: Widget
     display_options:
+      arguments:
+        bundle:
+          exception:
+            title: Tout
       filters:
         name:
           expose:
@@ -44,6 +49,10 @@ display:
       fields:
         name:
           label: Nom
+      arguments:
+        bundle:
+          exception:
+            title: Tout
       filters:
         name:
           expose:

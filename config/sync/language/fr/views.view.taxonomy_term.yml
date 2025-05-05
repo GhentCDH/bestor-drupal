@@ -6,3 +6,7 @@ display:
         options:
           reset_button_label: Réinitialiser
           exposed_sorts_label: 'Trier par'
+      arguments:
+        tid:
+          exception:
+            title: Tout
