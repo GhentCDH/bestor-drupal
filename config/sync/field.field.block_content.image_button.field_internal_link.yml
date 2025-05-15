@@ -1,0 +1,23 @@
+uuid: 33966f73-f4e3-4e13-a493-f1af7b00d08a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.image_button
+    - field.storage.block_content.field_internal_link
+  module:
+    - link
+id: block_content.image_button.field_internal_link
+field_name: field_internal_link
+entity_type: block_content
+bundle: image_button
+label: 'internal link'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 1
+field_type: link
