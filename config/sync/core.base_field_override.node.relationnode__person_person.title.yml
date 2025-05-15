@@ -1,0 +1,18 @@
+uuid: 6766854a-dc7c-4d3d-a816-a5d6a911aeff
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_person
+id: node.relationnode__person_person.title
+field_name: title
+entity_type: node
+bundle: relationnode__person_person
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

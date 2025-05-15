@@ -8,6 +8,7 @@ dependencies:
     - node.type.article
     - node.type.concept
     - node.type.document
+    - node.type.event
     - node.type.institution
     - node.type.instrument
     - node.type.person
@@ -413,6 +414,7 @@ display:
           plugin_id: bundle
           operator: in
           value:
+            event: event
             article: article
           group: 1
           exposed: false

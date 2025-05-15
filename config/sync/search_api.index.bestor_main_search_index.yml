@@ -57,14 +57,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  computed_relationshipfield__concept__concept:
-    label: 'Relationships with concept'
-    datasource_id: 'entity:node'
-    property_path: computed_relationshipfield__concept__concept
-    type: integer
-    dependencies:
-      module:
-        - null
   content_type__ft:
     label: 'Content type [fulltext]'
     datasource_id: 'entity:node'

@@ -11,7 +11,7 @@ third_party_settings:
     parent: 'main:'
 _core:
   default_config_hash: Fe3N1uqaAyyKJbVkqT-btXy3t98puW8GCRD822xjl10
-name: 'News and events'
+name: News
 type: article
 description: 'Use <em>news and events</em> for time-sensitive content like news, press releases or blog posts.'
 help: null

@@ -1,6 +1,8 @@
 <?php
 
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\node\NodeInterface;
 
 function bestor_form_alter(&$form, &$form_state, $form_id) {
     if($form['#id'] === 'views-exposed-form-search-page-1') {
@@ -14,6 +16,20 @@ function bestor_preprocess_block(&$variables) {
     if($variables['base_plugin_id'] === 'language_block'){
         foreach($variables['content']['#links'] as $lang_id => $link){
             $variables['content']['#links'][$lang_id]['title'] = strtoupper($lang_id);
+        }
+    }   
+}
+
+function bestor_preprocess_node(&$variables) {
+    if (isset($variables['node']) && $variables['node'] instanceof NodeInterface) {
+        $bundle_entity = \Drupal::entityTypeManager()->getStorage('node_type')->load($variables['node']->getType());
+        if ($bundle_entity) {
+            $variables['bundle_title'] = $bundle_entity->label();
+        }
+        
+        $langcode = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_INTERFACE)->getId();
+        if ($langcode) {
+            $variables['langcode'] = $langcode;
         }
     }   
 }
