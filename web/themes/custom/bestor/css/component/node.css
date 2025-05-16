@@ -1,0 +1,17 @@
+.teaser-image {
+    width: 100px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; 
+}
+
+.bundle-type {
+    position: absolute;
+    top: 0;
+    background-color:#DC143C;
+    color:#fff;
+    max-width: 100%;
+    padding: 2px 5px;
+    font-size: 12px;
+}

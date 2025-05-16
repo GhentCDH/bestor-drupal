@@ -2,7 +2,23 @@
 
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\file\Entity\File;
 use Drupal\node\NodeInterface;
+
+function customTranslations() {
+    return [
+        'published_label' => [
+            'en' => 'published at',
+            'fr' => 'publié à',
+            'nl' => 'gepubliceerd op',
+        ],
+        'readmore_label' => [
+            'en' => 'read more',
+            'fr' => 'voir plus',
+            'nl' => 'lees meer',
+        ],
+    ];
+}
 
 function bestor_form_alter(&$form, &$form_state, $form_id) {
     if($form['#id'] === 'views-exposed-form-search-page-1') {
@@ -22,14 +38,29 @@ function bestor_preprocess_block(&$variables) {
 
 function bestor_preprocess_node(&$variables) {
     if (isset($variables['node']) && $variables['node'] instanceof NodeInterface) {
+        // Bundle type variable
         $bundle_entity = \Drupal::entityTypeManager()->getStorage('node_type')->load($variables['node']->getType());
         if ($bundle_entity) {
+            $variables['bundle_id'] = $variables['node']->bundle();
             $variables['bundle_title'] = $bundle_entity->label();
         }
-        
+
+        // Language & translation variables
         $langcode = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_INTERFACE)->getId();
         if ($langcode) {
             $variables['langcode'] = $langcode;
+            foreach (customTranslations() as $term => $translations) {
+                $variables[$term] = isset($translations[$langcode]) ? $translations[$langcode] : null;
+            }
+        }
+
+        // Image URL variable
+        if($variables['teaser'] === true && $variables['node']->bundle() === 'article') {
+            if($variables['node']->field_image->getValue() != null  && isset($variables['node']->field_image->getValue()[0]['target_id'])) {
+                $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString(File::load($variables['node']->field_image->getValue()[0]['target_id'])->getFileUri());
+            }
+            $variables['image_url'] = $image_url ?? null;
         }
     }   
 }
+
