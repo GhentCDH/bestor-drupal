@@ -1,0 +1,21 @@
+.btn{
+    height:24px;
+    display: inline-block;
+    padding: 6px 10px 6px;
+    color: white;
+    background-color: #DC143C;
+    font-size: 12px;
+    line-height: 12px;
+    border: 0;
+    max-width: calc(100vw - 30px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+}
+
+
+.btn:hover{
+    background-color: var(--secondary);
+    color:white; 
+}

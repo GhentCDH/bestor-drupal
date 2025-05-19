@@ -78,32 +78,29 @@ set node_classes = [
 <article{{ attributes.addClass(node_classes) }}>
 
 
-  <div{{ content_attributes }}>
+  <div{{ content_attributes }} class="teaser-container">
 
-    {% if bundle_id == 'event' %}
-      <div class="teaser-image">
-        <div class="time icon teaser-image">
-          <strong>September</strong>
-          <span>20</span>
-        </div>
-
-
-
-    {% else %}
-
-    <div class="teaser-image" style="background-color: grey; background-image: url('{{ image_url }}')">
-
-    {% endif %}
-    <div class="bundle-type">{{ bundle_title }}</div></div>
-
-
-    <div class="teaser-publication-date">{{ published_label }} {{ node.getCreatedTime|date('j-n-Y') }}</div>
-    
-    {{ title_prefix }}
-      <h3{{ title_attributes.addClass('node-title') }}>
-        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-      </h3>
-    {{ title_suffix }}
-    <a href="{{ url }}" class="btn">{{ readmore_label }}</a> 
+      {% if bundle_id == 'event' %}
+        <div class="teaser-image">
+          <div class="time icon teaser-image">
+            <div class="bundle-type bundle-type-{{bundle_id}}">{{ bundle_title }}</div>X
+            <span class="time-day">20</span>
+            <span class="time-month">september</span>
+          </div>
+      {% else %}
+        <div class="teaser-image" style="background-color: grey; background-image: url('{{ image_url }}')">
+          <div class="bundle-type bundle-type-{{bundle_id}}">{{ bundle_title }}</div>
+      {% endif %}
+    </div>
+    <div class="teaser-text">
+      <div class="teaser-publication-date">{{ published_label }} {{ node.getCreatedTime|date('j-n-Y') }}</div>
+      
+      {{ title_prefix }}
+        <h3{{ title_attributes.addClass('node-title') }}>
+          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+        </h3>
+      {{ title_suffix }}
+        <a href="{{ url }}" class="btn">{{ readmore_label }}</a> 
+      </div>
   </div>
 </article>
