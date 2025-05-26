@@ -2,11 +2,12 @@
 
 .node-view-mode-teaser{
     border-bottom:unset !important;
+    margin-bottom: 2.5rem !important;
 }
 
 .node-view-mode-teaser .node-title{
     font-size: 18px; 
-    line-height: 1.2;
+    line-height: 1.2 !important;
     display: flex;
     flex-grow:1;
     gap:10px;
@@ -18,14 +19,14 @@
   }
 
 .teaser-image {
-    width: 100px;
+    flex: 0 0 100px;
     height: 100px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover; 
 }
 
-.node-view-mode-teaser .bundle-type {
+.bundle-type {
     position: absolute;
     top: 0;
     background-color:#DC143C;
@@ -47,7 +48,7 @@
     align-items:flex-start;
 }
 
-.teaser-publication-date{
+.publication-date{
     font-size: 11px;
     color: grey;
 }
@@ -98,7 +99,7 @@
         box-shadow: 0 2px 0 #DC143C;
   }
   
-  
+
   .time.icon span{
     width: 100%;
     letter-spacing: -0.05em;
@@ -112,3 +113,48 @@
       font-size:35px;
       font-weight: 600;
   }
+
+  /* Tiles */
+
+  
+.node-view-mode-tile{
+  display:flex;
+  gap: 35px;
+  height:450px;
+  border: solid 1px #eee;
+}
+
+a .tile-text{
+  color:#000;
+}
+
+.node-view-mode-tile > * {
+  flex:1
+}
+
+.tile-text{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:10px 25px 25px 0;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
+.node-view-mode-tile .intro-text{
+  font-size:16px;
+}
+
+.tile-text .reading-time{
+  text-align: center;
+  margin-bottom:10px;
+  font-size:16px;
+}
+
+.tile-text .publication-date{
+  margin-top:10px;
+}
+
+.node-view-mode-tile:hover{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

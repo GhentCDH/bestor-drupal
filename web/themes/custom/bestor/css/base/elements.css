@@ -36,6 +36,10 @@
     --heading-font: "Josefin Sans", sans-serif;
   }
 
+h3{
+  line-height: 32px !important;
+}
+
 body{
     background-color: unset !important;
 }

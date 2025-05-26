@@ -75,24 +75,20 @@ set node_classes = [
   view_mode ? 'node-view-mode-' ~ view_mode|clean_class,
 ]
 %}
-<article{{ attributes.addClass(node_classes) }}>
+<a href="{{ url }}">
+  <article{{ attributes.addClass(node_classes) }}>
+    <div class="tile-image" style="background-color: grey; background-image: url('{{ image_url }}')">
+        <div class="bundle-type bundle-type-{{bundle_id}}">{{ bundle_title }}</div>
+    </div>
+    <div class="tile-text">
 
+      <div class="reading-time"><i class="fa-regular fa-hourglass-half"></i> {{reading_time}} min</div>
 
- <div class="tile-image" style="background-color: grey; background-image: url('{{ image_url }}')">
-    <div class="bundle-type bundle-type-{{bundle_id}}">{{ bundle_title }}</div>
- </div>
- <div class="tile-text">
-   READING TIME: {{reading_time}} MINs
-   {% set createdDate = node.getCreatedTime|date('j F Y') %}
+      {{ title_prefix }}<h3{{ title_attributes.addClass('node-title') }}>{{ label }}</h3>{{ title_suffix }}
 
+      <div class="intro-text">{{ intro_text }}</div>
+      <div class="publication-date">{{ published_label }} {{ node.getCreatedTime|date('j-n-Y') }}</div>
 
-  {{ title_prefix }}
-  <h2{{ title_attributes.addClass('node-title') }}>
-    <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-  </h2>
-  {{ title_suffix }}
-
-  {{ intro_text }}
-
-  </div>
-</article>
+    </div>
+  </article>
+</a>

@@ -93,8 +93,9 @@ set node_classes = [
       {% endif %}
     </div>
     <div class="teaser-text">
-      <div class="teaser-publication-date">{{ published_label }} {{ node.getCreatedTime|date('j-n-Y') }}</div>
-      
+      {% if bundle_id != 'publication' %}
+        <div class="publication-date">{{ published_label }} {{ node.getCreatedTime|date('j-n-Y') }}</div>
+      {% endif %}
       {{ title_prefix }}
         <h3{{ title_attributes.addClass('node-title') }}>
           <a href="{{ url }}" rel="bookmark">{{ label }}</a>

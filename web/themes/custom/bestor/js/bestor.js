@@ -4,14 +4,19 @@
  */
 (function (Drupal) {
 
-  'use strict';
+  function updateIntroVisibility() {
+    document.querySelectorAll(".tile-text").forEach(tile => {
+      const intro = tile.querySelector(".intro-text");
+      if (!intro) return; 
+      intro.classList.remove("hidden");
 
-  Drupal.behaviors.bestor = {
-    attach (context, settings) {
+      if (tile.scrollHeight > 450) {
+        intro.classList.add("hidden");
+      }
+    });
+  }
 
-      console.log('It works!');
-
-    }
-  };
+  document.addEventListener("DOMContentLoaded", updateIntroVisibility);
+  window.addEventListener("resize", updateIntroVisibility);
 
 } (Drupal));

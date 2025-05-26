@@ -90,6 +90,6 @@ function bestor_preprocess_node(&$variables) {
     } else if(isset($node_fields['field_description']) && $node->field_description->getValue() != null){
         $intro_text = $words;
     } 
-    $variables['intro_text'] = $intro_text ? implode(' ', array_slice(explode(' ', $intro_text), 0, 50)) : null;
+    $variables['intro_text'] = $intro_text ? implode(' ', array_slice(explode(' ', $intro_text), 0, 30)) : null;
 }   
 

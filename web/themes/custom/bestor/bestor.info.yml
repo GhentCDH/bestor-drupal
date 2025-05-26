@@ -6,6 +6,7 @@ package: Custom
 core_version_requirement: ^10
 libraries:
   - bestor/global
+  - bestor/fontawesome
 regions:
   header_top_left: 'Header Top Left'
   header_top_right: 'Header Top Right'

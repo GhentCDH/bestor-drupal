@@ -13,6 +13,7 @@ dependencies:
     - node.type.instrument
     - node.type.person
     - node.type.place
+    - node.type.publication
     - node.type.story
   module:
     - node
@@ -557,6 +558,8 @@ display:
           operator: in
           value:
             '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
+            und: und
+            zxx: zxx
           group: 1
           exposed: false
           expose:
@@ -598,13 +601,7 @@ display:
           plugin_id: bundle
           operator: in
           value:
-            concept: concept
-            document: document
-            institution: institution
-            instrument: instrument
-            person: person
-            place: place
-            story: story
+            publication: publication
           group: 1
           exposed: false
           expose:
