@@ -29,6 +29,7 @@ content:
     weight: 100
     region: content
 hidden:
+  field_author: true
   field_description: true
   field_discipline: true
   field_end_date: true
@@ -42,3 +43,4 @@ hidden:
   field_wikidata_entry: true
   footnotes_group: true
   langcode: true
+  search_api_excerpt: true

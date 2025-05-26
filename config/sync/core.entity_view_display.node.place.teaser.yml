@@ -29,6 +29,7 @@ content:
     region: content
 hidden:
   field_alternative_name: true
+  field_author: true
   field_country: true
   field_description: true
   field_discipline: true
@@ -40,3 +41,4 @@ hidden:
   field_typology: true
   footnotes_group: true
   langcode: true
+  search_api_excerpt: true
