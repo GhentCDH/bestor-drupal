@@ -17,6 +17,11 @@ function customTranslations() {
             'fr' => 'voir plus',
             'nl' => 'lees meer',
         ],
+        'moreinfo_label' => [
+            'en' => 'more info',
+            'fr' => 'plus d\'infos',
+            'nl' => 'meer info',
+        ],
     ];
 }
 
@@ -29,11 +34,20 @@ function bestor_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function bestor_preprocess_block(&$variables) {
-    if($variables['base_plugin_id'] === 'language_block'){
-        foreach($variables['content']['#links'] as $lang_id => $link){
-            $variables['content']['#links'][$lang_id]['title'] = strtoupper($lang_id);
-        }
-    }   
+    switch($variables['base_plugin_id']){
+        case 'language_block':
+            foreach($variables['content']['#links'] as $lang_id => $link){
+                $variables['content']['#links'][$lang_id]['title'] = strtoupper($lang_id);
+            }
+            break;
+        case 'block_content':
+            $block_content = $variables['content']['#block_content'];
+            if($block_content->type->target_id === 'image_button') {
+                $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString(File::load($block_content->field_media_image->target_id)->getFileUri());
+                $variables['image_url'] = $image_url ?? null;
+            }
+            break;
+    }
 }
 
 function bestor_preprocess_node(&$variables) {
@@ -60,7 +74,7 @@ function bestor_preprocess_node(&$variables) {
         // Image URL variable
         if($variables['teaser'] === true && $node->bundle() === 'article') {
             if($node->field_image->getValue() != null  && isset($node->field_image->getValue()[0]['target_id'])) {
-                $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString(File::load($node->field_image->getValue()[0]['target_id'])->getFileUri());
+                $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString(File::load($node->field_image->target_id)->getFileUri());
             }
             $variables['image_url'] = $image_url ?? null;
         }

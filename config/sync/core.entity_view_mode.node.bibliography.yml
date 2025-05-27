@@ -1,0 +1,11 @@
+uuid: 8c8b44bc-b7a2-49cc-8a1f-3000fcc2eeec
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.bibliography
+label: Bibliography
+description: ''
+targetEntityType: node
+cache: true

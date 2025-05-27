@@ -3,31 +3,29 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.publication.body
+    - field.field.node.publication.field_external_link
     - node.type.publication
   module:
+    - link
     - path
-    - text
 id: node.publication.default
 targetEntityType: node
 bundle: publication
 mode: default
 content:
-  body:
-    type: text_textarea_with_summary
-    weight: 121
-    region: content
-    settings:
-      rows: 9
-      summary_rows: 3
-      placeholder: ''
-      show_summary: false
-    third_party_settings: {  }
   created:
     type: datetime_timestamp
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_external_link:
+    type: link_default
+    weight: 121
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   langcode:
     type: language_select

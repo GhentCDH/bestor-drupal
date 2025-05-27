@@ -5,7 +5,8 @@
     margin-bottom: 2.5rem !important;
 }
 
-.node-view-mode-teaser .node-title{
+.node-view-mode-teaser .node-title,
+.node-view-mode-bibliography .node-title{
     font-size: 18px; 
     line-height: 1.2 !important;
     display: flex;
@@ -26,6 +27,14 @@
     background-size: cover; 
 }
 
+.bibliography-image {
+  flex: 0 0 75px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover; 
+}
+
 .bundle-type {
     position: absolute;
     top: 0;
@@ -36,12 +45,19 @@
     font-size: 12px;
 }
 
-.teaser-container{
+.bibliography-container .bundle-type, 
+.bibliography-container .btn{
+  background-color:#282828;
+}
+
+.teaser-container, 
+.bibliography-container{
     display:flex;
     gap:10px;
 }
 
-.teaser-text{
+.teaser-text,
+.bibliography-text{
     display:flex;
     flex-direction: column;
     flex-grow:1;
@@ -53,10 +69,10 @@
     color: grey;
 }
 
-.teaser-text a.btn::before {
+.teaser-text a.btn::before,
+.bibliography-text a.btn::before {
     content: '';
     position: absolute;
-    left: 110px;
     bottom:-12px;
     transform: translateY(-50%);
     width: 0;
@@ -67,7 +83,16 @@
     pointer-events: none;
   }
 
-  .teaser-text a.btn{
+.teaser-text a.btn::before {
+    left: 110px;
+  }
+
+.bibliography-text a.btn::before {
+    left: 85px;
+  }
+
+  .teaser-text a.btn,
+  .bibliography-text a.btn{
     padding-left:18px;
 }
 
