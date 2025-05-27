@@ -1,21 +1,21 @@
-uuid: a0f37408-7fbc-4410-ae8d-5c0e19292ebe
+uuid: 1a68b63d-6891-43f9-b55b-b426fb2a7f74
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_end_date
+    - field.storage.node.field_time_period
     - node.type.instrument
   module:
-    - datetime
-id: node.instrument.field_end_date
-field_name: field_end_date
+    - datetime_range
+id: node.instrument.field_time_period
+field_name: field_time_period
 entity_type: node
 bundle: instrument
-label: 'End date'
+label: time_period
 description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: datetime
+field_type: daterange

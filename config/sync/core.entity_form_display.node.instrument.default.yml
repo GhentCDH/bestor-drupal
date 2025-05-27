@@ -5,14 +5,14 @@ dependencies:
   config:
     - field.field.node.instrument.body
     - field.field.node.instrument.field_alternative_name
+    - field.field.node.instrument.field_author
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
-    - field.field.node.instrument.field_end_date
     - field.field.node.instrument.field_specialisation
-    - field.field.node.instrument.field_start_date
+    - field.field.node.instrument.field_time_period
     - node.type.instrument
   module:
-    - datetime
+    - datetime_range
     - paragraphs
     - path
     - text
@@ -73,12 +73,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_end_date:
-    type: datetime_default
-    weight: 124
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete
     weight: 130
@@ -89,9 +83,9 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_start_date:
-    type: datetime_default
-    weight: 133
+  field_time_period:
+    type: daterange_default
+    weight: 128
     region: content
     settings: {  }
     third_party_settings: {  }

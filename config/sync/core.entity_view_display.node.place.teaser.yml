@@ -5,14 +5,14 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.place.field_alternative_name
+    - field.field.node.place.field_author
     - field.field.node.place.field_country
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
-    - field.field.node.place.field_end_date
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_municipality
     - field.field.node.place.field_specialisation
-    - field.field.node.place.field_start_date
+    - field.field.node.place.field_time_period
     - field.field.node.place.field_typology
     - node.type.place
   module:
@@ -33,11 +33,10 @@ hidden:
   field_country: true
   field_description: true
   field_discipline: true
-  field_end_date: true
   field_geolocation: true
   field_municipality: true
   field_specialisation: true
-  field_start_date: true
+  field_time_period: true
   field_typology: true
   footnotes_group: true
   langcode: true

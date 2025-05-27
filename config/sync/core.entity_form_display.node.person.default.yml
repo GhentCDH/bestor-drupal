@@ -3,20 +3,20 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.person.field_author
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
-    - field.field.node.person.field_end_date
     - field.field.node.person.field_end_municipality
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_specialisation
-    - field.field.node.person.field_start_date
+    - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
-    - datetime
+    - datetime_range
     - link
     - media_library
     - paragraphs
@@ -59,12 +59,6 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  field_end_date:
-    type: datetime_default
-    weight: 124
-    region: content
-    settings: {  }
     third_party_settings: {  }
   field_end_municipality:
     type: entity_reference_autocomplete
@@ -113,9 +107,9 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_start_date:
-    type: datetime_default
-    weight: 133
+  field_time_period:
+    type: daterange_default
+    weight: 128
     region: content
     settings: {  }
     third_party_settings: {  }

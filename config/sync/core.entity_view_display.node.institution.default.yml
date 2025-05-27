@@ -4,18 +4,20 @@ status: true
 dependencies:
   config:
     - field.field.node.institution.field_alternative_name
+    - field.field.node.institution.field_author
     - field.field.node.institution.field_country
     - field.field.node.institution.field_description
     - field.field.node.institution.field_discipline
-    - field.field.node.institution.field_end_date
     - field.field.node.institution.field_geolocation
     - field.field.node.institution.field_municipality
     - field.field.node.institution.field_specialisation
     - field.field.node.institution.field_start_date
+    - field.field.node.institution.field_time_period
     - field.field.node.institution.field_typology
     - node.type.institution
   module:
     - datetime
+    - datetime_range
     - entity_reference_revisions
     - geofield
     - user
@@ -57,15 +59,6 @@ content:
     third_party_settings: {  }
     weight: 115
     region: content
-  field_end_date:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 104
-    region: content
   field_geolocation:
     type: geofield_default
     label: above
@@ -99,6 +92,17 @@ content:
       format_type: medium
     third_party_settings: {  }
     weight: 113
+    region: content
+  field_time_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 102
     region: content
   field_typology:
     type: entity_reference_label

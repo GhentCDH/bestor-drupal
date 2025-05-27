@@ -180,6 +180,61 @@ a .tile-text{
   margin-top:10px;
 }
 
-.node-view-mode-tile:hover{
+.node-view-mode-tile:hover, 
+.database-item-container:hover{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Database view */
+
+.database-view{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap:20px;
+}
+
+.database-item-container{
+  width: 300px;
+  padding:20px;
+  border: solid 1px #eee; 
+  display:flex;
+}
+
+.database-item-container > *{
+flex:1;
+}
+
+.database-item-content{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  height:100%;
+  gap:10px;
+
+}
+
+.database-item-image{
+  height:150px;
+  width:100%;
+}
+
+.database-view .pager{
+  grid-column: 1 / -1;
+  justify-self: centerd
+}
+
+.database-item-metadata{
+display:flex;
+flex-direction:row;
+flex-wrap:nowrap;
+justify-content:space-between;
+align-items:center;
+}
+.database-item-content .bundle-type {
+position:relative;
+}
+
+.database-item-title{
+color:black;
+line-height:26px;  
 }

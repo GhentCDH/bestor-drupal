@@ -1,0 +1,21 @@
+uuid: 7fc5ec9b-ef69-4c6f-98ee-da7f9681e9bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_time_period
+    - node.type.story
+  module:
+    - datetime_range
+id: node.story.field_time_period
+field_name: field_time_period
+entity_type: node
+bundle: story
+label: time_period
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

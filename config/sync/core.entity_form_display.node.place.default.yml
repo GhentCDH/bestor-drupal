@@ -4,18 +4,18 @@ status: true
 dependencies:
   config:
     - field.field.node.place.field_alternative_name
+    - field.field.node.place.field_author
     - field.field.node.place.field_country
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
-    - field.field.node.place.field_end_date
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_municipality
     - field.field.node.place.field_specialisation
-    - field.field.node.place.field_start_date
+    - field.field.node.place.field_time_period
     - field.field.node.place.field_typology
     - node.type.place
   module:
-    - datetime
+    - datetime_range
     - geofield
     - paragraphs
     - path
@@ -76,12 +76,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_end_date:
-    type: datetime_default
-    weight: 124
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_geolocation:
     type: geofield_latlon
     weight: 132
@@ -109,9 +103,9 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_start_date:
-    type: datetime_default
-    weight: 133
+  field_time_period:
+    type: daterange_default
+    weight: 128
     region: content
     settings: {  }
     third_party_settings: {  }

@@ -1,21 +1,21 @@
-uuid: 4afcf8e0-cca7-44de-9454-b6191d93f06e
+uuid: b957f080-0581-46ee-9734-da51a0857b95
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_start_date
+    - field.storage.node.field_time_period
     - node.type.person
   module:
-    - datetime
-id: node.person.field_start_date
-field_name: field_start_date
+    - datetime_range
+id: node.person.field_time_period
+field_name: field_time_period
 entity_type: node
 bundle: person
-label: Birthdate
+label: time_period
 description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: datetime
+field_type: daterange

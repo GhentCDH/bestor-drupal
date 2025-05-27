@@ -1,8 +1,9 @@
-uuid: 749ff01b-b01c-4b42-a385-ec071a320606
+uuid: b2629017-f833-45cf-9750-e73b52688de9
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.database_preview
     - field.field.node.place.field_alternative_name
     - field.field.node.place.field_author
     - field.field.node.place.field_country
@@ -19,10 +20,10 @@ dependencies:
     - entity_reference_revisions
     - geofield
     - user
-id: node.place.default
+id: node.place.database_preview
 targetEntityType: node
 bundle: place
-mode: default
+mode: database_preview
 content:
   field_alternative_name:
     type: string

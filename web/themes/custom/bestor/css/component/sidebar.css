@@ -1,0 +1,7 @@
+.sidebar .block {
+    background-color:unset !important;
+}
+  
+.sidebar li {
+    border-bottom:unset !important;
+}

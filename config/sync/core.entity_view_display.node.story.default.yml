@@ -4,11 +4,14 @@ status: true
 dependencies:
   config:
     - field.field.node.story.field_alternative_name
+    - field.field.node.story.field_author
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_specialisation
+    - field.field.node.story.field_time_period
     - node.type.story
   module:
+    - datetime_range
     - entity_reference_revisions
     - user
 id: node.story.default
@@ -48,6 +51,17 @@ content:
       link: true
     third_party_settings: {  }
     weight: 110
+    region: content
+  field_time_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 102
     region: content
   links:
     settings: {  }

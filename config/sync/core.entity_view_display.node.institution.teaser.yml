@@ -5,14 +5,15 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.institution.field_alternative_name
+    - field.field.node.institution.field_author
     - field.field.node.institution.field_country
     - field.field.node.institution.field_description
     - field.field.node.institution.field_discipline
-    - field.field.node.institution.field_end_date
     - field.field.node.institution.field_geolocation
     - field.field.node.institution.field_municipality
     - field.field.node.institution.field_specialisation
     - field.field.node.institution.field_start_date
+    - field.field.node.institution.field_time_period
     - field.field.node.institution.field_typology
     - node.type.institution
   module:
@@ -33,11 +34,11 @@ hidden:
   field_country: true
   field_description: true
   field_discipline: true
-  field_end_date: true
   field_geolocation: true
   field_municipality: true
   field_specialisation: true
   field_start_date: true
+  field_time_period: true
   field_typology: true
   footnotes_group: true
   langcode: true

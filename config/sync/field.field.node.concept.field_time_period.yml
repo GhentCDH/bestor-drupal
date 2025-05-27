@@ -1,21 +1,21 @@
-uuid: b59ec102-ae17-45c8-a377-7188dcc05950
+uuid: eab9ff5c-fe61-4437-b52a-1a470b7011e1
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_start_date
+    - field.storage.node.field_time_period
     - node.type.concept
   module:
-    - datetime
-id: node.concept.field_start_date
-field_name: field_start_date
+    - datetime_range
+id: node.concept.field_time_period
+field_name: field_time_period
 entity_type: node
 bundle: concept
-label: 'Date of establishment'
+label: time_period
 description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: datetime
+field_type: daterange

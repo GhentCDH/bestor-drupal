@@ -1,8 +1,9 @@
-uuid: a86f1667-5dff-468a-9894-4cd0144b7d6c
+uuid: 1e3dc272-219b-4f5e-a551-c976f0ed4052
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.database_preview
     - field.field.node.person.field_author
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
@@ -20,10 +21,10 @@ dependencies:
     - entity_reference_revisions
     - link
     - user
-id: node.person.default
+id: node.person.database_preview
 targetEntityType: node
 bundle: person
-mode: default
+mode: database_preview
 content:
   field_description:
     type: entity_reference_revisions_entity_view

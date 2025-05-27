@@ -7,18 +7,16 @@ dependencies:
     - field.field.node.person.field_author
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
-    - field.field.node.person.field_end_date
     - field.field.node.person.field_end_municipality
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_specialisation
-    - field.field.node.person.field_start_date
+    - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
-    - datetime
     - entity_reference_revisions
     - link
     - user
@@ -43,15 +41,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 7
-    region: content
-  field_end_date:
-    type: datetime_custom
-    label: inline
-    settings:
-      timezone_override: ''
-      date_format: 'Y'
-    third_party_settings: {  }
-    weight: 2
     region: content
   field_end_municipality:
     type: entity_reference_label
@@ -94,15 +83,6 @@ content:
     third_party_settings: {  }
     weight: 8
     region: content
-  field_start_date:
-    type: datetime_custom
-    label: inline
-    settings:
-      timezone_override: ''
-      date_format: 'Y'
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_typology:
     type: entity_reference_label
     label: inline
@@ -136,6 +116,7 @@ hidden:
   computed_relationshipfield__person__place: true
   computed_relationshipfield__person__story: true
   field_author: true
+  field_time_period: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

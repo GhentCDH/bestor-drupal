@@ -9,11 +9,11 @@ dependencies:
     - field.field.node.institution.field_country
     - field.field.node.institution.field_description
     - field.field.node.institution.field_discipline
-    - field.field.node.institution.field_end_date
     - field.field.node.institution.field_geolocation
     - field.field.node.institution.field_municipality
     - field.field.node.institution.field_specialisation
     - field.field.node.institution.field_start_date
+    - field.field.node.institution.field_time_period
     - field.field.node.institution.field_typology
     - node.type.institution
   module:
@@ -58,15 +58,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 115
-    region: content
-  field_end_date:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 104
     region: content
   field_geolocation:
     type: geofield_default
@@ -123,6 +114,7 @@ hidden:
   computed_relationshipfield__institution__place: true
   computed_relationshipfield__institution__story: true
   field_author: true
+  field_time_period: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

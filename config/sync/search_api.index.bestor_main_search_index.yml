@@ -9,13 +9,12 @@ dependencies:
     - field.storage.node.field_country
     - field.storage.node.field_description
     - field.storage.node.field_discipline
-    - field.storage.node.field_end_date
     - field.storage.node.field_end_municipality
     - field.storage.node.field_gender
     - field.storage.node.field_geolocation
     - field.storage.node.field_municipality
     - field.storage.node.field_specialisation
-    - field.storage.node.field_start_date
+    - field.storage.node.field_time_period
     - field.storage.node.field_typology
     - field.storage.node.field_wikidata_entry
     - field.storage.paragraph.field_formatted_text
@@ -93,14 +92,22 @@ field_settings:
         - field.storage.node.field_discipline
       module:
         - taxonomy
-  end_date__date:
-    label: 'End date [date]'
+  field_time_period_end__date:
+    label: 'end time [date]'
     datasource_id: 'entity:node'
-    property_path: field_end_date
+    property_path: 'field_time_period:end_value'
     type: date
     dependencies:
       config:
-        - field.storage.node.field_end_date
+        - field.storage.node.field_time_period
+  field_time_period_start__date:
+    label: 'Start time [date]'
+    datasource_id: 'entity:node'
+    property_path: field_time_period
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_time_period
   gender_name__ft:
     label: 'Gender name [ft]'
     datasource_id: 'entity:node'
@@ -194,14 +201,6 @@ field_settings:
         - field.storage.node.field_specialisation
       module:
         - taxonomy
-  start_date__date:
-    label: 'Start date [date]'
-    datasource_id: 'entity:node'
-    property_path: field_start_date
-    type: date
-    dependencies:
-      config:
-        - field.storage.node.field_start_date
   status:
     label: Boolean
     datasource_id: 'entity:node'

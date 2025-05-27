@@ -4,14 +4,14 @@ status: true
 dependencies:
   config:
     - field.field.node.document.field_alternative_name
+    - field.field.node.document.field_author
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
-    - field.field.node.document.field_end_date
     - field.field.node.document.field_specialisation
-    - field.field.node.document.field_start_date
+    - field.field.node.document.field_time_period
     - node.type.document
   module:
-    - datetime
+    - datetime_range
     - paragraphs
     - path
 id: node.document.default
@@ -61,12 +61,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_end_date:
-    type: datetime_default
-    weight: 124
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete
     weight: 130
@@ -77,9 +71,9 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_start_date:
-    type: datetime_default
-    weight: 133
+  field_time_period:
+    type: daterange_default
+    weight: 128
     region: content
     settings: {  }
     third_party_settings: {  }

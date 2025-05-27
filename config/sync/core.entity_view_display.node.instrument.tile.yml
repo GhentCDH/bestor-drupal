@@ -9,12 +9,10 @@ dependencies:
     - field.field.node.instrument.field_author
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
-    - field.field.node.instrument.field_end_date
     - field.field.node.instrument.field_specialisation
-    - field.field.node.instrument.field_start_date
+    - field.field.node.instrument.field_time_period
     - node.type.instrument
   module:
-    - datetime
     - entity_reference_revisions
     - text
     - user
@@ -55,15 +53,6 @@ content:
     third_party_settings: {  }
     weight: 115
     region: content
-  field_end_date:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 104
-    region: content
   field_specialisation:
     type: entity_reference_label
     label: above
@@ -71,15 +60,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 110
-    region: content
-  field_start_date:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 113
     region: content
   links:
     settings: {  }
@@ -95,6 +75,7 @@ hidden:
   computed_relationshipfield__instrument__place: true
   computed_relationshipfield__instrument__story: true
   field_author: true
+  field_time_period: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

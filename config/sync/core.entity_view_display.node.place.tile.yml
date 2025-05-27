@@ -9,15 +9,13 @@ dependencies:
     - field.field.node.place.field_country
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
-    - field.field.node.place.field_end_date
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_municipality
     - field.field.node.place.field_specialisation
-    - field.field.node.place.field_start_date
+    - field.field.node.place.field_time_period
     - field.field.node.place.field_typology
     - node.type.place
   module:
-    - datetime
     - entity_reference_revisions
     - geofield
     - user
@@ -59,15 +57,6 @@ content:
     third_party_settings: {  }
     weight: 115
     region: content
-  field_end_date:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 104
-    region: content
   field_geolocation:
     type: geofield_default
     label: above
@@ -93,15 +82,6 @@ content:
     third_party_settings: {  }
     weight: 110
     region: content
-  field_start_date:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 113
-    region: content
   field_typology:
     type: entity_reference_label
     label: above
@@ -124,6 +104,7 @@ hidden:
   computed_relationshipfield__place__place: true
   computed_relationshipfield__place__story: true
   field_author: true
+  field_time_period: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

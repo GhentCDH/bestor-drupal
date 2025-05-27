@@ -5,11 +5,11 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.concept.field_alternative_name
+    - field.field.node.concept.field_author
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
-    - field.field.node.concept.field_end_date
     - field.field.node.concept.field_specialisation
-    - field.field.node.concept.field_start_date
+    - field.field.node.concept.field_time_period
     - node.type.concept
   module:
     - user
@@ -28,9 +28,8 @@ hidden:
   field_author: true
   field_description: true
   field_discipline: true
-  field_end_date: true
   field_specialisation: true
-  field_start_date: true
+  field_time_period: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

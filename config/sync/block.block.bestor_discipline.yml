@@ -1,0 +1,29 @@
+uuid: 6c819252-49bf-415e-a171-5db844a820ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.discipline
+  module:
+    - facets
+    - system
+  theme:
+    - bestor
+id: bestor_discipline
+theme: bestor
+region: sidebar_first
+weight: -8
+provider: null
+plugin: 'facet_block:discipline'
+settings:
+  id: 'facet_block:discipline'
+  label: discipline
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: bestor_discipline
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /database
