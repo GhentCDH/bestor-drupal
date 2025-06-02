@@ -24,6 +24,7 @@ dependencies:
     - elasticsearch_connector
     - node
     - paragraphs
+    - search_api_glossary
     - taxonomy
 id: bestor_main_search_index
 name: bestor_main_search_index
@@ -126,6 +127,13 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_geolocation
+  glossaryaz_title__str:
+    label: 'Glossary AZ - Content » Title [str]'
+    property_path: glossaryaz_title__str
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
   langcode__str:
     label: 'Language code [string]'
     datasource_id: 'entity:node'
@@ -373,6 +381,15 @@ processor_settings:
     snippet_joiner: ' … '
     type: unified
   entity_type: {  }
+  glossary:
+    weights:
+      preprocess_index: -20
+    glossarytable: 'a:1:{s:13:"glossarytable";a:30:{s:20:"alternative_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"author_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:8:"body__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:16:"content_type__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:17:"content_type__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:16:"country_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"discipline_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"gender_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"geolocation_str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:13:"langcode__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:21:"municipality_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:8:"nid__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:18:"paragraph_text__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"paragraph_title__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:18:"place_end_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:23:"specialisation_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"tax_author__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:16:"tax_country__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"tax_discipline__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:18:"tax_end_place__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"tax_gender__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:21:"tax_municipality__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:23:"tax_specialisation__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:17:"tax_typology__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:9:"title__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:10:"title__str";a:2:{s:8:"glossary";s:1:"1";s:8:"grouping";a:3:{s:11:"grouping_09";s:11:"grouping_09";s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;}}s:17:"typology_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:3:"uid";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:9:"uuid__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"wikidata_entry__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}}}'
+    field_enabled: 0
+    grouping_defaults:
+      grouping_other: grouping_other
+      grouping_az: 0
+      grouping_09: 0
   language_with_fallback: {  }
   rendered_item: {  }
   reverse_entity_references: {  }

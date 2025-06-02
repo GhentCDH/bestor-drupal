@@ -11,7 +11,7 @@ _core:
 id: bestor_help
 theme: bestor
 region: content
-weight: -5
+weight: -9
 provider: null
 plugin: help_block
 settings:

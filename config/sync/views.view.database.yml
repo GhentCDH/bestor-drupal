@@ -264,6 +264,10 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      cache:
+        type: search_api_none
+      defaults:
+        cache: false
       display_description: ''
       display_extenders: {  }
       path: database
@@ -293,7 +297,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
-      title: Concepts
+      title: 'Concepts advanced'
       filters:
         content_type_str:
           id: content_type_str
@@ -346,7 +350,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: concepts
+      path: advanced-search-concepts
     cache_metadata:
       max-age: -1
       contexts:
@@ -364,7 +368,7 @@ display:
     display_plugin: page
     position: 3
     display_options:
-      title: Documents
+      title: 'Documents advanced'
       filters:
         content_type_str:
           id: content_type_str
@@ -417,7 +421,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: documents
+      path: advanced-search-documents
     cache_metadata:
       max-age: -1
       contexts:
@@ -435,7 +439,7 @@ display:
     display_plugin: page
     position: 4
     display_options:
-      title: Institutions
+      title: 'Institutions advanced'
       filters:
         content_type_str:
           id: content_type_str
@@ -488,7 +492,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: institutions
+      path: advanced-search-institutions
     cache_metadata:
       max-age: -1
       contexts:
@@ -506,7 +510,7 @@ display:
     display_plugin: page
     position: 5
     display_options:
-      title: Instruments
+      title: 'Instruments advanced'
       filters:
         content_type_str:
           id: content_type_str
@@ -559,7 +563,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: instruments
+      path: advanced-search-instruments
     cache_metadata:
       max-age: -1
       contexts:
@@ -577,7 +581,7 @@ display:
     display_plugin: page
     position: 6
     display_options:
-      title: Persons
+      title: 'Persons advanced'
       filters:
         content_type_str:
           id: content_type_str
@@ -630,7 +634,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: persons
+      path: advanced-search-persons
     cache_metadata:
       max-age: -1
       contexts:
@@ -648,7 +652,7 @@ display:
     display_plugin: page
     position: 7
     display_options:
-      title: Places
+      title: 'Places advanced'
       filters:
         content_type_str:
           id: content_type_str
@@ -701,7 +705,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: places
+      path: advanced-search-places
     cache_metadata:
       max-age: -1
       contexts:
@@ -719,7 +723,7 @@ display:
     display_plugin: page
     position: 8
     display_options:
-      title: Stories
+      title: 'Stories advanced'
       filters:
         content_type_str:
           id: content_type_str
@@ -772,7 +776,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: stories
+      path: advanced-search-stories
     cache_metadata:
       max-age: -1
       contexts:
