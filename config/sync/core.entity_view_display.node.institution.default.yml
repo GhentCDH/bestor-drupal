@@ -29,104 +29,111 @@ mode: default
 content:
   field_alternative_name:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 102
+    weight: 2
     region: content
-  field_country:
+  field_author:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    weight: 106
+    weight: 12
+    region: content
+  field_country:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 101
+    weight: 1
     region: content
   field_discipline:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    weight: 115
+    weight: 10
     region: content
   field_geolocation:
     type: geofield_default
-    label: above
+    label: hidden
     settings:
       output_format: wkt
       output_escape: true
     third_party_settings: {  }
-    weight: 112
+    weight: 7
     region: content
   field_municipality:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    weight: 105
+    weight: 4
     region: content
   field_specialisation:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    weight: 110
+    weight: 6
     region: content
   field_start_date:
     type: datetime_default
-    label: above
+    label: hidden
     settings:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 113
+    weight: 8
     region: content
   field_summary:
     type: basic_string
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 116
+    weight: 11
     region: content
   field_time_period:
     type: daterange_default
-    label: above
+    label: hidden
     settings:
       timezone_override: ''
       format_type: medium
       from_to: both
       separator: '-'
     third_party_settings: {  }
-    weight: 102
+    weight: 3
     region: content
   field_typology:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    weight: 114
+    weight: 9
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 0
     region: content
 hidden:
-  field_author: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

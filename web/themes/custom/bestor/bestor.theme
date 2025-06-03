@@ -32,6 +32,16 @@ function customTranslations() {
             'fr' => 'temps de lecture',
             'nl' => 'leestijd',
         ],
+        'context_label' => [
+            'en' => 'In context',
+            'fr' => 'Contexte',
+            'nl' => 'In context',
+        ],
+        'place_label' => [
+            'en' => 'Place',
+            'fr' => 'Lieu',
+            'nl' => 'Plaats',
+        ],
     ];
 }
 

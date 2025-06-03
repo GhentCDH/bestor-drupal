@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.person.field_alternative_name
     - field.field.node.person.field_author
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
@@ -26,6 +27,14 @@ targetEntityType: node
 bundle: person
 mode: default
 content:
+  field_alternative_name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 102
+    region: content
   field_author:
     type: entity_reference_label
     label: hidden
@@ -36,7 +45,7 @@ content:
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
@@ -45,7 +54,7 @@ content:
     region: content
   field_discipline:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -53,7 +62,7 @@ content:
     region: content
   field_end_municipality:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -61,7 +70,7 @@ content:
     region: content
   field_gender:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -69,7 +78,7 @@ content:
     region: content
   field_image:
     type: entity_reference_entity_view
-    label: inline
+    label: hidden
     settings:
       view_mode: default
       link: false
@@ -78,7 +87,7 @@ content:
     region: content
   field_municipality:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -86,7 +95,7 @@ content:
     region: content
   field_specialisation:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -94,14 +103,14 @@ content:
     region: content
   field_summary:
     type: basic_string
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 116
     region: content
   field_time_period:
     type: daterange_default
-    label: above
+    label: hidden
     settings:
       timezone_override: ''
       format_type: medium
@@ -112,7 +121,7 @@ content:
     region: content
   field_typology:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -120,7 +129,7 @@ content:
     region: content
   field_wikidata_entry:
     type: link
-    label: inline
+    label: hidden
     settings:
       trim_length: 80
       url_only: false

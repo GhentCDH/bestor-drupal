@@ -98,11 +98,104 @@ set node_classes = [
         </div>
       </div>
     </div>
-    <div class="lemma-body">
-      <div class="lemma-main-content">
+    <div class="lemma-body row">
+      <div class="lemma-main-content col-md-8">
         {{ devel_dump(content) }}
+        {{content.field_description}}
+        {% if content.field_geolocation.0 %}
+          {{content.field_geolocation}}
+        {% endif %}
       </div>
-      <div class="lemma-sidebar">
+      <div class="lemma-sidebar col-md-4">
+      <h2>{{context_label}}</h2>
+        {% if content.field_alternative_name.0 %}
+          <div class="context-element ce-alt-name">
+            <h3 class="context-element-title"><i class="fa-solid fa-signature"></i>{{content.field_alternative_name['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_alternative_name}}
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_time_period.0 %}
+          <div class="context-element ce-time">
+            <h3  class="context-element-title"><i class="fa-solid fa-timeline"></i>{{content.field_time_period['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_time_period}}
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_municipality.0 or content.field_end_municipality.0 %}
+          <div class="context-element ce-place">
+            <h3 class="context-element-title"><i class="fa-solid fa-globe"></i>{{place_label}}</h3>
+            <div class="context-element-content">
+              {% if content.field_municipality.0 %}
+                <span class="municipality">
+                  {{content.field_municipality}}
+                </span>
+              {% endif %}
+              {% if content.field_end_municipality.0 %}
+                <span class="end-municipality">
+                   - {{content.field_end_municipality}}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_country.0 %}
+          <div class="context-element ce-country">
+            <h3 class="context-element-title"><i class="fa-regular fa-flag"></i>{{content.field_country['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_country}}
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_typology.0 %}
+          <div class="context-element ce-typology">
+          <h3 class="context-element-title"><i class="fa-solid fa-hashtag"></i>{{content.field_typology['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_typology}}
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_specialisation.0 %}
+          <div class="context-element ce-specialisation">
+            <h3 class="context-element-title"><i class="fa-solid fa-tags"></i>{{content.field_specialisation['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_specialisation}}
+            </div>
+          </div>
+        {% endif %}
+        {% if AANVULLEN %}
+          <div class="context-element ce-relationship">
+            <h3 class="context-element-title"><i class="fa-solid fa-link"></i></h3>
+            <div class="context-element-content">
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_image.0 %}
+          <div class="context-element ce-image">
+            <h3 class="context-element-title"><i class="fa-solid fa-camera-retro"></i>{{content.field_image['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_image}}
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_wikidata_entry.0 %}
+          <div class="context-element ce-wikidata">
+            <h3 class="context-element-title"><i class="fa-solid fa-up-right-from-square"></i>{{content.field_wikidata_entry['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_wikidata_entry}}
+            </div>
+          </div>
+        {% endif %}
+        {% if content.field_gender.0 %}
+          <div class="context-element ce-gender">
+            <h3 class="context-element-title"><i class="fa-solid fa-mars-and-venus"></i>{{content.field_gender['#title']}}</h3>
+            <div class="context-element-content">
+              {{content.field_gender}}
+            </div>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>

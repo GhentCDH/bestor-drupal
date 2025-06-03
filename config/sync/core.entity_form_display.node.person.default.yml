@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.person.field_alternative_name
     - field.field.node.person.field_author
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
@@ -32,6 +33,14 @@ content:
     weight: 3
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_alternative_name:
+    type: string_textfield
+    weight: 122
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_author:
     type: entity_reference_autocomplete

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.person.field_alternative_name
     - field.field.node.person.field_author
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
@@ -30,6 +31,7 @@ content:
     weight: 100
     region: content
 hidden:
+  field_alternative_name: true
   field_author: true
   field_description: true
   field_discipline: true

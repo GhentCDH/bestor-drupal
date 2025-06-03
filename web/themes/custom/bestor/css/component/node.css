@@ -256,8 +256,6 @@ line-height:26px;
   min-height: 200px;
   flex-direction: row;;
   gap:0px;
-  
-
 }
 
 .lemma-image {
@@ -276,8 +274,9 @@ line-height:26px;
   flex: 1;
   background-color: #eee;
   margin: 50px 0 25px -300px;
-  padding-left:350px;
-  border-radius:10px
+  padding:30px 30px 20px 350px;
+  border-radius:10px;
+  font-size:21px;
 }
 
 .lemma-author .node-taxonomy-container,
@@ -314,36 +313,39 @@ line-height:26px;
 }
 
 .lemma-metadata i{
+  font-size:30px;
   text-align:center;
-  width:20px;
-  margin-right:4px;
+  width:30px;
+  margin-right:8px;
 }
 
 .lemma-metadata {
   display:flex;
   flex-wrap: wrap;
   justify-content:space-between;
+  min-height:50px;
 }
 
 .lemma-metadata > *{
   flex:1;
-  padding:10px 0
+  padding:0px 0;
+  display:flex;
+  align-items:center;
 }
 
 .lemma-metadata > .lemma-author{
-  background-color:#282828;
   padding-left:10px;
-  color:white;
 }
 
 .lemma-metadata > .reading-time{
-  background-color:#DC143C;
+  justify-content:center;
+  border-radius:40px;
+  background-color:#282828;
   color:white;
-  text-align:center;
+  width:50px;
 }
 
 .lemma-metadata > .publication-date{
-  background-color:#ccc;
   padding-right:10px;
-  text-align: right;
+  justify-content:flex-end;
 }

@@ -22,7 +22,7 @@ mode: default
 content:
   field_alternative_name:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -30,7 +30,7 @@ content:
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
@@ -39,7 +39,7 @@ content:
     region: content
   field_discipline:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -47,7 +47,7 @@ content:
     region: content
   field_specialisation:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -55,14 +55,14 @@ content:
     region: content
   field_summary:
     type: basic_string
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 116
     region: content
   field_time_period:
     type: daterange_default
-    label: above
+    label: hidden
     settings:
       timezone_override: ''
       format_type: medium
