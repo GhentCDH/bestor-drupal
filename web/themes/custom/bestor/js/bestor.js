@@ -16,6 +16,8 @@
     });
   }
 
+  
+
   document.addEventListener("DOMContentLoaded", updateIntroVisibility);
   window.addEventListener("resize", updateIntroVisibility);
 

@@ -64,7 +64,9 @@
     align-items:flex-start;
 }
 
-.publication-date{
+.database-item-metadata .publication-date,
+.teaser-text .publication-date,
+.tile-text .publication-date{
     font-size: 11px;
     color: grey;
 }
@@ -220,7 +222,7 @@ flex:1;
 
 .database-view .pager{
   grid-column: 1 / -1;
-  justify-self: centerd
+  justify-self: center;
 }
 
 .database-item-metadata{
@@ -237,4 +239,111 @@ position:relative;
 .database-item-title{
 color:black;
 line-height:26px;  
+}
+
+/* Lemma's*/
+
+.lemma-header{
+  min-height:400px;
+  position:relative;
+
+}
+
+.lemma-banner {
+  margin-top:20px;
+  position: relative;
+  display: flex;
+  min-height: 200px;
+  flex-direction: row;;
+  gap:0px;
+  
+
+}
+
+.lemma-image {
+  height: 400px;
+  width: 400px;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  border-radius:200px;
+  border-right: #282828 solid;
+
+}
+
+.lemma-intro {
+  position:relative;
+  flex: 1;
+  background-color: #eee;
+  margin: 50px 0 25px -300px;
+  padding-left:350px;
+  border-radius:10px
+}
+
+.lemma-author .node-taxonomy-container,
+.lemma-author ul.taxonomy-terms,
+.lemma-author li.taxonomy-term{
+  margin:unset !important;
+  display:inline;
+}
+
+.lemma-author li.taxonomy-term a,
+.lemma-author li.taxonomy-term a:hover  {
+    color:unset;
+    background-color: unset;
+    border: 0;
+    border-radius: unset;
+    box-shadow: unset;
+    padding:unset;
+  }
+
+.lemma-author li.taxonomy-term a:hover {
+    border-bottom:1px solid;
+}
+
+.lemma-author  li::after {
+  content: ', ';
+}
+
+.lemma-author  li:nth-last-child(2)::after {
+  content: ' & ';
+}
+
+.lemma-author li:last-child::after {
+  content: '';
+}
+
+.lemma-metadata i{
+  text-align:center;
+  width:20px;
+  margin-right:4px;
+}
+
+.lemma-metadata {
+  display:flex;
+  flex-wrap: wrap;
+  justify-content:space-between;
+}
+
+.lemma-metadata > *{
+  flex:1;
+  padding:10px 0
+}
+
+.lemma-metadata > .lemma-author{
+  background-color:#282828;
+  padding-left:10px;
+  color:white;
+}
+
+.lemma-metadata > .reading-time{
+  background-color:#DC143C;
+  color:white;
+  text-align:center;
+}
+
+.lemma-metadata > .publication-date{
+  background-color:#ccc;
+  padding-right:10px;
+  text-align: right;
 }

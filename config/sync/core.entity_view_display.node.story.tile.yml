@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_specialisation
+    - field.field.node.story.field_summary
     - field.field.node.story.field_time_period
     - node.type.story
   module:
@@ -66,6 +67,7 @@ hidden:
   computed_relationshipfield__story__place: true
   computed_relationshipfield__story__story: true
   field_author: true
+  field_summary: true
   field_time_period: true
   footnotes_group: true
   langcode: true

@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
     - field.field.node.instrument.field_specialisation
+    - field.field.node.instrument.field_summary
     - field.field.node.instrument.field_time_period
     - node.type.instrument
   module:
@@ -75,6 +76,7 @@ hidden:
   computed_relationshipfield__instrument__place: true
   computed_relationshipfield__instrument__story: true
   field_author: true
+  field_summary: true
   field_time_period: true
   footnotes_group: true
   langcode: true

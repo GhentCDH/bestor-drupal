@@ -1,0 +1,19 @@
+uuid: c76e90ec-5c86-4f43-9fe9-37a1b881b83b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_summary
+    - node.type.institution
+id: node.institution.field_summary
+field_name: field_summary
+entity_type: node
+bundle: institution
+label: Summary
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

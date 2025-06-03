@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_specialisation
+    - field.field.node.person.field_summary
     - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
@@ -122,6 +123,7 @@ content:
     region: content
 hidden:
   field_author: true
+  field_summary: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

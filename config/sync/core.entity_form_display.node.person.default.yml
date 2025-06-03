@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_specialisation
+    - field.field.node.person.field_summary
     - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
@@ -28,13 +29,23 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_author:
+    type: entity_reference_autocomplete
+    weight: 19
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_description:
     type: paragraphs
-    weight: 121
+    weight: 9
     region: content
     settings:
       title: Paragraph
@@ -52,7 +63,7 @@ content:
     third_party_settings: {  }
   field_discipline:
     type: entity_reference_autocomplete
-    weight: 135
+    weight: 17
     region: content
     settings:
       match_operator: CONTAINS
@@ -62,7 +73,7 @@ content:
     third_party_settings: {  }
   field_end_municipality:
     type: entity_reference_autocomplete
-    weight: 134
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -72,7 +83,7 @@ content:
     third_party_settings: {  }
   field_gender:
     type: entity_reference_autocomplete
-    weight: 122
+    weight: 10
     region: content
     settings:
       match_operator: CONTAINS
@@ -82,14 +93,14 @@ content:
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 127
+    weight: 12
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_municipality:
     type: entity_reference_autocomplete
-    weight: 125
+    weight: 11
     region: content
     settings:
       match_operator: CONTAINS
@@ -99,7 +110,7 @@ content:
     third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete
-    weight: 130
+    weight: 14
     region: content
     settings:
       match_operator: CONTAINS
@@ -107,15 +118,23 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_summary:
+    type: string_textarea
+    weight: 136
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_time_period:
     type: daterange_default
-    weight: 128
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   field_typology:
     type: entity_reference_autocomplete
-    weight: 134
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -125,7 +144,7 @@ content:
     third_party_settings: {  }
   field_wikidata_entry:
     type: link_default
-    weight: 136
+    weight: 18
     region: content
     settings:
       placeholder_url: ''
@@ -133,54 +152,54 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 2
+    weight: 1
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 15
+    weight: 5
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 120
+    weight: 8
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 16
+    weight: 6
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: -5
+    weight: 0
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 10
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -188,5 +207,4 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden:
-  field_author: true
+hidden: {  }

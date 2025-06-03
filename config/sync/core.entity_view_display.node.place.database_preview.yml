@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_municipality
     - field.field.node.place.field_specialisation
+    - field.field.node.place.field_summary
     - field.field.node.place.field_time_period
     - field.field.node.place.field_typology
     - node.type.place
@@ -109,6 +110,7 @@ content:
     region: content
 hidden:
   field_author: true
+  field_summary: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

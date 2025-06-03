@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_specialisation
+    - field.field.node.person.field_summary
     - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
@@ -25,6 +26,14 @@ targetEntityType: node
 bundle: person
 mode: default
 content:
+  field_author:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
   field_description:
     type: entity_reference_revisions_entity_view
     label: above
@@ -32,7 +41,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 11
+    weight: 9
     region: content
   field_discipline:
     type: entity_reference_label
@@ -40,7 +49,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 7
+    weight: 5
     region: content
   field_end_municipality:
     type: entity_reference_label
@@ -48,7 +57,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 4
+    weight: 2
     region: content
   field_gender:
     type: entity_reference_label
@@ -56,7 +65,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 3
     region: content
   field_image:
     type: entity_reference_entity_view
@@ -65,7 +74,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 6
+    weight: 4
     region: content
   field_municipality:
     type: entity_reference_label
@@ -73,7 +82,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 3
+    weight: 1
     region: content
   field_specialisation:
     type: entity_reference_label
@@ -81,7 +90,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 8
+    weight: 6
+    region: content
+  field_summary:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
     region: content
   field_time_period:
     type: daterange_default
@@ -92,7 +108,7 @@ content:
       from_to: both
       separator: '-'
     third_party_settings: {  }
-    weight: 102
+    weight: 11
     region: content
   field_typology:
     type: entity_reference_label
@@ -100,7 +116,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 9
+    weight: 7
     region: content
   field_wikidata_entry:
     type: link
@@ -112,7 +128,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 10
+    weight: 8
     region: content
   links:
     settings: {  }
@@ -120,7 +136,6 @@ content:
     weight: 0
     region: content
 hidden:
-  field_author: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

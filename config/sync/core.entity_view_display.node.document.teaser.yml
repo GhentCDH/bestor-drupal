@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
     - field.field.node.document.field_specialisation
+    - field.field.node.document.field_summary
     - field.field.node.document.field_time_period
     - node.type.document
   module:
@@ -29,6 +30,7 @@ hidden:
   field_description: true
   field_discipline: true
   field_specialisation: true
+  field_summary: true
   field_time_period: true
   footnotes_group: true
   langcode: true

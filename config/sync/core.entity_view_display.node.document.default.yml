@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
     - field.field.node.document.field_specialisation
+    - field.field.node.document.field_summary
     - field.field.node.document.field_time_period
     - node.type.document
   module:
@@ -51,6 +52,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 110
+    region: content
+  field_summary:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
     region: content
   field_time_period:
     type: daterange_default

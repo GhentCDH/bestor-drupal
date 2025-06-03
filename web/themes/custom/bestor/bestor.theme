@@ -22,7 +22,29 @@ function customTranslations() {
             'fr' => 'plus d\'infos',
             'nl' => 'meer info',
         ],
+        'author_label' => [
+            'en' => 'author',
+            'fr' => 'auteur',
+            'nl' => 'auteur',
+        ],
+        'reading_time_label' => [
+            'en' => 'reading time',
+            'fr' => 'temps de lecture',
+            'nl' => 'leestijd',
+        ],
     ];
+}
+
+function isLemma($bundleName) {
+    $lemmas = ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'];
+    return in_array($bundleName, $lemmas);
+}
+
+function bestor_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+    $lemmas = ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'];
+    if ($variables['elements']['#view_mode'] === 'full' && isLemma($variables['elements']['#node']->getType())) {
+        $suggestions[] = 'node__lemma__full';
+    }
 }
 
 function bestor_form_alter(&$form, &$form_state, $form_id) {
@@ -31,7 +53,14 @@ function bestor_form_alter(&$form, &$form_state, $form_id) {
         $form['actions']['submit']['#attributes']['class'][] = 'icon-search';
         $form['actions']['submit']['#value'] = html_entity_decode("&#xe001;");
     }  
-}
+   /* dpm($form);
+    foreach($form_state->getStorage()['view']->getQuery()->getIndex()->getFields() as $field){
+        dpm($field);
+        dpm($field->getPropertyPath());
+        dpm(\Drupal::service('entity_field.manager')->getFieldMap()['node'][$field->getPropertyPath()]);
+    }*/
+    }
+    
 
 function bestor_preprocess_block(&$variables) {
     switch($variables['base_plugin_id']){
@@ -69,15 +98,14 @@ function bestor_preprocess_node(&$variables) {
             foreach (customTranslations() as $term => $translations) {
                 $variables[$term] = isset($translations[$langcode]) ? $translations[$langcode] : null;
             }
+            dpm($variables);
         }
 
         // Image URL variable
-        if($variables['teaser'] === true && $node->bundle() === 'article') {
-            if($node->field_image->getValue() != null  && isset($node->field_image->getValue()[0]['target_id'])) {
-                $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString(File::load($node->field_image->target_id)->getFileUri());
-            }
-            $variables['image_url'] = $image_url ?? null;
+        if($node->field_image && $node->field_image->getValue() != null  && isset($node->field_image->getValue()[0]['target_id'])) {
+            $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString(File::load($node->field_image->target_id)->getFileUri());
         }
+        $variables['image_url'] = $image_url ?? null;
         
         // Word count variable -> reading time
         $words = '';

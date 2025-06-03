@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
     - field.field.node.concept.field_specialisation
+    - field.field.node.concept.field_summary
     - field.field.node.concept.field_time_period
     - node.type.concept
   module:
@@ -71,6 +72,7 @@ content:
     region: content
 hidden:
   field_author: true
+  field_summary: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
