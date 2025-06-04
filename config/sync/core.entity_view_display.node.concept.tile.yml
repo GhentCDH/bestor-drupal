@@ -8,9 +8,9 @@ dependencies:
     - field.field.node.concept.field_author
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
+    - field.field.node.concept.field_period
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
-    - field.field.node.concept.field_time_period
     - node.type.concept
   module:
     - entity_reference_revisions
@@ -67,8 +67,8 @@ hidden:
   computed_relationshipfield__concept__place: true
   computed_relationshipfield__concept__story: true
   field_author: true
+  field_period: true
   field_summary: true
-  field_time_period: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

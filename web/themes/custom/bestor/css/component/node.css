@@ -71,33 +71,6 @@
     color: grey;
 }
 
-.teaser-text a.btn::before,
-.bibliography-text a.btn::before {
-    content: '';
-    position: absolute;
-    bottom:-12px;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-left: 12px solid white;
-    pointer-events: none;
-  }
-
-.teaser-text a.btn::before {
-    left: 110px;
-  }
-
-.bibliography-text a.btn::before {
-    left: 85px;
-  }
-
-  .teaser-text a.btn,
-  .bibliography-text a.btn{
-    padding-left:18px;
-}
-
 
 /* calendar icon */
 
@@ -251,6 +224,7 @@ line-height:26px;
 
 .lemma-banner {
   margin-top:20px;
+  margin-bottom:70px;
   position: relative;
   display: flex;
   min-height: 200px;
@@ -279,6 +253,10 @@ line-height:26px;
   font-size:21px;
 }
 
+.node-taxonomy-container{
+  padding:unset;
+}
+
 .lemma-author .node-taxonomy-container,
 .lemma-author ul.taxonomy-terms,
 .lemma-author li.taxonomy-term{
@@ -294,10 +272,11 @@ line-height:26px;
     border-radius: unset;
     box-shadow: unset;
     padding:unset;
+    border-bottom:1px solid;
   }
 
 .lemma-author li.taxonomy-term a:hover {
-    border-bottom:1px solid;
+    border-bottom:unset;
 }
 
 .lemma-author  li::after {
@@ -348,4 +327,16 @@ line-height:26px;
 .lemma-metadata > .publication-date{
   padding-right:10px;
   justify-content:flex-end;
+}
+
+.ce-place .context-element-content{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+
+.ce-place .context-element-content > * {
+  
+  display:inline-block;
 }

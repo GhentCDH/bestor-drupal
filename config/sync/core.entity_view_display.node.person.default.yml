@@ -11,9 +11,9 @@ dependencies:
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
+    - field.field.node.person.field_period
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_summary
-    - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
     - node.type.person
@@ -93,6 +93,17 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  field_period:
+    type: daterange_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: default_date_only
+      from_to: both
+      separator: '<i class="fa-solid fa-arrow-right"></i>'
+    third_party_settings: {  }
+    weight: 117
+    region: content
   field_specialisation:
     type: entity_reference_label
     label: hidden
@@ -107,17 +118,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 116
-    region: content
-  field_time_period:
-    type: daterange_default
-    label: hidden
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 11
     region: content
   field_typology:
     type: entity_reference_label

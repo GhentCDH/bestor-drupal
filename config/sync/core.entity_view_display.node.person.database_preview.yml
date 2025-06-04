@@ -12,14 +12,13 @@ dependencies:
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
+    - field.field.node.person.field_period
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_summary
-    - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
-    - datetime_range
     - entity_reference_revisions
     - link
     - user
@@ -94,17 +93,6 @@ content:
     third_party_settings: {  }
     weight: 8
     region: content
-  field_time_period:
-    type: daterange_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 102
-    region: content
   field_typology:
     type: entity_reference_label
     label: inline
@@ -132,6 +120,7 @@ content:
     region: content
 hidden:
   field_author: true
+  field_period: true
   field_summary: true
   footnotes_group: true
   langcode: true

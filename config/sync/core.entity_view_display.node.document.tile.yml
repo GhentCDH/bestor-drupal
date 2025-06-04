@@ -8,9 +8,9 @@ dependencies:
     - field.field.node.document.field_author
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
+    - field.field.node.document.field_period
     - field.field.node.document.field_specialisation
     - field.field.node.document.field_summary
-    - field.field.node.document.field_time_period
     - node.type.document
   module:
     - entity_reference_revisions
@@ -67,8 +67,8 @@ hidden:
   computed_relationshipfield__document__place: true
   computed_relationshipfield__document__story: true
   field_author: true
+  field_period: true
   field_summary: true
-  field_time_period: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

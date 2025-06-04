@@ -1,17 +1,17 @@
-uuid: b957f080-0581-46ee-9734-da51a0857b95
+uuid: 2fd547f9-9e93-4be9-a503-82fdc6f74797
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_time_period
+    - field.storage.node.field_period
     - node.type.person
   module:
     - datetime_range
-id: node.person.field_time_period
-field_name: field_time_period
+id: node.person.field_period
+field_name: field_period
 entity_type: node
 bundle: person
-label: time_period
+label: period
 description: ''
 required: false
 translatable: false

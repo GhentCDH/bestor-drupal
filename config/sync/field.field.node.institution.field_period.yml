@@ -1,17 +1,17 @@
-uuid: eab9ff5c-fe61-4437-b52a-1a470b7011e1
+uuid: c6a011bd-3c64-497e-8940-195954c9bc9f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_time_period
-    - node.type.concept
+    - field.storage.node.field_period
+    - node.type.institution
   module:
     - datetime_range
-id: node.concept.field_time_period
-field_name: field_time_period
+id: node.institution.field_period
+field_name: field_period
 entity_type: node
-bundle: concept
-label: time_period
+bundle: institution
+label: period
 description: ''
 required: false
 translatable: false

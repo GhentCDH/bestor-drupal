@@ -8,9 +8,9 @@ dependencies:
     - field.field.node.instrument.field_author
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
+    - field.field.node.instrument.field_period
     - field.field.node.instrument.field_specialisation
     - field.field.node.instrument.field_summary
-    - field.field.node.instrument.field_time_period
     - node.type.instrument
   module:
     - datetime_range
@@ -74,6 +74,12 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_period:
+    type: daterange_default
+    weight: 137
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete
     weight: 130
@@ -91,12 +97,6 @@ content:
     settings:
       rows: 5
       placeholder: ''
-    third_party_settings: {  }
-  field_time_period:
-    type: daterange_default
-    weight: 128
-    region: content
-    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select

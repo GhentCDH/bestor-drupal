@@ -10,9 +10,9 @@ dependencies:
     - field.field.node.place.field_discipline
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_municipality
+    - field.field.node.place.field_period
     - field.field.node.place.field_specialisation
     - field.field.node.place.field_summary
-    - field.field.node.place.field_time_period
     - field.field.node.place.field_typology
     - node.type.place
   module:
@@ -83,6 +83,17 @@ content:
     third_party_settings: {  }
     weight: 4
     region: content
+  field_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 117
+    region: content
   field_specialisation:
     type: entity_reference_label
     label: hidden
@@ -97,17 +108,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 10
-    region: content
-  field_time_period:
-    type: daterange_default
-    label: hidden
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 3
     region: content
   field_typology:
     type: entity_reference_label

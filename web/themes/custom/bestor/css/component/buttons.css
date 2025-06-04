@@ -1,7 +1,9 @@
-.btn{
+.btn,
+.lemma-sidebar .taxonomy-terms a{
+    position: relative;
     height:24px;
     display: inline-block;
-    padding: 6px 10px 6px;
+    padding: 6px 10px 6px 20px;
     color: white;
     background-color: #DC143C;
     font-size: 12px;
@@ -12,10 +14,29 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
+    border-radius:0;
+    box-shadow:unset;
 }
 
 
-.btn:hover{
+.btn:hover,
+.lemma-sidebar .taxonomy-terms a:hover{
     background-color: var(--secondary);
     color:white; 
 }
+
+.teaser-text a.btn::before,
+.bibliography-text a.btn::before,
+.lemma-sidebar .taxonomy-terms a::before{
+    content: '';
+    position: absolute;
+    left:0;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid white;
+    pointer-events: none;
+    bottom:-12px;
+  }

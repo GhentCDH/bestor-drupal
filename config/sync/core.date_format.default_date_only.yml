@@ -1,0 +1,8 @@
+uuid: e3f4d18b-5eb1-4a2a-879e-c75556d6b4c7
+langcode: und
+status: true
+dependencies: {  }
+id: default_date_only
+label: 'default date only'
+locked: false
+pattern: j-n-Y

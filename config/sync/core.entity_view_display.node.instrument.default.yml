@@ -8,9 +8,9 @@ dependencies:
     - field.field.node.instrument.field_author
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
+    - field.field.node.instrument.field_period
     - field.field.node.instrument.field_specialisation
     - field.field.node.instrument.field_summary
-    - field.field.node.instrument.field_time_period
     - node.type.instrument
   module:
     - datetime_range
@@ -62,6 +62,17 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
+  field_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 117
+    region: content
   field_specialisation:
     type: entity_reference_label
     label: hidden
@@ -76,17 +87,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 7
-    region: content
-  field_time_period:
-    type: daterange_default
-    label: hidden
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 4
     region: content
   links:
     settings: {  }

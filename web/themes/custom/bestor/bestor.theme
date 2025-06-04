@@ -145,3 +145,14 @@ function bestor_preprocess_node(&$variables) {
     $variables['intro_text'] = $intro_text ? implode(' ', array_slice(explode(' ', $intro_text), 0, 30)) : null;
 }   
 
+function bestor_preprocess_field(&$variables, $hook) {
+    if($variables['field_name'] === 'field_period'){      
+        foreach($variables['items'] as $i => $item) {
+            $variables['items'][$i]['content']['separator'] = [
+                '#type' => 'processed_text',
+                '#text' => '<i class="fa-solid fa-arrow-right"></i>',
+                '#format' => 'full_html',
+            ];
+        }
+    }   
+}

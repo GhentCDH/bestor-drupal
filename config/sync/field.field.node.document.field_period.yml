@@ -1,17 +1,17 @@
-uuid: 2d0e6c0e-4d35-45e7-ab69-db70193a19a8
+uuid: 8ed96637-1a06-4fa0-ba56-6a0692bb9444
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_time_period
-    - node.type.place
+    - field.storage.node.field_period
+    - node.type.document
   module:
     - datetime_range
-id: node.place.field_time_period
-field_name: field_time_period
+id: node.document.field_period
+field_name: field_period
 entity_type: node
-bundle: place
-label: time_period
+bundle: document
+label: period
 description: ''
 required: false
 translatable: false

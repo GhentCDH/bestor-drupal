@@ -12,9 +12,9 @@ dependencies:
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
+    - field.field.node.person.field_period
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_summary
-    - field.field.node.person.field_time_period
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
     - node.type.person
@@ -39,9 +39,9 @@ hidden:
   field_gender: true
   field_image: true
   field_municipality: true
+  field_period: true
   field_specialisation: true
   field_summary: true
-  field_time_period: true
   field_typology: true
   field_wikidata_entry: true
   footnotes_group: true

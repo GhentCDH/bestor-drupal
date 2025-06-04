@@ -7,9 +7,9 @@ dependencies:
     - field.field.node.story.field_author
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
+    - field.field.node.story.field_period
     - field.field.node.story.field_specialisation
     - field.field.node.story.field_summary
-    - field.field.node.story.field_time_period
     - node.type.story
   module:
     - datetime_range
@@ -45,6 +45,17 @@ content:
     third_party_settings: {  }
     weight: 115
     region: content
+  field_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 117
+    region: content
   field_specialisation:
     type: entity_reference_label
     label: hidden
@@ -59,17 +70,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 116
-    region: content
-  field_time_period:
-    type: daterange_default
-    label: hidden
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 102
     region: content
   links:
     settings: {  }

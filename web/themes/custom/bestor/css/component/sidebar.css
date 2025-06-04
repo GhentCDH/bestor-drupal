@@ -5,3 +5,7 @@
 .sidebar li {
     border-bottom:unset !important;
 }
+
+.lemma-sidebar{
+    padding-left:80px !important;
+}
