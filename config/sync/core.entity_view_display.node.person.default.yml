@@ -27,13 +27,29 @@ targetEntityType: node
 bundle: person
 mode: default
 content:
+  computed_relationshipfield__person__concept:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 14
+    region: content
+  computed_relationshipfield__person__person:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 15
+    region: content
   field_alternative_name:
     type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 102
+    weight: 11
     region: content
   field_author:
     type: entity_reference_label
@@ -102,7 +118,7 @@ content:
       from_to: both
       separator: '<i class="fa-solid fa-arrow-right"></i>'
     third_party_settings: {  }
-    weight: 117
+    weight: 13
     region: content
   field_specialisation:
     type: entity_reference_label
@@ -117,7 +133,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 116
+    weight: 12
     region: content
   field_typology:
     type: entity_reference_label
@@ -145,6 +161,10 @@ content:
     weight: 0
     region: content
 hidden:
+  computed_relationshipfield__person__document: true
+  computed_relationshipfield__person__instrument: true
+  computed_relationshipfield__person__place: true
+  computed_relationshipfield__person__story: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

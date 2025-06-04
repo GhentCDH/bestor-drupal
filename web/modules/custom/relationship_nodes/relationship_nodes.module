@@ -48,7 +48,7 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
       foreach($relationships as $relationship){
         $new_referencing_relationship_field = BaseFieldDefinition::create('entity_reference')
           ->setName('computed_relationshipfield__' .$relationship['this_bundle'] .'__' . $relationship['related_bundle'])
-          ->setLabel('Relationships with ' . $relationship['related_bundle'])//
+          ->setLabel('Relationships with ' . $relationship['related_bundle'])
           ->setDescription(t('This computed field lists all the relationships between ' . $relationship['this_bundle'] . ' and ' . $relationship['related_bundle'] . '.'))   
           ->setClass(ReferencingRelationshipItemList::class)
           ->setComputed(TRUE)

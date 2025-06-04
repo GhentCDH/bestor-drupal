@@ -118,7 +118,10 @@ class RelationshipInfoService {
                 if($selfreferencing_vocabulary_prefix != null && strpos($taxonomy_vocabulary, $selfreferencing_vocabulary_prefix) === 0){
                     if($mirror_reference_field != '' && isset($vocabulary_fields[$mirror_reference_field])){
                         $mirror_reference_field_entity = $vocabulary_fields[$mirror_reference_field];
-                        if($mirror_reference_field_entity->getType() == 'entity_reference' && $mirror_reference_field_entity->getSettings()['handler_settings']['target_bundles'] == [$taxonomy_vocabulary => $taxonomy_vocabulary]){
+                        dpm($mirror_reference_field_entity);
+                        dpm($mirror_reference_field_entity instanceof \Drupal\field\Entity\FieldConfig);
+                        dpm($mirror_reference_field_entity->getSettings());
+                        if(1 == 2 && $mirror_reference_field_entity->getType() == 'entity_reference' && $mirror_reference_field_entity->getSettings()['handler_settings']['target_bundles'] == [$taxonomy_vocabulary => $taxonomy_vocabulary]){
                             $result['mirrorfieldname'] = $mirror_reference_field;
                             $result['mirrorfieldtype'] = 'entity_reference_selfreferencing';
                         }
@@ -185,7 +188,7 @@ class RelationshipInfoService {
         $joinFields = [];
         $relationship_node_status = '';
         $config = \Drupal::config('relationship_nodes.settings');
-        if($config->get('related_entity_fields') != null && isset($config->get('related_entity_fields')['related_entity_field_1']) && isset($config->get('related_entity_fields')['related_entity_field_2'])){
+        if($relationship_node->id && $config->get('related_entity_fields') != null && isset($config->get('related_entity_fields')['related_entity_field_1']) && isset($config->get('related_entity_fields')['related_entity_field_2'])){
           $relationshipnode_info = $this->relationshipNodeInfo($relationship_node->getType());
           if(isset($relationshipnode_info['relationnode'])){
             $route = \Drupal::routeMatch()->getParameters();

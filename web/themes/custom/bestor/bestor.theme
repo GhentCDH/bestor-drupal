@@ -108,7 +108,6 @@ function bestor_preprocess_node(&$variables) {
             foreach (customTranslations() as $term => $translations) {
                 $variables[$term] = isset($translations[$langcode]) ? $translations[$langcode] : null;
             }
-            dpm($variables);
         }
 
         // Image URL variable

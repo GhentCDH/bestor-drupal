@@ -9,6 +9,7 @@ dependencies:
     - node.type.relationnode__person_concept
   module:
     - path
+    - relationship_nodes
 id: node.relationnode__person_concept.default
 targetEntityType: node
 bundle: relationnode__person_concept
@@ -41,14 +42,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_relation_type:
-    type: entity_reference_autocomplete
+    type: mirror_select_widget
     weight: 123
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select

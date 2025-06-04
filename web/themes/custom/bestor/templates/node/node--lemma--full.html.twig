@@ -100,7 +100,6 @@ set node_classes = [
     </div>
     <div class="lemma-body row">
       <div class="lemma-main-content col-md-8">
-        {{ devel_dump(content) }}
         {{content.field_description}}
         {% if content.field_geolocation.0 %}
           {{content.field_geolocation}}

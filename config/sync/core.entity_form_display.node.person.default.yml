@@ -19,6 +19,7 @@ dependencies:
     - node.type.person
   module:
     - datetime_range
+    - inline_entity_form
     - link
     - media_library
     - paragraphs
@@ -28,6 +29,32 @@ targetEntityType: node
 bundle: person
 mode: default
 content:
+  computed_relationshipfield__person__concept:
+    type: inline_entity_form_simple
+    weight: 22
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+  computed_relationshipfield__person__person:
+    type: inline_entity_form_simple
+    weight: 23
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
   created:
     type: datetime_timestamp
     weight: 3
@@ -36,7 +63,7 @@ content:
     third_party_settings: {  }
   field_alternative_name:
     type: string_textfield
-    weight: 122
+    weight: 19
     region: content
     settings:
       size: 60
@@ -44,7 +71,7 @@ content:
     third_party_settings: {  }
   field_author:
     type: entity_reference_autocomplete
-    weight: 19
+    weight: 18
     region: content
     settings:
       match_operator: CONTAINS
@@ -72,7 +99,7 @@ content:
     third_party_settings: {  }
   field_discipline:
     type: entity_reference_autocomplete
-    weight: 17
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -82,7 +109,7 @@ content:
     third_party_settings: {  }
   field_end_municipality:
     type: entity_reference_autocomplete
-    weight: 15
+    weight: 14
     region: content
     settings:
       match_operator: CONTAINS
@@ -119,13 +146,13 @@ content:
     third_party_settings: {  }
   field_period:
     type: daterange_default
-    weight: 137
+    weight: 21
     region: content
     settings: {  }
     third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete
-    weight: 14
+    weight: 13
     region: content
     settings:
       match_operator: CONTAINS
@@ -135,7 +162,7 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 136
+    weight: 20
     region: content
     settings:
       rows: 5
@@ -143,7 +170,7 @@ content:
     third_party_settings: {  }
   field_typology:
     type: entity_reference_autocomplete
-    weight: 16
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -153,7 +180,7 @@ content:
     third_party_settings: {  }
   field_wikidata_entry:
     type: link_default
-    weight: 18
+    weight: 17
     region: content
     settings:
       placeholder_url: ''
@@ -216,4 +243,8 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  computed_relationshipfield__person__document: true
+  computed_relationshipfield__person__instrument: true
+  computed_relationshipfield__person__place: true
+  computed_relationshipfield__person__story: true
