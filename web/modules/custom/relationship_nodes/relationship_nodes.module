@@ -41,31 +41,8 @@ function relationship_nodes_entity_bundle_info_alter(&$bundles) {
 
 
 function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) {
-  if($entity_type->id() == 'node'){
-
-    $relationships = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipInfoForRelatedItemNodeType($entity_type, $bundle);
-    if($relationships != null){
-      foreach($relationships as $relationship){
-        $new_referencing_relationship_field = BaseFieldDefinition::create('entity_reference')
-          ->setName('computed_relationshipfield__' .$relationship['this_bundle'] .'__' . $relationship['related_bundle'])
-          ->setLabel('Relationships with ' . $relationship['related_bundle'])
-          ->setDescription(t('This computed field lists all the relationships between ' . $relationship['this_bundle'] . ' and ' . $relationship['related_bundle'] . '.'))   
-          ->setClass(ReferencingRelationshipItemList::class)
-          ->setComputed(TRUE)
-          ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-          ->setTargetEntityTypeId('node')
-          ->setTargetBundle($relationship['relationship_bundle'])
-          ->setDisplayConfigurable('form', TRUE)
-          ->setDisplayConfigurable('view', TRUE)
-          ->setSetting('handler_settings', ['target_bundles' => [$relationship['relationship_bundle'] => $relationship['relationship_bundle']]])
-          ->setSetting('join_field', $relationship['join_fields'])
-          ->setRevisionable(FALSE);
-        
-      $fields['computed_relationshipfield__' .$relationship['this_bundle'] .'__' . $relationship['related_bundle']] =  $new_referencing_relationship_field;
-      }
-    }
+  \Drupal::service('relationship_nodes.relationship_field_auto_adder')->addFields($fields, $entity_type, $bundle);
    
-  }
 
   if ($entity_type->id() === 'taxonomy_term') {
     $vocabulary_info = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipTaxonomyVocabularyInfo($bundle, $fields);
@@ -74,6 +51,20 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
         $fields[$vocabulary_info['mirrorfieldname']]->addConstraint(Relationship_nodesAvailableMirrorTermConstraint::class);
       }
     }
+  } elseif($entity_type->id() === 'node') {
+    $fields['submit_batch_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Submit Batch ID'))
+      ->setDescription(t('On form submit a batch id is generated for new nodes. Multiple nodes can be created with the same form submit.'))
+      ->setTranslatable(FALSE)
+      ->setRevisionable(FALSE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setTranslatable(FALSE)
+      ->setRevisionable(FALSE)
+      ->setSettings([
+        'default_value' => '',
+        'max_length' => 255,
+      ]);
   }
   return $fields;
 } 
@@ -99,6 +90,7 @@ function relationship_nodes_node_presave(\Drupal\Core\Entity\EntityInterface $en
     $entity->set('title','Relationship ' . implode(' - ', $related_entities));
   }
 }
+
 
 
 function relationship_nodes_taxonomy_term_insert($entity) {
@@ -158,47 +150,33 @@ function setMirrorTermLink($entity, $hook){
 }
 
 
-/*
-function relationship_nodes_theme($existing, $type, $theme, $path) {
-  return [
-      'views_view_table__relationship_mirror_self' => [
-        'template' => 'views-view-table--relationship-mirror-self',
-        'base hook' => 'views_view_table',
-      ], 
-      'my_custom_container' => [
-        'template' => 'my-custom-container',
-        'base hook' => 'container',
-    ]
-  ];
+
+function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state) {
+  //$batch_id = time();
+  $form['actions']['submit']['#submit'][] = 'relationship_nodes_node_form_submit';
 
 }
 
-function relationship_nodes_theme_suggestions_views_view_table($variables) {
-  $view = $variables['view'];
-  if (strpos($view->id(), 'relationship_type_self__') === 0 && $view->build_info['query']->getUnion() != null) {
-    $suggestions[] = 'views_view_table__relationship_mirror_self';
-    return $suggestions;
-  }
-}
-
-function relationship_nodes_preprocess_views_view_fields(&$variables) {
-  $view = $variables['view'];
-  if (strpos($view->id(), 'relationship_type_self__') === 0 && $view->build_info['query']->getUnion() != null){
-    if($view->argument){
-      if($view->argument['nid']){
-        $contextual_filter_nid = $view->argument['nid']->value[0];
-        if ($contextual_filter_nid) {
-          if($variables['row']->_entity->field_related_entity_1->target_id == $contextual_filter_nid){
-            $join_field = 'field_related_entity_1';
-            unset($variables['fields']['form_field_field_related_entity_1']);
-          } else if($variables['row']->_entity->field_related_entity_2->target_id == $contextual_filter_nid){
-            unset($variables['fields']['form_field_field_related_entity_2']);
-          }
-        }
-      }
+function relationship_nodes_node_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $form_state->setValue('test',rand(0,10000));
+  dpm($form_state);
+  dpm($form_state->getStorage()['nid'], 'nieuw gecreeerde node');
+  if(isset($form_state->getStorage()['inline_entity_form'])){
+    foreach($form_state->getStorage()['inline_entity_form'] as $fieldname => $field_array){
+      dpm($field_array['entities']);
     }
   }
+
+  // Schrijf naar je custom veld op de node
+  //$node->set('submit_batch_id', $batch_id);
 }
+function relationship_nodes_node_insert(EntityInterface $entity){
+  dpm($entity);
+}
+
+/*
+
+
 
 function adjustRelationSubforms(array $form, FormStateInterface $form_state) {
   global $related_entity_fields, $relationship_type_field;
@@ -235,25 +213,5 @@ function adjustRelationSubforms(array $form, FormStateInterface $form_state) {
   return $form;
 }
 
-function mirrorSelectOptions(array $default_taxonomy_term_select_options){
-  global $mirror_fields;
-  $mirror_reference_field = $mirror_fields['mirror_reference_field'];
-  $mirror_string_field = $mirror_fields['mirror_string_field'];
-  $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-  $select_options = isset($default_taxonomy_term_select_options) ? $default_taxonomy_term_select_options : [];
-  foreach($default_taxonomy_term_select_options as $tid => $term_name){
-    $term = $taxonomy_storage->load($tid);
-    if($term){
-      if($term->$mirror_reference_field->target_id){
-        $select_options[$tid] =  $taxonomy_storage->load($term->$mirror_reference_field->target_id)->getName();
-      } else if($term->$mirror_string_field->value){
-        $select_options[$tid] =  $term->get($mirror_string_field)->value;
-      } else {
-      $select_options[$tid] =  $term_name;
-      }
-    }
-  }
-  return $select_options;
-}
 */
 

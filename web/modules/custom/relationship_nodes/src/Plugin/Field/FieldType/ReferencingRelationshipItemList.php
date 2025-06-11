@@ -22,21 +22,19 @@ class ReferencingRelationshipItemList extends EntityReferenceFieldItemList {
     $node_bundle = $this->definition['bundle'];
     $join_field_array = $this->getSettings()['join_field'];
     $related_nodes = [];
-  
+    if (!is_array($join_field_array) || empty($join_field_array)) {
+      return;
+    }
     if ($current_nid && $node_bundle && $join_field_array) {
       foreach ($join_field_array as $join_field) {
         $query_result = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
           'type' => $node_bundle,
           $join_field => $current_nid,
         ]);
-        if($query_result) {
-          foreach ($query_result as $key => $value) {
-            if(!isset( $related_nodes[$key])) {
-              $related_nodes[$key] = $value;
-            }
-          }
+        if ($query_result) {
+          $related_nodes += $query_result;
         }
-      }    
+      }
       if(count( $related_nodes) > 0) {
         $delta = 0;
         foreach ($related_nodes as $target_id =>  $related_node) {

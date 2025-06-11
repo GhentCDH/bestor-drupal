@@ -1,4 +1,8 @@
 services:
+  relationship_nodes.relationship_field_auto_adder:
+    class: Drupal\relationship_nodes\Service\RelationshipFieldAutoAdder
+    arguments:
+      - '@relationship_nodes.relationship_info_service'
   relationship_nodes.relationship_info_service:
     class: 'Drupal\relationship_nodes\Service\RelationshipInfoService'
   relationship_nodes.mirror_select_widget:

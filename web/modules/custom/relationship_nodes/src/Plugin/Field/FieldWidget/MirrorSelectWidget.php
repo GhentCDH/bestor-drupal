@@ -52,14 +52,14 @@ class MirrorSelectWidget extends OptionsSelectWidget {
   protected function getMirrorOptions($original_options, $relationshipnode_info) {
     $options = isset($original_options) ? $original_options : [];
     $config = \Drupal::config('relationship_nodes.settings');
-    if(isset($options) && isset($relationshipnode_info) && isset($relationshipnode_info['relationnode']) && isset($relationshipnode_info['relationtypefield']['relationtypefield']) && isset($relationshipnode_info['relationtypefield']['mirrorfieldtype'])){
+    if(isset($options) && isset($relationshipnode_info) && isset($relationshipnode_info['relationnode']) && isset($relationshipnode_info['relationtypeinfo']['relationtypefield']) && isset($relationshipnode_info['relationtypeinfo']['mirrorfieldtype'])){
       $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
       $mirror_reference_field = $config->get('mirror_fields')['mirror_reference_field'];
       $mirror_string_field = $config->get('mirror_fields')['mirror_string_field'];
       foreach ($options as $term_id => $term_name) {
         $term = $taxonomy_storage->load($term_id);
         if($term){
-          switch($relationshipnode_info['relationtypefield']['mirrorfieldtype']){
+          switch($relationshipnode_info['relationtypeinfo']['mirrorfieldtype']){
             case 'entity_reference_selfreferencing':
               if($term->get($mirror_reference_field)->target_id != null){
                 $options[$term_id] =  $taxonomy_storage->load($term->get($mirror_reference_field)->target_id)->getName();

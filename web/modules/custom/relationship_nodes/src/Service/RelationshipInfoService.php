@@ -6,6 +6,8 @@ namespace Drupal\relationship_nodes\Service;
 use \Drupal\Core\Entity\EntityTypeManagerInterface;
 use \Drupal\Core\Entity\EntityFieldManagerInterface;
 use \Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use \Drupal\field\Entity\FieldConfig;
+use \Drupal\field\Entity\FieldStorageConfig;
 use \Drupal\node\Entity\Node;
 use \Drupal\taxonomy\Entity\Term;
 use \Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -25,58 +27,66 @@ class RelationshipInfoService {
   public function relationshipNodeInfo($node_type) {
 
     $result = ['relationnode' => false];
-    $all_node_types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
-    $config = \Drupal::config('relationship_nodes.settings');
-    if(isset($all_node_types[$node_type]) && $config->get('relationship_node_bundle_prefix') != null && $config->get('related_entity_fields') != null && count($config->get('related_entity_fields')) == 2){ 
-        $relationship_node_bundle_prefix = $config->get('relationship_node_bundle_prefix');
-        $related_entity_fields = $config->get('related_entity_fields');
-        if (strpos($node_type, $relationship_node_bundle_prefix) === 0){
-            $fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node_type);
-            $related_entity_bundles = [];
-            foreach ($related_entity_fields as $related_entity_field) {
-                if (isset($fields[$related_entity_field])) {
-                    if($fields[$related_entity_field]->getType() == 'entity_reference' && isset($fields[$related_entity_field]->getSettings()['handler_settings']['target_bundles'])){
-                        $field_target_bundle = $fields[$related_entity_field]->getSettings()['handler_settings']['target_bundles'];      
-                        if(count($field_target_bundle) == 1 && strpos(array_values($field_target_bundle)[0], $relationship_node_bundle_prefix) === false){
-                            $related_entity_bundles[$related_entity_field] = array_values($field_target_bundle)[0];
-                        }
-                    }
-                }
-            }
-            if(count($related_entity_bundles) == 2){
-                $result = [
-                    'relationnode' => true,
-                    'relationship_bundle' => $node_type,
-                    'related_entity_fields' => $related_entity_bundles,
-                    'relationnodetype' => '',
-                    'relationtypefield' => ['relationtypefield' => '', 'vocabulary' => '', 'mirrorfieldtype' => '']
-                ];
-                $relationtype_field_info = [];
-                if ($config->get('relationship_type_field') != null && isset($fields[$config->get('relationship_type_field')])){
-                    $relationship_type_field = $fields[$config->get('relationship_type_field')];
-                    if(isset($relationship_type_field->getSettings()['handler_settings']['target_bundles'])){
-                        $target_bundles = $relationship_type_field->getSettings()['handler_settings']['target_bundles'];
-                        if(count($target_bundles) == 1){
-                            $relationtype_field_info = $this->relationshipTaxonomyVocabularyInfo(array_values($target_bundles)[0]);
-                            $result['relationtypefield']['relationtypefield'] = $relationtype_field_info['relationtypevocabulary'];
-                            $result['relationtypefield']['relationtypefield'] == true ? $result['relationtypefield']['vocabulary'] = array_values($target_bundles)[0] : '';
-                        }                    
-                    }          
-                }
-                if(array_values($related_entity_bundles)[0] == array_values($related_entity_bundles)[1]){
-                    $result['relationnodetype'] = 'selfreferencing';
-                    if($result['relationtypefield']['relationtypefield'] == true && isset($relationtype_field_info['mirrorfieldtype']) && $relationtype_field_info['mirrorfieldtype'] == 'entity_reference_selfreferencing'){
-                        $result['relationtypefield']['mirrorfieldtype'] = 'entity_reference_selfreferencing';
-                    }            
-                } else {
-                    $result['relationnodetype'] = 'crossreferencing';
-                    if($result['relationtypefield']['relationtypefield'] == true && isset($relationtype_field_info['mirrorfieldtype']) && $relationtype_field_info['mirrorfieldtype'] == 'string'){
-                        $result['relationtypefield']['mirrorfieldtype'] = 'string';
-                    }
-                }
-            }
-        }
+    $node_types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
+    if (!isset($node_types[$node_type])) {
+        return $result;
     }
+    $config = \Drupal::config('relationship_nodes.settings');
+    $bundle_prefix = $config->get('relationship_node_bundle_prefix') ?? '';
+    $related_fields = $config->get('related_entity_fields') ?? [];        
+    
+    if (!$bundle_prefix || count($related_fields) !== 2 || strpos($node_type, $bundle_prefix) !== 0) {
+        return $result;
+    }
+
+    $fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node_type);
+    $related_bundles = [];
+    foreach ($related_fields as $field_name) {
+        if (!isset($fields[$field_name])) {
+            continue;
+        }
+        $field = $fields[$field_name];
+        try {
+            if ($field->getType() === 'entity_reference') {
+                $settings = $field->getSettings();
+                $target_bundles = $settings['handler_settings']['target_bundles'] ?? [];      
+                if (count($target_bundles) === 1) {
+                    $target = array_values($target_bundles)[0];
+                    if (strpos($target, $bundle_prefix) === false) {
+                      $related_bundles[$field_name] = $target;
+                    }
+                }
+            }
+        } catch (\Exception $e) {} 
+    }
+    if (count($related_bundles) !== 2) {
+        return $result;
+    }
+    $result = [
+        'relationnode' => true,
+        'relationship_bundle' => $node_type,
+        'related_entity_fields' => $related_bundles,
+        'relationnodetype' => '',
+        'relationtypeinfo' => ['relationtypefield' => '', 'vocabulary' => '', 'mirrorfieldtype' => '']
+    ];
+    
+    $relation_type_field_name = $config->get('relationship_type_field') ?? '';
+    if ($relation_type_field_name && isset($fields[$relation_type_field_name])) {
+        try {
+            $target_bundles =  $fields[$relation_type_field_name]->getSettings()['handler_settings']['target_bundles'];
+            if(count($target_bundles) == 1){
+                $vocab = array_values($target_bundles)[0];
+                $vocab_info = $this->relationshipTaxonomyVocabularyInfo($vocab);
+                if ($vocab_info['relationtypevocabulary']) {              
+                    $result['relationtypeinfo']['relationtypefield'] = $vocab_info['relationtypevocabulary'];
+                    $result['relationtypeinfo']['relationtypefield'] == true ? $result['relationtypeinfo']['vocabulary'] = array_values($target_bundles)[0] : '';
+                    $result['relationtypeinfo']['mirrorfieldtype'] = $vocab_info['mirrorfieldtype'] ?? '';
+                }
+            }                    
+        } catch (\Exception $e) {}          
+    }
+    $result['relationnodetype'] = (array_values($related_bundles)[0] === array_values($related_bundles)[1]) ? 'selfreferencing' : 'crossreferencing';    
+    
     return $result;
   }
  
@@ -89,51 +99,59 @@ class RelationshipInfoService {
    * @return array
    */
   public function relationshipTaxonomyVocabularyInfo($taxonomy_vocabulary, $vocabulary_fields = null) {
-    $result = ['relationtypevocabulary' => false];
-    $all_taxonomy_vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
+    $result = [
+        'relationtypevocabulary' => false,
+        'mirrorfieldname' => false,
+        'mirrorfieldtype' => false,
+      ];
+    
+    $vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
+    if (!isset($vocabularies[$taxonomy_vocabulary])) {
+        return $result;
+    }
+
     $config = \Drupal::config('relationship_nodes.settings');
-    if(isset($all_taxonomy_vocabularies[$taxonomy_vocabulary]) && $config->get('relationship_taxonomy_prefixes') != null){
+    $prefixes = $config->get('relationship_taxonomy_prefixes') ?? [];
+    $mirror_fields_config = $config->get('mirror_fields') ?? [];
+  
+    $self_prefix = $prefixes['selfreferencing_vocabulary_prefix'] ?? null;
+    $cross_prefix = $prefixes['crossreferencing_vocabulary_prefix'] ?? null;
 
-        $selfreferencing_vocabulary_prefix = $config->get('relationship_taxonomy_prefixes')['selfreferencing_vocabulary_prefix'];
-        $crossreferencing_vocabulary_prefix = $config->get('relationship_taxonomy_prefixes')['crossreferencing_vocabulary_prefix'];
-        if(strpos($taxonomy_vocabulary, $selfreferencing_vocabulary_prefix) === 0 || strpos($taxonomy_vocabulary, $crossreferencing_vocabulary_prefix) === 0){
-            $mirror_fields = [];
-            $mirror_reference_field = '';
-            $mirror_string_field = '';
-            $result = [
-                'relationtypevocabulary' => true,
-                'mirrorfieldname' => false,
-                'mirrorfieldtype' => false
-            ];
-            if($config->get('mirror_fields') != null){
-                $mirror_fields = $config->get('mirror_fields');
-                $mirror_reference_field = isset($mirror_fields['mirror_reference_field']) ? $mirror_fields['mirror_reference_field'] : false;
-                $mirror_string_field = isset($mirror_fields['mirror_string_field']) ? $mirror_fields['mirror_string_field'] : false;
-            }
+    $is_self = $self_prefix && str_starts_with($taxonomy_vocabulary, $self_prefix);
+    $is_cross = $cross_prefix && str_starts_with($taxonomy_vocabulary, $cross_prefix); 
+    if (!$is_self && !$is_cross) {
+      return $result;
+    }
 
-            if(!isset($vocabulary_fields) && \Drupal::service('entity_field.manager')->getFieldDefinitions('taxonomy_term', $taxonomy_vocabulary) != null){
-                $vocabulary_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('taxonomy_term', $taxonomy_vocabulary);  
-            }
-            if(isset($vocabulary_fields)){
-                if($selfreferencing_vocabulary_prefix != null && strpos($taxonomy_vocabulary, $selfreferencing_vocabulary_prefix) === 0){
-                    if($mirror_reference_field != '' && isset($vocabulary_fields[$mirror_reference_field])){
-                        $mirror_reference_field_entity = $vocabulary_fields[$mirror_reference_field];
-                        dpm($mirror_reference_field_entity);
-                        dpm($mirror_reference_field_entity instanceof \Drupal\field\Entity\FieldConfig);
-                        dpm($mirror_reference_field_entity->getSettings());
-                        if(1 == 2 && $mirror_reference_field_entity->getType() == 'entity_reference' && $mirror_reference_field_entity->getSettings()['handler_settings']['target_bundles'] == [$taxonomy_vocabulary => $taxonomy_vocabulary]){
-                            $result['mirrorfieldname'] = $mirror_reference_field;
-                            $result['mirrorfieldtype'] = 'entity_reference_selfreferencing';
-                        }
-                    }
-                } else if ($crossreferencing_vocabulary_prefix != null && strpos($taxonomy_vocabulary, $crossreferencing_vocabulary_prefix) === 0){
-                    if($mirror_string_field != '' && isset($vocabulary_fields[$mirror_string_field]) && $vocabulary_fields[$mirror_string_field]->getType() == 'string'){
-                        $result['mirrorfieldname'] = $mirror_string_field;
-                        $result['mirrorfieldtype'] = 'string';
+    $result['relationtypevocabulary'] = true;
+    
+    
+    if($vocabulary_fields === null) {
+        $vocabulary_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('taxonomy_term', $taxonomy_vocabulary);
+    }
+    $mirror_reference_field = $mirror_fields_config['mirror_reference_field'] ?? '';
+    $mirror_string_field = $mirror_fields_config['mirror_string_field'] ?? '';
+
+    if($is_self && $mirror_reference_field && isset($vocabulary_fields[$mirror_reference_field])){
+        $field_def = $vocabulary_fields[$mirror_reference_field];
+        if ($field_def instanceof FieldConfig) {
+            try {
+                $storage = FieldStorageConfig::loadByName('taxonomy_term', $mirror_reference_field);
+                if ($storage) {
+                    $settings = $field_def->getSettings();
+                    if ($field_def->getType() === 'entity_reference' && isset($settings['handler_settings']['target_bundles']) && $settings['handler_settings']['target_bundles'] === [$taxonomy_vocabulary => $taxonomy_vocabulary]) {
+                        $result['mirrorfieldname'] = $mirror_reference_field;
+                        $result['mirrorfieldtype'] = 'entity_reference_selfreferencing';
                     }
                 }
-            }
-        }  
+            } catch (\Drupal\Core\Field\FieldException $e) {}
+        }          
+    } else if ($is_cross && $mirror_string_field && isset($vocabulary_fields[$mirror_string_field])){
+        $field_def = $vocabulary_fields[$mirror_string_field];
+        if($field_def->getType() == 'string'){
+            $result['mirrorfieldname'] = $mirror_string_field;
+            $result['mirrorfieldtype'] = 'string';
+        }
     }
     return $result;
   }
@@ -147,31 +165,38 @@ class RelationshipInfoService {
    */
     function relationshipInfoForRelatedItemNodeType(EntityTypeInterface $entity_type, $bundle) { 
         $relationshipInfo = [];
-        if($entity_type->id() == 'node'){
-            $config = \Drupal::config('relationship_nodes.settings');
-            if($config->get('related_entity_fields') != null && count($config->get('related_entity_fields')) == 2){
-                $related_entity_fields = $config->get('related_entity_fields');
-                $all_node_bundles = \Drupal::service("entity_type.bundle.info")->getBundleInfo('node');
-                foreach($all_node_bundles as $single_bundle_id => $single_bundle){
-                    if(isset($single_bundle['relationship_info_bundle']['relationnode']) && isset($single_bundle['relationship_info_bundle']['related_entity_fields'])){ 
-                        $join_fields = [];
-                        $relationship_node_info = $single_bundle['relationship_info_bundle'];
-                        $related_entity_bundles = $relationship_node_info['related_entity_fields'];
-                        foreach($related_entity_bundles as $related_entity_field_id => $related_entity_bundle){
-                            if($related_entity_bundle == $bundle){
-                                $join_fields[] = $related_entity_field_id;
-                            } 
-                        } 
-                        if(count($join_fields) > 0){
-                            $relationship_node_info['join_fields'] = $join_fields;
-                            $relationship_node_info['this_bundle'] = $bundle;
-                            $relationship_node_info['related_bundle'] =  $related_entity_bundles[$related_entity_fields['related_entity_field_1' ]] == $bundle ? $related_entity_bundles[$related_entity_fields['related_entity_field_2' ]] : $related_entity_bundles[$related_entity_fields['related_entity_field_1' ]];
-                            $relationshipInfo[] = $relationship_node_info;
-                        }      
+        if ($entity_type->id() !== 'node') {
+            return $relationshipInfo;
+        }
+      
+        $config = \Drupal::config('relationship_nodes.settings');
+        $related_entity_fields = $config->get('related_entity_fields');
+
+        if (!is_array($related_entity_fields) || count($related_entity_fields) !== 2) {
+            return $relationshipInfo;
+        }
+
+        $all_node_bundles = \Drupal::service("entity_type.bundle.info")->getBundleInfo('node');
+
+        foreach($all_node_bundles as $bundle_name => $bundle_array){
+            if(isset( $bundle_array['relationship_info_bundle']['relationnode']) &&  $bundle_array['relationship_info_bundle']['relationnode'] === true && isset($bundle_array['relationship_info_bundle']['related_entity_fields'])){ 
+                $join_fields = [];
+                $relationship_node_info =  $bundle_array['relationship_info_bundle'];
+                $related_bundles = $relationship_node_info['related_entity_fields'];
+                foreach($related_bundles as $field_name => $related_bundle){
+                    
+                    if($related_bundle == $bundle){
+                        $join_fields[] = $field_name; 
                     }
-                }
-                
-            } 
+                } 
+                if (!empty($join_fields)) {
+                    $relationship_node_info['join_fields'] = $join_fields;
+                    $relationship_node_info['this_bundle'] = $bundle;
+                    $relationship_node_info['related_bundle'] =  $related_bundles[$related_entity_fields['related_entity_field_1' ]] == $bundle ? $related_bundles[$related_entity_fields['related_entity_field_2' ]] : $related_bundles[$related_entity_fields['related_entity_field_1' ]];
+                    $relationship_node_info['relationship_bundle']= $bundle_name;
+                    $relationshipInfo[] = $relationship_node_info;
+                }      
+            }
         }
         return $relationshipInfo;
     }
@@ -184,46 +209,48 @@ class RelationshipInfoService {
      * 
      * Deze functie checkt of een relatie node (input) een join field heeft met de huidige node en geeft terug welke.
      */
-    function getRelationInfoForCurrentForm($relationship_node){
-        $joinFields = [];
-        $relationship_node_status = '';
-        $config = \Drupal::config('relationship_nodes.settings');
-        if($relationship_node->id && $config->get('related_entity_fields') != null && isset($config->get('related_entity_fields')['related_entity_field_1']) && isset($config->get('related_entity_fields')['related_entity_field_2'])){
-          $relationshipnode_info = $this->relationshipNodeInfo($relationship_node->getType());
-          if(isset($relationshipnode_info['relationnode'])){
-            $route = \Drupal::routeMatch()->getParameters();
-            $current_node_type = $route->get('node')->getType();  
-            if(in_array($current_node_type, $relationshipnode_info['related_entity_fields'])){
-              $current_node_id = $route->get('node')->id();
-              $related_entity_field_1 = $config->get('related_entity_fields')['related_entity_field_1'];
-              $related_entity_field_2 = $config->get('related_entity_fields')['related_entity_field_2'];
-              $related_entity_field_1_id_value = $relationship_node->get($related_entity_field_1)->getValue()[0]['target_id'] ?? null;
-              $related_entity_field_2_id_value = $relationship_node->get($related_entity_field_2)->getValue()[0]['target_id'] ?? null;
-              if(isset($related_entity_field_1_id_value) && isset($related_entity_field_2_id_value)){
-                if($current_node_id == $related_entity_field_1_id_value){
-                  $joinFields[] = $related_entity_field_1;
-                } else if($current_node_id == $related_entity_field_2_id_value){
-                  $joinFields[] = $related_entity_field_2;
-                }
+    function getRelationInfoForCurrentForm(Node $relationship_node){
+        $related_fields = \Drupal::config('relationship_nodes.settings')->get('related_entity_fields');
+        $node_info = $this->relationshipNodeInfo($relationship_node->getType());
 
-                // Deze functie moet veel beter uitgewerkt worden. het moet eigen duidelijk zijn,  niet alleen in welke related entity velden het een join is, maar ook wat de reden is als er geen related enities zijn
-                if(count($joinFields) == 1){
-                    $relationship_node_status = 'Existing';
-                } else if (count($joinFields) == 2){
-                    $relationship_node_status = 'Error: both related entities are the same.';
-                } else if (count($joinFields) == 0){
-                    if($related_entity_field_1_id_value == null && $related_entity_field_2_id_value == null){
-                        $relationship_node_status = 'New';
-                    } else {
-                        $relationship_node_status = 'Error: unrelated relationship node';
-                    }
-                }
-
-            }
-          }
+        if(!$relationship_node->id() ||  !is_array($related_fields) || !isset($related_fields['related_entity_field_1']) || !isset($related_fields['related_entity_field_2']) || !isset($node_info['relationnode']) || !$node_info['relationnode']){
+            return [];
         }
-        return ['current_node_join_fields' => $joinFields, 'relationship_node_status' => $relationship_node_status, 'general_relationship_info' => $relationshipnode_info];
-      }
+
+        $joinFields = [];
+        $status = '';
+
+        $current_node = \Drupal::routeMatch()->getParameter('node');
+        if (!($current_node instanceof Node && in_array( $current_node->getType(), $node_info['related_entity_fields']))) {
+          return [];
+        }
+
+        $related_entity_field_1 = $related_fields['related_entity_field_1'];
+        $related_entity_field_2 = $related_fields['related_entity_field_2'];
+        $referenced_entity_1 = $relationship_node->get($related_entity_field_1)->referencedEntities();
+        $referenced_entity_2 = $relationship_node->get($related_entity_field_2)->referencedEntities();
+        $related_entity_value_1 = isset($referenced_entity_1[0]) ? $referenced_entity_1[0]->id() : null;
+        $related_entity_value_2 =  isset($referenced_entity_2[0]) ? $referenced_entity_2[0]->id() : null;
+
+        if($current_node->id() == $related_entity_value_1){
+            $joinFields[] = $related_entity_field_1;
+        } 
+        if($current_node->id() == $related_entity_value_2){
+            $joinFields[] = $related_entity_field_2;
+        }
+
+        if(count($joinFields) === 1){
+            $status = 'Existing';
+        } elseif (count($joinFields) == 2){
+            $status = 'Error: both related entities are the same.';
+        } elseif (count($joinFields) == 0){
+            if(is_null($related_entity_value_1) && is_null($related_entity_value_2)){
+                $status = 'New';
+            } else {
+                $status = 'Error: unrelated relationship node';
+            }
+        }
+        return  ['current_node_join_fields' => $joinFields, 'relationship_node_status' => $status, 'general_relationship_info' => $node_info];
     }
 }
 
