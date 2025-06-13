@@ -89,7 +89,7 @@ function relationship_nodes_node_presave(\Drupal\Core\Entity\EntityInterface $en
     }
     $entity->set('title','Relationship ' . implode(' - ', $related_entities));
   }
-  dpm('presave' . $entity->getType());
+  //dpm($entity, 'presave entity');
 }
 
 
@@ -153,11 +153,33 @@ function setMirrorTermLink($entity, $hook){
 
 
 function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state) {
- $form['#ief_element_submit'][] = [MirrorRelationshipEntityInlineForm::class, 'getCreatedRelationIds'];
- $form['actions']['submit']['#submit'][] = 'mymodule_custom_node_submit';
+  dpm($form_state->getFormObject()->getEntity()->isNew(), 'form alter entity is new');
+  if($form_state->getBuildInfo()['base_form_id'] == 'node_form' && isset($form['#ief_element_submit_attached']) && $form['#ief_element_submit_attached'] == true) {
+    // Attach the inline entity form submit handler.
+    \Drupal\inline_entity_form\ElementSubmit::attach($form, $form_state);
+    
+    // Add the custom submit handler to the main submit button.
+    $form['actions']['submit']['#submit'][] = 'Drupal\relationship_nodes\Form\MirrorRelationshipEntityInlineForm::entityFormSubmit';
+    
+    // Add the custom submit handler to get created relation ids.
+  $form['#ief_element_submit'][] = [MirrorRelationshipEntityInlineForm::class, 'getCreatedRelationIds'];
+  $form['actions']['submit']['#submit'][] = 'mymodule_custom_node_submit';
+  }
+}
+
+function relationship_nodes_node_insert(\Drupal\Core\Entity\EntityInterface $entity) {
+
+  //dpm($entity, 'node insert');
 }
 
 
+
 function mymodule_custom_node_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  dpm($form_state, 'testtest'); // zie bij storge.
+  $relationship_ids = $form_state->get('created_relation_ids');
+  dpm($relationship_ids, 'mymodule_custom_node_submit');
+  $node = $form_state->getFormObject()->getEntity();
+  dpm($node, 'mymodule_custom_node_submit node');
+  dpm($form, 'mymodule_custom_node_submit form');
+  dpm($form_state, 'mymodule_custom_node_submit form_state');
+  $node->relationship_ids = $relationship_ids;
 }

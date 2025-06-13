@@ -45,7 +45,6 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
    * {@inheritdoc}
    */
    public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {
-    dpm($entity_form, 'entityFormSubmit');
     parent::entityFormSubmit($entity_form, $form_state);
     $current_node = \Drupal::routeMatch()->getParameter('node');  
     if (($current_node instanceof Node)) {
