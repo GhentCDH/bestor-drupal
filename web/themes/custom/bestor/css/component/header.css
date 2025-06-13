@@ -30,12 +30,6 @@
   min-height: unset !important;
 }
 
-.frontpage-banner.h1{
-  color:rgba(255,255,255,0.9);
-  font-size: 600px;
-  text-align: center;
-}
-
 .header {
     background-image: unset !important;
   }

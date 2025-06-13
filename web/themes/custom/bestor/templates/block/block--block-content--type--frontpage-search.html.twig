@@ -28,7 +28,6 @@
 <div{{ attributes.addClass('block') }}>
   {{ title_suffix }}
   <div class="block-content frontpage-search-block" style="background-color: #DC143C; background-image: url('{{ file_url(content.field_banner_image.0['#media'].field_media_image.0.entity.uri.value) }}');">
-    <div class='h1 frontpage-banner'>{{content.field_search_box_text}}</div>
     <div class="container">
       <div class='frontpage-search-form'>
         {{drupal_block('views_exposed_filter_block:search-page_1')}}

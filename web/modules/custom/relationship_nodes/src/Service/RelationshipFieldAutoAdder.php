@@ -59,28 +59,6 @@ class RelationshipFieldAutoAdder {
         ])
         ->setSetting('join_field', $relationship['join_fields'])
         ->setRevisionable(FALSE);
-
-        $rel_type_bundles = [$relationship['this_bundle'], $relationship['related_bundle'],$relationship['relationship_bundle']];
-        foreach ($rel_type_bundles as $rel_type_bundle) {
-          if (!in_array($rel_type_bundle, $bundles_involved)) {
-            $bundles_involved[] = $rel_type_bundle;
-          }
-        }
-    }
-    if(!empty($bundles_involved)) {
-      $fields['submit_batch_id'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Submit Batch ID'))
-      ->setDescription(t('On form submit a batch id is generated for new nodes. Multiple nodes can be created with the same form submit.'))
-      ->setTranslatable(FALSE)
-      ->setRevisionable(FALSE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', FALSE)
-      ->setTranslatable(FALSE)
-      ->setRevisionable(FALSE)
-      ->setSettings([
-        'default_value' => '',
-        'max_length' => 255,
-      ]);
     }
   }
 }

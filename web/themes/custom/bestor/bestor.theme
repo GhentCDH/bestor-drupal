@@ -134,6 +134,7 @@ function bestor_preprocess_node(&$variables) {
     }   
 
     // Intro text variable
+    $intro_text = '';
     if(isset($node_fields['field_summary']) && $node->field_summary->getValue() != null){
         $intro_text = strip_tags($node->field_summary->value);
     } else if(isset($node_fields['body']) && $node->body->getValue() != null){

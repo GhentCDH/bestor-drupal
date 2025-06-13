@@ -16,6 +16,7 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
    */
   public function entityForm(array $entity_form, FormStateInterface $form_state) {
     $entity_form = parent::entityForm($entity_form, $form_state);
+
     $config = \Drupal::config('relationship_nodes.settings');
     if($entity_form['#form_mode'] == $config->get('relationship_form_mode')){
       $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForCurrentForm($entity_form['#entity']);
@@ -44,11 +45,30 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
    * {@inheritdoc}
    */
    public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {
+    dpm($entity_form, 'entityFormSubmit');
     parent::entityFormSubmit($entity_form, $form_state);
     $current_node = \Drupal::routeMatch()->getParameter('node');  
     if (($current_node instanceof Node)) {
-      $entity_form[$related_entity_field_1]['widget'][0]['target_id']['#default_value'] = $current_node;    
+      // dit moet zeker uitgewerkt worden want is zeker niet altijd related entity field 1
+      $entity_form[$related_entity_field_1]['widget'][0]['target_id']['#default_value'] = $current_node;  
+      
     }     
-
   }
-}
+
+    public static function getCreatedRelationIds(array &$form, FormStateInterface $form_state) {
+      $updated_ids = [];
+      foreach ($form_state->get('inline_entity_form') as $relation_type_form) {
+        if (isset($relation_type_form['entities']) && !empty($relation_type_form['entities'])) {
+          foreach ($relation_type_form['entities'] as $entity) {
+            if ($entity['entity'] instanceof Node && $entity['needs_save'] == false) {
+              $relation_nid = $entity['entity']->id();
+              if ($relation_nid) {
+                $updated_ids[] = $relation_nid;
+              }
+            }
+          }
+        }
+      }
+      $form_state->set('created_relation_ids', $updated_ids);
+  }
+} 
