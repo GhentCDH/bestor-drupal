@@ -49,9 +49,9 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
       $foreign_key = $this->getForeignKeyField($entity_form, $form_entity->getType());
       $entity_form[$related_entity_field_1]['#attributes']['hidden'] = 'hidden';
 
-      if(count($foreign_key) == 2 || (count($foreign_key) == 1 && $foreign_key[0] == $related_entity_field_1)){ 
+      if( $foreign_key == $related_entity_field_1){ 
         $entity_form[$related_entity_field_1]['#attributes']['hidden'] = 'hidden';
-      } elseif(count($foreign_key) == 1 && $foreign_key[0] == $related_entity_field_2) {
+      } elseif( $foreign_key == $related_entity_field_2) {
         $entity_form[$related_entity_field_2]['#attributes']['hidden'] = 'hidden';
       } 
     }
@@ -76,23 +76,27 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
       }
 
       $foreign_key = $this->getForeignKeyField($entity_form, $form_entity->getType());
-      if(count($foreign_key) == 2 || (count($foreign_key) == 1 && $foreign_key[0] == $related_entity_field_1)){ 
+      if( $foreign_key  == $related_entity_field_1){ 
         $entity_form[$related_entity_field_1]['widget'][0]['target_id']['#default_value'] = $current_node;
-      } elseif(count($foreign_key) == 1 && $foreign_key[0] == $related_entity_field_2) {
+      } elseif( $foreign_key  == $related_entity_field_2) {
         $entity_form[$related_entity_field_2]['widget'][0]['target_id']['#default_value'] = $current_node;
-      } 
-       
+      }     
   }
 
+ /**
+   * {@inheritdoc}
+   */
     public static function getCreatedRelationIds(array &$form, FormStateInterface $form_state) {
       $updated_ids = [];
-      foreach ($form_state->get('inline_entity_form') as $relation_type_form) {
+      foreach ($form_state->get('inline_entity_form') as $field_name => $relation_type_form) {
         if (isset($relation_type_form['entities']) && !empty($relation_type_form['entities'])) {
-          foreach ($relation_type_form['entities'] as $entity) {
-            if ($entity['entity'] instanceof Node && $entity['needs_save'] == false) {
+          foreach ($relation_type_form['entities'] as $delta => $entity) {
+            $parent_entity = $form_state->getFormObject()->getEntity();
+            if ($entity['entity'] instanceof Node && $entity['needs_save'] == false && $parent_entity instanceof EntityInterface) {
+              $foreign_key = self::getForeignKeyField($form[$field_name]['widget'][$delta]['inline_entity_form'], $form_state->getFormObject()->getEntity()->getType());
               $relation_nid = $entity['entity']->id();
               if ($relation_nid) {
-                $updated_ids[] = $relation_nid;
+                $updated_ids[$relation_nid] =  $foreign_key;
               }
             }
           }
@@ -104,8 +108,11 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
 
 
 
-  function getForeignKeyField($entity_form, $bundle_name){
-    $result = [];
+ /**
+   * {@inheritdoc}
+   */
+  public static function getForeignKeyField($entity_form, $bundle_name){
+    $result = '';
     $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
 
     if($info_service->allConfigAvailable() == false && $entity_form['#form_mode'] != $info_service->getRelationshipFormMode()) {
@@ -113,15 +120,26 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     }     
 
     $fields = $info_service->getRelatedEntityFields();
-    if(!isset($entity_form[$fields['related_entity_field_1']]) || !isset($entity_form[$fields['related_entity_field_2']])){
+    $related_entity_field_1 = $fields['related_entity_field_1'];
+    $related_entity_field_2 = $fields['related_entity_field_2'];
+    if(!isset($entity_form[ $related_entity_field_1 ]) || !isset($entity_form[$related_entity_field_2])){
       return $result;
     }
 
+    $foreign_key = [];
     foreach($fields as $field){
       if(in_array($bundle_name, $entity_form[$field]['widget'][0]['target_id']['#selection_settings']['target_bundles'])){
-        $result[] = $field;
+        $foreign_key[] = $field;
       }
     }
+
+
+    if(count($foreign_key) == 2 || (count($foreign_key) == 1 && $foreign_key[0] == $related_entity_field_1)){ 
+        $result = $related_entity_field_1;
+    } elseif(count($foreign_key) == 1 && $foreign_key[0] == $related_entity_field_2) {
+        $result = $related_entity_field_2;
+    }
+    
     return $result;
   }
 }  

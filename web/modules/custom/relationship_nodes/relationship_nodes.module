@@ -139,10 +139,16 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
 
 function create_relations_on_insert(array &$form, FormStateInterface $form_state) {
   $relationship_ids = $form_state->get('created_relation_ids');
-  dpm($relationship_ids, 'mymodule_custom_node_submit');
-  $node = $form_state->getFormObject()->getEntity();
-  dpm($node, 'mymodule_custom_node_submit node');
-  dpm($form, 'mymodule_custom_node_submit form');
-  dpm($form_state, 'mymodule_custom_node_submit form_state');
-  $node->relationship_ids = $relationship_ids;
+  $parent_node = $form_state->getFormObject()->getEntity();
+  if(!is_array($relationship_ids) || empty($relationship_ids) || !$parent_node instanceof EntityInterface) {
+    return;   
+  }
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  foreach ($relationship_ids as $relationship_id => $relationship_field) {
+    $related_node = $node_storage->load($relationship_id);
+    if ($related_node instanceof EntityInterface) {
+      $related_node->set($relationship_field, [['target_id' => $parent_node->id()]]);
+      $related_node->save();
+    }
+  } 
 }

@@ -249,18 +249,6 @@ class RelationshipInfoService {
     }
 
 
-     /**
-     * @param \Drupal\node\Entity\Node $relationship_node
-     * @param string $bundle
-     *
-     * @return array
-     * 
-     * Deze functie checkt of een relatie node (input) een join field heeft met de huidige node en geeft terug welke.
-     */
-
-    function getForeignKeyField(Node $relationship_node, $bundle_name){
-
-    }
     
     /**
      * @param \Drupal\node\Entity\Node $relationship_node
