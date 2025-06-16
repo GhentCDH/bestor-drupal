@@ -26,8 +26,8 @@ class MirrorSelectWidget extends OptionsSelectWidget {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
-    $config = \Drupal::config('relationship_nodes.settings');
-    if($config->get('relationship_type_field') != null && count($config->get('related_entity_fields')) == 2){
+    $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
+    if($info_service->allConfigAvailable() === true){
       $relationship_subform = false;
       foreach ($element['#field_parents'] as $field_parent) {
         if (is_string($field_parent) && strpos($field_parent, 'computed_relationshipfield__') === 0) {
@@ -35,20 +35,28 @@ class MirrorSelectWidget extends OptionsSelectWidget {
           break;
         }
       }
-      if($relationship_subform === true && $form["#type"] === 'inline_entity_form' && strpos($form["#bundle"], $config->get('relationship_node_bundle_prefix')) === 0){    
+      if($relationship_subform === true && $form["#type"] === 'inline_entity_form' && strpos($form["#bundle"], $info_service->getRelationshipNodeBundlePrefix()) === 0){
         $field_definition = $items->getFieldDefinition();
-        if($field_definition && $field_definition->get('field_name') && $field_definition->get('field_name') === $config->get('relationship_type_field')){   
+        if($field_definition && $field_definition->get('field_name') && $field_definition->get('field_name') === $info_service->getRelationshipTypeField()){   
           $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForCurrentForm($items->getEntity());
           $current_node_join_fields = $relation_info['current_node_join_fields'];
-          if($current_node_join_fields && count($current_node_join_fields) == 1 && $current_node_join_fields[0] == $config->get('related_entity_fields')['related_entity_field_2'] ){
+          if(!$current_node_join_fields){
+            return $element;
+          }
+          dpm($element);
+          if(count($current_node_join_fields) == 1 && $current_node_join_fields[0] == $info_service->getRelatedEntityFields()['related_entity_field_2'] ){
             $element['#options'] = $this->getMirrorOptions($element['#options'], $relation_info['general_relationship_info']);
+            $element['#attributes']['hidden'] = 'hidden';
+          } else if((count($current_node_join_fields) == 1 && $current_node_join_fields[0] == $info_service->getRelatedEntityFields()['related_entity_field_1']) ||
+                    (count($current_node_join_fields) == 2 && in_array($info_service->getRelatedEntityFields()['related_entity_field_1'], $current_node_join_fields) && in_array($info_service->getRelatedEntityFields()['related_entity_field_2'], $current_node_join_fields))){
+            $element['#attributes']['hidden'] = 'hidden';
           }
         }
       }
     }
     return $element;
   }
-
+ 
   protected function getMirrorOptions($original_options, $relationshipnode_info) {
     $options = isset($original_options) ? $original_options : [];
     $config = \Drupal::config('relationship_nodes.settings');
@@ -71,7 +79,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
               }
               break;
           }   
-        }      
+        }       
       }
     }
     return $options;

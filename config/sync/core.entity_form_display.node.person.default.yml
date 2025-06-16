@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_form_mode.node.relationship_subform
     - field.field.node.person.field_alternative_name
     - field.field.node.person.field_author
     - field.field.node.person.field_description
@@ -34,7 +35,7 @@ content:
     weight: 22
     region: content
     settings:
-      form_mode: default
+      form_mode: relationship_subform
       override_labels: false
       label_singular: ''
       label_plural: ''
@@ -47,7 +48,7 @@ content:
     weight: 23
     region: content
     settings:
-      form_mode: default
+      form_mode: relationship_subform
       override_labels: false
       label_singular: ''
       label_plural: ''
