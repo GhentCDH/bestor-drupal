@@ -12,6 +12,7 @@ dependencies:
   module:
     - datetime_range
     - entity_reference_modal
+    - relationship_nodes
 id: node.relationnode__person_person.relationship_subform
 targetEntityType: node
 bundle: relationnode__person_person
@@ -22,6 +23,7 @@ content:
     weight: 0
     region: content
     settings:
+      view_and_display: ''
       add_new_button_title: +
       modal_form_mode: default
       modal_width: 80%
@@ -29,6 +31,7 @@ content:
       duplicate: false
       search: true
       bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -39,6 +42,7 @@ content:
     weight: 1
     region: content
     settings:
+      view_and_display: ''
       add_new_button_title: +
       modal_form_mode: default
       modal_width: 80%
@@ -46,6 +50,7 @@ content:
       duplicate: false
       search: true
       bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -58,7 +63,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_relation_type:
-    type: options_select
+    type: mirror_select_widget
     weight: 2
     region: content
     settings: {  }

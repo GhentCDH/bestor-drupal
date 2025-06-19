@@ -301,5 +301,38 @@ class RelationshipInfoService {
         return  ['current_node_join_fields' => $joinFields, 'relationship_node_status' => $status, 'general_relationship_info' => $node_info];
     }
 
+
+/**
+   * @param \Drupal\node\Entity\Node $parent_entity
+   * @param array $relationship_fields
+   * @param string $related_bundle
+   *
+   * @return array
+   */
+/*
+     public function getRelatedNodes($parent_entity, $field){
+          if (!$parent_entity->id() || empty($relationship_fields)) {
+    return [];
+  }
+
+  $nid = $parent_entity->id();
+  $all_results = [];
+
+   $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  foreach ($relationship_fields as $field_name) {
+    $referencing_nodes = $storage->loadByProperties([
+      'type' => $related_bundle,
+      $field_name => $nid,
+    ]);
+    $all_results += $referencing_nodes;
+  }
+
+  return $all_results;
+        
+    }
+*/
+
+    // Bekijken of het nuttig kan zijn om enkel te vertrekken van een base field definition en daar dan alle shit zelf uithalen. en uiteraard de parent node. ik denk dat dat een goede aanpak kan zijn.
 }
 

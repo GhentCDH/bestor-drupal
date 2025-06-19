@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\inline_entity_form\Form\EntityInlineForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\relationship_nodes\Service\RelationshipInfoService;
-use \Drupal\node\Entity\Node;
+use Drupal\node\Entity\Node;
 
 
 
@@ -40,7 +40,7 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
               break;
           } 
       }
-  }
+    }
     if($entity_form['#entity']->isNew()){
       $form_entity = $form_state->getFormObject()->getEntity();
       if(!$form_entity instanceof EntityInterface){
@@ -55,33 +55,38 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
         $entity_form[$related_entity_field_2]['#attributes']['hidden'] = 'hidden';
       } 
     }
+    
     return $entity_form;
   }
 
 
- /**
+   /**
    * {@inheritdoc}
    */
    public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {
       parent::entityFormSubmit($entity_form, $form_state);
-      
+      dpm('dit runt hier');
+      dpm($form_state->getValues(), 'Form State Values');
+      dpm($form_state->get('inline_entity_form'), 'Inline Entity Form State');
       $current_node = \Drupal::routeMatch()->getParameter('node');  
       if (!$current_node instanceof Node) {
-        return; // If a new node is being created, a submit handler creates the relations later.
+        return; // If a new node is being created, a submit handler creates the relation later.
       }  
   
-      $form_entity = $form_state->getFormObject()->getEntity();
-      if(!$form_entity instanceof EntityInterface){
+      $entity_form_entity = $entity_form['#entity'];
+      if(!$entity_form_entity instanceof EntityInterface){
         return;
       }
 
-      $foreign_key = $this->getForeignKeyField($entity_form, $form_entity->getType());
-      if( $foreign_key  == $related_entity_field_1){ 
-        $entity_form[$related_entity_field_1]['widget'][0]['target_id']['#default_value'] = $current_node;
-      } elseif( $foreign_key  == $related_entity_field_2) {
-        $entity_form[$related_entity_field_2]['widget'][0]['target_id']['#default_value'] = $current_node;
-      }     
+      if($entity_form['#entity']->isNew()){
+
+        $foreign_key = $this->getForeignKeyField($entity_form, $form_state->getFormObject()->getEntity()->getType());     
+        $entity_form_entity->set($foreign_key, $current_node->id()); 
+      } 
   }
+
+
+
 
  /**
    * {@inheritdoc}
@@ -89,7 +94,7 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     public static function getCreatedRelationIds(array &$form, FormStateInterface $form_state) {
       $updated_ids = [];
       foreach ($form_state->get('inline_entity_form') as $field_name => $relation_type_form) {
-        if (isset($relation_type_form['entities']) && !empty($relation_type_form['entities'])) {
+        if (str_starts_with($field_name, 'computed_relationshipfield__') && isset($relation_type_form['entities']) && !empty($relation_type_form['entities'])) {
           foreach ($relation_type_form['entities'] as $delta => $entity) {
             $parent_entity = $form_state->getFormObject()->getEntity();
             if ($entity['entity'] instanceof Node && $entity['needs_save'] == false && $parent_entity instanceof EntityInterface) {
@@ -104,7 +109,28 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
       }
       $form_state->set('created_relation_ids', $updated_ids);
   }
-
+/*
+    public static function removeIncompleteRelations(array &$form, FormStateInterface $form_state) {
+      $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
+      foreach ($form_state->get('inline_entity_form') as $field_name => $relation_type_form) {
+        $field_values = $form_state->getValues()[$field_name];
+        foreach($field_values as $i => $field_value) {
+          $ief = $field_value['inline_entity_form'];
+          $completed = true;
+          foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
+            if(count($ief[$related_entity_field]) == 1 && $ief[$related_entity_field][0]['target_id'] == null) {
+              $completed = false;
+              break;
+            }
+          }
+          if(!$completed){
+            //unset($field_values[$i]);
+          }
+        }
+        $form_state->setValue($field_name, $field_values);
+      }
+    }
+*/
 
 
 
@@ -142,4 +168,6 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     
     return $result;
   }
+
+
 }  

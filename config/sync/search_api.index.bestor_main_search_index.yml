@@ -399,6 +399,6 @@ tracker_settings:
 options:
   cron_limit: 50
   delete_on_fail: true
-  index_directly: true
-  track_changes_in_references: true
+  index_directly: false
+  track_changes_in_references: false
 server: s_api_elasticserver_bestor
