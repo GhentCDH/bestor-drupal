@@ -122,10 +122,15 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
     return;
   }
   if(isset($form['#ief_element_submit_attached']) && $form['#ief_element_submit_attached'] == true) {
-    //$form['#ief_element_submit'][] = [MirrorRelationshipEntityInlineForm::class, 'removeIncompleteRelations'];
     foreach($form_state->get('inline_entity_form') as $field_name => $form_data){
-      if(str_starts_with($field_name, 'computed_relationshipfield__')){
-        $form[$field_name]['widget']['#element_validate'][] = 'check_relation_completeness';
+      if(str_starts_with($field_name, 'computed_relationshipfield__')){   
+        $i = 0;
+        for($form[$field_name]['widget']; isset($form[$field_name]['widget'][$i]); $i++){
+          if(!isset($form[$field_name]['widget'][$i]['inline_entity_form'])) {
+            continue;
+          }
+          $form[$field_name]['widget'][$i]['inline_entity_form']['#parent_field_name'] = $field_name;
+        }
       }
     }
     if($form_entity->isNew()){
@@ -206,9 +211,9 @@ function delete_relations_on_submit(array &$form, FormStateInterface $form_state
 }
 
 function check_relation_completeness(array &$element, FormStateInterface $form_state) {
+  dpm('deze functie moet waarschijnlijk nog verwijderd worden');
   $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
   $field_element = $form_state->getValue($element['#field_name']);
-  dpm($field_element, 'Field Element Data');
   $valid_items = [];
   $i = 0;
   for($field_element;isset($field_element[$i]); $i++) {
@@ -228,6 +233,4 @@ function check_relation_completeness(array &$element, FormStateInterface $form_s
     }
   }
   $form_state->setValue($element['#field_name'], $valid_items);
-
-  dpm($form_state->getValue($element['#field_name']), 'Field Element Data after validation');
 }

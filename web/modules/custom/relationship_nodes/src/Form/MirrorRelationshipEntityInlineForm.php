@@ -23,8 +23,9 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     if($info_service->allConfigAvailable() == false && $entity_form['#form_mode'] != $info_service->getRelationshipFormMode()) {
       return $entity_form;
     }     
-    $related_entity_field_1 = $info_service->getRelatedEntityFields()['related_entity_field_1'];
-    $related_entity_field_2 = $info_service->getRelatedEntityFields()['related_entity_field_2'];
+    $related_entity_fields = $info_service->getRelatedEntityFields();
+    $related_entity_field_1 = $related_entity_fields['related_entity_field_1'];
+    $related_entity_field_2 = $related_entity_fields['related_entity_field_2'];
     
     if($entity_form['#entity'] && !$entity_form['#entity']->isNew()){ 
       $relation_info = $info_service->getRelationInfoForCurrentForm($entity_form['#entity']);
@@ -55,7 +56,8 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
         $entity_form[$related_entity_field_2]['#attributes']['hidden'] = 'hidden';
       } 
     }
-    
+    $entity_form['#element_validate'][] = [get_class($this), 'removeIncompleteRelations'];
+
     return $entity_form;
   }
 
@@ -65,21 +67,19 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
    */
    public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {
       parent::entityFormSubmit($entity_form, $form_state);
-      dpm('dit runt hier');
-      dpm($form_state->getValues(), 'Form State Values');
-      dpm($form_state->get('inline_entity_form'), 'Inline Entity Form State');
-      $current_node = \Drupal::routeMatch()->getParameter('node');  
+      $current_node = \Drupal::routeMatch()->getParameter('node');
+    dpm($entity_form, 'Entity Form SUBMIT');
+      dpm($form_state, 'Form State SUBMIT');
       if (!$current_node instanceof Node) {
         return; // If a new node is being created, a submit handler creates the relation later.
       }  
-  
+
       $entity_form_entity = $entity_form['#entity'];
       if(!$entity_form_entity instanceof EntityInterface){
         return;
       }
 
       if($entity_form['#entity']->isNew()){
-
         $foreign_key = $this->getForeignKeyField($entity_form, $form_state->getFormObject()->getEntity()->getType());     
         $entity_form_entity->set($foreign_key, $current_node->id()); 
       } 
@@ -109,10 +109,39 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
       }
       $form_state->set('created_relation_ids', $updated_ids);
   }
-/*
-    public static function removeIncompleteRelations(array &$form, FormStateInterface $form_state) {
+
+    public static function removeIncompleteRelations(array &$entity_form, FormStateInterface $form_state) {
+      //OPVALLEND DIT WERKT NIET WANT DE INLINE_ENTITI_FORM SHIT WORDT TOCH NOG AANGEMAAKT BIJ SUBMIT. DUS TOCH BIJ SUBMIT AANPAKKEN ZOU IK ZEGGEN.
       $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-      foreach ($form_state->get('inline_entity_form') as $field_name => $relation_type_form) {
+      dpm($entity_form, 'Entity Form VALIDSATION');
+      dpm($form_state, 'Form State VALIDSATION');
+
+      $field_element = $form_state->getValue($entity_form['#parent_field_name']);
+      $valid_items = [];
+      $i = 0;
+
+      dpm($field_element, 'Field Element');
+
+      for($field_element; isset($field_element[$i]); $i++) {
+        $ief = $field_element[$i]['inline_entity_form'];
+        $valid_fields = 0;
+        foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
+          foreach($ief[$related_entity_field] as $input) {
+            if($input['target_id'] != null) {
+              $valid_fields++;
+              break;
+            }        
+          }
+          if($valid_fields != 0) {
+            $valid_items[] = $field_element[$i];
+            break;
+          }
+        }
+      }
+      $form_state->setValue($entity_form['#parent_field_name'], $valid_items);
+      dpm($form_state->getValues());
+      dpm($form_state->get('inline_entity_form'), 'Inline Entity Form');
+      /*foreach ($form_state->get('inline_entity_form') as $field_name => $relation_type_form) {
         $field_values = $form_state->getValues()[$field_name];
         foreach($field_values as $i => $field_value) {
           $ief = $field_value['inline_entity_form'];
@@ -128,9 +157,9 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
           }
         }
         $form_state->setValue($field_name, $field_values);
-      }
+      }*/
     }
-*/
+
 
 
 
