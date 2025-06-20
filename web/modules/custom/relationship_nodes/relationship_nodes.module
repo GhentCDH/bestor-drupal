@@ -122,6 +122,9 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
     return;
   }
   if(isset($form['#ief_element_submit_attached']) && $form['#ief_element_submit_attached'] == true) {
+    //$submit_handlers = $form['#ief_element_submit'] ?? [];
+    //array_unshift($submit_handlers, [MirrorRelationshipEntityInlineForm::class, 'removeIncompleteRelations']);
+    //$form['#ief_element_submit'] = $submit_handlers;
     foreach($form_state->get('inline_entity_form') as $field_name => $form_data){
       if(str_starts_with($field_name, 'computed_relationshipfield__')){   
         $i = 0;
@@ -216,7 +219,7 @@ function check_relation_completeness(array &$element, FormStateInterface $form_s
   $field_element = $form_state->getValue($element['#field_name']);
   $valid_items = [];
   $i = 0;
-  for($field_element;isset($field_element[$i]); $i++) {
+  for($field_element; isset($field_element[$i]); $i++) {
     $ief = $field_element[$i]['inline_entity_form'];
     $valid_fields = 0;
     foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
@@ -234,3 +237,4 @@ function check_relation_completeness(array &$element, FormStateInterface $form_s
   }
   $form_state->setValue($element['#field_name'], $valid_items);
 }
+

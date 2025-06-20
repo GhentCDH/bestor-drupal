@@ -7,7 +7,7 @@ use Drupal\inline_entity_form\Form\EntityInlineForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\relationship_nodes\Service\RelationshipInfoService;
 use Drupal\node\Entity\Node;
-
+use Drupal\Core\Entity\ContentEntityInterface;
 
 
 class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
@@ -66,10 +66,16 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
    * {@inheritdoc}
    */
    public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {
+
+
+
+    
+      
       parent::entityFormSubmit($entity_form, $form_state);
+
+
+
       $current_node = \Drupal::routeMatch()->getParameter('node');
-    dpm($entity_form, 'Entity Form SUBMIT');
-      dpm($form_state, 'Form State SUBMIT');
       if (!$current_node instanceof Node) {
         return; // If a new node is being created, a submit handler creates the relation later.
       }  
@@ -113,14 +119,15 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     public static function removeIncompleteRelations(array &$entity_form, FormStateInterface $form_state) {
       //OPVALLEND DIT WERKT NIET WANT DE INLINE_ENTITI_FORM SHIT WORDT TOCH NOG AANGEMAAKT BIJ SUBMIT. DUS TOCH BIJ SUBMIT AANPAKKEN ZOU IK ZEGGEN.
       $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-      dpm($entity_form, 'Entity Form VALIDSATION');
-      dpm($form_state, 'Form State VALIDSATION');
+
+
+     
 
       $field_element = $form_state->getValue($entity_form['#parent_field_name']);
       $valid_items = [];
       $i = 0;
 
-      dpm($field_element, 'Field Element');
+
 
       for($field_element; isset($field_element[$i]); $i++) {
         $ief = $field_element[$i]['inline_entity_form'];
@@ -139,31 +146,12 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
         }
       }
       $form_state->setValue($entity_form['#parent_field_name'], $valid_items);
-      dpm($form_state->getValues());
-      dpm($form_state->get('inline_entity_form'), 'Inline Entity Form');
-      /*foreach ($form_state->get('inline_entity_form') as $field_name => $relation_type_form) {
-        $field_values = $form_state->getValues()[$field_name];
-        foreach($field_values as $i => $field_value) {
-          $ief = $field_value['inline_entity_form'];
-          $completed = true;
-          foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
-            if(count($ief[$related_entity_field]) == 1 && $ief[$related_entity_field][0]['target_id'] == null) {
-              $completed = false;
-              break;
-            }
-          }
-          if(!$completed){
-            //unset($field_values[$i]);
-          }
-        }
-        $form_state->setValue($field_name, $field_values);
-      }*/
+      dpm($form_state->getValue($entity_form['#parent_field_name']), 'valid_items');
+      dpm($form_state->get('inline_entity_form')[$entity_form['#parent_field_name']], 'inline_entity_form');
+
     }
 
-
-
-
- /**
+  /**
    * {@inheritdoc}
    */
   public static function getForeignKeyField($entity_form, $bundle_name){
