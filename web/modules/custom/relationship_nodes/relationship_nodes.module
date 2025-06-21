@@ -51,6 +51,7 @@ function relationship_nodes_node_presave(\Drupal\Core\Entity\EntityInterface $en
     }
     $entity->set('title','Relationship ' . implode(' - ', $related_entities));
   }
+  dpm('presave node ' . $entity->getType());
 }
 
 
@@ -122,9 +123,6 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
     return;
   }
   if(isset($form['#ief_element_submit_attached']) && $form['#ief_element_submit_attached'] == true) {
-    //$submit_handlers = $form['#ief_element_submit'] ?? [];
-    //array_unshift($submit_handlers, [MirrorRelationshipEntityInlineForm::class, 'removeIncompleteRelations']);
-    //$form['#ief_element_submit'] = $submit_handlers;
     foreach($form_state->get('inline_entity_form') as $field_name => $form_data){
       if(str_starts_with($field_name, 'computed_relationshipfield__')){   
         $i = 0;
@@ -144,6 +142,8 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
       $form['actions']['submit']['#submit'][] = 'delete_relations_on_submit';
     } 
   }
+ //  $form['actions']['submit']['#submit'][] = 'testtest';
+
 }
 
 function create_relations_on_insert(array &$form, FormStateInterface $form_state) {
@@ -212,29 +212,3 @@ function delete_relations_on_submit(array &$form, FormStateInterface $form_state
     }
   }
 }
-
-function check_relation_completeness(array &$element, FormStateInterface $form_state) {
-  dpm('deze functie moet waarschijnlijk nog verwijderd worden');
-  $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-  $field_element = $form_state->getValue($element['#field_name']);
-  $valid_items = [];
-  $i = 0;
-  for($field_element; isset($field_element[$i]); $i++) {
-    $ief = $field_element[$i]['inline_entity_form'];
-    $valid_fields = 0;
-    foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
-      foreach($ief[$related_entity_field] as $input) {
-        if($input['target_id'] != null) {
-          $valid_fields++;
-          break;
-        }        
-      }
-      if($valid_fields != 0) {
-        $valid_items[] = $field_element[$i];
-        break;
-      }
-    }
-  }
-  $form_state->setValue($element['#field_name'], $valid_items);
-}
-

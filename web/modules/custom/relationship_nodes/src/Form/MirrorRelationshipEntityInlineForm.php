@@ -56,8 +56,8 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
         $entity_form[$related_entity_field_2]['#attributes']['hidden'] = 'hidden';
       } 
     }
-    $entity_form['#element_validate'][] = [get_class($this), 'removeIncompleteRelations'];
-
+    //$entity_form['#element_validate'][] = [get_class($this), 'cleanEmptyRelationFields'];
+    //dpm($entity_form, 'entity form in mirror relationship inline form');
     return $entity_form;
   }
 
@@ -65,16 +65,19 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
    /**
    * {@inheritdoc}
    */
-   public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {
+   public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {   
+    $this->cleanEmptyRelationFields($entity_form, $form_state);  
+    parent::entityFormSubmit($entity_form, $form_state);
+     // $this->cleanEmptyRelationFields($entity_form, $form_state);
 
+      $parent_field_name = $entity_form['#parent_field_name'] ?? null;
+      if($parent_field_name == null || !str_starts_with($parent_field_name, 'computed_relationshipfield__') || $form_state->get('inline_entity_form') == null) {
+        return;
+      }
+      $form_state_value = $form_state->getValue($parent_field_name);
+      $form_state_ief_input = $form_state->get('inline_entity_form')[$parent_field_name];
 
-
-    
       
-      parent::entityFormSubmit($entity_form, $form_state);
-
-
-
       $current_node = \Drupal::routeMatch()->getParameter('node');
       if (!$current_node instanceof Node) {
         return; // If a new node is being created, a submit handler creates the relation later.
@@ -88,15 +91,65 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
       if($entity_form['#entity']->isNew()){
         $foreign_key = $this->getForeignKeyField($entity_form, $form_state->getFormObject()->getEntity()->getType());     
         $entity_form_entity->set($foreign_key, $current_node->id()); 
-      } 
+      }      
+    }
+
+    public static function cleanEmptyRelationFields(array &$entity_form, FormStateInterface $form_state) {
+    dpm('no 1');
+    $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
+    if(!$info_service->allConfigAvailable()) {
+      return;
+    }
+    dpm('no 2');
+    $parent_field_name = $entity_form['#parent_field_name'] ?? null;
+    if($parent_field_name == null || !str_starts_with($parent_field_name, 'computed_relationshipfield__') || $form_state->get('inline_entity_form') == null) {
+      return;
+    }
+    dpm('no 3');
+    $fs_field_ief_input = $form_state->get('inline_entity_form')[$parent_field_name] ?? null;
+    if($fs_field_ief_input  == null || !is_array($fs_field_ief_input) || count($fs_field_ief_input) == 0) {
+      return;
+    }
+    dpm('no 4');
+    $fs_field_values = $form_state->getValue($parent_field_name);
+    $valid_items = 0;
+    $i = 0;
+    for($fs_field_values; isset($fs_field_values[$i]); $i++) {
+      dpm($fs_field_values[$i], 'single full relation arr');
+      $ief = $fs_field_values[$i]['inline_entity_form'];
+      $valid_fields = 0;
+      foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
+        dpm($ief[$related_entity_field], 'single field value -- multiple possible');
+        foreach($ief[$related_entity_field] as $reference) {
+           dpm($ief[$related_entity_field], 'single field value input - one reference');
+          if($reference['target_id'] != null) {
+            $valid_fields++;
+            break;
+          }
+        }
+        if($valid_fields > 0) {
+          break;
+        }
+      }
+      if($valid_fields > 0) {
+        $valid_items++;
+        break;
+      }   
+    }
+    if($valid_items == 0) {
+      $form_state->setValue($parent_field_name, []);
+      $form_state->set(['inline_entity_form', $parent_field_name], []);
+      $form_state->set([
+  'inline_entity_form',
+  $parent_field_name,
+  'entities'
+], []);
+    } 
+    dpm($form_state->get('inline_entity_form'), 'cleaned inline entity form input');
   }
 
 
 
-
- /**
-   * {@inheritdoc}
-   */
     public static function getCreatedRelationIds(array &$form, FormStateInterface $form_state) {
       $updated_ids = [];
       foreach ($form_state->get('inline_entity_form') as $field_name => $relation_type_form) {
@@ -116,44 +169,9 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
       $form_state->set('created_relation_ids', $updated_ids);
   }
 
-    public static function removeIncompleteRelations(array &$entity_form, FormStateInterface $form_state) {
-      //OPVALLEND DIT WERKT NIET WANT DE INLINE_ENTITI_FORM SHIT WORDT TOCH NOG AANGEMAAKT BIJ SUBMIT. DUS TOCH BIJ SUBMIT AANPAKKEN ZOU IK ZEGGEN.
-      $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-
-
-     
-
-      $field_element = $form_state->getValue($entity_form['#parent_field_name']);
-      $valid_items = [];
-      $i = 0;
 
 
 
-      for($field_element; isset($field_element[$i]); $i++) {
-        $ief = $field_element[$i]['inline_entity_form'];
-        $valid_fields = 0;
-        foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
-          foreach($ief[$related_entity_field] as $input) {
-            if($input['target_id'] != null) {
-              $valid_fields++;
-              break;
-            }        
-          }
-          if($valid_fields != 0) {
-            $valid_items[] = $field_element[$i];
-            break;
-          }
-        }
-      }
-      $form_state->setValue($entity_form['#parent_field_name'], $valid_items);
-      dpm($form_state->getValue($entity_form['#parent_field_name']), 'valid_items');
-      dpm($form_state->get('inline_entity_form')[$entity_form['#parent_field_name']], 'inline_entity_form');
-
-    }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function getForeignKeyField($entity_form, $bundle_name){
     $result = '';
     $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
