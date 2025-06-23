@@ -14,6 +14,7 @@ class RelationshipFieldAutoAdder {
 
     protected $relationshipInfoService;
   
+
     public function __construct(RelationshipInfoService $relationshipInfoService) {
       $this->relationshipInfoService = $relationshipInfoService;
     }
@@ -52,6 +53,11 @@ class RelationshipFieldAutoAdder {
         ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
         ->setTargetEntityTypeId('node')
         ->setTargetBundle($relationship['relationship_bundle'])
+        ->setDisplayOptions('form', [
+          'type' => 'ief_validated_relations_simple',
+          'weight' => 0,
+          'settings' => [],
+        ])
         ->setDisplayConfigurable('form', TRUE)
         ->setDisplayConfigurable('view', TRUE)
         ->setSetting('handler_settings', [

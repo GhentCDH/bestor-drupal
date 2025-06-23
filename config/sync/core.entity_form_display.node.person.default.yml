@@ -20,18 +20,18 @@ dependencies:
     - node.type.person
   module:
     - datetime_range
-    - inline_entity_form
     - link
     - media_library
     - paragraphs
     - path
+    - relationship_nodes
 id: node.person.default
 targetEntityType: node
 bundle: person
 mode: default
 content:
   computed_relationshipfield__person__concept:
-    type: inline_entity_form_simple
+    type: ief_validated_relations_simple
     weight: 22
     region: content
     settings:
@@ -44,7 +44,7 @@ content:
       revision: false
     third_party_settings: {  }
   computed_relationshipfield__person__person:
-    type: inline_entity_form_simple
+    type: ief_validated_relations_simple
     weight: 23
     region: content
     settings:

@@ -4,9 +4,19 @@ namespace Drupal\relationship_nodes\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
-
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\relationship_nodes\Plugin\Field\FieldWidget\IefValidatedRelationsSimple;
+
+/**
+ * Defines the 'entity_reference' entity field type.
+ *
+ * @FieldType(
+ *   id = "referencing_relationship_item_list",
+ *   label = @Translation("Referencing Relationship Item List"),
+ *   description = @Translation("Field type: reference in two directions (referencing and referenced)."),
+ * )
+ */
 
 
 /**

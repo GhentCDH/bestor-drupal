@@ -49,6 +49,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
     return $element;
   }
 
+
   protected function getMirrorOptions($original_options, $relationshipnode_info) {
     $options = isset($original_options) ? $original_options : [];
     $config = \Drupal::config('relationship_nodes.settings');
@@ -76,4 +77,5 @@ class MirrorSelectWidget extends OptionsSelectWidget {
     }
     return $options;
   }
+  
 }

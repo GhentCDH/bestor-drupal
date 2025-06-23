@@ -17,20 +17,17 @@ use \Drupal\Core\Routing\RouteMatchInterface;
 
 class RelationshipInfoService {
 
-    function getRerelationshipNodeBundlePrefix() {
-        $config = \Drupal::config('relationship_nodes.settings');
-        return $config->get('relationship_node_bundle_prefix') ?? '';
-    }
-
     function getRelationshipTypeField() {
         $config = \Drupal::config('relationship_nodes.settings');
         return $config->get('relationship_type_field') ?? '';
     }
 
+
     function getRelationshipFormMode() {
         $config = \Drupal::config('relationship_nodes.settings');
         return $config->get('relationship_form_mode') ?? '';
     }
+
 
     function getRelatedEntityFields() {
         $config = \Drupal::config('relationship_nodes.settings');
@@ -40,6 +37,7 @@ class RelationshipInfoService {
         return $config->get('related_entity_fields');
     }
 
+
     function getRelationshipTaxonomyPrefixes() {
         $config = \Drupal::config('relationship_nodes.settings');
         if (!$config->get('relationship_taxonomy_prefixes') || !is_array($config->get('relationship_taxonomy_prefixes')) || count($config->get('relationship_taxonomy_prefixes')) !== 2 || !isset($config->get('relationship_taxonomy_prefixes')['selfreferencing_vocabulary_prefix']) || !isset($config->get('relationship_taxonomy_prefixes')['crossreferencing_vocabulary_prefix'])) {
@@ -47,6 +45,7 @@ class RelationshipInfoService {
         }
         return $config->get('relationship_taxonomy_prefixes');
     }
+
 
     function getMirrorFields() {
         $config = \Drupal::config('relationship_nodes.settings');
@@ -56,10 +55,12 @@ class RelationshipInfoService {
         return $config->get('mirror_fields');
     }
 
+
     function getRelationshipNodeBundlePrefix() {
         $config = \Drupal::config('relationship_nodes.settings');
         return $config->get('relationship_node_bundle_prefix') ?? '';
     }
+
 
     function allConfigAvailable() {
         if($this->getRelationshipNodeBundlePrefix() === '' || $this->getRelationshipTypeField() === '' || $this->getRelationshipFormMode() === '' || $this->getRelatedEntityFields() === [] || $this->getRelationshipTaxonomyPrefixes() === [] || $this->getMirrorFields() === []) {
@@ -67,6 +68,7 @@ class RelationshipInfoService {
         }
         return true;
     }
+
 
   /**
    *
@@ -141,6 +143,7 @@ class RelationshipInfoService {
     return $result;
   }
  
+
   /**
    * Controleer of een taxonomie bundle bepaalde velden heeft.
    *
@@ -175,7 +178,6 @@ class RelationshipInfoService {
     }
 
     $result['relationtypevocabulary'] = true;
-    
     
     if($vocabulary_fields === null) {
         $vocabulary_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('taxonomy_term', $taxonomy_vocabulary);
@@ -222,7 +224,6 @@ class RelationshipInfoService {
       
         $related_entity_fields = $this->getRelatedEntityFields();
 
-
         $all_node_bundles = \Drupal::service("entity_type.bundle.info")->getBundleInfo('node');
 
         foreach($all_node_bundles as $bundle_name => $bundle_array){
@@ -249,7 +250,6 @@ class RelationshipInfoService {
     }
 
 
-    
     /**
      * @param \Drupal\node\Entity\Node $relationship_node
      *
@@ -258,7 +258,6 @@ class RelationshipInfoService {
      * Deze functie checkt of een relatie node (input) een join field heeft met de huidige node en geeft terug welke.
      */
     function getRelationInfoForCurrentForm(Node $relationship_node){
-        
         $node_info = $this->relationshipNodeInfo($relationship_node->getType());
  
         if(!$relationship_node->id() ||  $this->allConfigAvailable() === false|| !isset($node_info['relationnode']) || !$node_info['relationnode']){
@@ -301,38 +300,4 @@ class RelationshipInfoService {
         return  ['current_node_join_fields' => $joinFields, 'relationship_node_status' => $status, 'general_relationship_info' => $node_info];
     }
 
-
-/**
-   * @param \Drupal\node\Entity\Node $parent_entity
-   * @param array $relationship_fields
-   * @param string $related_bundle
-   *
-   * @return array
-   */
-/*
-     public function getRelatedNodes($parent_entity, $field){
-          if (!$parent_entity->id() || empty($relationship_fields)) {
-    return [];
-  }
-
-  $nid = $parent_entity->id();
-  $all_results = [];
-
-   $storage = \Drupal::entityTypeManager()->getStorage('node');
-
-  foreach ($relationship_fields as $field_name) {
-    $referencing_nodes = $storage->loadByProperties([
-      'type' => $related_bundle,
-      $field_name => $nid,
-    ]);
-    $all_results += $referencing_nodes;
-  }
-
-  return $all_results;
-        
-    }
-*/
-
-    // Bekijken of het nuttig kan zijn om enkel te vertrekken van een base field definition en daar dan alle shit zelf uithalen. en uiteraard de parent node. ik denk dat dat een goede aanpak kan zijn.
 }
-

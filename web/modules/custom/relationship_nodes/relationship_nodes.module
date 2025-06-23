@@ -19,24 +19,28 @@ function relationship_nodes_entity_bundle_info_alter(&$bundles) {
 }
 
 
-function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) {
+function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) { 
   \Drupal::service('relationship_nodes.relationship_field_auto_adder')->addFields($fields, $entity_type, $bundle);
+   $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
   if ($entity_type->id() === 'taxonomy_term') {
-    $vocabulary_info = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipTaxonomyVocabularyInfo($bundle, $fields);
+    $vocabulary_info = $info_service->relationshipTaxonomyVocabularyInfo($bundle, $fields);
     if(isset($vocabulary_info) && isset($vocabulary_info['relationtypevocabulary']) && isset($vocabulary_info['mirrorfieldtype'])){
       if($vocabulary_info['mirrorfieldtype'] == 'entity_reference_selfreferencing' && isset($fields[$vocabulary_info['mirrorfieldname']])){
         $fields[$vocabulary_info['mirrorfieldname']]->addConstraint(Relationship_nodesAvailableMirrorTermConstraint::class);
       }
     }
-  } 
+  }
   return $fields;
 } 
+
 
 function relationship_nodes_entity_type_build(array &$entity_types) {
   if (isset($entity_types['node'])) {
     $entity_types['node']->setHandlerClass('inline_form', MirrorRelationshipEntityInlineForm::class);
   }
 }
+
+
 function relationship_nodes_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
   $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
   if(strpos($entity->getType(), $info_service->getRelationshipNodeBundlePrefix()) === 0) {
@@ -51,9 +55,7 @@ function relationship_nodes_node_presave(\Drupal\Core\Entity\EntityInterface $en
     }
     $entity->set('title','Relationship ' . implode(' - ', $related_entities));
   }
-  dpm('presave node ' . $entity->getType());
 }
-
 
 
 function relationship_nodes_taxonomy_term_insert($entity) {
@@ -118,13 +120,19 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
   if(!$form_object instanceof EntityForm || $form_state->getBuildInfo()['base_form_id'] != 'node_form'){
     return;
   }
+  
   $form_entity = $form_object->getEntity();
   if(!$form_entity instanceof EntityInterface){
     return;
   }
-  if(isset($form['#ief_element_submit_attached']) && $form['#ief_element_submit_attached'] == true) {
-    foreach($form_state->get('inline_entity_form') as $field_name => $form_data){
-      if(str_starts_with($field_name, 'computed_relationshipfield__')){   
+  
+  $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
+  if($ief_widget_state != null && is_array($ief_widget_state) && count($ief_widget_state) > 0){  
+     
+    $relationship_iefs = false;
+    foreach($ief_widget_state as $field_name => $form_data){
+      if(str_starts_with($field_name, 'computed_relationshipfield__')){
+        $relationship_iefs = true;   
         $i = 0;
         for($form[$field_name]['widget']; isset($form[$field_name]['widget'][$i]); $i++){
           if(!isset($form[$field_name]['widget'][$i]['inline_entity_form'])) {
@@ -134,6 +142,12 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
         }
       }
     }
+
+    if(!$relationship_iefs) {
+      return;
+    } 
+
+
     if($form_entity->isNew()){
       ElementSubmit::attach($form, $form_state);
       $form['#ief_element_submit'][] = [MirrorRelationshipEntityInlineForm::class, 'getCreatedRelationIds'];
@@ -142,9 +156,8 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
       $form['actions']['submit']['#submit'][] = 'delete_relations_on_submit';
     } 
   }
- //  $form['actions']['submit']['#submit'][] = 'testtest';
-
 }
+
 
 function create_relations_on_insert(array &$form, FormStateInterface $form_state) {
   $relationship_ids = $form_state->get('created_relation_ids');
@@ -162,8 +175,10 @@ function create_relations_on_insert(array &$form, FormStateInterface $form_state
   } 
 }
 
+
 function delete_relations_on_submit(array &$form, FormStateInterface $form_state) {
-  if (!$form_state instanceof FormStateInterface || $form_state->get('inline_entity_form') == null) {
+  $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
+  if (!$form_state instanceof FormStateInterface ||  $ief_widget_state == null) {
     return; 
   }
   
@@ -179,7 +194,7 @@ function delete_relations_on_submit(array &$form, FormStateInterface $form_state
 
   $start_relations = [];
   $current_relations = [];
-  foreach($form_state->get('inline_entity_form') as $field_name => $form_data){
+  foreach($ief_widget_state as $field_name => $form_data){
     if(str_starts_with($field_name, 'computed_relationshipfield__') && $form_entity->hasField($field_name)){
       $items = $form_entity->get($field_name);
       if($items instanceof ReferencingRelationshipItemList){
@@ -202,6 +217,7 @@ function delete_relations_on_submit(array &$form, FormStateInterface $form_state
   if(empty($start_relations) || $start_relations == $current_relations) {
     return;
   }
+
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   foreach($start_relations as $relation_id) {
     if(!in_array($relation_id, $current_relations)){
@@ -211,4 +227,49 @@ function delete_relations_on_submit(array &$form, FormStateInterface $form_state
       }
     }
   }
+}
+
+
+function cleanEmptyRelationFields(array &$form, FormStateInterface $form_state) {
+  $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
+  if(!$info_service->allConfigAvailable()) {
+    return;
+  }
+
+  $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
+  if($ief_widget_state == null || !is_array($ief_widget_state) || count($ief_widget_state) == 0) {
+    return;
+  }
+  
+  foreach($ief_widget_state as $field_name => $fs_field_ief_input){
+    if(str_starts_with($field_name, 'computed_relationshipfield__') && is_array( $fs_field_ief_input) && isset( $fs_field_ief_input['entities']) && is_array( $fs_field_ief_input['entities']) && count( $fs_field_ief_input['entities']) > 0) {
+      $fs_field_values = $form_state->getValue($field_name);
+      $valid_items = 0;
+      $i = 0;
+      for($fs_field_values; isset($fs_field_values[$i]); $i++) {
+        $ief = $fs_field_values[$i]['inline_entity_form'];
+        $valid_fields = 0;
+        foreach($info_service->getRelatedEntityFields() as $related_entity_field) { 
+          foreach($ief[$related_entity_field] as $reference) {
+            if($reference['target_id'] != null) {
+              $valid_fields++;
+              break;
+            }
+          }
+          if($valid_fields > 0) {
+            break;
+          }
+        }
+        if($valid_fields > 0) {
+          $valid_items++;
+          break;
+        }   
+      }
+      if($valid_items == 0) {
+        $form_state->setValue($field_name, []);
+        $form_state->set(['inline_entity_form', $field_name], []);
+        $form_state->set(['inline_entity_form',$field_name,'entities'], []);
+      } 
+    } 
+  }   
 }
