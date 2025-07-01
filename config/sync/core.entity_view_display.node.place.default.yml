@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
     - field.field.node.place.field_geolocation
+    - field.field.node.place.field_image
     - field.field.node.place.field_municipality
     - field.field.node.place.field_period
     - field.field.node.place.field_specialisation
@@ -74,6 +75,15 @@ content:
       output_escape: true
     third_party_settings: {  }
     weight: 7
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_municipality:
     type: entity_reference_label

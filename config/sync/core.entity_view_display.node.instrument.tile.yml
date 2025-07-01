@@ -4,31 +4,23 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.tile
-    - field.field.node.instrument.body
     - field.field.node.instrument.field_alternative_name
     - field.field.node.instrument.field_author
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
+    - field.field.node.instrument.field_image
     - field.field.node.instrument.field_period
     - field.field.node.instrument.field_specialisation
     - field.field.node.instrument.field_summary
     - node.type.instrument
   module:
     - entity_reference_revisions
-    - text
     - user
 id: node.instrument.tile
 targetEntityType: node
 bundle: instrument
 mode: tile
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 101
-    region: content
   field_alternative_name:
     type: string
     label: above
@@ -53,6 +45,15 @@ content:
       link: true
     third_party_settings: {  }
     weight: 115
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_specialisation:
     type: entity_reference_label

@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.document.field_author
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
+    - field.field.node.document.field_image
     - field.field.node.document.field_period
     - field.field.node.document.field_specialisation
     - field.field.node.document.field_summary
@@ -52,6 +53,15 @@ content:
       link: true
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_period:
     type: daterange_default

@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
     - field.field.node.place.field_geolocation
+    - field.field.node.place.field_image
     - field.field.node.place.field_municipality
     - field.field.node.place.field_period
     - field.field.node.place.field_specialisation
@@ -98,6 +99,7 @@ content:
     region: content
 hidden:
   field_author: true
+  field_image: true
   field_period: true
   field_summary: true
   footnotes_group: true

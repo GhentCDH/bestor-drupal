@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.concept.field_author
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
+    - field.field.node.concept.field_image
     - field.field.node.concept.field_period
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
@@ -19,6 +20,15 @@ targetEntityType: node
 bundle: concept
 mode: teaser
 content:
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }

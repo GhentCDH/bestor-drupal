@@ -3,11 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.instrument.body
     - field.field.node.instrument.field_alternative_name
     - field.field.node.instrument.field_author
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
+    - field.field.node.instrument.field_image
     - field.field.node.instrument.field_period
     - field.field.node.instrument.field_specialisation
     - field.field.node.instrument.field_summary
@@ -15,20 +15,12 @@ dependencies:
   module:
     - datetime_range
     - entity_reference_revisions
-    - text
     - user
 id: node.instrument.default
 targetEntityType: node
 bundle: instrument
 mode: default
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_alternative_name:
     type: string
     label: hidden
@@ -59,6 +51,15 @@ content:
     label: hidden
     settings:
       link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
     third_party_settings: {  }
     weight: 6
     region: content

@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.document.field_author
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
+    - field.field.node.document.field_image
     - field.field.node.document.field_period
     - field.field.node.document.field_specialisation
     - field.field.node.document.field_summary
@@ -60,6 +61,7 @@ content:
     region: content
 hidden:
   field_author: true
+  field_image: true
   field_period: true
   field_summary: true
   footnotes_group: true

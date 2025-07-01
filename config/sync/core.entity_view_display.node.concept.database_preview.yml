@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.concept.field_author
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
+    - field.field.node.concept.field_image
     - field.field.node.concept.field_period
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
@@ -60,6 +61,7 @@ content:
     region: content
 hidden:
   field_author: true
+  field_image: true
   field_period: true
   field_summary: true
   footnotes_group: true

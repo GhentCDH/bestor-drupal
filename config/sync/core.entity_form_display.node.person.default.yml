@@ -20,30 +20,286 @@ dependencies:
     - node.type.person
   module:
     - datetime_range
+    - field_group
     - link
     - media_library
     - paragraphs
     - path
     - relationship_nodes
+third_party_settings:
+  field_group:
+    group_base_foprm:
+      children:
+        - group_key_data
+        - group_content
+        - group_tags
+        - group_relations
+        - group_linked_data
+        - group_m
+      label: base_form
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: horizontal
+        width_breakpoint: null
+    group_key_data:
+      children:
+        - title
+        - field_alternative_name
+        - field_gender
+        - field_period
+        - field_municipality
+        - field_end_municipality
+        - field_image
+        - field_summary
+      label: 'Key data'
+      region: content
+      parent_name: group_base_foprm
+      weight: 20
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_content:
+      children:
+        - field_description
+      label: Content
+      region: content
+      parent_name: group_base_foprm
+      weight: 21
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_tags:
+      children:
+        - field_typology
+        - field_discipline
+        - field_specialisation
+      label: Tags
+      region: content
+      parent_name: group_base_foprm
+      weight: 22
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_relations:
+      children:
+        - group_relation_types
+      label: Relations
+      region: content
+      parent_name: group_base_foprm
+      weight: 23
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_relation_types:
+      children:
+        - group_concepts
+        - group_documents
+        - group_institutions
+        - group_instruments
+        - group_persons
+        - group_places
+        - group_stories
+      label: 'relation types'
+      region: content
+      parent_name: group_relations
+      weight: 20
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: vertical
+        width_breakpoint: null
+    group_concepts:
+      children:
+        - computed_relationshipfield__person__concept
+      label: Concepts
+      region: content
+      parent_name: group_relation_types
+      weight: 20
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_documents:
+      children:
+        - computed_relationshipfield__person__document
+      label: Documents
+      region: content
+      parent_name: group_relation_types
+      weight: 21
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_institutions:
+      children:
+        - computed_relationshipfield__person__institution
+      label: Institutions
+      region: content
+      parent_name: group_relation_types
+      weight: 22
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_instruments:
+      children:
+        - computed_relationshipfield__person__instrument
+      label: Instruments
+      region: content
+      parent_name: group_relation_types
+      weight: 23
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_persons:
+      children:
+        - computed_relationshipfield__person__person
+      label: Persons
+      region: content
+      parent_name: group_relation_types
+      weight: 24
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_places:
+      children:
+        - computed_relationshipfield__person__place
+      label: Places
+      region: content
+      parent_name: group_relation_types
+      weight: 25
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_stories:
+      children:
+        - computed_relationshipfield__person__story
+      label: Stories
+      region: content
+      parent_name: group_relation_types
+      weight: 26
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_m:
+      children:
+        - langcode
+        - translation
+        - status
+        - promote
+        - sticky
+        - created
+        - uid
+        - path
+        - field_author
+      label: Metadata
+      region: content
+      parent_name: group_base_foprm
+      weight: 25
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_linked_data:
+      children:
+        - field_wikidata_entry
+      label: 'Linked data'
+      region: content
+      parent_name: group_base_foprm
+      weight: 24
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
 id: node.person.default
 targetEntityType: node
 bundle: person
 mode: default
 content:
   computed_relationshipfield__person__concept:
-    type: ief_validated_relations_simple
-    weight: 22
-    region: content
-    settings:
-      form_mode: relationship_subform
-      override_labels: false
-      label_singular: ''
-      label_plural: ''
-      collapsible: false
-      collapsed: false
-      revision: false
-    third_party_settings: {  }
-  computed_relationshipfield__person__person:
     type: ief_validated_relations_simple
     weight: 23
     region: content
@@ -56,15 +312,81 @@ content:
       collapsed: false
       revision: false
     third_party_settings: {  }
+  computed_relationshipfield__person__document:
+    type: entity_reference_autocomplete
+    weight: 24
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  computed_relationshipfield__person__institution:
+    type: ief_validated_relations_simple
+    weight: 0
+    region: content
+    settings:
+      form_mode: relationship_subform
+      revision: false
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+    third_party_settings: {  }
+  computed_relationshipfield__person__instrument:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  computed_relationshipfield__person__person:
+    type: ief_validated_relations_simple
+    weight: 24
+    region: content
+    settings:
+      form_mode: relationship_subform
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+  computed_relationshipfield__person__place:
+    type: entity_reference_autocomplete
+    weight: 27
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  computed_relationshipfield__person__story:
+    type: entity_reference_autocomplete
+    weight: 28
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 3
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   field_alternative_name:
     type: string_textfield
-    weight: 19
+    weight: 2
     region: content
     settings:
       size: 60
@@ -72,7 +394,7 @@ content:
     third_party_settings: {  }
   field_author:
     type: entity_reference_autocomplete
-    weight: 18
+    weight: 10
     region: content
     settings:
       match_operator: CONTAINS
@@ -82,7 +404,7 @@ content:
     third_party_settings: {  }
   field_description:
     type: paragraphs
-    weight: 9
+    weight: 10
     region: content
     settings:
       title: Paragraph
@@ -100,7 +422,7 @@ content:
     third_party_settings: {  }
   field_discipline:
     type: entity_reference_autocomplete
-    weight: 16
+    weight: 17
     region: content
     settings:
       match_operator: CONTAINS
@@ -110,7 +432,7 @@ content:
     third_party_settings: {  }
   field_end_municipality:
     type: entity_reference_autocomplete
-    weight: 14
+    weight: 6
     region: content
     settings:
       match_operator: CONTAINS
@@ -120,7 +442,7 @@ content:
     third_party_settings: {  }
   field_gender:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 3
     region: content
     settings:
       match_operator: CONTAINS
@@ -130,14 +452,14 @@ content:
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 12
+    weight: 7
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_municipality:
     type: entity_reference_autocomplete
-    weight: 11
+    weight: 5
     region: content
     settings:
       match_operator: CONTAINS
@@ -147,13 +469,13 @@ content:
     third_party_settings: {  }
   field_period:
     type: daterange_default
-    weight: 21
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete
-    weight: 13
+    weight: 18
     region: content
     settings:
       match_operator: CONTAINS
@@ -163,7 +485,7 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 20
+    weight: 8
     region: content
     settings:
       rows: 5
@@ -171,7 +493,7 @@ content:
     third_party_settings: {  }
   field_typology:
     type: entity_reference_autocomplete
-    weight: 15
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -181,7 +503,7 @@ content:
     third_party_settings: {  }
   field_wikidata_entry:
     type: link_default
-    weight: 17
+    weight: 2
     region: content
     settings:
       placeholder_url: ''
@@ -189,14 +511,14 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 1
+    weight: 2
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 7
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -209,7 +531,7 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 8
+    weight: 4
     region: content
     settings:
       display_label: true
@@ -223,20 +545,20 @@ content:
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 4
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 2
+    weight: 8
     region: content
     settings:
       match_operator: CONTAINS
@@ -244,8 +566,4 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden:
-  computed_relationshipfield__person__document: true
-  computed_relationshipfield__person__instrument: true
-  computed_relationshipfield__person__place: true
-  computed_relationshipfield__person__story: true
+hidden: {  }
