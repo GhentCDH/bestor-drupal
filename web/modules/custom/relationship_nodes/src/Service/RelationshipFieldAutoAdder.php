@@ -8,6 +8,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\node\Entity\Node;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
+use Drupal\relationship_nodes\Service\RelationshipInfoService;
 
 
 class RelationshipFieldAutoAdder {
@@ -56,7 +57,7 @@ class RelationshipFieldAutoAdder {
         ->setDisplayOptions('form', [
           'type' => 'ief_validated_relations_simple',
           'weight' => 0,
-          'settings' => [],
+          'settings' => ['form_mode' => \Drupal::service('relationship_nodes.relationship_info_service')->getRelationshipFormMode() ?? 'default'],
         ])
         ->setDisplayConfigurable('form', TRUE)
         ->setDisplayConfigurable('view', TRUE)

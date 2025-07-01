@@ -27,6 +27,7 @@
         "drupal/ds": "^3.24",
         "drupal/elasticsearch_connector": "^8.0@alpha",
         "drupal/entity_reference_modal": "^1.0",
+        "drupal/field_group": "^4.0",
         "drupal/footnotes": "^4.0@beta",
         "drupal/geofield": "^1.61",
         "drupal/inline_entity_form": "^3.0@RC",

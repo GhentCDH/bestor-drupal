@@ -21,7 +21,6 @@ class IefValidatedRelationsSimple extends InlineEntityFormSimple {
 
     public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
         parent::massageFormValues( $values, $form, $form_state);
-        // Remove empty relationships before saving (created automatically by the inline entity form as an empty default form).
         $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
         if(!$info_service->allConfigAvailable()) {
             return $values;
