@@ -103,7 +103,6 @@ dependencies:
     - media
     - node
     - path
-    - shortcut
     - system
     - taxonomy
     - toolbar
@@ -113,10 +112,10 @@ weight: -7
 is_admin: null
 permissions:
   - 'access administration pages'
+  - 'access content overview'
   - 'access contextual links'
   - 'access files overview'
   - 'access media overview'
-  - 'access shortcuts'
   - 'access site in maintenance mode'
   - 'access taxonomy overview'
   - 'access toolbar'

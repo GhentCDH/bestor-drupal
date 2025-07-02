@@ -1,0 +1,14 @@
+<?php
+
+function customize_admin_menu_per_role_page_attachments(&$page) {
+  $roles = \Drupal::currentUser()->getRoles();
+  if(in_array('administrator', $roles)) {
+	return;
+  } elseif(in_array('web_manager', $roles)) {
+	$page['#attached']['library'][] = 'customize_admin_menu_per_role/web-manager-styles';
+	return;
+  } elseif(in_array('authenticated', $roles)) {
+	$page['#attached']['library'][] = 'customize_admin_menu_per_role/authenticated-styles';
+	return;
+  };  
+}

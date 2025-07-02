@@ -1,0 +1,5 @@
+<?php
+
+function customviewfilters_views_data_alter(&$data){
+   $data['config_taxonomy_vocabulary']['vid']['filter']['id'] = 'custom_extended_string_filter';
+}

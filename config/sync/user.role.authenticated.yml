@@ -89,7 +89,6 @@ dependencies:
     - media
     - node
     - path
-    - shortcut
     - system
     - taxonomy
     - toolbar
@@ -102,8 +101,8 @@ is_admin: false
 permissions:
   - 'access administration pages'
   - 'access content'
+  - 'access content overview'
   - 'access contextual links'
-  - 'access shortcuts'
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'administer url aliases'

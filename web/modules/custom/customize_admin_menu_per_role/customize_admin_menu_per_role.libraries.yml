@@ -1,0 +1,8 @@
+web-manager-styles:
+  css:
+    theme:
+      css/webmanager_admin_menu.css: {}
+authenticated-styles:
+  css:
+    theme:
+      css/authenticated_admin_menu.css: {}

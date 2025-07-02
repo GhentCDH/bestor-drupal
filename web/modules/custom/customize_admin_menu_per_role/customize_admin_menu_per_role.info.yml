@@ -1,0 +1,11 @@
+# Package info
+name: "customize_admin_menu_per_role"
+description: "This custom module customizes the admin menu for the Bestor roles!"
+type: module
+core_version_requirement: ^10
+package: Custom
+
+# Dependencies
+dependencies:
+  - drupal:menu_link_content
+  - drupal:user

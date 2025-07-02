@@ -1,0 +1,8 @@
+name: customviewfilters
+description: Custom module which updates the exposed filters of views
+package: Custom
+type: module
+version: 1.0
+core_version_requirement: ^10
+dependencies:
+  - config_views:config_views

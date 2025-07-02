@@ -1,0 +1,8 @@
+uuid: 140eaa73-c0dc-4b80-9422-c6c0a1c294ac
+langcode: en
+status: true
+dependencies: {  }
+id: web-manager-admin
+label: 'Web manager admin'
+description: ''
+locked: false
