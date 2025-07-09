@@ -1,3 +1,15 @@
 ul.toolbar-menu > li.menu-item:first-child a.toolbar-icon::before{
 	background-image: url(../../../../core/misc/icons/787878/file.svg);
 }
+
+ul.toolbar-menu > li.menu-item:nth-child(2) a.toolbar-icon::before{
+	background-image: url(../../../../core/misc/icons/787878/pencil.svg);
+}
+
+ul.toolbar-menu > li.menu-item:nth-child(3) a.toolbar-icon::before{
+	background-image: url(../../../../core/misc/icons/787878/people.svg);
+}
+
+ul.toolbar-menu > li.menu-item:nth-child(4) a.toolbar-icon::before{
+	background-image: url(../../../../core/misc/icons/787878/wrench.svg);
+}

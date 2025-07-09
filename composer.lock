@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fad191084fa3bcb91ac27e5c52a6542",
+    "content-hash": "9a55116aede40421b74d2f7d758dff9b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1508,6 +1508,82 @@
             }
         },
         {
+            "name": "drupal/config_perms",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/config_perms.git",
+                "reference": "8.x-2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_perms-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "6ec87b91b7ff23a41c5ee266b507e882851b7828"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.3",
+                    "datestamp": "1746157140",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "benellefimostfa",
+                    "homepage": "https://www.drupal.org/user/3092403"
+                },
+                {
+                    "name": "Docc",
+                    "homepage": "https://www.drupal.org/user/310132"
+                },
+                {
+                    "name": "elkaro",
+                    "homepage": "https://www.drupal.org/user/3577260"
+                },
+                {
+                    "name": "gnuget",
+                    "homepage": "https://www.drupal.org/user/992990"
+                },
+                {
+                    "name": "kristen pol",
+                    "homepage": "https://www.drupal.org/user/8389"
+                },
+                {
+                    "name": "megakeegman",
+                    "homepage": "https://www.drupal.org/user/3620027"
+                },
+                {
+                    "name": "mlncn",
+                    "homepage": "https://www.drupal.org/user/64383"
+                },
+                {
+                    "name": "mrthumpz",
+                    "homepage": "https://www.drupal.org/user/266351"
+                }
+            ],
+            "description": "Allows additional permissions to be created and managed through an administration form.",
+            "homepage": "http://drupal.org/project/config_perms",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/config_perms",
+                "issues": "http://drupal.org/project/issues/config_perms"
+            }
+        },
+        {
             "name": "drupal/config_views",
             "version": "2.1.2",
             "source": {
@@ -2609,77 +2685,6 @@
             "homepage": "https://www.drupal.org/project/inline_entity_form",
             "support": {
                 "source": "https://git.drupalcode.org/project/inline_entity_form"
-            }
-        },
-        {
-            "name": "drupal/masquerade",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/masquerade.git",
-                "reference": "8.x-2.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/masquerade-8.x-2.0.zip",
-                "reference": "8.x-2.0",
-                "shasum": "3af711878f5f7a06a2c837440cb90fbcba8db0e1"
-            },
-            "require": {
-                "drupal/core": "^9.2 || ^10 || ^11.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.0",
-                    "datestamp": "1723165789",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Andrey Postnikov (andypost)",
-                    "homepage": "https://www.drupal.org/u/andypost",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "David Norman (deekayen)",
-                    "homepage": "https://www.drupal.org/u/deekayen",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Mark Shropshire (shrop)",
-                    "homepage": "https://www.drupal.org/u/shrop",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Daniel Kudwien (sun)",
-                    "homepage": "https://www.drupal.org/u/sun",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Andrew Berry (deviantintegral)",
-                    "homepage": "https://www.drupal.org/u/deviantintegral",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "sun",
-                    "homepage": "https://www.drupal.org/user/54136"
-                }
-            ],
-            "description": "Allows privileged users to masquerade as another user.",
-            "homepage": "https://www.drupal.org/project/masquerade",
-            "support": {
-                "source": "https://git.drupal.org/project/masquerade.git",
-                "issues": "https://www.drupal.org/project/issues/masquerade",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
             }
         },
         {

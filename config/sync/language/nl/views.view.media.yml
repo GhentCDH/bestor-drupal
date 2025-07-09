@@ -69,9 +69,6 @@ display:
                 title: Gepubliceerd
               2:
                 title: 'Niet gepubliceerd'
-        langcode:
-          expose:
-            label: Taal
   media_page_list:
     display_title: Media
     display_options:

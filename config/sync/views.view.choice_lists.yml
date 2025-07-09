@@ -197,8 +197,8 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
-          reset_button: false
+          submit_button: Filter
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
@@ -214,33 +214,36 @@ display:
       sorts: {  }
       arguments: {  }
       filters:
-        vid:
-          id: vid
+        name:
+          id: name
           table: config_taxonomy_vocabulary
-          field: vid
+          field: name
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: taxonomy_vocabulary
-          plugin_id: custom_extended_string_filter
-          operator: NOT_STARTS_WITH
-          value: relation
+          plugin_id: config_entity_string
+          operator: CONTAINS
+          value: ''
           group: 1
-          exposed: false
+          exposed: true
           expose:
-            operator_id: ''
-            label: ''
+            operator_id: name_op
+            label: Search
             description: ''
             use_operator: false
-            operator: ''
+            operator: name_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: ''
+            identifier: name
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              web_manager: '0'
+              administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -254,6 +257,126 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        vid_1:
+          id: vid_1
+          table: config_taxonomy_vocabulary
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: taxonomy_vocabulary
+          plugin_id: custom_extended_string_filter
+          operator: LINKED_TO_BUNDLE
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: vid_1_op
+            label: 'Machine name'
+            description: null
+            use_operator: false
+            operator: vid_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: vid_1
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: null
+          is_grouped: true
+          group_info:
+            label: 'Used in content type'
+            description: ''
+            identifier: contenttype
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Concept
+                operator: LINKED_TO_BUNDLE
+                value: concept
+              2:
+                title: ' Document'
+                operator: LINKED_TO_BUNDLE
+                value: document
+              3:
+                title: Institution
+                operator: LINKED_TO_BUNDLE
+                value: institution
+              4:
+                title: Instrument
+                operator: LINKED_TO_BUNDLE
+                value: instrument
+              5:
+                title: Person
+                operator: LINKED_TO_BUNDLE
+                value: person
+              6:
+                title: Place
+                operator: LINKED_TO_BUNDLE
+                value: place
+              7:
+                title: Story
+                operator: LINKED_TO_BUNDLE
+                value: story
+        vid_2:
+          id: vid_2
+          table: config_taxonomy_vocabulary
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: taxonomy_vocabulary
+          plugin_id: custom_extended_string_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: vid_2_op
+            label: 'Machine name'
+            description: null
+            use_operator: false
+            operator: vid_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: vid_2
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: null
+          is_grouped: true
+          group_info:
+            label: 'Exclude relation types in overview'
+            description: ''
+            identifier: type
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: '1'
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: 'Exclude relation types'
+                operator: NOT_STARTS_WITH
+                value: relationtype_
+              2:
+                title: 'Relation types only'
+                operator: STARTS_WITH
+                value: relationtype_
+              3:
+                title: ''
+                operator: '='
+                value: ''
       filter_groups:
         operator: AND
         groups:
@@ -315,6 +438,7 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - url
         - url.query_args
       tags: {  }
   page_1:
@@ -324,10 +448,11 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: choice-lists
+      path: admin/choicelists
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - url
         - url.query_args
       tags: {  }

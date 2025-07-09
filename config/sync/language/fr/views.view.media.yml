@@ -38,6 +38,3 @@ display:
                 title: Publié
               2:
                 title: 'Non publié'
-        langcode:
-          expose:
-            label: Langue
