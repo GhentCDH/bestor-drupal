@@ -4,13 +4,14 @@ status: true
 dependencies:
   module:
     - config_views
+    - customize_admin_menu_per_role
 id: add_content
 label: 'Add content'
 module: views
 description: ''
 tag: ''
 base_table: config_node_type
-base_field: nid
+base_field: type
 display:
   default:
     id: default
@@ -20,16 +21,15 @@ display:
     display_options:
       title: 'Add content'
       fields:
-        type:
-          id: type
+        content_type_machine_name:
+          id: content_type_machine_name
           table: config_node_type
-          field: type
+          field: content_type_machine_name
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: null
-          entity_field: null
-          plugin_id: standard
+          entity_type: node_type
+          plugin_id: content_type_machine_name
           label: ''
           exclude: false
           alter:
@@ -63,7 +63,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -76,7 +76,7 @@ display:
         options:
           offset: 0
           pagination_heading_level: h4
-          items_per_page: 10
+          items_per_page: 100
           total_pages: null
           id: 0
           tags:
@@ -107,7 +107,21 @@ display:
         type: tag
         options: {  }
       empty: {  }
-      sorts: {  }
+      sorts:
+        content_type_machine_name:
+          id: content_type_machine_name
+          table: config_node_type
+          field: content_type_machine_name
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node_type
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters: {  }
       style:
@@ -125,6 +139,7 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -139,6 +154,20 @@ display:
     display_options:
       display_extenders: {  }
       path: add-content
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url.query_args
+      tags: {  }
+  page_2:
+    id: page_2
+    display_title: 'Page 2'
+    display_plugin: page
+    position: 2
+    display_options:
+      display_extenders: {  }
+      path: admin/add-content2
     cache_metadata:
       max-age: -1
       contexts:

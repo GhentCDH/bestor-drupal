@@ -9,3 +9,4 @@ package: Custom
 dependencies:
   - drupal:menu_link_content
   - drupal:user
+  - config_views:config_views

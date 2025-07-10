@@ -1,5 +1,9 @@
 <?php
 
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
 function customize_admin_menu_per_role_page_attachments(&$page) {
   $roles = \Drupal::currentUser()->getRoles();
   if(in_array('administrator', $roles)) {
@@ -11,4 +15,26 @@ function customize_admin_menu_per_role_page_attachments(&$page) {
 	$page['#attached']['library'][] = 'customize_admin_menu_per_role/authenticated-styles';
 	return;
   };  
+}
+
+function customize_admin_menu_per_role_views_data_alter(array &$data) {
+  $data['config_node_type']['content_type_machine_name'] = [
+    'title' => t('REAL Content type machine name'),
+    'help' => t('Filter by machine name of content type'),
+    'field' => [
+      'id' => 'content_type_machine_name',
+      'table' => 'config_node_type',
+      'field' => 'content_type_machine_name',
+    ],
+    'filter' => [
+      'id' => 'content_type_machine_name',
+      'table' => 'config_node_type',
+      'field' => 'content_type_machine_name',
+    ],
+    'sort' => [
+      'id' => 'standard',
+      'table' => 'config_node_type',
+      'field' => 'content_type_machine_name',
+    ],
+  ];
 }

@@ -1,15 +1,12 @@
-# Package info
 name: "relationship_nodes"
 description: "This custom module interacts with entities based on their machine name in order to make it possible to create a bidirectional relationships between entities (also of the same content) type. The naming of entities (incl. taxonomies, bundles, views, [extra] fields...) have to be exact before this module will work. Check the readme!"
 type: module
 core_version_requirement: ^10
 package: Custom
-
-# Dependencies
 dependencies:
   - drupal:node
   - drupal:field
+  - drupal:views
   - inline_entity_form:inline_entity_form
-
 services:
   file: relationship_nodes.services.yml
