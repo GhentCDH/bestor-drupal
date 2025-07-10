@@ -86,4 +86,18 @@ services:
   #     nofile:
   #       soft: 65536
   #       hard: 65536
-
+  
+  bestor-phpmyadmin:
+    container_name: bestor-phpmyadmin
+    image: phpmyadmin:latest
+    env_file:
+      - dev.env
+    ports:
+      - 8092:80
+    environment:
+      - PMA_HOST=bestor-drupal-db
+      - PMA_PORT=3306
+    depends_on:
+      bestor-drupal-db:
+        condition: service_healthy
+    restart: always
