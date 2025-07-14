@@ -16,25 +16,3 @@ function customize_admin_menu_per_role_page_attachments(&$page) {
 	return;
   };  
 }
-
-function customize_admin_menu_per_role_views_data_alter(array &$data) {
-  $data['config_node_type']['content_type_machine_name'] = [
-    'title' => t('REAL Content type machine name'),
-    'help' => t('Filter by machine name of content type'),
-    'field' => [
-      'id' => 'content_type_machine_name',
-      'table' => 'config_node_type',
-      'field' => 'content_type_machine_name',
-    ],
-    'filter' => [
-      'id' => 'content_type_machine_name',
-      'table' => 'config_node_type',
-      'field' => 'content_type_machine_name',
-    ],
-    'sort' => [
-      'id' => 'standard',
-      'table' => 'config_node_type',
-      'field' => 'content_type_machine_name',
-    ],
-  ];
-}

@@ -32,6 +32,12 @@ class CustomExtendedStringFilter extends StringEntity {
       'method' => 'linkedToBundle',
       'values' => 1,
     ];
+    $operators['STRING_IN_ARRAY'] = [
+      'title' => $this->t('The machine name is part of this list'),
+      'short' => $this->t('Give comma separated list of machine names.'),
+      'method' => 'stringInArray',
+      'values' => 1,
+    ];
     return $operators;
   }
 
@@ -44,8 +50,13 @@ class CustomExtendedStringFilter extends StringEntity {
   protected function opNotStartsWith($field) {
     $value = $this->value;
     $query = $this->query;
-    $helpquery = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->getQuery();
-
+    if($field == 'vid') {
+      $helpquery = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->getQuery();
+    } elseif($field == 'type') {
+      $helpquery = \Drupal::entityTypeManager()->getStorage('node_type')->getQuery();
+    } else {
+      return;
+    }
     $matching_vids = $helpquery
     ->accessCheck(TRUE)
     ->condition($field, $value, 'STARTS_WITH')
@@ -85,4 +96,12 @@ class CustomExtendedStringFilter extends StringEntity {
     }
     $query->condition($this->options['group'], $field, array_unique($matching_vids), 'IN');
   }
+
+
+  protected function stringInArray($field) {
+    $value = array_map('trim', explode(',', $this->value));
+    $query = $this->query;
+    $query->condition($this->options['group'], $field, $value, 'IN');
+  }
+
 }

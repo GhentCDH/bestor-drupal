@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\customize_admin_menu_per_role\Plugin\views\field;
+namespace Drupal\customviewfilters\Plugin\views\field;
 
 use Drupal\views\ResultRow;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
@@ -17,6 +17,14 @@ class ContentTypeMachineName extends FieldPluginBase {
    * {@inheritdoc}
    */
   public function render(ResultRow $values) {
-    return $values->entity->id();
+    if (isset($values->_entity)) {
+      return $values->_entity->id();
+    }
+    elseif (isset($values->entity)) {
+      return $values->entity->id();
+    }
+    else {
+      return '';
+    }
   }
 }

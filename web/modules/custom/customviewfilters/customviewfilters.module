@@ -2,4 +2,16 @@
 
 function customviewfilters_views_data_alter(&$data){
    $data['config_taxonomy_vocabulary']['vid']['filter']['id'] = 'custom_extended_string_filter';
+   $data['config_node_type']['content_type_machine_name'] = [
+    'title' => t('Content type machine name'),
+    'help' => t('The machine name (ID) of the content type.'),
+    'field' => [
+      'id' => 'content_type_machine_name',
+      'field' => 'type',
+    ],
+    'filter' => [
+      'id' => 'custom_extended_string_filter', 
+      'field' => 'type',
+    ],
+  ];
 }
