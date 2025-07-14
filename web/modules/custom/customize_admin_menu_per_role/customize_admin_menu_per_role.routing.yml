@@ -1,0 +1,7 @@
+customize_admin_menu_per_role.webmanager_dashboard:
+  path: '/admin/webmanager-dashboard'
+  defaults:
+    _controller: '\Drupal\customize_admin_menu_per_role\Controller\WebmanagerDashboardController::dashboard'
+    _title: 'Webmanager Dashboard'
+  requirements:
+    _permission: 'access webmanager dashboard'

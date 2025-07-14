@@ -1,15 +1,37 @@
-ul.toolbar-menu > li.menu-item:first-child a.toolbar-icon::before{
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:first-child{
+	background-color:rgb(80,80,80);
+}
+
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:first-child a{
+	color:#bebebe;
+	background-color:rgb(80,80,80);
+}
+
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:first-child a.is-active{
+	color:#bebebe;
+	background-color:rgb(80,80,80);
+}
+
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:first-child a.toolbar-icon::before{
+	background-image: url(../../../../core/misc/icons/bebebe/cog.svg);
+}
+
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:nth-child(2) a.toolbar-icon::before{
 	background-image: url(../../../../core/misc/icons/787878/file.svg);
 }
 
-ul.toolbar-menu > li.menu-item:nth-child(2) a.toolbar-icon::before{
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:nth-child(3) a.toolbar-icon::before{
 	background-image: url(../../../../core/misc/icons/787878/pencil.svg);
 }
 
-ul.toolbar-menu > li.menu-item:nth-child(3) a.toolbar-icon::before{
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:nth-child(4) a.toolbar-icon::before{
 	background-image: url(../../../../core/misc/icons/787878/people.svg);
 }
 
-ul.toolbar-menu > li.menu-item:nth-child(4) a.toolbar-icon::before{
+.toolbar-menu-administration > ul.toolbar-menu > li.menu-item:nth-child(5) a.toolbar-icon::before{
 	background-image: url(../../../../core/misc/icons/787878/wrench.svg);
+}
+
+.custom-dashboard-link{
+	margin:10px 0;
 }

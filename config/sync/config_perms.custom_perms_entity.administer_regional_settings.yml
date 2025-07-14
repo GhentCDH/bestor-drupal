@@ -1,0 +1,7 @@
+uuid: 88b29cd8-9449-405b-a312-ba7b9db72ae0
+langcode: en
+status: true
+dependencies: {  }
+id: administer_regional_settings
+label: 'Administer regional settings'
+route: system.regional_settings

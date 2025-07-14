@@ -1,5 +1,0 @@
-name: customize_permissions
-type: module
-description: "customize_permissions"
-core_version_requirement: ^10
-package: Custom

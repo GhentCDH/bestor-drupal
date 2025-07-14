@@ -1,0 +1,6 @@
+services:
+  customize_admin_menu_per_role.redirect_subscriber:
+    class: Drupal\customize_admin_menu_per_role\EventSubscriber\AdminConfigRedirectSubscriber
+    arguments: ['@current_user', '@path.matcher', '@url_generator']
+    tags:
+      - { name: event_subscriber }

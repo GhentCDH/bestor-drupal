@@ -94,9 +94,11 @@ dependencies:
     - taxonomy.vocabulary.specialisation
   module:
     - block_content
+    - config_perms
     - config_translation
     - content_translation
     - contextual
+    - customize_admin_menu_per_role
     - file
     - filter
     - locale
@@ -111,6 +113,9 @@ label: 'Web manager'
 weight: -7
 is_admin: null
 permissions:
+  - 'Administer maintenance mode'
+  - 'Administer performance'
+  - 'Administer regional settings'
   - 'access administration pages'
   - 'access content overview'
   - 'access contextual links'
@@ -120,6 +125,7 @@ permissions:
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
+  - 'access webmanager dashboard'
   - 'administer url aliases'
   - 'administer users'
   - 'change own username'
