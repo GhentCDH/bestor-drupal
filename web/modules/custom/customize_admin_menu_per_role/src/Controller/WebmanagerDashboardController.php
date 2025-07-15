@@ -83,7 +83,6 @@ class WebmanagerDashboardController extends ControllerBase {
       $link = Link::fromTextAndUrl($this->t($title), Url::fromRoute($route))->toRenderable();
       $link['#attributes']['class'][] = 'admin-item__link';
 
-      // Wrap elke link in een div
       $rendered[] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['admin-item__title', 'custom-dashboard-link']],

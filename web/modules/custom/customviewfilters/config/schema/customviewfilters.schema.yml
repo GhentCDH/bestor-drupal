@@ -1,0 +1,12 @@
+views.filter.create_permission_filter:
+  type: views_filter
+  label: 'Create permission filter'
+  mapping:
+    entity_type:
+      type: string
+      label: 'Entity type'
+    value:
+      type: sequence
+      label: 'Selected roles'
+      sequence:
+        - type: string
