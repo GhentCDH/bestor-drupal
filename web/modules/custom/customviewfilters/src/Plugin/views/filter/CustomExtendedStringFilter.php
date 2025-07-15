@@ -42,7 +42,6 @@ class CustomExtendedStringFilter extends StringEntity {
   }
 
   /**
-     * Implements the 'NOT_STARTS_WITH' operator with EntityQuery workaround.
      *
      * @param string $field
      *   The field to filter on.

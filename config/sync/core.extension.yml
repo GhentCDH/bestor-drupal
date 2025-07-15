@@ -67,6 +67,7 @@ module:
   relationship_nodes: 0
   search_api: 0
   search_api_glossary: 0
+  single_user_role: 0
   standard: 0
   system: 0
   taxonomy: 0

@@ -14,4 +14,21 @@ function customviewfilters_views_data_alter(&$data){
       'field' => 'type',
     ],
   ];
+
+  $data['config_taxonomy_vocabulary']['user_permission_filter'] = [
+    'title' => t('Vocabulary permission filter'),
+    'help' => t('Filter vocabularies based on user permissions.'),
+    'filter' => [
+      'id' => 'vocabulary_permission_filter',  // Je eigen filter plugin ID.
+    ],
+  ];
+
+  // Zelfde voor content types (node bundles).
+  $data['config_node_type']['user_permission_filter'] = [
+    'title' => t('Content type permission filter'),
+    'help' => t('Filter content types based on user permissions.'),
+    'filter' => [
+      'id' => 'bundle_permission_filter',
+    ],
+  ];
 }

@@ -1,2 +1,4 @@
 access webmanager dashboard:
   title: 'Access webmanager dashboard'
+access redactor dashboard:
+  title: 'Access redactor dashboard'

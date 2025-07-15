@@ -1,0 +1,399 @@
+uuid: eb395414-631a-493f-93c2-5cd5e8861191
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - media.type.audio
+    - media.type.document
+    - media.type.iframe
+    - media.type.image
+    - media.type.remote_video
+    - media.type.slideshow
+    - media.type.soundcloud
+    - media.type.video
+    - node.type.article
+    - node.type.concept
+    - node.type.document
+    - node.type.event
+    - node.type.institution
+    - node.type.instrument
+    - node.type.page
+    - node.type.person
+    - node.type.place
+    - node.type.publication
+    - node.type.relationnode__concept_concept
+    - node.type.relationnode__concept_document
+    - node.type.relationnode__concept_instrument
+    - node.type.relationnode__concept_place
+    - node.type.relationnode__concept_story
+    - node.type.relationnode__document_document
+    - node.type.relationnode__document_place
+    - node.type.relationnode__document_strory
+    - node.type.relationnode__institut_concept
+    - node.type.relationnode__institut_document
+    - node.type.relationnode__institut_institut
+    - node.type.relationnode__institut_instrum
+    - node.type.relationnode__institut_place
+    - node.type.relationnode__institut_story
+    - node.type.relationnode__instrum_document
+    - node.type.relationnode__instrum_instrum
+    - node.type.relationnode__instrum_place
+    - node.type.relationnode__instrum_story
+    - node.type.relationnode__person_concept
+    - node.type.relationnode__person_document
+    - node.type.relationnode__person_institut
+    - node.type.relationnode__person_instrum
+    - node.type.relationnode__person_person
+    - node.type.relationnode__person_place
+    - node.type.relationnode__person_story
+    - node.type.relationnode__place_place
+    - node.type.relationnode__place_story
+    - node.type.relationnode__story_story
+    - node.type.story
+    - taxonomy.vocabulary.author
+    - taxonomy.vocabulary.country
+    - taxonomy.vocabulary.municipality
+    - taxonomy.vocabulary.relationtype_cross__conc_docu
+    - taxonomy.vocabulary.relationtype_cross__conc_inst
+    - taxonomy.vocabulary.relationtype_cross__conc_plac
+    - taxonomy.vocabulary.relationtype_cross__conc_stor
+    - taxonomy.vocabulary.relationtype_cross__docu_plac
+    - taxonomy.vocabulary.relationtype_cross__docu_stor
+    - taxonomy.vocabulary.relationtype_cross__inst_docu
+    - taxonomy.vocabulary.relationtype_cross__inst_plac
+    - taxonomy.vocabulary.relationtype_cross__inst_stor
+    - taxonomy.vocabulary.relationtype_cross__orga_conc
+    - taxonomy.vocabulary.relationtype_cross__orga_docu
+    - taxonomy.vocabulary.relationtype_cross__orga_inst
+    - taxonomy.vocabulary.relationtype_cross__orga_plac
+    - taxonomy.vocabulary.relationtype_cross__orga_stor
+    - taxonomy.vocabulary.relationtype_cross__pers_conc
+    - taxonomy.vocabulary.relationtype_cross__pers_docu
+    - taxonomy.vocabulary.relationtype_cross__pers_inst
+    - taxonomy.vocabulary.relationtype_cross__pers_orga
+    - taxonomy.vocabulary.relationtype_cross__pers_plac
+    - taxonomy.vocabulary.relationtype_cross__pers_stor
+    - taxonomy.vocabulary.relationtype_cross__plac_stor
+    - taxonomy.vocabulary.relationtype_self__conc_conc
+    - taxonomy.vocabulary.relationtype_self__docu_docu
+    - taxonomy.vocabulary.relationtype_self__inst_inst
+    - taxonomy.vocabulary.relationtype_self__orga_orga
+    - taxonomy.vocabulary.relationtype_self__pers_pers
+    - taxonomy.vocabulary.relationtype_self__plac_plac
+    - taxonomy.vocabulary.relationtype_self__stor_stor
+    - taxonomy.vocabulary.specialisation
+  module:
+    - contextual
+    - customize_admin_menu_per_role
+    - filter
+    - media
+    - node
+    - path
+    - system
+    - taxonomy
+    - toolbar
+id: redactor
+label: Redactor
+weight: -8
+is_admin: null
+permissions:
+  - 'access administration pages'
+  - 'access content'
+  - 'access content overview'
+  - 'access contextual links'
+  - 'access redactor dashboard'
+  - 'access taxonomy overview'
+  - 'access toolbar'
+  - 'administer url aliases'
+  - 'change own username'
+  - 'create article content'
+  - 'create audio media'
+  - 'create concept content'
+  - 'create document content'
+  - 'create document media'
+  - 'create event content'
+  - 'create iframe media'
+  - 'create image media'
+  - 'create institution content'
+  - 'create instrument content'
+  - 'create media'
+  - 'create person content'
+  - 'create place content'
+  - 'create publication content'
+  - 'create relationnode__concept_concept content'
+  - 'create relationnode__concept_document content'
+  - 'create relationnode__concept_instrument content'
+  - 'create relationnode__concept_place content'
+  - 'create relationnode__concept_story content'
+  - 'create relationnode__document_document content'
+  - 'create relationnode__document_place content'
+  - 'create relationnode__document_strory content'
+  - 'create relationnode__institut_concept content'
+  - 'create relationnode__institut_document content'
+  - 'create relationnode__institut_institut content'
+  - 'create relationnode__institut_instrum content'
+  - 'create relationnode__institut_place content'
+  - 'create relationnode__institut_story content'
+  - 'create relationnode__instrum_document content'
+  - 'create relationnode__instrum_instrum content'
+  - 'create relationnode__instrum_place content'
+  - 'create relationnode__instrum_story content'
+  - 'create relationnode__person_concept content'
+  - 'create relationnode__person_document content'
+  - 'create relationnode__person_institut content'
+  - 'create relationnode__person_instrum content'
+  - 'create relationnode__person_person content'
+  - 'create relationnode__person_place content'
+  - 'create relationnode__person_story content'
+  - 'create relationnode__place_place content'
+  - 'create relationnode__place_story content'
+  - 'create relationnode__story_story content'
+  - 'create remote_video media'
+  - 'create slideshow media'
+  - 'create soundcloud media'
+  - 'create story content'
+  - 'create terms in author'
+  - 'create terms in country'
+  - 'create terms in municipality'
+  - 'create terms in relationtype_cross__conc_docu'
+  - 'create terms in relationtype_cross__conc_inst'
+  - 'create terms in relationtype_cross__conc_plac'
+  - 'create terms in relationtype_cross__conc_stor'
+  - 'create terms in relationtype_cross__docu_plac'
+  - 'create terms in relationtype_cross__docu_stor'
+  - 'create terms in relationtype_cross__inst_docu'
+  - 'create terms in relationtype_cross__inst_plac'
+  - 'create terms in relationtype_cross__inst_stor'
+  - 'create terms in relationtype_cross__orga_conc'
+  - 'create terms in relationtype_cross__orga_docu'
+  - 'create terms in relationtype_cross__orga_inst'
+  - 'create terms in relationtype_cross__orga_plac'
+  - 'create terms in relationtype_cross__orga_stor'
+  - 'create terms in relationtype_cross__pers_conc'
+  - 'create terms in relationtype_cross__pers_docu'
+  - 'create terms in relationtype_cross__pers_inst'
+  - 'create terms in relationtype_cross__pers_orga'
+  - 'create terms in relationtype_cross__pers_plac'
+  - 'create terms in relationtype_cross__pers_stor'
+  - 'create terms in relationtype_cross__plac_stor'
+  - 'create terms in relationtype_self__conc_conc'
+  - 'create terms in relationtype_self__docu_docu'
+  - 'create terms in relationtype_self__inst_inst'
+  - 'create terms in relationtype_self__orga_orga'
+  - 'create terms in relationtype_self__pers_pers'
+  - 'create terms in relationtype_self__plac_plac'
+  - 'create terms in relationtype_self__stor_stor'
+  - 'create terms in specialisation'
+  - 'create url aliases'
+  - 'create video media'
+  - 'delete any relationnode__concept_concept content'
+  - 'delete any relationnode__concept_document content'
+  - 'delete any relationnode__concept_instrument content'
+  - 'delete any relationnode__concept_place content'
+  - 'delete any relationnode__concept_story content'
+  - 'delete any relationnode__document_document content'
+  - 'delete any relationnode__document_place content'
+  - 'delete any relationnode__document_strory content'
+  - 'delete any relationnode__institut_concept content'
+  - 'delete any relationnode__institut_document content'
+  - 'delete any relationnode__institut_institut content'
+  - 'delete any relationnode__institut_instrum content'
+  - 'delete any relationnode__institut_place content'
+  - 'delete any relationnode__institut_story content'
+  - 'delete any relationnode__instrum_document content'
+  - 'delete any relationnode__instrum_instrum content'
+  - 'delete any relationnode__instrum_place content'
+  - 'delete any relationnode__instrum_story content'
+  - 'delete any relationnode__person_concept content'
+  - 'delete any relationnode__person_document content'
+  - 'delete any relationnode__person_institut content'
+  - 'delete any relationnode__person_instrum content'
+  - 'delete any relationnode__person_person content'
+  - 'delete any relationnode__person_place content'
+  - 'delete any relationnode__person_story content'
+  - 'delete any relationnode__place_place content'
+  - 'delete any relationnode__place_story content'
+  - 'delete any relationnode__story_story content'
+  - 'delete any story content'
+  - 'delete media'
+  - 'delete own article content'
+  - 'delete own audio media'
+  - 'delete own concept content'
+  - 'delete own document content'
+  - 'delete own document media'
+  - 'delete own event content'
+  - 'delete own iframe media'
+  - 'delete own image media'
+  - 'delete own institution content'
+  - 'delete own instrument content'
+  - 'delete own person content'
+  - 'delete own place content'
+  - 'delete own publication content'
+  - 'delete own relationnode__concept_concept content'
+  - 'delete own relationnode__concept_document content'
+  - 'delete own relationnode__concept_instrument content'
+  - 'delete own relationnode__concept_place content'
+  - 'delete own relationnode__concept_story content'
+  - 'delete own relationnode__document_document content'
+  - 'delete own relationnode__document_place content'
+  - 'delete own relationnode__document_strory content'
+  - 'delete own relationnode__institut_concept content'
+  - 'delete own relationnode__institut_document content'
+  - 'delete own relationnode__institut_institut content'
+  - 'delete own relationnode__institut_instrum content'
+  - 'delete own relationnode__institut_place content'
+  - 'delete own relationnode__institut_story content'
+  - 'delete own relationnode__instrum_document content'
+  - 'delete own relationnode__instrum_instrum content'
+  - 'delete own relationnode__instrum_place content'
+  - 'delete own relationnode__instrum_story content'
+  - 'delete own relationnode__person_concept content'
+  - 'delete own relationnode__person_document content'
+  - 'delete own relationnode__person_institut content'
+  - 'delete own relationnode__person_instrum content'
+  - 'delete own relationnode__person_person content'
+  - 'delete own relationnode__person_place content'
+  - 'delete own relationnode__person_story content'
+  - 'delete own relationnode__place_place content'
+  - 'delete own relationnode__place_story content'
+  - 'delete own relationnode__story_story content'
+  - 'delete own remote_video media'
+  - 'delete own slideshow media'
+  - 'delete own soundcloud media'
+  - 'delete own story content'
+  - 'delete own video media'
+  - 'edit any article content'
+  - 'edit any audio media'
+  - 'edit any concept content'
+  - 'edit any document content'
+  - 'edit any document media'
+  - 'edit any event content'
+  - 'edit any iframe media'
+  - 'edit any image media'
+  - 'edit any institution content'
+  - 'edit any instrument content'
+  - 'edit any page content'
+  - 'edit any person content'
+  - 'edit any place content'
+  - 'edit any publication content'
+  - 'edit any relationnode__concept_concept content'
+  - 'edit any relationnode__concept_document content'
+  - 'edit any relationnode__concept_instrument content'
+  - 'edit any relationnode__concept_place content'
+  - 'edit any relationnode__concept_story content'
+  - 'edit any relationnode__document_document content'
+  - 'edit any relationnode__document_place content'
+  - 'edit any relationnode__document_strory content'
+  - 'edit any relationnode__institut_concept content'
+  - 'edit any relationnode__institut_document content'
+  - 'edit any relationnode__institut_institut content'
+  - 'edit any relationnode__institut_instrum content'
+  - 'edit any relationnode__institut_place content'
+  - 'edit any relationnode__institut_story content'
+  - 'edit any relationnode__instrum_document content'
+  - 'edit any relationnode__instrum_instrum content'
+  - 'edit any relationnode__instrum_place content'
+  - 'edit any relationnode__instrum_story content'
+  - 'edit any relationnode__person_concept content'
+  - 'edit any relationnode__person_document content'
+  - 'edit any relationnode__person_institut content'
+  - 'edit any relationnode__person_instrum content'
+  - 'edit any relationnode__person_person content'
+  - 'edit any relationnode__person_place content'
+  - 'edit any relationnode__person_story content'
+  - 'edit any relationnode__place_place content'
+  - 'edit any relationnode__place_story content'
+  - 'edit any relationnode__story_story content'
+  - 'edit any remote_video media'
+  - 'edit any slideshow media'
+  - 'edit any soundcloud media'
+  - 'edit any story content'
+  - 'edit any video media'
+  - 'edit own article content'
+  - 'edit own audio media'
+  - 'edit own concept content'
+  - 'edit own document content'
+  - 'edit own document media'
+  - 'edit own event content'
+  - 'edit own iframe media'
+  - 'edit own image media'
+  - 'edit own institution content'
+  - 'edit own instrument content'
+  - 'edit own page content'
+  - 'edit own person content'
+  - 'edit own place content'
+  - 'edit own publication content'
+  - 'edit own relationnode__concept_concept content'
+  - 'edit own relationnode__concept_document content'
+  - 'edit own relationnode__concept_instrument content'
+  - 'edit own relationnode__concept_place content'
+  - 'edit own relationnode__concept_story content'
+  - 'edit own relationnode__document_document content'
+  - 'edit own relationnode__document_place content'
+  - 'edit own relationnode__document_strory content'
+  - 'edit own relationnode__institut_concept content'
+  - 'edit own relationnode__institut_document content'
+  - 'edit own relationnode__institut_institut content'
+  - 'edit own relationnode__institut_instrum content'
+  - 'edit own relationnode__institut_place content'
+  - 'edit own relationnode__institut_story content'
+  - 'edit own relationnode__instrum_document content'
+  - 'edit own relationnode__instrum_instrum content'
+  - 'edit own relationnode__instrum_place content'
+  - 'edit own relationnode__instrum_story content'
+  - 'edit own relationnode__person_concept content'
+  - 'edit own relationnode__person_document content'
+  - 'edit own relationnode__person_institut content'
+  - 'edit own relationnode__person_instrum content'
+  - 'edit own relationnode__person_person content'
+  - 'edit own relationnode__person_place content'
+  - 'edit own relationnode__person_story content'
+  - 'edit own relationnode__place_place content'
+  - 'edit own relationnode__place_story content'
+  - 'edit own relationnode__story_story content'
+  - 'edit own remote_video media'
+  - 'edit own slideshow media'
+  - 'edit own soundcloud media'
+  - 'edit own story content'
+  - 'edit own video media'
+  - 'edit terms in author'
+  - 'edit terms in country'
+  - 'edit terms in municipality'
+  - 'edit terms in relationtype_cross__conc_docu'
+  - 'edit terms in relationtype_cross__conc_inst'
+  - 'edit terms in relationtype_cross__conc_plac'
+  - 'edit terms in relationtype_cross__conc_stor'
+  - 'edit terms in relationtype_cross__docu_plac'
+  - 'edit terms in relationtype_cross__docu_stor'
+  - 'edit terms in relationtype_cross__inst_docu'
+  - 'edit terms in relationtype_cross__inst_plac'
+  - 'edit terms in relationtype_cross__inst_stor'
+  - 'edit terms in relationtype_cross__orga_conc'
+  - 'edit terms in relationtype_cross__orga_docu'
+  - 'edit terms in relationtype_cross__orga_inst'
+  - 'edit terms in relationtype_cross__orga_plac'
+  - 'edit terms in relationtype_cross__orga_stor'
+  - 'edit terms in relationtype_cross__pers_conc'
+  - 'edit terms in relationtype_cross__pers_docu'
+  - 'edit terms in relationtype_cross__pers_inst'
+  - 'edit terms in relationtype_cross__pers_orga'
+  - 'edit terms in relationtype_cross__pers_plac'
+  - 'edit terms in relationtype_cross__pers_stor'
+  - 'edit terms in relationtype_cross__plac_stor'
+  - 'edit terms in relationtype_self__conc_conc'
+  - 'edit terms in relationtype_self__docu_docu'
+  - 'edit terms in relationtype_self__inst_inst'
+  - 'edit terms in relationtype_self__orga_orga'
+  - 'edit terms in relationtype_self__pers_pers'
+  - 'edit terms in relationtype_self__plac_plac'
+  - 'edit terms in relationtype_self__stor_stor'
+  - 'edit terms in specialisation'
+  - 'update any media'
+  - 'update media'
+  - 'use text format basic_html'
+  - 'view media'
+  - 'view own unpublished content'
+  - 'view own unpublished media'
+  - 'view the administration theme'
+  - 'view vocabulary labels'

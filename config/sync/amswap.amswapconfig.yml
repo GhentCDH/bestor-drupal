@@ -4,3 +4,6 @@ role_menu_pairs:
   -
     role: web_manager
     menu: web-manager-admin
+  -
+    role: redactor
+    menu: user-menu

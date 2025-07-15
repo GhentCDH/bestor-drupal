@@ -33,10 +33,16 @@ class AdminConfigRedirectSubscriber implements EventSubscriberInterface {
     $path = $request->getPathInfo();
 
     if ($path === '/admin') {
-      if (!\Drupal::currentUser()->hasPermission('administer site configuration') && \Drupal::currentUser()->hasPermission('access webmanager dashboard')) {
-        $url = $this->urlGenerator->generateFromRoute('customize_admin_menu_per_role.webmanager_dashboard');
-        $response = new RedirectResponse($url);
-        $event->setResponse($response);
+      if (!\Drupal::currentUser()->hasPermission('administer site configuration')) {
+        if (\Drupal::currentUser()->hasPermission('access webmanager dashboard')) {
+          $url = $this->urlGenerator->generateFromRoute('customize_admin_menu_per_role.webmanager_dashboard');
+          $response = new RedirectResponse($url);
+          $event->setResponse($response);
+        } elseif (\Drupal::currentUser()->hasPermission('access redactor dashboard')) {
+          $url = $this->urlGenerator->generateFromRoute('customize_admin_menu_per_role.redactor_dashboard');
+          $response = new RedirectResponse($url);
+          $event->setResponse($response);
+        }
       }
     }
   }

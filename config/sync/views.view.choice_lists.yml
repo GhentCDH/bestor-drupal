@@ -2,10 +2,15 @@ uuid: 7ef1ad22-a49d-4257-84ee-31e098a95c4d
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.administrator
+    - user.role.redactor
+    - user.role.web_manager
   module:
     - config_views
     - contextual
     - customviewfilters
+    - user
 id: choice_lists
 label: 'Choice lists'
 module: views
@@ -205,8 +210,12 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            redactor: redactor
+            web_manager: web_manager
+            administrator: administrator
       cache:
         type: tag
         options: {  }
@@ -440,6 +449,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.roles
       tags: {  }
   page_1:
     id: page_1
@@ -455,4 +465,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.roles
       tags: {  }

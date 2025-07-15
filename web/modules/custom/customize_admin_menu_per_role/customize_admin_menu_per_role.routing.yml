@@ -5,3 +5,10 @@ customize_admin_menu_per_role.webmanager_dashboard:
     _title: 'Webmanager Dashboard'
   requirements:
     _permission: 'access webmanager dashboard'
+customize_admin_menu_per_role.redactor_dashboard:
+  path: '/admin/redactor-dashboard'
+  defaults:
+    _controller: '\Drupal\customize_admin_menu_per_role\Controller\RedactorDashboardController::dashboard'
+    _title: 'Redactor Dashboard'
+  requirements:
+    _permission: 'access redactor dashboard'

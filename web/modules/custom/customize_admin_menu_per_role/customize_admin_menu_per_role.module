@@ -1,18 +1,19 @@
 <?php
 
-use Drupal\views\ViewExecutable;
+
 use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\views\ViewExecutable;
 
 function customize_admin_menu_per_role_page_attachments(&$page) {
   $roles = \Drupal::currentUser()->getRoles();
   if(in_array('administrator', $roles)) {
 	return;
-  } elseif(in_array('web_manager', $roles)) {
-	$page['#attached']['library'][] = 'customize_admin_menu_per_role/web-manager-styles';
+  } elseif(in_array('web_manager', $roles) || in_array('redactor', $roles)) {
+	$page['#attached']['library'][] = 'customize_admin_menu_per_role/loggedin-styles';
 	return;
-  } elseif(in_array('authenticated', $roles)) {
-	$page['#attached']['library'][] = 'customize_admin_menu_per_role/authenticated-styles';
-	return;
-  };  
+  } 
 }
+

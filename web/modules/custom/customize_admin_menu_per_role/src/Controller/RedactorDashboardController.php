@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 
-class WebmanagerDashboardController extends ControllerBase {
+class RedactorDashboardController extends ControllerBase {
 
   public function dashboard() {
     $blocks = [];
@@ -18,11 +18,8 @@ class WebmanagerDashboardController extends ControllerBase {
       '#block' => [
         'title' => $this->t('Content'),
         'content' => $this->buildLinks([
-          'Content overview' => 'view.content.page_2',
+          'All content overview' => 'view.content.page_2',
           'Administer choicelists' => 'view.choice_lists.page_1',
-          'Update banners and block content' => 'view.contentblocks.page_1',
-          'All media' => 'entity.media.collection',
-          'Overview relationships' => 'view.content.page_3',
         ]),
       ],
     ];
@@ -40,41 +37,13 @@ class WebmanagerDashboardController extends ControllerBase {
       ],
     ];
 
-    // User management block
-    $blocks['users'] = [
-      '#theme' => 'admin_block',
-      '#attributes' => ['class' => ['admin-block', 'admin-block--users']],
-      '#block' => [
-        'title' => $this->t('User management'),
-        'content' => $this->buildLinks([
-          'Users' => 'entity.user.collection',
-        ]),
-      ],
-    ];
-
-    // Site config block
-    $blocks['config'] = [
-      '#theme' => 'admin_block',
-      '#attributes' => ['class' => ['admin-block', 'admin-block--config']],
-      '#block' => [
-        'title' => $this->t('Site configuration'),
-        'content' => $this->buildLinks([
-          'Site cache and performance' => 'system.performance_settings',
-          'Maintenance mode' => 'system.site_maintenance_mode',
-          'Regional settings' => 'system.regional_settings',
-          'User interface translation' => 'locale.translate_page',
-          'Configuration translation' => 'config_translation.mapper_list',
-          'URL aliases' => 'entity.path_alias.collection',
-        ]),
-      ],
-    ];
-
     return [
       '#type' => 'container',
       '#attributes' => ['class' => ['webmanager-dashboard', 'admin-blocks']],
       'blocks' => $blocks,
     ];
   }
+  
 
   private function buildLinks(array $links): array {
     $rendered = [];
