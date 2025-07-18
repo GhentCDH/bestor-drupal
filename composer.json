@@ -28,7 +28,6 @@
         "drupal/core-project-message": "^10.3",
         "drupal/core-recommended": "^10.3",
         "drupal/ds": "^3.24",
-        "drupal/elasticsearch_connector": "^8.0@alpha",
         "drupal/entity_reference_modal": "^1.0",
         "drupal/field_group": "^4.0",
         "drupal/footnotes": "^4.0@beta",
@@ -44,11 +43,13 @@
         "drupal/rabbit_hole": "^1.0",
         "drupal/ruhi": "^10.2",
         "drupal/search_api": "^1.38",
+        "drupal/search_api_elasticsearch_client": "^1.0",
         "drupal/search_api_glossary": "^4.2",
         "drupal/single_user_role": "^1.0@beta",
         "drupal/thex": "^10.0",
         "drupal/twig_tweak": "^3.4",
-        "drush/drush": "^12.5"
+        "drush/drush": "^12.5",
+        "elasticsearch/elasticsearch": "^8.11"
     },
     "conflict": {
         "drupal/drupal": "*"

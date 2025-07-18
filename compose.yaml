@@ -60,32 +60,32 @@ services:
     image: memcached:1.6.32-bookworm
 
 
-## uncomment the following block to use elasticsearch
+# uncomment the following block to use elasticsearch
 
-  # bestor-elastic:
-  #   image: elasticsearch:8.15.3
-  #   environment:
-  #     discovery.type: single-node
-  #     network.host: 0.0.0.0
-  #     http.port: 9200
-  #     transport.host: localhost
-  #     cluster.name: docker-cluster
-  #     bootstrap.memory_lock: "true"
-  #     xpack.security.enabled: "false"
-  #     cluster.routing.allocation.disk.threshold_enabled: "false"
-  #     ES_JAVA_OPTS: -Xms2g -Xmx2g
-  #     TAKE_FILE_OWNERSHIP: 1
-  #   env_file:
-  #     - dev.env
-  #   volumes:
-  #     - ./docker_data/elastic/data:/usr/share/elasticsearch/data
-  #   ulimits:
-  #     memlock:
-  #       soft: -1
-  #       hard: -1
-  #     nofile:
-  #       soft: 65536
-  #       hard: 65536
+  bestor-elastic:
+    image: elasticsearch:8.15.3
+    environment:
+      discovery.type: single-node
+      network.host: 0.0.0.0
+      http.port: 9200
+      transport.host: localhost
+      cluster.name: docker-cluster
+      bootstrap.memory_lock: "true"
+      xpack.security.enabled: "false"
+      cluster.routing.allocation.disk.threshold_enabled: "false"
+      ES_JAVA_OPTS: -Xms2g -Xmx2g
+      TAKE_FILE_OWNERSHIP: 1
+    env_file:
+      - dev.env
+    volumes:
+      - ./docker_data/elastic/data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
   
   bestor-phpmyadmin:
     container_name: bestor-phpmyadmin

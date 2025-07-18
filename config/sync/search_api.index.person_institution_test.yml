@@ -1,0 +1,81 @@
+uuid: 27b0ce54-f1a3-40f9-b086-6adb1e707f72
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.server.bestor_elastic_docker
+  module:
+    - node
+    - search_api_elasticsearch_client
+id: person_institution_test
+name: 'person institution test'
+description: ''
+read_only: false
+field_settings:
+  field_related_entity_1:
+    label: 'reverse  via rel 2 > relatie > rel 1'
+    datasource_id: 'entity:node'
+    property_path: 'search_api_reverse_entity_references_node__field_related_entity_2:field_related_entity_1'
+    type: integer
+  field_related_entity_2:
+    label: 'reverse  via rel 1 > relatie > rel 2'
+    datasource_id: 'entity:node'
+    property_path: 'search_api_reverse_entity_references_node__field_related_entity_1:field_related_entity_2'
+    type: integer
+  field_relation_type:
+    label: 'reverse  via rel 1 > relatie > TYPE'
+    datasource_id: 'entity:node'
+    property_path: 'search_api_reverse_entity_references_node__field_related_entity_1:field_relation_type'
+    type: integer
+  field_relation_type_1:
+    label: 'reverse  via rel 2 > relatie > TYPE'
+    datasource_id: 'entity:node'
+    property_path: 'search_api_reverse_entity_references_node__field_related_entity_2:field_relation_type'
+    type: integer
+  nid:
+    label: 'search_api_reverse_entity_references_node__field_related_entity_1:nid'
+    datasource_id: 'entity:node'
+    property_path: 'search_api_reverse_entity_references_node__field_related_entity_1:nid'
+    type: search_api_elasticsearch_client_object
+  nid_1:
+    label: 'search_api_reverse_entity_references_node__field_related_entity_2:nid'
+    datasource_id: 'entity:node'
+    property_path: 'search_api_reverse_entity_references_node__field_related_entity_2:nid'
+    type: search_api_elasticsearch_client_object
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - person
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  custom_value: {  }
+  entity_type: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+  reverse_entity_references: {  }
+  search_api_elasticsearch_client_date_range:
+    weights:
+      preprocess_index: 0
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  delete_on_fail: true
+  index_directly: true
+  track_changes_in_references: true
+server: bestor_elastic_docker

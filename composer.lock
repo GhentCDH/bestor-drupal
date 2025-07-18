@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c00b09e289d3eaa9f3f7695040608f63",
+    "content-hash": "ac2fda2b2d34bddf9477bf4978f559d2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2054,83 +2054,6 @@
             }
         },
         {
-            "name": "drupal/elasticsearch_connector",
-            "version": "8.0.0-alpha4",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/elasticsearch_connector.git",
-                "reference": "8.0.0-alpha4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/elasticsearch_connector-8.0.0-alpha4.zip",
-                "reference": "8.0.0-alpha4",
-                "shasum": "f2c0448ad77268fb2716187691e6e0a80f9806db"
-            },
-            "require": {
-                "drupal/core": "^10.2 || ^11",
-                "drupal/search_api": "^1.23",
-                "elasticsearch/elasticsearch": "^8",
-                "makinacorpus/php-lucene": "^1.1",
-                "php": "^8"
-            },
-            "require-dev": {
-                "drupal/coder": "^8.3",
-                "drupal/devel": "^4.0|^5.0",
-                "drupal/geofield": "1.x-dev",
-                "drush/drush": "^12.0 || ^13",
-                "phayes/geophp": "^1.2"
-            },
-            "suggest": {
-                "drupal/facets": "Provides facetted search.",
-                "drupal/search_api_autocomplete": "Provides auto complete for search boxes.",
-                "drupal/search_api_location": "Provides location searches.",
-                "drupal/search_api_spellcheck": "Provides spell checking and 'Did You Mean?'."
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.0.0-alpha4",
-                    "datestamp": "1740168985",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "lachezar.valchev",
-                    "homepage": "https://www.drupal.org/user/1482368"
-                },
-                {
-                    "name": "mparker17",
-                    "homepage": "https://www.drupal.org/user/536298"
-                },
-                {
-                    "name": "skek",
-                    "homepage": "https://www.drupal.org/user/417078"
-                },
-                {
-                    "name": "sokru",
-                    "homepage": "https://www.drupal.org/user/388235"
-                },
-                {
-                    "name": "ygerasimov",
-                    "homepage": "https://www.drupal.org/user/257311"
-                }
-            ],
-            "description": "Provides a Search API backend for Elasticsearch (a powerful, distributed, RESTful search and analytics engine), using the official Elasticsearch PHP Client.",
-            "homepage": "https://www.drupal.org/project/elasticsearch_connector",
-            "support": {
-                "source": "https://git.drupalcode.org/project/elasticsearch_connector"
-            }
-        },
-        {
             "name": "drupal/entity_reference_modal",
             "version": "1.0.7",
             "source": {
@@ -3426,6 +3349,62 @@
                 "source": "https://git.drupalcode.org/project/search_api",
                 "issues": "https://www.drupal.org/project/issues/search_api",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
+            }
+        },
+        {
+            "name": "drupal/search_api_elasticsearch_client",
+            "version": "1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/search_api_elasticsearch_client.git",
+                "reference": "1.0.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_elasticsearch_client-1.0.8.zip",
+                "reference": "1.0.8",
+                "shasum": "11bdfa580650b29ac03eb6f56487d7784458c456"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/geofield": "*",
+                "drupal/search_api": "^1.23",
+                "makinacorpus/php-lucene": "^1.1",
+                "php": "^8"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.3",
+                "drush/drush": "^11.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.8",
+                    "datestamp": "1740408333",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "ayalon",
+                    "homepage": "https://www.drupal.org/user/419226"
+                },
+                {
+                    "name": "dulnan",
+                    "homepage": "https://www.drupal.org/user/3652792"
+                }
+            ],
+            "description": "Provides an ElasticSearch backend for Search API.",
+            "homepage": "https://www.drupal.org/project/search_api_elasticsearch_client",
+            "support": {
+                "source": "https://git.drupalcode.org/project/search_api_elasticsearch_client"
             }
         },
         {
@@ -9038,7 +9017,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "drupal/elasticsearch_connector": 15,
         "drupal/footnotes": 10,
         "drupal/inline_entity_form": 5,
         "drupal/single_user_role": 10

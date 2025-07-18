@@ -1,6 +1,6 @@
 uuid: 6051a6a8-47d5-4389-86a4-f0c6bb6e82d0
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - field.storage.node.body
@@ -19,11 +19,10 @@ dependencies:
     - field.storage.node.field_wikidata_entry
     - field.storage.paragraph.field_formatted_text
     - field.storage.paragraph.field_title
-    - search_api.server.s_api_elasticserver_bestor
   module:
-    - elasticsearch_connector
     - node
     - paragraphs
+    - search_api_elasticsearch_client
     - search_api_glossary
     - taxonomy
 id: bestor_main_search_index
@@ -350,36 +349,6 @@ processor_settings:
     weights:
       preprocess_query: -30
   custom_value: {  }
-  elasticsearch_highlight:
-    weights:
-      postprocess_query: 0
-      preprocess_query: 0
-    boundary_scanner: sentence
-    boundary_scanner_locale: system
-    encoder: default
-    fields:
-      - alternative_name__ft
-      - author_name__ft
-      - body__ft
-      - content_type__ft
-      - country_name__ft
-      - discipline_name__ft
-      - gender_name__ft
-      - municipality_name__ft
-      - paragraph_text__ft
-      - paragraph_title__ft
-      - place_end_name__ft
-      - specialisation_name__ft
-      - typology_name__ft
-    fragment_size: 60
-    fragmenter: span
-    no_match_size: 0
-    number_of_fragments: 5
-    order: none
-    pre_tag: '<em class="placeholder">'
-    require_field_match: true
-    snippet_joiner: ' … '
-    type: unified
   entity_type: {  }
   glossary:
     weights:
@@ -393,6 +362,7 @@ processor_settings:
   language_with_fallback: {  }
   rendered_item: {  }
   reverse_entity_references: {  }
+  search_api_elasticsearch_client_date_range: {  }
 tracker_settings:
   default:
     indexing_order: fifo
@@ -401,4 +371,4 @@ options:
   delete_on_fail: true
   index_directly: false
   track_changes_in_references: false
-server: s_api_elasticserver_bestor
+server: null
