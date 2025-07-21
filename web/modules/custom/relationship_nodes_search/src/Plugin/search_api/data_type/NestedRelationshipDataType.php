@@ -40,19 +40,20 @@ class NestedRelationshipDataType extends DataTypePluginBase implements Container
      * {@inheritdoc}
      */
     public function getValues($item, DatasourceInterface $datasource, Index $index) {
-        $entity = $item->getOriginalObject()->getValue();
+        return [];
+ /*       $entity = $item->getOriginalObject()->getValue();
 
         if (!$entity || !$entity->id()) {
             return [];
         }
-/*
+
         $bundle_prefix = $this->infoService->getRelationshipNodeBundlePrefix();
         $related_entity_fields = $this->infoService->getRelatedEntityFields();
         $rel_type_field = $this->infoService->getRelationshipTypeField();
         $nid = $entity->id();
-*/
-        dpm($item);
-/*
+
+        //dpm($item);
+
 
         $nids = [];
 
