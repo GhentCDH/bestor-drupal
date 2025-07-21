@@ -1,0 +1,5 @@
+services:
+  relationship_nodes_search.nested_relationship_mapping_subscriber:
+    class: Drupal\relationship_nodes_search\EventSubscriber\NestedRelationshipMappingSubscriber
+    tags:
+      - { name: event_subscriber }

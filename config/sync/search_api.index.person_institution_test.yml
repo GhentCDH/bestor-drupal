@@ -6,6 +6,7 @@ dependencies:
     - search_api.server.bestor_elastic_docker
   module:
     - node
+    - relationship_nodes_search
     - search_api_elasticsearch_client
 id: person_institution_test
 name: 'person institution test'
@@ -36,12 +37,12 @@ field_settings:
     label: 'search_api_reverse_entity_references_node__field_related_entity_1:nid'
     datasource_id: 'entity:node'
     property_path: 'search_api_reverse_entity_references_node__field_related_entity_1:nid'
-    type: search_api_elasticsearch_client_object
+    type: relationship_nodes_search_nested_relationship
   nid_1:
     label: 'search_api_reverse_entity_references_node__field_related_entity_2:nid'
     datasource_id: 'entity:node'
     property_path: 'search_api_reverse_entity_references_node__field_related_entity_2:nid'
-    type: search_api_elasticsearch_client_object
+    type: relationship_nodes_search_nested_relationship
   title:
     label: Title
     datasource_id: 'entity:node'

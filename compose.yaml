@@ -47,6 +47,7 @@ services:
       - ./docker_data/db/data:/var/lib/mysql
       - ./docker_data/db/initdb:/docker-entrypoint-initdb.d
       - ./docker_data/db/my.cnf:/etc/mysql/my.cnf
+      - ./mysql-config/my.cnf:/etc/mysql/conf.d/my.cnf
     restart: always
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
