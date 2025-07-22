@@ -42,7 +42,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
     if($relationship_subform === true && $form["#type"] === 'inline_entity_form' && strpos($form["#bundle"], $info_service->getRelationshipNodeBundlePrefix()) === 0){    
       $field_definition = $items->getFieldDefinition();
       if($field_definition && $field_definition->get('field_name') && $field_definition->get('field_name') === $info_service->getRelationshipTypeField()){   
-        $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForCurrentForm($items->getEntity());
+        $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForNode($items->getEntity());
         $current_node_join_fields = $relation_info['current_node_join_fields'];
         if($current_node_join_fields && count($current_node_join_fields) == 1 && $current_node_join_fields[0] == $info_service->getRelatedEntityFields()['related_entity_field_2'] ){
           $element['#options'] = $this->getMirrorOptions($element['#options'], $relation_info['general_relationship_info']);

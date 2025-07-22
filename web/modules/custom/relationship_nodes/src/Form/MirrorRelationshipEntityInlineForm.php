@@ -27,7 +27,7 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     $related_entity_field_2 = $related_entity_fields['related_entity_field_2'];
     
     if($entity_form['#entity'] && !$entity_form['#entity']->isNew()){ 
-      $relation_info = $info_service->getRelationInfoForCurrentForm($entity_form['#entity']);
+      $relation_info = $info_service->getRelationInfoForNode($entity_form['#entity']);
       $current_node_join_fields = $relation_info['current_node_join_fields'];
       if($current_node_join_fields && is_array($current_node_join_fields) && count($current_node_join_fields) == 1){
 

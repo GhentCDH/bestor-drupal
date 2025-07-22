@@ -3,3 +3,7 @@ services:
     class: Drupal\relationship_nodes_search\EventSubscriber\NestedRelationshipMappingSubscriber
     tags:
       - { name: event_subscriber }
+  typed_data.data_type.relation_info:
+    class: Drupal\relationship_nodes_search\TypedData\RelationInfoData
+    tags:
+      - { name: typed_data }

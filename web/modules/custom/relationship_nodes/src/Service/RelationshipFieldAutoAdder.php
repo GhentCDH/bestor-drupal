@@ -33,7 +33,7 @@ class RelationshipFieldAutoAdder {
       return;
     }
 
-    $relationships = $this->relationshipInfoService->relationshipInfoForRelatedItemNodeType($entity_type, $bundle);
+    $relationships = $this->relationshipInfoService->relationshipInfoForRelatedItemNodeType($bundle);
 
     if (empty($relationships)) {
       return;

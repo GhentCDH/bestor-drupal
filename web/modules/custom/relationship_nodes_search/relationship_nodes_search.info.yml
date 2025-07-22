@@ -7,3 +7,5 @@ dependencies:
   - search_api:search_api
   - search_api_elasticsearch_client:search_api_elasticsearch_client
   - relationship_nodes:relationship_nodes
+services:
+  - relationship_nodes_search.services.yml

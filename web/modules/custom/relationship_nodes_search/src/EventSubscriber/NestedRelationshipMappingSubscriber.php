@@ -18,8 +18,7 @@ class NestedRelationshipMappingSubscriber implements EventSubscriberInterface {
     public function onFieldMapping(FieldMappingEvent $event): void {
     $field = $event->getField();
     
-    if ($field->getType() === 'relationship_nodes_search_nested_relationship') {
-      dpm($field);
+    if ($field->getType() === 'relationship_nodes_search_nested_relationship' && 1 == 2) { //DIT WORDT DUS NIET UITGEVOERD
 
       $event->setParam([
         'type' => 'nested',

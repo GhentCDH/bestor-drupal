@@ -72,6 +72,8 @@ class RelationshipInfoService {
 
   /**
    *
+   * Checks if a content type is a relationship node. If yes: returns info; if no: returns false
+   * 
    * @param string $node_type
    *
    * @return array
@@ -211,20 +213,18 @@ class RelationshipInfoService {
 
 
   /**
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
    * @param string $bundle
    *
    * @return array
    */
-    function relationshipInfoForRelatedItemNodeType(EntityTypeInterface $entity_type, $bundle) { 
+    function relationshipInfoForRelatedItemNodeType($bundle) { 
         $relationshipInfo = [];
-        if ($this->allConfigAvailable() === false || $entity_type->id() !== 'node') {
+        $all_node_bundles = \Drupal::service("entity_type.bundle.info")->getBundleInfo('node');
+        if ($this->allConfigAvailable() === false || !isset($all_node_bundles[$bundle])) {
             return $relationshipInfo;
         }
       
         $related_entity_fields = $this->getRelatedEntityFields();
-
-        $all_node_bundles = \Drupal::service("entity_type.bundle.info")->getBundleInfo('node');
 
         foreach($all_node_bundles as $bundle_name => $bundle_array){
             if(isset( $bundle_array['relationship_info_bundle']['relationnode']) &&  $bundle_array['relationship_info_bundle']['relationnode'] === true && isset($bundle_array['relationship_info_bundle']['related_entity_fields'])){ 
@@ -252,12 +252,12 @@ class RelationshipInfoService {
 
     /**
      * @param \Drupal\node\Entity\Node $relationship_node
-     *
+     * @param int|null $target_nid
      * @return array
      * 
-     * Deze functie checkt of een relatie node (input) een join field heeft met de huidige node en geeft terug welke.
+     * Deze functie checkt of een relatie node (input) een join field heeft met de huidige node / een opgegeven nid en geeft terug welke.
      */
-    function getRelationInfoForCurrentForm(Node $relationship_node){
+    function getRelationInfoForNode(Node $relationship_node, ?int $target_nid = NULL): array {
         $node_info = $this->relationshipNodeInfo($relationship_node->getType());
  
         if(!$relationship_node->id() ||  $this->allConfigAvailable() === false|| !isset($node_info['relationnode']) || !$node_info['relationnode']){
@@ -266,8 +266,12 @@ class RelationshipInfoService {
         $related_fields = $this->getRelatedEntityFields();
         $joinFields = [];
         $status = '';
-
-        $current_node = \Drupal::routeMatch()->getParameter('node');
+        if ($target_nid === NULL) {
+            $current_node = \Drupal::routeMatch()->getParameter('node');
+        } else {
+            $current_node = \Drupal::entityTypeManager()->getStorage('node')->load($target_nid);
+        }
+        
         if (!($current_node instanceof Node && in_array( $current_node->getType(), $node_info['related_entity_fields']))) {
           return [];
         }
