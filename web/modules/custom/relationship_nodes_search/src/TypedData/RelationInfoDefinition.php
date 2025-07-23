@@ -36,17 +36,23 @@ class RelationInfoDefinition extends ComplexDataDefinitionBase {
 
         $this->entityFieldManager = \Drupal::service('entity_field.manager');
         $this->entityTypeManager = \Drupal::service('entity_type.manager');
-
-        $this->buildPropertyDefinitions();
     }
 
     public function getDataClass() {
         return RelationInfoData::class;
     }
 
+    public function getPropertyDefinitions() {
+        if (!isset($this->propertyDefinitions)) {
+        $this->propertyDefinitions = $this->buildPropertyDefinitions();
+        }
+        return $this->propertyDefinitions;
+    }
+
     protected function buildPropertyDefinitions() {
+        $properties = [];
         if (!$this->bundle) {
-            return;
+            return $properties;
         }
 
         $fields = $this->entityFieldManager->getFieldDefinitions('node', $this->bundle);
@@ -89,7 +95,8 @@ class RelationInfoDefinition extends ComplexDataDefinitionBase {
                 break;
             }
 
-            $this->addProperty($field_name, $property);
+             $properties[$field_name] = $property;
         }
+        return $properties;
     }
 }

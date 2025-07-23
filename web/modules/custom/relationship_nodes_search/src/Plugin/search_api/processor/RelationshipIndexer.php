@@ -89,117 +89,120 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   /**
    * {@inheritdoc}
    */
-public function getPropertyDefinitions(?DatasourceInterface $datasource = NULL) {
-  $properties = [];
+  public function getPropertyDefinitions(?DatasourceInterface $datasource = NULL) {
+    $properties = [];
 
-  if (!$datasource || !$datasource->getEntityTypeId()) {
+    if (!$datasource || !$datasource->getEntityTypeId()) {
+      return $properties;
+    }
+
+    $node_types_in_index = $datasource->getConfiguration()['bundles']['selected']  ?? [];
+    $relationship_node_types = [];
+    foreach($node_types_in_index as $node_type_in_index){
+      $related_relationships = $this->infoService->relationshipInfoForRelatedItemNodeType($node_type_in_index);
+      foreach($related_relationships as $related_relationship){
+        if(!in_array($related_relationship['relationship_bundle'], $relationship_node_types)){
+          $relationship_node_types[] = $related_relationship['relationship_bundle'];
+        }
+      }
+    }
+
+    foreach($relationship_node_types as $relationship_node_type){
+      $definition = [
+        'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
+        'description' => $this->t('All related @type nodes, with selectable fields.', ['@type' => $relationship_node_type]),
+        'type' => 'entity:node', 
+        'processor_id' => $this->getPluginId(),
+        'is_list' => TRUE,
+        
+      ];
+      
+      $property = new \Drupal\relationship_nodes_search\Processor\RelationInfoProcessorProperty($definition);
+      //$property = new EntityProcessorProperty($definition);
+      //$property->setEntityTypeId('node'); 
+      dpm($property);
+      $properties["relationship_info__{$relationship_node_type}"] = $property;
+
+    }
+
     return $properties;
   }
 
-  $node_types_in_index = $datasource->getConfiguration()['bundles']['selected']  ?? [];
-  $relationship_node_types = [];
-  foreach($node_types_in_index as $node_type_in_index){
-    $related_relationships = $this->infoService->relationshipInfoForRelatedItemNodeType($node_type_in_index);
-    foreach($related_relationships as $related_relationship){
-      if(!in_array($related_relationship['relationship_bundle'], $relationship_node_types)){
-        $relationship_node_types[] = $related_relationship['relationship_bundle'];
-      }
-    }
-  }
-
-  foreach($relationship_node_types as $relationship_node_type){
-    $definition = [
-      'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
-      'description' => $this->t('All related @type nodes, with selectable fields.', ['@type' => $relationship_node_type]),
-      'type' => 'entity:node', 
-      'processor_id' => $this->getPluginId(),
-      'is_list' => TRUE,
-      'definition_class' => \Drupal\relationship_nodes_search\TypedData\RelationInfoDefinition::class,
-      'definition_class_settings' => [
-        'bundle' => $relationship_node_type,
-      ],
-    ];
-
-    $property = new \Drupal\search_api\Processor\EntityProcessorProperty($definition);
-    $property->setEntityTypeId('node'); 
-    $properties["relationship_info__{$relationship_node_type}"] = $property;
-
-  }
-
-  return $properties;
-}
-
-
-/**
- * Cf Partially based on code of ReverseEntityReferences
- * {@inheritdoc}
- */
-public function addFieldValues(ItemInterface $item) {
-  try {
-    $entity = $item->getOriginalObject()->getValue();
-  }
-  catch (SearchApiException) {
-    return;
-  }
-
-  if (!($entity instanceof \Drupal\Core\Entity\EntityInterface)) {
-    return;
-  }
-
-  dpm($entity->getType());
-
-  /** @var \Drupal\search_api\Item\FieldInterface[][] $to_extract */
-  $to_extract = [];
-  $prefix = 'relationship_info__';
-  foreach ($item->getFields() as $field) {
-    
-    $property_path = $field->getPropertyPath();
-    [$direct, $nested] = Utility::splitPropertyPath($property_path, FALSE);
-    if ($field->getDatasourceId() === $item->getDatasourceId() && str_starts_with($direct, $prefix)) {
-      $relation_bundle = substr($direct, strlen($prefix));
-      $to_extract[$relation_bundle][$nested][] = $field;
-    }
-  
-  }
-  if (!$to_extract) {
-    return;
-  }
 
   /**
-   *  de property info uit reverse entities ziet er uit als array:
-   * array:3 [▼
-   * "label" => "Related entity 2"
-   * "entity_type" => "node"
-   * "property" => "field_related_entity_2"
-   * ]
-   * 
-   * de entity id is gewoon $entity->id()
-   * 
-  **/ 
-
-  $related_relationships = $this->infoService->relationshipInfoForRelatedItemNodeType($entity->getType());
-  foreach ($to_extract as $relation_bundle => $fields_to_extract) {
-    $relationship_info = [];
-    foreach($related_relationships as $relationship){
-      if(isset($relationship['relationship_bundle']) && $relationship['relationship_bundle'] == $relation_bundle ){
-        $relationship_info = $relationship;
-      }
+   * Cf Partially based on code of ReverseEntityReferences
+   * {@inheritdoc}
+   */
+  public function addFieldValues(ItemInterface $item) {
+    try {
+      $entity = $item->getOriginalObject()->getValue();
     }
-    if($relationship_info = []){
-      continue;
-    }
-
-  }
-
-
-
-    $node = $this->getEntityTypeManager()
-      ->getStorage('node')
-      ->load($node->id());
-    if (!$node) {
+    catch (SearchApiException) {
       return;
     }
-        $this->getFieldsHelper()
-      ->extractFields($node->getTypedData(), $to_extract, $item->getLanguage());
-}
+
+    if (!($entity instanceof \Drupal\Core\Entity\EntityInterface)) {
+      return;
+    }
+
+    /** @var \Drupal\search_api\Item\FieldInterface[][] $to_extract */
+    $to_extract = [];
+    $prefix = 'relationship_info__';
+    foreach ($item->getFields() as $field) {
+      
+      [$direct, $nested] = Utility::splitPropertyPath($field->getPropertyPath(), FALSE);
+      if ($field->getDatasourceId() === $item->getDatasourceId() && str_starts_with($direct, $prefix)) {
+        $relation_bundle = substr($direct, strlen($prefix));
+        $to_extract[$relation_bundle][$nested][] = $field;
+      }
+    
+    }
+
+    if (!$to_extract) {
+      return;
+    }
+
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $related_relationships = $this->infoService->relationshipInfoForRelatedItemNodeType($entity->getType());
+    
+    foreach ($to_extract as $relation_bundle => $fields_to_extract) {
+      $relationship_info = [];
+      foreach($related_relationships as $relationship){
+        if(isset($relationship['relationship_bundle']) && $relationship['relationship_bundle'] == $relation_bundle ){
+          $relationship_info = $relationship;
+          break;
+        }
+      }
+      if($relationship_info == [] || !isset($relationship_info['join_fields']) || !is_array($relationship_info['join_fields'])){
+        continue;
+      }
+      
+      $entity_ids = [];
+      foreach($relationship_info['join_fields'] as $join_field){
+        $result = $node_storage->getQuery()
+          ->accessCheck(FALSE)
+          ->condition('type', $relation_bundle)
+          ->condition($join_field, $entity->id())
+          ->execute();
+        $entity_ids = array_merge($entity_ids, $result);
+      }
+
+      $entities = $node_storage->loadMultiple(array_unique($entity_ids));
+      if (!$entities) {
+        continue;
+      }
+
+      foreach ($fields_to_extract as $nested_path => $fields) {
+        foreach ($fields as $field) {
+          $values = [];
+          foreach ($entities as $related_node) {
+            $field_value = $related_node->get($nested_path)->getValue();
+            $values[] = new RelationInfoData([$nested_path => $field_value], $field->getDataDefinition());
+            dpm($values);
+          }
+          $field->setValues($values);
+        }
+      }
+    }
+  }
 }
