@@ -15,7 +15,7 @@ use Drupal\search_api\Processor\EntityProcessorProperty;
 use Drupal\relationship_nodes_search\TypedData\RelationInfoData;
 use Drupal\search_api\Utility\Utility;
 
-
+use Drupal\search_api\Processor\ProcessorProperty;
 
 /**
  * Adds nested relationship data to specified fields.
@@ -111,20 +111,19 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $definition = [
         'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
         'description' => $this->t('All related @type nodes, with selectable fields.', ['@type' => $relationship_node_type]),
-        'type' => 'entity:node', 
+        'type' => 'relationship_info', 
         'processor_id' => $this->getPluginId(),
         'is_list' => TRUE,
-        
+        'definition_class' => \Drupal\relationship_nodes_search\TypedData\RelationInfoDefinition::class,
+        'definition_class_settings' => [
+          'bundle' => $relationship_node_type,
+        ],
       ];
       
       $property = new \Drupal\relationship_nodes_search\Processor\RelationInfoProcessorProperty($definition);
-      //$property = new EntityProcessorProperty($definition);
-      //$property->setEntityTypeId('node'); 
-      dpm($property);
       $properties["relationship_info__{$relationship_node_type}"] = $property;
 
     }
-
     return $properties;
   }
 
@@ -134,6 +133,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    * {@inheritdoc}
    */
   public function addFieldValues(ItemInterface $item) {
+    dpm($item);
     try {
       $entity = $item->getOriginalObject()->getValue();
     }

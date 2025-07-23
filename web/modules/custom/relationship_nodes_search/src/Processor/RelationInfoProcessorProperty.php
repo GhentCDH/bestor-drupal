@@ -2,22 +2,32 @@
 
 namespace Drupal\relationship_nodes_search\Processor;
 
-use Drupal\Core\Entity\TypedData\EntityDataDefinition;
+use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\relationship_nodes_search\TypedData\RelationInfoDefinition;
-use Drupal\Core\TypedData\TypedDataInterface;
+use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 
-/**
- * Provides a processor property using RelationInfoDefinition.
- */
-class RelationInfoProcessorProperty extends EntityDataDefinition {
+class RelationInfoProcessorProperty extends ProcessorProperty implements ComplexDataDefinitionInterface {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getDataDefinition() {
-    // Zorg dat je hier eventuele settings (bv. bundle) doorgeeft aan je definitie.
-    $settings = $this->definition['definition_class_settings'] ?? [];
-    return new RelationInfoDefinition($settings);
+  protected $relationInfoDefinition;
+
+  public function __construct(array $definition) {
+    parent::__construct($definition);
+
+    $bundle = $definition['definition_class_settings']['bundle'] ?? NULL;
+     
+    $this->relationInfoDefinition = new RelationInfoDefinition(['bundle' => $bundle]);
   }
 
+  public function getPropertyDefinitions() {
+    return $this->relationInfoDefinition->getPropertyDefinitions();
+  }
+
+    public function getMainPropertyName() {
+    return NULL;
+  }
+
+  public function getPropertyDefinition($name) {
+  $definitions = $this->getPropertyDefinitions();
+  return $definitions[$name] ?? NULL;
+}
 }
