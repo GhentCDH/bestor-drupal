@@ -66,12 +66,12 @@ class RelationInfoDefinition extends ComplexDataDefinitionBase {
 
             switch ($field_type) {
                 case 'entity_reference':
-                    dpm('test');
-                    $target_type = $field_config->getSetting('target_type') ?: 'entity';
-                    $property = DataDefinition::create('entity:' . $target_type)
+                case 'integer':
+                    //$target_type = $field_config->getSetting('target_type') ?: 'entity';
+                    //$property = DataDefinition::create('entity:' . $target_type)
+                    $property = DataDefinition::create('integer')
                     ->setLabel($field_config->getLabel())
-                    ->setDescription($field_config->getDescription())
-                    ->setSetting('data_type', 'entity_reference');
+                    ->setDescription($field_config->getDescription());
                     break;
                 case 'datetime_range':
                     $property = DataDefinition::create('search_api_elasticsearch_client_date_range')
@@ -83,7 +83,6 @@ class RelationInfoDefinition extends ComplexDataDefinitionBase {
                     ->setLabel($field_config->getLabel())
                     ->setDescription($field_config->getDescription());
                     break;
-                case 'integer':
                 case 'decimal':
                 case 'float':
                     $property = DataDefinition::create('float')

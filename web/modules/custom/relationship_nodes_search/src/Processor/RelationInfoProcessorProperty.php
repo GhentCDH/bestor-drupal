@@ -22,8 +22,9 @@ class RelationInfoProcessorProperty extends ProcessorProperty implements Complex
     return $this->relationInfoDefinition->getPropertyDefinitions();
   }
 
-    public function getMainPropertyName() {
-    return NULL;
+  public function getMainPropertyName() {
+    //return $this->fieldDefinition->getFieldStorageDefinition()->getMainPropertyName();
+    return;
   }
 
   public function getPropertyDefinition($name) {
