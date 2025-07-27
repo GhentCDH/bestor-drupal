@@ -133,7 +133,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    * {@inheritdoc}
    */
   public function addFieldValues(ItemInterface $item) {
-    dpm($item);
     try {
       $entity = $item->getOriginalObject()->getValue();
     }
@@ -198,7 +197,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           foreach ($entities as $related_node) {
             $field_value = $related_node->get($nested_path)->getValue();
             $values[] = new RelationInfoData([$nested_path => $field_value], $field->getDataDefinition());
-            dpm($values);
           }
           $field->setValues($values);
         }

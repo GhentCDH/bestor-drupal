@@ -1,0 +1,6 @@
+relationship_form:
+  version: 1.x
+  js:
+    js/relationship_form.js: {}
+  dependencies:
+    - core/drupal

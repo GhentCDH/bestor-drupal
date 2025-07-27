@@ -63,13 +63,7 @@ function bestor_form_alter(&$form, &$form_state, $form_id) {
         $form['actions']['submit']['#attributes']['class'][] = 'icon-search';
         $form['actions']['submit']['#value'] = html_entity_decode("&#xe001;");
     }  
-   /* dpm($form);
-    foreach($form_state->getStorage()['view']->getQuery()->getIndex()->getFields() as $field){
-        dpm($field);
-        dpm($field->getPropertyPath());
-        dpm(\Drupal::service('entity_field.manager')->getFieldMap()['node'][$field->getPropertyPath()]);
-    }*/
-    }
+}
     
 
 function bestor_preprocess_block(&$variables) {
