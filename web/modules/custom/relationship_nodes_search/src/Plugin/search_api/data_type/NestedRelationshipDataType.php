@@ -13,5 +13,5 @@ use Drupal\search_api\DataType\DataTypePluginBase;
  * )
  */
 class NestedRelationshipDataType extends DataTypePluginBase {
- 
+
 }

@@ -10,7 +10,6 @@
             }
 
             if (!parentTr) {
-                console.warn('Geen parent-knop gevonden voor checkbox');
                 return;
             }
            
@@ -27,11 +26,9 @@
                 nextRow = nextRow.nextElementSibling;
             }
 
-            console.log(anyChecked);
             if(anyChecked){
                 parentButton.disabled = false;
                 parentButton.classList.remove('is-disabled');
-                console.log(parentButton);
             } else {
                 parentButton.disabled = true;
                 parentButton.classList.add('is-disabled');
