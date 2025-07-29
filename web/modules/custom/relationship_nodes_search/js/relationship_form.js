@@ -34,6 +34,7 @@
                 parentButton.classList.add('is-disabled');
             }
         });
+        checkbox.dispatchEvent(new Event('change'));
       });
     }
   };

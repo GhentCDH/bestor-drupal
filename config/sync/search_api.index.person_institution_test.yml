@@ -13,44 +13,27 @@ name: 'person institution test'
 description: ''
 read_only: false
 field_settings:
-  field_related_entity_1:
-    label: 'reverse  via rel 2 > relatie > rel 1'
+  relationship_info__relationnode__person_institut__nested:
+    label: 'Related nodes of type relationnode__person_institut'
     datasource_id: 'entity:node'
-    property_path: 'search_api_reverse_entity_references_node__field_related_entity_2:field_related_entity_1'
-    type: integer
-  field_related_entity_2:
-    label: 'reverse  via rel 1 > relatie > rel 2'
+    property_path: relationship_info__relationnode__person_institut
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        - field_related_entity_1
+        - field_related_entity_2
+        - field_relation_type
+  relationship_info__relationnode__person_person__nested:
+    label: 'Related nodes of type relationnode__person_person'
     datasource_id: 'entity:node'
-    property_path: 'search_api_reverse_entity_references_node__field_related_entity_1:field_related_entity_2'
-    type: integer
-  field_relation_type:
-    label: 'reverse  via rel 1 > relatie > TYPE'
-    datasource_id: 'entity:node'
-    property_path: 'search_api_reverse_entity_references_node__field_related_entity_1:field_relation_type'
-    type: integer
-  field_relation_type_1:
-    label: 'reverse  via rel 2 > relatie > TYPE'
-    datasource_id: 'entity:node'
-    property_path: 'search_api_reverse_entity_references_node__field_related_entity_2:field_relation_type'
-    type: string
-  nid:
-    label: 'search_api_reverse_entity_references_node__field_related_entity_1:nid'
-    datasource_id: 'entity:node'
-    property_path: 'search_api_reverse_entity_references_node__field_related_entity_1:nid'
-    type: string
-  nid_1:
-    label: 'search_api_reverse_entity_references_node__field_related_entity_2:nid'
-    datasource_id: 'entity:node'
-    property_path: 'search_api_reverse_entity_references_node__field_related_entity_2:nid'
-    type: string
-  title:
-    label: Title
-    datasource_id: 'entity:node'
-    property_path: title
-    type: string
-    dependencies:
-      module:
-        - node
+    property_path: relationship_info__relationnode__person_person
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        - field_related_entity_1
+        - field_related_entity_2
+        - field_relation_period
+        - field_relation_type
 datasource_settings:
   'entity:node':
     bundles:
@@ -67,7 +50,9 @@ processor_settings:
   custom_value: {  }
   entity_type: {  }
   language_with_fallback: {  }
-  relationship_indexer: {  }
+  relationship_indexer:
+    weights:
+      preprocess_index: 0
   rendered_item: {  }
   reverse_entity_references: {  }
   search_api_elasticsearch_client_date_range:

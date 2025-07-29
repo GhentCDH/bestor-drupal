@@ -114,7 +114,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         'type' => 'relationship_info', 
         'processor_id' => $this->getPluginId(),
         'is_list' => TRUE,
-        'definition_class' => \Drupal\relationship_nodes_search\TypedData\RelationInfoDefinition::class,
         'definition_class_settings' => [
           'bundle' => $relationship_node_type,
         ],
@@ -140,67 +139,63 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       return;
     }
 
-    if (!($entity instanceof \Drupal\Core\Entity\EntityInterface)) {
+    $item_relation_info_list = $this->infoService->relationshipInfoForRelatedItemNodeType($entity->getType());
+
+    if (!($entity instanceof \Drupal\Core\Entity\EntityInterface) || empty($item_relation_info_list)) {
       return;
     }
 
-    /** @var \Drupal\search_api\Item\FieldInterface[][] $to_extract */
-    $to_extract = [];
     $prefix = 'relationship_info__';
-    foreach ($item->getFields() as $field) {
-      
-      [$direct, $nested] = Utility::splitPropertyPath($field->getPropertyPath(), FALSE);
-      if ($field->getDatasourceId() === $item->getDatasourceId() && str_starts_with($direct, $prefix)) {
-        $relation_bundle = substr($direct, strlen($prefix));
-        $to_extract[$relation_bundle][$nested][] = $field;
-      }
-    
-    }
-
-    if (!$to_extract) {
-      return;
-    }
-
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    $related_relationships = $this->infoService->relationshipInfoForRelatedItemNodeType($entity->getType());
-    
-    foreach ($to_extract as $relation_bundle => $fields_to_extract) {
-      $relationship_info = [];
-      foreach($related_relationships as $relationship){
-        if(isset($relationship['relationship_bundle']) && $relationship['relationship_bundle'] == $relation_bundle ){
-          $relationship_info = $relationship;
-          break;
-        }
-      }
-      if($relationship_info == [] || !isset($relationship_info['join_fields']) || !is_array($relationship_info['join_fields'])){
+
+    foreach ($item->getFields() as $field) {
+      $relation_nodetype_name = $field->getPropertyPath();     
+      
+      if ($field->getDatasourceId() != $item->getDatasourceId() || !str_starts_with( $relation_nodetype_name, $prefix) || !isset($field->getConfiguration()['nested_fields'])) {
         continue;
       }
+
+      $nested_fields = $field->getConfiguration()['nested_fields'];
+      $relationship_node_type = substr($relation_nodetype_name, strlen($prefix));
+
+
+      if(!is_array($nested_fields) || empty($nested_fields) || !isset($item_relation_info_list[$relationship_node_type])){
+        continue;
+      }
+
+      $relation_info = $item_relation_info_list[$relationship_node_type];
+      $values = [];
       
-      $entity_ids = [];
-      foreach($relationship_info['join_fields'] as $join_field){
+      foreach($relation_info['join_fields'] as $join_field){
         $result = $node_storage->getQuery()
           ->accessCheck(FALSE)
-          ->condition('type', $relation_bundle)
+          ->condition('type', $relationship_node_type)
           ->condition($join_field, $entity->id())
           ->execute();
-        $entity_ids = array_merge($entity_ids, $result);
-      }
+        
+        if(empty($result)){
+          continue;
+        }
 
-      $entities = $node_storage->loadMultiple(array_unique($entity_ids));
-      if (!$entities) {
-        continue;
-      }
+        $entities = $node_storage->loadMultiple($result);
+      
+        if (!$entities) {
+          continue;
+        }
 
-      foreach ($fields_to_extract as $nested_path => $fields) {
-        foreach ($fields as $field) {
-          $values = [];
-          foreach ($entities as $related_node) {
-            $field_value = $related_node->get($nested_path)->getValue();
-            $values[] = new RelationInfoData([$nested_path => $field_value], $field->getDataDefinition());
+        
+        foreach($entities as $relationship_entity){
+          $nested_values = [];
+          foreach ($nested_fields as $nested_field){
+             // if ($relationship_entity->hasField($nested_field)) {
+                $nested_values[$nested_field] = $relationship_entity->get($nested_field)->getValue();
+            //  }
           }
-          $field->setValues($values);
+           $values[] = new RelationInfoData($nested_values, $field->getDataDefinition());
         }
       }
-    }
+      if(!empty($values)) dpm($values);
+      $field->setValues($values);
+    }  
   }
 }

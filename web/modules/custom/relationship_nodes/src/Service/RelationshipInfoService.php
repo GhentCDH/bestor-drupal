@@ -242,7 +242,7 @@ class RelationshipInfoService {
                     $relationship_node_info['this_bundle'] = $bundle;
                     $relationship_node_info['related_bundle'] =  $related_bundles[$related_entity_fields['related_entity_field_1' ]] == $bundle ? $related_bundles[$related_entity_fields['related_entity_field_2' ]] : $related_bundles[$related_entity_fields['related_entity_field_1' ]];
                     $relationship_node_info['relationship_bundle']= $bundle_name;
-                    $relationshipInfo[] = $relationship_node_info;
+                    $relationshipInfo[$bundle_name] = $relationship_node_info;
                 }      
             }
         }
