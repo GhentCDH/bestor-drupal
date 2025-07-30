@@ -74,7 +74,9 @@ services:
       xpack.security.enabled: "false"
       cluster.routing.allocation.disk.threshold_enabled: "false"
       ES_JAVA_OPTS: -Xms2g -Xmx2g
-      TAKE_FILE_OWNERSHIP: 1
+      TAKE_FILE_OWNERSHIP: 1"
+    ports:
+      - 9200:9200
     env_file:
       - dev.env
     volumes:
