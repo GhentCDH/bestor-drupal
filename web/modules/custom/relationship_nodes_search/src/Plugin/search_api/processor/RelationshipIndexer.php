@@ -99,7 +99,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $node_types_in_index = $datasource->getConfiguration()['bundles']['selected']  ?? [];
     $relationship_node_types = [];
     foreach($node_types_in_index as $node_type_in_index){
-      $related_relationships = $this->infoService->relationshipInfoForRelatedItemNodeType($node_type_in_index);
+      $related_relationships = $this->infoService->getRelationInfoForTargetBundle($node_type_in_index);
       foreach($related_relationships as $related_relationship){
         if(!in_array($related_relationship['relationship_bundle'], $relationship_node_types)){
           $relationship_node_types[] = $related_relationship['relationship_bundle'];
@@ -139,7 +139,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       return;
     }
 
-    $item_relation_info_list = $this->infoService->relationshipInfoForRelatedItemNodeType($entity->getType());
+    $item_relation_info_list = $this->infoService->getRelationInfoForTargetBundle($entity->getType());
 
     if (!($entity instanceof \Drupal\Core\Entity\EntityInterface) || empty($item_relation_info_list)) {
       return;
@@ -165,6 +165,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
 
       $relation_info = $item_relation_info_list[$relationship_node_type];
       $values = [];
+      $serialized = []; // ipv values, eenvoudiger - zonder custom typed data
       
       foreach($relation_info['join_fields'] as $join_field){
         $result = $node_storage->getQuery()
@@ -187,15 +188,17 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         foreach($entities as $relationship_entity){
           $nested_values = [];
           foreach ($nested_fields as $nested_field){
-             // if ($relationship_entity->hasField($nested_field)) {
                 $nested_values[$nested_field] = $relationship_entity->get($nested_field)->getValue();
-            //  }
           }
            $values[] = new RelationInfoData($nested_values, $field->getDataDefinition());
+           $serialized[] = $nested_values;
         }
       }
-      if(!empty($values)) dpm($values);
-      $field->setValues($values);
+      if(!empty($values)){
+        dpm($values);
+        dpm($serialized);
+      }
+      $field->setValues($serialized);
     }  
   }
 }

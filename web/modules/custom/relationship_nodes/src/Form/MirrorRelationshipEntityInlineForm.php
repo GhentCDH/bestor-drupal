@@ -19,7 +19,7 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     $entity_form = parent::entityForm($entity_form, $form_state);
     $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
 
-    if($info_service->allConfigAvailable() == false && $entity_form['#form_mode'] != $info_service->getRelationshipFormMode()) {
+    if($info_service->allConfigAvailable() == false && $entity_form['#form_mode'] != $info_service->getRelationFormMode()) {
       return $entity_form;
     }     
     $related_entity_fields = $info_service->getRelatedEntityFields();
@@ -115,7 +115,7 @@ class MirrorRelationshipEntityInlineForm extends EntityInlineForm {
     $result = '';
     $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
 
-    if($info_service->allConfigAvailable() == false && $entity_form['#form_mode'] != $info_service->getRelationshipFormMode()) {
+    if($info_service->allConfigAvailable() == false && $entity_form['#form_mode'] != $info_service->getRelationFormMode()) {
       return $result;
     }     
 

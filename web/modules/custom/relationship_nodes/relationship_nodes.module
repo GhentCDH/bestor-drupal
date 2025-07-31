@@ -15,9 +15,9 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
   \Drupal::service('relationship_nodes.relationship_field_auto_adder')->addFields($fields, $entity_type, $bundle);
    $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
   if ($entity_type->id() === 'taxonomy_term') {
-    $vocabulary_info = $info_service->relationshipTaxonomyVocabularyInfo($bundle, $fields);
-    if(isset($vocabulary_info) && isset($vocabulary_info['relationtypevocabulary']) && isset($vocabulary_info['mirrorfieldtype'])){
-      if($vocabulary_info['mirrorfieldtype'] == 'entity_reference_selfreferencing' && isset($fields[$vocabulary_info['mirrorfieldname']])){
+    $vocabulary_info = $info_service->getRelationVocabInfo($bundle, $fields);
+    if(!empty($vocabulary_info)){
+      if($vocabulary_info['mirrorfieldtype'] == 'entity_reference_selfreferencing'){
         $fields[$vocabulary_info['mirrorfieldname']]->addConstraint(Relationship_nodesAvailableMirrorTermConstraint::class);
       }
     }
@@ -28,11 +28,16 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
 
 
 function relationship_nodes_entity_bundle_info_alter(&$bundles) {
-  if (isset($bundles['node'])) {  
+    $info_service = \Drupal::service('relationship_nodes.relationship_info_service'); 
     foreach($bundles['node'] as $bundle_id => $bundle){ 
-      $bundles['node'][$bundle_id]['relationship_info_bundle'] = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipNodeInfo($bundle_id);
+      $relation_info = $info_service->getRelationBundleInfo($bundle_id);
+      if(empty($relation_info)){
+         $bundles['node'][$bundle_id]['relation_bundle'] = false;
+      } else {
+        $bundles['node'][$bundle_id]['relation_bundle'] = true;
+        $bundles['node'][$bundle_id]['relation_info'] = $relation_info;
+      }  
     }
-  }
 }
 
 
@@ -43,12 +48,12 @@ function relationship_nodes_entity_form_display_alter(EntityFormDisplay &$displa
     return;
   }
 
-  if($context['form_mode'] != $info_service->getRelationshipFormMode() || !str_starts_with($context['bundle'], $info_service->getRelationshipNodeBundlePrefix())) {
+  if($context['form_mode'] != $info_service->getRelationFormMode() || !str_starts_with($context['bundle'], $info_service->getRelationBundlePrefix())) {
     return;
   }
   
   foreach ($display->getComponents() as $field_name => $component) {
-    if ($field_name == $info_service->getRelationshipTypeField() && $component['type'] == 'options_select') {
+    if ($field_name == $info_service->getRelationTypeField() && $component['type'] == 'options_select') {
       $updated_component = $component;
       $updated_component['type'] = 'mirror_select_widget';
       $display->setComponent($field_name, $updated_component);
@@ -112,7 +117,7 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
 
 function relationship_nodes_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
   $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-  if(strpos($entity->getType(), $info_service->getRelationshipNodeBundlePrefix()) === 0) {
+  if(strpos($entity->getType(), $info_service->getRelationBundlePrefix()) === 0) {
     $related_entities = [];
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
     foreach($info_service->getRelatedEntityFields() as $related_entity_field){
@@ -266,8 +271,8 @@ function cleanEmptyRelationFields(array &$form, FormStateInterface $form_state) 
 
 
 function setMirrorTermLink($entity, $hook){
-  $relationship_type_vocabulary_info = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipTaxonomyVocabularyInfo($entity->bundle());
-  if(isset($relationship_type_vocabulary_info['relationtypevocabulary'])){
+  $relationship_type_vocabulary_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationVocabInfo($entity->bundle());
+  if(!empty($relationship_type_vocabulary_info)){
     $mirror_reference_field_type = isset($relationship_type_vocabulary_info['mirrorfieldtype']) ? $relationship_type_vocabulary_info['mirrorfieldtype'] : '';
     if($mirror_reference_field_type == 'entity_reference_selfreferencing'){
       $info_service = \Drupal::service('relationship_nodes.relationship_info_service');

@@ -5,6 +5,14 @@ services:
       - '@relationship_nodes.relationship_info_service'
   relationship_nodes.relationship_info_service:
     class: 'Drupal\relationship_nodes\Service\RelationshipInfoService'
+    arguments:
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@entity_type.bundle.info'
+  relationship_nodes.mirror_service:
+    class: 'Drupal\relationship_nodes\Service\MirrorService'
+    arguments: ['@entity_type.manager', '@relationship_nodes.relationship_info_service']
   relationship_nodes.mirror_select_widget:
     class: Drupal\relationship_nodes\Plugin\Field\FieldWidget\MirrorSelectWidget
     arguments: ['@entity_type.manager', '@config.factory']
