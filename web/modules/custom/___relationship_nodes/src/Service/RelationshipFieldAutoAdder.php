@@ -32,8 +32,7 @@ class RelationshipFieldAutoAdder {
     if ($entity_type->id() !== 'node') {
       return;
     }
-
-    $relationships = $this->relationshipInfoService->relationshipInfoForRelatedItemNodeType($bundle);
+    $relationships = $this->relationshipInfoService->getRelationInfoForTargetBundle($bundle);
 
     if (empty($relationships)) {
       return;
@@ -41,13 +40,13 @@ class RelationshipFieldAutoAdder {
 
     $bundles_involved = [];
     foreach ($relationships as $relationship) {
-      $field_name = 'computed_relationshipfield__' . $relationship['this_bundle'] . '__' . $relationship['related_bundle'];
+      $field_name = 'computed_relationshipfield__' . $bundle . '__' . implode(', ', $relationship['related_bundle']);
       $fields[$field_name] = BaseFieldDefinition::create('entity_reference')
         ->setName($field_name)
-        ->setLabel('Relationships with ' . $relationship['related_bundle'])
+        ->setLabel('Relationships with ' . implode(', ', $relationship['related_bundle']))
         ->setDescription(t('This computed field lists all the relationships between @this and @related.', [
-          '@this' => $relationship['this_bundle'],
-          '@related' => $relationship['related_bundle'],
+          '@this' => $bundle,
+          '@related' => implode(', ', $relationship['related_bundle']),
         ]))
         ->setClass(ReferencingRelationshipItemList::class)
         ->setComputed(TRUE)
@@ -57,7 +56,7 @@ class RelationshipFieldAutoAdder {
         ->setDisplayOptions('form', [
           'type' => 'ief_validated_relations_simple',
           'weight' => 0,
-          'settings' => ['form_mode' => \Drupal::service('relationship_nodes.relationship_info_service')->getRelationshipFormMode() ?? 'default'],
+          'settings' => ['form_mode' => \Drupal::service('relationship_nodes.relationship_info_service')->getRelationFormMode() ?? 'default'],
         ])
         ->setDisplayConfigurable('form', TRUE)
         ->setDisplayConfigurable('view', TRUE)
@@ -67,5 +66,8 @@ class RelationshipFieldAutoAdder {
         ->setSetting('join_field', $relationship['join_fields'])
         ->setRevisionable(FALSE);
     }
+
   }
 }
+
+

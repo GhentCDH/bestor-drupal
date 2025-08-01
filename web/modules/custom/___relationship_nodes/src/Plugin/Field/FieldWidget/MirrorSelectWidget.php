@@ -39,13 +39,15 @@ class MirrorSelectWidget extends OptionsSelectWidget {
       }
     }
 
-    if($relationship_subform === true && $form["#type"] === 'inline_entity_form' && strpos($form["#bundle"], $info_service->getRelationshipNodeBundlePrefix()) === 0){    
+    if($relationship_subform === true && $form["#type"] === 'inline_entity_form' && strpos($form["#bundle"], $info_service->getRelationBundlePrefix()) === 0){    
       $field_definition = $items->getFieldDefinition();
-      if($field_definition && $field_definition->get('field_name') && $field_definition->get('field_name') === $info_service->getRelationshipTypeField()){   
-        $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForNode($items->getEntity());
-        $current_node_join_fields = $relation_info['current_node_join_fields'];
-        if($current_node_join_fields && count($current_node_join_fields) == 1 && $current_node_join_fields[0] == $info_service->getRelatedEntityFields()['related_entity_field_2'] ){
-          $element['#options'] = $this->getMirrorOptions($element['#options'], $relation_info['general_relationship_info']);
+      if($field_definition && $field_definition->get('field_name') && $field_definition->get('field_name') === $info_service->getRelationTypeField()){   
+        $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getConnectionInfo($items->getEntity(), true);
+        if(isset($relation_info['join_field'])){
+          $join_field = $relation_info['join_field'];
+          if(is_string($join_field) && $join_field == $info_service->getRelatedEntityFields()['related_entity_field_2'] ){
+            $element['#options'] = $this->getMirrorOptions($element['#options'], $relation_info['general_relationship_info']);
+          }
         }
       }
     }
@@ -60,7 +62,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
     }
 
     $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-    if(!$info_service->allConfigAvailable() ||!is_array($relationshipnode_info) || empty($relationshipnode_info) || isset($relationshipnode_info['relationnode']) || isset($relationshipnode_info['relationtypeinfo']['relationtypefield']) || isset($relationshipnode_info['relationtypeinfo']['mirrorfieldtype'])) {
+    if(!$info_service->allConfigAvailable() ||!is_array($relationshipnode_info) || empty($relationshipnode_info) || isset($relationshipnode_info['relationtypeinfo']['relationtypefield']) || isset($relationshipnode_info['relationtypeinfo']['mirrorfieldtype'])) {
         return $options;
     } 
 
