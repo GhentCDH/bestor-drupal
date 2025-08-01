@@ -19,21 +19,26 @@ use Drupal\Core\Entity\EntityStorageInterface;
 
 
 class RelationshipInfoService {
+    protected array $fieldDefinitionsCache = [];
+
     protected ConfigFactoryInterface $configFactory;
     protected EntityTypeManagerInterface $entityTypeManager;
     protected EntityFieldManagerInterface $fieldManager;
     protected EntityTypeBundleInfoInterface $bundleInfo;
+    protected RouteMatchInterface $routeMatch;
 
     public function __construct(
         ConfigFactoryInterface $configFactory,
         EntityTypeManagerInterface $entityTypeManager,
         EntityFieldManagerInterface $fieldManager,
-        EntityTypeBundleInfoInterface $bundleInfo
+        EntityTypeBundleInfoInterface $bundleInfo,
+        RouteMatchInterface $routeMatch
     ) {
         $this->configFactory = $configFactory;
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldManager = $fieldManager;
         $this->bundleInfo = $bundleInfo;
+        $this->routeMatch = $routeMatch;
     }
 
     protected function getConfig(): ImmutableConfig {
@@ -52,6 +57,11 @@ class RelationshipInfoService {
 
     public function getRelatedEntityFields(): array {
         return $this->getConfig()->get('related_entity_fields') ?? [];
+    }
+
+    public function getRelatedEntityField(int $i): string {
+        $fields = array_values($this->getRelatedEntityFields());
+        return $fields[$i - 1] ?? '';
     }
 
     public function getRelationTypeVocabPrefixes(): array {
@@ -77,7 +87,7 @@ class RelationshipInfoService {
     public function validBasicRelationConfig(): bool{
         $bundle_prefix = $this->getRelationBundlePrefix();
         $related_fields = $this->getRelatedEntityFields();
-        if($bundle_prefix == '' || $related_fields == []){
+        if($bundle_prefix == '' || !$this->hasRequiredKeys($related_fields, ['related_entity_field_1', 'related_entity_field_2'], true)){
             return false;
         }
         return true;
@@ -151,6 +161,7 @@ class RelationshipInfoService {
 
 
         $all_bundle_fields = $this->ensureFieldDefinitions('node', $bundle, $all_bundle_fields);
+        //dpm($all_bundle_fields, 'ensr isValidRelationBundle');
 
         foreach($this->getRelatedEntityFields() as $related_entity_field){
             if(!isset($all_bundle_fields[$related_entity_field])){
@@ -175,6 +186,7 @@ class RelationshipInfoService {
             return false;
         }
         $all_bundle_fields = $this->ensureFieldDefinitions('node', $bundle, $all_bundle_fields);
+        // dpm($all_bundle_fields, 'ensr isValidTypedRelationBundle');
         $relation_field = $this->getRelationTypeField();
         $target_bundles = $this->getFieldTargetBundles($all_bundle_fields[$relation_field]);
 
@@ -202,7 +214,7 @@ class RelationshipInfoService {
         }
 
         $all_vocab_fields = $this->ensureFieldDefinitions('taxonomy_term', $vocab, $all_vocab_fields);
-
+//dpm($all_vocab_fields, 'ensr getRelationVocabType');
         $mirror_fields_config = $this->getMirrorFields();
         $mirror_reference_field = $mirror_fields_config['mirror_reference_field'];
         $mirror_string_field = $mirror_fields_config['mirror_string_field'];
@@ -236,7 +248,7 @@ class RelationshipInfoService {
     $info = [];
 
     $all_bundle_fields = $this->ensureFieldDefinitions('node', $bundle, $all_bundle_fields);
-
+   // dpm($all_bundle_fields, 'ensr getRelationBundleInfo');
     if (!$this->isValidRelationBundle($bundle, $all_bundle_fields)) {
         return $info;
     }
@@ -244,12 +256,12 @@ class RelationshipInfoService {
     $related_bundles = [];
 
     foreach ($this->getRelatedEntityFields() as $field_name) {
-        $related_bundles[$field_name] = $this->getFieldTargetBundles($all_bundle_fields[$field_name])[0];
+        $related_bundles[$field_name] = $this->getFieldTargetBundles($all_bundle_fields[$field_name]);
     }
 
     $info = [
         'related_bundles_per_field' => $related_bundles,
-        'includes_relationtype' => false
+        'has_relationtype' => false
     ];
     
     if(!$this->isValidTypedRelationBundle($bundle, $all_bundle_fields)){
@@ -262,7 +274,7 @@ class RelationshipInfoService {
         return $info;
     }           
 
-    $info['includes_relationtype'] = true;
+    $info['has_relationtype'] = true;
     $info['relationtypeinfo'] = $vocab_info;
     $info['relationtypeinfo']['vocabulary'] = $vocab;
                 
@@ -294,10 +306,10 @@ class RelationshipInfoService {
 
 
   
-    function getRelationInfoForTargetBundle(string $bundle): array { 
+    public function getRelationInfoForTargetBundle(string $bundle): array { 
 
         $relation_bundles = $this->getAllRelationBundles();
-        $all_bundles_info = \Drupal::service("entity_type.bundle.info")->getBundleInfo('node');
+        $all_bundles_info = $this->bundleInfo->getBundleInfo('node');
         $info_array = [];
         foreach($relation_bundles as $relation_bundle){
             if (!isset($all_bundles_info[$relation_bundle]['related_bundles_per_field'])) {
@@ -306,20 +318,20 @@ class RelationshipInfoService {
             $bundle_info = $all_bundles_info[$relation_bundle];
             $related_bundles_per_field = $bundle_info['related_bundles_per_field'];
             $join_fields = [];
-            $other_bundle = '';
+            $other_bundles = [];
             $relation_info = [];
-            foreach($related_bundles_per_field as $field => $related_bundle){
-                if($related_bundle == $bundle){
+            foreach($related_bundles_per_field as $field => $related_bundles){
+                if(in_array($bundle, $related_bundles)){
                     $join_fields[] = $field; 
                 } else {
-                    $other_bundle = $related_bundle;
+                    $other_bundles = $related_bundles;
                 }
             } 
             if (empty($join_fields)) {
                 continue;
             }
             $relation_info['join_fields'] = $join_fields;
-            $relation_info['related_bundle'] =  $other_bundle;
+            $relation_info['related_bundle'] =  $other_bundles;
             $relation_info['relationship_bundle']= $relation_bundle;
 
             $info_array[$relation_bundle] =  $relation_info;
@@ -329,56 +341,64 @@ class RelationshipInfoService {
     }
 
 
-    /**
-     * 
-     * Deze functie checkt of een relatie node (input) een join field heeft met de huidige node / een opgegeven nid en geeft terug welke.
-     */
-    function getRelationInfoForNode(Node $relationship_node, ?int $target_nid = NULL, bool $current = true): array {
-        $node_info = $this->getRelationBundleInfo($relationship_node->getType());
- 
-        if(!$relationship_node->id() ||  $this->allConfigAvailable() === false|| !isset($node_info['relationnode']) || !$node_info['relationnode']){
+    public function getConnectionInfo(Node $relation_node, bool $current = true, ?Node $target_node = NULL): array {
+        if(($current && $target_node != null) || (!$current && $target_node == null)){
             return [];
         }
-        $related_fields = $this->getRelatedEntityFields();
-        $joinFields = [];
-        $status = '';
-        if ($target_nid === NULL) {
-            $current_node = \Drupal::routeMatch()->getParameter('node');
-        } else {
-            $current_node = \Drupal::entityTypeManager()->getStorage('node')->load($target_nid);
+
+        if(!$this->isValidRelationBundle($relation_node->getType())){
+            return [];
+        }
+
+        if($current == true){
+            $target_node = $this->routeMatch->getParameter('node');
         }
         
-        if (!($current_node instanceof Node && in_array( $current_node->getType(), $node_info['related_entity_fields']))) {
-          return [];
+        if(!($target_node instanceof Node)){
+            return [];
+        }
+        
+        $relation_info =$this->getRelationBundleInfo($relation_node->getType());
+        
+        if(empty($relation_info)){
+            return [];
         }
 
-        $related_entity_field_1 = $related_fields['related_entity_field_1'];
-        $related_entity_field_2 = $related_fields['related_entity_field_2'];
-        $referenced_entity_1 = $relationship_node->get($related_entity_field_1)->referencedEntities();
-        $referenced_entity_2 = $relationship_node->get($related_entity_field_2)->referencedEntities();
-        $related_entity_value_1 = isset($referenced_entity_1[0]) ? $referenced_entity_1[0]->id() : null;
-        $related_entity_value_2 =  isset($referenced_entity_2[0]) ? $referenced_entity_2[0]->id() : null;
-
-        if($current_node->id() == $related_entity_value_1){
-            $joinFields[] = $related_entity_field_1;
-        } 
-        if($current_node->id() == $related_entity_value_2){
-            $joinFields[] = $related_entity_field_2;
-        }
-
-        if(count($joinFields) === 1){
-            $status = 'Existing';
-        } elseif (count($joinFields) == 2){
-            $status = 'Error: both related entities are the same.';
-        } elseif (count($joinFields) == 0){
-            if(is_null($related_entity_value_1) && is_null($related_entity_value_2)){
-                $status = 'New';
-            } else {
-                $status = 'Error: unrelated relationship node';
+        $join_fields = [];
+        foreach($this->getRelatedEntityFields() as $related_entity_field){
+            if(!in_array($target_node->getType(), $relation_info['related_bundles_per_field'][$related_entity_field])){
+                continue;
             }
+            $referenced_entities = $relation_node->get($related_entity_field)->referencedEntities() ?? [];
+            if(empty($referenced_entities) || !in_array($target_node, $referenced_entities)){
+                continue;
+            }
+            $join_fields[] = $related_entity_field;
         }
-        return  ['current_node_join_fields' => $joinFields, 'relationship_node_status' => $status, 'general_relationship_info' => $node_info];
+
+        $result = [];
+
+        switch(count($join_fields)){
+            case 0:
+                $result = [
+                    'relation_state' => 'unrelated',
+                ];
+                break;
+            case 1:
+                $result = [
+                    'relation_state' => 'related',
+                    'join_field' => $join_fields[0],
+                    'relation_info' => $relation_info,
+                ];
+                break;
+            default: 
+                $result = [];
+        }
+        return $result;
     }
+
+
+
 
     protected function getFieldDefinitions(string $entityType, string $bundle): array {
         return $this->fieldManager->getFieldDefinitions($entityType, $bundle);
@@ -393,16 +413,22 @@ class RelationshipInfoService {
             return [];
         }
         $settings = $field_config->getSettings();
-        if(empty($settings['handler_settings']['target_bundles'])){
-            return [];
-        }
-        $target_bundles = $settings['handler_settings']['target_bundles'] ?? [];
+        $handler_settings = $settings['handler_settings'] ?? [];
+        $target_bundles = $handler_settings['target_bundles'] ?? [];
         
         return is_array($target_bundles) ? $target_bundles : [];
     }
 
     protected function ensureFieldDefinitions(string $entity_type, string $bundle, array $fields): array {
-        return empty($fields) ? $this->getFieldDefinitions($entity_type, $bundle) : $fields;
+        //dpm($this->getFieldDefinitions($entity_type, $bundle), 'def ensure');
+         if (!empty($fields)) {
+            return $fields;
+        }
+        $cache_key = $entity_type . '::' . $bundle;
+        if (!isset($this->fieldDefinitionsCache[$cache_key])) {
+            $this->fieldDefinitionsCache[$cache_key] = $this->getFieldDefinitions($entity_type, $bundle);
+        }
+        return $this->fieldDefinitionsCache[$cache_key];
     }
 
 }

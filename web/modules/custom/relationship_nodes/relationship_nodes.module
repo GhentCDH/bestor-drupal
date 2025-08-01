@@ -30,12 +30,12 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
 function relationship_nodes_entity_bundle_info_alter(&$bundles) {
     $info_service = \Drupal::service('relationship_nodes.relationship_info_service'); 
     foreach($bundles['node'] as $bundle_id => $bundle){ 
-      $relation_info = $info_service->getRelationBundleInfo($bundle_id);
+      //$relation_info = $info_service->getRelationBundleInfo($bundle_id);
       if(empty($relation_info)){
-         $bundles['node'][$bundle_id]['relation_bundle'] = false;
+         //$bundles['node'][$bundle_id]['relation_bundle'] = false;
       } else {
-        $bundles['node'][$bundle_id]['relation_bundle'] = true;
-        $bundles['node'][$bundle_id]['relation_info'] = $relation_info;
+        //$bundles['node'][$bundle_id]['relation_bundle'] = true;
+       // $bundles['node'][$bundle_id]['relation_info'] = $relation_info;
       }  
     }
 }
