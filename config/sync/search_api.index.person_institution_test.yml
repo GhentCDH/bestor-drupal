@@ -7,7 +7,6 @@ dependencies:
     - search_api.server.bestor_elastic_docker
   module:
     - node
-    - relationship_nodes_search
     - search_api_elasticsearch_client
 id: person_institution_test
 name: 'person institution test'
@@ -22,27 +21,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_alternative_name
-  relationship_info__relationnode__person_institut__nested:
-    label: 'Related nodes of type relationnode__person_institut'
-    datasource_id: 'entity:node'
-    property_path: relationship_info__relationnode__person_institut
-    type: relationship_nodes_search_nested_relationship
-    configuration:
-      nested_fields:
-        - field_related_entity_1
-        - field_related_entity_2
-        - field_relation_type
-  relationship_info__relationnode__person_person__nested:
-    label: 'Related nodes of type relationnode__person_person'
-    datasource_id: 'entity:node'
-    property_path: relationship_info__relationnode__person_person
-    type: search_api_elasticsearch_client_object
-    configuration:
-      nested_fields:
-        - field_related_entity_1
-        - field_related_entity_2
-        - field_relation_period
-        - field_relation_type
 datasource_settings:
   'entity:node':
     bundles:
@@ -59,9 +37,6 @@ processor_settings:
   custom_value: {  }
   entity_type: {  }
   language_with_fallback: {  }
-  relationship_indexer:
-    weights:
-      preprocess_index: 0
   rendered_item: {  }
   reverse_entity_references: {  }
   search_api_elasticsearch_client_date_range:

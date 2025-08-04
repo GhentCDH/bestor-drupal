@@ -7,6 +7,5 @@ dependencies:
   - drupal:node
   - drupal:field
   - drupal:views
+  - entity_events:entity_events
   - inline_entity_form:inline_entity_form
-services:
-  file: relationship_nodes.services.yml

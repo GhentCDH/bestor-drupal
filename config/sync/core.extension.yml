@@ -25,6 +25,7 @@ module:
   ds: 0
   dynamic_page_cache: 0
   editor: 0
+  entity_events: 0
   entity_reference_modal: 0
   entity_reference_revisions: 0
   facets: 0

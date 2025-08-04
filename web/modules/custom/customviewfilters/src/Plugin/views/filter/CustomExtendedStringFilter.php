@@ -85,11 +85,15 @@ class CustomExtendedStringFilter extends StringEntity {
       }
     }
 
-    $relationship_nodes = \Drupal::service('relationship_nodes.relationship_info_service')->relationshipInfoForRelatedItemNodeType($value);
+    $relationship_nodes = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForTargetBundle($value);
     if (is_array($relationship_nodes) && !empty($relationship_nodes)) {
       foreach($relationship_nodes as $relationship_node) {
-        if (isset($relationship_node['relationtypeinfo']) && is_array($relationship_node['relationtypeinfo']) && isset($relationship_node['relationtypeinfo']['vocabulary']) && $relationship_node['relationtypeinfo']['vocabulary'] != ''){
-           $matching_vids[($relationship_node['relationtypeinfo']['vocabulary'])] = $relationship_node['relationtypeinfo']['vocabulary'];
+        if (isset($relationship_node['relation_bundle_info']) && is_array($relationship_node['relation_bundle_info']) && $relationship_node['relation_bundle_info']['has_relationtype']){
+          $vocab =  $relationship_node['relation_bundle_info']['relationtypeinfo']['vocabulary'];
+          if(!empty($vocab)){
+             $matching_vids[$vocab] = $vocab;
+          }
+         
         }
       }
     }

@@ -5,8 +5,32 @@ services:
       - '@relationship_nodes.relationship_info_service'
   relationship_nodes.relationship_info_service:
     class: 'Drupal\relationship_nodes\Service\RelationshipInfoService'
+    arguments:
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@entity_type.bundle.info'
+      - '@current_route_match' 
+  relationship_nodes.relation_sync_service:
+    class: Drupal\relationship_nodes\Service\RelationSyncService
+    arguments: 
+      - '@entity_type.manager'
+      - '@relationship_nodes.relationship_info_service'
+  relationship_nodes.mirror_service:
+    class: Drupal\relationship_nodes\Service\MirrorService
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.relationship_info_service'
+  relationship_nodes.mirror_term_event_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\MirrorTermEventSubscriber
+    arguments: 
+      - '@relationship_nodes.mirror_service'
+    tags:
+      - { name: event_subscriber }
   relationship_nodes.mirror_select_widget:
     class: Drupal\relationship_nodes\Plugin\Field\FieldWidget\MirrorSelectWidget
-    arguments: ['@entity_type.manager', '@config.factory']
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
     tags:
       - { name: field_widget, id: mirror_select_widget }

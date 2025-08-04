@@ -29,19 +29,36 @@ class ReferencingRelationshipItemList extends EntityReferenceFieldItemList {
   /**
    * {@inheritdoc}
    */
-  protected function computeValue() {
-    $related_nodes = self::getRelations($this);
-    if(count( $related_nodes) > 0) {
-      $delta = 0;
-      foreach ($related_nodes as $target_id =>  $related_node) {
-        $this->list[$delta] = $this->createItem($delta, ['target_id' => $target_id, 'entity' => $related_node]);
-        $delta++;
-
-      }     
+  protected function computeValue() : void {
+    dpm($this->getParent()->getEntity(), 'this');
+    $current_node = $this->getParent()->getEntity() ?? null;
+    if(!($current_node instanceof Node)){
+      return;
     }
+    $relation_bundle = $this->definition['bundle'] ?? '';
+    if(empty($relation_bundle)){
+      return;
+    }
+    $join_fields = $this->getSettings()['join_field'] ?? [];
+    if(empty($join_fields)){
+      return;
+    }
+    $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
+    $related_nodes = $info_service->getReferencingRelations($current_node, $relation_bundle, $join_fields) ?? [];
+    if(empty($related_nodes)){
+      return;
+    }
+
+    $delta = 0;
+    foreach ($related_nodes as $target_id => $related_node) {
+      $this->list[$delta] = $this->createItem($delta, ['target_id' => $target_id, 'entity' => $related_node]);
+      $delta++;
+    }     
   }   
   
 
+
+  // ONDERSTRAANDE MOET ZEKER NOG WEGGEWERKT WORDEN
   /**
    *
    * @param Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList $ReferencingRelationshipItemList

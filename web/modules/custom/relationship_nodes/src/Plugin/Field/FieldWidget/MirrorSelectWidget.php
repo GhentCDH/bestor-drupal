@@ -39,17 +39,19 @@ class MirrorSelectWidget extends OptionsSelectWidget {
       }
     }
 
-    if($relationship_subform === true && $form["#type"] === 'inline_entity_form' && strpos($form["#bundle"], $info_service->getRelationshipNodeBundlePrefix()) === 0){    
+    if($relationship_subform === true && $form["#type"] === 'inline_entity_form' && strpos($form["#bundle"], $info_service->getRelationBundlePrefix()) === 0){    
       $field_definition = $items->getFieldDefinition();
-      if($field_definition && $field_definition->get('field_name') && $field_definition->get('field_name') === $info_service->getRelationshipTypeField()){   
-        $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForNode($items->getEntity());
-        $current_node_join_fields = $relation_info['current_node_join_fields'];
-        if($current_node_join_fields && count($current_node_join_fields) == 1 && $current_node_join_fields[0] == $info_service->getRelatedEntityFields()['related_entity_field_2'] ){
-          $element['#options'] = $this->getMirrorOptions($element['#options'], $relation_info['general_relationship_info']);
+      if($field_definition && $field_definition->get('field_name') && $field_definition->get('field_name') === $info_service->getRelationTypeField()){   
+        $relation_info = \Drupal::service('relationship_nodes.relationship_info_service')->getEntityConnectionInfo($items->getEntity());
+        if(empty($relation_info['join_fields'])){
+          return $element;
+        }
+        $join_fields = $relation_info['join_fields'];
+        if(count($join_fields) == 1 && $join_fields[0] == $info_service->getRelatedEntityFields(2)){
+          $element['#options'] = $this->getMirrorOptions($element['#options'], $relation_info['relation_info']);
         }
       }
     }
-
     return $element;
   }
 
@@ -60,17 +62,17 @@ class MirrorSelectWidget extends OptionsSelectWidget {
     }
 
     $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-    if(!$info_service->allConfigAvailable() ||!is_array($relationshipnode_info) || empty($relationshipnode_info) || isset($relationshipnode_info['relationnode']) || isset($relationshipnode_info['relationtypeinfo']['relationtypefield']) || isset($relationshipnode_info['relationtypeinfo']['mirrorfieldtype'])) {
+    if(!$info_service->allConfigAvailable() ||!is_array($relationshipnode_info) || empty($relationshipnode_info) || !empty($relationshipnode_info['relationtypeinfo'])) {
         return $options;
     } 
 
     $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $mirror_reference_field = $info_service->getMirrorFields()['mirror_reference_field'];
-    $mirror_string_field = $info_service->getMirrorFields()['mirror_string_field'];
+    $mirror_reference_field = $info_service->getMirrorFields('reference');
+    $mirror_string_field = $info_service->getMirrorFields()['string'];
     foreach ($options as $term_id => $term_name) {
       $term = $taxonomy_storage->load($term_id);
       if($term){
-        switch($relationshipnode_info['relationtypeinfo']['mirrorfieldtype']){
+        switch($relationshipnode_info['relationtypeinfo']['mirror_field_type']){
           case 'entity_reference_selfreferencing':
             if($term->get($mirror_reference_field)->target_id != null){
               $options[$term_id] =  $taxonomy_storage->load($term->get($mirror_reference_field)->target_id)->getName();
