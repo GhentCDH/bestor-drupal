@@ -2,18 +2,18 @@
 
 namespace Drupal\relationship_nodes\EventSubscriber;
 
+use Drupal\entity_events\EntityEventType;
+use Drupal\entity_events\Event\EntityEvent;
+use Drupal\relationship_nodes\Service\MirrorTermAutoUpdater;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\relationship_nodes\Service\MirrorService;
-use Drupal\entity_events\Event\EntityEvent;
-use Drupal\entity_events\EntityEventType;
 
 class MirrorTermEventSubscriber implements EventSubscriberInterface {
 
-  protected MirrorService $mirrorService;
+  protected MirrorTermAutoUpdater $mirrorUpdater;
 
-  public function __construct(MirrorService $mirrorService) {
-    $this->mirrorService = $mirrorService;
+  public function __construct(MirrorTermAutoUpdater $mirrorUpdater) {
+    $this->mirrorUpdater = $mirrorUpdater;
   }
 
   public static function getSubscribedEvents(): array {
@@ -28,7 +28,7 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
   public function addMirrorLogic(EntityEvent $event, string $event_name): void {
     $entity = $event->getEntity();
     if ($entity instanceof TermInterface) {
-      $this->mirrorService->setMirrorTermLink($entity, $this->mapEventNameToHook($event_name));
+      $this->mirrorUpdater->setMirrorTermLink($entity, $this->mapEventNameToHook($event_name));
     }
   }
 

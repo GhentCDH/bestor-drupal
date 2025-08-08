@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraint;
  * Provides a Custom Desk Constraint.
  *
  * @Constraint(
- *   id = "Relationship_nodesAvailableMirrorTermConstraint",
+ *   id = "available_mirror_term_constraint",
  *   label = @Translation("Term Mirror Validation", context = "Validation"),
  * )
  */

@@ -6,7 +6,7 @@ use Drupal\search_api\Form\IndexAddFieldsForm;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Utility\Utility;
-use Drupal\relationship_nodes\Service\RelationshipInfoService;
+use Drupal\relationship_nodes\Service\ConfigManager;
 
 class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
@@ -23,7 +23,7 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
     $rows = parent::getPropertiesList($properties, $active_property_path, $base_url, $datasource_id, $parent_path, $label_prefix, $depth, $rows);
     $remove_add_button = [];
-    $related_entity_fields = \Drupal::service('relationship_nodes.relationship_info_service')->getRelatedEntityFields();
+    $related_entity_fields = \Drupal::service('relationship_nodes.config_manager')->getRelatedEntityFields();
     foreach ($rows as $key => &$row) {
       $machine_name = $row['machine_name']['data'] ?? '';
 

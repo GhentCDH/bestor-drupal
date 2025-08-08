@@ -2,15 +2,12 @@
 
 namespace Drupal\relationship_nodes\Form;
 
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\inline_entity_form\Form\EntityInlineForm;
 use Drupal\node\Entity\Node;
+use Drupal\relationship_nodes\Service\ConfigManager;
 use Drupal\relationship_nodes\Service\RelationSyncService;
 use Drupal\relationship_nodes\Service\RelationshipInfoService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,42 +19,23 @@ class RelationExtendedEntityInlineForm extends EntityInlineForm {
   protected RouteMatchInterface $routeMatch;
   protected RelationshipInfoService $infoService;
   protected RelationSyncService $syncService;
-  
-  public function __construct(
-    EntityFieldManagerInterface $entity_field_manager,
-    EntityTypeManagerInterface $entity_type_manager,
-    ModuleHandlerInterface $module_handler,
-    EntityTypeInterface $entity_type,
-    ThemeManagerInterface $theme_manager,
-    RouteMatchInterface $routeMatch,
-    RelationshipInfoService $infoService,
-    RelationSyncService $syncService
-  ) {
-    parent::__construct($entity_field_manager, $entity_type_manager, $module_handler, $entity_type, $theme_manager);
-      $this->routeMatch = $routeMatch;
-      $this->infoService = $infoService;
-      $this->syncService = $syncService;
-  }
+  protected ConfigManager $configManager;
 
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
-    return new static(
-      $container->get('entity_field.manager'),
-      $container->get('entity_type.manager'),
-      $container->get('module_handler'),
-      $entity_type,
-      $container->get('theme.manager'),
-      $container->get('current_route_match'),
-      $container->get('relationship_nodes.relationship_info_service'),
-      $container->get('relationship_nodes.relation_sync_service')
-    );
-  }
+    $instance = parent::createInstance($container, $entity_type);
+    $instance->routeMatch = $container->get('current_route_match');
+    $instance->infoService = $container->get('relationship_nodes.relationship_info_service');
+    $instance->syncService = $container->get('relationship_nodes.relation_sync_service');
+    $instance->configManager = $container->get('relationship_nodes.config_manager');
 
+    return $instance;
+  }
 
 
   public function entityForm(array $entity_form, FormStateInterface $form_state) {
     $entity_form = parent::entityForm($entity_form, $form_state);
     
-    if($entity_form['#form_mode'] != $this->infoService->getRelationFormMode()){
+    if($entity_form['#form_mode'] != $this->configManager->getRelationFormMode()){
       return $entity_form;
     } 
 
@@ -67,7 +45,6 @@ class RelationExtendedEntityInlineForm extends EntityInlineForm {
       $entity_form[$foreign_key]['#attributes']['hidden'] = 'hidden';
       $entity_form['#rn__foreign_key'] = $foreign_key;
     }
-
     return $entity_form;
   }
 
@@ -102,7 +79,7 @@ class RelationExtendedEntityInlineForm extends EntityInlineForm {
       return;
     }
 
-    $relation_node->set($foreign_key, $current_node->id());     
+    $relation_node->set($foreign_key, $current_node->id());
   }
 
 }

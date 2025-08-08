@@ -2,35 +2,75 @@ services:
   relationship_nodes.relationship_field_auto_adder:
     class: Drupal\relationship_nodes\Service\RelationshipFieldAutoAdder
     arguments:
+      - '@relationship_nodes.config_manager'
       - '@relationship_nodes.relationship_info_service'
   relationship_nodes.relationship_info_service:
-    class: 'Drupal\relationship_nodes\Service\RelationshipInfoService'
+    class: Drupal\relationship_nodes\Service\RelationshipInfoService
     arguments:
-      - '@config.factory'
       - '@entity_type.manager'
       - '@entity_field.manager'
       - '@entity_type.bundle.info'
       - '@current_route_match' 
+      - '@relationship_nodes.config_manager'
+      - '@relationship_nodes.relation_entity_validator'
+      - '@relationship_nodes.reference_field_helper'
   relationship_nodes.relation_sync_service:
     class: Drupal\relationship_nodes\Service\RelationSyncService
     arguments: 
       - '@entity_type.manager'
       - '@relationship_nodes.relationship_info_service'
-  relationship_nodes.mirror_service:
-    class: Drupal\relationship_nodes\Service\MirrorService
+      - '@relationship_nodes.reference_field_helper'
+  relationship_nodes.mirroring_service:
+    class: Drupal\relationship_nodes\Service\MirroringService
+    arguments: 
+      - '@entity_type.manager'
+      - '@relationship_nodes.config_manager'
+      - '@relationship_nodes.relation_entity_validator'
+      - '@relationship_nodes.relationship_info_service'
+  relationship_nodes.mirror_term_auto_updater:
+    class: Drupal\relationship_nodes\Service\MirrorTermAutoUpdater
     arguments:
       - '@entity_type.manager'
+      - '@relationship_nodes.config_manager'
       - '@relationship_nodes.relationship_info_service'
+  relationship_nodes.relation_sanitizer:
+    class: Drupal\relationship_nodes\Service\RelationSanitizer
+    arguments:
+      - '@entity_type.manager'
+      - '@current_route_match' 
+      - '@relationship_nodes.config_manager'
+      - '@relationship_nodes.relation_entity_validator'
+      - '@relationship_nodes.relationship_info_service'
+      - '@relationship_nodes.reference_field_helper'
+  relationship_nodes.config_manager:
+    class: Drupal\relationship_nodes\Service\ConfigManager
+    arguments:
+      - '@config.factory'
+  relationship_nodes.relation_entity_validator:
+    class: Drupal\relationship_nodes\Service\RelationEntityValidator
+    arguments:
+      - '@entity_field.manager'
+      - '@relationship_nodes.config_manager'
+      - '@relationship_nodes.reference_field_helper'
+  relationship_nodes.reference_field_helper:
+    class: Drupal\relationship_nodes\Service\ReferenceFieldHelper
+  relationship_nodes.delete_target_node_event_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\DeleteTargetNodeEventSubscriber
+    arguments: 
+      - '@relationship_nodes.relationship_info_service'
+      - '@relationship_nodes.relation_sync_service'
+    tags:
+      - { name: event_subscriber }
   relationship_nodes.mirror_term_event_subscriber:
     class: Drupal\relationship_nodes\EventSubscriber\MirrorTermEventSubscriber
     arguments: 
-      - '@relationship_nodes.mirror_service'
+      - '@relationship_nodes.mirror_term_auto_updater'
     tags:
       - { name: event_subscriber }
-  relationship_nodes.mirror_select_widget:
-    class: Drupal\relationship_nodes\Plugin\Field\FieldWidget\MirrorSelectWidget
-    arguments:
-      - '@entity_type.manager'
-      - '@config.factory'
+  relationship_nodes.set_relation_title_event_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\SetRelationTitleEventSubscriber
+    arguments: 
+      - '@relationship_nodes.relation_entity_validator'
+      - '@relationship_nodes.relation_sanitizer'
     tags:
-      - { name: field_widget, id: mirror_select_widget }
+      - { name: event_subscriber }

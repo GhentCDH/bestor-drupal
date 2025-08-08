@@ -7,14 +7,19 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
+use Drupal\relationship_nodes\Service\ConfigManager;
 use Drupal\relationship_nodes\Service\RelationshipInfoService;
 
 
 class RelationshipFieldAutoAdder {
 
+    
+  protected ConfigManager $configManager;
   protected RelationshipInfoService $infoService;
+
   
-  public function __construct(RelationshipInfoService $infoService) {
+  public function __construct(ConfigManager $configManager, RelationshipInfoService $infoService) {
+    $this->configManager = $configManager;
     $this->infoService = $infoService;
   }
 
@@ -48,7 +53,7 @@ class RelationshipFieldAutoAdder {
         ->setDisplayOptions('form', [
           'type' => 'ief_validated_relations_simple',
           'weight' => 0,
-          'settings' => ['form_mode' => $this->infoService->getRelationFormMode() ?? 'default'],
+          'settings' => ['form_mode' => $this->configManager->getRelationFormMode() ?? 'default'],
         ])
         ->setDisplayConfigurable('form', TRUE)
         ->setDisplayConfigurable('view', TRUE)

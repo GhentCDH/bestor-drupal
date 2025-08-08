@@ -20,20 +20,25 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
     $vocab_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationVocabInfo($bundle, $fields);
     if(!empty($vocab_info)){
       if($vocab_info['mirror_field_type'] == 'entity_reference_selfreferencing' && isset($fields[$vocab_info['mirror_field_name']])){
-        $fields[$vocab_info['mirror_field_name']]->addConstraint(Relationship_nodesAvailableMirrorTermConstraint::class);
+        $fields[$vocab_info['mirror_field_name']]->addConstraint(available_mirror_term_constraint::class);
       }
     }
   }
   return $fields;
 } 
 
+function relationship_nodes_entity_type_alter(array &$entity_types) {
+  if (isset($entity_types['node'])) {
+    $entity_types['node']->addConstraint(valid_related_entities_constraint::class);
+  }
+}
 
 function relationship_nodes_entity_bundle_info_alter(&$bundles) {
   $relation_bundles = [];
   if (isset($bundles['node'])) {  
-    $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
+    $relation_entity_validator = \Drupal::service('relationship_nodes.relation_entity_validator');
     foreach($bundles['node'] as $bundle_id => $bundle){ 
-      if(!$info_service->isValidRelationBundle($bundle_id, [], true)){
+      if(!$relation_entity_validator->isValidRelationBundle($bundle_id, [], true)){
         $bundles['node'][$bundle_id]['relation_bundle'] = [];
         continue;
       } 
@@ -41,6 +46,7 @@ function relationship_nodes_entity_bundle_info_alter(&$bundles) {
     }
   }
   if(!empty($relation_bundles)){
+    $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
     foreach($relation_bundles as $relation_bundle_id){
       $bundles['node'][$relation_bundle_id]['relation_bundle'] = $info_service->getRelationBundleInfo($relation_bundle_id);
     }
@@ -55,56 +61,22 @@ function relationship_nodes_entity_type_build(array &$entity_types) {
 }
 
 
-function relationship_nodes_node_presave(EntityInterface $entity) {
-  $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
-  if($info_service->isValidRelationBundle($entity->getType())) {
-    $related_entities = [];
-    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    foreach($info_service->getRelatedEntityFields() as $related_entity_field){
-      if($entity->hasField($related_entity_field) && !empty($entity->get($related_entity_field)->target_id)){
-        $related_entities[] = $node_storage->load($entity->$related_entity_field->target_id)->getTitle() ;
-      }
-    }
-    $entity->set('title','Relationship ' . implode(' - ', $related_entities));
-  }
-}
-
-
 function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state) {
-  $form_object = $form_state->getFormObject();
-  if(!$form_object instanceof EntityForm || $form_state->getBuildInfo()['base_form_id'] != 'node_form'){
+  $sync_service = \Drupal::service('relationship_nodes.relation_sync_service');
+  $entity = $sync_service->getParentFormEntity($form_state);
+  if(!$entity){
     return;
   }
-  $form_entity = $form_object->getEntity();
-  if(!$form_entity instanceof EntityInterface){
+  $relation_subforms = $sync_service->getRelationSubformFields($form_state);
+  if(empty($relation_subforms)){
     return;
   }
-  $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
-  if(!is_array($ief_widget_state) || empty($ief_widget_state)){
-    return;
-  }
-  $relationship_iefs = false;
-  foreach($ief_widget_state as $field_name => $form_data){
-    if(!str_starts_with($field_name, 'computed_relationshipfield__')){
-      continue;
-    }
-    $relationship_iefs = true;   
-    $i = 0;
-    for($form[$field_name]['widget']; isset($form[$field_name]['widget'][$i]); $i++){
-      if(!isset($form[$field_name]['widget'][$i]['inline_entity_form'])) {
-        continue;
-      }
-      $form[$field_name]['widget'][$i]['inline_entity_form']['#rn__parent_field'] = $field_name;
-    } 
-  }
-  if(!$relationship_iefs) {
-    return;
-  } 
+  $sync_service->addParentFieldConfig($form, $relation_subforms);
   $form['actions']['submit']['#submit'][] = 'handle_relations';
-  if($form_entity->isNew()){
+  if ($entity->isNew()) {
     ElementSubmit::attach($form, $form_state);
     $form['#ief_element_submit'][] = [RelationSyncService::class, 'registerCreatedRelations'];
-  }  
+  }    
 }
 
 

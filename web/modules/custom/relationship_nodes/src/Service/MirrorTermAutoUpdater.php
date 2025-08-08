@@ -4,15 +4,19 @@ namespace Drupal\relationship_nodes\Service;
 
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\relationship_nodes\Service\ConfigManager;
 use Drupal\relationship_nodes\Service\RelationshipInfoService;
 
-class MirrorService {
+class MirrorTermAutoUpdater {
 
     protected EntityTypeManagerInterface $entityTypeManager;
+    protected ConfigManager $configManager;
     protected RelationshipInfoService $infoService;
+
   
-    public function __construct(EntityTypeManagerInterface $entityTypeManager, RelationshipInfoService $infoService) {
+    public function __construct(EntityTypeManagerInterface $entityTypeManager, ConfigManager $configManager, RelationshipInfoService $infoService) {
         $this->entityTypeManager = $entityTypeManager;
+        $this->configManager = $configManager;
         $this->infoService = $infoService;
     }
 
@@ -21,7 +25,7 @@ class MirrorService {
         if(empty($vocab_info) || empty($vocab_info['mirror_field_name'])){
             return null;
         }
-        if($vocab_info['mirror_field_name'] !== $this->infoService->getMirrorFields('reference')){
+        if($vocab_info['mirror_field_name'] !== $this->configManager->getMirrorFields('reference')){
             return null;
         }
         return $vocab_info['mirror_field_name'];
@@ -37,7 +41,7 @@ class MirrorService {
         return $term->$field->target_id ?? null;
     }
 
-    public function getMirrorTermChanges(TermInterface $term, string $field): ?array{
+    private function getMirrorTermChanges(TermInterface $term, string $field): ?array{
         $orig_id = $this->getMirrorTermId($term, $field, true) ?? null;
         $current_id = $this->getMirrorTermId($term, $field) ?? null;
         return $orig_id === $current_id ? null : ['original'=> $orig_id, 'current'=> $current_id];
@@ -50,7 +54,7 @@ class MirrorService {
     }
 
 
-    function setMirrorTermLink(TermInterface $term, string $hook): void {
+    public function setMirrorTermLink(TermInterface $term, string $hook): void {
         $ref_field = $this->getMirrorReferenceField($term);      
         if(!$ref_field){
             return;
@@ -77,8 +81,7 @@ class MirrorService {
             } elseif ($hook !== 'delete') {
                 $linked_term->$ref_field->target_id = $term_id;
             }
-            $linked_term->save();
-            
+            $linked_term->save();        
         }
     }
 }
