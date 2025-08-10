@@ -28,10 +28,9 @@ class RelationSyncService {
         $this->referenceFieldHelper = $referenceFieldHelper;
     }
 
-
+    // ONDERSTAANDE PROBEREN AFSTEMMEN OP HET NORMALE ZETTEN VAN VELDWAARDEN VAN DE MODULE. Refs
 
     public static function registerCreatedRelations(array &$form, FormStateInterface $form_state): void {
-      dpm('register start')  ;
       $updated_ids = [];
         $parent_entity = $form_state->getFormObject()->getEntity();
         if(!($parent_entity instanceof Node)){
@@ -60,14 +59,11 @@ class RelationSyncService {
             }     
         }
         $form_state->set('created_relation_ids', $updated_ids);
-        dpm($updated_ids);
-        dpm('regtister stop');
     }
 
 
 
     public function dispatchToRelationHandlers(array &$form, FormStateInterface $form_state): void {        
-      dpm('dispatch steart');
       $entity = $this->getParentFormEntity($form_state);
         if ($entity->isNew()) {
             $this->bindCreatedRelations($form, $form_state);
@@ -77,7 +73,6 @@ class RelationSyncService {
               $this->deleteNodes($removed);
             }   
         }
-        dpm('dispatch satop');
     }
 
 

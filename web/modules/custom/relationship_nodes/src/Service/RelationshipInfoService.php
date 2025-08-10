@@ -230,9 +230,23 @@ class RelationshipInfoService {
         return $result;
     }
 
+   
+    public function getDefaultBundleForeignKeyField(string $relation_bundle, string $target_bundle = null): ?string{       
+        if(!$target_bundle){
+            $target_entity = $this->ensureTargetNode($target_entity);
+            if(!($target_entity instanceof Node)){
+                return null;
+            }
+            $target_bundle = $target_entity->getType();
+        }        
+        
+        $connection_info = $this->getBundleConnectionInfo($relation_bundle, $target_bundle) ?? [];
+        return $this->connectionInfoToForeignKey($connection_info);
+    }
 
 
-    public function getEntityForeignKeyField(Node $relation_entity, ?Node $target_entity = NULL){
+
+    public function getEntityForeignKeyField(Node $relation_entity, ?Node $target_entity = NULL): ?string {
         $target_entity = $this->ensureTargetNode($target_entity);
         if(!$target_entity){
             return null;
@@ -246,19 +260,14 @@ class RelationshipInfoService {
             $connection_info = $this->getEntityConnectionInfo($relation_entity, $target_entity) ?? [];
         }
 
-        if(empty($connection_info) || empty($connection_info['join_fields'])){
-            return null;
-        }
-        $join_fields = $connection_info['join_fields'];
-
-        if(!is_array($join_fields)){
-            return null;
-        }
-        return $join_fields[0] ?? null;
+        return $this->connectionInfoToForeignKey($connection_info);
     }
 
 
     public function getEntityFormForeignKeyField(array $entity_form, FormStateInterface $form_state):?string {
+        if(!isset($entity_form['#entity']) || !($entity_form['#entity'] instanceof Node)){
+            return null;
+        }   
         $relation_entity = $entity_form['#entity'];
         $form_entity = $form_state->getFormObject()->getEntity();
         return $this->getEntityForeignKeyField($relation_entity,  $form_entity);   
@@ -330,6 +339,20 @@ class RelationshipInfoService {
         }
         return $result;   
     }
+
+
+    private function connectionInfoToForeignKey(array $connection_info): ?string{
+        if(empty($connection_info['join_fields'])){
+            return null;
+        }
+        $join_fields = $connection_info['join_fields'];
+
+        if(!is_array($join_fields)){
+            return null;
+        }
+        return $join_fields[0] ?? null;
+    }
+    
 
     private function ensureTargetNode(?Node $node): ?Node {
         if($node instanceof Node){

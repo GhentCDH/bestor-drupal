@@ -32,7 +32,7 @@ class SetRelationTitleEventSubscriber implements EventSubscriberInterface {
 
   public function setRelationTitle(EntityEvent $event, string $event_name): void {
     $entity = $event->getEntity();
-    
+    dpm("save entity " . $entity->getType());
     if (!($entity instanceof Node) || !$this->relationEntityValidator->isValidRelationBundle($entity->getType())) {
       return;
     }

@@ -5,10 +5,10 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\inline_entity_form\ElementSubmit;
-use Drupal\relationship_nodes\Form\RelationExtendedEntityInlineForm;
+use Drupal\relationship_nodes\RelationExtensionWidgetSubmit;
 use Drupal\relationship_nodes\Service\RelationshipInfoService;
 use Drupal\relationship_nodes\Service\RelationSyncService;
+use Drupal\relationship_nodes\Form\RelationExtendedEntityInlineForm;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 
 
@@ -27,9 +27,10 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
   return $fields;
 } 
 
+
 function relationship_nodes_entity_type_alter(array &$entity_types) {
   if (isset($entity_types['node'])) {
-    $entity_types['node']->addConstraint(valid_related_entities_constraint::class);
+    //$entity_types['node']->addConstraint(valid_related_entities_constraint::class);
   }
 }
 
@@ -54,11 +55,14 @@ function relationship_nodes_entity_bundle_info_alter(&$bundles) {
 }
 
 
+
+
 function relationship_nodes_entity_type_build(array &$entity_types) {
   if (isset($entity_types['node'])) {
     $entity_types['node']->setHandlerClass('inline_form', RelationExtendedEntityInlineForm::class);
   }
 }
+
 
 
 function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state) {
@@ -73,10 +77,11 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
   }
   $sync_service->addParentFieldConfig($form, $relation_subforms);
   $form['actions']['submit']['#submit'][] = 'handle_relations';
-  if ($entity->isNew()) {
-    ElementSubmit::attach($form, $form_state);
-    $form['#ief_element_submit'][] = [RelationSyncService::class, 'registerCreatedRelations'];
-  }    
+
+  if (!is_null($form_state->get('inline_entity_form'))) {
+    RelationExtensionWidgetSubmit::attach($form, $form_state);
+  }
+
 }
 
 

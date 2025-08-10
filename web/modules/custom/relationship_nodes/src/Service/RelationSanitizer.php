@@ -40,26 +40,24 @@ class RelationSanitizer {
         if($field_name == null || empty($values) || !str_starts_with($field_name, 'computed_relationshipfield__')){
             return $values;
         }
-
         $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
         if($ief_widget_state == null || !isset($ief_widget_state[$field_name])){
             return $values;
         }
-
         $form_field_elements = $form_state->getValue($field_name);
         foreach($form_field_elements as $i => $element) {
             if(!is_array($element) || empty($element['inline_entity_form'])){
                 continue;
             }
             $ief = $element['inline_entity_form'];
-            $filled_ief = false;          
+            $filled_ief = false;      
             foreach($this->configManager->getRelatedEntityFields() as $related_entity_field) {
                 $ref_field = (array) ($ief[$related_entity_field] ?? []);
                 if(empty($ref_field)){
                     continue;
                 }
                 foreach($ref_field as $reference) {
-                    if($reference['target_id'] != null) {
+                    if($reference['target_id'] !== null) {
                         $filled_ief = true;  
                         break;
                     }

@@ -5,7 +5,7 @@ namespace Drupal\relationship_nodes\Form;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\inline_entity_form\Form\EntityInlineForm;
+use Drupal\inline_entity_form\Form\NodeInlineForm;
 use Drupal\node\Entity\Node;
 use Drupal\relationship_nodes\Service\ConfigManager;
 use Drupal\relationship_nodes\Service\RelationSyncService;
@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 
-class RelationExtendedEntityInlineForm extends EntityInlineForm {
+class RelationExtendedEntityInlineForm extends NodeInlineForm {
 
   protected RouteMatchInterface $routeMatch;
   protected RelationshipInfoService $infoService;
@@ -34,7 +34,10 @@ class RelationExtendedEntityInlineForm extends EntityInlineForm {
 
   public function entityForm(array $entity_form, FormStateInterface $form_state) {
     $entity_form = parent::entityForm($entity_form, $form_state);
-    
+    if(empty($entity_form['#relation_extension_widget']) || $entity_form['#relation_extension_widget'] !== true){
+      return  $entity_form;
+    }
+
     if($entity_form['#form_mode'] != $this->configManager->getRelationFormMode()){
       return $entity_form;
     } 
@@ -52,6 +55,10 @@ class RelationExtendedEntityInlineForm extends EntityInlineForm {
   public function entityFormSubmit(array &$entity_form, FormStateInterface $form_state) {   
 
     parent::entityFormSubmit($entity_form, $form_state);
+
+    if(empty($entity_form['#relation_extension_widget']) || $entity_form['#relation_extension_widget'] !== true){
+      return;
+    }
 
     if($form_state->get('inline_entity_form') == null){
       return;
