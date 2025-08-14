@@ -6,7 +6,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\Service\ConfigManager;
 use Drupal\relationship_nodes\Service\RelationshipInfoService;
 use Drupal\relationship_nodes\Service\ReferenceFieldHelper;
 
@@ -15,7 +14,6 @@ class RelationSanitizer {
 
     protected EntityTypeManagerInterface $entityTypeManager;
     protected RouteMatchInterface $routeMatch;
-    protected ConfigManager $configManager;
     protected RelationEntityValidator $relationEntityValidator;
     protected RelationshipInfoService $infoService;
     protected ReferenceFieldHelper $referenceFieldHelper;
@@ -23,55 +21,17 @@ class RelationSanitizer {
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager,
         RouteMatchInterface $routeMatch,
-        ConfigManager $configManager,
         RelationEntityValidator $relationEntityValidator,
         RelationshipInfoService $infoService,
         ReferenceFieldHelper $referenceFieldHelper
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->routeMatch = $routeMatch;
-        $this->configManager = $configManager;
         $this->relationEntityValidator = $relationEntityValidator;
         $this->infoService = $infoService;
         $this->referenceFieldHelper = $referenceFieldHelper;
     }
 
-    public function clearEmptyRelationsFromInput(array $values, FormStateInterface $form_state, string $field_name){
-        if($field_name == null || empty($values) || !str_starts_with($field_name, 'computed_relationshipfield__')){
-            return $values;
-        }
-        $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
-        if($ief_widget_state == null || !isset($ief_widget_state[$field_name])){
-            return $values;
-        }
-        $form_field_elements = $form_state->getValue($field_name);
-        foreach($form_field_elements as $i => $element) {
-            if(!is_array($element) || empty($element['inline_entity_form'])){
-                continue;
-            }
-            $ief = $element['inline_entity_form'];
-            $filled_ief = false;      
-            foreach($this->configManager->getRelatedEntityFields() as $related_entity_field) {
-                $ref_field = (array) ($ief[$related_entity_field] ?? []);
-                if(empty($ref_field)){
-                    continue;
-                }
-                foreach($ref_field as $reference) {
-                    if($reference['target_id'] !== null) {
-                        $filled_ief = true;  
-                        break;
-                    }
-                }
-                if($filled_ief) {
-                    break;
-                }
-            }
-            if(!$filled_ief) {
-                unset($values[$i]);
-            }  
-        }
-        return $values;
-    }
 
 
 

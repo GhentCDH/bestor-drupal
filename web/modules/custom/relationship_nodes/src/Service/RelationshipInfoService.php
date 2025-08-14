@@ -253,13 +253,11 @@ class RelationshipInfoService {
         }
         $relation_type = $relation_entity->getType();
         $target_entity_type = $target_entity->getType();
-        if($relation_entity->isNew()){
+        if($relation_entity->isNew() || $target_entity->isNew()){
             $connection_info = $this->getBundleConnectionInfo($relation_type, $target_entity_type) ?? [];
-
         } else {
             $connection_info = $this->getEntityConnectionInfo($relation_entity, $target_entity) ?? [];
         }
-
         return $this->connectionInfoToForeignKey($connection_info);
     }
 

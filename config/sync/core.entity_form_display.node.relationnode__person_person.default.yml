@@ -10,6 +10,7 @@ dependencies:
     - node.type.relationnode__person_person
   module:
     - datetime_range
+    - relationship_nodes
 id: node.relationnode__person_person.default
 targetEntityType: node
 bundle: relationnode__person_person
@@ -42,14 +43,10 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_relation_type:
-    type: entity_reference_autocomplete
+    type: mirror_select_widget
     weight: 26
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

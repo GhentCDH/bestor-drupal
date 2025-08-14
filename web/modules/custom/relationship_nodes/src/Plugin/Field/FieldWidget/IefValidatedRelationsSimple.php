@@ -10,7 +10,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\inline_entity_form\Plugin\Field\FieldWidget\InlineEntityFormSimple;
 use Drupal\relationship_nodes\Form\RelationExtendedEntityInlineForm;
-use Drupal\relationship_nodes\Service\RelationSanitizer;
+use Drupal\relationship_nodes\Service\RelationSyncService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class IefValidatedRelationsSimple extends InlineEntityFormSimple {
 
-    protected RelationSanitizer $relationSanitizer;
+    protected RelationSyncService $syncService;
 
     public function __construct(
         $plugin_id,
@@ -39,10 +39,10 @@ class IefValidatedRelationsSimple extends InlineEntityFormSimple {
         EntityTypeBundleInfoInterface $entity_type_bundle_info,
         EntityTypeManagerInterface $entity_type_manager,
         EntityDisplayRepositoryInterface $entity_display_repository,
-        RelationSanitizer $relationSanitizer
+        RelationSyncService $syncService
         ) {
         parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_bundle_info, $entity_type_manager, $entity_display_repository);
-        $this->relationSanitizer = $relationSanitizer;
+        $this->syncService = $syncService;
     }
 
     public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -55,7 +55,7 @@ class IefValidatedRelationsSimple extends InlineEntityFormSimple {
             $container->get('entity_type.bundle.info'),
             $container->get('entity_type.manager'),
             $container->get('entity_display.repository'),
-            $container->get('relationship_nodes.relation_sanitizer')
+            $container->get('relationship_nodes.relation_sync_service')
         );
     }
 
@@ -80,6 +80,6 @@ class IefValidatedRelationsSimple extends InlineEntityFormSimple {
 
  
     public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
-        return $this->relationSanitizer->clearEmptyRelationsFromInput($values, $form_state, $this->fieldDefinition->getName());
+        return $this->syncService->clearEmptyRelationsFromInput($values, $form_state, $this->fieldDefinition->getName());
     }
 }

@@ -54,7 +54,6 @@ third_party_settings:
         - group_instruments
         - group_persons
         - group_places
-        - computed_relationshipfield__institution__place
         - group_stories
       label: 'relation types'
       region: content
@@ -206,7 +205,8 @@ third_party_settings:
         description: ''
         required_fields: true
     group_places:
-      children: {  }
+      children:
+        - computed_relationshipfield__institution__place
       label: Places
       region: content
       parent_name: group_relation_types
