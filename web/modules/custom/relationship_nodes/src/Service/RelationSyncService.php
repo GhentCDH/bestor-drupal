@@ -71,6 +71,11 @@ class RelationSyncService {
   }
 
 
+  public function isValidRelationParentForm(FormStateInterface $form_state) : bool{
+    return !empty($this->getParentFormNode($form_state)) && !empty($this->getRelationSubformFields($form_state));
+  }
+
+
   public function getParentFormNode(FormStateInterface $form_state): ?Node{
     $form_object = $form_state->getFormObject();
     if(!$form_object instanceof NodeForm){
@@ -86,6 +91,8 @@ class RelationSyncService {
     }
     return $form_entity;
   }
+
+
 
 
   public function getRelationSubformFields(FormStateInterface $form_state): array{

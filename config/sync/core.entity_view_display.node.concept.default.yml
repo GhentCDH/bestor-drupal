@@ -87,6 +87,13 @@ content:
     weight: 100
     region: content
 hidden:
+  computed_relationshipfield__concept__concept: true
+  computed_relationshipfield__concept__document: true
+  computed_relationshipfield__concept__institution: true
+  computed_relationshipfield__concept__instrument: true
+  computed_relationshipfield__concept__person: true
+  computed_relationshipfield__concept__place: true
+  computed_relationshipfield__concept__story: true
   field_author: true
   footnotes_group: true
   langcode: true

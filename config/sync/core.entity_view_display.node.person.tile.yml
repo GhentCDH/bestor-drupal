@@ -121,6 +121,7 @@ content:
 hidden:
   computed_relationshipfield__person__concept: true
   computed_relationshipfield__person__document: true
+  computed_relationshipfield__person__institution: true
   computed_relationshipfield__person__instrument: true
   computed_relationshipfield__person__person: true
   computed_relationshipfield__person__place: true

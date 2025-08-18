@@ -78,3 +78,17 @@ services:
       - '@relationship_nodes.relation_sanitizer'
     tags:
       - { name: event_subscriber }
+  relationship_nodes.relation_entity_type_preparer:
+    class: Drupal\relationship_nodes\Service\RelationEntityTypePreparer
+    arguments: 
+      - '@entity_type.manager'
+  relationship_nodes.node_type_form_alter:
+    class: Drupal\relationship_nodes\FormAlter\NodeTypeFormAlter
+    arguments:
+    - '@relationship_nodes.relation_entity_type_preparer'
+  relationship_nodes.vocab_form_alter:
+    class: Drupal\relationship_nodes\FormAlter\VocabFormAlter
+  relationship_nodes.parent_node_form_alter:
+    class: Drupal\relationship_nodes\FormAlter\ParentNodeFormAlter
+    arguments: 
+      - '@relationship_nodes.relation_sync_service'

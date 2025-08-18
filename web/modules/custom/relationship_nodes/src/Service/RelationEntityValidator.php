@@ -24,6 +24,10 @@ class RelationEntityValidator {
 
 
     public function isValidRelationBundle(string $bundle, $fields=[], bool $omit_fields_check = false): bool{
+       
+ 
+       
+       
         if(!$this->configManager->validBasicRelationConfig() || !$this->nodeTypeExists($bundle)){
             return false;
         }

@@ -4,10 +4,16 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - relationship_nodes
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  relationship_nodes:
+    enabled: true
+    typed_relationship: false
+    auto_title: true
+    typed_relation: true
 name: Concept
 type: concept
 description: 'Database: a scientific concept'

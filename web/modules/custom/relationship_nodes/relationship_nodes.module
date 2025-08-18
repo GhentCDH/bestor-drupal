@@ -1,8 +1,11 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\relationship_nodes\RelationExtensionWidgetSubmit;
 use Drupal\relationship_nodes\Form\RelationExtendedEntityInlineForm;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Config\ConfigException;
+use Drupal\relationship_nodes\KeepLockedFieldConfigListBuilder;
 
 
 function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) { 
@@ -20,10 +23,37 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
   return $fields;
 } 
 
+function relationship_nodes_field_storage_config_update(FieldStorageConfig $storage) {
+  $locked_fields = ['related_entity_1', 'related_entity_2'];
+  if ($storage->getTargetEntityTypeId() === 'node' && in_array($storage->getName(), $locked_fields)) {
+    if ($storage->getType() !== 'entity_reference' ||
+        $storage->getCardinality() !== 1 ||
+        $storage->getSetting('target_type') !== 'node') {
+      throw new ConfigException("The field {$storage->getName()} must remain a single-value entity_reference to nodes.");
+    }
+  }
+}
+
+
+function relationship_nodes_field_config_update(FieldConfig $field) {
+  $locked_fields = ['related_entity_1', 'related_entity_2'];
+  if (in_array($field->getName(), $locked_fields)) {
+    $target_bundles = $field->getSetting('handler_settings')['target_bundles'] ?? [];
+    dpm($target_bundles);
+    if (count($target_bundles) !== 1) {
+      throw new ConfigException("The field {$field->getName()} must reference exactly one node type.");
+    }
+  }
+}
+
 
 function relationship_nodes_entity_type_alter(array &$entity_types) {
   if (isset($entity_types['node'])) {
     //$entity_types['node']->addConstraint(valid_related_entities_constraint::class);
+  }
+  if (isset($entity_types['field_config'])) {
+    // Gebruik onze eigen list builder i.p.v. Core/Field UI.
+    $entity_types['field_config']->setListBuilderClass(KeepLockedFieldConfigListBuilder::class);
   }
 }
 
@@ -56,30 +86,46 @@ function relationship_nodes_entity_type_build(array &$entity_types) {
 }
 
 
-function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state) {
-  $sync_service = \Drupal::service('relationship_nodes.relation_sync_service');
-  $entity = $sync_service->getParentFormNode($form_state);
-  if(!$entity){
-    return;
+function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  dpm($form, $form_id);
+  $alter_form_service = null;
+  switch($form_id){
+    case 'node_type_edit_form':
+      $alter_form_service = \Drupal::service('relationship_nodes.node_type_form_alter');
+      break;
+    case 'taxonomy_vocabulary_form': 
+      $alter_form_service = \Drupal::service('relationship_nodes.vocab_form_alter');
+      break;
+    default:
+      if ($form_state->getFormObject() instanceof EntityFormInterface) {
+        $alter_form_service = \Drupal::service('relationship_nodes.parent_node_form_alter');    
+      }
+      break;
   }
 
-  $relation_subforms = $sync_service->getRelationSubformFields($form_state);
-  if(empty($relation_subforms)){
-    return;
+  if ($alter_form_service) {
+    $alter_form_service->alterForm($form, $form_state, $form_id);
   }
-  $sync_service->addParentFieldConfig($form, $relation_subforms);
-  
-  if($entity->isNew()){
-    $form['actions']['submit']['#submit'][] = 'sync_relations';
-  }
+}
 
-  if (!is_null($form_state->get('inline_entity_form'))) {
-    RelationExtensionWidgetSubmit::attach($form, $form_state);
+function relationship_nodes_local_tasks_alter(&$data, $route_name) {
+  if ($route_name == 'entity.field_config.node_field_edit_form') {
+    $data['tabs'][0]['#primary'][] = [
+      'title' => t('Custom edit'),
+      'route_name' => 'relationship_nodes.relation_field_form',
+    ];
   }
 }
 
 
-function sync_relations(array &$form, FormStateInterface $form_state) {
-  $sync_service = \Drupal::service('relationship_nodes.relation_sync_service');
-  $sync_service->bindNewRelationsToParent($form_state);
+function relationship_nodes_module_implements_alter(array &$implementations, $hook) {
+  if ($hook === 'entity_type_alter') {
+    $module = 'relationship_nodes';
+    if (isset($implementations[$module])) {
+      // Move our implementation to the end.
+      $weight = $implementations[$module];
+      unset($implementations[$module]);
+      $implementations[$module] = $weight;
+    }
+  }
 }

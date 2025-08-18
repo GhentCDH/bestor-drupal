@@ -1,0 +1,15 @@
+relationship_nodes.relation_field_form:
+  path: '/admin/structure/types/manage/{node_type}/fields/{field_config}/edit-relation'
+  defaults:
+    _form: '\Drupal\relationship_nodes\Form\RelationFieldConfigForm'
+    _title: 'Edit relation field'
+  requirements:
+    _permission: 'administer content types'
+  options:
+    _admin_route: TRUE
+    _field_ui_base_route: 'entity.field_config.node_field_edit_form'
+  parameters:
+    node_type:
+      type: entity:node_type
+    field_config:
+      type: entity:field_config

@@ -1,0 +1,5 @@
+relationship_nodes.relation_field_form_tab:
+  route_name: relationship_nodes.relation_field_form
+  title: 'Edit relation field'
+  base_route: entity.field_config.node_field_edit_form
+  weight: 0
