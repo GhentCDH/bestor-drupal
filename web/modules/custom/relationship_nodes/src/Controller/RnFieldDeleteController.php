@@ -10,12 +10,16 @@ class RnFieldDeleteController extends ControllerBase {
 
   public function delete(FieldConfig $field_config) {
     $rn_field = (bool) $field_config->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
-    
-    if ($rn_field) {
+    $relation_preparer = \Drupal::service('relationship_nodes.relation_entity_type_preparer');
+    $relation_entity = $relation_preparer->isRelationEntity($field_config->getTargetBundle());
+  
+    if($relation_entity){
+        $this->messenger()->addError($this->t('This field cannot be deleted because it is managed by Relationship Nodes.'));
+    } elseif ($rn_field) {
         $field_config->delete();
         $this->messenger()->addStatus($this->t('RN-managed field deleted.'));
     }
-
+    
     return $this->configuredRedirect($field_config);
 }
 

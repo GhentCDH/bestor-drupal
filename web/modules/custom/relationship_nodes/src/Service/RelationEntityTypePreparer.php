@@ -301,7 +301,7 @@ class RelationEntityTypePreparer {
 
 
         
-    public function ensureNodeType(NodeType|string $node_type):?NodeType{ 
+    public function ensureNodeType(ConfigEntityBundleBase|string $node_type):?NodeType{ 
         if(is_string($node_type)){
            $node_type = $this->entityTypeManager->getStorage('node_type')->load($node_type);
         }
@@ -311,7 +311,7 @@ class RelationEntityTypePreparer {
         return $node_type;
     }
 
-    public function ensureVocab(Vocabulary|string $vocab):?Vocabulary{ 
+    public function ensureVocab(ConfigEntityBundleBase|string $vocab):?Vocabulary{ 
         if(is_string($vocab)){
            $vocab = $this->entityTypeManager->getStorage('taxonomy_vocabulary')->load($vocab);
         }
@@ -328,7 +328,7 @@ class RelationEntityTypePreparer {
         return ($this->isRelationNode($entity) || $this->isRelationVocab($entity));
     }
 
-    public function isRelationVocab(Vocabulary|string $vocab): bool{
+    public function isRelationVocab(ConfigEntityBundleBase|string $vocab): bool{
         if(!$vocab = $this->ensureVocab($vocab)){
             return false;
         }
@@ -353,7 +353,7 @@ class RelationEntityTypePreparer {
         return '';
     }
 
-    public function isRelationNode(NodeType|string $node_type) : bool{
+    public function isRelationNode(ConfigEntityBundleBase|string $node_type) : bool{
         if(!$node_type = $this->ensureNodeType($node_type)){
             return false;
         }
