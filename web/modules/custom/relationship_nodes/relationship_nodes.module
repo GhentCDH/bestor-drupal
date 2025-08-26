@@ -5,7 +5,10 @@ use Drupal\relationship_nodes\Form\RelationExtendedEntityInlineForm;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Config\ConfigException;
-use Drupal\relationship_nodes\KeepLockedFieldConfigListBuilder;
+use Drupal\relationship_nodes\KeepLockedRelationFieldConfigListBuilder;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\node\Entity\NodeType;
+use Drupal\relationship_nodes\Service\RelationFieldConfigHelper;
 
 
 function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) { 
@@ -39,7 +42,6 @@ function relationship_nodes_field_config_update(FieldConfig $field) {
   $locked_fields = ['related_entity_1', 'related_entity_2'];
   if (in_array($field->getName(), $locked_fields)) {
     $target_bundles = $field->getSetting('handler_settings')['target_bundles'] ?? [];
-    dpm($target_bundles);
     if (count($target_bundles) !== 1) {
       throw new ConfigException("The field {$field->getName()} must reference exactly one node type.");
     }
@@ -52,8 +54,7 @@ function relationship_nodes_entity_type_alter(array &$entity_types) {
     //$entity_types['node']->addConstraint(valid_related_entities_constraint::class);
   }
   if (isset($entity_types['field_config'])) {
-    // Gebruik onze eigen list builder i.p.v. Core/Field UI.
-    $entity_types['field_config']->setListBuilderClass(KeepLockedFieldConfigListBuilder::class);
+    $entity_types['field_config']->setListBuilderClass(KeepLockedRelationFieldConfigListBuilder::class);
   }
 }
 
@@ -87,7 +88,6 @@ function relationship_nodes_entity_type_build(array &$entity_types) {
 
 
 function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  dpm($form, $form_id);
   $alter_form_service = null;
   switch($form_id){
     case 'node_type_edit_form':
@@ -108,24 +108,52 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
   }
 }
 
-function relationship_nodes_local_tasks_alter(&$data, $route_name) {
-  if ($route_name == 'entity.field_config.node_field_edit_form') {
-    $data['tabs'][0]['#primary'][] = [
-      'title' => t('Custom edit'),
-      'route_name' => 'relationship_nodes.relation_field_form',
-    ];
+
+
+function relationship_nodes_local_tasks_alter(&$local_tasks) {
+  $field_config_helper = \Drupal::service('relationship_nodes.relation_field_config_helper');
+  $field_config_helper->overrideLocalTasksEdit($local_tasks);
+
+}
+
+
+
+function relationship_nodes_module_implements_alyter(array &$implementations, $hook) {
+  if ($hook === 'entity_type_alter') {
+    $module = 'relationship_nodes';
+    if (isset($implementations[$module])) {
+      $weight = $implementations[$module];
+      unset($implementations[$module]);
+      $implementations[$module] = $weight;
+    }
   }
 }
 
 
-function relationship_nodes_module_implements_alter(array &$implementations, $hook) {
-  if ($hook === 'entity_type_alter') {
-    $module = 'relationship_nodes';
-    if (isset($implementations[$module])) {
-      // Move our implementation to the end.
-      $weight = $implementations[$module];
-      unset($implementations[$module]);
-      $implementations[$module] = $weight;
+function relationship_nodes_modules_uninstalled(array $modules) {
+  if (!in_array('relationship_nodes', $modules)) {
+    return;
+  }
+
+  foreach (FieldStorageConfig::loadMultiple() as $storage) {
+    if ($storage->getThirdPartySetting('relationship_nodes')) {
+      $storage->set('locked', FALSE);
+      $storage->unsetThirdPartySetting('relationship_nodes');
+      $storage->save();
+    }
+  }
+
+  foreach (FieldConfig::loadMultiple as $field_config) {
+    if ($field_config->getThirdPartySetting('relationship_nodes')) {
+      $field_config->unsetThirdPartySetting('relationship_nodes');
+      $field_config->save();
+    }
+  }
+
+  foreach (NodeType::loadMultiple() as $node_type) {
+    if ($node_type->getThirdPartySettings('relationship_nodes')) {
+      $node_type->unsetThirdPartySetting('relationship_nodes');
+      $node_type->save();
     }
   }
 }

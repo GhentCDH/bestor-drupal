@@ -11,6 +11,9 @@ use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Link;
+use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\field\FieldConfigStorage;
 
 class RelationEntityTypePreparer {
 
@@ -25,38 +28,57 @@ class RelationEntityTypePreparer {
     }
 
 
-    public function handleNodeTypeSubmission(array &$form, FormStateInterface $form_state) {
-        $node_type = $this->getFormNodeType($form_state);
-        if (!($node_type instanceof NodeType)) {
+
+
+    public function handleRelationEntitySubmission(array &$form, FormStateInterface $form_state) {
+        $entity = $this->getFormEntity($form_state);
+        
+        if (!$entity) {
             return;
         }
-
         $values = $form_state->getValue('relationship_nodes') ?? [];
-       
-        $this->setRelationEntityProperties($node_type, $values); 
-        
-        if (!$this->isRelationNode($node_type)) {
-           return;
+        $this->setRelationEntityProperties($entity, $values); 
+        if (!$this->isRelationEntity($entity)) {
+            return;
         }
+        $fields_status = $this->getDedicatedRelationFieldsStatus($entity);       
+        $missing = $fields_status['missing'];
+        $remove = $fields_status['remove'];
 
-        $missing_fields = $this->getMissingDedicatedRelationFields($node_type);
-        
-        if (!empty($missing_fields)) {
-            $this->createDedicatedRelationFields($node_type, $missing_fields);
-            $this->showFieldCreationMessage($node_type, $missing_fields);
+        if (!empty($missing)) {
+            $this->createDedicatedRelationFields($entity, $missing);
+            $this->showFieldCreationMessage($entity, $missing);
+        } 
+
+        if(!empty($remove)) {
+            $this->removeFieldConfig($entity, $remove);
         }     
-      
+    }
+
+    public function removeFieldConfig(ConfigEntityBundleBase $entity, array $fields_to_remove){
+        $field_config_storage = $this->entityTypeManager->getStorage('field_config');
+        $entity_type_id = $this->getRelationEntityTypeId($entity);
+        $bundle_name = $entity->id();
+        foreach($fields_to_remove as $field_name){
+            $field_config = $field_config_storage->load("$entity_type_id.{$bundle_name}.$field_name");
+            $field_config->delete();
+        }     
     }
 
 
-    public function showFieldCreationMessage(NodeType $node_type, array $missing_fields): void {
+
+    public function showFieldCreationMessage(ConfigEntityBundleBase $entity, array $missing_fields): void {
         if(empty($missing_fields)){
             return;
         }
-        $url = \Drupal\Core\Url::fromRoute('entity.node.field_ui_fields', [
-            'node_type' => $node_type->id()
+
+
+        $url_info = $this->getDefaultRoutingInfo($this->getRelationEntityTypeId($entity));
+        $url = Url::fromRoute($url_info['field_ui_fields_route'], [
+            $url_info['bundle_param_key'] => $entity->id(),
         ]);
-        $link = \Drupal\Core\Link::fromTextAndUrl($this->t('Manage fields'), $url)->toString();
+
+        $link = Link::fromTextAndUrl($this->t('Manage fields'), $url)->toString();
 
         \Drupal::messenger()->addStatus($this->t(
             'The following relationship fields were created but need to be configured: @fields. @link',
@@ -65,137 +87,102 @@ class RelationEntityTypePreparer {
     }
     
 
-    public function getDedicatedRelationFields(NodeType $node_type) : array{
+    public function getDedicatedRelationFields(ConfigEntityBundleBase $entity) : array{
         $fields = [];
-        if(!$this->isRelationNode($node_type)){
-            return $fields;
-        }
-        $fields = [
-            'related_entity_1' => ['type' => 'entity_reference', 'target_type' => 'node', 'cardinality' => 1],
-            'related_entity_2' => ['type' => 'entity_reference', 'target_type' => 'node', 'cardinality' => 1],
-        ];
-        if($this->isTypedRelationNode($node_type)){
-            $fields['relation_type'] = ['type' => 'entity_reference', 'target_type' => 'taxonomy_term', 'cardinality' => 1];
+        if($entity instanceof NodeType && $this->isRelationNode($entity)){
+            $fields = [
+                'related_entity_1' => ['type' => 'entity_reference', 'target_type' => 'node', 'cardinality' => 1],
+                'related_entity_2' => ['type' => 'entity_reference', 'target_type' => 'node', 'cardinality' => 1],
+            ];
+            if($this->isTypedRelationNode($entity)){
+                $fields['relation_type'] = ['type' => 'entity_reference', 'target_type' => 'taxonomy_term', 'cardinality' => 1];
+            }
+        } elseif($entity instanceof Vocabulary && $this->isRelationVocab($entity)){
+            switch($this->getRelationVocabType($entity)){
+                case 'self':
+                    $fields['mirror_field_self'] = ['type' => 'entity_reference', 'target_type' => 'taxonomy_term', 'cardinality' => 1];
+                    break;
+                case 'cross':
+                    $fields['mirror_field_cross'] = ['type' => 'string', 'cardinality' => 1];
+                    break;
+                default:
+                    break;
+            }
         }
         return $fields;
-
     }
 
-    public function getMissingDedicatedRelationFields(NodeType $node_type) : array{
-        $required = $this->getDedicatedRelationFields($node_type);
+    public function getDedicatedRelationFieldsStatus(ConfigEntityBundleBase $entity) : array{
+        $required = $this->getDedicatedRelationFields($entity);
         $field_config_storage = $this->entityTypeManager->getStorage('field_config');
+        $entity_type_id = $this->getRelationEntityTypeId($entity);
+        $existing = [];
         $missing = [];
-        foreach ($required as $field_name => $field_config) {
-            $field = $field_config_storage->load("node.{$node_type->id()}.$field_name");
-            if (!$field) {
-                $missing[$field_name] = $field_config;
+        $remove = [];
+        foreach ($required as $field_name => $field_settings) {
+            $field_config = $field_config_storage->load("$entity_type_id.{$entity->id()}.$field_name");
+            if (!$field_config) {
+                $missing[$field_name] = ['settings' => $field_settings];
+            } else{
+                $existing[$field_name] = ['settings' => $field_settings, 'field_config' => $field_config];
             }
+
+            if($field_to_remove = $this->getIncompatibleField($field_name)){
+                $field_to_remove_config = $field_config_storage->load("$entity_type_id.{$entity->id()}.$field_to_remove");
+                if($field_to_remove_config){
+                    $remove[] = $field_to_remove;
+                }          
+            } 
         }
-        return $missing;
+        return ['existing' => $existing, 'missing' => $missing, 'remove' => $remove];
     }
 
-    // VERDER UITWERKEN, NOT NIET WERKZAAM
-    public function validateDedicatedRelationFields(FieldConfig $field, array $required_config): void {
-        $expected_fields = $this->getDedicatedRelationFields($node_type);
-        $field_config_storage = $this->entityTypeManager->getStorage('field_config');
 
-        foreach ($expected_fields as $field_name => $requirements) {
-            /** @var \Drupal\field\Entity\FieldConfig|null $field */
-            $field = $field_config_storage->load("node.{$node_type->id()}.$field_name");
-            if (!$field) {
-                continue; // ontbrekende velden check je al elders
-            }
-
-        $storage = $field->getFieldStorageDefinition();
-
-        // Check type
-        if ($storage->getType() !== $requirements['type']) {
-            \Drupal::messenger()->addError($this->t(
-                'The field %field on content type %type must be of type %expected (currently %actual).',
-                [
-                    '%field' => $field_name,
-                    '%type' => $node_type->label(),
-                    '%expected' => $requirements['type'],
-                    '%actual' => $storage->getType(),
-                ]
-            ));
-        }
-
-        // Check cardinality
-        if ($storage->getCardinality() !== $requirements['cardinality']) {
-            \Drupal::messenger()->addError($this->t(
-                'The field %field on content type %type must have cardinality %expected.',
-                [
-                    '%field' => $field_name,
-                    '%type' => $node_type->label(),
-                    '%expected' => $requirements['cardinality'],
-                ]
-            ));
-        }
-
-        // Check target_type
-        if ($requirements['type'] === 'entity_reference') {
-            $target_type = $storage->getSetting('target_type');
-            if ($target_type !== $requirements['target_type']) {
-                \Drupal::messenger()->addError($this->t(
-                    'The field %field on content type %type must reference %expected, not %actual.',
-                    [
-                        '%field' => $field_name,
-                        '%type' => $node_type->label(),
-                        '%expected' => $requirements['target_type'],
-                        '%actual' => $target_type,
-                    ]
-                ));
-            }
-
-            // Check bundles: exact 1 bundle
-            $bundles = $field->getSetting('handler_settings')['target_bundles'] ?? [];
-            if (empty($bundles) || count($bundles) !== 1) {
-                \Drupal::messenger()->addError($this->t(
-                    'The field %field on content type %type must reference exactly one node type.',
-                    [
-                        '%field' => $field_name,
-                        '%type' => $node_type->label(),
-                    ]
-                ));
-            }
+    protected function getIncompatibleField($field_name):?string{
+        switch($field_name){
+            case 'mirror_field_self':
+                return 'mirror_field_cross';
+            case 'mirror_field_cross':
+                return 'mirror_field_self';
+            default:
+                return null;
         }
     }
-}
 
-
-    protected function createDedicatedRelationFields(NodeType $node_type, array $missing_fields) : void {
+     protected function createDedicatedRelationFields(ConfigEntityBundleBase $entity, array $missing_fields) : void {
 
         $field_storage_config_storage = $this->entityTypeManager->getStorage('field_storage_config');
         $field_config_storage = $this->entityTypeManager->getStorage('field_config');
+        $entity_type_id = $this->getRelationEntityTypeId($entity);
 
-        foreach ($missing_fields as $field_name => $settings) {
-            $field_storage = $field_storage_config_storage->load("node.$field_name");
+        foreach ($missing_fields as $field_name => $field_arr) {
+            $settings = $field_arr['settings'];
+            $field_storage = $field_storage_config_storage->load("$entity_type_id.$field_name");
             if (!$field_storage) {
-                dpm('storage mist voor ' . $field_name);
                 $field_storage = $field_storage_config_storage->create([
                     'field_name'  => $field_name,
-                    'entity_type' => 'node',
+                    'entity_type' => $entity_type_id,
                     'type'        => $settings['type'],
                     'cardinality' => $settings['cardinality'],
                     'settings'    => [
                         'target_type' => $settings['target_type'],
                         ],
+                    'third_party_settings' => ['relationship_nodes' => ['rn_created'=> true]],
                 ]);
-            
                 $field_storage->set('locked', true);
                 $field_storage->save();
             }
 
-            $field_config = $field_config_storage->load("node.{$node_type->id()}.$field_name");
+            $field_config = $field_config_storage->load("$entity_type_id.{$entity->id()}.$field_name");
 
             if (!$field_config) {
                 $field_config = $field_config_storage->create([
                     'field_name'   => $field_name,
-                    'entity_type'  => 'node',
-                    'bundle'       => $node_type->id(),
+                    'entity_type'  => $entity_type_id,
+                    'bundle'       => $entity->id(),
                     'label'        => ucfirst(str_replace('_', ' ', $field_name)),
                     'required'     => true,
+                    'third_party_settings' => ['relationship_nodes' => ['rn_created'=> true]],
                 ]);
                 $field_config->save();
 
@@ -203,9 +190,95 @@ class RelationEntityTypePreparer {
         }
     }
 
+      public function validateReferencingType(array &$form, FormStateInterface $form_state) {
+        $entity = $this->getFormEntity($form_state);
+        if (!$entity || !$form_state->getValue('relationship_nodes', 'enabled')) {
+            return;
+        }
+
+      }
+
+
+    public function detectRelationEntityConfigConflicts(array &$form, FormStateInterface $form_state) {
+        $entity = $this->getFormEntity($form_state);
+        if (!$entity || !$form_state->getValue(['relationship_nodes', 'enabled'])) {
+            return;
+        }
+        if($entity instanceof Vocabulary && empty($form_state->getValue(['relationship_nodes', 'referencing_type']))){
+            $form_state->setErrorByName('relationship_nodes][referencing_type', $this->t('You must select a relation type.'));
+        }
+
+        $existing = $this->getDedicatedRelationFieldsStatus($entity)['existing'] ?? [];
+        if (empty($existing)) {
+            return;
+        }
+
+
+        $misconfigured = [];
+        foreach ($existing as $field_name => $field_arr) {
+            $field_config = $field_arr['field_config'];
+            if (!$field_config instanceof FieldConfig || !$this->validateRelationField($entity, $field_config)) {
+                $misconfigured[] = $field_name;
+            }
+        }
+
+        if (!empty($misconfigured)) {
+            $form_state->setErrorByName('relationship_nodes', $this->t(
+                'There are misconfigured relation fields: @fields. Remove or fix them first.',
+                ['@fields' => implode(', ', $misconfigured)]
+            ));
+        }
+    }
+
+
+
+    public function validateRelationField(ConfigEntityBundleBase $entity, FieldConfig $field_config): bool {
+        $entity_type_id = $this->getRelationEntityTypeId($entity);
+        $field_storage_config = $field_config->getFieldStorageDefinition();
+        if (!$field_storage_config) {
+            return false;
+        }
+
+        $field_settings_all = $this->getDedicatedRelationFields($entity);
+        $field_name = $field_config->getName();
+        if (!isset($field_settings_all[$field_name])) {
+            return false;
+        }
+        $field_settings = $field_settings_all[$field_name];
+
+
+        if(
+            $field_storage_config->getType() != $field_settings['type'] || 
+            $field_storage_config->getCardinality() != $field_settings['cardinality']
+        ){
+            return false;
+        }
+
+        if(isset($field_settings['target_type'])){
+            $target_bundles = $field_config->getSetting('handler_settings')['target_bundles'] ?? [];
+            if(
+                $field_storage_config->getSetting('target_type') != $field_settings['target_type'] ||
+                (!empty($target_bundles) && count($target_bundles) !== 1) ||
+                (
+                    $entity instanceof Vocabulary && 
+                    $field_name === 'mirror_field' && 
+                    $this->getRelationVocabType($entity) === 'self' &&
+                    key($target_bundles) !== $entity->id()
+                )
+            ){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+
 
     protected function setRelationEntityProperty(ConfigEntityBundleBase $entity_type, string $property, bool $value) : void {
-        $this->fillRelationshipNodeSetting($entity_type, $property, $value);
+        $this->fillRelationEntitySetting($entity_type, $property, $value);
         $entity_type->save();
     }
 
@@ -217,30 +290,99 @@ class RelationEntityTypePreparer {
                     $entity_type->setThirdPartySetting('relationship_nodes', $property_to_unset, 0);
                 }
             }
+        } else {
+            foreach($properties as $property => $value){
+                $this->fillRelationEntitySetting($entity_type, $property, $value);
+            }
         }
-        foreach($properties as $property => $value){
-            $this->fillRelationshipNodeSetting($entity_type, $property, $value);
-        }
+
         $entity_type->save();
     }
 
-    public function isRelationNode(NodeType $node_type) : bool{
+
+        
+    public function ensureNodeType(NodeType|string $node_type):?NodeType{ 
+        if(is_string($node_type)){
+           $node_type = $this->entityTypeManager->getStorage('node_type')->load($node_type);
+        }
+        if(!$node_type instanceof NodeType){
+            return null;
+        }
+        return $node_type;
+    }
+
+    public function ensureVocab(Vocabulary|string $vocab):?Vocabulary{ 
+        if(is_string($vocab)){
+           $vocab = $this->entityTypeManager->getStorage('taxonomy_vocabulary')->load($vocab);
+        }
+        if(!$vocab instanceof Vocabulary){
+            return null;
+        }
+        return $vocab;
+    }
+
+
+
+
+    public function isRelationEntity(ConfigEntityBundleBase|string $entity): bool {
+        return ($this->isRelationNode($entity) || $this->isRelationVocab($entity));
+    }
+
+    public function isRelationVocab(Vocabulary|string $vocab): bool{
+        if(!$vocab = $this->ensureVocab($vocab)){
+            return false;
+        }
+        $value = $this->getRelationEntityProperty($vocab, 'enabled');
+        return !empty($value);
+    }
+
+    public function getRelationVocabType(Vocabulary|string $vocab): string{
+        if(!$vocab = $this->ensureVocab($vocab)){
+            return '';
+        }
+        return $this->getRelationEntityProperty($vocab, 'referencing_type') ?? '';
+    }
+
+     protected function getRelationEntityTypeId(ConfigEntityBundleBase $entity): string {
+        if ($entity instanceof NodeType) {
+            return 'node';
+        }
+        if ($entity instanceof Vocabulary) {
+            return 'taxonomy_term';
+        }
+        return '';
+    }
+
+    public function isRelationNode(NodeType|string $node_type) : bool{
+        if(!$node_type = $this->ensureNodeType($node_type)){
+            return false;
+        }
         $value = $this->getRelationEntityProperty($node_type, 'enabled');
         return !empty($value);
     }
 
-    public function isTypedRelationNode(NodeType $node_type) : bool{
+    public function isTypedRelationNode(NodeType|string $node_type) : bool{
+        if(!$node_type = $this->ensureNodeType($node_type)){
+            return false;
+        }
         $typed = $this->getRelationEntityProperty($node_type, 'typed_relation');
         return $this->isRelationNode($node_type) && !empty($typed);
     }
 
-    public function hasAutoTitleCreation(NodeType $node_type) : bool{
+    public function isRnCreatedField(FieldConfig $field_config) : bool{
+        return (bool) $field_config->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
+    }
+
+    public function hasAutoTitleCreation(NodeType|string $node_type) : bool{
+        if(!$node_type = $this->ensureNodeType($node_type)){
+            return false;
+        }
         $auto_title = $this->getRelationEntityProperty($node_type, 'auto_title');
         return !empty($auto_title);
     }
 
 
-    protected function fillRelationshipNodeSetting(ConfigEntityBundleBase $entity_type, string $property, bool $value) : void {
+    protected function fillRelationEntitySetting(ConfigEntityBundleBase $entity_type, string $property, bool|string|null $value) : void {
         if(!$this->validRelationProperty($property)){
             return;
         }
@@ -248,7 +390,7 @@ class RelationEntityTypePreparer {
     }
 
 
-    public function getRelationEntityProperty(ConfigEntityBundleBase $entity_type, string $property) : ?bool {
+    public function getRelationEntityProperty(ConfigEntityBundleBase $entity_type, string $property) : bool|string|null {
         if(!$this->validRelationProperty($property)){
             return null;
         }
@@ -262,13 +404,39 @@ class RelationEntityTypePreparer {
 
 
     public function validRelationProperty(string $property){
-        $properties = ['enabled', 'typed_relation', 'auto_title'];
+        $properties = ['enabled', 'typed_relation', 'auto_title', 'referencing_type'];
         return in_array($property, $properties);
     }
 
 
-    public function getFormNodeType(FormStateInterface $form_state): ?NodeType{
-        $node_type = $form_state->getFormObject()->getEntity();
-        return $node_type instanceof NodeType ?  $node_type : null;
+    public function getFormEntity(FormStateInterface $form_state): NodeType|Vocabulary|null {
+        $entity = $form_state->getFormObject()->getEntity();
+        if(!($entity instanceof NodeType || $entity instanceof Vocabulary)){
+             return null;
+        }
+        return $entity;
     }
+
+    public function getDefaultRoutingInfo(string $entity_type_id):array{
+        $mapping = [
+           'node' => [
+                'bundle_param_key' => 'node_type',
+            ],
+            'taxonomy_term' => [
+                'bundle_param_key' => 'taxonomy_vocabulary',
+            ]
+        ];
+
+        if(!isset($mapping[$entity_type_id])){
+            return [];
+        }
+
+        return $mapping[$entity_type_id] + [
+            'rn_field_edit_route' => 'relationship_nodes.relation_' . $entity_type_id . '_field_form',
+            'field_edit_form_route' => 'entity.field_config.' . $entity_type_id . '_field_edit_form',
+            'field_ui_fields_route' => 'entity.' . $entity_type_id . '.field_ui_fields',
+            'field_edit_local_task' => 'field_ui.fields:field_edit_'. $entity_type_id,
+        ];
+    }
+
 }

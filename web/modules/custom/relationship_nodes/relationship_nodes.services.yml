@@ -54,6 +54,12 @@ services:
       - '@relationship_nodes.reference_field_helper'
   relationship_nodes.reference_field_helper:
     class: Drupal\relationship_nodes\Service\ReferenceFieldHelper
+  relationship_nodes.relation_field_config_helper:
+    class: Drupal\relationship_nodes\Service\RelationFieldConfigHelper
+    arguments: 
+      - '@entity_type.manager'
+      - '@current_route_match'
+      - '@relationship_nodes.relation_entity_type_preparer'
   relationship_nodes.delete_target_node_event_subscriber:
     class: Drupal\relationship_nodes\EventSubscriber\DeleteTargetNodeEventSubscriber
     arguments: 
@@ -88,6 +94,8 @@ services:
     - '@relationship_nodes.relation_entity_type_preparer'
   relationship_nodes.vocab_form_alter:
     class: Drupal\relationship_nodes\FormAlter\VocabFormAlter
+    arguments:
+    - '@relationship_nodes.relation_entity_type_preparer'
   relationship_nodes.parent_node_form_alter:
     class: Drupal\relationship_nodes\FormAlter\ParentNodeFormAlter
     arguments: 

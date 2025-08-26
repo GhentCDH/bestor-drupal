@@ -4,3 +4,10 @@ relationship_form:
     js/relationship_form.js: {}
   dependencies:
     - core/drupal
+vocab_confirm:
+  version: 1.0
+  js:
+    js/vocab_confirm.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

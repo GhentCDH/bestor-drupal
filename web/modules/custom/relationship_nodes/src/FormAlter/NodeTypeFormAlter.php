@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\relationship_nodes\Service\RelationEntityTypePreparer;
 use Drupal\node\Entity\ConfigEntityBundleBase;
+use Drupal\node\Entity\NodeType;
 
 class NodeTypeFormAlter {
 
@@ -20,8 +21,8 @@ class NodeTypeFormAlter {
     }
 
     public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
-        $node_type = $this->relationEntityPreparer->getFormNodeType($form_state);
-        if(!$node_type){
+        $node_type = $this->relationEntityPreparer->getFormEntity($form_state);
+        if(!$node_type instanceof NodeType){
             return;
         }
         
@@ -50,10 +51,10 @@ class NodeTypeFormAlter {
             '#default_value' => $this->relationEntityPreparer->getRelationEntityProperty($node_type, 'typed_relation'),
             '#description' => $this->t('If this is checked, this content type will be validated as a typed relationship node. It get an extra "relation type feeld" that needs to be configured.'),
             '#states' => [
-                    'visible' => [
-                        ':input[name="relationship_nodes[enabled]"]' => ['checked' => TRUE],
-                    ],
+                'visible' => [
+                    ':input[name="relationship_nodes[enabled]"]' => ['checked' => TRUE],
                 ],
+            ],
         ];
 
         $form['relationship_nodes']['auto_title'] = [
@@ -68,7 +69,8 @@ class NodeTypeFormAlter {
                 ],
         ];
 
-        $form['actions']['submit']['#submit'][] = [$this->relationEntityPreparer,  'handleNodeTypeSubmission'];
+        $form['#validate'][] = [$this->relationEntityPreparer,  'detectRelationEntityConfigConflicts'];
+        $form['actions']['submit']['#submit'][] = [$this->relationEntityPreparer,  'handleRelationEntitySubmission'];
     }
 
 }
