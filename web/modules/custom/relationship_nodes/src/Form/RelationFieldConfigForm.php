@@ -8,7 +8,9 @@ use Drupal\field\Entity\FieldConfig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Core\Url;
+
 
 class RelationFieldConfigForm extends FormBase {
 
@@ -37,11 +39,13 @@ class RelationFieldConfigForm extends FormBase {
   }
 
   public function buildForm(array $form, FormStateInterface $form_state, FieldConfig $field_config = NULL) {
+
     $this->fieldConfig = $field_config;
     $this->entityType = $field_config->getTargetEntityTypeId();
     $this->fieldName = $field_config->getName();
     $this->bundle = $field_config->getTargetBundle();
 
+    $relation_preparer = \Drupal::service('relationship_nodes.relation_entity_type_preparer');
     dpm($form_state->getFormObject());
 
 
@@ -62,6 +66,13 @@ class RelationFieldConfigForm extends FormBase {
         '#required' => TRUE,
         '#multiple' => FALSE,
       ];
+      if($this->fieldName == 'relation_type'){
+        $form['target_bundle']['#title'] = $this->t('Target relation type vocabulary');
+        $form['target_bundle']['#options'] = $this->getAllRelationVocabs();
+      } elseif($this->fieldName == 'related_entity_1' || $this->fieldName == 'related_entity_2'){
+          $form['target_bundle']['#title'] = $this->t('Target node type');
+          $form['target_bundle']['#options'] = $this->getAllNodeTypes();
+      }
     }
 
     $form['submit'] = [
@@ -113,6 +124,17 @@ class RelationFieldConfigForm extends FormBase {
     $options = [];
     foreach (NodeType::loadMultiple() as $type) {
       $options[$type->id()] = $type->label();
+    }
+    return $options;
+  }
+
+    protected function getAllRelationVocabs() {
+    $options = [];
+    $relation_preparer = \Drupal::service('relationship_nodes.relation_entity_type_preparer');
+    foreach (Vocabulary::loadMultiple() as $type) {
+      if($relation_preparer->isRelationVocab($type)){
+        $options[$type->id()] = $type->label();
+      } 
     }
     return $options;
   }

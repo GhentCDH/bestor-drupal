@@ -9,6 +9,8 @@ use Drupal\relationship_nodes\KeepLockedRelationFieldConfigListBuilder;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\relationship_nodes\Service\RelationFieldConfigHelper;
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\taxonomy\Entity\Vocabulary;
 
 
 function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) { 
@@ -42,7 +44,7 @@ function relationship_nodes_field_config_update(FieldConfig $field) {
   $locked_fields = ['related_entity_1', 'related_entity_2'];
   if (in_array($field->getName(), $locked_fields)) {
     $target_bundles = $field->getSetting('handler_settings')['target_bundles'] ?? [];
-    if (count($target_bundles) !== 1) {
+    if (count($target_bundles) > 1) {
       throw new ConfigException("The field {$field->getName()} must reference exactly one node type.");
     }
   }
@@ -130,30 +132,40 @@ function relationship_nodes_module_implements_alyter(array &$implementations, $h
 }
 
 
-function relationship_nodes_modules_uninstalled(array $modules) {
-  if (!in_array('relationship_nodes', $modules)) {
-    return;
-  }
+function relationship_nodes_uninstall($is_syncing) : void {
+   $rn_updated_classes = [
+    'field_storage_config' => FieldStorageConfig::class, 
+    'field_config' => FieldConfig::class, 
+    'node_type' => NodeType::class, 
+    'taxonomy_vocabulary' => Vocabulary::class];
 
-  foreach (FieldStorageConfig::loadMultiple() as $storage) {
-    if ($storage->getThirdPartySetting('relationship_nodes')) {
-      $storage->set('locked', FALSE);
-      $storage->unsetThirdPartySetting('relationship_nodes');
-      $storage->save();
+  foreach ($rn_updated_classes as $storage_id => $class) {
+    $storage =  \Drupal::entityTypeManager()->getStorage($storage_id);
+
+    if(!$storage){
+      continue;
     }
-  }
+    foreach ($storage->loadMultiple() as &$object) {
 
-  foreach (FieldConfig::loadMultiple as $field_config) {
-    if ($field_config->getThirdPartySetting('relationship_nodes')) {
-      $field_config->unsetThirdPartySetting('relationship_nodes');
-      $field_config->save();
-    }
-  }
+      if (!$object instanceof ConfigEntityInterface) {
+        continue;
+      }
 
-  foreach (NodeType::loadMultiple() as $node_type) {
-    if ($node_type->getThirdPartySettings('relationship_nodes')) {
-      $node_type->unsetThirdPartySetting('relationship_nodes');
-      $node_type->save();
+      $rn_settings = $object->getThirdPartySettings('relationship_nodes');
+
+      if (empty($rn_settings)) {
+        continue;
+      }
+
+      if (method_exists($object, 'setLocked')) {
+        $object->setLocked(FALSE);
+      }
+
+      foreach ($rn_settings as $rn_setting => $value) {
+        $object->unsetThirdPartySetting('relationship_nodes', $rn_setting);
+      }
+
+      $object->save();
     }
   }
 }

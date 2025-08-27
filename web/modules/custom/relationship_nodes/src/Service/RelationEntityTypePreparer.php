@@ -41,9 +41,15 @@ class RelationEntityTypePreparer {
         if (!$this->isRelationEntity($entity)) {
             return;
         }
-        $fields_status = $this->getDedicatedRelationFieldsStatus($entity);       
+        $fields_status = $this->getDedicatedRelationFieldsStatus($entity); 
+        $existing = $fields_status['existing'];      
         $missing = $fields_status['missing'];
         $remove = $fields_status['remove'];
+
+
+        if(!empty($existing)){
+            $this->ensureRequiredFieldConfig($entity, $existing);
+        }
 
         if (!empty($missing)) {
             $this->createDedicatedRelationFields($entity, $missing);
@@ -85,35 +91,71 @@ class RelationEntityTypePreparer {
             ['@fields' => implode(', ', array_keys($missing_fields)), '@link' => $link]
         ));
     }
+
+
+    public function getFormStateDedicatedRelationFields(FormStateInterface $form_state){
+        if($entity instanceof NodeType && $this->isRelationNode($entity)){
+
+        } elseif($entity instanceof Vocabulary && $this->isRelationVocab($entity)){
+
+        }
+    }
+
+    public function getEntityDedicatedRelationFields(ConfigEntityBundleBase $entity){
+        if($entity instanceof NodeType && $this->isRelationNode($entity)){
+
+        } elseif($entity instanceof Vocabulary && $this->isRelationVocab($entity)){
+
+        }
+    }
     
 
-    public function getDedicatedRelationFields(ConfigEntityBundleBase $entity) : array{
+    public function getDedicatedRelationFields(ConfigEntityBundleBase $entity, ?FormStateInterface $form_state = null): array {
+        $enabled = $form_state 
+            ? $form_state->getValue(['relationship_nodes', 'enabled']) 
+            : $this->isRelationEntity($entity);
+
+        if (empty($enabled)) {
+            return [];
+        }
+
         $fields = [];
-        if($entity instanceof NodeType && $this->isRelationNode($entity)){
+
+        if ($entity instanceof NodeType) {
             $fields = [
                 'related_entity_1' => ['type' => 'entity_reference', 'target_type' => 'node', 'cardinality' => 1],
                 'related_entity_2' => ['type' => 'entity_reference', 'target_type' => 'node', 'cardinality' => 1],
             ];
-            if($this->isTypedRelationNode($entity)){
+
+            $typed = $form_state 
+                ? !empty($form_state->getValue(['relationship_nodes', 'typed_relation'])) 
+                : $this->isTypedRelationNode($entity);
+
+            if ($typed) {
                 $fields['relation_type'] = ['type' => 'entity_reference', 'target_type' => 'taxonomy_term', 'cardinality' => 1];
             }
-        } elseif($entity instanceof Vocabulary && $this->isRelationVocab($entity)){
-            switch($this->getRelationVocabType($entity)){
+
+        } elseif ($entity instanceof Vocabulary) {
+            $type = $form_state 
+                ? $form_state->getValue(['relationship_nodes', 'referencing_type']) 
+                : $this->getRelationVocabType($entity);
+
+            switch ($type) {
                 case 'self':
                     $fields['mirror_field_self'] = ['type' => 'entity_reference', 'target_type' => 'taxonomy_term', 'cardinality' => 1];
                     break;
                 case 'cross':
                     $fields['mirror_field_cross'] = ['type' => 'string', 'cardinality' => 1];
                     break;
-                default:
-                    break;
             }
         }
+
         return $fields;
     }
 
-    public function getDedicatedRelationFieldsStatus(ConfigEntityBundleBase $entity) : array{
-        $required = $this->getDedicatedRelationFields($entity);
+
+    public function getDedicatedRelationFieldsStatus(ConfigEntityBundleBase $entity, ?FormStateInterface $form_state = null): array {
+        $required = $this->getDedicatedRelationFields($entity, $form_state);
         $field_config_storage = $this->entityTypeManager->getStorage('field_config');
         $entity_type_id = $this->getRelationEntityTypeId($entity);
         $existing = [];
@@ -146,6 +188,27 @@ class RelationEntityTypePreparer {
                 return 'mirror_field_self';
             default:
                 return null;
+        }
+    }
+
+    protected function ensureRequiredFieldConfig(ConfigEntityBundleBase $entity, array $existing_fields) : void {
+        foreach ($existing_fields as $field_name => $field_arr) {
+            
+            $field_config = $field_arr['field_config'];
+            if (!$field_config->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE)) {
+                $field_config->setThirdPartySetting('relationship_nodes', 'rn_created', TRUE);
+                $field_config->save();
+            }
+
+            $field_storage = $field_config->getFieldStorageDefinition();
+            if (!$field_storage->isLocked()) {
+                $field_storage->set('locked', TRUE);
+                $field_storage->save();
+            }
+            if (!$field_storage->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE)) {
+                $field_storage->setThirdPartySetting('relationship_nodes', 'rn_created', TRUE);
+                $field_storage->save();
+            }
         }
     }
 
@@ -190,25 +253,20 @@ class RelationEntityTypePreparer {
         }
     }
 
-      public function validateReferencingType(array &$form, FormStateInterface $form_state) {
-        $entity = $this->getFormEntity($form_state);
-        if (!$entity || !$form_state->getValue('relationship_nodes', 'enabled')) {
-            return;
-        }
-
-      }
 
 
     public function detectRelationEntityConfigConflicts(array &$form, FormStateInterface $form_state) {
         $entity = $this->getFormEntity($form_state);
+
         if (!$entity || !$form_state->getValue(['relationship_nodes', 'enabled'])) {
             return;
         }
+
         if($entity instanceof Vocabulary && empty($form_state->getValue(['relationship_nodes', 'referencing_type']))){
             $form_state->setErrorByName('relationship_nodes][referencing_type', $this->t('You must select a relation type.'));
         }
 
-        $existing = $this->getDedicatedRelationFieldsStatus($entity)['existing'] ?? [];
+        $existing = $this->getDedicatedRelationFieldsStatus($entity, $form_state)['existing'] ?? [];
         if (empty($existing)) {
             return;
         }
@@ -217,7 +275,7 @@ class RelationEntityTypePreparer {
         $misconfigured = [];
         foreach ($existing as $field_name => $field_arr) {
             $field_config = $field_arr['field_config'];
-            if (!$field_config instanceof FieldConfig || !$this->validateRelationField($entity, $field_config)) {
+            if (!$field_config instanceof FieldConfig || !$this->validateRelationField($entity, $field_config, $field_arr['settings'])) {
                 $misconfigured[] = $field_name;
             }
         }
@@ -232,39 +290,22 @@ class RelationEntityTypePreparer {
 
 
 
-    public function validateRelationField(ConfigEntityBundleBase $entity, FieldConfig $field_config): bool {
-        $entity_type_id = $this->getRelationEntityTypeId($entity);
+    public function validateRelationField(ConfigEntityBundleBase $entity, FieldConfig $field_config, array $required_field_settings): bool {
         $field_storage_config = $field_config->getFieldStorageDefinition();
-        if (!$field_storage_config) {
+        if (
+            !$field_storage_config ||
+            $field_storage_config->getType() !== $required_field_settings['type'] ||
+            $field_storage_config->getCardinality() != $required_field_settings['cardinality']
+        ) {
             return false;
         }
 
-        $field_settings_all = $this->getDedicatedRelationFields($entity);
-        $field_name = $field_config->getName();
-        if (!isset($field_settings_all[$field_name])) {
-            return false;
-        }
-        $field_settings = $field_settings_all[$field_name];
-
-
-        if(
-            $field_storage_config->getType() != $field_settings['type'] || 
-            $field_storage_config->getCardinality() != $field_settings['cardinality']
-        ){
-            return false;
-        }
-
-        if(isset($field_settings['target_type'])){
+        if(isset($required_field_settings['target_type'])){
             $target_bundles = $field_config->getSetting('handler_settings')['target_bundles'] ?? [];
             if(
-                $field_storage_config->getSetting('target_type') != $field_settings['target_type'] ||
+                $field_storage_config->getSetting('target_type') != $required_field_settings['target_type'] ||
                 (!empty($target_bundles) && count($target_bundles) !== 1) ||
-                (
-                    $entity instanceof Vocabulary && 
-                    $field_name === 'mirror_field' && 
-                    $this->getRelationVocabType($entity) === 'self' &&
-                    key($target_bundles) !== $entity->id()
-                )
+                ($field_config->getName() === 'mirror_field_self' && key($target_bundles) !== $entity->id())
             ){
                 return false;
             }
@@ -374,7 +415,7 @@ class RelationEntityTypePreparer {
     }
 
     public function hasAutoTitleCreation(NodeType|string $node_type) : bool{
-        if(!$node_type = $this->ensureNodeType($node_type)){
+        if(!$node_type = $this->ensureNodeType($node_type) || !$this->isRelationNode($node_type)){
             return false;
         }
         $auto_title = $this->getRelationEntityProperty($node_type, 'auto_title');
@@ -397,14 +438,13 @@ class RelationEntityTypePreparer {
         return $entity_type->getThirdPartySetting('relationship_nodes', $property, null);
     }
 
-
     public function getRelationEntityProperties(ConfigEntityBundleBase $entity_type) : ?array {
         return $entity_type->getThirdPartySettings('relationship_nodes') ?? null;
     }
 
 
     public function validRelationProperty(string $property){
-        $properties = ['enabled', 'typed_relation', 'auto_title', 'referencing_type'];
+        $properties = ['rn_created', 'enabled', 'typed_relation', 'auto_title', 'referencing_type'];
         return in_array($property, $properties);
     }
 

@@ -1,0 +1,8 @@
+related_entity_fields:
+  related_entity_1: 'rn_related_entity_1'
+  related_entity_2: 'rn_related_entity_2'
+relationship_type_field: 'field_relation_type'
+relationship_form_mode: 'relationship_subform'
+mirror_fields:
+  mirror_self: 'rn_mirror_self'
+  mirror_cross: 'rn_mirror_cross'

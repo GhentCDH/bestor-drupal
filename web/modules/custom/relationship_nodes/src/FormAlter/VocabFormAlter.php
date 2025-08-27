@@ -101,12 +101,6 @@ class VocabFormAlter {
     $form['#validate'][] = [$this, 'validateConflicts'];
   }
 
-
-  public function validateReferencingType(array &$form, FormStateInterface $form_state) {
-  
-}
-
-
   public function validateConflicts(array &$form, FormStateInterface $form_state) {
     \Drupal::service('relationship_nodes.relation_entity_type_preparer')->detectRelationEntityConfigConflicts($form, $form_state);
   }
