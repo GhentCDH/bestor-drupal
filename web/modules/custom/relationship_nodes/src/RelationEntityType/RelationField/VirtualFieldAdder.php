@@ -1,26 +1,22 @@
 <?php
 
-namespace Drupal\relationship_nodes\Service;
+namespace Drupal\relationship_nodes\RelationEntityType\RelationField;
 
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
-use Drupal\relationship_nodes\Service\ConfigManager;
-use Drupal\relationship_nodes\Service\RelationshipInfoService;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 
 
-class RelationshipFieldAutoAdder {
+class VirtualFieldAdder {
 
-    
-  protected ConfigManager $configManager;
-  protected RelationshipInfoService $infoService;
+  protected RelationBundleInfoService $bundleInfoService;
 
   
-  public function __construct(ConfigManager $configManager, RelationshipInfoService $infoService) {
-    $this->configManager = $configManager;
-    $this->infoService = $infoService;
+  public function __construct(RelationBundleInfoService $bundleInfoService) {
+    $this->bundleInfoService = $bundleInfoService;
   }
 
 
@@ -29,7 +25,7 @@ class RelationshipFieldAutoAdder {
       return;
     }
 
-    $relationships = $this->infoService->getRelationInfoForTargetBundle($bundle);
+    $relationships = $this->bundleInfoService->getRelationInfoForTargetBundle($bundle);
 
     if (empty($relationships)) {
       return;
@@ -53,7 +49,6 @@ class RelationshipFieldAutoAdder {
         ->setDisplayOptions('form', [
           'type' => 'ief_validated_relations_simple',
           'weight' => 0,
-          'settings' => ['form_mode' => $this->configManager->getRelationFormMode() ?? 'default'],
         ])
         ->setDisplayConfigurable('form', TRUE)
         ->setDisplayConfigurable('view', TRUE)

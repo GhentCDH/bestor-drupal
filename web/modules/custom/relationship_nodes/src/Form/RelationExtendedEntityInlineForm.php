@@ -7,9 +7,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\inline_entity_form\Form\NodeInlineForm;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\Service\ConfigManager;
-use Drupal\relationship_nodes\Service\RelationSyncService;
-use Drupal\relationship_nodes\Service\RelationshipInfoService;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
@@ -17,16 +16,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RelationExtendedEntityInlineForm extends NodeInlineForm {
 
   protected RouteMatchInterface $routeMatch;
-  protected RelationshipInfoService $infoService;
-  protected RelationSyncService $syncService;
-  protected ConfigManager $configManager;
+  protected FieldNameResolver $fieldNameResolver;
+  protected ForeignKeyFieldResolver $foreignKeyResolver;
 
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     $instance = parent::createInstance($container, $entity_type);
     $instance->routeMatch = $container->get('current_route_match');
-    $instance->infoService = $container->get('relationship_nodes.relationship_info_service');
-    $instance->syncService = $container->get('relationship_nodes.relation_sync_service');
-    $instance->configManager = $container->get('relationship_nodes.config_manager');
+    $instance->fieldNameResolver = $container->get('relationship_nodes.field_name_resolver');
+    $instance->foreignKeyResolver = $container->get('relationship_nodes.foreign_key_field_resolver');
 
     return $instance;
   }
@@ -38,11 +35,7 @@ class RelationExtendedEntityInlineForm extends NodeInlineForm {
       return  $entity_form;
     }
 
-    if($entity_form['#form_mode'] != $this->configManager->getRelationFormMode()){
-      return $entity_form;
-    } 
-
-    $foreign_key = $this->infoService->getEntityFormForeignKeyField($entity_form, $form_state);
+    $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($entity_form, $form_state);
 
     if($foreign_key){
       $entity_form[$foreign_key]['#attributes']['hidden'] = 'hidden';

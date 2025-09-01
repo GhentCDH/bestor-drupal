@@ -5,21 +5,21 @@ namespace Drupal\relationship_nodes\EventSubscriber;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\entity_events\EntityEventType;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\Service\RelationshipInfoService;
-use Drupal\relationship_nodes\Service\RelationSyncService;
+use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
+use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DeleteTargetNodeEventSubscriber implements EventSubscriberInterface {
 
-  protected RelationshipInfoService $infoService;
+  protected RelationNodeInfoService $nodeInfoService;
   protected RelationSyncService $syncService;
 
 
   public function __construct(
-    RelationshipInfoService $infoService, 
+    RelationNodeInfoService $nodeInfoService, 
     RelationSyncService $syncService
   ) {
-    $this->infoService = $infoService;
+    $this->nodeInfoService = $nodeInfoService;
     $this->syncService = $syncService;
   }
 
@@ -35,7 +35,7 @@ class DeleteTargetNodeEventSubscriber implements EventSubscriberInterface {
     if (!($entity instanceof Node)) {
       return;
     }
-    $relations_per_type = $this->infoService->getAllReferencingRelations($entity) ?? [];
+    $relations_per_type = $this->nodeInfoService->getAllReferencingRelations($entity) ?? [];
     if(!is_array($relations_per_type) || empty($relations_per_type)) {
       return;
     }

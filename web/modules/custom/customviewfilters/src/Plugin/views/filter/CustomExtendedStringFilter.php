@@ -3,7 +3,6 @@
 namespace Drupal\customviewfilters\Plugin\views\filter;
 
 use Drupal\config_views\Plugin\views\filter\StringEntity;
-use Drupal\relationship_nodes\Service\RelationshipInfoService;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 
@@ -85,7 +84,7 @@ class CustomExtendedStringFilter extends StringEntity {
       }
     }
 
-    $relationship_nodes = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationInfoForTargetBundle($value);
+    $relationship_nodes = \Drupal::service('relationship_nodes.relation_bundle_info_service')->getRelationInfoForTargetBundle($value);
     if (is_array($relationship_nodes) && !empty($relationship_nodes)) {
       foreach($relationship_nodes as $relationship_node) {
         if (isset($relationship_node['relation_bundle_info']) && is_array($relationship_node['relation_bundle_info']) && $relationship_node['relation_bundle_info']['has_relationtype']){

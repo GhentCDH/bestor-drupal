@@ -45,7 +45,7 @@ class RelationFieldConfigForm extends FormBase {
     $this->fieldName = $field_config->getName();
     $this->bundle = $field_config->getTargetBundle();
 
-    $relation_preparer = \Drupal::service('relationship_nodes.relation_entity_type_preparer');
+    $settingsManager = \Drupal::service('relationship_nodes.relation_bundle_settings_manager');
     dpm($form_state->getFormObject());
 
 
@@ -80,8 +80,7 @@ class RelationFieldConfigForm extends FormBase {
       '#value' => $this->t('Save'),
     ];
 
-    $relation_preparer = \Drupal::service('relationship_nodes.relation_entity_type_preparer');
-    if (!$relation_preparer->isRelationEntity($this->bundle)) {
+    if (!$settingsManager->isRelationEntity($this->bundle)) {
       $form['delete'] = [
           '#type' => 'link',
           '#title' => $this->t('Delete RN Field'),
@@ -130,9 +129,9 @@ class RelationFieldConfigForm extends FormBase {
 
     protected function getAllRelationVocabs() {
     $options = [];
-    $relation_preparer = \Drupal::service('relationship_nodes.relation_entity_type_preparer');
+    $settingsManager = \Drupal::service('relationship_nodes.relation_bundle_settings_manager');
     foreach (Vocabulary::loadMultiple() as $type) {
-      if($relation_preparer->isRelationVocab($type)){
+      if($settingsManager->isRelationVocab($type)){
         $options[$type->id()] = $type->label();
       } 
     }

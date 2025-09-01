@@ -5,25 +5,27 @@ namespace Drupal\relationship_nodes\EventSubscriber;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\entity_events\EntityEventType;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\Service\RelationEntityValidator;
-use Drupal\relationship_nodes\Service\RelationSanitizer;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-//verplaats onderstaande
 use Drupal\node\Entity\NodeType;
-use Drupal\node\NodeInterface;
+
 
 class SetRelationTitleEventSubscriber implements EventSubscriberInterface {
 
-  protected RelationEntityValidator $relationEntityValidator;
-  protected RelationSanitizer $relationSanitizer;
+  protected EntityTypeManagerInterface $entityTypeManager;  
+  protected RelationBundleSettingsManager $settingsManager;
+  protected RelationNodeInfoService $nodeInfoService;
 
 
   public function __construct(
-    RelationEntityValidator $relationEntityValidator,
-    RelationSanitizer $relationSanitizer
+    EntityTypeManagerInterface $entityTypeManager,
+    RelationBundleSettingsManager $settingsManager,
+    RelationNodeInfoService $nodeInfoService
   ) {
-    $this->relationEntityValidator = $relationEntityValidator;
-    $this->relationSanitizer = $relationSanitizer;
+    $this->entityTypeManager = $entityTypeManager;
+    $this->settingsManager = $settingsManager;
+    $this->nodeInfoService = $nodeInfoService;
   }
 
   public static function getSubscribedEvents(): array {
@@ -48,11 +50,31 @@ class SetRelationTitleEventSubscriber implements EventSubscriberInterface {
 
  
   
-    if (!($entity instanceof Node) || !$this->relationEntityValidator->isValidRelationBundle($entity->getType())) {
+    if (!($entity instanceof Node) || !$this->settingsManager->isRelationNodeType($entity->getType())) {
       return;
     }
       dpm("save entity " . $entity->getType());
-    $entity->set('title', $this->relationSanitizer->generateRelationLabel($entity));
+    $entity->set('title', $this->generateRelationLabel($entity));
     
   }
+
+  
+    private function generateRelationLabel(Node $relation_node): string{
+        $related_entities = $this->nodeInfoService->getRelatedEntityValues($relation_node);
+        $title_parts = [];
+        $node_storage = $this->entityTypeManager->getStorage('node');
+        foreach($related_entities as $field_values){
+            $node_titles = [];
+            foreach($field_values as $nid){
+                $node = $node_storage->load($nid);
+                if ($node instanceof Node) {
+                    $node_titles[] = $node->getTitle();
+                }
+            }
+            if (!empty($node_titles)) {
+                $title_parts[] = implode(', ', $node_titles);
+            }
+        }
+        return 'Relationship '  . implode(' - ', $title_parts);
+    }
 }

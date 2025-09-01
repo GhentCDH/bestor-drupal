@@ -5,10 +5,9 @@ use Drupal\relationship_nodes\Form\RelationExtendedEntityInlineForm;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Config\ConfigException;
-use Drupal\relationship_nodes\KeepLockedRelationFieldConfigListBuilder;
+use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\KeepLockedRelationFieldConfigListBuilder;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\node\Entity\NodeType;
-use Drupal\relationship_nodes\Service\RelationFieldConfigHelper;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 
@@ -16,9 +15,9 @@ use Drupal\taxonomy\Entity\Vocabulary;
 function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) { 
   $type_id = $entity_type->id();
   if( $type_id === 'node'){
-    \Drupal::service('relationship_nodes.relationship_field_auto_adder')->addFields($fields, $entity_type, $bundle);
+    \Drupal::service('relationship_nodes.virtual_field_adder')->addFields($fields, $entity_type, $bundle);
   } elseif ($type_id === 'taxonomy_term') {
-    $vocab_info = \Drupal::service('relationship_nodes.relationship_info_service')->getRelationVocabInfo($bundle, $fields);
+    $vocab_info = \Drupal::service('relationship_nodes.relation_bundle_info_service')->getRelationVocabInfo($bundle, $fields);
     if(!empty($vocab_info)){
       if($vocab_info['mirror_field_type'] == 'entity_reference_selfreferencing' && isset($fields[$vocab_info['mirror_field_name']])){
         $fields[$vocab_info['mirror_field_name']]->addConstraint(available_mirror_term_constraint::class);
@@ -64,9 +63,9 @@ function relationship_nodes_entity_type_alter(array &$entity_types) {
 function relationship_nodes_entity_bundle_info_alter(&$bundles) {
   $relation_bundles = [];
   if (isset($bundles['node'])) {  
-    $relation_entity_validator = \Drupal::service('relationship_nodes.relation_entity_validator');
+    $settingsManager = \Drupal::service('relationship_nodes.relation_bundle_settings_manager');
     foreach($bundles['node'] as $bundle_id => $bundle){ 
-      if(!$relation_entity_validator->isValidRelationBundle($bundle_id, [], true)){
+      if(!$settingsManager->isRelationNodeType($bundle_id, [], true)){
         $bundles['node'][$bundle_id]['relation_bundle'] = [];
         continue;
       } 
@@ -74,9 +73,9 @@ function relationship_nodes_entity_bundle_info_alter(&$bundles) {
     }
   }
   if(!empty($relation_bundles)){
-    $info_service = \Drupal::service('relationship_nodes.relationship_info_service');
+    $bundleInfoService = \Drupal::service('relationship_nodes.relation_bundle_info_service');
     foreach($relation_bundles as $relation_bundle_id){
-      $bundles['node'][$relation_bundle_id]['relation_bundle'] = $info_service->getRelationBundleInfo($relation_bundle_id);
+      $bundles['node'][$relation_bundle_id]['relation_bundle'] = $bundleInfoService->getRelationBundleInfo($relation_bundle_id);
     }
   }
 }
@@ -113,8 +112,8 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
 
 
 function relationship_nodes_local_tasks_alter(&$local_tasks) {
-  $field_config_helper = \Drupal::service('relationship_nodes.relation_field_config_helper');
-  $field_config_helper->overrideLocalTasksEdit($local_tasks);
+  $field_config_updater = \Drupal::service('relationship_nodes.field_config_ui_updater');
+  $field_config_updater->overrideLocalTasksEdit($local_tasks);
 
 }
 

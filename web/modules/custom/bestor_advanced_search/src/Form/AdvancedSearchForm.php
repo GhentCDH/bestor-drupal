@@ -5,7 +5,6 @@ namespace Drupal\bestor_advanced_search\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
-use Drupal\relationship_nodes\Service\RelationshipInfoService;
 
 /**
  * Advanced Search form with dynamic filters per content type.

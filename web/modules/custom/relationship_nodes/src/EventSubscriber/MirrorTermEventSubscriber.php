@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes\EventSubscriber;
 
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
-use Drupal\relationship_nodes\Service\MirrorTermAutoUpdater;
+use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermAutoUpdater;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

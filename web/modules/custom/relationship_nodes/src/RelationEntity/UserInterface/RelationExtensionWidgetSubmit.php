@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes;
+namespace Drupal\relationship_nodes\RelationEntity\UserInterface;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\inline_entity_form\WidgetSubmit;
@@ -23,11 +23,11 @@ class RelationExtensionWidgetSubmit extends WidgetSubmit{
         if(empty($widget_states) || !is_array($widget_states)){
             return;
         }
-        $sync_service = \Drupal::service('relationship_nodes.relation_sync_service');
+        $relationFormHandler = \Drupal::service('relationship_nodes.relation_entity_form_handler');
         krsort($widget_states, SORT_STRING);
         foreach ($widget_states as $field_name => &$widget_state) {
-            if($sync_service->validRelationWidgetState($widget_state)){
-                $sync_service->dispatchToRelationHandlers($field_name, $widget_state, $form, $form_state);
+            if($relationFormHandler->validRelationWidgetState($widget_state)){
+                $relationFormHandler->dispatchToRelationHandlers($field_name, $widget_state, $form, $form_state);
             }
         }
 

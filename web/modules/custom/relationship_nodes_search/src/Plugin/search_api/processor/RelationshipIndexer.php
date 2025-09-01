@@ -4,12 +4,13 @@ namespace Drupal\relationship_nodes_search\Plugin\search_api\processor;
 
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\relationship_nodes_search\Processor\RelationInfoProcessorProperty;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\relationship_nodes\Service\RelationshipInfoService;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\Processor\EntityProcessorProperty;
 use Drupal\relationship_nodes_search\TypedData\RelationInfoData;
@@ -34,39 +35,28 @@ use Drupal\search_api\Processor\ProcessorProperty;
 
 class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFactoryPluginInterface {
 
-  /**
-   * The relationship info service.
-   *
-   * @var \Drupal\relationship_nodes\RelationshipInfoService
-   */
-  protected $infoService;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
+  protected RelationBundleInfoService $bundleInfoService;
 
   /**
    * Constructs a RelationshipIndexer object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RelationshipInfoService $infoService, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, RelationBundleInfoService $bundleInfoService) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->infoService = $infoService;
     $this->entityTypeManager = $entity_type_manager;
+    $this->bundleInfoService = $bundleInfoService;
   }
 
   /**
-   * {@inheritdoc}
+   * {@inheritdoc}s
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('relationship_nodes.relationship_info_service'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('relationship_nodes.relation_bundle_info_service'),
     );
   }
 
@@ -99,7 +89,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $node_types_in_index = $datasource->getConfiguration()['bundles']['selected']  ?? [];
     $relationship_node_types = [];
     foreach($node_types_in_index as $node_type_in_index){
-      $related_relationships = $this->infoService->getRelationInfoForTargetBundle($node_type_in_index);
+      $related_relationships = $this->bundleInfoService->getRelationInfoForTargetBundle($node_type_in_index);
       foreach($related_relationships as $related_relationship){
         if(!in_array($related_relationship['relationship_bundle'], $relationship_node_types)){
           $relationship_node_types[] = $related_relationship['relationship_bundle'];
@@ -119,7 +109,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         ],
       ];
       
-      $property = new \Drupal\relationship_nodes_search\Processor\RelationInfoProcessorProperty($definition);
+      $property = new RelationInfoProcessorProperty($definition);
       $properties["relationship_info__{$relationship_node_type}"] = $property;
 
     }
@@ -139,14 +129,14 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       return;
     }
 
-    $item_relation_info_list = $this->infoService->getRelationInfoForTargetBundle($entity->getType());
+    $item_relation_info_list = $this->bundleInfoService->getRelationInfoForTargetBundle($entity->getType());
 
-    if (!($entity instanceof \Drupal\Core\Entity\EntityInterface) || empty($item_relation_info_list)) {
+    if (!($entity instanceof EntityInterface) || empty($item_relation_info_list)) {
       return;
     }
 
     $prefix = 'relationship_info__';
-    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $node_storage = $this->entityTypeManager->getStorage('node');
 
     foreach ($item->getFields() as $field) {
       $relation_nodetype_name = $field->getPropertyPath();     

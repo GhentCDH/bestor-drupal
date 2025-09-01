@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes\FormAlter;
+namespace Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\InvokeCommand;
@@ -8,15 +8,28 @@ use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler;
 
 
 class VocabFormAlter {
+    use StringTranslationTrait;
 
-  use StringTranslationTrait;
+    protected RelationBundleFormHandler $formHandler;
+    protected RelationBundleSettingsManager $settingsManager;
 
-  public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
-    $relationEntityPreparer = \Drupal::service('relationship_nodes.relation_entity_type_preparer');
-    $vocab = $relationEntityPreparer->getFormEntity($form_state);
+    public function __construct(
+      RelationBundleFormHandler $formHandler,
+      RelationBundleSettingsManager $settingsManager,
+    ) {
+        $this->formHandler = $formHandler;
+        $this->settingsManager = $settingsManager;
+    }
+    
+    
+    public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
+    $vocab = $this->formHandler->getFormEntity($form_state);
+    
     if (!$vocab instanceof Vocabulary) {
       return;
     }
@@ -33,7 +46,7 @@ class VocabFormAlter {
     $form['relationship_nodes']['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('This vocabulary is a relation type vocabulary'),
-      '#default_value' => $relationEntityPreparer->getRelationEntityProperty($vocab, 'enabled'),
+      '#default_value' => $this->settingsManager->getProperty($vocab, 'enabled'),
       '#description' => $this->t('If this is checked, this vocabulary will be validated as a relationship types list. It gets a mirror field that can contain the reverse relation type of the term.'),
       '#id' => 'relationship-nodes-enabled',
     ];
@@ -41,7 +54,7 @@ class VocabFormAlter {
     $form['relationship_nodes']['referencing_type'] = [
       '#type' => 'radios',
       '#title' => $this->t('Relation type'),
-      '#default_value' => $relationEntityPreparer->getRelationEntityProperty($vocab, 'referencing_type'),
+      '#default_value' => $this->settingsManager->getProperty($vocab, 'referencing_type'),
       '#options' => [
         'self' => $this->t('Self-referencing (same content type)'),
         'cross' => $this->t('Cross-referencing (different content types)'),
@@ -62,7 +75,7 @@ class VocabFormAlter {
       '#default_value' => $form_state->getValue(['relationship_nodes', 'confirm_mirror_change']) ?? 0,
       '#attributes' => [
         'id' => 'relationship-nodes-confirm-mirror-change',
-        'data-original' => $relationEntityPreparer->getRelationEntityProperty($vocab, 'referencing_type'),
+        'data-original' => $this->settingsManager->getProperty($vocab, 'referencing_type'),
       ],
     ];
 
@@ -95,20 +108,20 @@ class VocabFormAlter {
         'style' => 'display:none;',
         'id' => 'relationship-nodes-hidden-submit',
       ],
-      '#submit' => array_merge($original_submit_callbacks, [[$this, 'handleRelationEntitySubmission']]),
+      '#submit' => array_merge($original_submit_callbacks, [[$this, 'handleSubmission']]),
     ];
 
     $form['#validate'][] = [$this, 'validateConflicts'];
   }
 
   public function validateConflicts(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_entity_type_preparer')->detectRelationEntityConfigConflicts($form, $form_state);
+    \Drupal::service('relationship_nodes.relation_entity_type_preparer')->validateRelationFormState($form, $form_state);
   }
 
 
 
-  public function handleRelationEntitySubmission(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_entity_type_preparer')->handleRelationEntitySubmission($form, $form_state);
+  public function handleSubmission(array &$form, FormStateInterface $form_state) {
+    \Drupal::service('relationship_nodes.relation_entity_type_preparer')->handleSubmission($form, $form_state);
   }
 
 
