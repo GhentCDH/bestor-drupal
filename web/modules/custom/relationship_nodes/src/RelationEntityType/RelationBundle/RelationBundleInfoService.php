@@ -31,17 +31,24 @@ class RelationBundleInfoService {
 
     
     public function getRelationBundleInfo(string $bundle, array $fields = []):array {
-        if (empty($fields)) {
-            $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
-        }
-
+        dpm($bundle);
+        dpm($this->settingsManager->isRelationNodeType($bundle));
         if (!$this->settingsManager->isRelationNodeType($bundle)) {
             return [];
         }
 
+        if (empty($fields)) {
+            $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
+        }
+
         $related_bundles = [];
 
+        dpm($fields); // toegevoegd, weer weg aub
+
         foreach ($this->fieldNameResolver->getRelatedEntityFields() as $field_name) {
+            if(!$fields[$field_name]){ // toegevoegd, weer weg aub
+                continue;
+            }
             $related_bundles[$field_name] = $this->getFieldTargetBundles($fields[$field_name]);
         }
 
@@ -50,6 +57,9 @@ class RelationBundleInfoService {
             'has_relationtype' => false
         ];
 
+        if(!isset($fields[$this->fieldNameResolver->getRelationTypeField()])){// toegevoegd, weer weg aub
+            return $info;
+        }
         $target_bundles = $this->getFieldTargetBundles($fields[$this->fieldNameResolver->getRelationTypeField()]);            
         
         if(count($target_bundles) != 1){

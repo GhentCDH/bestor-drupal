@@ -26,10 +26,10 @@ class RelationNodeInfoService {
         RouteMatchInterface $routeMatch,
         FieldNameResolver $fieldNameResolver,
         RelationBundleInfoService $bundleInfoService,
-        RelationBundleSettingsManager $settingsManager,
+        RelationBundleSettingsManager $settingsManager
     ) {
-        $this->routeMatch = $routeMatch;
         $this->entityTypeManager = $entityTypeManager;
+        $this->routeMatch = $routeMatch;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->bundleInfoService = $bundleInfoService;
         $this->settingsManager = $settingsManager;

@@ -28,24 +28,37 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
 } 
 
 function relationship_nodes_field_storage_config_update(FieldStorageConfig $storage) {
-  $locked_fields = ['related_entity_1', 'related_entity_2'];
-  if ($storage->getTargetEntityTypeId() === 'node' && in_array($storage->getName(), $locked_fields)) {
-    if ($storage->getType() !== 'entity_reference' ||
-        $storage->getCardinality() !== 1 ||
-        $storage->getSetting('target_type') !== 'node') {
-      throw new ConfigException("The field {$storage->getName()} must remain a single-value entity_reference to nodes.");
-    }
+  $field_name = $storage->getName();
+  $fieldResolver = \Drupal::service('relationship_nodes.field_name_resolver');
+  $module_fields = $fieldResolver->getAllRelationFieldNames();
+  if (!in_array($field_name, $module_fields)) {
+    return;
+  }
+  $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
+  if(!$bundleValidator->validateFieldStorageConfig($storage)){
+    throw new ConfigException("The fieldstorage {$field_name} doesn't meet the required 'Relationship Nodes' configuration.");
   }
 }
 
 
 function relationship_nodes_field_config_update(FieldConfig $field) {
-  $locked_fields = ['related_entity_1', 'related_entity_2'];
-  if (in_array($field->getName(), $locked_fields)) {
-    $target_bundles = $field->getSetting('handler_settings')['target_bundles'] ?? [];
-    if (count($target_bundles) > 1) {
-      throw new ConfigException("The field {$field->getName()} must reference exactly one node type.");
-    }
+  $settingsManager = \Drupal::service('relationship_nodes.relation_bundle_settings_manager');
+  if(!$settingsManager->isRelationEntity($field->getTargetBundle())){
+    return;
+  }
+
+  $field_name = $field->getName();
+  $fieldResolver = \Drupal::service('relationship_nodes.field_name_resolver');
+  $module_fields = $fieldResolver->getAllRelationFieldNames();
+  
+  if (!in_array($field_name, $module_fields)) {
+    return;
+  }
+
+  $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
+
+  if(!$bundleValidator->validateFieldSettings($field)){
+    throw new ConfigException("The fieldconfig {$field_name} doesn't meet the required 'Relationship Nodes' configuration.");
   }
 }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\relationship_nodes\EventSubscriber;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\entity_events\EntityEventType;
 use Drupal\node\Entity\Node;

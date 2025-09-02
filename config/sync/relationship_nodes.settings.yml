@@ -1,14 +1,9 @@
 _core:
-  default_config_hash: Pm6k8qdc8r3amEigjbcWkRKxbDOmpL4oIzvArzLIjrI
-relationship_node_bundle_prefix: relationnode__
+  default_config_hash: 8-mDGmYEgrkyO6CWWQ0X7lD4jXXUDilFoFK_vg6cStE
 related_entity_fields:
-  related_entity_field_1: field_related_entity_1
-  related_entity_field_2: field_related_entity_2
-relationship_type_field: field_relation_type
-relationship_form_mode: relationship_subform
-relationship_taxonomy_prefixes:
-  selfreferencing_vocabulary_prefix: relationtype_self__
-  crossreferencing_vocabulary_prefix: relationtype_cross__
+  related_entity_1: rn_related_entity_1
+  related_entity_2: rn_related_entity_2
+relation_type: rn_relation_type
 mirror_fields:
-  mirror_reference_field: field_term_mirror_ref
-  mirror_string_field: field_term_mirror_str
+  mirror_self: rn_mirror_self
+  mirror_cross: rn_mirror_cross

@@ -10,6 +10,7 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
+use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationEntityFormHandler;
 
 
 class MirrorTermProvider{
@@ -26,7 +27,7 @@ class MirrorTermProvider{
         FieldNameResolver $fieldNameResolver, 
         RelationBundleSettingsManager $settingsManager, 
         ForeignKeyFieldResolver $foreignKeyResolver,
-        RelationEntityFormHandler $relationFormHandler,
+        RelationEntityFormHandler $relationFormHandler
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldNameResolver = $fieldNameResolver;

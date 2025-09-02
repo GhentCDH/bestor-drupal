@@ -11,6 +11,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
 
 class FieldConfigUiUpdater {
@@ -19,6 +20,7 @@ class FieldConfigUiUpdater {
 
     protected EntityTypeManagerInterface $entityTypeManager;
     protected RouteMatchInterface $routeMatch;
+    protected FieldNameResolver $fieldResolver;
     protected RelationBundleSettingsManager $settingsManager;
     protected RelationFieldConfigurator $fieldConfigurator;
 
@@ -26,11 +28,13 @@ class FieldConfigUiUpdater {
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager, 
         RouteMatchInterface $routeMatch, 
+        FieldNameResolver $fieldResolver,
         RelationBundleSettingsManager $settingsManager, 
-        RelationFieldConfigurator $fieldConfigurator,
+        RelationFieldConfigurator $fieldConfigurator
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->routeMatch = $routeMatch;
+        $this->fieldResolver = $fieldResolver;
         $this->settingsManager = $settingsManager;
         $this->fieldConfigurator = $fieldConfigurator;
     }
@@ -61,9 +65,7 @@ class FieldConfigUiUpdater {
             return;
         }
         
-
-        //vuil. moet nog worden opgeschoond. pas op id is niet hetzelfde als name, geen underscores maar dasehs
-        if(!in_array($row['id'], ['related-entity-1', 'related-entity-2', 'relation-type', 'mirror-field-self', 'mirror-field-cross'])){
+        if(!in_array($row['data']['field_name'], $this->fieldResolver->getAllRelationFieldNames())){
             return;
         }
 
@@ -104,7 +106,7 @@ class FieldConfigUiUpdater {
         }
 
         // VUIL niet zo expliciet. dynamisch ophalen.
-        if(!in_array($field_config->getName(), ['related_entity_1', 'related_entity_2', 'relation_type', 'mirror_field_self', 'mirror_field_cross'])){
+        if(!in_array($field_config->getName(), $this->fieldResolver->getAllRelationFieldNames())){
             return;
         }
 

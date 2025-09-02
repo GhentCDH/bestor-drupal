@@ -4,10 +4,15 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - relationship_nodes
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 0
+    auto_title: 0
 name: 'Relationship between concepts'
 type: relationnode__concept_concept
 description: 'This content type describes the relationship between an entities of the concept type (related item 1 and 2).'

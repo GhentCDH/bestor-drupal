@@ -10,6 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
+use Drupal\node\Entity\NodeType;
 
 class RelationBundleFormHandler {
 
@@ -32,7 +33,6 @@ class RelationBundleFormHandler {
 
     public function handleSubmission(array &$form, FormStateInterface $form_state) {
         $entity = $this->getFormEntity($form_state);
-        
         if (!$entity) {
             return;
         }
@@ -46,7 +46,7 @@ class RelationBundleFormHandler {
         $missing = $fields_status['missing'];
         $remove = $fields_status['remove'];
 
-
+        dpm($fields_status, 'field statusses');
         if(!empty($existing)){
             $this->fieldConfigurator->ensureFieldConfig($entity, $existing);
         }
@@ -83,6 +83,7 @@ class RelationBundleFormHandler {
     
     public function getFormEntity(FormStateInterface $form_state): NodeType|Vocabulary|null {
         $entity = $form_state->getFormObject()->getEntity();
+        dpm($entity);
         return ($entity instanceof NodeType || $entity instanceof Vocabulary) ? $entity : null;
     }
 }

@@ -2,7 +2,8 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationField;
 
-use Drupal\Core\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Config\ConfigException;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\NodeType;
@@ -24,6 +25,35 @@ class RelationFieldConfigurator {
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->settingsManager = $settingsManager;
+    }
+
+
+    public function getRequiredFieldConfiguration(string $field_name): ?array {
+        if (in_array($field_name, $this->fieldNameResolver->getRelatedEntityFields())) {
+            return [
+                'type' => 'entity_reference',
+                'target_type' => 'node',
+                'cardinality' => 1,
+            ];
+        } elseif ($field_name === $this->fieldNameResolver->getRelationTypeField()) {
+            return [
+                'type' => 'entity_reference',
+                'target_type' => 'taxonomy_term',
+                'cardinality' => 1,
+            ];
+        } elseif ($field_name === $this->fieldNameResolver->getMirrorFields('cross')) {
+            return [
+                'type' => 'string',
+                'cardinality' => 1,
+            ];
+        } elseif ($field_name === $this->fieldNameResolver->getMirrorFields('self')) {
+            return [
+                'type' => 'entity_reference',
+                'target_type' => 'taxonomy_term',
+                'cardinality' => 1,
+            ];
+        }
+        return null;
     }
 
 
@@ -52,24 +82,32 @@ class RelationFieldConfigurator {
     }
 
 
+
+
     protected function getRequiredFields(ConfigEntityBundleBase $entity): array {
         $fields = [];
         if ($entity instanceof NodeType) {
-            foreach($this->fieldNameResolver->getRelatedEntityFields() as $related_entity_field){
-                $fields[$related_entity_field] = ['type' => 'entity_reference', 'target_type' => 'node', 'cardinality' => 1];
+            foreach($this->fieldNameResolver->getRelatedEntityFields() as $field_name){
+                $config = $this->getRequiredFieldConfiguration($field_name);
+                if ($config) {
+                    $fields[$field_name] = $config;
+                }
             }
             if ($this->settingsManager->isTypedRelationNode($entity)) {
-                $fields[$this->fieldNameResolver->getRelationTypeField()] = ['type' => 'entity_reference', 'target_type' => 'taxonomy_term', 'cardinality' => 1];
+                $config = $this->getRequiredFieldConfiguration($this->fieldNameResolver->getRelationTypeField());
+                if ($config) {
+                    $fields[$field_name] = $config;
+                }
             }
         } elseif ($entity instanceof Vocabulary) {
-            $type = $this->settingsManager->getProperty($entity, 'referencing_type');
-            switch ($type) {
-                case 'self':
-                    $fields[$this->fieldNameResolver->getMirrorFields('self')] = ['type' => 'entity_reference', 'target_type' => 'taxonomy_term', 'cardinality' => 1];
-                    break;
-                case 'cross':
-                    $fields[$this->fieldNameResolver->getMirrorFields('cross')] = ['type' => 'string', 'cardinality' => 1];
-                    break;
+            if($type = $this->settingsManager->getProperty($entity, 'referencing_type')){
+                $field_name = $this->fieldNameResolver->getMirrorFields($type);
+                if($field_name){
+                    $config = $this->getRequiredFieldConfiguration($field_name);
+                    if ($config) {
+                        $fields[$field_name] = $config;
+                    }
+                }          
             }
         }
         return $fields;
@@ -91,7 +129,7 @@ class RelationFieldConfigurator {
                     'entity_type' => $entity_type_id,
                     'type' => $settings['type'],
                     'cardinality' => $settings['cardinality'],
-                    'settings' => $settings['target_type'] ? ['target_type' => $settings['target_type']] : [],
+                    'settings' => isset($settings['target_type']) ? ['target_type' => $settings['target_type']] : [],
                     'third_party_settings' => ['relationship_nodes' => ['rn_created'=> true]],
                 ]);
                 $field_storage->setLocked(true);

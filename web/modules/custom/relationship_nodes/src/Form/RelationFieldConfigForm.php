@@ -5,28 +5,49 @@ namespace Drupal\relationship_nodes\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Core\Url;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class RelationFieldConfigForm extends FormBase {
 
   use StringTranslationTrait;
 
-  protected $entityType;
-  protected $bundle;
-  protected $fieldName;
-  protected $fieldConfig;
+  protected EntityTypeManagerInterface $entityTypeManager;
+  protected FieldNameResolver $fieldResolver;
+  protected RelationBundleSettingsManager $settingsManager;
+  protected ?FieldConfig $fieldConfig = null;
+  protected ?string $fieldName = null;
+  protected ?string $entityType = null;
+  protected ?string $bundle = null;
+
+
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, FieldNameResolver $fieldResolver, RelationBundleSettingsManager $settingsManager) {
+    $this->entityTypeManager = $entityTypeManager;
+    $this->fieldResolver = $fieldResolver;
+    $this->settingsManager = $settingsManager;
+  }
+
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('relationship_nodes.field_name_resolver'),
+      $container->get('relationship_nodes.relation_bundle_settings_manager'),
+    );
+  }
 
   public function getFormId() {
     return 'relation_field_config_form';
   }
 
   public function getTitle($bundle, $field_name) {
-    $bundle_entity = \Drupal::entityTypeManager()
+    $bundle_entity = $this->entityTypeManager
       ->getStorage($this->entityType === 'node' ? 'node_type' : 'taxonomy_vocabulary')
       ->load($bundle);
 
@@ -44,9 +65,6 @@ class RelationFieldConfigForm extends FormBase {
     $this->entityType = $field_config->getTargetEntityTypeId();
     $this->fieldName = $field_config->getName();
     $this->bundle = $field_config->getTargetBundle();
-
-    $settingsManager = \Drupal::service('relationship_nodes.relation_bundle_settings_manager');
-    dpm($form_state->getFormObject());
 
 
     $form['label'] = [
@@ -69,7 +87,7 @@ class RelationFieldConfigForm extends FormBase {
       if($this->fieldName == 'relation_type'){
         $form['target_bundle']['#title'] = $this->t('Target relation type vocabulary');
         $form['target_bundle']['#options'] = $this->getAllRelationVocabs();
-      } elseif($this->fieldName == 'related_entity_1' || $this->fieldName == 'related_entity_2'){
+      } elseif(in_array($this->fieldName,$this->fieldResolver->getRelatedEntityFields())){
           $form['target_bundle']['#title'] = $this->t('Target node type');
           $form['target_bundle']['#options'] = $this->getAllNodeTypes();
       }
@@ -80,7 +98,7 @@ class RelationFieldConfigForm extends FormBase {
       '#value' => $this->t('Save'),
     ];
 
-    if (!$settingsManager->isRelationEntity($this->bundle)) {
+    if (!$this->settingsManager->isRelationEntity($this->bundle)) {
       $form['delete'] = [
           '#type' => 'link',
           '#title' => $this->t('Delete RN Field'),
@@ -129,17 +147,16 @@ class RelationFieldConfigForm extends FormBase {
 
     protected function getAllRelationVocabs() {
     $options = [];
-    $settingsManager = \Drupal::service('relationship_nodes.relation_bundle_settings_manager');
     foreach (Vocabulary::loadMultiple() as $type) {
-      if($settingsManager->isRelationVocab($type)){
+      if($this->settingsManager->isRelationVocab($type)){
         $options[$type->id()] = $type->label();
       } 
     }
     return $options;
   }
 
-  protected function getCurrentTargetBundle($bundle, $field_name) {
-    $field = \Drupal::entityTypeManager()
+  protected function getCurrentTargetBundle($bundle, $field_name):?string {
+    $field = $this->entityTypeManager
       ->getStorage('field_config')
       ->load("{$this->entityType}.$bundle.$field_name");
 

@@ -10,19 +10,23 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleValidator;
 
 
 class VocabFormAlter {
     use StringTranslationTrait;
 
     protected RelationBundleFormHandler $formHandler;
+    protected RelationBundleValidator $bundleValidator;
     protected RelationBundleSettingsManager $settingsManager;
 
     public function __construct(
       RelationBundleFormHandler $formHandler,
-      RelationBundleSettingsManager $settingsManager,
+      RelationBundleValidator $bundleValidator,
+      RelationBundleSettingsManager $settingsManager
     ) {
         $this->formHandler = $formHandler;
+        $this->bundleValidator = $bundleValidator;
         $this->settingsManager = $settingsManager;
     }
     
@@ -115,13 +119,13 @@ class VocabFormAlter {
   }
 
   public function validateConflicts(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_entity_type_preparer')->validateRelationFormState($form, $form_state);
+    $this->bundleValidator->validateRelationFormState($form, $form_state);
   }
 
 
 
   public function handleSubmission(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_entity_type_preparer')->handleSubmission($form, $form_state);
+    $this->formHandler->handleSubmission($form, $form_state);
   }
 
 
@@ -176,6 +180,4 @@ class VocabFormAlter {
 
     return $response;
   }
-
-
 }

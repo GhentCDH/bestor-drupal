@@ -3,8 +3,9 @@
 namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
@@ -90,7 +91,7 @@ class RelationBundleValidator {
             $field_config = $field_arr['field_config'];
             if (
                 !$field_config instanceof FieldConfig ||
-                !$this->validateFieldSettings($entity, $field_config, $field_arr['settings'])
+                !$this->validateFieldSettings($field_config)
             ) {
             $errors[] = $this->t('Field @field in bundle @bundle is misconfigured.', [
                 '@field' => $field_name,
@@ -103,28 +104,47 @@ class RelationBundleValidator {
     }
 
     
-    protected function validateFieldSettings(ConfigEntityBundleBase $entity, FieldConfig $field_config, array $required_settings): bool {
+    public function validateFieldSettings(FieldConfig $field_config): bool {
         $storage = $field_config->getFieldStorageDefinition();
-        if (!$storage) return false;
-        if ($storage->getType() !== $required_settings['type']) return false;
-        if ($storage->getCardinality() != $required_settings['cardinality']) return false;
+        if(!$storage instanceof FieldStorageConfig || !$this->validateFieldStorageConfig($storage)){
+            return false;
+        }
+        $target_bundles = $field_config->getSetting('handler_settings')['target_bundles'] ?? [];
+        if (
+            (!empty($target_bundles) && count($target_bundles) !== 1) || (
+                $field_config->getName() === $this->fieldNameResolver->getMirrorFields('self') && 
+                key($target_bundles) !== $field_config->getTargetBundle()
+            )
+        ) {
+            return false;
+        }
 
-        if(isset($storage['target_type'])){
-            if ($storage->getSetting('target_type') != $storage['target_type']) return false;
-            $target_bundles = $field_config->getSetting('handler_settings')['target_bundles'] ?? [];
-            if (!empty($target_bundles) && count($target_bundles) !== 1) return false;
-            if ($field_config->getName() === $this->fieldNameResolver->getMirrorFields('self') && key($target_bundles) !== $entity->id()) return false;
-            if ($field_config->getName() === $this->fieldNameResolver->getRelationTypeField()){
-                foreach($target_bundles as $vocab_name => $vocab_label){
-                    if(!$this->settingsManager->isRelationVocab($vocab_name)){
-                        return false;
-                    }
+        if ($field_config->getName() === $this->fieldNameResolver->getRelationTypeField()){
+            foreach($target_bundles as $vocab_name => $vocab_label){
+                if(!$this->settingsManager->isRelationVocab($vocab_name)){
+                    return false;
                 }
             }
         }
         return true;
     }
-    
+
+
+    public function validateFieldStorageConfig(FieldStorageConfig $storage){
+        $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($storage->getName());
+        if (
+            !$required_settings ||
+            $storage->getType() !== $required_settings['type'] ||
+            $storage->getCardinality() != $required_settings['cardinality'] || (
+                isset($required_settings['target_type']) && 
+                $storage->getSetting('target_type') != $required_settings['target_type']
+            )
+        ){
+            return false;
+        }
+        return true;
+    }
+
 
     protected function validBasicRelationConfig(): bool{  
         if(!$this->validChildFieldConfig($this->fieldNameResolver->getRelatedEntityFields(), 'related_entity_fields')){

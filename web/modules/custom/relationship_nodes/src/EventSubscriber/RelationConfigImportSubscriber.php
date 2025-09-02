@@ -31,7 +31,8 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
      * Controleer node types en vocabularies bij config import.
      */
     public function onConfigImport(ConfigImporterEvent $event): void {
-        $storage = $event->getConfigStorage();
+      
+      /*  $storage = $event->getConfigStorage();
 
         // Loop over alle node types
         foreach ($storage->listAll() as $config_name) {
@@ -57,6 +58,6 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
                     }
                 }
             }
-        }
+        }*/
     }
 }

@@ -23,7 +23,7 @@ class RelationSyncService {
       EntityTypeManagerInterface $entityTypeManager,
       RelationNodeInfoService $nodeInfoService,
       ForeignKeyFieldResolver $foreignKeyResolver,
-      RelationFormStateHelper $formStateHelper,
+      RelationFormStateHelper $formStateHelper
   ) {
       $this->entityTypeManager = $entityTypeManager;
       $this->nodeInfoService = $nodeInfoService;

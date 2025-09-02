@@ -4,32 +4,37 @@ namespace Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAl
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\node\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\node\Entity\NodeType;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleValidator;
 
 class NodeTypeFormAlter {
 
     use StringTranslationTrait;
 
     protected RelationBundleFormHandler $formHandler;
+    protected RelationBundleValidator $bundleValidator;
     protected RelationBundleSettingsManager $settingsManager;
 
     public function __construct(
       RelationBundleFormHandler $formHandler,
+      RelationBundleValidator $bundleValidator,
       RelationBundleSettingsManager $settingsManager,
     ) {
         $this->formHandler = $formHandler;
+        $this->bundleValidator = $bundleValidator;
         $this->settingsManager = $settingsManager;
     }
 
     public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
         $node_type = $this->formHandler->getFormEntity($form_state);
+        dpm($this->formHandler->getFormEntity($form_state));
         if(!$node_type instanceof NodeType){
             return;
         }
-        
+
         $form['relationship_nodes'] = [
             '#type' => 'details',
             '#title' => $this->t('Relationship Node'),
@@ -72,8 +77,8 @@ class NodeTypeFormAlter {
                     ],
                 ],
         ];
-
-        $form['#validate'][] = [$this->formHandler,  'validateRelationFormState'];
+        dpm($form);
+        $form['#validate'][] = [$this->bundleValidator, 'validateRelationFormState'];
         $form['actions']['submit']['#submit'][] = [$this->formHandler,  'handleSubmission'];
     }
 

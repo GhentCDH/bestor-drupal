@@ -6,6 +6,8 @@ dependencies:
     - field.field.node.relationnode__concept_concept.field_related_entity_1
     - field.field.node.relationnode__concept_concept.field_related_entity_2
     - field.field.node.relationnode__concept_concept.field_relation_type
+    - field.field.node.relationnode__concept_concept.rn_related_entity_1
+    - field.field.node.relationnode__concept_concept.rn_related_entity_2
     - node.type.relationnode__concept_concept
   module:
     - user
@@ -46,3 +48,6 @@ content:
 hidden:
   footnotes_group: true
   langcode: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  search_api_excerpt: true

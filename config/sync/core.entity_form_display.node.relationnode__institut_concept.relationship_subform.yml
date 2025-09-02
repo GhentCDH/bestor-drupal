@@ -10,7 +10,6 @@ dependencies:
     - node.type.relationnode__institut_concept
   module:
     - entity_reference_modal
-    - relationship_nodes
 id: node.relationnode__institut_concept.relationship_subform
 targetEntityType: node
 bundle: relationnode__institut_concept
@@ -55,10 +54,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_relation_type:
-    type: mirror_select_widget
-    weight: 2
+    type: entity_reference_autocomplete
+    weight: 26
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   translation:
     weight: 10

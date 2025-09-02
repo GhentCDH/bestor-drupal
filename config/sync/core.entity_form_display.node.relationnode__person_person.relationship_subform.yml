@@ -12,7 +12,6 @@ dependencies:
   module:
     - datetime_range
     - entity_reference_modal
-    - relationship_nodes
 id: node.relationnode__person_person.relationship_subform
 targetEntityType: node
 bundle: relationnode__person_person
@@ -63,10 +62,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_relation_type:
-    type: mirror_select_widget
-    weight: 2
+    type: entity_reference_autocomplete
+    weight: 26
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   created: true

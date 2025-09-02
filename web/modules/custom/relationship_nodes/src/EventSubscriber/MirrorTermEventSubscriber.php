@@ -27,17 +27,23 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
 
   public function addMirrorLogic(EntityEvent $event, string $event_name): void {
     $entity = $event->getEntity();
-    if ($entity instanceof TermInterface) {
-      $this->mirrorUpdater->setMirrorTermLink($entity, $this->mapEventNameToHook($event_name));
+    if (!$entity instanceof TermInterface) {
+      return;      
     }
+    $hook = $this->mapEventNameToHook($event_name);
+    if ($hook === null) {
+      return;
+    }
+
+    $this->mirrorUpdater->setMirrorTermLink($entity, $hook);
   }
 
-  private function mapEventNameToHook(string $event_name): string {
+  private function mapEventNameToHook(string $event_name): ?string {
     return match ($event_name) {
       EntityEventType::INSERT => 'insert',
       EntityEventType::UPDATE => 'update',
       EntityEventType::DELETE => 'delete',
-      default => 'unknown',
+      default => null,
     };
   }
 }

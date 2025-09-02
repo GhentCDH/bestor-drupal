@@ -6,9 +6,10 @@ dependencies:
     - field.field.node.relationnode__concept_concept.field_related_entity_1
     - field.field.node.relationnode__concept_concept.field_related_entity_2
     - field.field.node.relationnode__concept_concept.field_relation_type
+    - field.field.node.relationnode__concept_concept.rn_related_entity_1
+    - field.field.node.relationnode__concept_concept.rn_related_entity_2
     - node.type.relationnode__concept_concept
   module:
-    - datetime_range
     - path
 id: node.relationnode__concept_concept.default
 targetEntityType: node
@@ -108,4 +109,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  rn_related_entity_1: true
+  rn_related_entity_2: true

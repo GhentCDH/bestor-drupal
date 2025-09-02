@@ -49,7 +49,25 @@ class FieldNameResolver {
     }
 
 
-    protected function getConfig(): ImmutableConfig {
+    public function getAllRelationFieldNames(): array{
+        $fields = [];
+        $relation_type = $this->getRelationTypeField();
+        if ($relation_type) {
+            $fields[] = $relation_type;
+        }
+        $related = $this->getRelatedEntityFields();
+        if (!empty($related)) {
+            $fields = array_merge($fields, array_values($related));
+        }
+        $mirror = $this->getMirrorFields();
+        if (!empty($mirror)) {
+            $fields = array_merge($fields, array_values($mirror));
+        }
+        return $fields;
+    }
+
+
+    public function getConfig(): ImmutableConfig {
         return $this->configFactory->get('relationship_nodes.settings');
     }    
 }
