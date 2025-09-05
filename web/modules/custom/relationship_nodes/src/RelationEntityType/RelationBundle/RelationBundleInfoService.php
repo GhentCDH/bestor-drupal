@@ -3,14 +3,18 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 
 class RelationBundleInfoService {
 
+    protected EntityTypeManagerInterface $entityTypeManager;
     protected EntityFieldManagerInterface $fieldManager;
     protected EntityTypeBundleInfoInterface $bundleInfo;
     protected FieldNameResolver $fieldNameResolver;
@@ -18,11 +22,13 @@ class RelationBundleInfoService {
 
 
     public function __construct(
+        EntityTypeManagerInterface $entityTypeManager,
         EntityFieldManagerInterface $fieldManager,
         EntityTypeBundleInfoInterface $bundleInfo,
         FieldNameResolver $fieldNameResolver,
         RelationBundleSettingsManager $settingsManager,
     ) {
+        $this->entityTypeManager = $entityTypeManager;
         $this->fieldManager = $fieldManager;
         $this->bundleInfo = $bundleInfo;
         $this->fieldNameResolver = $fieldNameResolver;
@@ -31,8 +37,6 @@ class RelationBundleInfoService {
 
     
     public function getRelationBundleInfo(string $bundle, array $fields = []):array {
-        dpm($bundle);
-        dpm($this->settingsManager->isRelationNodeType($bundle));
         if (!$this->settingsManager->isRelationNodeType($bundle)) {
             return [];
         }
@@ -43,10 +47,9 @@ class RelationBundleInfoService {
 
         $related_bundles = [];
 
-        dpm($fields); // toegevoegd, weer weg aub
 
         foreach ($this->fieldNameResolver->getRelatedEntityFields() as $field_name) {
-            if(!$fields[$field_name]){ // toegevoegd, weer weg aub
+            if(!$fields[$field_name]){ 
                 continue;
             }
             $related_bundles[$field_name] = $this->getFieldTargetBundles($fields[$field_name]);
@@ -57,7 +60,7 @@ class RelationBundleInfoService {
             'has_relationtype' => false
         ];
 
-        if(!isset($fields[$this->fieldNameResolver->getRelationTypeField()])){// toegevoegd, weer weg aub
+        if(!isset($fields[$this->fieldNameResolver->getRelationTypeField()])){
             return $info;
         }
         $target_bundles = $this->getFieldTargetBundles($fields[$this->fieldNameResolver->getRelationTypeField()]);            
@@ -160,6 +163,32 @@ class RelationBundleInfoService {
         }
 
         return empty($join_fields) ? [] : ['join_fields' => $join_fields, 'relation_info' => $relation_info];
+    }
+
+
+    public function getAllRelationEntityTypes(?string $entity_type_id = null):array{
+        $entity_types = ['node_type', 'taxonomy_vocabulary'];
+        if($entity_type_id !== null  && !in_array($entity_type_id, $entity_types)){
+            return [];
+        }
+
+        $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
+
+        $result = []; 
+        foreach($input as $entity_type){
+         $storage = $this->entityTypeManager->getStorage($entity_type);
+            if(!$storage instanceof EntityStorageInterface){
+                continue;
+            }
+
+            $all = $storage->loadMultiple();
+            foreach ($all as $type) {
+                if($type instanceof ConfigEntityBundleBase && $this->settingsManager->isRelationEntity($type)){            
+                    $result[$type->id()] = $type;
+                }
+            }
+        }
+        return $result;
     }
 
 

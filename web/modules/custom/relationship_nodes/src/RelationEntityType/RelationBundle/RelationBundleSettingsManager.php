@@ -8,6 +8,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 
 class RelationBundleSettingsManager {
@@ -143,5 +144,17 @@ class RelationBundleSettingsManager {
         }
         $auto_title = $this->getProperty($node_type, 'auto_title');
         return !empty($auto_title);
+    }
+
+
+    public function removeRnThirdPartySettings(ConfigEntityBase $entity): void {
+        $rn_settings = $entity->getThirdPartySettings('relationship_nodes');
+        foreach ($rn_settings as $key => $value) {
+            $entity->unsetThirdPartySetting('relationship_nodes', $key);
+        }
+        if (method_exists($entity, 'setLocked')) {
+            $entity->setLocked(FALSE);
+        }
+        $entity->save();
     }
 }

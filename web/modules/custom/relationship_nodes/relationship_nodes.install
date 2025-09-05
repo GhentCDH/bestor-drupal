@@ -1,0 +1,64 @@
+<?php
+
+function relationship_nodes_requirements($phase) {
+    $requirements = [];
+
+    if ($phase == 'install' || $phase == 'runtime') {
+        try {
+            if (\Drupal::hasService('relationship_nodes.relation_bundle_validator')) {
+                $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
+                $validation_errors = $bundleValidator->validateAllRelationConfig();
+                
+                if (!empty($validation_errors)) {
+                    $requirements['relationship_nodes_config'] = [
+                        'title' => t('Relationship Nodes Configuration'),
+                        'value' => t('Configuration validation failed'),
+                        'description' => [
+                        '#theme' => 'item_list',
+                        '#title' => t('The following configuration issues must be resolved:'),
+                        '#items' => $validation_errors,
+                        ],
+                        'severity' => REQUIREMENT_ERROR,
+                    ];
+                } else {
+                    $requirements['relationship_nodes_config'] = [
+                        'title' => t('Relationship Nodes Configuration'),
+                        'value' => t('Configuration validated successfully'),
+                        'severity' => REQUIREMENT_OK,
+                    ];
+                }
+            }
+        } catch (Exception $e) {
+            $requirements['relationship_nodes_config'] = [
+                'title' => t('Relationship Nodes Configuration'),
+                'value' => t('Validation failed'),
+                'description' => t('Error during validation: @error', ['@error' => $e->getMessage()]),
+                'severity' => REQUIREMENT_ERROR,
+            ];
+        }
+    }
+
+    return $requirements;
+}
+
+function relationship_nodes_uninstall($is_syncing){
+    try {
+        $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
+        $cleanupService->cleanupModuleData();
+        $bundleInfoService = \Drupal::service('relationship_nodes.relation_bundle_info_service');
+        foreach($bundleInfoService->getAllRelationEntityTypes() as $entity_type){
+            $settingsManager->removeRnThirdPartySettings($entity_type);
+        }
+
+        $fieldConfigurator = \Drupal::service('relationship_nodes.relation_field_configurator');
+        foreach($fieldConfigurator->getAllRnCreatedFields() as $field){
+            $settingsManager->removeRnThirdPartySettings($field);
+        }
+
+        \Drupal::cache()->deleteAll();
+    } catch (Exception $e) {
+        \Drupal::logger('relationship_nodes')->error('Error during uninstall: @error', [
+            '@error' => $e->getMessage()
+        ]);
+    }
+}

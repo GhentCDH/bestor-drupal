@@ -10,30 +10,26 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleValidator;
 
 
 class VocabFormAlter {
     use StringTranslationTrait;
 
     protected RelationBundleFormHandler $formHandler;
-    protected RelationBundleValidator $bundleValidator;
     protected RelationBundleSettingsManager $settingsManager;
 
     public function __construct(
       RelationBundleFormHandler $formHandler,
-      RelationBundleValidator $bundleValidator,
       RelationBundleSettingsManager $settingsManager
     ) {
         $this->formHandler = $formHandler;
-        $this->bundleValidator = $bundleValidator;
         $this->settingsManager = $settingsManager;
     }
     
     
     public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
     $vocab = $this->formHandler->getFormEntity($form_state);
-    
+    dpm($vocab);
     if (!$vocab instanceof Vocabulary) {
       return;
     }
@@ -97,7 +93,7 @@ class VocabFormAlter {
       '#value' => $this->t('Save'),
       '#button_type' => 'primary',
       '#ajax' => [
-        'callback' => [$this, 'openConfirmationModal'],
+        'callback' => [static::class, 'openConfirmationModal'],
         'event' => 'click',
         'progress' => ['type' => 'none'],
         'disable-refocus' => TRUE,
@@ -112,24 +108,23 @@ class VocabFormAlter {
         'style' => 'display:none;',
         'id' => 'relationship-nodes-hidden-submit',
       ],
-      '#submit' => array_merge($original_submit_callbacks, [[$this, 'handleSubmission']]),
+      '#submit' => array_merge($original_submit_callbacks, [[static::class, 'handleSubmission']]),
     ];
 
-    $form['#validate'][] = [$this, 'validateConflicts'];
+    $form['#validate'][] = [static::class, 'validateConflicts'];
   }
 
-  public function validateConflicts(array &$form, FormStateInterface $form_state) {
-    $this->bundleValidator->validateRelationFormState($form, $form_state);
+  public static function validateConflicts(array &$form, FormStateInterface $form_state) {
+    \Drupal::service('relationship_nodes.relation_bundle_validator')->validateRelationFormState($form, $form_state);
+  }
+
+  
+ public static function handleSubmission(array &$form, FormStateInterface $form_state) {
+    \Drupal::service('relationship_nodes.relation_bundle_form_handler')->handleSubmission($form, $form_state);
   }
 
 
-
-  public function handleSubmission(array &$form, FormStateInterface $form_state) {
-    $this->formHandler->handleSubmission($form, $form_state);
-  }
-
-
-  public function openConfirmationModal(array &$form, FormStateInterface $form_state) {
+  public static function openConfirmationModal(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
 
     $new_value = $form_state->getValue(['relationship_nodes', 'referencing_type']);
@@ -147,13 +142,13 @@ class VocabFormAlter {
     $dialog_content = [
       '#type' => 'container',
       'message' => [
-        '#markup' => $this->t('You changed the relation type. Are you sure you want to save these relationship settings?'),
+        '#markup' => t('You changed the relation type. Are you sure you want to save these relationship settings?'),
       ],
       'actions' => [
         '#type' => 'container',
         'save' => [
           '#type' => 'button',
-          '#value' => $this->t('Save'),
+          '#value' => t('Save'),
           '#attributes' => [
             'id' => 'relationship-nodes-modal-save',
             'class' => ['button', 'button--primary'],
@@ -161,7 +156,7 @@ class VocabFormAlter {
         ],
         'cancel' => [
           '#type' => 'button',
-          '#value' => $this->t('Cancel'),
+          '#value' => t('Cancel'),
           '#attributes' => [
             'id' => 'relationship-nodes-modal-cancel',
             'class' => ['button'],
@@ -173,7 +168,7 @@ class VocabFormAlter {
     ];
 
     $response->addCommand(new OpenModalDialogCommand(
-      $this->t('Confirm save'),
+      t('Confirm save'),
       $dialog_content,
       ['width' => '400']
     ));

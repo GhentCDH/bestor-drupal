@@ -44,7 +44,6 @@ class SetRelationTitleEventSubscriber implements EventSubscriberInterface {
     if($entity instanceof Node){
       $node_type_id = $entity->bundle();
       $node_type = NodeType::load($node_type_id);
-      dpm($node_type);
     }
 
     // testcode stop 
@@ -54,7 +53,6 @@ class SetRelationTitleEventSubscriber implements EventSubscriberInterface {
     if (!($entity instanceof Node) || !$this->settingsManager->isRelationNodeType($entity->getType())) {
       return;
     }
-      dpm("save entity " . $entity->getType());
     $entity->set('title', $this->generateRelationLabel($entity));
     
   }

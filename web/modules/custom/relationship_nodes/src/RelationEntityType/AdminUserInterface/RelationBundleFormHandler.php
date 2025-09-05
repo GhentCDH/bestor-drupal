@@ -11,6 +11,7 @@ use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSe
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
 use Drupal\node\Entity\NodeType;
+use Drupal\taxonomy\Entity\Vocabulary;
 
 class RelationBundleFormHandler {
 
@@ -46,7 +47,6 @@ class RelationBundleFormHandler {
         $missing = $fields_status['missing'];
         $remove = $fields_status['remove'];
 
-        dpm($fields_status, 'field statusses');
         if(!empty($existing)){
             $this->fieldConfigurator->ensureFieldConfig($entity, $existing);
         }
@@ -83,7 +83,6 @@ class RelationBundleFormHandler {
     
     public function getFormEntity(FormStateInterface $form_state): NodeType|Vocabulary|null {
         $entity = $form_state->getFormObject()->getEntity();
-        dpm($entity);
         return ($entity instanceof NodeType || $entity instanceof Vocabulary) ? $entity : null;
     }
 }

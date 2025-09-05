@@ -6,11 +6,13 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Config\ConfigException;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 class RelationFieldConfigurator {
     protected EntityTypeManagerInterface $entityTypeManager;
@@ -63,7 +65,7 @@ class RelationFieldConfigurator {
         $entity_type_id = $this->settingsManager->getEntityTypeId($entity);
 
         $existing = $missing = $remove = [];
-
+        dpm($required_fields, 'req');
         foreach ($required_fields as $field_name => $settings) {
             $field_config = $storage->load("$entity_type_id.{$entity->id()}.$field_name");
             if (!$field_config) {
@@ -94,7 +96,9 @@ class RelationFieldConfigurator {
                 }
             }
             if ($this->settingsManager->isTypedRelationNode($entity)) {
-                $config = $this->getRequiredFieldConfiguration($this->fieldNameResolver->getRelationTypeField());
+                $field_name = $this->fieldNameResolver->getRelationTypeField();
+                $config = $this->getRequiredFieldConfiguration($field_name);
+                dpm($config, 'config');
                 if ($config) {
                     $fields[$field_name] = $config;
                 }
@@ -110,6 +114,7 @@ class RelationFieldConfigurator {
                 }          
             }
         }
+        dpm($fields, 'fields');
         return $fields;
     }
 
@@ -180,8 +185,33 @@ class RelationFieldConfigurator {
     }
 
 
-    public function isRnCreatedField(FieldConfig $field_config) : bool{
-        return (bool) $field_config->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
+    public function isRnCreatedField(FieldConfig|FieldStorageConfig $field) : bool{
+        return (bool) $field->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
     }
 
+
+    public function getAllRnCreatedFields(?string $entity_type_id = null) : array {
+        $entity_types = ['field_storage_config', 'field_config'];
+        if($entity_type_id !== null && !in_array($entity_type_id, $entity_types)){
+            return [];
+        }
+
+        $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
+
+        $result = []; 
+        foreach($input as $entity_type){
+            $storage = $this->entityTypeManager->getStorage($entity_type);
+            if(!$storage instanceof EntityStorageInterface){
+                continue;
+            }
+            $all = $storage->loadMultiple();
+            foreach ($all as $type) {
+                if($type instanceof ConfigEntityBase && $this->isRnCreatedField($type)){
+                    $result[$type->id()] = $type;
+                } 
+            }    
+        }
+
+        return $result;
+    }
 }

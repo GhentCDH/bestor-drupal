@@ -1,11 +1,4 @@
 services:
-  relationship_nodes.config_import_subscriber:
-    class: Drupal\relationship_nodes\EventSubscriber\RelationConfigImportSubscriber
-    arguments:
-      - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.relation_field_configurator'
-    tags:
-      - { name: event_subscriber }
   relationship_nodes.delete_target_node_event_subscriber:
     class: Drupal\relationship_nodes\EventSubscriber\DeleteTargetNodeEventSubscriber
     arguments: 
@@ -72,6 +65,7 @@ services:
   relationship_nodes.relation_bundle_info_service:
     class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService
     arguments:
+      - '@entity_type.manager'
       - '@entity_field.manager'
       - '@entity_type.bundle.info' 
       - '@relationship_nodes.field_name_resolver'
@@ -83,9 +77,19 @@ services:
   relationship_nodes.relation_bundle_validator:
     class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleValidator
     arguments:
+      - '@entity_type.manager'
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_field_configurator'
+      - '@relationship_nodes.relation_bundle_info_service'
       - '@relationship_nodes.relation_bundle_settings_manager'
+  relationship_nodes.relation_config_import_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\RelationConfigImportSubscriber
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.relation_settings_cleanup_service'
+      - '@relationship_nodes.relation_bundle_validator' 
+    tags:
+      - { name: event_subscriber }
   relationship_nodes.relation_entity_form_handler:
     class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationEntityFormHandler
     arguments: 
@@ -114,6 +118,12 @@ services:
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_bundle_info_service'
       - '@relationship_nodes.relation_bundle_settings_manager'
+  relationship_nodes.relation_settings_cleanup_service:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationSettingsCleanUpService
+    arguments:
+      - '@relationship_nodes.relation_bundle_info_service'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_field_configurator'    
   relationship_nodes.relation_sync_service:
     class: Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService
     arguments: 
@@ -137,5 +147,4 @@ services:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\VocabFormAlter
     arguments:
       - '@relationship_nodes.relation_bundle_form_handler'
-      - '@relationship_nodes.relation_bundle_validator'   
       - '@relationship_nodes.relation_bundle_settings_manager'

@@ -30,7 +30,6 @@ class NodeTypeFormAlter {
 
     public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
         $node_type = $this->formHandler->getFormEntity($form_state);
-        dpm($this->formHandler->getFormEntity($form_state));
         if(!$node_type instanceof NodeType){
             return;
         }
@@ -77,7 +76,6 @@ class NodeTypeFormAlter {
                     ],
                 ],
         ];
-        dpm($form);
         $form['#validate'][] = [$this->bundleValidator, 'validateRelationFormState'];
         $form['actions']['submit']['#submit'][] = [$this->formHandler,  'handleSubmission'];
     }

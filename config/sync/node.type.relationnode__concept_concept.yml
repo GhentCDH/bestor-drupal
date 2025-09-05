@@ -11,7 +11,7 @@ third_party_settings:
     parent: ''
   relationship_nodes:
     enabled: 1
-    typed_relation: 0
+    typed_relation: 1
     auto_title: 0
 name: 'Relationship between concepts'
 type: relationnode__concept_concept

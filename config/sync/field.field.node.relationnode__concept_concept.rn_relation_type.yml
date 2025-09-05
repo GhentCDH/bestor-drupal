@@ -1,0 +1,26 @@
+uuid: a18f7f5b-2695-4fb8-adbd-76ab4f19cc0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_relation_type
+    - node.type.relationnode__concept_concept
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__concept_concept.rn_relation_type
+field_name: rn_relation_type
+entity_type: node
+bundle: relationnode__concept_concept
+label: 'Rn relation type'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings: {  }
+field_type: entity_reference
