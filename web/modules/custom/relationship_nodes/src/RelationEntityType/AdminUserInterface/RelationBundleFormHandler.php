@@ -42,27 +42,22 @@ class RelationBundleFormHandler {
         if (!$this->settingsManager->isRelationEntity($entity)) {
             return;
         }
-        $fields_status = $this->fieldConfigurator->getFieldStatus($entity); 
-        $existing = $fields_status['existing'];      
-        $missing = $fields_status['missing'];
-        $remove = $fields_status['remove'];
 
-        if(!empty($existing)){
-            $this->fieldConfigurator->ensureFieldConfig($entity, $existing);
+        $updates = $this->fieldConfigurator->implementFieldUpdates($entity);
+
+        if(isset($updates['created'])){
+            $this->showFieldCreationMessage($entity, $updates['created']);
         }
-
-        if (!empty($missing)) {
-            $this->fieldConfigurator->createFields($entity, $missing);
-            $this->showFieldCreationMessage($entity, $missing);
-        } 
-
-        if(!empty($remove)) {
-            $this->fieldConfigurator->removeFields($entity, $remove);
-        }     
     }
 
 
-    public function showFieldCreationMessage(ConfigEntityBundleBase $entity, array $missing_fields): void {
+    public function getFormEntity(FormStateInterface $form_state): NodeType|Vocabulary|null {
+        $entity = $form_state->getFormObject()->getEntity();
+        return ($entity instanceof NodeType || $entity instanceof Vocabulary) ? $entity : null;
+    }
+
+
+    protected function showFieldCreationMessage(ConfigEntityBundleBase $entity, array $missing_fields): void {
         if(empty($missing_fields)){
             return;
         }
@@ -78,11 +73,5 @@ class RelationBundleFormHandler {
             'The following relationship fields were created but need to be configured: @fields. @link',
             ['@fields' => implode(', ', array_keys($missing_fields)), '@link' => $link]
         ));
-    }
-
-    
-    public function getFormEntity(FormStateInterface $form_state): NodeType|Vocabulary|null {
-        $entity = $form_state->getFormObject()->getEntity();
-        return ($entity instanceof NodeType || $entity instanceof Vocabulary) ? $entity : null;
     }
 }

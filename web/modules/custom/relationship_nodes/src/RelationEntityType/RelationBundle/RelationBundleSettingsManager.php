@@ -66,6 +66,7 @@ class RelationBundleSettingsManager {
         }   
     }  
 
+    
     public function getEntityTypeId(ConfigEntityBundleBase $entity): string {
         if ($entity instanceof NodeType) {
             return 'node';

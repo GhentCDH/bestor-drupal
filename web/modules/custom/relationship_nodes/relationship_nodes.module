@@ -27,6 +27,7 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
   return $fields;
 } 
 
+
 function relationship_nodes_field_storage_config_update(FieldStorageConfig $storage) {
   $field_name = $storage->getName();
   $fieldResolver = \Drupal::service('relationship_nodes.field_name_resolver');
@@ -123,13 +124,11 @@ function relationship_nodes_form_alter(array &$form, FormStateInterface $form_st
 }
 
 
-
 function relationship_nodes_local_tasks_alter(&$local_tasks) {
   $field_config_updater = \Drupal::service('relationship_nodes.field_config_ui_updater');
   $field_config_updater->overrideLocalTasksEdit($local_tasks);
 
 }
-
 
 
 function relationship_nodes_module_implements_alyter(array &$implementations, $hook) {

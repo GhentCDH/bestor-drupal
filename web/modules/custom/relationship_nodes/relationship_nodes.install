@@ -37,28 +37,23 @@ function relationship_nodes_requirements($phase) {
             ];
         }
     }
-
     return $requirements;
 }
 
-function relationship_nodes_uninstall($is_syncing){
-    try {
-        $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
-        $cleanupService->cleanupModuleData();
-        $bundleInfoService = \Drupal::service('relationship_nodes.relation_bundle_info_service');
-        foreach($bundleInfoService->getAllRelationEntityTypes() as $entity_type){
-            $settingsManager->removeRnThirdPartySettings($entity_type);
-        }
 
-        $fieldConfigurator = \Drupal::service('relationship_nodes.relation_field_configurator');
-        foreach($fieldConfigurator->getAllRnCreatedFields() as $field){
-            $settingsManager->removeRnThirdPartySettings($field);
-        }
+function relationship_nodes_install($is_syncing) {
+  if ($is_syncing) {
+    $bundleInfoService = \Drupal::service('relationship_nodes.relation_bundle_info_service');
+    $fieldConfigurator = \Drupal::service('relationship_nodes.relation_field_configurator');
 
-        \Drupal::cache()->deleteAll();
-    } catch (Exception $e) {
-        \Drupal::logger('relationship_nodes')->error('Error during uninstall: @error', [
-            '@error' => $e->getMessage()
-        ]);
+    foreach ($bundleInfoService->getAllRelationEntityTypes() as $entity) {
+      $fieldConfigurator->implementFieldUpdates($entity);
     }
+  }
+}
+
+
+function relationship_nodes_uninstall($is_syncing){
+    $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
+    $cleanupService->cleanupModuleData();
 }

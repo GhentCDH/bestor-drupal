@@ -4,6 +4,7 @@ namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Config\ConfigImporterEvent;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\NodeType;
@@ -65,6 +66,23 @@ class RelationBundleValidator {
             return null;
         }
         return $this->formatValidationErrorsForConfig($entity, $errors);
+    }
+
+
+    public function validateEntityConfig(string $entity_type, string $entity_id, array $config_data, ConfigImporterEvent $event): void {
+        $relation_settings = $config_data['third_party_settings']
+        ['relationship_nodes'] ?? [];
+        if (empty($relation_settings['enabled'])) {
+            return;
+        }
+
+        $storage = $this->entityTypeManager->getStorage($entity_type);
+        $entity = $storage->load($entity_id) ?: $storage->create($config_data);
+
+        $error = $this->validateRelationConfig($entity);
+        if ($error) {
+            $event->getConfigImporter()->logError($error);
+        }
     }
 
 
@@ -156,7 +174,7 @@ class RelationBundleValidator {
             }
             $vocab_referencing_type = $form_state 
                 ? $form_state->getValue(['relationship_nodes', 'referencing_type']) 
-                : $entity->getThirdPartySetting('relationship_nodes', 'referencing_type', FALSE);
+                : $this->settingsManager->getProperty($entity, 'referencing_type');
             if(!$vocab_referencing_type){
                 $errors[] = $this->t('Vocabulary @id has no referencing type (which is required).', [
                     '@id' => $entity->id(),
@@ -170,7 +188,7 @@ class RelationBundleValidator {
             }
             $typed_relation_enabled = $form_state
                 ? $form_state->getValue(['relationship_nodes', 'typed_relation'])
-                : $entity->getThirdPartySetting('relationship_nodes', 'typed_relation', FALSE);
+                : $this->settingsManager->getProperty($entity, 'typed_relation');
 
             if ($typed_relation_enabled && !$this->validTypedRelationConfig()) {
                 $errors[] = $this->t('Node type @id is missing valid typed relation config.', [

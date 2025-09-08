@@ -14,11 +14,14 @@ use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSe
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 
+
 class RelationFieldConfigurator {
+
     protected EntityTypeManagerInterface $entityTypeManager;
     protected FieldNameResolver $fieldNameResolver;
     protected RelationBundleSettingsManager $settingsManager;
 
+    
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager,
         FieldNameResolver $fieldNameResolver, 
@@ -59,13 +62,39 @@ class RelationFieldConfigurator {
     }
 
 
+    public function implementFieldUpdates(ConfigEntityBundleBase $entity): array {
+        $result = [];
+        $fields_status = $this->getFieldStatus($entity); 
+        $existing = $fields_status['existing'];      
+        $missing = $fields_status['missing'];
+        $remove = $fields_status['remove'];
+
+        if(!empty($existing)){
+            $this->ensureFieldConfig($entity, $existing);
+            $result['checked'] = $existing;
+        }
+
+        if (!empty($missing)) {
+            $this->createFields($entity, $missing);
+            
+            $result['created'] = $missing;
+        } 
+
+        if(!empty($remove)) {
+            $this->removeFields($entity, $remove);
+            $result['removed'] = $remove;
+        } 
+        
+        return $result;
+    }
+
+
     public function getFieldStatus(ConfigEntityBundleBase $entity): array {
         $required_fields = $this->getRequiredFields($entity);
         $storage = $this->entityTypeManager->getStorage('field_config');
         $entity_type_id = $this->settingsManager->getEntityTypeId($entity);
 
         $existing = $missing = $remove = [];
-        dpm($required_fields, 'req');
         foreach ($required_fields as $field_name => $settings) {
             $field_config = $storage->load("$entity_type_id.{$entity->id()}.$field_name");
             if (!$field_config) {
@@ -84,9 +113,7 @@ class RelationFieldConfigurator {
     }
 
 
-
-
-    protected function getRequiredFields(ConfigEntityBundleBase $entity): array {
+    public function getRequiredFields(ConfigEntityBundleBase $entity): array {
         $fields = [];
         if ($entity instanceof NodeType) {
             foreach($this->fieldNameResolver->getRelatedEntityFields() as $field_name){
@@ -114,12 +141,42 @@ class RelationFieldConfigurator {
                 }          
             }
         }
-        dpm($fields, 'fields');
         return $fields;
     }
 
 
-    public function createFields(ConfigEntityBundleBase $entity, array $missing_fields): void {
+    public function isRnCreatedField(FieldConfig|FieldStorageConfig $field) : bool{
+        return (bool) $field->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
+    }
+
+
+    public function getAllRnCreatedFields(?string $entity_type_id = null) : array {
+        $entity_types = ['field_storage_config', 'field_config'];
+        if($entity_type_id !== null && !in_array($entity_type_id, $entity_types)){
+            return [];
+        }
+
+        $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
+
+        $result = []; 
+        foreach($input as $entity_type){
+            $storage = $this->entityTypeManager->getStorage($entity_type);
+            if(!$storage instanceof EntityStorageInterface){
+                continue;
+            }
+            $all = $storage->loadMultiple();
+            foreach ($all as $type) {
+                if($type instanceof ConfigEntityBase && $this->isRnCreatedField($type)){
+                    $result[$type->id()] = $type;
+                } 
+            }    
+        }
+
+        return $result;
+    }
+
+
+    protected function createFields(ConfigEntityBundleBase $entity, array $missing_fields): void {
         $field_storage_config_storage = $this->entityTypeManager->getStorage('field_storage_config');
         $field_config_storage = $this->entityTypeManager->getStorage('field_config');
 
@@ -156,8 +213,19 @@ class RelationFieldConfigurator {
         }
     }
 
- 
-    public function ensureFieldConfig(ConfigEntityBundleBase $entity, array $existing_fields): void {
+
+    protected function removeFields(ConfigEntityBundleBase $entity, array $fields_to_remove): void {
+        $storage = $this->entityTypeManager->getStorage('field_config');
+        $entity_type_id = $this->settingsManager->getEntityTypeId($entity);
+
+        foreach ($fields_to_remove as $field_name) {
+            $field_config = $storage->load("$entity_type_id.{$entity->id()}.$field_name");
+            if ($field_config) $field_config->delete();
+        }
+    }
+
+
+    protected function ensureFieldConfig(ConfigEntityBundleBase $entity, array $existing_fields): void {
         foreach ($existing_fields as $field_arr) {
             $field_config = $field_arr['field_config'];
             $field_storage = $field_config->getFieldStorageDefinition();
@@ -171,47 +239,5 @@ class RelationFieldConfigurator {
                 $field_config->setThirdPartySetting('relationship_nodes', 'rn_created', true)->save();
             }
         }
-    }
-
-
-    public function removeFields(ConfigEntityBundleBase $entity, array $fields_to_remove): void {
-        $storage = $this->entityTypeManager->getStorage('field_config');
-        $entity_type_id = $this->settingsManager->getEntityTypeId($entity);
-
-        foreach ($fields_to_remove as $field_name) {
-            $field_config = $storage->load("$entity_type_id.{$entity->id()}.$field_name");
-            if ($field_config) $field_config->delete();
-        }
-    }
-
-
-    public function isRnCreatedField(FieldConfig|FieldStorageConfig $field) : bool{
-        return (bool) $field->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
-    }
-
-
-    public function getAllRnCreatedFields(?string $entity_type_id = null) : array {
-        $entity_types = ['field_storage_config', 'field_config'];
-        if($entity_type_id !== null && !in_array($entity_type_id, $entity_types)){
-            return [];
-        }
-
-        $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
-
-        $result = []; 
-        foreach($input as $entity_type){
-            $storage = $this->entityTypeManager->getStorage($entity_type);
-            if(!$storage instanceof EntityStorageInterface){
-                continue;
-            }
-            $all = $storage->loadMultiple();
-            foreach ($all as $type) {
-                if($type instanceof ConfigEntityBase && $this->isRnCreatedField($type)){
-                    $result[$type->id()] = $type;
-                } 
-            }    
-        }
-
-        return $result;
     }
 }
