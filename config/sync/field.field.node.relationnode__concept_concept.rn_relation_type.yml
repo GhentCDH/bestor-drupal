@@ -1,10 +1,11 @@
-uuid: a18f7f5b-2695-4fb8-adbd-76ab4f19cc0e
+uuid: c96e3927-9c19-4a48-94eb-9f09fb4de73f
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.rn_relation_type
     - node.type.relationnode__concept_concept
+    - taxonomy.vocabulary.relationtype_self__conc_conc
   module:
     - relationship_nodes
 third_party_settings:
@@ -22,5 +23,7 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      relationtype_self__conc_conc: relationtype_self__conc_conc
 field_type: entity_reference

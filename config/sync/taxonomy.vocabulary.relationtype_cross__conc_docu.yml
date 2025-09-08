@@ -7,7 +7,7 @@ dependencies:
 third_party_settings:
   relationship_nodes:
     enabled: 1
-    referencing_type: null
+    referencing_type: cross
 name: 'Types of relationships between a concept and a document'
 vid: relationtype_cross__conc_docu
 description: null

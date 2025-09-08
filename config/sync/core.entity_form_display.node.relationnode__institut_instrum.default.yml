@@ -3,9 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.relationnode__institut_instrum.field_related_entity_1
-    - field.field.node.relationnode__institut_instrum.field_related_entity_2
-    - field.field.node.relationnode__institut_instrum.field_relation_type
     - node.type.relationnode__institut_instrum
   module:
     - path
@@ -19,36 +16,6 @@ content:
     weight: 10
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_related_entity_1:
-    type: entity_reference_autocomplete
-    weight: 121
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_related_entity_2:
-    type: entity_reference_autocomplete
-    weight: 122
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_relation_type:
-    type: entity_reference_autocomplete
-    weight: 123
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select

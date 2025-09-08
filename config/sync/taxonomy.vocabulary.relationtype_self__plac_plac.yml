@@ -1,7 +1,13 @@
 uuid: 73a1a862-3710-485f-886d-1c1223449b81
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: self
 name: 'Types of relationships between places'
 vid: relationtype_self__plac_plac
 description: null

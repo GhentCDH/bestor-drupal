@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.relationtype_self__pers_pers.field_term_mirror_ref
+    - field.field.taxonomy_term.relationtype_self__pers_pers.rn_mirror_self
     - taxonomy.vocabulary.relationtype_self__pers_pers
   module:
     - path
@@ -12,16 +12,6 @@ targetEntityType: taxonomy_term
 bundle: relationtype_self__pers_pers
 mode: default
 content:
-  field_term_mirror_ref:
-    type: entity_reference_autocomplete
-    weight: 1
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   langcode:
     type: language_select
     weight: 3
@@ -57,3 +47,4 @@ content:
     third_party_settings: {  }
 hidden:
   description: true
+  rn_mirror_self: true

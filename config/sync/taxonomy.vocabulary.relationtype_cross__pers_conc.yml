@@ -1,7 +1,13 @@
 uuid: 75052764-e856-460c-b22c-79b6e557f5e0
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: cross
 name: 'Types of relationships between a person and a concept'
 vid: relationtype_cross__pers_conc
 description: null

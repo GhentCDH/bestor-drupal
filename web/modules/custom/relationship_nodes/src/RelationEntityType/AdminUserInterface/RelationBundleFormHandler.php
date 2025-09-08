@@ -69,9 +69,13 @@ class RelationBundleFormHandler {
 
         $link = Link::fromTextAndUrl($this->t('Manage fields'), $url)->toString();
 
+        if($entity instanceof NodeType){
+            $message = 'The following relationship fields were created but need to be configured: @fields. @link';
+        } else {
+            $message = 'The following relationship fields were created: @fields. You can review them here: @link';
+        }
         \Drupal::messenger()->addStatus($this->t(
-            'The following relationship fields were created but need to be configured: @fields. @link',
-            ['@fields' => implode(', ', array_keys($missing_fields)), '@link' => $link]
+             $message, ['@fields' => implode(', ', array_keys($missing_fields)), '@link' => $link]
         ));
     }
 }

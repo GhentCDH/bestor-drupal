@@ -12,7 +12,7 @@ third_party_settings:
   relationship_nodes:
     enabled: 1
     typed_relation: 1
-    auto_title: 0
+    auto_title: 1
 name: 'Relationship between concepts'
 type: relationnode__concept_concept
 description: 'This content type describes the relationship between an entities of the concept type (related item 1 and 2).'

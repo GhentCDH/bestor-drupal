@@ -1,7 +1,13 @@
 uuid: 7f1028c7-8687-482a-b93f-22b4b76d3248
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: cross
 name: 'Types of relationships between a concept and a story'
 vid: relationtype_cross__conc_stor
 description: null

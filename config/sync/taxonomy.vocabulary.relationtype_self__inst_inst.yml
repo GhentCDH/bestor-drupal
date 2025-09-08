@@ -1,7 +1,13 @@
 uuid: ae128f05-29c1-45d1-a802-1b813f9bebeb
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: self
 name: 'Types of relationships between instruments'
 vid: relationtype_self__inst_inst
 description: null

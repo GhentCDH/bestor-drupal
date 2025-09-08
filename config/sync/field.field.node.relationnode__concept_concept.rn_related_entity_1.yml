@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.node.rn_related_entity_1
+    - node.type.concept
     - node.type.relationnode__concept_concept
   module:
     - relationship_nodes
@@ -22,5 +23,7 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:node'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      - concept
 field_type: entity_reference

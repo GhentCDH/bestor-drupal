@@ -1,7 +1,13 @@
 uuid: 8bf4a188-f3d7-4004-8ac6-15bb389c56ce
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: self
 name: 'Types of relationships between persons'
 vid: relationtype_self__pers_pers
 description: null

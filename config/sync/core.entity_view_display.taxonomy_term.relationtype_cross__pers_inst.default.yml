@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.relationtype_cross__pers_inst.field_term_mirror_str
+    - field.field.taxonomy_term.relationtype_cross__pers_inst.rn_mirror_cross
     - taxonomy.vocabulary.relationtype_cross__pers_inst
   module:
     - text
@@ -19,13 +19,7 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_term_mirror_str:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
-    region: content
 hidden:
   langcode: true
+  rn_mirror_cross: true
+  search_api_excerpt: true

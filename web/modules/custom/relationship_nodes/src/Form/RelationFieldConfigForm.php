@@ -12,6 +12,7 @@ use Drupal\Core\Url;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
@@ -22,16 +23,23 @@ class RelationFieldConfigForm extends FormBase {
   protected EntityTypeManagerInterface $entityTypeManager;
   protected FieldNameResolver $fieldResolver;
   protected RelationBundleSettingsManager $settingsManager;
+  protected FieldConfigUiUpdater $uiUpdater;
   protected ?FieldConfig $fieldConfig = null;
   protected ?string $fieldName = null;
   protected ?string $entityType = null;
   protected ?string $bundle = null;
 
 
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, FieldNameResolver $fieldResolver, RelationBundleSettingsManager $settingsManager) {
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager, 
+    FieldNameResolver $fieldResolver, 
+    RelationBundleSettingsManager $settingsManager,
+    FieldConfigUiUpdater $uiUpdater
+  ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->fieldResolver = $fieldResolver;
     $this->settingsManager = $settingsManager;
+    $this->uiUpdater = $uiUpdater;
   }
 
   public static function create(ContainerInterface $container): self {
@@ -39,6 +47,7 @@ class RelationFieldConfigForm extends FormBase {
       $container->get('entity_type.manager'),
       $container->get('relationship_nodes.field_name_resolver'),
       $container->get('relationship_nodes.relation_bundle_settings_manager'),
+      $container->get('relationship_nodes.field_config_ui_updater')
     );
   }
 
@@ -84,7 +93,7 @@ class RelationFieldConfigForm extends FormBase {
         '#required' => TRUE,
         '#multiple' => FALSE,
       ];
-      if($this->fieldName == 'relation_type'){
+      if($this->fieldName == $this->fieldResolver->getRelationTypeField()){
         $form['target_bundle']['#title'] = $this->t('Target relation type vocabulary');
         $form['target_bundle']['#options'] = $this->getAllRelationVocabs();
       } elseif(in_array($this->fieldName,$this->fieldResolver->getRelatedEntityFields())){
@@ -125,8 +134,9 @@ class RelationFieldConfigForm extends FormBase {
 
 
     if ($this->entityType === 'node') {
+      $target = $form_state->getValue('target_bundle');
       $field->setSetting('handler_settings', [
-        'target_bundles' => [$form_state->getValue('target_bundle')],
+        'target_bundles' => [$target => $target],
       ]);
     }
 
@@ -135,7 +145,10 @@ class RelationFieldConfigForm extends FormBase {
     $this->messenger()->addStatus($this->t('Field @field updated.', [
       '@field' => $this->fieldName,
     ]));
+
+    $form_state->setRedirectUrl($this->uiUpdater->getRedirectUrl($field));
   }
+
 
   protected function getAllNodeTypes() {
     $options = [];
@@ -145,6 +158,7 @@ class RelationFieldConfigForm extends FormBase {
     return $options;
   }
 
+
     protected function getAllRelationVocabs() {
     $options = [];
     foreach (Vocabulary::loadMultiple() as $type) {
@@ -152,8 +166,10 @@ class RelationFieldConfigForm extends FormBase {
         $options[$type->id()] = $type->label();
       } 
     }
+    dpm($options);
     return $options;
   }
+
 
   protected function getCurrentTargetBundle($bundle, $field_name):?string {
     $field = $this->entityTypeManager

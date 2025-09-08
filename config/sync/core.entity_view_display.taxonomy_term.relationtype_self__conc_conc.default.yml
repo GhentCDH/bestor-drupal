@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.relationtype_self__conc_conc.field_term_mirror_ref
+    - field.field.taxonomy_term.relationtype_self__conc_conc.rn_mirror_self
     - taxonomy.vocabulary.relationtype_self__conc_conc
   module:
     - text
@@ -19,14 +19,7 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_term_mirror_ref:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
 hidden:
   langcode: true
+  rn_mirror_self: true
   search_api_excerpt: true

@@ -1,7 +1,13 @@
 uuid: 7f0b56cb-b059-4bc4-9a7d-957442809f77
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: cross
 name: 'Types of relationships between an institution and a place'
 vid: relationtype_cross__orga_plac
 description: null

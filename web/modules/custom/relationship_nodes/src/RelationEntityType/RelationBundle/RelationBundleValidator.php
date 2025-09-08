@@ -43,6 +43,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Form submit validator for relation-enabled node types and vocabularies
+    */
     public function validateRelationFormState(array &$form, FormStateInterface $form_state) {
         $entity = $form_state->getFormObject()->getEntity();
 
@@ -60,6 +63,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Config import validator
+    */
     public function validateRelationConfig(ConfigEntityBundleBase $entity): ?string {
         $errors = $this->collectValidationErrors($entity);
         if (empty($errors)) {
@@ -69,6 +75,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates a single relation-enabled node type or vocabulary
+    */
     public function validateEntityConfig(string $entity_type, string $entity_id, array $config_data, ConfigImporterEvent $event): void {
         $relation_settings = $config_data['third_party_settings']
         ['relationship_nodes'] ?? [];
@@ -86,10 +95,12 @@ class RelationBundleValidator {
     }
 
 
-    public function validateFieldSettings(FieldConfig $field_config): bool {
-        $storage = $field_config->getFieldStorageDefinition();
-        if(!$storage instanceof FieldStorageConfig || !$this->validateFieldStorageConfig($storage)){
-            return false;
+    public function validateFieldConfig(FieldConfig $field_config, bool $include_storage_validation = true): bool {
+        if($include_storage_validation == true){
+            $storage = $field_config->getFieldStorageDefinition();
+            if(!$storage instanceof FieldStorageConfig || !$this->validateFieldStorageConfig($storage)){
+                return false;
+            }
         }
         $target_bundles = $field_config->getSetting('handler_settings')['target_bundles'] ?? [];
         if (
@@ -100,7 +111,7 @@ class RelationBundleValidator {
         ) {
             return false;
         }
-
+        
         if ($field_config->getName() === $this->fieldNameResolver->getRelationTypeField()){
             foreach($target_bundles as $vocab_name => $vocab_label){
                 if(!$this->settingsManager->isRelationVocab($vocab_name)){
@@ -127,6 +138,7 @@ class RelationBundleValidator {
         return true;
     }
 
+
     
     public function validateAllRelationConfig(): array {
         $all_errors = [];
@@ -138,27 +150,35 @@ class RelationBundleValidator {
             }
         }
 
-        $storage_errors = $this->validateAllFieldStorageConfig() ?? [];
+        $storage_errors = $this->validateAllRelationFieldConfig() ?? [];
         $all_errors = array_merge($all_errors, $storage_errors);
         
         return $all_errors;
     }   
 
 
-    protected function validateAllFieldStorageConfig(): array {
+    protected function validateAllRelationFieldConfig(): array {
         $errors = [];
-        $rn_fields = $this->fieldConfigurator->getAllRnCreatedFields('field_storage_config');
+        $rn_fields = $this->fieldConfigurator->getAllRnCreatedFields();
         
-        foreach ($rn_fields as $field_id => $storage) {
-            if ($storage instanceof FieldStorageConfig) {
-                if (!$this->validateFieldStorageConfig($storage)) {
-                    $errors[] = $this->t('Field storage "@field" has invalid configuration.', [
-                        '@field' => $storage->getName(),
-                    ]);
-                }
+        foreach ($rn_fields as $field_id => $field) {
+            $field_name = $field->getName();
+            if ($field instanceof FieldStorageConfig && !$this->validateFieldStorageConfig($field)) {
+                $errors[] = $this->t('Field storage "@field" has invalid configuration.', [
+                    '@field' => $field_name,
+                ]);
+
+            } elseif ($field instanceof FieldConfig && !$this->validateFieldConfig($field, false)){
+                $errors[] = $this->t('Field config "@field" has invalid configuration.', [
+                    '@field' => $field_name,
+                ]);
+            }
+            if (!in_array($field_name, $this->fieldNameResolver->getAllRelationFieldNames())){
+                $errors[] = $this->t('Field "@field" has Relationship Nodes configuration, but is not a dedicated field of this module.', [
+                    '@field' => $field_name,
+                ]);
             }
         }
-        
         return $errors;
     }
 
@@ -202,7 +222,7 @@ class RelationBundleValidator {
             $field_config = $field_arr['field_config'];
             if (
                 !$field_config instanceof FieldConfig ||
-                !$this->validateFieldSettings($field_config)
+                !$this->validateFieldConfig($field_config)
             ) {
             $errors[] = $this->t('Field @field in bundle @bundle is misconfigured.', [
                 '@field' => $field_name,
@@ -243,7 +263,6 @@ class RelationBundleValidator {
         if (!is_array($array)) {
             return false;
         }
-
         $subfields = $this->fieldNameResolver->getConfig()->get($parent_key);
         if (empty($subfields) || !is_array($subfields)) {
             return false;

@@ -171,7 +171,7 @@ class RelationFieldConfigurator {
                 } 
             }    
         }
-
+        dpm($result);
         return $result;
     }
 
@@ -200,12 +200,23 @@ class RelationFieldConfigurator {
 
             $field_config = $field_config_storage->load("$entity_type_id.{$entity->id()}.$field_name");
             if (!$field_config) {
+                $self_target_settings = [];
+                if($field_name == $this->fieldNameResolver->getMirrorFields('self')){
+                    $self_target_settings = [
+                        'handler' => 'default:taxonomy_term',
+                        'handler_settings' => [
+                            'target_bundles' => [$entity->id() => $entity->id()],
+                        ],
+                    ];
+                }
+                
                 $field_config = $field_config_storage->create([
                     'field_name' => $field_name,
                     'bundle' => $entity->id(),
                     'entity_type' => $entity_type_id,
                     'label' => ucfirst(str_replace('_', ' ', $field_name)),
                     'required' => true,
+                    'settings' =>  $self_target_settings,
                     'third_party_settings' => ['relationship_nodes' => ['rn_created'=> true]],
                 ]);
                 $field_config->save();

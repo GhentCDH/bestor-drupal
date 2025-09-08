@@ -1,7 +1,13 @@
 uuid: 66991cb2-3496-4781-9b1c-5278b92e4961
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: self
 name: 'Types of relationships between documents'
 vid: relationtype_self__docu_docu
 description: null

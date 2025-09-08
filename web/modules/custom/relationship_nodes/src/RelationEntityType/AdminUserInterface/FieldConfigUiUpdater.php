@@ -13,7 +13,6 @@ use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSe
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
-
 class FieldConfigUiUpdater {
 
     use StringTranslationTrait;
@@ -105,7 +104,6 @@ class FieldConfigUiUpdater {
             return;
         }
 
-        // VUIL niet zo expliciet. dynamisch ophalen.
         if(!in_array($field_config->getName(), $this->fieldResolver->getAllRelationFieldNames())){
             return;
         }
@@ -136,6 +134,25 @@ class FieldConfigUiUpdater {
             return null;
         }
         return $bundle;
+    }
+
+
+    public function getRedirectUrl(FieldConfig $field_config):Url{
+        $entity_type = $field_config->getTargetEntityTypeId();
+        $bundle = $field_config->getTargetBundle();
+
+        switch ($entity_type) {
+            case 'node':
+                $url = Url::fromRoute('entity.node.field_ui_fields', ['node_type' => $bundle]);
+                break;
+            case 'taxonomy_term':
+                $url = Url::fromRoute('entity.taxonomy_term.field_ui_fields', ['taxonomy_vocabulary' => $bundle]);
+                break;
+            default:
+                $url = Url::fromRoute('<front>');
+                break;
+        }
+        return $url;
     }
 
 

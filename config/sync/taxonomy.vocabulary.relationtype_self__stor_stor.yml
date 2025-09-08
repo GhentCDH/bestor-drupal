@@ -1,7 +1,13 @@
 uuid: 350c851f-65c2-483a-ae9f-a3e2d74e3426
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: self
 name: 'Types of relationships between stories'
 vid: relationtype_self__stor_stor
 description: null

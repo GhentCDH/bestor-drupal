@@ -1,7 +1,13 @@
 uuid: 3686a07a-078b-4552-a450-96f141a99ba0
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: self
 name: 'Types of relationships between institutions'
 vid: relationtype_self__orga_orga
 description: null

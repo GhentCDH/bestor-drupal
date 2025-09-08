@@ -1,7 +1,13 @@
 uuid: 66c477cb-e183-4f4a-bc0f-4d331764fcbe
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: cross
 name: 'Types of relationships between a place and a story'
 vid: relationtype_cross__plac_stor
 description: null

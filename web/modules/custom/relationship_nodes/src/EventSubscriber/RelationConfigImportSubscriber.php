@@ -25,8 +25,8 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,     
     RelationSettingsCleanUpService $cleanupService,
-    RelationBundleValidator $bundleValidator,
     RelationBundleInfoService $bundleInfoService,
+    RelationBundleValidator $bundleValidator,
     RelationFieldConfigurator $fieldConfigurator
   ) {
     $this->entityTypeManager = $entityTypeManager;

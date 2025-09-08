@@ -1,7 +1,13 @@
 uuid: a609f593-8a6f-4c3f-b8cb-da34631a88ae
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: cross
 name: 'Types of relationships between a person and a place'
 vid: relationtype_cross__pers_plac
 description: null

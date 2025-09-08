@@ -3,9 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.relationnode__concept_concept.field_related_entity_1
-    - field.field.node.relationnode__concept_concept.field_related_entity_2
-    - field.field.node.relationnode__concept_concept.field_relation_type
     - field.field.node.relationnode__concept_concept.rn_related_entity_1
     - field.field.node.relationnode__concept_concept.rn_related_entity_2
     - field.field.node.relationnode__concept_concept.rn_relation_type
@@ -22,36 +19,6 @@ content:
     weight: 10
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_related_entity_1:
-    type: entity_reference_autocomplete
-    weight: 121
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_related_entity_2:
-    type: entity_reference_autocomplete
-    weight: 122
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_relation_type:
-    type: entity_reference_autocomplete
-    weight: 123
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select

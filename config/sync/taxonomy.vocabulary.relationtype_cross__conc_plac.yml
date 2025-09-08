@@ -1,7 +1,13 @@
 uuid: 6a0a86e2-21af-4980-8252-d9471ce17bc0
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: cross
 name: 'Types of relationships between a concept and a place'
 vid: relationtype_cross__conc_plac
 description: null

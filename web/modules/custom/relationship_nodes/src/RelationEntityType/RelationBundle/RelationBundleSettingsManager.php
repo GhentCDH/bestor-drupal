@@ -19,7 +19,7 @@ class RelationBundleSettingsManager {
 
 
     public function __construct(
-        EntityTypeManagerInterface $entityTypeManager,
+        EntityTypeManagerInterface $entityTypeManager
     ) {
         $this->entityTypeManager = $entityTypeManager;
     }
@@ -66,7 +66,7 @@ class RelationBundleSettingsManager {
         }   
     }  
 
-    
+
     public function getEntityTypeId(ConfigEntityBundleBase $entity): string {
         if ($entity instanceof NodeType) {
             return 'node';
@@ -130,7 +130,7 @@ class RelationBundleSettingsManager {
 
     public function ensureVocab(ConfigEntityBundleBase|string $vocab):?Vocabulary{ 
         if(is_string($vocab)){
-           $vocab = $this->entityTypeManager->getStorage('taxonomy_vocabulary')->load($vocab);
+            $vocab = $this->entityTypeManager->getStorage('taxonomy_vocabulary')->load($vocab);
         }
         if(!$vocab instanceof Vocabulary){
             return null;
@@ -139,8 +139,9 @@ class RelationBundleSettingsManager {
     }
 
 
-    public function autoCreateTitle(NodeType|string $node_type) : bool{
-        if(!$node_type = $this->ensureNodeType($node_type) || !$this->isRelationNodeType($node_type)){
+    public function autoCreateTitle(NodeType|string $node_type) : bool {
+        $node_type = $this->ensureNodeType($node_type);
+        if (!$node_type || !$this->isRelationNodeType($node_type)) {
             return false;
         }
         $auto_title = $this->getProperty($node_type, 'auto_title');

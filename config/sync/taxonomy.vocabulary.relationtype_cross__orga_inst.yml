@@ -1,7 +1,13 @@
 uuid: 4e84636b-eb73-482b-ba99-0cbe0cc05a5e
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: cross
 name: 'Types of relationships between an institution and an instrument'
 vid: relationtype_cross__orga_inst
 description: null

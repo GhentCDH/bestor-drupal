@@ -1,7 +1,13 @@
 uuid: a4b64483-0f97-4a06-9b02-702ccee0e1e9
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: self
 name: 'Types of relationships between concepts'
 vid: relationtype_self__conc_conc
 description: null

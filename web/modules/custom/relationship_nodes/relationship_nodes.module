@@ -58,7 +58,7 @@ function relationship_nodes_field_config_update(FieldConfig $field) {
 
   $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
 
-  if(!$bundleValidator->validateFieldSettings($field)){
+  if(!$bundleValidator->validateFieldConfig($field)){
     throw new ConfigException("The fieldconfig {$field_name} doesn't meet the required 'Relationship Nodes' configuration.");
   }
 }
@@ -131,7 +131,7 @@ function relationship_nodes_local_tasks_alter(&$local_tasks) {
 }
 
 
-function relationship_nodes_module_implements_alyter(array &$implementations, $hook) {
+function relationship_nodes_module_implements_alter(array &$implementations, $hook) {
   if ($hook === 'entity_type_alter') {
     $module = 'relationship_nodes';
     if (isset($implementations[$module])) {
