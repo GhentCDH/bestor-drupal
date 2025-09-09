@@ -1,0 +1,24 @@
+uuid: d7a8ebfe-d0d0-472e-bee6-993e0a1ca30e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.rn_mirror_string
+    - taxonomy.vocabulary.relationtype_cross__orga_plac
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: taxonomy_term.relationtype_cross__orga_plac.rn_mirror_string
+field_name: rn_mirror_string
+entity_type: taxonomy_term
+bundle: relationtype_cross__orga_plac
+label: 'Rn mirror string'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

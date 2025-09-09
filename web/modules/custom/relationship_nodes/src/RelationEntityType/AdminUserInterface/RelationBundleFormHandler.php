@@ -74,6 +74,7 @@ class RelationBundleFormHandler {
         } else {
             $message = 'The following relationship fields were created: @fields. You can review them here: @link';
         }
+        
         \Drupal::messenger()->addStatus($this->t(
              $message, ['@fields' => implode(', ', array_keys($missing_fields)), '@link' => $link]
         ));

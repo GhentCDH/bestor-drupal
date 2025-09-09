@@ -1,0 +1,29 @@
+uuid: ff7cfe57-b4d7-4a74-a020-3e3c38a23759
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_related_entity_1
+    - node.type.institution
+    - node.type.relationnode__institut_institut
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__institut_institut.rn_related_entity_1
+field_name: rn_related_entity_1
+entity_type: node
+bundle: relationnode__institut_institut
+label: 'Rn related entity 1'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      institution: institution
+field_type: entity_reference

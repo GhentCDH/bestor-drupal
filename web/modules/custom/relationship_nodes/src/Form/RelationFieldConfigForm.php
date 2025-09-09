@@ -166,7 +166,6 @@ class RelationFieldConfigForm extends FormBase {
         $options[$type->id()] = $type->label();
       } 
     }
-    dpm($options);
     return $options;
   }
 

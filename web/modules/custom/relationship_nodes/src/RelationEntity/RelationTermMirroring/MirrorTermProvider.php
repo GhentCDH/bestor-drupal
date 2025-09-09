@@ -49,7 +49,6 @@ class MirrorTermProvider{
     }
 
 
-
     public function mirroringRequired(array $form, FormStateInterface $form_state): bool {
         $foreign_key_field = $this->foreignKeyResolver->getEntityFormForeignKeyField($form, $form_state);
         
@@ -87,11 +86,11 @@ class MirrorTermProvider{
             $mirror_field_arr = [];
 
             switch($this->settingsManager->getRelationVocabType($vocab )){
-                case 'cross':
-                    $mirror_field_arr = $term->get($this->fieldNameResolver->getMirrorFields('cross'))->getValue();
+                case 'string':
+                    $mirror_field_arr = $term->get($this->fieldNameResolver->getMirrorFields('string'))->getValue();
                     break;
-                case 'self':
-                    $mirror_field_arr = $term->get($this->fieldNameResolver->getMirrorFields('self'))->getValue(); 
+                case 'entity_reference':
+                    $mirror_field_arr = $term->get($this->fieldNameResolver->getMirrorFields('entity_reference'))->getValue(); 
                     break;
             }
 

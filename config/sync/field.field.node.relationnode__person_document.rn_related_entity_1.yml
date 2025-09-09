@@ -1,0 +1,29 @@
+uuid: f81f5a03-af52-473e-80d2-3b16b802a45a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_related_entity_1
+    - node.type.person
+    - node.type.relationnode__person_document
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__person_document.rn_related_entity_1
+field_name: rn_related_entity_1
+entity_type: node
+bundle: relationnode__person_document
+label: 'Rn related entity 1'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      person: person
+field_type: entity_reference

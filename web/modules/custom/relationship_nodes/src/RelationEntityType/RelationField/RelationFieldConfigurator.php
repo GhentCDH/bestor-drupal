@@ -46,12 +46,12 @@ class RelationFieldConfigurator {
                 'target_type' => 'taxonomy_term',
                 'cardinality' => 1,
             ];
-        } elseif ($field_name === $this->fieldNameResolver->getMirrorFields('cross')) {
+        } elseif ($field_name === $this->fieldNameResolver->getMirrorFields('string')) {
             return [
                 'type' => 'string',
                 'cardinality' => 1,
             ];
-        } elseif ($field_name === $this->fieldNameResolver->getMirrorFields('self')) {
+        } elseif ($field_name === $this->fieldNameResolver->getMirrorFields('entity_reference')) {
             return [
                 'type' => 'entity_reference',
                 'target_type' => 'taxonomy_term',
@@ -132,13 +132,15 @@ class RelationFieldConfigurator {
             }
         } elseif ($entity instanceof Vocabulary) {
             if($type = $this->settingsManager->getProperty($entity, 'referencing_type')){
-                $field_name = $this->fieldNameResolver->getMirrorFields($type);
-                if($field_name){
-                    $config = $this->getRequiredFieldConfiguration($field_name);
-                    if ($config) {
-                        $fields[$field_name] = $config;
-                    }
-                }          
+                if($type !== 'none'){
+                    $field_name = $this->fieldNameResolver->getMirrorFields($type);
+                    if($field_name){
+                        $config = $this->getRequiredFieldConfiguration($field_name);
+                        if ($config) {
+                            $fields[$field_name] = $config;
+                        }
+                    }          
+                }
             }
         }
         return $fields;
@@ -171,7 +173,6 @@ class RelationFieldConfigurator {
                 } 
             }    
         }
-        dpm($result);
         return $result;
     }
 
@@ -200,8 +201,9 @@ class RelationFieldConfigurator {
 
             $field_config = $field_config_storage->load("$entity_type_id.{$entity->id()}.$field_name");
             if (!$field_config) {
+               
                 $self_target_settings = [];
-                if($field_name == $this->fieldNameResolver->getMirrorFields('self')){
+                if($field_name == $this->fieldNameResolver->getMirrorFields('entity_reference')){
                     $self_target_settings = [
                         'handler' => 'default:taxonomy_term',
                         'handler_settings' => [
@@ -209,7 +211,7 @@ class RelationFieldConfigurator {
                         ],
                     ];
                 }
-                
+
                 $field_config = $field_config_storage->create([
                     'field_name' => $field_name,
                     'bundle' => $entity->id(),

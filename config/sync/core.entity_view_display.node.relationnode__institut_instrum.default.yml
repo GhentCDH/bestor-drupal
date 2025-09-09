@@ -3,6 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.relationnode__institut_instrum.rn_related_entity_1
+    - field.field.node.relationnode__institut_instrum.rn_related_entity_2
+    - field.field.node.relationnode__institut_instrum.rn_relation_type
     - node.type.relationnode__institut_instrum
   module:
     - user
@@ -15,4 +18,7 @@ hidden:
   footnotes_group: true
   langcode: true
   links: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
   search_api_excerpt: true

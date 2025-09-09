@@ -3,54 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.relationnode__person_person.field_related_entity_1
-    - field.field.node.relationnode__person_person.field_related_entity_2
-    - field.field.node.relationnode__person_person.field_relation_period
-    - field.field.node.relationnode__person_person.field_relation_type
+    - field.field.node.relationnode__person_person.rn_related_entity_1
+    - field.field.node.relationnode__person_person.rn_related_entity_2
+    - field.field.node.relationnode__person_person.rn_relation_type
     - node.type.relationnode__person_person
   module:
-    - datetime_range
     - user
 id: node.relationnode__person_person.default
 targetEntityType: node
 bundle: relationnode__person_person
 mode: default
 content:
-  field_related_entity_1:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 101
-    region: content
-  field_related_entity_2:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 102
-    region: content
-  field_relation_period:
-    type: daterange_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 104
-    region: content
-  field_relation_type:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 103
-    region: content
   links:
     settings: {  }
     third_party_settings: {  }
@@ -59,3 +22,7 @@ content:
 hidden:
   footnotes_group: true
   langcode: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  search_api_excerpt: true

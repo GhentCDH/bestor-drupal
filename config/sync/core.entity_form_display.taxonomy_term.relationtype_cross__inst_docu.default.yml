@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.relationtype_cross__inst_docu.rn_mirror_cross
+    - field.field.taxonomy_term.relationtype_cross__inst_docu.rn_mirror_string
     - taxonomy.vocabulary.relationtype_cross__inst_docu
   module:
     - path
@@ -47,4 +47,4 @@ content:
     third_party_settings: {  }
 hidden:
   description: true
-  rn_mirror_cross: true
+  rn_mirror_string: true

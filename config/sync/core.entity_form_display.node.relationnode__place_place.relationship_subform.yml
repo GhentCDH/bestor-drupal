@@ -4,65 +4,15 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.relationship_subform
-    - field.field.node.relationnode__place_place.field_related_entity_1
-    - field.field.node.relationnode__place_place.field_related_entity_2
-    - field.field.node.relationnode__place_place.field_relation_type
+    - field.field.node.relationnode__place_place.rn_related_entity_1
+    - field.field.node.relationnode__place_place.rn_related_entity_2
+    - field.field.node.relationnode__place_place.rn_relation_type
     - node.type.relationnode__place_place
-  module:
-    - entity_reference_modal
 id: node.relationnode__place_place.relationship_subform
 targetEntityType: node
 bundle: relationnode__place_place
 mode: relationship_subform
 content:
-  field_related_entity_1:
-    type: entity_reference_modal
-    weight: 0
-    region: content
-    settings:
-      view_and_display: ''
-      add_new_button_title: +
-      modal_form_mode: default
-      modal_width: 80%
-      modal_title: 'Add new'
-      duplicate: false
-      search: true
-      bootstrap: false
-      tagify: false
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_related_entity_2:
-    type: entity_reference_modal
-    weight: 1
-    region: content
-    settings:
-      view_and_display: ''
-      add_new_button_title: +
-      modal_form_mode: default
-      modal_width: 80%
-      modal_title: 'Add new'
-      duplicate: false
-      search: true
-      bootstrap: false
-      tagify: false
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_relation_type:
-    type: entity_reference_autocomplete
-    weight: 26
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   translation:
     weight: 10
     region: content
@@ -73,6 +23,9 @@ hidden:
   langcode: true
   path: true
   promote: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
   status: true
   sticky: true
   title: true

@@ -50,14 +50,15 @@ class VocabFormAlter {
       '#description' => $this->t('If this is checked, this vocabulary will be validated as a relationship types list. It gets a mirror field that can contain the reverse relation type of the term.'),
       '#id' => 'relationship-nodes-enabled',
     ];
-
+    $saved_referencing_type = $this->settingsManager->getProperty($vocab, 'referencing_type') ?? null;
     $form['relationship_nodes']['referencing_type'] = [
       '#type' => 'radios',
       '#title' => $this->t('Relation type'),
-      '#default_value' => $this->settingsManager->getProperty($vocab, 'referencing_type'),
+      '#default_value' => $saved_referencing_type ? $saved_referencing_type : 'none',
       '#options' => [
-        'self' => $this->t('Self-referencing (same content type)'),
-        'cross' => $this->t('Cross-referencing (different content types)'),
+        'none' => $this->t('No mirroring field (relation type is undirectional)'),
+        'entity_reference' => $this->t('The mirror field is a term reference field, referring to terms of the same list.'),
+        'string' => $this->t('The mirror field is a string field.'),
       ],
       '#states' => [
         'visible' => [

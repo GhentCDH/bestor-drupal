@@ -1,0 +1,29 @@
+uuid: 2cc0f3e4-6654-40e7-8717-ae0f89e9bb16
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_related_entity_1
+    - node.type.instrument
+    - node.type.relationnode__instrum_document
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__instrum_document.rn_related_entity_1
+field_name: rn_related_entity_1
+entity_type: node
+bundle: relationnode__instrum_document
+label: 'Rn related entity 1'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      instrument: instrument
+field_type: entity_reference

@@ -15,12 +15,17 @@ use Drupal\taxonomy\Entity\Vocabulary;
 function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) { 
   $type_id = $entity_type->id();
   if( $type_id === 'node'){
-    \Drupal::service('relationship_nodes.virtual_field_adder')->addFields($fields, $entity_type, $bundle);
+    $fieldAdder = \Drupal::service('relationship_nodes.virtual_field_adder');
+    $fieldAdder->addFields($fields, $entity_type, $bundle);
   } elseif ($type_id === 'taxonomy_term') {
-    $vocab_info = \Drupal::service('relationship_nodes.relation_bundle_info_service')->getRelationVocabInfo($bundle, $fields);
-    if(!empty($vocab_info)){
-      if($vocab_info['mirror_field_type'] == 'entity_reference_selfreferencing' && isset($fields[$vocab_info['mirror_field_name']])){
-        $fields[$vocab_info['mirror_field_name']]->addConstraint(available_mirror_term_constraint::class);
+    $settingsManager = \Drupal::service('relationship_nodes.relation_bundle_settings_manager');
+    $vocab_type = $settingsManager->getRelationVocabType($bundle);
+    
+    if($vocab_type == 'entity_reference'){
+      $fieldnameResolver = \Drupal::service('relationship_nodes.field_name_resolver');
+      $mirror_field_name = $fieldnameResolver->getMirrorFields('entity_reference');
+      if(!empty($mirror_field_name)){
+        $fields[$mirror_field_name]->addConstraint(available_mirror_term_constraint::class);
       }
     }
   }

@@ -71,47 +71,12 @@ class RelationBundleInfoService {
 
         $vocab = $target_bundles[0];
         
-        $vocab_info = $this->getRelationVocabInfo($vocab);
-   
-        if(empty($vocab_info)){
-            return $info;
-        }           
-
         $info['has_relationtype'] = true;
-        $info['relationtypeinfo'] = $vocab_info;
-        $info['relationtypeinfo']['vocabulary'] = $vocab;
+        $info['vocabulary'] = $vocab;
 
         return $info;
     }
  
-
-    public function getRelationVocabInfo(string $vocab, array $fields = []): array {
-        if (empty($fields)) {
-            $fields = $this->fieldManager->getFieldDefinitions('taxonomy_term', $vocab);
-        }
-
-        switch($this->settingsManager->getRelationVocabType($vocab)){
-            case 'cross':
-                $result = [
-                    'mirror_field_type' => 'string',
-                    'mirror_field_name' => $this->fieldNameResolver->getMirrorFields('cross'),
-                    'referencing_type' => 'crossreferencing'
-                ];
-                break;
-            case 'self':
-                $result = [
-                    'mirror_field_type' => 'entity_reference_selfreferencing',
-                    'mirror_field_name' => $this->fieldNameResolver->getMirrorFields('self'),
-                    'referencing_type' => 'selfreferencing'
-                ];
-                break;
-            default:
-                $result = [];
-        }
-
-        return $result ?? [];
-    }
-
 
     public function getRelationInfoForTargetBundle(string $target_bundle): array { 
         $all_bundles_info = $this->bundleInfo->getBundleInfo('node');

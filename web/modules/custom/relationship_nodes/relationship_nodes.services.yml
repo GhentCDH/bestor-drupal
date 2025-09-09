@@ -29,7 +29,7 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes.relation_bundle_info_service'
+      - '@relationship_nodes.relation_bundle_settings_manager'
   relationship_nodes.mirror_term_event_subscriber:
     class: Drupal\relationship_nodes\EventSubscriber\MirrorTermEventSubscriber
     arguments: 

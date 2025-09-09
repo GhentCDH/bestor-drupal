@@ -105,7 +105,7 @@ class RelationBundleValidator {
         $target_bundles = $field_config->getSetting('handler_settings')['target_bundles'] ?? [];
         if (
             (!empty($target_bundles) && count($target_bundles) !== 1) || (
-                $field_config->getName() === $this->fieldNameResolver->getMirrorFields('self') && 
+                $field_config->getName() === $this->fieldNameResolver->getMirrorFields('entity_reference') && 
                 key($target_bundles) !== $field_config->getTargetBundle()
             )
         ) {
@@ -125,8 +125,11 @@ class RelationBundleValidator {
 
     public function validateFieldStorageConfig(FieldStorageConfig $storage){
         $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($storage->getName());
+        if(!$required_settings){
+            // Not a RN field, no validation required. 
+            return true;
+        }
         if (
-            !$required_settings ||
             $storage->getType() !== $required_settings['type'] ||
             $storage->getCardinality() != $required_settings['cardinality'] || (
                 isset($required_settings['target_type']) && 

@@ -1,0 +1,29 @@
+uuid: 7e1ab4c0-d952-4106-9799-65370a116839
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_relation_type
+    - node.type.relationnode__instrum_instrum
+    - taxonomy.vocabulary.relationtype_self__inst_inst
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__instrum_instrum.rn_relation_type
+field_name: rn_relation_type
+entity_type: node
+bundle: relationnode__instrum_instrum
+label: 'Rn relation type'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      relationtype_self__inst_inst: relationtype_self__inst_inst
+field_type: entity_reference

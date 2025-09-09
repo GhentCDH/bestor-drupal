@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.relationtype_self__pers_pers.rn_mirror_self
+    - field.field.taxonomy_term.relationtype_self__pers_pers.rn_mirror_reference
     - taxonomy.vocabulary.relationtype_self__pers_pers
   module:
     - path
@@ -47,4 +47,4 @@ content:
     third_party_settings: {  }
 hidden:
   description: true
-  rn_mirror_self: true
+  rn_mirror_reference: true

@@ -88,7 +88,7 @@ class CustomExtendedStringFilter extends StringEntity {
     if (is_array($relationship_nodes) && !empty($relationship_nodes)) {
       foreach($relationship_nodes as $relationship_node) {
         if (isset($relationship_node['relation_bundle_info']) && is_array($relationship_node['relation_bundle_info']) && $relationship_node['relation_bundle_info']['has_relationtype']){
-          $vocab =  $relationship_node['relation_bundle_info']['relationtypeinfo']['vocabulary'];
+          $vocab =  $relationship_node['relation_bundle_info']['vocabulary'];
           if(!empty($vocab)){
              $matching_vids[$vocab] = $vocab;
           }

@@ -30,7 +30,7 @@ class FieldNameResolver {
 
 
     public function getMirrorFields(?string $type = null): array|string {
-        $options = ['cross' => 'mirror_cross', 'self' => 'mirror_self'];
+        $options = ['string' => 'mirror_string', 'entity_reference' => 'mirror_entity_reference'];
         $fields  = $this->getConfig()->get('mirror_fields') ?? [];
         if($type !== null && isset($options[$type])){
 
@@ -42,8 +42,8 @@ class FieldNameResolver {
 
     public function getOppositeMirrorField(string $field_name): ?string {
         return match($field_name){
-            $this->getMirrorFields('cross') => $this->getMirrorFields('self'),
-            $this->getMirrorFields('self') => $this->getMirrorFields('cross'),
+            $this->getMirrorFields('string') => $this->getMirrorFields('entity_reference'),
+            $this->getMirrorFields('entity_reference') => $this->getMirrorFields('string'),
             default => null
         };
     }

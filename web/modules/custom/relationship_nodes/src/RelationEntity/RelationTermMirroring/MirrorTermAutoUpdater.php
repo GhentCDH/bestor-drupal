@@ -5,35 +5,23 @@ namespace Drupal\relationship_nodes\RelationEntity\RelationTermMirroring;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 
 class MirrorTermAutoUpdater {
 
     protected EntityTypeManagerInterface $entityTypeManager;
     protected FieldNameResolver $fieldNameResolver;
-    protected RelationBundleInfoService $bundleInfoService;
+    protected RelationBundleSettingsManager $settingsManager;
 
 
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager,
         FieldNameResolver $fieldNameResolver,
-        RelationBundleInfoService $bundleInfoService,
+        RelationBundleSettingsManager $settingsManager,
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldNameResolver = $fieldNameResolver;
-        $this->bundleInfoService = $bundleInfoService;
-    }
-
-
-    public function getMirrorReferenceField(TermInterface $term): ?string {
-        $vocab_info = $this->bundleInfoService->getRelationVocabInfo($term->bundle()) ?? [];
-        if(empty($vocab_info) || empty($vocab_info['mirror_field_name'])){
-            return null;
-        }
-        if($vocab_info['mirror_field_name'] !== $this->fieldNameResolver->getMirrorFields('self')){
-            return null;
-        }
-        return $vocab_info['mirror_field_name'];
+        $this->settingsManager = $settingsManager;
     }
 
 
@@ -63,10 +51,15 @@ class MirrorTermAutoUpdater {
 
 
     public function setMirrorTermLink(TermInterface $term, string $hook): void {
-        $ref_field = $this->getMirrorReferenceField($term);      
-        if(!$ref_field){
+   
+        if(!$this->settingsManager->getRelationVocabType($term) !== 'entity_reference'){
             return;
         }
+
+        $ref_field = $this->fieldNameResolver->getMirrorFields('entity_reference');  
+        if(empty($ref_field)){
+            return;
+        }   
 
         $changes = $this->getMirrorTermChanges($term, $ref_field);
 

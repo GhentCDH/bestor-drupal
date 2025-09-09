@@ -3,5 +3,5 @@ related_entity_fields:
   related_entity_2: 'rn_related_entity_2'
 relation_type: 'rn_relation_type'
 mirror_fields:
-  mirror_self: 'rn_mirror_self'
-  mirror_cross: 'rn_mirror_cross'
+  mirror_entity_reference: 'rn_mirror_reference'
+  mirror_string: 'rn_mirror_string'

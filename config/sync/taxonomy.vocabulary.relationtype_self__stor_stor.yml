@@ -7,7 +7,7 @@ dependencies:
 third_party_settings:
   relationship_nodes:
     enabled: 1
-    referencing_type: self
+    referencing_type: entity_reference
 name: 'Types of relationships between stories'
 vid: relationtype_self__stor_stor
 description: null

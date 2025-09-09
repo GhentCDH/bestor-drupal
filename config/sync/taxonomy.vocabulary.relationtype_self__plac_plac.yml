@@ -7,7 +7,7 @@ dependencies:
 third_party_settings:
   relationship_nodes:
     enabled: 1
-    referencing_type: self
+    referencing_type: entity_reference
 name: 'Types of relationships between places'
 vid: relationtype_self__plac_plac
 description: null

@@ -1,0 +1,29 @@
+uuid: a35e4f63-e917-4b33-9781-fb754b42e2c4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_relation_type
+    - node.type.relationnode__place_place
+    - taxonomy.vocabulary.relationtype_self__plac_plac
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__place_place.rn_relation_type
+field_name: rn_relation_type
+entity_type: node
+bundle: relationnode__place_place
+label: 'Rn relation type'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      relationtype_self__plac_plac: relationtype_self__plac_plac
+field_type: entity_reference

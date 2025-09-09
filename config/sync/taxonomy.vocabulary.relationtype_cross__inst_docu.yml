@@ -7,7 +7,7 @@ dependencies:
 third_party_settings:
   relationship_nodes:
     enabled: 1
-    referencing_type: cross
+    referencing_type: string
 name: 'Types of relationships between an instrument and a document'
 vid: relationtype_cross__inst_docu
 description: null
