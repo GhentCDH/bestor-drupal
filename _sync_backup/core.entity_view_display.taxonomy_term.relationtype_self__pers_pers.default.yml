@@ -1,0 +1,25 @@
+uuid: 0ec6ff5c-ec7e-4f3f-b76f-d53dae64af0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_self__pers_pers.rn_mirror_reference
+    - taxonomy.vocabulary.relationtype_self__pers_pers
+  module:
+    - text
+id: taxonomy_term.relationtype_self__pers_pers.default
+targetEntityType: taxonomy_term
+bundle: relationtype_self__pers_pers
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_reference: true
+  search_api_excerpt: true

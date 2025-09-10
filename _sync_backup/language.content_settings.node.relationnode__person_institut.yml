@@ -1,0 +1,18 @@
+uuid: 132ef6f3-2e04-4f66-b770-b01f77e8c5f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_institut
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__person_institut
+target_entity_type_id: node
+target_bundle: relationnode__person_institut
+default_langcode: current_interface
+language_alterable: false

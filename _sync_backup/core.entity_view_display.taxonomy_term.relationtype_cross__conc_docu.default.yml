@@ -1,0 +1,25 @@
+uuid: 1fea3a70-766c-44f2-bc51-88acc1b18100
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__conc_docu.rn_mirror_string
+    - taxonomy.vocabulary.relationtype_cross__conc_docu
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__conc_docu.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__conc_docu
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_string: true
+  search_api_excerpt: true

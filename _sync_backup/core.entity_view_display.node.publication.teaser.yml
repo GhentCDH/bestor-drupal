@@ -1,0 +1,25 @@
+uuid: d1cdf758-3d76-4574-ab81-f473c946d7cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.publication.field_external_link
+    - node.type.publication
+  module:
+    - user
+id: node.publication.teaser
+targetEntityType: node
+bundle: publication
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_external_link: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

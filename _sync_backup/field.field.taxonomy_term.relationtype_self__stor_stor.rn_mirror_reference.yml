@@ -1,0 +1,28 @@
+uuid: c2b020d9-44f2-4602-8fdb-10f436e1443e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.rn_mirror_reference
+    - taxonomy.vocabulary.relationtype_self__stor_stor
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: taxonomy_term.relationtype_self__stor_stor.rn_mirror_reference
+field_name: rn_mirror_reference
+entity_type: taxonomy_term
+bundle: relationtype_self__stor_stor
+label: 'Rn mirror reference'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      relationtype_self__stor_stor: relationtype_self__stor_stor
+field_type: entity_reference

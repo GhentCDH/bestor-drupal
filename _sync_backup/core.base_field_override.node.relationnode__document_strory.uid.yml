@@ -1,0 +1,20 @@
+uuid: ef7b393c-782b-4f7c-b8d7-e6c1f9e84701
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_strory
+id: node.relationnode__document_strory.uid
+field_name: uid
+entity_type: node
+bundle: relationnode__document_strory
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

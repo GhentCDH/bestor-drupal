@@ -1,0 +1,17 @@
+uuid: 94195870-7955-4034-8588-f488636ba511
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Concept
+type: concept
+description: 'Database: a scientific concept'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

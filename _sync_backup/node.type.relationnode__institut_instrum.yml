@@ -1,0 +1,22 @@
+uuid: 89a4a12a-bbf7-4511-961e-f73150ca39d1
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - relationship_nodes
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 1
+    auto_title: 1
+name: 'Relationship between an institution and  an instrument'
+type: relationnode__institut_instrum
+description: 'This content type describes the relationship between an entity of the institution type (related item 1) and an entity of the instrument type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

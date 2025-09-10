@@ -1,0 +1,18 @@
+uuid: 5087c7a8-5f4c-4819-a817-f5b047e9b50f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_document
+id: node.relationnode__instrum_document.title
+field_name: title
+entity_type: node
+bundle: relationnode__instrum_document
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

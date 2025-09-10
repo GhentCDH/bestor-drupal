@@ -1,0 +1,25 @@
+uuid: 4a3936d7-50c4-4063-a5b0-58e687bf7a0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__docu_stor.rn_mirror_string
+    - taxonomy.vocabulary.relationtype_cross__docu_stor
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__docu_stor.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__docu_stor
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_string: true
+  search_api_excerpt: true

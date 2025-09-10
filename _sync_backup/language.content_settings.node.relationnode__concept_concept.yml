@@ -1,0 +1,18 @@
+uuid: 27ad361a-3d7d-4b16-bed7-722e6527f927
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_concept
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__concept_concept
+target_entity_type_id: node
+target_bundle: relationnode__concept_concept
+default_langcode: current_interface
+language_alterable: false

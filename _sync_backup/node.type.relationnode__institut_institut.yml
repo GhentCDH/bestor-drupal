@@ -1,0 +1,22 @@
+uuid: 7399ff28-ac06-4d06-926b-6ecd49f2f05e
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - relationship_nodes
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 1
+    auto_title: 1
+name: 'Relationship between institutions'
+type: relationnode__institut_institut
+description: 'This content type describes the relationship between an entities of the institution type (related item 1 and 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

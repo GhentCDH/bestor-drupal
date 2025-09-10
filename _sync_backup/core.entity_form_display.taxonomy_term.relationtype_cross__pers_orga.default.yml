@@ -1,0 +1,50 @@
+uuid: 53eb2155-f800-4dad-8bf7-0fcffa0f2c75
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__pers_orga.rn_mirror_string
+    - taxonomy.vocabulary.relationtype_cross__pers_orga
+  module:
+    - path
+id: taxonomy_term.relationtype_cross__pers_orga.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__pers_orga
+mode: default
+content:
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  translation:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  description: true
+  rn_mirror_string: true

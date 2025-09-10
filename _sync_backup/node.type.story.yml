@@ -1,0 +1,17 @@
+uuid: ab24a0fa-7e52-4832-8851-85d8f79b9d06
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Story
+type: story
+description: 'Provides both overviews and in-depth analysis of a particular phenomenon, event, or period...'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

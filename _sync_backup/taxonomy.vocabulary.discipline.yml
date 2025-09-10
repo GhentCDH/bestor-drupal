@@ -1,0 +1,9 @@
+uuid: e93df5c8-72d4-4658-b8b3-a10f4926b692
+langcode: en
+status: true
+dependencies: {  }
+name: Discipline
+vid: discipline
+description: null
+weight: 0
+new_revision: false

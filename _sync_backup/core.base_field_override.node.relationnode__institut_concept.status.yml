@@ -1,0 +1,22 @@
+uuid: 32c704ba-4ab5-4cb8-8861-ed5504ebdcce
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_concept
+id: node.relationnode__institut_concept.status
+field_name: status
+entity_type: node
+bundle: relationnode__institut_concept
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,22 @@
+uuid: 83cb8f08-29ef-4337-b655-229246fa9951
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_instrum
+id: node.relationnode__institut_instrum.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__institut_instrum
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

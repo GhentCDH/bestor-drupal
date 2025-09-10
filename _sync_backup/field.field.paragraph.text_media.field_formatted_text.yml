@@ -1,0 +1,24 @@
+uuid: a7671165-543c-4543-92c8-ff12db100d8d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_formatted_text
+    - filter.format.basic_html
+    - paragraphs.paragraphs_type.text_media
+  module:
+    - text
+id: paragraph.text_media.field_formatted_text
+field_name: field_formatted_text
+entity_type: paragraph
+bundle: text_media
+label: Text
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+field_type: text_long

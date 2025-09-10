@@ -1,0 +1,15 @@
+uuid: 8597e52d-240b-4c6a-a8a9-ea68d5ea6842
+langcode: en
+status: true
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: string
+name: 'Types of relationships between a person and a document'
+vid: relationtype_cross__pers_docu
+description: null
+weight: 0
+new_revision: false

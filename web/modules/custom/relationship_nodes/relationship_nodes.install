@@ -2,13 +2,14 @@
 
 function relationship_nodes_requirements($phase) {
     $requirements = [];
-
+    print('test requirements');
     if ($phase == 'install' || $phase == 'runtime') {
         try {
             if (\Drupal::hasService('relationship_nodes.relation_bundle_validator')) {
                 $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
                 $validation_errors = $bundleValidator->validateAllRelationConfig();
-                
+                print_r($validation_errors);
+                print('test hans');
                 if (!empty($validation_errors)) {
                     $requirements['relationship_nodes_config'] = [
                         'title' => t('Relationship Nodes Configuration'),
@@ -42,18 +43,33 @@ function relationship_nodes_requirements($phase) {
 
 
 function relationship_nodes_install($is_syncing) {
-  if ($is_syncing) {
-    $bundleInfoService = \Drupal::service('relationship_nodes.relation_bundle_info_service');
-    $fieldConfigurator = \Drupal::service('relationship_nodes.relation_field_configurator');
 
-    foreach ($bundleInfoService->getAllRelationEntityTypes() as $entity) {
-      $fieldConfigurator->implementFieldUpdates($entity);
+    //print('test install');
+
+    if ($is_syncing) {
+          /*      try {
+            $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
+            $validation_errors = $bundleValidator->validateAllRelationConfig();
+            if (!empty($validation_errors)) {
+                $error_message = "Relationship Nodes validation failed on module install:\n" . implode("\n", $validation_errors);
+                throw new \Exception($error_message);
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Relationship Nodes install validation failed on module install: ' . $e->getMessage());
+        }
+*/
+        $bundleInfoService = \Drupal::service('relationship_nodes.relation_bundle_info_service');
+        $fieldConfigurator = \Drupal::service('relationship_nodes.relation_field_configurator');
+
+        foreach ($bundleInfoService->getAllRelationEntityTypes() as $entity) {
+        $fieldConfigurator->implementFieldUpdates($entity);
+        }
     }
-  }
 }
 
 
 function relationship_nodes_uninstall($is_syncing){
     $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
-    $cleanupService->cleanupModuleData();
+    $cleanupService->removeModuleSettings();
+    $cleanupService->cleanFormDisplays();
 }

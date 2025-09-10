@@ -1,0 +1,25 @@
+uuid: 23d9f6ba-f09f-4136-900f-a914ca949947
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_self__inst_inst.rn_mirror_reference
+    - taxonomy.vocabulary.relationtype_self__inst_inst
+  module:
+    - text
+id: taxonomy_term.relationtype_self__inst_inst.default
+targetEntityType: taxonomy_term
+bundle: relationtype_self__inst_inst
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_reference: true
+  search_api_excerpt: true

@@ -1,0 +1,33 @@
+uuid: 29553994-3ee2-46e0-ba62-c8a8f2168201
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.bibliography
+    - field.field.node.publication.field_external_link
+    - node.type.publication
+  module:
+    - link
+    - user
+id: node.publication.bibliography
+targetEntityType: node
+bundle: publication
+mode: bibliography
+content:
+  field_external_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  footnotes_group: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

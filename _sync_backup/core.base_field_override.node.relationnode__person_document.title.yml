@@ -1,0 +1,18 @@
+uuid: b51c3a7b-d0ff-42a7-9e44-3e81b1463ebf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_document
+id: node.relationnode__person_document.title
+field_name: title
+entity_type: node
+bundle: relationnode__person_document
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

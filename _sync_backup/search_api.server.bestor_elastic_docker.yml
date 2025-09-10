@@ -1,0 +1,19 @@
+uuid: 42433a13-b91c-4980-a7af-f6c114313a41
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_api_elasticsearch_client
+id: bestor_elastic_docker
+name: 'bestor elastic docker'
+description: ''
+backend: elasticsearch_client
+backend_config:
+  connector: standard
+  connector_config:
+    url: 'http://bestor-elastic:9200'
+  advanced:
+    fuzziness: auto
+    prefix: ''
+    synonyms:
+      - ''

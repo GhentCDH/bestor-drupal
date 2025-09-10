@@ -1,0 +1,14 @@
+uuid: d7ceb834-50f9-4ff7-9642-3b2bca7d6789
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.web_manager
+  module:
+    - user
+id: user_add_role_action.web_manager
+label: 'Add the Web manager role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: web_manager

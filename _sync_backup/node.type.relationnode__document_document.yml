@@ -1,0 +1,22 @@
+uuid: 05544ecb-883f-4a13-b12f-cc1b2793236e
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - relationship_nodes
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 1
+    auto_title: 1
+name: 'Relationship between documents'
+type: relationnode__document_document
+description: 'This content type describes the relationship between an entities of the document type (related item 1 and 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

@@ -1,0 +1,100 @@
+uuid: 68cb3e9b-9327-4449-bcbe-9b6fb04dcea4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.instrument.field_alternative_name
+    - field.field.node.instrument.field_author
+    - field.field.node.instrument.field_description
+    - field.field.node.instrument.field_discipline
+    - field.field.node.instrument.field_image
+    - field.field.node.instrument.field_period
+    - field.field.node.instrument.field_specialisation
+    - field.field.node.instrument.field_summary
+    - node.type.instrument
+  module:
+    - datetime_range
+    - entity_reference_revisions
+    - user
+id: node.instrument.default
+targetEntityType: node
+bundle: instrument
+mode: default
+content:
+  field_alternative_name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_author:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_description:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_discipline:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 117
+    region: content
+  field_specialisation:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

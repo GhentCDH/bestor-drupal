@@ -1,0 +1,18 @@
+uuid: 66542832-9ee4-4042-8774-4b1dc5183507
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_concept
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__person_concept
+target_entity_type_id: node
+target_bundle: relationnode__person_concept
+default_langcode: current_interface
+language_alterable: false

@@ -1,0 +1,18 @@
+uuid: 07ef59b5-c08c-4029-bba5-b188ee5bdf44
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.institution
+id: node.institution.title
+field_name: title
+entity_type: node
+bundle: institution
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,25 @@
+uuid: 8092829e-eaf6-4b24-b21e-a264f781b239
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_self__docu_docu.rn_mirror_reference
+    - taxonomy.vocabulary.relationtype_self__docu_docu
+  module:
+    - text
+id: taxonomy_term.relationtype_self__docu_docu.default
+targetEntityType: taxonomy_term
+bundle: relationtype_self__docu_docu
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_reference: true
+  search_api_excerpt: true

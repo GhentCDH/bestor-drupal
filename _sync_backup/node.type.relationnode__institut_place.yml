@@ -1,0 +1,22 @@
+uuid: 5a6f55b6-2581-450e-894c-2ff178340774
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - relationship_nodes
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 1
+    auto_title: 1
+name: 'Relationship between an institution and  a place'
+type: relationnode__institut_place
+description: 'This content type describes the relationship between an entity of the institution type (related item 1) and an entity of the place type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

@@ -1,0 +1,22 @@
+uuid: fa4da628-fe97-436b-91d6-a59c6d0d5a3f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_story
+id: node.relationnode__place_story.status
+field_name: status
+entity_type: node
+bundle: relationnode__place_story
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

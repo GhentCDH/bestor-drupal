@@ -1,0 +1,25 @@
+uuid: 5b4c1eca-274b-4978-bf82-93c2dc168273
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__pers_orga.rn_mirror_string
+    - taxonomy.vocabulary.relationtype_cross__pers_orga
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__pers_orga.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__pers_orga
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_string: true
+  search_api_excerpt: true

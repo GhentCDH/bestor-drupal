@@ -1,0 +1,41 @@
+uuid: 39dcb221-07af-44c3-835f-f2340b3861e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_description
+    - node.type.instrument
+    - paragraphs.paragraphs_type.formatted_text
+    - paragraphs.paragraphs_type.media
+    - paragraphs.paragraphs_type.text_media
+  module:
+    - entity_reference_revisions
+id: node.instrument.field_description
+field_name: field_description
+entity_type: node
+bundle: instrument
+label: Description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      formatted_text: formatted_text
+      media: media
+      text_media: text_media
+    negate: 0
+    target_bundles_drag_drop:
+      formatted_text:
+        weight: 3
+        enabled: true
+      media:
+        weight: 4
+        enabled: true
+      text_media:
+        weight: 6
+        enabled: true
+field_type: entity_reference_revisions

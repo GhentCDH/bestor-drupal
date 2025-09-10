@@ -1,0 +1,22 @@
+uuid: 0836d261-1b0a-48cc-8950-4f8085b6e39f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_strory
+id: node.relationnode__document_strory.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__document_strory
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

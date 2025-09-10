@@ -1,0 +1,21 @@
+uuid: 8ed96637-1a06-4fa0-ba56-6a0692bb9444
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_period
+    - node.type.document
+  module:
+    - datetime_range
+id: node.document.field_period
+field_name: field_period
+entity_type: node
+bundle: document
+label: period
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

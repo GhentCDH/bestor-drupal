@@ -1,0 +1,25 @@
+uuid: ed41e31d-2a74-44fc-ab26-07f034dc99dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_self__orga_orga.rn_mirror_reference
+    - taxonomy.vocabulary.relationtype_self__orga_orga
+  module:
+    - text
+id: taxonomy_term.relationtype_self__orga_orga.default
+targetEntityType: taxonomy_term
+bundle: relationtype_self__orga_orga
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_reference: true
+  search_api_excerpt: true

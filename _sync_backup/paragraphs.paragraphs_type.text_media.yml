@@ -1,0 +1,10 @@
+uuid: 79d9cf68-ce85-4eb8-b514-14b38e3ae4e7
+langcode: en
+status: true
+dependencies: {  }
+id: text_media
+label: 'text + media'
+icon_uuid: null
+icon_default: null
+description: 'Displays a media item (e.g. image, file, audio, video...) alongside text, with the option to choose the layout. '
+behavior_plugins: {  }

@@ -1,0 +1,20 @@
+uuid: 0c6792fa-940a-45ce-a468-0b82d83214c3
+langcode: en
+status: true
+dependencies:
+  theme:
+    - bestor
+_core:
+  default_config_hash: 0wp40IlneQ7aL73yYH8uecnISk55xnGbzU3xxLdjPV8
+id: bestor_page_title
+theme: bestor
+region: page_header
+weight: -6
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

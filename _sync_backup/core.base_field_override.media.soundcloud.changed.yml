@@ -1,0 +1,18 @@
+uuid: eec49b4f-446d-4e8b-a69d-d7231520fb2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.soundcloud
+id: media.soundcloud.changed
+field_name: changed
+entity_type: media
+bundle: soundcloud
+label: Changed
+description: 'The time the media item was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

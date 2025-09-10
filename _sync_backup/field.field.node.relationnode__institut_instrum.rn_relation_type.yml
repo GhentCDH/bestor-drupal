@@ -1,0 +1,29 @@
+uuid: 62d01034-482f-474e-a96a-646507bc262a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_relation_type
+    - node.type.relationnode__institut_instrum
+    - taxonomy.vocabulary.relationtype_cross__orga_inst
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__institut_instrum.rn_relation_type
+field_name: rn_relation_type
+entity_type: node
+bundle: relationnode__institut_instrum
+label: 'Rn relation type'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      relationtype_cross__orga_inst: relationtype_cross__orga_inst
+field_type: entity_reference

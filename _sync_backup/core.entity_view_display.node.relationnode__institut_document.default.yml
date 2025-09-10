@@ -1,0 +1,28 @@
+uuid: b7d0e6bb-08f9-4d67-ad89-72ac774793c1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.relationnode__institut_document.rn_related_entity_1
+    - field.field.node.relationnode__institut_document.rn_related_entity_2
+    - field.field.node.relationnode__institut_document.rn_relation_type
+    - node.type.relationnode__institut_document
+  module:
+    - user
+id: node.relationnode__institut_document.default
+targetEntityType: node
+bundle: relationnode__institut_document
+mode: default
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  footnotes_group: true
+  langcode: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  search_api_excerpt: true

@@ -143,7 +143,7 @@ class VocabFormAlter {
     $dialog_content = [
       '#type' => 'container',
       'message' => [
-        '#markup' => t('You changed the relation type. Are you sure you want to save these relationship settings?'),
+        '#markup' => t('You changed the relation type. Existing fields may be deleted if incompatible with the input. Are you sure you want to save these relationship settings?'),
       ],
       'actions' => [
         '#type' => 'container',

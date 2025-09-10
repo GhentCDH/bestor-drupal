@@ -1,0 +1,22 @@
+uuid: 3f4fafc7-d54d-4ecf-a24d-4cbc888259f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_instrum
+id: node.relationnode__person_instrum.sticky
+field_name: sticky
+entity_type: node
+bundle: relationnode__person_instrum
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

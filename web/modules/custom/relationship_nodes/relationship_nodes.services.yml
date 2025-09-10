@@ -123,6 +123,7 @@ services:
   relationship_nodes.relation_settings_cleanup_service:
     class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationSettingsCleanUpService
     arguments:
+      - '@entity_type.manager'
       - '@relationship_nodes.relation_bundle_info_service'
       - '@relationship_nodes.relation_bundle_settings_manager'
       - '@relationship_nodes.relation_field_configurator'    

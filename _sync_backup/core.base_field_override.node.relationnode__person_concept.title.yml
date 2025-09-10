@@ -1,0 +1,18 @@
+uuid: 96dcbed9-f483-410b-98e9-cbf173b5b690
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_concept
+id: node.relationnode__person_concept.title
+field_name: title
+entity_type: node
+bundle: relationnode__person_concept
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

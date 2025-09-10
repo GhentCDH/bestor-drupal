@@ -1,0 +1,25 @@
+uuid: c8718026-b23b-449d-9a1f-be91bb6427fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_self__stor_stor.rn_mirror_reference
+    - taxonomy.vocabulary.relationtype_self__stor_stor
+  module:
+    - text
+id: taxonomy_term.relationtype_self__stor_stor.default
+targetEntityType: taxonomy_term
+bundle: relationtype_self__stor_stor
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_reference: true
+  search_api_excerpt: true

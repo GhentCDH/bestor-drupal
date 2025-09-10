@@ -1,0 +1,22 @@
+uuid: 7f65dd00-ec90-46d8-935e-1347c0ddaf4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_document
+id: node.relationnode__institut_document.sticky
+field_name: sticky
+entity_type: node
+bundle: relationnode__institut_document
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

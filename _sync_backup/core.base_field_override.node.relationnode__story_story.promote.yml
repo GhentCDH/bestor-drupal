@@ -1,0 +1,22 @@
+uuid: 7c43ee1f-8203-4902-9308-14fe9f4aeaff
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__story_story
+id: node.relationnode__story_story.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__story_story
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

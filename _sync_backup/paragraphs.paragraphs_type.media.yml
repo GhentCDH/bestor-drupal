@@ -1,0 +1,10 @@
+uuid: d2be67c7-66d6-4909-afd4-562fcc69ce88
+langcode: en
+status: true
+dependencies: {  }
+id: media
+label: media
+icon_uuid: null
+icon_default: null
+description: 'Adds a media item (e.g. image, file, audio, video...). The media item is displayed at its original size, with a maximum width of 100% of the screen.'
+behavior_plugins: {  }

@@ -1,0 +1,20 @@
+uuid: 54f677b8-a2cf-4576-8c8e-05ba71f16d84
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.iframe
+id: media.iframe.uid
+field_name: uid
+entity_type: media
+bundle: iframe
+label: 'Authored by'
+description: 'The user ID of the author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\media\Entity\Media::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

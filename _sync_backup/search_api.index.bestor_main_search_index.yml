@@ -1,0 +1,374 @@
+uuid: 6051a6a8-47d5-4389-86a4-f0c6bb6e82d0
+langcode: en
+status: false
+dependencies:
+  config:
+    - field.storage.node.body
+    - field.storage.node.field_alternative_name
+    - field.storage.node.field_author
+    - field.storage.node.field_country
+    - field.storage.node.field_description
+    - field.storage.node.field_discipline
+    - field.storage.node.field_end_municipality
+    - field.storage.node.field_gender
+    - field.storage.node.field_geolocation
+    - field.storage.node.field_municipality
+    - field.storage.node.field_specialisation
+    - field.storage.node.field_time_period
+    - field.storage.node.field_typology
+    - field.storage.node.field_wikidata_entry
+    - field.storage.paragraph.field_formatted_text
+    - field.storage.paragraph.field_title
+  module:
+    - node
+    - paragraphs
+    - search_api_elasticsearch_client
+    - search_api_glossary
+    - taxonomy
+id: bestor_main_search_index
+name: bestor_main_search_index
+description: ''
+read_only: false
+field_settings:
+  alternative_name__ft:
+    label: 'Alternative name [fulltext]'
+    datasource_id: 'entity:node'
+    property_path: field_alternative_name
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_alternative_name
+  author_name__ft:
+    label: 'Author Name [fulltext]'
+    datasource_id: 'entity:node'
+    property_path: 'field_author:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_author
+      module:
+        - taxonomy
+  body__ft:
+    label: 'Body [fulltext]'
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.body
+  content_type__ft:
+    label: 'Content type [fulltext]'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: text
+    dependencies:
+      module:
+        - node
+  content_type__str:
+    label: 'Content type [string]'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
+  country_name__ft:
+    label: 'Country name [ft]'
+    datasource_id: 'entity:node'
+    property_path: 'field_country:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_country
+      module:
+        - taxonomy
+  discipline_name__ft:
+    label: 'Discipline name [ft]'
+    datasource_id: 'entity:node'
+    property_path: 'field_discipline:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_discipline
+      module:
+        - taxonomy
+  field_time_period_end__date:
+    label: 'end time [date]'
+    datasource_id: 'entity:node'
+    property_path: 'field_time_period:end_value'
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_time_period
+  field_time_period_start__date:
+    label: 'Start time [date]'
+    datasource_id: 'entity:node'
+    property_path: field_time_period
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_time_period
+  gender_name__ft:
+    label: 'Gender name [ft]'
+    datasource_id: 'entity:node'
+    property_path: 'field_gender:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_gender
+      module:
+        - taxonomy
+  geolocation_str:
+    label: 'Geolocation [string]'
+    datasource_id: 'entity:node'
+    property_path: field_geolocation
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_geolocation
+  glossaryaz_title__str:
+    label: 'Glossary AZ - Content » Title [str]'
+    property_path: glossaryaz_title__str
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
+  langcode__str:
+    label: 'Language code [string]'
+    datasource_id: 'entity:node'
+    property_path: langcode
+    type: string
+    dependencies:
+      module:
+        - node
+  municipality_name__ft:
+    label: 'Municipality name [ft]'
+    datasource_id: 'entity:node'
+    property_path: 'field_municipality:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_municipality
+      module:
+        - taxonomy
+  nid__int:
+    label: 'Node ID [int]'
+    datasource_id: 'entity:node'
+    property_path: nid
+    type: integer
+    dependencies:
+      module:
+        - node
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
+  paragraph_text__ft:
+    label: 'Paragraph text [fulltext]'
+    datasource_id: 'entity:node'
+    property_path: 'field_description:entity:field_formatted_text'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_description
+        - field.storage.paragraph.field_formatted_text
+      module:
+        - paragraphs
+  paragraph_title__ft:
+    label: 'Paragraph title [fulltext]'
+    datasource_id: 'entity:node'
+    property_path: 'field_description:entity:field_title'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_description
+        - field.storage.paragraph.field_title
+      module:
+        - paragraphs
+  place_end_name__ft:
+    label: 'Place end  name [ft]'
+    datasource_id: 'entity:node'
+    property_path: 'field_end_municipality:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_end_municipality
+      module:
+        - taxonomy
+  specialisation_name__ft:
+    label: 'Specialisation  name [ft]'
+    datasource_id: 'entity:node'
+    property_path: 'field_specialisation:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_specialisation
+      module:
+        - taxonomy
+  status:
+    label: Boolean
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+  tax_author__int:
+    label: 'Author tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_author
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_author
+  tax_country__int:
+    label: 'Country tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_country
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_country
+  tax_discipline__int:
+    label: 'Discipline tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_discipline
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_discipline
+  tax_end_place__int:
+    label: 'End Place tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_end_municipality
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_end_municipality
+  tax_gender__int:
+    label: 'Gender  tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_gender
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_gender
+  tax_municipality__int:
+    label: 'Municipality tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_municipality
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_municipality
+  tax_specialisation__int:
+    label: 'Specialisation tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_specialisation
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_specialisation
+  tax_typology__int:
+    label: 'Typology tax [int]'
+    datasource_id: 'entity:node'
+    property_path: field_typology
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_typology
+  title__ft:
+    label: 'Title [fulltext]'
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+    dependencies:
+      module:
+        - node
+  title__str:
+    label: 'Title [str]'
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - node
+  typology_name__ft:
+    label: 'Typology name [ft]'
+    datasource_id: 'entity:node'
+    property_path: 'field_typology:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_typology
+      module:
+        - taxonomy
+  uid:
+    label: 'Entity reference'
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+  uuid__str:
+    label: 'UUID [str]'
+    datasource_id: 'entity:node'
+    property_path: uuid
+    type: string
+    dependencies:
+      module:
+        - node
+  wikidata_entry__str:
+    label: 'Wikidata Entry [str]'
+    datasource_id: 'entity:node'
+    property_path: field_wikidata_entry
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_wikidata_entry
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: true
+      selected: {  }
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
+  custom_value: {  }
+  entity_type: {  }
+  glossary:
+    weights:
+      preprocess_index: -20
+    glossarytable: 'a:1:{s:13:"glossarytable";a:30:{s:20:"alternative_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"author_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:8:"body__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:16:"content_type__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:17:"content_type__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:16:"country_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"discipline_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"gender_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"geolocation_str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:13:"langcode__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:21:"municipality_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:8:"nid__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:18:"paragraph_text__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"paragraph_title__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:18:"place_end_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:23:"specialisation_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"tax_author__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:16:"tax_country__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"tax_discipline__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:18:"tax_end_place__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:15:"tax_gender__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:21:"tax_municipality__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:23:"tax_specialisation__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:17:"tax_typology__int";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:9:"title__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:10:"title__str";a:2:{s:8:"glossary";s:1:"1";s:8:"grouping";a:3:{s:11:"grouping_09";s:11:"grouping_09";s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;}}s:17:"typology_name__ft";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:3:"uid";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:9:"uuid__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}s:19:"wikidata_entry__str";a:2:{s:8:"grouping";a:3:{s:14:"grouping_other";s:14:"grouping_other";s:11:"grouping_az";i:0;s:11:"grouping_09";i:0;}s:8:"glossary";i:0;}}}'
+    field_enabled: 0
+    grouping_defaults:
+      grouping_other: grouping_other
+      grouping_az: 0
+      grouping_09: 0
+  language_with_fallback: {  }
+  rendered_item: {  }
+  reverse_entity_references: {  }
+  search_api_elasticsearch_client_date_range: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  delete_on_fail: true
+  index_directly: false
+  track_changes_in_references: false
+server: null

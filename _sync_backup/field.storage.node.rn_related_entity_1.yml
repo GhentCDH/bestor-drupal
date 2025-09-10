@@ -1,0 +1,23 @@
+uuid: 759894ac-09be-416b-b4ea-b3c21ef4d0f8
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.rn_related_entity_1
+field_name: rn_related_entity_1
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: true
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

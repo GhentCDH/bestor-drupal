@@ -1,0 +1,24 @@
+uuid: 16caf061-28d0-4c9a-af60-c875bd04b207
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.rn_mirror_string
+    - taxonomy.vocabulary.relationtype_cross__pers_inst
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: taxonomy_term.relationtype_cross__pers_inst.rn_mirror_string
+field_name: rn_mirror_string
+entity_type: taxonomy_term
+bundle: relationtype_cross__pers_inst
+label: 'Rn mirror string'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

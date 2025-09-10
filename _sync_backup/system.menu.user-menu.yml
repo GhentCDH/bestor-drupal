@@ -1,0 +1,8 @@
+uuid: 4bf90566-375a-44f5-8d8b-e1fe383542e0
+langcode: en
+status: true
+dependencies: {  }
+id: user-menu
+label: 'Redactor menu'
+description: ''
+locked: false

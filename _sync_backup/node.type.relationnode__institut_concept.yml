@@ -1,0 +1,22 @@
+uuid: f722f313-1771-49b5-bc55-df69d4fd2316
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - relationship_nodes
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 1
+    auto_title: 1
+name: 'Relationship between an institution and a concept'
+type: relationnode__institut_concept
+description: 'This content type describes the relationship between an entity of the institution type (related item 1) and an entity of the concept type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

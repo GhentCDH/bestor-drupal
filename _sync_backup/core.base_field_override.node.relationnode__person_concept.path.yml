@@ -1,0 +1,20 @@
+uuid: 9e36610f-5b7f-46a4-a6e2-f0a7eac5ae2c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_concept
+  module:
+    - path
+id: node.relationnode__person_concept.path
+field_name: path
+entity_type: node
+bundle: relationnode__person_concept
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

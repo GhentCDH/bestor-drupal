@@ -1,0 +1,53 @@
+uuid: 27b0ce54-f1a3-40f9-b086-6adb1e707f72
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_alternative_name
+    - search_api.server.bestor_elastic_docker
+  module:
+    - node
+    - search_api_elasticsearch_client
+id: person_institution_test
+name: 'person institution test'
+description: ''
+read_only: false
+field_settings:
+  field_alternative_name:
+    label: 'Alternative  name'
+    datasource_id: 'entity:node'
+    property_path: field_alternative_name
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_alternative_name
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - institution
+        - person
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  custom_value: {  }
+  entity_type: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+  reverse_entity_references: {  }
+  search_api_elasticsearch_client_date_range:
+    weights:
+      preprocess_index: 0
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  delete_on_fail: true
+  index_directly: true
+  track_changes_in_references: true
+server: bestor_elastic_docker

@@ -1,0 +1,22 @@
+uuid: 986d5112-f049-49cb-afb5-7a106f640243
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_instrum
+id: node.relationnode__person_instrum.status
+field_name: status
+entity_type: node
+bundle: relationnode__person_instrum
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

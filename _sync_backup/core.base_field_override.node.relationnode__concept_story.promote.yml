@@ -1,0 +1,22 @@
+uuid: cc8856bf-74eb-4f0a-8220-d0d2650c154a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_story
+id: node.relationnode__concept_story.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__concept_story
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

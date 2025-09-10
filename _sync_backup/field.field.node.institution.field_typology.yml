@@ -1,0 +1,29 @@
+uuid: 9fb68ce8-00a9-4757-b49d-1f4d5200af6a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_typology
+    - node.type.institution
+    - taxonomy.vocabulary.institution_type
+id: node.institution.field_typology
+field_name: field_typology
+entity_type: node
+bundle: institution
+label: 'Institution type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      institution_type: institution_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

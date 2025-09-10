@@ -77,7 +77,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
 
     if ($this->isModuleDisabling($storage_comparer)) {
-      $this->cleanupService->cleanupModuleData();
+      $this->cleanupService->removeModuleSettings();
     } else {
       foreach ($this->getChangedRelationEntities($storage_comparer) as $entity) {
         $this->fieldConfigurator->implementFieldUpdates($entity);

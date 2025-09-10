@@ -1,0 +1,20 @@
+uuid: 67f62376-8370-4f1f-9fac-11cbae9cd78f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_place
+  module:
+    - path
+id: node.relationnode__institut_place.path
+field_name: path
+entity_type: node
+bundle: relationnode__institut_place
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

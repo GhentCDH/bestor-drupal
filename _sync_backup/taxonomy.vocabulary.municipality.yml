@@ -1,0 +1,9 @@
+uuid: c47711ac-0f3a-490f-b229-8bdcaaec5079
+langcode: en
+status: true
+dependencies: {  }
+name: Municipality
+vid: municipality
+description: null
+weight: 0
+new_revision: false

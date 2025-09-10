@@ -1,0 +1,20 @@
+uuid: e275c6bc-4149-4643-b5c1-cea086baa39f
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.iframe
+id: media.iframe.name
+field_name: name
+entity_type: media
+bundle: iframe
+label: Name
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: ''
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,15 @@
+uuid: 83af9577-a74b-4ed0-a82f-dbbdda6bc60b
+langcode: en
+status: true
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: string
+name: 'Types of relationships between a document and a story'
+vid: relationtype_cross__docu_stor
+description: null
+weight: 0
+new_revision: false

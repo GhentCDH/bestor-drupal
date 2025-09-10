@@ -1,0 +1,18 @@
+uuid: bad18a18-7fd3-45bf-846a-6c58a4b56485
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_place
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: node.relationnode__institut_place
+target_entity_type_id: node
+target_bundle: relationnode__institut_place
+default_langcode: current_interface
+language_alterable: false

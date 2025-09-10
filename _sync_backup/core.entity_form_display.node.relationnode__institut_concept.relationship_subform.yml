@@ -1,0 +1,32 @@
+uuid: 61cba234-1ad8-4ffe-971f-212d0bb40da2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.relationship_subform
+    - field.field.node.relationnode__institut_concept.rn_related_entity_1
+    - field.field.node.relationnode__institut_concept.rn_related_entity_2
+    - field.field.node.relationnode__institut_concept.rn_relation_type
+    - node.type.relationnode__institut_concept
+id: node.relationnode__institut_concept.relationship_subform
+targetEntityType: node
+bundle: relationnode__institut_concept
+mode: relationship_subform
+content:
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  status: true
+  sticky: true
+  title: true
+  uid: true

@@ -1,0 +1,28 @@
+uuid: 87977fcc-b134-4c9c-abed-38adf37081ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.relationnode__concept_instrument.rn_related_entity_1
+    - field.field.node.relationnode__concept_instrument.rn_related_entity_2
+    - field.field.node.relationnode__concept_instrument.rn_relation_type
+    - node.type.relationnode__concept_instrument
+  module:
+    - user
+id: node.relationnode__concept_instrument.default
+targetEntityType: node
+bundle: relationnode__concept_instrument
+mode: default
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  footnotes_group: true
+  langcode: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  search_api_excerpt: true

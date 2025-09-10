@@ -1,0 +1,17 @@
+uuid: 12eaa903-d9c7-421d-8ee6-c61b69846663
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Document
+type: document
+description: 'Database: a document such as an archival record, publication, series, speech, draft, treaty, or letter...'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

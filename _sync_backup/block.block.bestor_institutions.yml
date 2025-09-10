@@ -1,0 +1,30 @@
+uuid: 6e9dfdc9-6267-4b8b-a01c-a443936dadf2
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:image_button:37d82119-ee4d-45f3-816b-01b912f434f2'
+  module:
+    - block_content
+    - system
+  theme:
+    - bestor
+id: bestor_institutions
+theme: bestor
+region: content_bottom
+weight: 0
+provider: null
+plugin: 'block_content:37d82119-ee4d-45f3-816b-01b912f434f2'
+settings:
+  id: 'block_content:37d82119-ee4d-45f3-816b-01b912f434f2'
+  label: Institutions
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

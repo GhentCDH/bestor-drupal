@@ -1,0 +1,21 @@
+uuid: 607e4eb0-1881-4b40-804d-351ef634a474
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.footnote
+  module:
+    - ckeditor5
+_core:
+  default_config_hash: SyHxfjreOgdyYXaIXOlKvLazJjPl6X-6ywdJeSruOzg
+format: footnote
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - bold
+      - italic
+      - link
+  plugins: {  }
+image_upload:
+  status: false

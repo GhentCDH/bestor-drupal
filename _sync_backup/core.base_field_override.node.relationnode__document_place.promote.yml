@@ -1,0 +1,22 @@
+uuid: 28dfc1b6-1a50-4d80-8c84-37880f5c1bd6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_place
+id: node.relationnode__document_place.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__document_place
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

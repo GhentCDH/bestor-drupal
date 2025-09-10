@@ -1,0 +1,22 @@
+uuid: 8133e5c0-7f62-4ff4-acf0-39287d83ce0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_person
+id: node.relationnode__person_person.status
+field_name: status
+entity_type: node
+bundle: relationnode__person_person
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

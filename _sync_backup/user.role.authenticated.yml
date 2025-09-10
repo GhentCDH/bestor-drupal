@@ -1,0 +1,16 @@
+uuid: a937e9d6-26dc-4974-85fb-1700cc48381d
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+    - system
+_core:
+  default_config_hash: cFrlqjtkTfvY3RGccjJkPf1SGIfJ942IrxTLWAO4mgA
+id: authenticated
+label: 'User without permissions'
+weight: -9
+is_admin: false
+permissions:
+  - 'access content'
+  - 'view media'

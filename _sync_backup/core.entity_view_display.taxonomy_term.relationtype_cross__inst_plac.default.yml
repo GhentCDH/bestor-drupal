@@ -1,0 +1,25 @@
+uuid: a88e0b94-b154-4e92-8952-abde9ea422d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.relationtype_cross__inst_plac.rn_mirror_string
+    - taxonomy.vocabulary.relationtype_cross__inst_plac
+  module:
+    - text
+id: taxonomy_term.relationtype_cross__inst_plac.default
+targetEntityType: taxonomy_term
+bundle: relationtype_cross__inst_plac
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  rn_mirror_string: true
+  search_api_excerpt: true

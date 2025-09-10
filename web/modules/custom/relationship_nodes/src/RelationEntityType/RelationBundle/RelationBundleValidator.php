@@ -143,7 +143,15 @@ class RelationBundleValidator {
 
 
     
-    public function validateAllRelationConfig(): array {
+    public function validateAllRelationConfig(): array {      
+        return array_merge(
+           $this->validateAllRelationEntityConfig(), 
+           $this->validateAllRelationFieldConfig()
+        );
+    }   
+
+
+    protected function validateAllRelationEntityConfig():array{
         $all_errors = [];
         
         foreach ($this->bundleInfoService->getAllRelationEntityTypes() as $entity) {
@@ -153,17 +161,15 @@ class RelationBundleValidator {
             }
         }
 
-        $storage_errors = $this->validateAllRelationFieldConfig() ?? [];
-        $all_errors = array_merge($all_errors, $storage_errors);
-        
         return $all_errors;
-    }   
+    }
 
 
     protected function validateAllRelationFieldConfig(): array {
         $errors = [];
         $rn_fields = $this->fieldConfigurator->getAllRnCreatedFields();
-        
+        $relation_field_names = $this->fieldNameResolver->getAllRelationFieldNames();
+
         foreach ($rn_fields as $field_id => $field) {
             $field_name = $field->getName();
             if ($field instanceof FieldStorageConfig && !$this->validateFieldStorageConfig($field)) {
@@ -176,7 +182,7 @@ class RelationBundleValidator {
                     '@field' => $field_name,
                 ]);
             }
-            if (!in_array($field_name, $this->fieldNameResolver->getAllRelationFieldNames())){
+            if (!in_array($field_name, $relation_field_names)){
                 $errors[] = $this->t('Field "@field" has Relationship Nodes configuration, but is not a dedicated field of this module.', [
                     '@field' => $field_name,
                 ]);

@@ -1,0 +1,22 @@
+uuid: 9c9ba55d-fde2-4075-884f-641e622c5010
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_story
+id: node.relationnode__place_story.sticky
+field_name: sticky
+entity_type: node
+bundle: relationnode__place_story
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

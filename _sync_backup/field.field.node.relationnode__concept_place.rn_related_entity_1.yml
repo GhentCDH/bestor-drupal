@@ -1,0 +1,29 @@
+uuid: f2217166-b7f0-4695-91f3-d3d2cda29360
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rn_related_entity_1
+    - node.type.concept
+    - node.type.relationnode__concept_place
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: node.relationnode__concept_place.rn_related_entity_1
+field_name: rn_related_entity_1
+entity_type: node
+bundle: relationnode__concept_place
+label: 'Rn related entity 1'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      concept: concept
+field_type: entity_reference

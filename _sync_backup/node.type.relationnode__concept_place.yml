@@ -1,0 +1,22 @@
+uuid: 67a1d53c-66dd-4460-8d92-69bc819f9292
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - relationship_nodes
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 1
+    auto_title: 1
+name: 'Relationship between a concept and a place'
+type: relationnode__concept_place
+description: 'This content type describes the relationship between an entity of the concept type (related item 1) and an entity of the place type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

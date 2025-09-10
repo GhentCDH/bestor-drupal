@@ -1,0 +1,18 @@
+uuid: c6a4aa69-dd16-4940-a9d9-124c7175fe87
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_concept
+id: node.relationnode__institut_concept.title
+field_name: title
+entity_type: node
+bundle: relationnode__institut_concept
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,138 @@
+uuid: b7a7bb2f-b859-4229-862f-b2719016c23c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.institution.field_alternative_name
+    - field.field.node.institution.field_author
+    - field.field.node.institution.field_country
+    - field.field.node.institution.field_description
+    - field.field.node.institution.field_discipline
+    - field.field.node.institution.field_geolocation
+    - field.field.node.institution.field_image
+    - field.field.node.institution.field_municipality
+    - field.field.node.institution.field_period
+    - field.field.node.institution.field_specialisation
+    - field.field.node.institution.field_summary
+    - field.field.node.institution.field_typology
+    - node.type.institution
+  module:
+    - datetime_range
+    - entity_reference_revisions
+    - geofield
+    - user
+id: node.institution.default
+targetEntityType: node
+bundle: institution
+mode: default
+content:
+  field_alternative_name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_author:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_country:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_description:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_discipline:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_geolocation:
+    type: geofield_default
+    label: hidden
+    settings:
+      output_format: wkt
+      output_escape: true
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_municipality:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 117
+    region: content
+  field_specialisation:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_typology:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

@@ -1,0 +1,18 @@
+uuid: f0793c7f-f31a-4d13-853b-ebc028ff9fa1
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__conc_conc
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.relationtype_self__conc_conc
+target_entity_type_id: taxonomy_term
+target_bundle: relationtype_self__conc_conc
+default_langcode: current_interface
+language_alterable: true

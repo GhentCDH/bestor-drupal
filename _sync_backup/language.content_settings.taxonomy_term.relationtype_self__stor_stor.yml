@@ -1,0 +1,18 @@
+uuid: 6298476d-01c2-48c1-aa23-304a47d63e11
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__stor_stor
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.relationtype_self__stor_stor
+target_entity_type_id: taxonomy_term
+target_bundle: relationtype_self__stor_stor
+default_langcode: current_interface
+language_alterable: true

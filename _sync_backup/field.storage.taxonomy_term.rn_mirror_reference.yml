@@ -1,0 +1,23 @@
+uuid: 21e9b0a5-7ffd-4629-a072-c67b961dab79
+langcode: en
+status: true
+dependencies:
+  module:
+    - relationship_nodes
+    - taxonomy
+third_party_settings:
+  relationship_nodes:
+    rn_created: true
+id: taxonomy_term.rn_mirror_reference
+field_name: rn_mirror_reference
+entity_type: taxonomy_term
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: true
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

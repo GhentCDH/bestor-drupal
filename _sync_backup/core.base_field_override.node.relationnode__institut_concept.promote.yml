@@ -1,0 +1,22 @@
+uuid: ff91b509-df68-4f78-a40d-11bfcd753d09
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_concept
+id: node.relationnode__institut_concept.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__institut_concept
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

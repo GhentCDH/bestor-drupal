@@ -1,0 +1,30 @@
+uuid: 502fa7ec-8ae4-45a4-900a-b6f8e5c1db6b
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:image_button:7821898c-0532-44ca-bc11-c30daccc50dc'
+  module:
+    - block_content
+    - system
+  theme:
+    - bestor
+id: bestor_concepts
+theme: bestor
+region: content_bottom
+weight: 0
+provider: null
+plugin: 'block_content:7821898c-0532-44ca-bc11-c30daccc50dc'
+settings:
+  id: 'block_content:7821898c-0532-44ca-bc11-c30daccc50dc'
+  label: Concepts
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

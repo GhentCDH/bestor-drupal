@@ -1,0 +1,22 @@
+uuid: cb65ce11-1d09-4037-b82d-1a5e95afdad9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_institut
+id: node.relationnode__person_institut.sticky
+field_name: sticky
+entity_type: node
+bundle: relationnode__person_institut
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,18 @@
+uuid: 90d039a2-6df4-4d5b-8179-51e4ba82480e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_story
+id: node.relationnode__institut_story.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__institut_story
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

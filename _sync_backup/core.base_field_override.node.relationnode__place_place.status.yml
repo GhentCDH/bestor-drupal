@@ -1,0 +1,22 @@
+uuid: 8f5f0299-4e40-44da-b640-4179b797cf61
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_place
+id: node.relationnode__place_place.status
+field_name: status
+entity_type: node
+bundle: relationnode__place_place
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

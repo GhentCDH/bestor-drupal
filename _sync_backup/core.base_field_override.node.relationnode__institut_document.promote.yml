@@ -1,0 +1,22 @@
+uuid: 8bb8dbb4-db6e-4afd-b4ad-1db23524a2fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_document
+id: node.relationnode__institut_document.promote
+field_name: promote
+entity_type: node
+bundle: relationnode__institut_document
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

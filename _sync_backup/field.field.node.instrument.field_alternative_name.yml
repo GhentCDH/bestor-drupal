@@ -1,0 +1,19 @@
+uuid: 46634481-ce6c-43ec-832c-bf1417dfa882
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_alternative_name
+    - node.type.instrument
+id: node.instrument.field_alternative_name
+field_name: field_alternative_name
+entity_type: node
+bundle: instrument
+label: 'Alternative  name'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,28 @@
+uuid: 66b843cf-c5b8-4721-ac04-254b12fcaf5c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.relationnode__document_document.rn_related_entity_1
+    - field.field.node.relationnode__document_document.rn_related_entity_2
+    - field.field.node.relationnode__document_document.rn_relation_type
+    - node.type.relationnode__document_document
+  module:
+    - user
+id: node.relationnode__document_document.default
+targetEntityType: node
+bundle: relationnode__document_document
+mode: default
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  footnotes_group: true
+  langcode: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  search_api_excerpt: true

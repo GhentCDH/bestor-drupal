@@ -1,0 +1,22 @@
+uuid: 2f6a4a42-62b9-4113-be2a-c17b43a7f7f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_instrument
+id: node.relationnode__concept_instrument.sticky
+field_name: sticky
+entity_type: node
+bundle: relationnode__concept_instrument
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

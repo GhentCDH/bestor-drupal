@@ -1,0 +1,55 @@
+uuid: 553b2120-3036-473a-84e9-3c0b84ab4530
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.place.field_alternative_name
+    - field.field.node.place.field_author
+    - field.field.node.place.field_country
+    - field.field.node.place.field_description
+    - field.field.node.place.field_discipline
+    - field.field.node.place.field_geolocation
+    - field.field.node.place.field_image
+    - field.field.node.place.field_municipality
+    - field.field.node.place.field_period
+    - field.field.node.place.field_specialisation
+    - field.field.node.place.field_summary
+    - field.field.node.place.field_typology
+    - node.type.place
+  module:
+    - user
+id: node.place.teaser
+targetEntityType: node
+bundle: place
+mode: teaser
+content:
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_alternative_name: true
+  field_author: true
+  field_country: true
+  field_description: true
+  field_discipline: true
+  field_geolocation: true
+  field_municipality: true
+  field_period: true
+  field_specialisation: true
+  field_summary: true
+  field_typology: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

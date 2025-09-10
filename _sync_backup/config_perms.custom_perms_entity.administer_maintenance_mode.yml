@@ -1,0 +1,7 @@
+uuid: 02361087-edcd-4bef-9475-b58b044deb7a
+langcode: en
+status: true
+dependencies: {  }
+id: administer_maintenance_mode
+label: 'Administer maintenance mode'
+route: system.site_maintenance_mode

@@ -1,0 +1,18 @@
+uuid: d2003320-6d0a-49cd-b5f8-323efb8c1eb6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_instrument
+id: node.relationnode__concept_instrument.title
+field_name: title
+entity_type: node
+bundle: relationnode__concept_instrument
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

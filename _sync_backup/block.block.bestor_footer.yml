@@ -1,0 +1,27 @@
+uuid: 0a7a2f10-11af-4502-bc42-dcd4d452299e
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer
+  module:
+    - system
+  theme:
+    - bestor
+_core:
+  default_config_hash: QQM7Pywl0P7otwsKQhi-04x7tdOTXvvSn6TrO7v2Ayw
+id: bestor_footer
+theme: bestor
+region: footer_one
+weight: -6
+provider: null
+plugin: 'system_menu_block:footer'
+settings:
+  id: 'system_menu_block:footer'
+  label: 'Footer menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

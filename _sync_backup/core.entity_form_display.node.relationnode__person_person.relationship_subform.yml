@@ -1,0 +1,28 @@
+uuid: 87d8d9fb-96bc-4d15-a950-f8355747ada1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.relationship_subform
+    - field.field.node.relationnode__person_person.rn_related_entity_1
+    - field.field.node.relationnode__person_person.rn_related_entity_2
+    - field.field.node.relationnode__person_person.rn_relation_type
+    - node.type.relationnode__person_person
+id: node.relationnode__person_person.relationship_subform
+targetEntityType: node
+bundle: relationnode__person_person
+mode: relationship_subform
+content: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  status: true
+  sticky: true
+  title: true
+  translation: true
+  uid: true

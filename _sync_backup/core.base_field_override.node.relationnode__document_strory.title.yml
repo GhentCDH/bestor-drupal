@@ -1,0 +1,18 @@
+uuid: f19e9dce-1a58-434e-8141-b05573e7c08b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_strory
+id: node.relationnode__document_strory.title
+field_name: title
+entity_type: node
+bundle: relationnode__document_strory
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

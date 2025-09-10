@@ -1,0 +1,29 @@
+uuid: a6671bbd-2970-4a14-9e15-9bac013b267d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_end_municipality
+    - node.type.person
+    - taxonomy.vocabulary.municipality
+id: node.person.field_end_municipality
+field_name: field_end_municipality
+entity_type: node
+bundle: person
+label: 'Place of death'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      municipality: municipality
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

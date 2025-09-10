@@ -1,0 +1,7 @@
+uuid: 8f832013-3f27-4350-9bc1-3f3d94bd693e
+langcode: en
+status: true
+dependencies: {  }
+id: administer_performance
+label: 'Administer performance'
+route: system.performance_settings

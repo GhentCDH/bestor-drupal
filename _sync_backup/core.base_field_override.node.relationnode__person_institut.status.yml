@@ -1,0 +1,22 @@
+uuid: 283f4e5e-7ef1-4cab-b7a1-81b791e21418
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_institut
+id: node.relationnode__person_institut.status
+field_name: status
+entity_type: node
+bundle: relationnode__person_institut
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

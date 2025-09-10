@@ -1,0 +1,18 @@
+uuid: e9f2d1a2-4c89-43ae-8201-693b618b4ffc
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_place
+id: node.relationnode__institut_place.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__institut_place
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

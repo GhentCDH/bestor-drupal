@@ -1,0 +1,18 @@
+uuid: c66c2882-8e21-4487-8ccc-ec308c040afc
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_place
+id: node.relationnode__document_place.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__document_place
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

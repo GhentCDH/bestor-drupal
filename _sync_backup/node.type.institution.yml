@@ -1,0 +1,17 @@
+uuid: 4c6c1d18-392a-4560-8397-96e57e587c66
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Institution
+type: institution
+description: 'Database: institution entry'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

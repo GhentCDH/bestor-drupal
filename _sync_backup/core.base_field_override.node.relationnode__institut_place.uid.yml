@@ -1,0 +1,20 @@
+uuid: 48aca7b3-4734-4a93-970f-3ffc712d649b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_place
+id: node.relationnode__institut_place.uid
+field_name: uid
+entity_type: node
+bundle: relationnode__institut_place
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

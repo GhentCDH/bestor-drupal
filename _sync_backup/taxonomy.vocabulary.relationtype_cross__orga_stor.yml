@@ -1,0 +1,15 @@
+uuid: c13bd91f-6d2b-44fb-b83a-c65992f84b3c
+langcode: en
+status: true
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 1
+    referencing_type: string
+name: 'Types of relationships between an institution and a story'
+vid: relationtype_cross__orga_stor
+description: null
+weight: 0
+new_revision: false

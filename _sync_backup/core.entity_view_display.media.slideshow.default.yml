@@ -1,0 +1,26 @@
+uuid: 121a3a4a-9e80-4d1d-802d-729917dc920d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.slideshow.field_media_slideshow
+    - media.type.slideshow
+id: media.slideshow.default
+targetEntityType: media
+bundle: slideshow
+mode: default
+content:
+  field_media_slideshow:
+    type: entity_reference_label
+    label: visually_hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  thumbnail: true
+  uid: true

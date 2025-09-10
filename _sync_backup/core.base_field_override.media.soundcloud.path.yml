@@ -1,0 +1,20 @@
+uuid: 69aff5da-6359-4947-ae3f-6e196f3e3bf1
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.soundcloud
+  module:
+    - path
+id: media.soundcloud.path
+field_name: path
+entity_type: media
+bundle: soundcloud
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

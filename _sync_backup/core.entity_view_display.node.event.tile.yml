@@ -1,0 +1,50 @@
+uuid: 26afedc2-8f13-4959-b865-befb8ebe2221
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.tile
+    - field.field.node.event.body
+    - field.field.node.event.field_geolocation
+    - field.field.node.event.field_image
+    - field.field.node.event.field_location_text
+    - field.field.node.event.field_time_period
+    - node.type.event
+  module:
+    - geofield
+    - user
+id: node.event.tile
+targetEntityType: node
+bundle: event
+mode: tile
+content:
+  field_geolocation:
+    type: geofield_default
+    label: above
+    settings:
+      output_format: wkt
+      output_escape: true
+    third_party_settings: {  }
+    weight: 112
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  body: true
+  field_location_text: true
+  field_time_period: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

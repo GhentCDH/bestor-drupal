@@ -1,0 +1,18 @@
+uuid: c613ace9-c0fb-45ba-bcd8-82f8ad9ab3f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_place
+id: node.relationnode__document_place.title
+field_name: title
+entity_type: node
+bundle: relationnode__document_place
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

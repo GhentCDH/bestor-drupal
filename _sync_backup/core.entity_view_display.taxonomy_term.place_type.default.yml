@@ -1,0 +1,42 @@
+uuid: 24644968-3014-44a2-9705-2548fde102c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.place_type.field_coordinates
+    - field.field.taxonomy_term.place_type.field_country
+    - taxonomy.vocabulary.place_type
+  module:
+    - geofield
+    - text
+id: taxonomy_term.place_type.default
+targetEntityType: taxonomy_term
+bundle: place_type
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_coordinates:
+    type: geofield_default
+    label: above
+    settings:
+      output_format: wkt
+      output_escape: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_country:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

@@ -1,0 +1,18 @@
+uuid: fb7f87dc-5245-464b-a733-aa1893aee40d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_place
+id: node.relationnode__concept_place.title
+field_name: title
+entity_type: node
+bundle: relationnode__concept_place
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

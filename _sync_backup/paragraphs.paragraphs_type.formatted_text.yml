@@ -1,0 +1,10 @@
+uuid: b402a1ef-fc02-4660-b555-a0f8deab7931
+langcode: en
+status: true
+dependencies: {  }
+id: formatted_text
+label: text
+icon_uuid: null
+icon_default: null
+description: 'Adds text with formatting options such as headings, lists, links, and other HTML elements. Suitable for rich text content with structure and styling.'
+behavior_plugins: {  }

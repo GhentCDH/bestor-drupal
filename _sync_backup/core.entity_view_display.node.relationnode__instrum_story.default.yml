@@ -1,0 +1,24 @@
+uuid: 81d44ec8-8ea2-4067-b341-8b22c5bc9060
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.relationnode__instrum_story.rn_related_entity_1
+    - field.field.node.relationnode__instrum_story.rn_related_entity_2
+    - field.field.node.relationnode__instrum_story.rn_relation_type
+    - node.type.relationnode__instrum_story
+  module:
+    - user
+id: node.relationnode__instrum_story.default
+targetEntityType: node
+bundle: relationnode__instrum_story
+mode: default
+content: {  }
+hidden:
+  footnotes_group: true
+  langcode: true
+  links: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  search_api_excerpt: true

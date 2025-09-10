@@ -1,0 +1,18 @@
+uuid: 09135d62-00f2-4693-98be-355c3f287ddd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_document
+id: node.relationnode__institut_document.title
+field_name: title
+entity_type: node
+bundle: relationnode__institut_document
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

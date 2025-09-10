@@ -1,0 +1,22 @@
+uuid: 95c4f1ff-473f-4d9a-85f1-400e361082ef
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - relationship_nodes
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  relationship_nodes:
+    enabled: 1
+    typed_relation: 1
+    auto_title: 1
+name: 'Relationship between a person and an institution'
+type: relationnode__person_institut
+description: 'This content type describes the relationship between an entity of the person type (related item 1) and an entity of the institute type (related item 2).'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

@@ -1,0 +1,18 @@
+uuid: b3d4f74b-2d10-4c0e-a214-722f6bf0a7e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_story
+id: node.relationnode__place_story.title
+field_name: title
+entity_type: node
+bundle: relationnode__place_story
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

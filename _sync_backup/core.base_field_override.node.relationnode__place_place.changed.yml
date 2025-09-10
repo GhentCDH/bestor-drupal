@@ -1,0 +1,18 @@
+uuid: 0eeb4714-2de8-4d53-bd89-5c660c1fd898
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_place
+id: node.relationnode__place_place.changed
+field_name: changed
+entity_type: node
+bundle: relationnode__place_place
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

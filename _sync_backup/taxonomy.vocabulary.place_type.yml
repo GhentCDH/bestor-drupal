@@ -1,0 +1,9 @@
+uuid: f585a0c7-3b65-4da8-b3b9-0b71d73d8e08
+langcode: en
+status: true
+dependencies: {  }
+name: 'Place type'
+vid: place_type
+description: null
+weight: 0
+new_revision: false

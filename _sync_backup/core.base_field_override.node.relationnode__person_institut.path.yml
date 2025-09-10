@@ -1,0 +1,20 @@
+uuid: 216eec08-8657-4821-a7c5-0745de3a7e96
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_institut
+  module:
+    - path
+id: node.relationnode__person_institut.path
+field_name: path
+entity_type: node
+bundle: relationnode__person_institut
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

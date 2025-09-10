@@ -1,0 +1,29 @@
+uuid: 962c5d81-f014-4d64-9518-dc16ebb38d74
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_discipline
+    - node.type.concept
+    - taxonomy.vocabulary.discipline
+id: node.concept.field_discipline
+field_name: field_discipline
+entity_type: node
+bundle: concept
+label: Discipline
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      discipline: discipline
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

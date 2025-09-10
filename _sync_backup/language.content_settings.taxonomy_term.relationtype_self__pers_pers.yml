@@ -1,0 +1,18 @@
+uuid: e02f0e06-1dbb-44b7-848d-bd9af03c69de
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__pers_pers
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: taxonomy_term.relationtype_self__pers_pers
+target_entity_type_id: taxonomy_term
+target_bundle: relationtype_self__pers_pers
+default_langcode: current_interface
+language_alterable: true

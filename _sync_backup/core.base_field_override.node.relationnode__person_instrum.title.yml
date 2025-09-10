@@ -1,0 +1,18 @@
+uuid: 4f493c91-f9fa-4a1d-8966-bdb0647299db
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_instrum
+id: node.relationnode__person_instrum.title
+field_name: title
+entity_type: node
+bundle: relationnode__person_instrum
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

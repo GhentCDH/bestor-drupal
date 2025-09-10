@@ -1,0 +1,20 @@
+uuid: e2c1c4b3-0345-4557-9b57-a7bc25b1ea2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_story
+  module:
+    - path
+id: node.relationnode__place_story.path
+field_name: path
+entity_type: node
+bundle: relationnode__place_story
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path
