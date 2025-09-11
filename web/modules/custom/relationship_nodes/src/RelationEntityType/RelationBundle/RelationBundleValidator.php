@@ -95,6 +95,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates a single field config (with or without its storage)
+    */
     public function validateFieldConfig(FieldConfig $field_config, bool $include_storage_validation = true): bool {
         if($include_storage_validation == true){
             $storage = $field_config->getFieldStorageDefinition();
@@ -103,16 +106,19 @@ class RelationBundleValidator {
             }
         }
         $target_bundles = $field_config->getSetting('handler_settings')['target_bundles'] ?? [];
+        $field_name = $field_config->getName();
+        
         if (
-            (!empty($target_bundles) && count($target_bundles) !== 1) || (
-                $field_config->getName() === $this->fieldNameResolver->getMirrorFields('entity_reference') && 
+            (!empty($target_bundles) && count($target_bundles) !== 1) || 
+            $field_config->isRequired() || ( // Field cannot be required (validation errors in IEF)
+                $field_name === $this->fieldNameResolver->getMirrorFields('entity_reference') && 
                 key($target_bundles) !== $field_config->getTargetBundle()
             )
         ) {
             return false;
         }
         
-        if ($field_config->getName() === $this->fieldNameResolver->getRelationTypeField()){
+        if ($field_name === $this->fieldNameResolver->getRelationTypeField()){
             foreach($target_bundles as $vocab_name => $vocab_label){
                 if(!$this->settingsManager->isRelationVocab($vocab_name)){
                     return false;
@@ -123,6 +129,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates a single field storage
+    */
     public function validateFieldStorageConfig(FieldStorageConfig $storage){
         $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($storage->getName());
         if(!$required_settings){
@@ -142,7 +151,9 @@ class RelationBundleValidator {
     }
 
 
-    
+    /**
+    * Validates all the required config of this module: nodetypes, vocabs, fields (both storage and config)
+    */    
     public function validateAllRelationConfig(): array {      
         return array_merge(
            $this->validateAllRelationEntityConfig(), 
@@ -151,6 +162,9 @@ class RelationBundleValidator {
     }   
 
 
+    /**
+    * Validates the config of all node types and vocabs
+    */  
     protected function validateAllRelationEntityConfig():array{
         $all_errors = [];
         
@@ -165,6 +179,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates the config of all fields (both storage and field config)
+    */
     protected function validateAllRelationFieldConfig(): array {
         $errors = [];
         $rn_fields = $this->fieldConfigurator->getAllRnCreatedFields();
@@ -192,6 +209,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates an entity and its fields and returns an array of errors
+    */
     protected function collectValidationErrors(ConfigEntityBundleBase $entity, ?FormStateInterface $form_state = NULL): array {
         $errors = [];
         
@@ -244,6 +264,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates whether the related entity field names have been filled in the module config (cf /config/install) 
+    */
     protected function validBasicRelationConfig(): bool{  
         if(!$this->validChildFieldConfig($this->fieldNameResolver->getRelatedEntityFields(), 'related_entity_fields')){
             return false;
@@ -252,6 +275,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates whether the related type field name has been filled in the module config (cf /config/install) 
+    */
     protected function validTypedRelationConfig(): bool{
         if (empty($this->fieldNameResolver->getRelationTypeField()) || !$this->validRelationVocabConfig()) {
             return false;
@@ -260,6 +286,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Validates whether the mirror field names have been filled in the module config (cf /config/install) 
+    */
     protected function validRelationVocabConfig():bool{
         if(!$this->validChildFieldConfig($this->fieldNameResolver->getMirrorFields(), 'mirror_fields')){
             return false;
@@ -268,6 +297,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Helper function to check arrays of (sub)fields in the module config (cf /config/install) 
+    */
     protected function validChildFieldConfig(array $array, string $parent_key): bool {
         if (!is_array($array)) {
             return false;
@@ -286,6 +318,9 @@ class RelationBundleValidator {
     }
 
 
+    /**
+    * Formats validation errors from array to text 
+    */
     protected function formatValidationErrorsForConfig(ConfigEntityBundleBase $entity, array $errors): string {
         $entity_type = $entity->getEntityTypeId();
         $entity_id = $entity->id();

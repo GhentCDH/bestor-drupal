@@ -31,7 +31,7 @@ class RelationExtendedEntityInlineForm extends NodeInlineForm {
 
   public function entityForm(array $entity_form, FormStateInterface $form_state) {
     $entity_form = parent::entityForm($entity_form, $form_state);
-    if(empty($entity_form['#relation_extension_widget']) || $entity_form['#relation_extension_widget'] !== true){
+    if(empty($entity_form['#relation_extended_widget']) || $entity_form['#relation_extended_widget'] !== true){
       return  $entity_form;
     }
 
@@ -49,7 +49,7 @@ class RelationExtendedEntityInlineForm extends NodeInlineForm {
 
     parent::entityFormSubmit($entity_form, $form_state);
 
-    if(empty($entity_form['#relation_extension_widget']) || $entity_form['#relation_extension_widget'] !== true){
+    if(empty($entity_form['#relation_extended_widget']) || $entity_form['#relation_extended_widget'] !== true){
       return;
     }
 
@@ -62,16 +62,10 @@ class RelationExtendedEntityInlineForm extends NodeInlineForm {
       return; // If a new node is being created, a submit handler creates the relation later.
     }
 
-    if(empty($entity_form['#rn__parent_field']) || empty($entity_form['#rn__foreign_key'])){
+    if(empty($entity_form['#rn__foreign_key'])){
       return;
     }
-
-    $parent_field = $entity_form['#rn__parent_field'];
-
-    if(!is_string($parent_field) || !str_starts_with($parent_field, 'computed_relationshipfield__')) {
-      return;
-    }
-    
+   
     $relation_node = $entity_form['#entity'];
     $foreign_key = $entity_form['#rn__foreign_key'];
     
@@ -81,5 +75,4 @@ class RelationExtendedEntityInlineForm extends NodeInlineForm {
 
     $relation_node->set($foreign_key, $current_node->id());
   }
-
 }

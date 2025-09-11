@@ -17,7 +17,7 @@ entity_type: node
 bundle: relationnode__instrum_instrum
 label: 'Rn related entity 2'
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''

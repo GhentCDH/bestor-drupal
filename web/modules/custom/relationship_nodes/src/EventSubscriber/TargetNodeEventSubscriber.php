@@ -9,7 +9,7 @@ use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoServic
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class DeleteTargetNodeEventSubscriber implements EventSubscriberInterface {
+class TargetNodeEventSubscriber implements EventSubscriberInterface {
 
   protected RelationNodeInfoService $nodeInfoService;
   protected RelationSyncService $syncService;

@@ -15,18 +15,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 /**
- * Plugin implementation of the 'ief_validated_relations_simple' widget.
+ * Plugin implementation of the 'relation_extended_ief_widget' widget.
  *
  * @FieldWidget(
- *   id = "ief_validated_relations_simple",
- *   label = @Translation("Inline entity form - Validated relations (simple)"),
- *   description = @Translation("Entity form with validation to skip incomplete relation entities."),
+ *   id = "relation_extended_ief_widget",
+ *   label = @Translation("Relation extended IEF simple widget"),
+ *   description = @Translation("Entity form provided by the relationship nodes module - extends the inline entity form simple widget."),
  *   field_types = {
  *     "entity_reference"
  *   }
  * )
  */
-class IefValidatedRelationsSimple extends InlineEntityFormSimple {
+class RelationExtendedIefWidget extends InlineEntityFormSimple {
 
     protected RelationEntityFormHandler $relationFormHandler;
 
@@ -62,7 +62,7 @@ class IefValidatedRelationsSimple extends InlineEntityFormSimple {
     public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
         $element = parent::formElement($items, $delta, $element, $form, $form_state);
         if(!empty($element['inline_entity_form'])){
-            $element['inline_entity_form']['#relation_extension_widget'] = true;
+            $element['inline_entity_form']['#relation_extended_widget'] = true;
         }
         return $element;
     }
@@ -72,11 +72,11 @@ class IefValidatedRelationsSimple extends InlineEntityFormSimple {
         $field_name = $this->fieldDefinition->getName();
         $parents = array_merge($form['#parents'], [$field_name]);
         $ief_id = $this->makeIefId($parents);
-        $form_state->set(['inline_entity_form', $ief_id, 'relation_extension_widget'], true);
+        $form_state->set(['inline_entity_form', $ief_id, 'relation_extended_widget'], true);
     }
 
 
     public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
-        return $this->relationFormHandler->clearEmptyRelationsFromInput($values, $form_state, $this->fieldDefinition->getName());
+        return $this->relationFormHandler->clearEmptyRelationsFromInput($values, $form, $form_state, $this->fieldDefinition->getName());
     }
 }

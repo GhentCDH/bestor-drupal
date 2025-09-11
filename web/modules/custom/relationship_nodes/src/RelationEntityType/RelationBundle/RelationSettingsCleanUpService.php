@@ -63,7 +63,7 @@ class RelationSettingsCleanUpService {
                     if (str_starts_with($field_name, 'computed_relationshipfield__')) {
                         unset($content[$field_name]);
                         $changed = TRUE;
-                    } elseif (!empty($settings['type']) && $settings['type'] === 'ief_validated_relations_simple') {
+                    } elseif (!empty($settings['type']) && $settings['type'] === 'relation_extended_ief_widget') {
                         $content[$field_name]['type'] = 'entity_reference_autocomplete';
                         $content[$field_name]['settings'] = [
                             'match_operator' => 'CONTAINS',

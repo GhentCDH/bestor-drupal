@@ -122,10 +122,9 @@ class RelationFieldConfigurator {
                     $fields[$field_name] = $config;
                 }
             }
-            if ($this->settingsManager->isTypedRelationNode($entity)) {
+            if ($this->settingsManager->isTypedRelationNodeType($entity)) {
                 $field_name = $this->fieldNameResolver->getRelationTypeField();
                 $config = $this->getRequiredFieldConfiguration($field_name);
-                dpm($config, 'config');
                 if ($config) {
                     $fields[$field_name] = $config;
                 }
@@ -217,7 +216,7 @@ class RelationFieldConfigurator {
                     'bundle' => $entity->id(),
                     'entity_type' => $entity_type_id,
                     'label' => ucfirst(str_replace('_', ' ', $field_name)),
-                    'required' => true,
+                    'required' => false,
                     'settings' =>  $self_target_settings,
                     'third_party_settings' => ['relationship_nodes' => ['rn_created'=> true]],
                 ]);

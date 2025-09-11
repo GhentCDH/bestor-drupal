@@ -52,10 +52,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
   
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
-    if(
-      !$this->mirrorProvider->elementSupportsMirroring($items, $form, $form_state) || 
-      !$this->mirrorProvider->mirroringRequired($form, $form_state)
-    ) {
+    if(!$this->mirrorProvider->mirroringRequired($items, $form, $form_state)) {
       return $element;
     }
 

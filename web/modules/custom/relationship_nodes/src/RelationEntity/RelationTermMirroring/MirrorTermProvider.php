@@ -10,7 +10,7 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
-use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationEntityFormHandler;
+use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
 
 
 class MirrorTermProvider{
@@ -19,7 +19,7 @@ class MirrorTermProvider{
     protected FieldNameResolver $fieldNameResolver;
     protected RelationBundleSettingsManager $settingsManager;
     protected ForeignKeyFieldResolver $foreignKeyResolver;
-    protected RelationEntityFormHandler $relationFormHandler;
+    protected RelationFormHelper $formHelper;
 
   
     public function __construct(
@@ -27,21 +27,46 @@ class MirrorTermProvider{
         FieldNameResolver $fieldNameResolver, 
         RelationBundleSettingsManager $settingsManager, 
         ForeignKeyFieldResolver $foreignKeyResolver,
-        RelationEntityFormHandler $relationFormHandler
+        RelationFormHelper $formHelper
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->settingsManager = $settingsManager;
         $this->foreignKeyResolver = $foreignKeyResolver;
-        $this->relationFormHandler = $relationFormHandler; 
+        $this->formHelper = $formHelper; 
     }
     
-    public function elementSupportsMirroring(FieldItemListInterface $items, array $form, FormStateInterface $form_state): bool {
+    public function elementSupportsMirroring(FieldItemListInterface $items, array $form, FormStateInterface $form_state): bool {   
         if(
-            $this->relationFormHandler->isValidRelationParentForm($form_state) ||
-            !$this->settingsManager->isRelationVocab($items->getEntity()) ||
-            !in_array($items->getName(), $this->fieldNameResolver->getMirrorFields())
+            !$this->formHelper->isParentFormWithIefSubforms($form, $form_state) ||
+            !$this->settingsManager->isRelationNodeType($items->getEntity()->getType()) ||
+            !$items->getFieldDefinition() instanceof FieldConfig
         ) {
+            return false;
+        }
+
+        $field = $items->getFieldDefinition();
+
+        if(empty($field->getSettings())){
+            return false;
+        }
+
+        $field_settings = $field->getSettings();
+        if(
+            !isset($field_settings['target_type']) || 
+            $field_settings['target_type'] != 'taxonomy_term' || 
+            empty($field_settings['handler_settings']['target_bundles'])
+        ){
+            return false;
+        }
+
+        $target_bundles = $field_settings['handler_settings']['target_bundles'];
+        $target_vocab = $this->settingsManager->ensureVocab(reset($target_bundles));
+        if(
+            !$target_vocab || 
+            !$this->settingsManager->isRelationVocab($target_vocab) ||
+            !$this->settingsManager->isMirroringVocab($target_vocab)
+        ){
             return false;
         }
 
@@ -49,7 +74,11 @@ class MirrorTermProvider{
     }
 
 
-    public function mirroringRequired(array $form, FormStateInterface $form_state): bool {
+    public function mirroringRequired(FieldItemListInterface $items, array $form, FormStateInterface $form_state): bool {
+        if(!$this->elementSupportsMirroring($items, $form, $form_state)){
+            return false;
+        }
+        
         $foreign_key_field = $this->foreignKeyResolver->getEntityFormForeignKeyField($form, $form_state);
         
         if(!is_string($foreign_key_field) || $foreign_key_field !== $this->fieldNameResolver->getRelatedEntityFields(2)){

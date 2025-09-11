@@ -5,23 +5,20 @@ namespace Drupal\relationship_nodes\RelationEntity\RelationTermMirroring;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+
 
 class MirrorTermAutoUpdater {
 
     protected EntityTypeManagerInterface $entityTypeManager;
     protected FieldNameResolver $fieldNameResolver;
-    protected RelationBundleSettingsManager $settingsManager;
 
 
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager,
-        FieldNameResolver $fieldNameResolver,
-        RelationBundleSettingsManager $settingsManager,
+        FieldNameResolver $fieldNameResolver   
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldNameResolver = $fieldNameResolver;
-        $this->settingsManager = $settingsManager;
     }
 
 
@@ -51,11 +48,6 @@ class MirrorTermAutoUpdater {
 
 
     public function setMirrorTermLink(TermInterface $term, string $hook): void {
-   
-        if(!$this->settingsManager->getRelationVocabType($term) !== 'entity_reference'){
-            return;
-        }
-
         $ref_field = $this->fieldNameResolver->getMirrorFields('entity_reference');  
         if(empty($ref_field)){
             return;

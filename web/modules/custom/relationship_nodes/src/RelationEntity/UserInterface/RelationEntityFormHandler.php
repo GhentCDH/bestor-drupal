@@ -7,7 +7,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
-use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormStateHelper;
+use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
 
 
 class RelationEntityFormHandler {
@@ -16,61 +16,38 @@ class RelationEntityFormHandler {
 
     protected FieldNameResolver $fieldNameResolver;
     protected RelationSyncService $syncService;
-    protected RelationFormStateHelper $formStateHelper;
+    protected RelationFormHelper $formHelper;
 
 
     public function __construct(
         FieldNameResolver $fieldNameResolver,
         RelationSyncService $syncService,
-        RelationFormStateHelper $formStateHelper,
+        RelationFormHelper $formHelper,
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
         $this->syncService = $syncService;
-        $this->formStateHelper = $formStateHelper; 
+        $this->formHelper = $formHelper; 
     }
 
 
-    public function dispatchToRelationHandlers(string $field_name, array &$widget_state, array &$form, FormStateInterface $form_state): void {
-        $parent_node = $this->formStateHelper->getParentFormNode($form_state);
+    public function handleRelationWidgetSubmit(string $field_name, array &$widget_state, array &$form, FormStateInterface $form_state): void {
+        $parent_node = $this->formHelper->getParentFormNode($form_state);
         if (!($parent_node instanceof Node)) {
         return;
         }
 
         if (!$parent_node->isNew()) {
-        $removed = $this->syncService->getRemovedRelations($parent_node, $field_name);
-        if (!empty($removed)) {
-            $this->syncService->deleteNodes($removed);
-        }
+            $removed = $this->syncService->getRemovedRelations($parent_node, $field_name);
+            if (!empty($removed)) {
+                $this->syncService->deleteNodes($removed);
+            }
         }
 
         $this->syncService->saveSubformRelations($parent_node, $field_name, $widget_state, $form, $form_state);  
     }
 
 
-    public function validRelationWidgetState(array $widget_state): bool{
-        if(!isset($widget_state['relation_extension_widget']) || $widget_state['relation_extension_widget'] !== true){
-        return false;
-        }
-        return true;
-    }
-
-
-    public function addParentFieldConfig(array &$parent_form, array &$subform_fields): void{        
-        foreach($subform_fields as $field_name => $form_data){
-        if (!isset($parent_form[$field_name]['widget'])) {
-            continue;
-        }
-        foreach($parent_form[$field_name]['widget'] as $i => &$widget){
-            if(!is_int($i) || !is_array($widget) || !isset($widget['inline_entity_form'])) {
-                continue;
-            }
-            $widget['inline_entity_form']['#rn__parent_field'] = $field_name;
-        } 
-        } 
-    }
-
-
-    public function clearEmptyRelationsFromInput(array $values, FormStateInterface $form_state, string $field_name){
+    public function clearEmptyRelationsFromInput(array $values, array &$form, FormStateInterface $form_state, string $field_name){
         if($field_name == null || empty($values) || !str_starts_with($field_name, 'computed_relationshipfield__')){
             return $values;
         }
@@ -105,6 +82,7 @@ class RelationEntityFormHandler {
                 unset($values[$i]);
             }  
         }
+
         return $values;
     }
 }

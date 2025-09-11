@@ -16,7 +16,7 @@ entity_type: taxonomy_term
 bundle: relationtype_cross__conc_plac
 label: 'Rn mirror string'
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''

@@ -281,7 +281,7 @@ bundle: institution
 mode: default
 content:
   computed_relationshipfield__institution__concept:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 2
     region: content
     settings:
@@ -294,63 +294,63 @@ content:
       collapsed: 0
     third_party_settings: {  }
   computed_relationshipfield__institution__document:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 3
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__institution__institution:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 4
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__institution__instrument:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 5
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__institution__person:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 0
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__institution__place:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 39
     region: content
     settings:
-      form_mode: relationship_subform
+      form_mode: default
       revision: false
       override_labels: false
       label_singular: ''
@@ -359,17 +359,17 @@ content:
       collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__institution__story:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 7
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   created:
     type: datetime_timestamp

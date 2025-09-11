@@ -24,12 +24,6 @@ class RelationBundleSettingsManager {
         $this->entityTypeManager = $entityTypeManager;
     }
 
-    
-    private function isRelationProperty(string $property) : bool{
-        $properties = ['rn_created', 'enabled', 'typed_relation', 'auto_title', 'referencing_type'];
-        return in_array($property, $properties);
-    }
-
 
     public function getProperty(ConfigEntityBundleBase $entity, string $property): bool|string|null {
         if (!$this->isRelationProperty($property)) {
@@ -86,7 +80,7 @@ class RelationBundleSettingsManager {
     }
 
 
-    public function isTypedRelationNode(NodeType|string $node_type) : bool{
+    public function isTypedRelationNodeType(NodeType|string $node_type) : bool{
         if(!$node_type = $this->ensureNodeType($node_type)){
             return false;
         }
@@ -109,6 +103,12 @@ class RelationBundleSettingsManager {
             return '';
         }
         return $this->getProperty($vocab, 'referencing_type') ?? '';
+    }
+
+
+    public function isMirroringVocab(Vocabulary|string $vocab): bool{
+        $relation_vocab_type = $this->getRelationVocabType($vocab);
+        return in_array($relation_vocab_type, ['string', 'entity_reference']);
     }
 
 
@@ -158,5 +158,11 @@ class RelationBundleSettingsManager {
             $entity->setLocked(FALSE);
         }
         $entity->save();
+    }
+ 
+    
+    private function isRelationProperty(string $property) : bool{
+        $properties = ['rn_created', 'enabled', 'typed_relation', 'auto_title', 'referencing_type'];
+        return in_array($property, $properties);
     }
 }

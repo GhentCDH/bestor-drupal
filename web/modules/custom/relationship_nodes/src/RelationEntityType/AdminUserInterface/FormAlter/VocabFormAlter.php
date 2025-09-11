@@ -29,7 +29,6 @@ class VocabFormAlter {
     
     public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
     $vocab = $this->formHandler->getFormEntity($form_state);
-    dpm($vocab);
     if (!$vocab instanceof Vocabulary) {
       return;
     }

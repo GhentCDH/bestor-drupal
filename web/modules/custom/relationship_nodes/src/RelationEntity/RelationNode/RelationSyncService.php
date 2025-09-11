@@ -8,7 +8,7 @@ use Drupal\node\Entity\Node;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
-use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormStateHelper;
+use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
 
 
 class RelationSyncService {
@@ -16,19 +16,19 @@ class RelationSyncService {
   protected EntityTypeManagerInterface $entityTypeManager;
   protected RelationNodeInfoService $nodeInfoService;
   protected ForeignKeyFieldResolver $foreignKeyResolver;
-  protected RelationFormStateHelper $formStateHelper;
+  protected RelationFormHelper $formHelper;
 
 
   public function __construct(
       EntityTypeManagerInterface $entityTypeManager,
       RelationNodeInfoService $nodeInfoService,
       ForeignKeyFieldResolver $foreignKeyResolver,
-      RelationFormStateHelper $formStateHelper
+      RelationFormHelper $formHelper
   ) {
       $this->entityTypeManager = $entityTypeManager;
       $this->nodeInfoService = $nodeInfoService;
       $this->foreignKeyResolver = $foreignKeyResolver;
-      $this->formStateHelper = $formStateHelper;
+      $this->formHelper = $formHelper;
   }
 
   
@@ -37,7 +37,7 @@ class RelationSyncService {
     if(empty($relations) || !is_array($relations)){
       return;
     }
-    $target_node = $this->formStateHelper->getParentFormNode($form_state);
+    $target_node = $this->formHelper->getParentFormNode($form_state);
     if (!($target_node instanceof Node)) {
       return;   
     }
@@ -67,7 +67,7 @@ class RelationSyncService {
   }
 
 
-  private function saveSubformRelations(Node $parent_node, string $field_name, array &$widget_state, array &$form, FormStateInterface $form_state): void {        
+  public function saveSubformRelations(Node $parent_node, string $field_name, array &$widget_state, array &$form, FormStateInterface $form_state): void {        
     if (empty($widget_state['entities']) || !is_array($widget_state['entities'])) {
       return;
     }
@@ -96,7 +96,9 @@ class RelationSyncService {
       return [];
     }
     $original_relations = array_keys($item_list->collectExistingRelations()) ?? [];
+    dpm($original_relations);
     $current_relations = $this->nodeInfoService->getFieldListTargetIds($item_list) ?? [];
+    dpm($current_relations);
     return array_diff($original_relations, $current_relations);
   }
 

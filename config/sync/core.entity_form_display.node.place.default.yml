@@ -127,7 +127,6 @@ third_party_settings:
         - group_persons
         - group_places
         - group_stories
-        - computed_relationshipfield__place__story
       label: 'relation types'
       region: content
       parent_name: group_relations
@@ -237,7 +236,8 @@ third_party_settings:
         description: ''
         required_fields: true
     group_stories:
-      children: {  }
+      children:
+        - computed_relationshipfield__place__story
       label: Stories
       region: content
       parent_name: group_relation_types
@@ -281,7 +281,7 @@ bundle: place
 mode: default
 content:
   computed_relationshipfield__place__concept:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 2
     region: content
     settings:
@@ -294,82 +294,82 @@ content:
       collapsed: 0
     third_party_settings: {  }
   computed_relationshipfield__place__document:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 3
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__place__institution:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 4
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__place__instrument:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 5
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__place__person:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 6
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__place__place:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 7
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__place__story:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 29
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   created:
     type: datetime_timestamp

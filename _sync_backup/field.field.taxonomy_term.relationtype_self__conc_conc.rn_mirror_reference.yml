@@ -16,7 +16,7 @@ entity_type: taxonomy_term
 bundle: relationtype_self__conc_conc
 label: 'Rn mirror reference'
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''

@@ -47,7 +47,7 @@ class VirtualFieldAdder {
         ->setTargetEntityTypeId('node')
         ->setTargetBundle($relation_bundle)
         ->setDisplayOptions('form', [
-          'type' => 'ief_validated_relations_simple',
+          'type' => 'relation_extended_ief_widget',
           'weight' => 0,
         ])
         ->setDisplayConfigurable('form', TRUE)

@@ -1,6 +1,6 @@
 services:
-  relationship_nodes.delete_target_node_event_subscriber:
-    class: Drupal\relationship_nodes\EventSubscriber\DeleteTargetNodeEventSubscriber
+  relationship_nodes.target_node_event_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\TargetNodeEventSubscriber
     arguments: 
       - '@relationship_nodes.relation_node_info_service'
       - '@relationship_nodes.relation_sync_service'
@@ -29,11 +29,11 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes.relation_bundle_settings_manager'
   relationship_nodes.mirror_term_event_subscriber:
     class: Drupal\relationship_nodes\EventSubscriber\MirrorTermEventSubscriber
     arguments: 
       - '@relationship_nodes.mirror_term_auto_updater'
+      - '@relationship_nodes.relation_bundle_settings_manager'
     tags:
       - { name: event_subscriber }
   relationship_nodes.mirror_term_provider:
@@ -43,7 +43,7 @@ services:
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_bundle_settings_manager'
       - '@relationship_nodes.foreign_key_field_resolver'
-      - '@relationship_nodes.relation_entity_form_handler'
+      - '@relationship_nodes.relation_form_helper'
   relationship_nodes.node_type_form_alter:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\NodeTypeFormAlter
     arguments:
@@ -54,8 +54,7 @@ services:
     class: Drupal\relationship_nodes\RelationEntity\UserInterface\FormAlter\ParentNodeFormAlter
     arguments: 
       - '@relationship_nodes.relation_sync_service'
-      - '@relationship_nodes.relation_entity_form_handler'
-      - '@relationship_nodes.relation_form_state_helper'
+      - '@relationship_nodes.relation_form_helper'
   relationship_nodes.relation_bundle_form_handler:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler
     arguments: 
@@ -97,7 +96,7 @@ services:
     arguments: 
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_sync_service'
-      - '@relationship_nodes.relation_form_state_helper'
+      - '@relationship_nodes.relation_form_helper'
   relationship_nodes.relation_entity_validator:
     class: Drupal\relationship_nodes\RelationEntity\RelationNode\RelationEntityValidator
     arguments:
@@ -110,8 +109,8 @@ services:
       - '@entity_type.manager'
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_bundle_settings_manager'
-  relationship_nodes.relation_form_state_helper: 
-    class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormStateHelper
+  relationship_nodes.relation_form_helper: 
+    class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper
   relationship_nodes.relation_node_info_service:
     class: Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService
     arguments:
@@ -133,9 +132,9 @@ services:
       - '@entity_type.manager'
       - '@relationship_nodes.relation_node_info_service'
       - '@relationship_nodes.foreign_key_field_resolver'
-      - '@relationship_nodes.relation_form_state_helper'
-  relationship_nodes.set_relation_title_event_subscriber:
-    class: Drupal\relationship_nodes\EventSubscriber\SetRelationTitleEventSubscriber
+      - '@relationship_nodes.relation_form_helper'
+  relationship_nodes.relation_node_event_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\RelationNodeEventSubscriber
     arguments: 
       - '@entity_type.manager'
       - '@relationship_nodes.relation_bundle_settings_manager'

@@ -7,13 +7,20 @@ use Drupal\entity_events\Event\EntityEvent;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermAutoUpdater;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 
 class MirrorTermEventSubscriber implements EventSubscriberInterface {
 
   protected MirrorTermAutoUpdater $mirrorUpdater;
+  protected RelationBundleSettingsManager $settingsManager;
 
-  public function __construct(MirrorTermAutoUpdater $mirrorUpdater) {
+
+  public function __construct(
+    MirrorTermAutoUpdater $mirrorUpdater,
+    RelationBundleSettingsManager $settingsManager
+  ) {
     $this->mirrorUpdater = $mirrorUpdater;
+    $this->settingsManager = $settingsManager;
   }
 
   public static function getSubscribedEvents(): array {
@@ -26,16 +33,22 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
 
 
   public function addMirrorLogic(EntityEvent $event, string $event_name): void {
-    $entity = $event->getEntity();
-    if (!$entity instanceof TermInterface) {
+    $term = $event->getEntity();
+    if (!$term instanceof TermInterface) {
       return;      
+    }
+
+    $vocab = $term->bundle();
+    if(empty($vocab) || empty($this->settingsManager->isRelationVocab($vocab)) ||
+        $this->settingsManager->getRelationVocabType($vocab) !== 'entity_reference'
+    ){
+        return;
     }
     $hook = $this->mapEventNameToHook($event_name);
     if ($hook === null) {
       return;
     }
-
-    $this->mirrorUpdater->setMirrorTermLink($entity, $hook);
+    $this->mirrorUpdater->setMirrorTermLink($term, $hook);
   }
 
   private function mapEventNameToHook(string $event_name): ?string {

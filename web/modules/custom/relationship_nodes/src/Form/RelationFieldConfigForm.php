@@ -183,5 +183,4 @@ class RelationFieldConfigForm extends FormBase {
     }
     return NULL;
   }
-
 }

@@ -17,7 +17,7 @@ entity_type: node
 bundle: relationnode__concept_concept
 label: 'Rn related entity 2'
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
@@ -25,5 +25,5 @@ settings:
   handler: 'default:node'
   handler_settings:
     target_bundles:
-      - concept
+      concept: concept
 field_type: entity_reference
