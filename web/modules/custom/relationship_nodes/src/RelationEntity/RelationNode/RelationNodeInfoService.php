@@ -64,7 +64,7 @@ class RelationNodeInfoService {
 
     public function getEntityConnectionInfo(Node $relation_node, ?Node $target_node = NULL): array {
         if(empty($target_node)){
-             $target_node = $this->routeMatch->getParameter('node');;
+             $target_node = $this->routeMatch->getParameter('node');
         }
 
         if(!$target_node instanceof Node){

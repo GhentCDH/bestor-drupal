@@ -2,8 +2,8 @@
 
 namespace Drupal\relationship_nodes\RelationEntity\RelationTermMirroring;
 
-use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
 

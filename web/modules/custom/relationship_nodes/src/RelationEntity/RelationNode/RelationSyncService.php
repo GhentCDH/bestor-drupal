@@ -96,9 +96,7 @@ class RelationSyncService {
       return [];
     }
     $original_relations = array_keys($item_list->collectExistingRelations()) ?? [];
-    dpm($original_relations);
     $current_relations = $this->nodeInfoService->getFieldListTargetIds($item_list) ?? [];
-    dpm($current_relations);
     return array_diff($original_relations, $current_relations);
   }
 

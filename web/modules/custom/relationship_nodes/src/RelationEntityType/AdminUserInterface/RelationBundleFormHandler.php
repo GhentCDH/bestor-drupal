@@ -7,11 +7,12 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\node\Entity\NodeType;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
-use Drupal\node\Entity\NodeType;
-use Drupal\taxonomy\Entity\Vocabulary;
+
 
 class RelationBundleFormHandler {
 
@@ -32,7 +33,7 @@ class RelationBundleFormHandler {
     }
 
 
-    public function handleSubmission(array &$form, FormStateInterface $form_state) {
+    public function handleSubmission(array &$form, FormStateInterface $form_state): void {
         $entity = $this->getFormEntity($form_state);
         if (!$entity) {
             return;
@@ -62,7 +63,7 @@ class RelationBundleFormHandler {
             return;
         }
 
-        $url_info = $this->fieldUiUpdater->getDefaultRoutingInfo($this->settingsManager->getEntityTypeId($entity));
+        $url_info = $this->fieldUiUpdater->getDefaultRoutingInfo($this->settingsManager->getEntityTypeObjectClass($entity));
         $url = Url::fromRoute($url_info['field_ui_fields_route'], [
             $url_info['bundle_param_key'] => $entity->id(),
         ]);

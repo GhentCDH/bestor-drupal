@@ -5,8 +5,8 @@ namespace Drupal\relationship_nodes\RelationEntity\RelationNode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 
 
 class RelationEntityValidator {
@@ -18,7 +18,7 @@ class RelationEntityValidator {
     public function __construct(
         RouteMatchInterface $routeMatch,
         RelationNodeInfoService $nodeInfoService,
-        ForeignKeyFieldResolver $foreignKeyResolver,
+        ForeignKeyFieldResolver $foreignKeyResolver
     ) {
         $this->routeMatch = $routeMatch;
         $this->nodeInfoService = $nodeInfoService;

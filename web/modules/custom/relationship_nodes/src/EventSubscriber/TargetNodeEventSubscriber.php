@@ -2,12 +2,13 @@
 
 namespace Drupal\relationship_nodes\EventSubscriber;
 
-use Drupal\entity_events\Event\EntityEvent;
 use Drupal\entity_events\EntityEventType;
+use Drupal\entity_events\Event\EntityEvent;
 use Drupal\node\Entity\Node;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 
 class TargetNodeEventSubscriber implements EventSubscriberInterface {
 

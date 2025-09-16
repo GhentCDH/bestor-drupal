@@ -7,10 +7,11 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+
 
 
 class MirrorTermProvider{
@@ -61,6 +62,10 @@ class MirrorTermProvider{
         }
 
         $target_bundles = $field_settings['handler_settings']['target_bundles'];
+        if(empty($target_bundles)){
+            return false;
+        }
+        
         $target_vocab = $this->settingsManager->ensureVocab(reset($target_bundles));
         if(
             !$target_vocab || 

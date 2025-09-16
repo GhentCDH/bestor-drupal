@@ -299,7 +299,7 @@ bundle: person
 mode: default
 content:
   computed_relationshipfield__person__concept:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 23
     region: content
     settings:
@@ -312,7 +312,7 @@ content:
       collapsed: 0
     third_party_settings: {  }
   computed_relationshipfield__person__document:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 24
     region: content
     settings:
@@ -325,20 +325,20 @@ content:
       collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__person__institution:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 0
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__person__instrument:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 26
     region: content
     settings:
@@ -351,20 +351,20 @@ content:
       collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__person__person:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 24
     region: content
     settings:
       form_mode: default
+      revision: false
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
+      collapsible: false
+      collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__person__place:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 27
     region: content
     settings:
@@ -377,7 +377,7 @@ content:
       collapsed: false
     third_party_settings: {  }
   computed_relationshipfield__person__story:
-    type: ief_validated_relations_simple
+    type: relation_extended_ief_widget
     weight: 28
     region: content
     settings:

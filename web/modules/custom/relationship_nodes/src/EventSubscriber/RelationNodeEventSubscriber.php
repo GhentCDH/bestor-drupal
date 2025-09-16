@@ -3,13 +3,13 @@
 namespace Drupal\relationship_nodes\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\entity_events\Event\EntityEvent;
 use Drupal\entity_events\EntityEventType;
+use Drupal\entity_events\Event\EntityEvent;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
-use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\node\Entity\NodeType;
+use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
 class RelationNodeEventSubscriber implements EventSubscriberInterface {
@@ -29,7 +29,7 @@ class RelationNodeEventSubscriber implements EventSubscriberInterface {
     $this->nodeInfoService = $nodeInfoService;
   }
 
-  
+
   public static function getSubscribedEvents(): array {
     return [
       EntityEventType::PRESAVE => ['setRelationTitle'],

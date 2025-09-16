@@ -5,8 +5,8 @@ function relationship_nodes_requirements($phase) {
     print('test requirements');
     if ($phase == 'install' || $phase == 'runtime') {
         try {
-            if (\Drupal::hasService('relationship_nodes.relation_bundle_validator')) {
-                $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
+            if (\Drupal::hasService('relationship_nodes.relation_bundle_validation_service')) {
+                $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validation_service');
                 $validation_errors = $bundleValidator->validateAllRelationConfig();
                 print_r($validation_errors);
                 print('test hans');
@@ -48,7 +48,7 @@ function relationship_nodes_install($is_syncing) {
 
     if ($is_syncing) {
           /*      try {
-            $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
+            $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validation_service');
             $validation_errors = $bundleValidator->validateAllRelationConfig();
             if (!empty($validation_errors)) {
                 $error_message = "Relationship Nodes validation failed on module install:\n" . implode("\n", $validation_errors);
@@ -57,19 +57,22 @@ function relationship_nodes_install($is_syncing) {
         } catch (\Exception $e) {
             throw new \Exception('Relationship Nodes install validation failed on module install: ' . $e->getMessage());
         }
-*/
+
         $bundleInfoService = \Drupal::service('relationship_nodes.relation_bundle_info_service');
         $fieldConfigurator = \Drupal::service('relationship_nodes.relation_field_configurator');
 
         foreach ($bundleInfoService->getAllRelationEntityTypes() as $entity) {
         $fieldConfigurator->implementFieldUpdates($entity);
-        }
+        }*/
     }
 }
 
 
 function relationship_nodes_uninstall($is_syncing){
     $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
+    print('remove module settings'); // dit duurt ontzettend lang
     $cleanupService->removeModuleSettings();
+    print('clean form displays');
     $cleanupService->cleanFormDisplays();
+    print('done');
 }

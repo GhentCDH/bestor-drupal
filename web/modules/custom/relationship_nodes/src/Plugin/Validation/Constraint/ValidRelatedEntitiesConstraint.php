@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraint;
  * )
  */
 class ValidRelatedEntitiesConstraint extends Constraint {
-   public $incomplete = 'A relation cannot have  empty related item fields.';
+   public $incomplete = 'A relation cannot have empty related item fields.';
    public $selfReferring = 'An item cannot have a relation with itself.';
 }
 

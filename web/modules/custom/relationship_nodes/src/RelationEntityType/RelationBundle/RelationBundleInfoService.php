@@ -131,7 +131,7 @@ class RelationBundleInfoService {
     }
 
 
-    public function getAllRelationEntityTypes(?string $entity_type_id = null):array{
+    public function getAllRelationBundles(?string $entity_type_id = null):array{
         $entity_types = ['node_type', 'taxonomy_vocabulary'];
         if($entity_type_id !== null  && !in_array($entity_type_id, $entity_types)){
             return [];

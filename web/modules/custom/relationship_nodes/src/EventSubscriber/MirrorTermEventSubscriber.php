@@ -5,9 +5,9 @@ namespace Drupal\relationship_nodes\EventSubscriber;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermAutoUpdater;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 
 class MirrorTermEventSubscriber implements EventSubscriberInterface {
 

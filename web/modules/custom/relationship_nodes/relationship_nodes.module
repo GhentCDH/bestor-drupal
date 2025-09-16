@@ -41,8 +41,8 @@ function relationship_nodes_field_storage_config_update(FieldStorageConfig $stor
   if (!in_array($field_name, $module_fields)) {
     return;
   }
-  $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
-  if(!$bundleValidator->validateFieldStorageConfig($storage)){
+  $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validation_service');
+  if(!empty($bundleValidator->getFieldStorageValidationErrors($storage))){
     throw new ConfigException("The fieldstorage {$field_name} doesn't meet the required 'Relationship Nodes' configuration.");
   }
 }
@@ -62,9 +62,9 @@ function relationship_nodes_field_config_update(FieldConfig $field) {
     return;
   }
 
-  $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validator');
+  $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validation_service');
 
-  if(!$bundleValidator->validateFieldConfig($field)){
+  if(!empty($bundleValidator->getFieldConfigValidationErrors($field))){
     throw new ConfigException("The fieldconfig {$field_name} doesn't meet the required 'Relationship Nodes' configuration.");
   }
 }

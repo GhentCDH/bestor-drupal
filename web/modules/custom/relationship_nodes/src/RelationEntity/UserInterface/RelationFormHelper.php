@@ -27,7 +27,7 @@ class RelationFormHelper {
 
     public function getAllIefWidgetFields(FormStateInterface $form_state): array {
         $ief_widget_state = $form_state->get('inline_entity_form');
-        return is_array($ief_widget_state) ?  array_keys($ief_widget_state) : [];
+        return is_array($ief_widget_state) ? array_keys($ief_widget_state) : [];
     }
 
 

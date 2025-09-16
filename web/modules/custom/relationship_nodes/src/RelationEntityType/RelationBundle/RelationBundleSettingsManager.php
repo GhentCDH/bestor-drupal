@@ -2,13 +2,12 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 
 class RelationBundleSettingsManager {
@@ -30,6 +29,10 @@ class RelationBundleSettingsManager {
             return null;
         }
         return $entity->getThirdPartySetting('relationship_nodes', $property, null);
+    }
+    
+    public function getProperties(ConfigEntityBundleBase $entity): ?array {
+        return $entity->getThirdPartySettings('relationship_nodes');
     }
 
  
@@ -61,14 +64,7 @@ class RelationBundleSettingsManager {
     }  
 
 
-    public function getEntityTypeId(ConfigEntityBundleBase $entity): string {
-        if ($entity instanceof NodeType) {
-            return 'node';
-        } elseif ($entity instanceof Vocabulary) {
-            return 'taxonomy_term';
-        }
-        return '';
-    }
+
 
 
     public function isRelationNodeType(ConfigEntityBundleBase|string $node_type) : bool{
@@ -98,11 +94,11 @@ class RelationBundleSettingsManager {
     }
 
 
-    public function getRelationVocabType(Vocabulary|string $vocab): string{
+    public function getRelationVocabType(Vocabulary|string $vocab): ?string{
         if(!$vocab = $this->ensureVocab($vocab)){
-            return '';
+            return null;
         }
-        return $this->getProperty($vocab, 'referencing_type') ?? '';
+        return $this->getProperty($vocab, 'referencing_type') ?? null;
     }
 
 
@@ -161,8 +157,40 @@ class RelationBundleSettingsManager {
     }
  
     
-    private function isRelationProperty(string $property) : bool{
+    public function isRelationProperty(string $property) : bool{
         $properties = ['rn_created', 'enabled', 'typed_relation', 'auto_title', 'referencing_type'];
         return in_array($property, $properties);
+    }
+
+
+    public function getEntityTypeObjectClass(string|ConfigEntityBundleBase $entity_type):?string{
+        if($entity_type instanceof ConfigEntityBundleBase){
+            $entity_type = $entity_type->getEntityTypeId();
+        }   
+        switch($entity_type){
+            case 'node_type':
+                return 'node';
+            case 'taxonomy_vocabulary':
+                return 'taxonomy_term';
+            default:
+                return null;
+        }
+    }
+
+    public function getConfigFileEntityClasses(string $config_name):?array{
+        if (str_starts_with($config_name, 'node.type.')) {
+            $bundle_name = substr($config_name, strlen('node.type.'));
+            $entity_type_id = 'node_type';
+        } elseif (str_starts_with($config_name, 'taxonomy.vocabulary.')) {
+            $bundle_name = substr($config_name, strlen('taxonomy.vocabulary.'));
+            $entity_type_id = 'taxonomy_vocabulary';
+        } else {
+            return null;
+        }
+        return [
+            'bundle' => $bundle_name,
+            'entity_type' => $entity_type_id,
+            'object_class' => $this->getEntityTypeObjectClass($entity_type_id)
+        ];
     }
 }

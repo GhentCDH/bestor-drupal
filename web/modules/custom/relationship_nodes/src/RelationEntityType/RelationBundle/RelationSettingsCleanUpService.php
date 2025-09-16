@@ -2,10 +2,11 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+
 
 class RelationSettingsCleanUpService {
         
@@ -29,7 +30,7 @@ class RelationSettingsCleanUpService {
 
     public function removeModuleSettings(): void {
         try {
-            foreach ( $this->bundleInfoService->getAllRelationEntityTypes() as $entity_type) {
+            foreach ( $this->bundleInfoService->getAllRelationBundles() as $entity_type) {
                 $this->settingsManager->removeRnThirdPartySettings($entity_type);
             }
 

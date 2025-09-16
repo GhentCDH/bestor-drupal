@@ -2,14 +2,14 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter;
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\taxonomy\Entity\Vocabulary;
 
 
 class VocabFormAlter {
@@ -115,7 +115,7 @@ class VocabFormAlter {
   }
 
   public static function validateConflicts(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_bundle_validator')->validateRelationFormState($form, $form_state);
+    \Drupal::service('relationship_nodes.relation_bundle_validation_service')->displayFormStateValidationErrors($form, $form_state);
   }
 
   

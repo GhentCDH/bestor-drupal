@@ -2,18 +2,19 @@
 
 namespace Drupal\relationship_nodes\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\node\Entity\NodeType;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Core\Url;
+use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 
 class RelationFieldConfigForm extends FormBase {

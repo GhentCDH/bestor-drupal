@@ -5,9 +5,10 @@ namespace Drupal\relationship_nodes\RelationEntity\UserInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+
 
 
 class RelationEntityFormHandler {
@@ -22,7 +23,7 @@ class RelationEntityFormHandler {
     public function __construct(
         FieldNameResolver $fieldNameResolver,
         RelationSyncService $syncService,
-        RelationFormHelper $formHelper,
+        RelationFormHelper $formHelper
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
         $this->syncService = $syncService;
@@ -47,7 +48,7 @@ class RelationEntityFormHandler {
     }
 
 
-    public function clearEmptyRelationsFromInput(array $values, array &$form, FormStateInterface $form_state, string $field_name){
+    public function clearEmptyRelationsFromInput(array $values, array &$form, FormStateInterface $form_state, string $field_name):?array{
         if($field_name == null || empty($values) || !str_starts_with($field_name, 'computed_relationshipfield__')){
             return $values;
         }

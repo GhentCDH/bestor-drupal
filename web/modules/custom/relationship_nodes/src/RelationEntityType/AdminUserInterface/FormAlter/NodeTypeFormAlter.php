@@ -4,24 +4,23 @@ namespace Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAl
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\node\Entity\NodeType;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleValidator;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationBundleValidationService;
 
 class NodeTypeFormAlter {
 
     use StringTranslationTrait;
 
     protected RelationBundleFormHandler $formHandler;
-    protected RelationBundleValidator $bundleValidator;
+    protected RelationBundleValidationService $bundleValidator;
     protected RelationBundleSettingsManager $settingsManager;
 
     public function __construct(
       RelationBundleFormHandler $formHandler,
-      RelationBundleValidator $bundleValidator,
-      RelationBundleSettingsManager $settingsManager,
+      RelationBundleValidationService $bundleValidator,
+      RelationBundleSettingsManager $settingsManager
     ) {
         $this->formHandler = $formHandler;
         $this->bundleValidator = $bundleValidator;
@@ -57,7 +56,7 @@ class NodeTypeFormAlter {
             '#type' => 'checkbox',
             '#title' => $this->t('This is a typed relation: a vocabulary term describes the relation type'),
             '#default_value' => $this->settingsManager->getProperty($node_type, 'typed_relation'),
-            '#description' => $this->t('If this is checked, this content type will be validated as a typed relationship node. It get an extra "relation type feeld" that needs to be configured.'),
+            '#description' => $this->t('If this is checked, this content type will be validated as a typed relationship node. It get an extra "relation type field" that needs to be configured.'),
             '#states' => [
                 'visible' => [
                     ':input[name="relationship_nodes[enabled]"]' => ['checked' => TRUE],
@@ -76,7 +75,7 @@ class NodeTypeFormAlter {
                     ],
                 ],
         ];
-        $form['#validate'][] = [$this->bundleValidator, 'validateRelationFormState'];
+        $form['#validate'][] = [$this->bundleValidator, 'displayFormStateValidationErrors'];
         $form['actions']['submit']['#submit'][] = [$this->formHandler,  'handleSubmission'];
     }
 

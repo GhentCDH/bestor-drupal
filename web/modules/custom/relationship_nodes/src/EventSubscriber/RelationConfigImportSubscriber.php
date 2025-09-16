@@ -2,15 +2,16 @@
 
 namespace Drupal\relationship_nodes\EventSubscriber;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigEvents;
-use Drupal\Core\Config\StorageComparerInterface;
 use Drupal\Core\Config\ConfigImporterEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationSettingsCleanUpService;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleValidator;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
+use Drupal\Core\Config\StorageComparerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationBundleValidationService;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationSettingsCleanUpService;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 
 
 class RelationConfigImportSubscriber implements EventSubscriberInterface {
@@ -18,7 +19,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   protected EntityTypeManagerInterface $entityTypeManager;
   protected RelationSettingsCleanUpService $cleanupService;  
   protected RelationBundleInfoService $bundleInfoService;
-  protected RelationBundleValidator $bundleValidator;
+  protected RelationBundleValidationService $bundleValidator;
   protected RelationFieldConfigurator $fieldConfigurator;
 
 
@@ -26,7 +27,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     EntityTypeManagerInterface $entityTypeManager,     
     RelationSettingsCleanUpService $cleanupService,
     RelationBundleInfoService $bundleInfoService,
-    RelationBundleValidator $bundleValidator,
+    RelationBundleValidationService $bundleValidator,
     RelationFieldConfigurator $fieldConfigurator
   ) {
     $this->entityTypeManager = $entityTypeManager;
@@ -47,26 +48,21 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
   public function onConfigImportValidate(ConfigImporterEvent $event): void {
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
+
     if ($this->isModuleDisabling($storage_comparer)) {
         return;
     }
     $source_storage = $storage_comparer->getSourceStorage();
 
-    foreach ($storage_comparer->getAllCollectionNames() as $collection) {
-      $changes = $storage_comparer->getChangelist(null, $collection);
+     $operations = ['create', 'update'];
+     foreach ($operations as $op) {
+      //languages
+      foreach ($storage_comparer->getAllCollectionNames() as $collection) {     
 
-      foreach (['create', 'update'] as $op) {
-        foreach ($changes[$op] ?? [] as $config_name) {
-          $config_data = $source_storage->read($config_name);
-
-          if (str_starts_with($config_name, 'node.type.')) {
-            $entity_id = substr($config_name, strlen('node.type.'));
-             $this->bundleValidator->validateEntityConfig('node_type', $entity_id, $config_data, $event);
-          }
-          elseif (str_starts_with($config_name, 'taxonomy.vocabulary.')) {
-            $entity_id = substr($config_name, strlen('taxonomy.vocabulary.'));
-             $this->bundleValidator->validateEntityConfig('taxonomy_vocabulary', $entity_id, $config_data, $event);
-          }
+        $change_list = $storage_comparer->getChangelist($op, $collection) ?? [];
+        foreach ($change_list as $config_name) {
+          $this->bundleValidator->displayBundleCimValidationErrors($config_name, $event, $source_storage);
+  
         }
       }
     }
@@ -74,6 +70,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
 
   public function onConfigImport(ConfigImporterEvent $event): void {
+    print('config import is running');
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
 
     if ($this->isModuleDisabling($storage_comparer)) {
@@ -126,7 +123,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
   
   protected function getAllRelationEntityConfigNames(): array{   
-    $relation_entities = $this->bundleInfoService->getAllRelationEntityTypes();
+    $relation_entities = $this->bundleInfoService->getAllRelationBundles();
     $relation_config_names = [];
     
     foreach ($relation_entities as $entity) {

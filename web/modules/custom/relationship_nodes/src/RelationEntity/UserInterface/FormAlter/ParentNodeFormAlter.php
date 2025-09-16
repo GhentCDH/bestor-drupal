@@ -3,21 +3,11 @@
 namespace Drupal\relationship_nodes\RelationEntity\UserInterface\FormAlter;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationExtensionWidgetSubmit;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
+use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationExtensionWidgetSubmit;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
-use Drupal\inline_entity_form\ElementSubmit;
-
-use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 
 class ParentNodeFormAlter {
-
-
-   use DependencySerializationTrait;
-
-
-
 
   protected RelationSyncService $syncService;
   protected RelationFormHelper $formHelper;
@@ -54,8 +44,4 @@ class ParentNodeFormAlter {
   public function bindNewRelationsToParent(array &$form, FormStateInterface $form_state) {
     $this->syncService->bindNewRelationsToParent($form_state);
   }
-
 }
-
-
-

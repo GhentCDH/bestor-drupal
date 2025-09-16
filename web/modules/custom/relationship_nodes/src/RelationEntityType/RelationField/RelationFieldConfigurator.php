@@ -4,6 +4,7 @@ namespace Drupal\relationship_nodes\RelationEntityType\RelationField;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Config\ConfigException;
+use Drupal\field\FieldConfigStorage;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -64,7 +65,7 @@ class RelationFieldConfigurator {
 
     public function implementFieldUpdates(ConfigEntityBundleBase $entity): array {
         $result = [];
-        $fields_status = $this->getFieldStatus($entity); 
+        $fields_status = $this->getBundleFieldsStatus($entity); 
         $existing = $fields_status['existing'];      
         $missing = $fields_status['missing'];
         $remove = $fields_status['remove'];
@@ -89,22 +90,62 @@ class RelationFieldConfigurator {
     }
 
 
-    public function getFieldStatus(ConfigEntityBundleBase $entity): array {
-        $required_fields = $this->getRequiredFields($entity);
-        $storage = $this->entityTypeManager->getStorage('field_config');
-        $entity_type_id = $this->settingsManager->getEntityTypeId($entity);
+    public function getBundleFieldsStatus(ConfigEntityBundleBase $entity): ?array {
+        return $this->getFieldsStatus(
+            $entity->getEntityTypeId(), 
+            $entity->id(), 
+            $this->settingsManager->getProperties($entity), 
+            $this->entityTypeManager->getStorage('field_config')
+        );
+    }
 
+
+    public function getCimFieldsStatus(string $config_name, StorageInterface $storage): ?array {
+        $config_data = $storage->read($config_name);
+
+        $entity_classes = $this->getConfigFileEntityClasses($config_name);
+        $rn_settings = [];
+        if(!empty($config_data['third_party_settings']['relationship_nodes'])){
+            $rn_settings = $config_data['third_party_settings']['relationship_nodes'];
+        } 
+        return $this->getFieldsStatus(
+            $entity_classes['entity_type'],
+            $entity_classes['bundle'],
+            $rn_settings,
+            $storage
+        );
+    }
+
+
+    public function getFieldsStatus(string $entity_type_id, string $bundle_name, array $rn_settings, FieldConfigStorage|StorageInterface $storage): ?array {
+        $config_import = !($storage instanceof FieldConfigStorage);
+        $config_prefix = $this->getConfigNamePrefix($entity_type_id, $bundle_name, $config_import);
+        if(empty($config_prefix)){
+            return null;
+        }
+        
         $existing = $missing = $remove = [];
+        $required_fields = $this->getRequiredFields($entity_type_id, $rn_settings);
         foreach ($required_fields as $field_name => $settings) {
-            $field_config = $storage->load("$entity_type_id.{$entity->id()}.$field_name");
-            if (!$field_config) {
+            $config = $config_import
+                ? $storage->read($config_prefix . $field_name)
+                : $storage->load($config_prefix . $field_name);
+            if (!$config) {
                 $missing[$field_name] = ['settings' => $settings];
             } else {
-                $existing[$field_name] = ['settings' => $settings, 'field_config' => $field_config];
+                $key = $config_import
+                    ? 'config_file_data'
+                    : 'field_config';
+                $existing[$field_name] = [
+                    'settings' => $settings,
+                        $key => $config
+                ];
             }
 
             if ($incompatible = $this->fieldNameResolver->getOppositeMirrorField($field_name)) {
-                $field_to_remove = $storage->load("$entity_type_id.{$entity->id()}.$incompatible");
+                $field_to_remove = $config_import
+                    ? $storage->read($config_prefix . $incompatible)
+                    : $storage->load($config_prefix . $incompatible);
                 if ($field_to_remove) $remove[] = $incompatible;
             }
         }
@@ -113,24 +154,32 @@ class RelationFieldConfigurator {
     }
 
 
-    public function getRequiredFields(ConfigEntityBundleBase $entity): array {
+
+
+    public function getRequiredFields(string $entity_type_id, array $rn_settings): array {
         $fields = [];
-        if ($entity instanceof NodeType) {
+
+        if(empty($rn_settings) || empty($rn_settings['enabled'])){
+            return [];
+        }
+
+        if ($entity_type_id === 'node_type') {
             foreach($this->fieldNameResolver->getRelatedEntityFields() as $field_name){
                 $config = $this->getRequiredFieldConfiguration($field_name);
                 if ($config) {
                     $fields[$field_name] = $config;
                 }
             }
-            if ($this->settingsManager->isTypedRelationNodeType($entity)) {
+            if (!empty($rn_settings['typed_relation'])) {
                 $field_name = $this->fieldNameResolver->getRelationTypeField();
                 $config = $this->getRequiredFieldConfiguration($field_name);
                 if ($config) {
                     $fields[$field_name] = $config;
                 }
             }
-        } elseif ($entity instanceof Vocabulary) {
-            if($type = $this->settingsManager->getProperty($entity, 'referencing_type')){
+        } elseif ($entity_type_id === 'taxonomy_vocabulary') {
+            if(!empty($rn_settings['referencing_type'])){
+                $type = $rn_settings['referencing_type'];
                 if($type !== 'none'){
                     $field_name = $this->fieldNameResolver->getMirrorFields($type);
                     if($field_name){
@@ -138,8 +187,8 @@ class RelationFieldConfigurator {
                         if ($config) {
                             $fields[$field_name] = $config;
                         }
-                    }          
-                }
+                    }  
+                }          
             }
         }
         return $fields;
@@ -180,7 +229,7 @@ class RelationFieldConfigurator {
         $field_storage_config_storage = $this->entityTypeManager->getStorage('field_storage_config');
         $field_config_storage = $this->entityTypeManager->getStorage('field_config');
 
-        $entity_type_id = $this->settingsManager->getEntityTypeId($entity);
+        $entity_type_id = $this->settingsManager->getEntityTypeObjectClass($entity);
 
         foreach ($missing_fields as $field_name => $field_arr) {
             $settings = $field_arr['settings'];
@@ -228,7 +277,7 @@ class RelationFieldConfigurator {
 
     protected function removeFields(ConfigEntityBundleBase $entity, array $fields_to_remove): void {
         $storage = $this->entityTypeManager->getStorage('field_config');
-        $entity_type_id = $this->settingsManager->getEntityTypeId($entity);
+        $entity_type_id = $this->settingsManager->getEntityTypeObjectClass($entity);
 
         foreach ($fields_to_remove as $field_name) {
             $field_config = $storage->load("$entity_type_id.{$entity->id()}.$field_name");
@@ -250,6 +299,19 @@ class RelationFieldConfigurator {
             if (!$field_config->getThirdPartySetting('relationship_nodes', 'rn_created', false)) {
                 $field_config->setThirdPartySetting('relationship_nodes', 'rn_created', true)->save();
             }
+        }
+    }
+
+
+    protected function getConfigNamePrefix(string $entity_type_id, string $bundle_name, bool $config_import=false): ?string{
+        $object_type = $this->settingsManager->getEntityTypeObjectClass($entity_type_id);
+        if(!$object_type){
+            return null;
+        }
+        if($config_import){         
+            return 'field.field.' . $object_type . '.' . $bundle_name . '.';
+        } else {
+            return $object_type . '.' . $bundle_name . '.';
         }
     }
 }

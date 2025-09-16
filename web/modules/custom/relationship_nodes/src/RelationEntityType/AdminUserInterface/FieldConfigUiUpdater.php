@@ -53,7 +53,7 @@ class FieldConfigUiUpdater {
     }
 
 
-    public function getRelationFieldDeleteUrl($field_config): ?url{
+    public function getRelationFieldDeleteUrl(FieldConfig $field_config): ?url{
         $url = Url::fromRoute('relationship_nodes.rn_field_delete',['field_config' => $field_config->id(),]);
         return $url ?? null;
     }

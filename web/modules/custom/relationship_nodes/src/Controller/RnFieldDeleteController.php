@@ -4,10 +4,11 @@ namespace Drupal\relationship_nodes\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 class RnFieldDeleteController extends ControllerBase {
 

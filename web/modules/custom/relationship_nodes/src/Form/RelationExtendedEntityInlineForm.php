@@ -7,8 +7,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\inline_entity_form\Form\NodeInlineForm;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
