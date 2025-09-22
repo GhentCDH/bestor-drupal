@@ -192,6 +192,7 @@ class RelationBundleSettingsManager {
         }
     }
 
+    
     public function getCimProperty(array $config_data, string $property): bool|string|null {
         if (!$this->isRelationProperty($property) || empty($this->getCimProperties($config_data))) {
             return null;
@@ -199,6 +200,7 @@ class RelationBundleSettingsManager {
         return $this->getCimProperties($config_data)[$property] ?? null;
     }
     
+
     public function getCimProperties(array $config_data): ?array {
         return !empty($config_data['third_party_settings']['relationship_nodes'])
                     ? $config_data['third_party_settings']['relationship_nodes']

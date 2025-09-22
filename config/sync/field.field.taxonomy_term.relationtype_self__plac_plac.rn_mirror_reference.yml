@@ -9,7 +9,7 @@ dependencies:
     - relationship_nodes
 third_party_settings:
   relationship_nodes:
-    rn_created: false
+    rn_created: true
 id: taxonomy_term.relationtype_self__plac_plac.rn_mirror_reference
 field_name: rn_mirror_reference
 entity_type: taxonomy_term

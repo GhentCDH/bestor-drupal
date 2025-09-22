@@ -59,7 +59,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
       //Validate all rn bundles and the fields linked to them
       $this->validationService->displayBundleCimValidationErrors($bundle_config_name, $event, $source_storage);
     }
-    $event->getConfigImporter()->logError('stop');
+    //$event->getConfigImporter()->logError('stop');
   }
 
 
