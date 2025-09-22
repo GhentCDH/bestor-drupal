@@ -3,6 +3,7 @@
 namespace Drupal\relationship_nodes\RelationEntityType\RelationField;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Config\ConfigException;
 use Drupal\field\FieldConfigStorage;
 use Drupal\field\Entity\FieldConfig;
@@ -90,11 +91,12 @@ class RelationFieldConfigurator {
     }
 
 
-    public function getBundleFieldsStatus(ConfigEntityBundleBase $entity): ?array {
+    public function getBundleFieldsStatus(ConfigEntityBundleBase $entity, ?array $rn_settings = null): ?array {
+        $rn_settings = !empty($rn_settings) ? $rn_settings : $this->settingsManager->getProperties($entity);
         return $this->getFieldsStatus(
             $entity->getEntityTypeId(), 
             $entity->id(), 
-            $this->settingsManager->getProperties($entity), 
+            $rn_settings, 
             $this->entityTypeManager->getStorage('field_config')
         );
     }
@@ -103,11 +105,15 @@ class RelationFieldConfigurator {
     public function getCimFieldsStatus(string $config_name, StorageInterface $storage): ?array {
         $config_data = $storage->read($config_name);
 
-        $entity_classes = $this->getConfigFileEntityClasses($config_name);
-        $rn_settings = [];
-        if(!empty($config_data['third_party_settings']['relationship_nodes'])){
-            $rn_settings = $config_data['third_party_settings']['relationship_nodes'];
+        $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
+        if(empty($config_data['third_party_settings']['relationship_nodes'])){
+            return null;
         } 
+        $rn_settings = $config_data['third_party_settings']['relationship_nodes'];
+        if(empty($rn_settings['enabled'])){
+            return null;
+        }
+
         return $this->getFieldsStatus(
             $entity_classes['entity_type'],
             $entity_classes['bundle'],
@@ -119,7 +125,7 @@ class RelationFieldConfigurator {
 
     public function getFieldsStatus(string $entity_type_id, string $bundle_name, array $rn_settings, FieldConfigStorage|StorageInterface $storage): ?array {
         $config_import = !($storage instanceof FieldConfigStorage);
-        $config_prefix = $this->getConfigNamePrefix($entity_type_id, $bundle_name, $config_import);
+        $config_prefix = $this->getFieldConfigNamePrefix($entity_type_id, $bundle_name, $config_import);
         if(empty($config_prefix)){
             return null;
         }
@@ -149,7 +155,6 @@ class RelationFieldConfigurator {
                 if ($field_to_remove) $remove[] = $incompatible;
             }
         }
-
         return ['existing' => $existing, 'missing' => $missing, 'remove' => $remove];
     }
 
@@ -182,7 +187,7 @@ class RelationFieldConfigurator {
                 $type = $rn_settings['referencing_type'];
                 if($type !== 'none'){
                     $field_name = $this->fieldNameResolver->getMirrorFields($type);
-                    if($field_name){
+                    if(is_string($field_name)){
                         $config = $this->getRequiredFieldConfiguration($field_name);
                         if ($config) {
                             $fields[$field_name] = $config;
@@ -303,7 +308,7 @@ class RelationFieldConfigurator {
     }
 
 
-    protected function getConfigNamePrefix(string $entity_type_id, string $bundle_name, bool $config_import=false): ?string{
+     public function getFieldConfigNamePrefix(string $entity_type_id, string $bundle_name, bool $config_import=false): ?string{
         $object_type = $this->settingsManager->getEntityTypeObjectClass($entity_type_id);
         if(!$object_type){
             return null;

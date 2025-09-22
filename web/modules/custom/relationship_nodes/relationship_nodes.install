@@ -5,8 +5,8 @@ function relationship_nodes_requirements($phase) {
     print('test requirements');
     if ($phase == 'install' || $phase == 'runtime') {
         try {
-            if (\Drupal::hasService('relationship_nodes.relation_bundle_validation_service')) {
-                $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validation_service');
+            if (\Drupal::hasService('relationship_nodes.relation_validation_service')) {
+                $bundleValidator = \Drupal::service('relationship_nodes.relation_validation_service');
                 $validation_errors = $bundleValidator->validateAllRelationConfig();
                 print_r($validation_errors);
                 print('test hans');
@@ -38,17 +38,18 @@ function relationship_nodes_requirements($phase) {
             ];
         }
     }
+    print('end requirements');
     return $requirements;
 }
 
 
 function relationship_nodes_install($is_syncing) {
-
-    //print('test install');
+    // deze hook is wellicht niet nodig -> 
+    print('test install');
 
     if ($is_syncing) {
           /*      try {
-            $bundleValidator = \Drupal::service('relationship_nodes.relation_bundle_validation_service');
+            $bundleValidator = \Drupal::service('relationship_nodes.relation_validation_service');
             $validation_errors = $bundleValidator->validateAllRelationConfig();
             if (!empty($validation_errors)) {
                 $error_message = "Relationship Nodes validation failed on module install:\n" . implode("\n", $validation_errors);
@@ -65,14 +66,11 @@ function relationship_nodes_install($is_syncing) {
         $fieldConfigurator->implementFieldUpdates($entity);
         }*/
     }
+    print ('end install');
 }
 
 
 function relationship_nodes_uninstall($is_syncing){
     $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
-    print('remove module settings'); // dit duurt ontzettend lang
-    $cleanupService->removeModuleSettings();
-    print('clean form displays');
-    $cleanupService->cleanFormDisplays();
-    print('done');
+    $cleanupService->removeModuleSettings(); //Potentially, a lot of entity types need to be saved, which can take a while.
 }

@@ -7,23 +7,23 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\NodeType;
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
-use Drupal\relationship_nodes\RelationEntityType\Validation\RelationBundleValidationService;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationService;
 
 class NodeTypeFormAlter {
 
     use StringTranslationTrait;
 
     protected RelationBundleFormHandler $formHandler;
-    protected RelationBundleValidationService $bundleValidator;
+    protected RelationValidationService $validationService;
     protected RelationBundleSettingsManager $settingsManager;
 
     public function __construct(
       RelationBundleFormHandler $formHandler,
-      RelationBundleValidationService $bundleValidator,
+      RelationValidationService $validationService,
       RelationBundleSettingsManager $settingsManager
     ) {
         $this->formHandler = $formHandler;
-        $this->bundleValidator = $bundleValidator;
+        $this->validationService = $validationService;
         $this->settingsManager = $settingsManager;
     }
 
@@ -75,7 +75,7 @@ class NodeTypeFormAlter {
                     ],
                 ],
         ];
-        $form['#validate'][] = [$this->bundleValidator, 'displayFormStateValidationErrors'];
+        $form['#validate'][] = [$this->validationService, 'displayFormStateValidationErrors'];
         $form['actions']['submit']['#submit'][] = [$this->formHandler,  'handleSubmission'];
     }
 

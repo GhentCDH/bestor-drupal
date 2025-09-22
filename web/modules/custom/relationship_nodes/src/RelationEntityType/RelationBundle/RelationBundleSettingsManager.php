@@ -2,7 +2,6 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
-use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -62,10 +61,6 @@ class RelationBundleSettingsManager {
             $entity->save();
         }   
     }  
-
-
-
-
 
     public function isRelationNodeType(ConfigEntityBundleBase|string $node_type) : bool{
         if(!$node_type = $this->ensureNodeType($node_type)){
@@ -143,18 +138,6 @@ class RelationBundleSettingsManager {
         $auto_title = $this->getProperty($node_type, 'auto_title');
         return !empty($auto_title);
     }
-
-
-    public function removeRnThirdPartySettings(ConfigEntityBase $entity): void {
-        $rn_settings = $entity->getThirdPartySettings('relationship_nodes');
-        foreach ($rn_settings as $key => $value) {
-            $entity->unsetThirdPartySetting('relationship_nodes', $key);
-        }
-        if (method_exists($entity, 'setLocked')) {
-            $entity->setLocked(FALSE);
-        }
-        $entity->save();
-    }
  
     
     public function isRelationProperty(string $property) : bool{
@@ -192,5 +175,61 @@ class RelationBundleSettingsManager {
             'entity_type' => $entity_type_id,
             'object_class' => $this->getEntityTypeObjectClass($entity_type_id)
         ];
+    }
+
+
+    public function getEntityTypeConfigPrefix(string|ConfigEntityBundleBase $entity_type):?string{
+        if($entity_type instanceof ConfigEntityBundleBase){
+            $entity_type = $entity_type->getEntityTypeId();
+        }   
+        switch($entity_type){
+            case 'node_type':
+                return 'node.type.';
+            case 'taxonomy_vocabulary':
+                return  'taxonomy.vocabulary.';
+            default:
+                return null;
+        }
+    }
+
+    public function getCimProperty(array $config_data, string $property): bool|string|null {
+        if (!$this->isRelationProperty($property) || empty($this->getCimProperties($config_data))) {
+            return null;
+        }
+        return $this->getCimProperties($config_data)[$property] ?? null;
+    }
+    
+    public function getCimProperties(array $config_data): ?array {
+        return !empty($config_data['third_party_settings']['relationship_nodes'])
+                    ? $config_data['third_party_settings']['relationship_nodes']
+                    : null;
+    }
+
+
+       public function isCimRelationEntity(array $config_data): bool {
+        $value = $this->getCimProperty($config_data, 'enabled');
+        return !empty($value);
+    }
+
+
+    public function isCimTypedRelationNodeType(array $config_data) : bool{
+        if(!$this->isCimRelationEntity($config_data) || !isset($config_data['typed_relation'])){
+            return false;
+        }
+        $typed = $this->getCimProperty($config_data, 'typed_relation');
+        return !empty($typed);
+    }
+
+    public function getCimRelationVocabType(array $config_data): ?string{
+        if(!$this->isCimRelationEntity($config_data) || !isset($config_data['referencing_type'])){
+            return null;
+        }
+        return $this->getCimProperty($config_data, 'referencing_type');
+    }
+
+
+    public function isCimMirroringVocab(array $config_data): bool{
+        $relation_vocab_type = $this->getRelationVocabType($config_data);
+        return in_array($relation_vocab_type, ['string', 'entity_reference']);
     }
 }

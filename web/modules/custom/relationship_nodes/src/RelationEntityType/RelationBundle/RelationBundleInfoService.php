@@ -3,12 +3,14 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\field\FieldConfigStorage;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 
@@ -69,7 +71,7 @@ class RelationBundleInfoService {
             return $info;
         }
 
-        $vocab = $target_bundles[0];
+        $vocab = reset($target_bundles);
         
         $info['has_relationtype'] = true;
         $info['vocabulary'] = $vocab;
@@ -157,6 +159,54 @@ class RelationBundleInfoService {
     }
 
 
+    public function getAllCimRelationBundles(StorageInterface $config_storage, ?string $entity_type_id = null):array{
+        $entity_types = ['node_type', 'taxonomy_vocabulary'];
+        if($entity_type_id !== null  && !in_array($entity_type_id, $entity_types)){
+            return [];
+        }
+
+        $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
+
+        $result = []; 
+
+        foreach($input as $entity_type){
+            $prefix = $this->settingsManager->getEntityTypeConfigPrefix($entity_type);
+            $all = $config_storage->listAll($prefix);
+            foreach ($all as $config_name) {
+                $config_data = $config_storage->read($config_name);
+                if($this->settingsManager->isCimRelationEntity($config_data)){
+                    $result[$config_name] = $config_data;
+                }
+            }
+        }
+        return $result;
+    }
+
+
+    public function getAllTypedRelationNodeTypes():array{
+        $result = [];
+        $relation_node_types = $this->getAllRelationBundles('node_type');
+        foreach($relation_node_types as $bundle_id => $node_type){
+            if($this->settingsManager->isTypedRelationNodeType($node_type)){
+                $result[$bundle_id] = $node_type;
+            }
+        }
+        return $result;
+    }
+
+
+    public function getAllCimTypedRelationNodeTypes(StorageInterface $config_storage):array{
+        $result = [];
+        $all_cim_bundles = $this->getAllCimRelationBundles($config_storage, 'node_type');
+        foreach($all_cim_bundles as $config_name => $config_data){
+            if($this->settingsManager->isCimTypedRelationNodeType($config_data)){
+                $result[$config_name] = $config_data;
+            }
+        }
+        return $result;
+    }
+
+
     private function getFieldTargetBundles(FieldConfig $field_config):array {
         if($field_config->getType() != 'entity_reference'){
             return [];
@@ -166,6 +216,80 @@ class RelationBundleInfoService {
         $handler_settings = $settings['handler_settings'] ?? [];
         $target_bundles = $handler_settings['target_bundles'] ?? [];
         
-        return is_array($target_bundles) ? array_values($target_bundles) : [];
+        return is_array($target_bundles) ? $target_bundles : [];
+    }
+
+
+    public function getNodeTypesLinkedToVocab(ConfigEntityBundleBase $vocab):array{
+        if(!$this->settingsManager->isRelationVocab($vocab)){
+            return [];
+        }
+
+        $node_types = $this->getAllTypedRelationNodeTypes();
+
+
+        if(empty($node_types)){
+            return [];
+        }
+        
+        $relation_type_field = $this->fieldNameResolver->getRelationTypeField() ?? null;
+        $field_storage = $this->entityTypeManager->getStorage('field_config') ?? null;
+
+        if(!is_string($relation_type_field) || !($field_storage instanceof FieldConfigStorage)){
+            return [];
+        }
+        $result = [];
+        foreach($node_types as $node_type_id => $node_type){
+            $field_config = $field_storage->load("node.{$node_type->id()}.$relation_type_field");
+            if(!($field_config instanceof FieldConfig)){
+                continue;
+            }
+            $target_bundle = reset($this->getFieldTargetBundles($field_config));
+            if($target_bundle === $vocab->id()){
+                $result[$node_type_id] = $node_type;
+            }
+        }
+        return $result;
+    }
+
+
+    public function getCimNodeTypesLinkedToVocab(string $config_name, StorageInterface $storage):array{
+        $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
+        if(empty($entity_classes['entity_type']) || $entity_classes['entity_type'] !== 'taxonomy_vocabulary'){
+            return [];
+        } 
+
+        $node_types = $this->getAllCimTypedRelationNodeTypes($storage);
+        if(empty($node_types)){
+            return [];
+        }
+        
+        $relation_type_field = $this->fieldNameResolver->getRelationTypeField() ?? null;
+
+        if(!is_string($relation_type_field)){
+            return [];
+        }
+        $result = [];
+        
+        foreach($node_types as $node_config_name => $node_config_data){
+            $node_classes = $this->settingsManager->getConfigFileEntityClasses($node_config_name);
+            $field_prefix = $this->fieldConfigurator->getFieldConfigNamePrefix(
+                'node',
+                $node_classes['bundle'],
+                true
+            );
+
+            $field_config = $storage->load($field_prefix . $relation_type_field);
+            
+            if(!($field_config) || empty($field_config['settings']['handler_settings']['target_bundles'])){
+                continue;
+            }
+            
+            $target_bundle = reset($field_config['settings']['handler_settings']['target_bundles']);
+            if($target_bundle === $vocab->id()){
+                $result[$node_config_name] = $node_config_data;
+            }
+        }
+        return $result;
     }
 }

@@ -36,6 +36,10 @@ class RelationFieldStorageValidationObject {
   public function validate():bool {
     $this->errors = [];
     $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($this->fieldName);
+    
+    print($this->field_name);
+    print_r($required_settings);
+
     if(!$required_settings){
       // Not a RN field, no validation required. 
       return true;

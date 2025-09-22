@@ -115,12 +115,12 @@ class VocabFormAlter {
   }
 
   public static function validateConflicts(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_bundle_validation_service')->displayFormStateValidationErrors($form, $form_state);
+    \Drupal::service('relationship_nodes.relation_validation_service')->displayFormStateValidationErrors($form, $form_state);
   }
 
   
  public static function handleSubmission(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_bundle_form_handler')->handleSubmission($form, $form_state);
+    \Drupal::service('relationship_nodes.relation_form_handler')->handleSubmission($form, $form_state);
   }
 
 

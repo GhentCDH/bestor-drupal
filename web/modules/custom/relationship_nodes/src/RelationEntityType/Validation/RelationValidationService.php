@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
@@ -18,11 +17,11 @@ use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationOb
 use Drupal\relationship_nodes\RelationEntityType\Validation\RelationBundleValidationObject;
 use Drupal\relationship_nodes\RelationEntityType\Validation\RelationFieldConfigValidationObject;
 use Drupal\relationship_nodes\RelationEntityType\Validation\RelationFieldStorageValidationObject;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundleRelationBundleInfoService;
+use Drupal\relationship_nodes\RelationEntityType\Validation\ValidationErrorFormatter;
 
 
-class RelationBundleValidationService {
-
-    use StringTranslationTrait;
+class RelationValidationService {
 
     protected EntityTypeManagerInterface $entityTypeManager;
     protected FieldNameResolver $fieldNameResolver;
@@ -30,6 +29,7 @@ class RelationBundleValidationService {
     protected RelationBundleInfoService $bundleInfoService;
     protected RelationBundleSettingsManager $settingsManager;
     protected RelationValidationObjectFactory $validationFactory;
+    protected ValidationErrorFormatter $errorFormatter;
 
 
     public function __construct(
@@ -38,7 +38,8 @@ class RelationBundleValidationService {
         RelationFieldConfigurator $fieldConfigurator,
         RelationBundleInfoService $bundleInfoService,
         RelationBundleSettingsManager $settingsManager,
-        RelationValidationObjectFactory $validationFactory
+        RelationValidationObjectFactory $validationFactory,
+        ValidationErrorFormatter $errorFormatter
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldNameResolver = $fieldNameResolver;
@@ -46,25 +47,8 @@ class RelationBundleValidationService {
         $this->bundleInfoService = $bundleInfoService;
         $this->settingsManager = $settingsManager;
         $this->validationFactory = $validationFactory;
+        $this->errorFormatter = $errorFormatter;
     }
-
-
-    private const ERROR_MESSAGES = [
-        'invalid_entity_type' => 'Invalid entity type for relation configuration: only node_type and taxonomy_vocabulary are allowed.',
-        'missing_field_name_config' => 'The relationship node module lacks the required field name configuration. (Cf. config/install.)',
-        'multiple_target_bundles' => 'Field "@field" in bundle "@bundle" can only target one bundle.',
-        'field_cannot_be_required' => 'Field "@field" in bundle "@bundle" cannot be required due to IEF widget conflicts.',
-        'mirror_field_bundle_mismatch' => 'Mirror field "@field" in bundle "@bundle" must reference the same vocabulary.',
-        'relation_type_field_no_targets' => 'Relation type field "@field" in bundle "@bundle" must have target bundles.',
-        'invalid_relation_vocabulary' => 'Field "@field" in bundle "@bundle" targets invalid relation vocabulary.',
-        'invalid_field_type' => 'Field "@field" has an invalid field type.',
-        'invalid_cardinality' => 'Field "@field" has an invalid cardinality.',
-        'invalid_target_type' => 'Field "@field" has an invalid target type.',
-        'orphaned_rn_field_settings' => 'Field "@field" has relation settings but is not in module configuration.',
-        'missing_field_config' => 'Field "@field" exists, but its field configuration is not found.',
-        'missing_config_file_data' => 'Field "@field" has a configuration file, but its content cannot be found.',
-        'no_field_storage' => 'The field "@field" of bundle "@bundle" has no valid field storage.',
-    ];
 
 
     /**
@@ -74,7 +58,7 @@ class RelationBundleValidationService {
     /**
      * 1.1. entity validator (for node types and vocabs)
      */
-    public function getBundleValidationErrors(ConfigEntityBundleBase $entity):array {
+    protected function getBundleValidationErrors(ConfigEntityBundleBase $entity):array {
         $errors = [];
         $validator = $this->validationFactory->fromEntity($entity);
         if(!$validator instanceof RelationBundleValidationObject){
@@ -99,7 +83,7 @@ class RelationBundleValidationService {
     /**
     * 1.2. Form submit validator for relation-enabled node types and vocabularies
     */
-    public function getFormStateValidationErrors(FormStateInterface $form_state):array {
+    protected function getFormStateValidationErrors(FormStateInterface $form_state):array {
         $errors = [];
 
         $validator = $this->validationFactory->fromFormState($form_state);
@@ -108,6 +92,7 @@ class RelationBundleValidationService {
         }
 
         $entity = $form_state->getFormObject()->getEntity();
+        dpm($this->bundleInfoService->getNodeTypesLinkedToVocab($entity), 'links');
         if(!$validator->validate()){
             foreach($validator->getErrors() as $error_code){
                 $errors[] = [
@@ -118,7 +103,8 @@ class RelationBundleValidationService {
                 ];
             }
         }    
-        $field_errors = $this->validateEntityExistingFields($entity);
+        $rn_settings = $form_state->getValue('relationship_nodes') ?? null;
+        $field_errors = $this->validateEntityExistingFields($entity, $rn_settings);
         return array_merge($errors, $field_errors);
     }
 
@@ -129,16 +115,18 @@ class RelationBundleValidationService {
             return;
         }
 
-        foreach ($errors as $error) {
-            $form_state->setErrorByName('relationship_nodes', $this->errorCodeToMessage($error['error_code'], $error['context']));      
-        }
+        $error_message = $this->errorFormatter->formatValidationErrors($form_state->getFormObject()->getEntity()->id(), $errors);
+
+
+        $form_state->setErrorByName('relationship_nodes', $error_message);      
+        
     }
 
 
     /**
     * 1.3. Validates a single entity config import file
     */
-    public function getBundleCimValidationErrors(string $config_name, StorageInterface $storage): array {
+    protected function getBundleCimValidationErrors(string $config_name, StorageInterface $storage): array {
         $errors = []; 
         $validator = $this->validationFactory->fromBundleConfigFile($config_name, $storage);
         if(!$validator instanceof RelationBundleValidationObject){
@@ -165,7 +153,7 @@ class RelationBundleValidationService {
             return;
         }
 
-        $error_message = $this->formatValidationErrors($config_name, $errors);
+        $error_message = $this->errorFormatter->formatValidationErrors($config_name, $errors);
 
         $event->getConfigImporter()->logError($error_message); 
     }
@@ -199,7 +187,30 @@ class RelationBundleValidationService {
 
 
     /**
-    * 2.2. Validates a single field config (with or without its storage)
+    * 2.2. Validates a single field storage import file
+    */
+    public function getFieldStorageCimValidationErrors(array $config_data):array{
+        $errors = [];
+        $validator = $this->validationFactory->fromFieldStorageConfigFile($config_data);
+        if(!$validator instanceof RelationFieldStorageValidationObject){
+            return [];
+        }
+        if(!$validator->validate()){
+            foreach($validator->getErrors() as $error_code){
+                $errors[] = [
+                    'error_code' => $error_code,
+                    'context' => [
+                        '@field' => !empty($config_data['field_name']) ? $config_data['field_name'] : '',
+                    ]
+                ];
+            }
+        } 
+        return $errors;   
+    }
+
+
+    /**
+    * 2.3. Validates a single field config (with or without its storage)
     */
     public function getFieldConfigValidationErrors(FieldConfig $field_config, bool $include_storage_validation = true): array {
         $errors = []; 
@@ -240,11 +251,11 @@ class RelationBundleValidationService {
 
 
     /**
-    * 2.3. Validates a single field config import file
+    * 2.4. Validates a single field config import file
     */
-    public function getFieldConfigCimValidationErrors(array $config_data): array {
+    protected function getFieldConfigCimValidationErrors(array $config_data, StorageInterface $storage): array {
         $errors = []; 
-        $validator = $this->validationFactory->fromFieldConfigConfigFile($config_data);
+        $validator = $this->validationFactory->fromFieldConfigConfigFile($config_data, $storage);
         if(!$validator instanceof RelationFieldConfigValidationObject){
             return [];
         }
@@ -270,9 +281,9 @@ class RelationBundleValidationService {
     /**
     * 3.1. Validates a node type/vocab's existing fields
     */
-    protected function validateEntityExistingFields($entity): array{
+    protected function validateEntityExistingFields(ConfigEntityBundleBase $entity, ?array $rn_settings = null): array{
         $errors = [];
-        $existing_fields = $this->fieldConfigurator->getBundleFieldsStatus($entity)['existing'];
+        $existing_fields = $this->fieldConfigurator->getBundleFieldsStatus($entity, $rn_settings)['existing'];
         foreach($existing_fields as $field => $field_info){
             if(!isset($field_info['field_config'])){
                 $errors[] = [
@@ -297,20 +308,36 @@ class RelationBundleValidationService {
     */
     protected function validateCimExistingFields(string $config_name, StorageInterface $storage):array{
         $errors = [];
-        $existing_fields = $this->fieldConfigurator->getCimFieldsStatus($config_name, $storage)['existing'];
+        $existing_fields = $this->fieldConfigurator->getCimFieldsStatus($config_name, $storage)['existing'] ?? [];
         foreach($existing_fields as $field => $field_info){
+            $error_context = [
+                '@field' => $field,
+                '@bundle' => !empty($entity_classes['bundle']) ? $entity_classes['bundle'] : '',
+            ];
             if(!isset($field_info['config_file_data'])){
                 $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
                 $errors[] = [
                     'error_code' => 'missing_config_file_data',
-                    'context' => [
-                        '@field' => $field,
-                        '@bundle' => !empty($entity_classes['bundle']) ? $entity_classes['bundle'] : '',
-                    ]
+                    'context' => $error_context
                 ];
                 continue;
             }
-            $field_errors = $this->getFieldConfigCimValidationErrors($field_info['config_file_data']);
+
+            $field_storage_config = $this->getFieldStorageCimForFieldCim($field_info['config_file_data'], $storage);
+            if(!empty($field_storage_config)){
+                $field_storage_errors = $this->getFieldStorageCimValidationErrors($field_storage_config);
+                if(!empty($field_storage_errors)){
+                    $errors = array_merge($errors, $field_storage_errors);
+                }  
+            } else {
+                $errors[] = [
+                    'error_code' => 'no_field_storage',
+                    'context' => $error_context
+                ];
+            }
+            
+
+            $field_errors = $this->getFieldConfigCimValidationErrors($field_info['config_file_data'], $storage);
             if(!empty($field_errors)){
                 $errors = array_merge($errors, $field_errors);
             }
@@ -383,26 +410,30 @@ class RelationBundleValidationService {
            $this->validateAllRelationBundles(), 
            $this->validateAllRelationFields()
         );
-    }
+    }   
+    
 
-  
     /*
-    * 5. ERROR MESSAGE FORMATTING
-    */
+    * 5. Helper function(s)
+    */ 
 
-    protected function errorCodeToMessage(string $error_code, array $context): string{
-        $error_message = self::ERROR_MESSAGES[$error_code] ?? $error_code;
-        return $this->t($error_message, $context);
-    }
+    protected function getFieldStorageCimForFieldCim(array $parent_config_data, StorageInterface $storage):?array{
+        $dependency_config = [];
+        if(!empty($parent_config_data['dependencies']['config'])){
+            $dependency_config = $parent_config_data['dependencies']['config'];
+        }
 
+        $field_storage_config_name = '';
+        foreach($dependency_config as $dependency){
+            if(str_starts_with($dependency,'field.storage.')){
+                $field_storage_config_name = $dependency;
+            }
+        }
 
-    protected function formatValidationErrors(string $name, array $errors): string {
-        $message = "Validation errors for {$name}:\n";
-        foreach ($errors as $error) {
-            if (isset($error['error_code']) && isset($error['context'])) {
-                $message .= "- " . $this->errorCodeToMessage($error['error_code'], $error['context']) . "\n";   
-            }   
-        }  
-        return rtrim($message, "\n");
+        if(empty($field_storage_config_name) || empty($storage->read($field_storage_config_name))){
+            return null;
+        }
+        
+        return $storage->read($field_storage_config_name);
     }
 }

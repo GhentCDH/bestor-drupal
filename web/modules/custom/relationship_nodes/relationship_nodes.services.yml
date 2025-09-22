@@ -48,7 +48,7 @@ services:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\NodeTypeFormAlter
     arguments:
       - '@relationship_nodes.relation_bundle_form_handler'
-      - '@relationship_nodes.relation_bundle_validation_service'    
+      - '@relationship_nodes.relation_validation_service'    
       - '@relationship_nodes.relation_bundle_settings_manager'
   relationship_nodes.parent_node_form_alter:
     class: Drupal\relationship_nodes\RelationEntity\UserInterface\FormAlter\ParentNodeFormAlter
@@ -78,8 +78,8 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@relationship_nodes.relation_settings_cleanup_service'
-      - '@relationship_nodes.relation_bundle_info_service'
-      - '@relationship_nodes.relation_bundle_validation_service' 
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_validation_service' 
       - '@relationship_nodes.relation_field_configurator'
     tags:
       - { name: event_subscriber }
@@ -112,11 +112,10 @@ services:
       - '@relationship_nodes.relation_bundle_info_service'
       - '@relationship_nodes.relation_bundle_settings_manager'
   relationship_nodes.relation_settings_cleanup_service:
-    class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationSettingsCleanUpService
+    class: Drupal\relationship_nodes\RelationEntityType\RelationSettingsCleanUpService
     arguments:
       - '@entity_type.manager'
       - '@relationship_nodes.relation_bundle_info_service'
-      - '@relationship_nodes.relation_bundle_settings_manager'
       - '@relationship_nodes.relation_field_configurator'    
   relationship_nodes.relation_sync_service:
     class: Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService
@@ -145,12 +144,12 @@ services:
   relationship_nodes.relation_validation_object_factory:
     class: Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationObjectFactory
     arguments:
-      - '@entity_type.manager'
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_field_configurator'
       - '@relationship_nodes.relation_bundle_settings_manager'
-  relationship_nodes.relation_bundle_validation_service:
-    class: Drupal\relationship_nodes\RelationEntityType\Validation\RelationBundleValidationService
+      - '@relationship_nodes.relation_bundle_info_service'
+  relationship_nodes.relation_validation_service:
+    class: Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationService
     arguments:
       - '@entity_type.manager'
       - '@relationship_nodes.field_name_resolver'
@@ -158,3 +157,6 @@ services:
       - '@relationship_nodes.relation_bundle_info_service'
       - '@relationship_nodes.relation_bundle_settings_manager'
       - '@relationship_nodes.relation_validation_object_factory'
+      - '@relationship_nodes.validation_error_formatter'
+  relationship_nodes.validation_error_formatter:
+    class: Drupal\relationship_nodes\RelationEntityType\Validation\ValidationErrorFormatter

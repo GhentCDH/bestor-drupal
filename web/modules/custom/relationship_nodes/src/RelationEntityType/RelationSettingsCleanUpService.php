@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
+namespace Drupal\relationship_nodes\RelationEntityType;
 
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 
 
@@ -12,32 +12,32 @@ class RelationSettingsCleanUpService {
         
     protected EntityTypeManagerInterface $entityTypeManager;
     protected RelationBundleInfoService $bundleInfoService;
-    protected RelationBundleSettingsManager $settingsManager;
     protected RelationFieldConfigurator $fieldConfigurator;
 
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager,
-        RelationBundleInfoService $bundleInfoService,
-        RelationBundleSettingsManager $settingsManager, 
+        RelationBundleInfoService $bundleInfoService, 
         RelationFieldConfigurator $fieldConfigurator
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->bundleInfoService = $bundleInfoService;
-        $this->settingsManager = $settingsManager;
         $this->fieldConfigurator = $fieldConfigurator;
     }
 
+     public function removeModuleSettings(): void {
+        $this->unsetRnEntitySettings();
+        $this->cleanFormDisplays();
+     }
 
-    public function removeModuleSettings(): void {
+
+    protected function unsetRnEntitySettings(): void {
         try {
             foreach ( $this->bundleInfoService->getAllRelationBundles() as $entity_type) {
-                $this->settingsManager->removeRnThirdPartySettings($entity_type);
+                $updated = $this->unsetRnThirdPartySettings($entity_type) ?? [];
             }
-
             foreach ($this->fieldConfigurator->getAllRnCreatedFields() as $field) {
-                $this->settingsManager->removeRnThirdPartySettings($field);
+                $updated = $this->unsetRnThirdPartySettings($field) ?? [];
             }
-
             \Drupal::cache()->deleteAll();
         } catch (\Exception $e) {
             \Drupal::logger('relationship_nodes')->error('Error cleaning up Relationship Nodes data: @error', [
@@ -47,7 +47,7 @@ class RelationSettingsCleanUpService {
     }
 
 
-    public function cleanFormDisplays(): void {
+    protected function cleanFormDisplays(): void {
         $display_storages = [
             'form' => $this->entityTypeManager->getStorage('entity_form_display'), 
             'view' => $this->entityTypeManager->getStorage('entity_view_display')
@@ -80,5 +80,17 @@ class RelationSettingsCleanUpService {
                 }
             }
         }
+    }
+
+
+    protected function unsetRnThirdPartySettings(ConfigEntityBase $entity): void {
+        $rn_settings = $entity->getThirdPartySettings('relationship_nodes');
+        foreach ($rn_settings as $key => $value) {
+            $entity->unsetThirdPartySetting('relationship_nodes', $key);
+        }
+        if (method_exists($entity, 'setLocked')) {
+            $entity->setLocked(FALSE);
+        }
+        $entity->save();
     }
 }

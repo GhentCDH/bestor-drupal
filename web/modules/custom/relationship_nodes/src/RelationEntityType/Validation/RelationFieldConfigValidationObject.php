@@ -4,6 +4,7 @@ namespace Drupal\relationship_nodes\RelationEntityType\Validation;
 
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\Core\Config\StorageInterface;
 
 
 class RelationFieldConfigValidationObject {
@@ -12,6 +13,7 @@ class RelationFieldConfigValidationObject {
   protected string $bundle;
   protected bool $required;
   protected ?array $targetBundles;
+  protected ?StorageInterface $storage;
   protected FieldNameResolver $fieldNameResolver;
   protected RelationBundleSettingsManager $settingsManager;
   protected array $errors = [];
@@ -22,6 +24,7 @@ class RelationFieldConfigValidationObject {
     string $bundle,
     bool $required,
     ?array $targetBundles = null,
+    ?StorageInterface $storage,
     FieldNameResolver $fieldNameResolver,
     RelationBundleSettingsManager $settingsManager
   ) {
@@ -29,6 +32,7 @@ class RelationFieldConfigValidationObject {
     $this->bundle = $bundle;
     $this->required = $required;
     $this->targetBundles = $targetBundles;
+    $this->storage = $storage;
     $this->fieldNameResolver = $fieldNameResolver;
     $this->settingsManager = $settingsManager;
   }
@@ -88,12 +92,19 @@ class RelationFieldConfigValidationObject {
         $this->errors[] = 'relation_type_field_no_targets';
         return;
       }
-      
+      // werkt niet bij configimport...
       foreach ($this->targetBundles as $vocab_name => $vocab_label) {
-        if (!$this->settingsManager->isRelationVocab($vocab_name)) {
-          $this->errors[] = 'invalid_relation_vocabulary';
-          break;
+        if(empty($this->storage) && $this->settingsManager->isRelationVocab($vocab_name)){
+          continue;
+        } elseif (!empty($this->storage)) {
+          $config_data = $this->storage->read('taxonomy.vocabulary.' . $vocab_name);
+          if(!empty($config_data) && $this->settingsManager->isCimRelationEntity($config_data)){
+            continue;
+          }
         }
+        $this->errors[] = 'invalid_relation_vocabulary';
+        break;
+        
       }
     }
   }
