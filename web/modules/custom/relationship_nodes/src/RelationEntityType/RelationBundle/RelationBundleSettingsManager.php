@@ -160,6 +160,17 @@ class RelationBundleSettingsManager {
         }
     }
 
+    public function getEntityTypeClass(string $object_class_name):?string{
+        switch($object_class_name){
+            case 'node':
+                return 'node_type';
+            case 'taxonomy_term':
+                return 'taxonomy_vocabulary';
+            default:
+                return null;
+        }
+    }
+
     public function getConfigFileEntityClasses(string $config_name):?array{
         if (str_starts_with($config_name, 'node.type.')) {
             $bundle_name = substr($config_name, strlen('node.type.'));
@@ -172,7 +183,7 @@ class RelationBundleSettingsManager {
         }
         return [
             'bundle' => $bundle_name,
-            'entity_type' => $entity_type_id,
+            'entity_type_id' => $entity_type_id,
             'object_class' => $this->getEntityTypeObjectClass($entity_type_id)
         ];
     }
@@ -192,12 +203,13 @@ class RelationBundleSettingsManager {
         }
     }
 
-    
+
     public function getCimProperty(array $config_data, string $property): bool|string|null {
         if (!$this->isRelationProperty($property) || empty($this->getCimProperties($config_data))) {
             return null;
         }
-        return $this->getCimProperties($config_data)[$property] ?? null;
+        $properties = $this->getCimProperties($config_data);
+        return isset($properties[$property]) ? $properties[$property] : null;
     }
     
 
@@ -214,11 +226,13 @@ class RelationBundleSettingsManager {
     }
 
 
-    public function isCimTypedRelationNodeType(array $config_data) : bool{
-        if(!$this->isCimRelationEntity($config_data) || !isset($config_data['typed_relation'])){
+    public function isCimTypedRelationNodeType(array $config_data) : bool{  
+        if(!$this->isCimRelationEntity($config_data)){
             return false;
         }
+
         $typed = $this->getCimProperty($config_data, 'typed_relation');
+
         return !empty($typed);
     }
 

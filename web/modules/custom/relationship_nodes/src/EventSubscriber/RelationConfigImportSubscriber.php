@@ -47,10 +47,10 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
 
   public function onConfigImportValidate(ConfigImporterEvent $event): void {
-    print("config validate");
+    print('config import validate runt');
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
 
-    if ($this->isModuleDisabling($storage_comparer)) {
+    if ($this->getModuleStateChange($storage_comparer) === 'disabling') {
         return;
     }
     $source_storage = $storage_comparer->getSourceStorage();
@@ -59,31 +59,50 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
       //Validate all rn bundles and the fields linked to them
       $this->validationService->displayBundleCimValidationErrors($bundle_config_name, $event, $source_storage);
     }
-    //$event->getConfigImporter()->logError('stop');
-  }
-
-
-  public function onConfigImport(ConfigImporterEvent $event): void {
-    $storage_comparer = $event->getConfigImporter()->getStorageComparer();
-
-    if ($this->isModuleDisabling($storage_comparer)) {
-      $this->cleanupService->removeModuleSettings();
-    } else {
-      foreach ($this->fromConfigToEntities($this->getUpdatedRelationBundleConfigs($storage_comparer)) as $entity) {
-        $this->fieldConfigurator->implementFieldUpdates($entity);
-      }
+    foreach ($this->getDeletedFieldsToValidate($storage_comparer) as $field_config_name) {   
+      //Prevent the deletion of fields used by the module
+      $this->validationService->displayCimFieldDependencieValidationErrors($field_config_name, $event, $source_storage);
     }
   }
 
 
-  protected function isModuleDisabling(StorageComparerInterface $storage_comparer): bool {
+  public function onConfigImport(ConfigImporterEvent $event): void {
+    print('config import runt');
+    $storage_comparer = $event->getConfigImporter()->getStorageComparer();
+
+    if ($this->getModuleStateChange($storage_comparer) === 'disabling') {
+      $this->cleanupService->removeModuleSettings();
+      return;
+    }
+
+    if ($this->getModuleStateChange($storage_comparer) === 'enabling') {
+      $source_storage = $storage_comparer->getSourceStorage();
+      print(' pre validatie in on config import ');
+      $this->validationService->displayAllCimValidationErrors($event, $source_storage);
+    }
+    print(' post validatie in on config import ');
+    foreach ($this->fromConfigToEntities($this->getUpdatedRelationBundleConfigs($storage_comparer)) as $entity) {
+      print($entity->id());
+      $this->fieldConfigurator->implementFieldUpdates($entity);
+    }
+    print(' einde van config import event ');
+  }
+
+
+  protected function getModuleStateChange(StorageComparerInterface $storage_comparer): ?string {
       $source_storage = $storage_comparer->getSourceStorage();
       $target_storage = $storage_comparer->getTargetStorage();
       $source_extensions = $source_storage->read('core.extension');
       $target_extensions = $target_storage->read('core.extension');
 
-      return isset($source_extensions['module']['relationship_nodes'])
-          && !isset($target_extensions['module']['relationship_nodes']);
+
+      if(isset($source_extensions['module']['relationship_nodes']) && !isset($target_extensions['module']['relationship_nodes'])){
+       return 'disabling';
+      }
+      if(!isset($source_extensions['module']['relationship_nodes']) && isset($target_extensions['module']['relationship_nodes'])){
+        return 'enabling';
+      }
+      return null;
   }
 
 
@@ -121,7 +140,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     $result = [];
     foreach($config_list as $config_name => $config_data){
       $class_names = $this->settingsManager->getConfigFileEntityClasses($config_name);
-      $entity_type = $class_names['entity_type'];
+      $entity_type = $class_names['entity_type_id'];
       if(isset($load[$entity_type])){
         $load[$entity_type][] = $class_names['bundle'];
       }
@@ -132,6 +151,24 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
       }
       $entity_list = $this->entityTypeManager->getStorage($entity_type)->loadMultiple($entities);
       $result = array_merge($result, $entity_list);
+    }
+    return $result;
+  }
+
+  protected function getDeletedFieldsToValidate(StorageComparerInterface $storage_comparer):array{
+    $result = [];
+    foreach ($storage_comparer->getAllCollectionNames() as $collection) {
+      $change_list = $storage_comparer->getChangelist('delete', $collection) ?? [];
+      foreach ($change_list as $config_name) {
+        if(
+          str_starts_with($config_name, 'field.storage.taxonomy_term.') || 
+          str_starts_with($config_name, 'field.storage.node.') || 
+          str_starts_with($config_name, 'field.field.taxonomy_term') ||
+          str_starts_with($config_name, 'field.field.node.')
+        ) {
+           $result[] = $config_name;
+        }
+      }
     }
     return $result;
   }

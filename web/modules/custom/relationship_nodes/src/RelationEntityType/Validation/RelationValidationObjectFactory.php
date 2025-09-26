@@ -79,7 +79,8 @@ class RelationValidationObjectFactory {
             return null;
         }
         $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
-        $entity_type_id = $entity_classes['entity_type'];
+
+        $entity_type_id = $entity_classes['entity_type_id'];
         return new RelationBundleValidationObject(
             $entity_type_id,
             $relation_settings,
@@ -112,6 +113,7 @@ class RelationValidationObjectFactory {
         $target_bundles = empty($config_data['settings']['handler_settings']['target_bundles']) 
             ? null 
             : $config_data['settings']['handler_settings']['target_bundles'];
+
         return new RelationFieldConfigValidationObject(
             $config_data['field_name'],
             $config_data['bundle'],
@@ -143,10 +145,12 @@ class RelationValidationObjectFactory {
     * Create a field storage validation object from a config yaml file of the type field.storage.node/taxonomy_term (cf config import)
     */
     public function fromFieldStorageConfigFile(array $config_data):?RelationFieldStorageValidationObject{
-        $target_type =  empty($config_data['settings']['target_type']) 
+
+        $target_type = empty($config_data['settings']['target_type']) 
             ? null 
             : $config_data['settings']['target_type'];
-            print_r($config_data);
+            
+
         return new RelationFieldStorageValidationObject(
             $config_data['field_name'],
             $config_data['type'],

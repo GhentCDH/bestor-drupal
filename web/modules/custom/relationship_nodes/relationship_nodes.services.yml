@@ -69,6 +69,7 @@ services:
       - '@entity_type.bundle.info' 
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_field_configurator'
   relationship_nodes.relation_bundle_settings_manager:
     class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager
     arguments: 

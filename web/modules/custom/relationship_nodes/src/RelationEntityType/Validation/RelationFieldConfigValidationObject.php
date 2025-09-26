@@ -39,9 +39,13 @@ class RelationFieldConfigValidationObject {
 
 
   public function validate(): bool {      
+
     $this->validateTargetBundles();
+
     $this->validateFieldRequired();
+
     $this->validateSelfReferencingMirrorField();
+
     $this->validateRelationVocabTarget();
 
     return empty($this->errors);
@@ -87,6 +91,7 @@ class RelationFieldConfigValidationObject {
   * Relation type fields (cf typed relation NodeTypes) must reference a vocab that is marked as a relation vocab. 
   */
   protected function validateRelationVocabTarget(): void {
+
     if ($this->fieldName === $this->fieldNameResolver->getRelationTypeField()) {
       if (empty($this->targetBundles)) {
         $this->errors[] = 'relation_type_field_no_targets';
@@ -98,6 +103,7 @@ class RelationFieldConfigValidationObject {
           continue;
         } elseif (!empty($this->storage)) {
           $config_data = $this->storage->read('taxonomy.vocabulary.' . $vocab_name);
+
           if(!empty($config_data) && $this->settingsManager->isCimRelationEntity($config_data)){
             continue;
           }

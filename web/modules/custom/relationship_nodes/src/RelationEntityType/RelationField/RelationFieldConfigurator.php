@@ -70,7 +70,6 @@ class RelationFieldConfigurator {
         $existing = $fields_status['existing'];      
         $missing = $fields_status['missing'];
         $remove = $fields_status['remove'];
-
         if(!empty($existing)){
             $this->ensureFieldConfig($entity, $existing);
             $result['checked'] = $existing;
@@ -104,8 +103,8 @@ class RelationFieldConfigurator {
 
     public function getCimFieldsStatus(string $config_name, StorageInterface $storage): ?array {
         $config_data = $storage->read($config_name);
-
         $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
+
         if(empty($config_data['third_party_settings']['relationship_nodes'])){
             return null;
         } 
@@ -114,8 +113,9 @@ class RelationFieldConfigurator {
             return null;
         }
 
+
         return $this->getFieldsStatus(
-            $entity_classes['entity_type'],
+            $entity_classes['entity_type_id'],
             $entity_classes['bundle'],
             $rn_settings,
             $storage
@@ -132,6 +132,7 @@ class RelationFieldConfigurator {
         
         $existing = $missing = $remove = [];
         $required_fields = $this->getRequiredFields($entity_type_id, $rn_settings);
+
         foreach ($required_fields as $field_name => $settings) {
             $config = $config_import
                 ? $storage->read($config_prefix . $field_name)
@@ -205,13 +206,21 @@ class RelationFieldConfigurator {
     }
 
 
+    public function isCimRnCreatedField(array $config_data) : bool{
+        $rn_created = $this->settingsManager->getCimProperty($config_data, 'rn_created');
+        return !empty($rn_created);
+    }
+
+
     public function getAllRnCreatedFields(?string $entity_type_id = null) : array {
-        $entity_types = ['field_storage_config', 'field_config'];
-        if($entity_type_id !== null && !in_array($entity_type_id, $entity_types)){
+        $entity_types = ['storage' => 'field_storage_config', 'field' => 'field_config'];
+        if($entity_type_id !== null && !in_array($entity_type_id, array_keys($entity_types))){
             return [];
         }
 
-        $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
+        $input = $entity_type_id !== null 
+            ? [$entity_type_id => $entity_types[$entity_type_id]] 
+            : $entity_types;
 
         $result = []; 
         foreach($input as $entity_type){
@@ -225,6 +234,28 @@ class RelationFieldConfigurator {
                     $result[$type->id()] = $type;
                 } 
             }    
+        }
+        return $result;
+    }
+
+
+    public function getAllCimRnCreatedFields(StorageInterface $storage, ?string $entity_type_id = null) : array {
+        $entity_types = ['storage', 'field'];
+        if($entity_type_id !== null && !in_array($entity_type_id, $entity_types)){
+            return [];
+        }
+
+        $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
+
+        $result = []; 
+        foreach($input as $entity_type){
+            $all_fields = $storage->listAll('field.' . $entity_type_id . '.');
+            foreach($all_fields as $field_name){
+                $config_data = $storage->read($field_name);
+                if($config_data && $this->settingsManager->isCimRnCreatedField($config_data)){
+                    $result[$field_name] = $config_data;
+                }
+            }
         }
         return $result;
     }
@@ -317,6 +348,33 @@ class RelationFieldConfigurator {
             return 'field.field.' . $object_type . '.' . $bundle_name . '.';
         } else {
             return $object_type . '.' . $bundle_name . '.';
+        }
+    }
+
+    
+     public function getConfigFileFieldClasses(string $config_name):?array{
+        $parts = explode('.', $config_name);
+        if($parts[0] !== 'field' || !in_array($parts[1], ['field', 'storage']) || !in_array($parts[2], ['node', 'taxonomy_term'])){
+            return null;
+        }
+        if($parts[1] === 'field'){
+            return [
+                'field_entity_class' => 'field',
+                'entity_type_id' => $this->settingsManager->getEntityTypeClass($parts[2]),
+                'bundle' => $parts[3],
+                'field_name' => $parts[4],
+
+            ];
+        } elseif($parts[1] === 'storage'){
+            return [
+                'field_entity_class' => 'storage',
+                'entity_type_id' => $this->settingsManager->getEntityTypeClass($parts[2]),
+                'bundle' => null,
+                'field_name' => $parts[3],
+            ];
+
+        } else {
+            return null;
         }
     }
 }

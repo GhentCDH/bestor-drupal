@@ -13,6 +13,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\FieldConfigStorage;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 
 class RelationBundleInfoService {
 
@@ -21,6 +22,7 @@ class RelationBundleInfoService {
     protected EntityTypeBundleInfoInterface $bundleInfo;
     protected FieldNameResolver $fieldNameResolver;
     protected RelationBundleSettingsManager $settingsManager;
+    protected RelationFieldConfigurator $fieldConfigurator;
 
 
     public function __construct(
@@ -29,12 +31,14 @@ class RelationBundleInfoService {
         EntityTypeBundleInfoInterface $bundleInfo,
         FieldNameResolver $fieldNameResolver,
         RelationBundleSettingsManager $settingsManager,
+        RelationFieldConfigurator $fieldConfigurator
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->fieldManager = $fieldManager;
         $this->bundleInfo = $bundleInfo;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->settingsManager = $settingsManager;
+        $this->fieldConfigurator = $fieldConfigurator;
     }
 
     
@@ -51,7 +55,7 @@ class RelationBundleInfoService {
 
 
         foreach ($this->fieldNameResolver->getRelatedEntityFields() as $field_name) {
-            if(!$fields[$field_name]){ 
+            if(!isset($fields[$field_name])){ 
                 continue;
             }
             $related_bundles[$field_name] = $this->getFieldTargetBundles($fields[$field_name]);
@@ -168,7 +172,6 @@ class RelationBundleInfoService {
         $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
 
         $result = []; 
-
         foreach($input as $entity_type){
             $prefix = $this->settingsManager->getEntityTypeConfigPrefix($entity_type);
             $all = $config_storage->listAll($prefix);
@@ -253,9 +256,25 @@ class RelationBundleInfoService {
     }
 
 
+    public function getAllCimRelationVocabs(StorageInterface $storage, string $type=null):array{
+        $all_vocabs = $this->getAllCimRelationBundles($storage, 'taxonomy_vocabulary') ?? [];
+        if($type === null){
+            return $all_vocabs;
+        }
+        $result = [];
+        foreach($all_vocabs as $config_name => $config_data){
+            if($this->settingsManager->getCimProperty($config_data, 'referencing_type') === $type){
+                $result[$config_name] = $config_data;
+            }
+        }
+        return $result;
+    }
+
+
+
     public function getCimNodeTypesLinkedToVocab(string $config_name, StorageInterface $storage):array{
         $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
-        if(empty($entity_classes['entity_type']) || $entity_classes['entity_type'] !== 'taxonomy_vocabulary'){
+        if(empty($entity_classes['entity_type_id']) || $entity_classes['entity_type_id'] !== 'taxonomy_vocabulary'){
             return [];
         } 
 
@@ -279,7 +298,7 @@ class RelationBundleInfoService {
                 true
             );
 
-            $field_config = $storage->load($field_prefix . $relation_type_field);
+            $field_config = $storage->read($field_prefix . $relation_type_field);
             
             if(!($field_config) || empty($field_config['settings']['handler_settings']['target_bundles'])){
                 continue;
