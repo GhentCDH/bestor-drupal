@@ -4,6 +4,7 @@ namespace Drupal\relationship_nodes\RelationEntityType\Validation;
 
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\Core\Config\StorageInterface;
 
 
@@ -12,10 +13,13 @@ class RelationFieldConfigValidationObject {
   protected string $fieldName;
   protected string $bundle;
   protected bool $required;
+  protected string $fieldType;
   protected ?array $targetBundles;
   protected ?StorageInterface $storage;
   protected FieldNameResolver $fieldNameResolver;
+  protected RelationFieldConfigurator $configurator;
   protected RelationBundleSettingsManager $settingsManager;
+  
   protected array $errors = [];
 
 
@@ -23,31 +27,41 @@ class RelationFieldConfigValidationObject {
     string $fieldName,
     string $bundle,
     bool $required,
+    string $fieldType,
     ?array $targetBundles = null,
     ?StorageInterface $storage,
     FieldNameResolver $fieldNameResolver,
+    RelationFieldConfigurator $fieldConfigurator,
     RelationBundleSettingsManager $settingsManager
   ) {
     $this->fieldName = $fieldName;
     $this->bundle = $bundle;
     $this->required = $required;
+    $this->fieldType = $fieldType;
     $this->targetBundles = $targetBundles;
     $this->storage = $storage;
     $this->fieldNameResolver = $fieldNameResolver;
+    $this->fieldConfigurator = $fieldConfigurator;
     $this->settingsManager = $settingsManager;
   }
 
 
   public function validate(): bool {      
 
+    $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($this->fieldName);
+
+    if(!$required_settings){
+      // Not a RN field, no validation required. 
+      return true;
+    }
+
     $this->validateTargetBundles();
-
     $this->validateFieldRequired();
-
+    $this->validateFieldType($required_settings);
     $this->validateSelfReferencingMirrorField();
-
-    $this->validateRelationVocabTarget();
-
+    if($required_settings['type'] === 'entity_reference'){
+      $this->validateRelationVocabTarget();
+    }
     return empty($this->errors);
   }
 
@@ -112,6 +126,13 @@ class RelationFieldConfigValidationObject {
         break;
         
       }
+    }
+  }
+
+  
+  protected function validateFieldType(array $required_settings): void {
+    if ($this->fieldType !== $required_settings['type']) {
+      $this->errors[] = 'invalid_field_type';
     }
   }
 }

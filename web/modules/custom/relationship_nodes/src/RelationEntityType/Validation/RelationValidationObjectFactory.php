@@ -98,9 +98,11 @@ class RelationValidationObjectFactory {
             $field_config->getName(),
             $field_config->getTargetBundle(),
             $field_config->isRequired(),
+            $field_config->getType(),
             $field_config->getSetting('handler_settings')['target_bundles'] ?? null,
             null,
             $this->fieldNameResolver,
+            $this->fieldConfigurator, 
             $this->settingsManager
         );
     }
@@ -118,9 +120,11 @@ class RelationValidationObjectFactory {
             $config_data['field_name'],
             $config_data['bundle'],
             $config_data['required'],  
+            $config_data['field_type'],
             $target_bundles,
             $storage,
             $this->fieldNameResolver,
+            $this->fieldConfigurator, 
             $this->settingsManager
         );
 

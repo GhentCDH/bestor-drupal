@@ -47,7 +47,6 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
 
   public function onConfigImportValidate(ConfigImporterEvent $event): void {
-    print('config import validate runt');
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
 
     if ($this->getModuleStateChange($storage_comparer) === 'disabling') {
@@ -67,7 +66,6 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
 
   public function onConfigImport(ConfigImporterEvent $event): void {
-    print('config import runt');
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
 
     if ($this->getModuleStateChange($storage_comparer) === 'disabling') {
@@ -75,17 +73,9 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    if ($this->getModuleStateChange($storage_comparer) === 'enabling') {
-      $source_storage = $storage_comparer->getSourceStorage();
-      print(' pre validatie in on config import ');
-      $this->validationService->displayAllCimValidationErrors($event, $source_storage);
-    }
-    print(' post validatie in on config import ');
     foreach ($this->fromConfigToEntities($this->getUpdatedRelationBundleConfigs($storage_comparer)) as $entity) {
-      print($entity->id());
       $this->fieldConfigurator->implementFieldUpdates($entity);
     }
-    print(' einde van config import event ');
   }
 
 

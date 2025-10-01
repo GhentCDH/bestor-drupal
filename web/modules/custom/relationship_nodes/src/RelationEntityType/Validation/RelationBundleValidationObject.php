@@ -157,7 +157,7 @@ class RelationBundleValidationObject {
     if (!is_array($array)) {
       return false;
     }
-    $subfields = $this->fieldNameResolver->getConfig()->get($parent_key);
+    $subfields = $this->fieldNameResolver->getConfig($parent_key);
     if (empty($subfields) || !is_array($subfields)) {
       return false;
     }

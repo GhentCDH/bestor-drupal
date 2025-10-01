@@ -2,26 +2,30 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationField;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\ImmutableConfig;
 
 class FieldNameResolver {
 
-    protected ConfigFactoryInterface $configFactory;
-    
+    private const FIELD_NAMES = [
+        'related_entity_fields' => [
+            'related_entity_1' => 'rn_related_entity_1',
+            'related_entity_2'=> 'rn_related_entity_2',
+        ],
+        'relation_type' => 'rn_relation_type',
+        'mirror_fields' => [
+            'mirror_entity_reference' => 'rn_mirror_reference',
+            'mirror_string' => 'rn_mirror_string',
+        ],
+    ];
 
-    public function __construct(ConfigFactoryInterface $configFactory) {
-        $this->configFactory = $configFactory;
-    }
 
-
+  
     public function getRelationTypeField(): string {
-        return $this->getConfig()->get('relation_type') ?? '';
+        return $this->getConfig('relation_type');
     }
 
 
     public function getRelatedEntityFields(?int $no = null): array|string {
-        $fields = $this->getConfig()->get('related_entity_fields') ?? [];
+        $fields = $this->getConfig('related_entity_fields') ?? [];
         if($no === 1 || $no === 2){
             return array_values($fields)[$no - 1] ?? '';
         }    
@@ -31,7 +35,7 @@ class FieldNameResolver {
 
     public function getMirrorFields(?string $type = null): array|string {
         $options = ['string' => 'mirror_string', 'entity_reference' => 'mirror_entity_reference'];
-        $fields  = $this->getConfig()->get('mirror_fields') ?? [];
+        $fields  = $this->getConfig('mirror_fields')?? [];
         if($type !== null && isset($options[$type])){
 
             return $fields[$options[$type]] ?? '';
@@ -66,8 +70,15 @@ class FieldNameResolver {
         return $fields;
     }
 
-
-    public function getConfig(): ImmutableConfig {
-        return $this->configFactory->get('relationship_nodes.settings');
-    }    
+    public function getConfig(?string $key=null):string|array|null{
+        $config = self::FIELD_NAMES;
+        if($key == null){
+            return $config;
+        }
+        if(!isset($config[$key])){
+            return null;
+        }
+        return $config[$key];
+    }
+  
 }

@@ -315,7 +315,6 @@ class RelationValidationService {
                 '@bundle' => !empty($entity_classes['bundle']) ? $entity_classes['bundle'] : '',
             ];
             if(!isset($field_info['config_file_data'])){
-                
                 $errors[] = [
                     'error_code' => 'missing_config_file_data',
                     'context' => $error_context
@@ -480,7 +479,7 @@ class RelationValidationService {
     protected function validateAllCimRelationBundles(StorageInterface $storage):array{
         $all_errors = [];
         
-        foreach ($this->bundleInfoService->getAllCimRelationBundles() as $config_name => $config_data) {
+        foreach ($this->bundleInfoService->getAllCimRelationBundles($storage) as $config_name => $config_data) {
             $errors = $this->getBundleCimValidationErrors($config_name, $storage);
             if (!empty($errors)) {
                 $all_errors = array_merge($all_errors, $errors);
@@ -491,7 +490,7 @@ class RelationValidationService {
 
     protected function validateAllCimRelationFields(StorageInterface $storage): array{
         $all_errors = [];
-        $rn_fields = $this->fieldconfigurator->getAllCimRnCreatedFields($storage);
+        $rn_fields = $this->fieldConfigurator->getAllCimRnCreatedFields($storage);
         $relation_field_names = $this->fieldNameResolver->getAllRelationFieldNames();
         foreach ($rn_fields as $config_name => $config_data) {
             $field_info = $this->fieldConfigurator->getConfigFileFieldClasses($config_name);
@@ -517,7 +516,7 @@ class RelationValidationService {
                 } 
             }
             $field_name = $field_info['field_name']; 
-             if (!in_array($field_name, $relation_field_names)){
+            if (!in_array($field_name, $relation_field_names)){
                 $context = ['@field' => $field_name];
                 if($field_config){
                     $context['@bundle'] = $config_data['bundle'];
@@ -528,6 +527,7 @@ class RelationValidationService {
                 ];
             }
         }
+        return $all_errors;
     }
 
 
@@ -536,8 +536,10 @@ class RelationValidationService {
     */    
     public function validateAllRelationConfig(): array {      
         return array_merge(
-           $this->validateAllRelationBundles(), 
-           $this->validateAllRelationFields()
+            // Validate bundles config and existing fields related to this bundle
+            $this->validateAllRelationBundles(), 
+            // Validate all fields marked as created by this module (find orphaned fields)
+            $this->validateAllRelationFields()
         );
     }   
 
@@ -556,7 +558,6 @@ class RelationValidationService {
         }
 
         $error_message = $this->errorFormatter->formatValidationErrors('Relationship nodes', $errors);
-        print($error_message);
         $event->getConfigImporter()->logError($error_message); 
     }
 
@@ -565,7 +566,6 @@ class RelationValidationService {
     /*
     * 5. Helper function(s)
     */ 
-
     protected function getFieldStorageCimForFieldCim(array $field_config_data, StorageInterface $storage):?array{
         $dependency_config = [];
         if(!empty($field_config_data['dependencies']['config'])){
@@ -600,4 +600,4 @@ class RelationValidationService {
         }       
         return $dependent_field_config;
     }
-}
+}    
