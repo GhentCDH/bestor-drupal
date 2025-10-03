@@ -25,10 +25,10 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
     $related_entity_fields = \Drupal::service('relationship_nodes.field_name_resolver')->getRelatedEntityFields();
     foreach ($rows as $key => &$row) {
       $machine_name = $row['machine_name']['data'] ?? '';
-
       if (!str_starts_with($machine_name, 'relationship_info__')) {
         continue;
       }
+  
       if (substr_count($machine_name, ':') === 0) {
          $this->addFieldButtons[] = [
           '#type' => 'submit',

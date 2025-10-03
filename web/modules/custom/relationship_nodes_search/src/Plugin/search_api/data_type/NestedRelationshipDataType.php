@@ -13,8 +13,4 @@ use Drupal\search_api\DataType\DataTypePluginBase;
  * )
  */
 class NestedRelationshipDataType extends DataTypePluginBase {
-    public function getValue($value) {
-        dpm($value, 'datatype plugin');
-        return $value;
-    }
 }

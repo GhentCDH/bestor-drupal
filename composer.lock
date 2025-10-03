@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6992716b48fd03a61e0a80b30ec55933",
+    "content-hash": "4d579ac1d204d4c91c5bae648e6ffcfe",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2045,6 +2045,85 @@
                 "source": "http://git.drupal.org/project/ds.git",
                 "issues": "https://www.drupal.org/project/issues/ds",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
+            "name": "drupal/elasticsearch_connector",
+            "version": "8.0.0-alpha5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/elasticsearch_connector.git",
+                "reference": "8.0.0-alpha5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/elasticsearch_connector-8.0.0-alpha5.zip",
+                "reference": "8.0.0-alpha5",
+                "shasum": "d277fd5f7cd8c91b8aff3b1fcb0c5dd8a1b20c54"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11",
+                "drupal/search_api": "^1.23",
+                "elasticsearch/elasticsearch": "^8",
+                "makinacorpus/php-lucene": "^1.1",
+                "php": "^8"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.3",
+                "drupal/devel": "^4.0|^5.0",
+                "drupal/geofield": "^1",
+                "drupal/key": "^1",
+                "drush/drush": "^12.0 || ^13",
+                "phayes/geophp": "^1.2"
+            },
+            "suggest": {
+                "drupal/facets": "Provides facetted search.",
+                "drupal/key": "API Key storage for connecting to Elastic Cloud.",
+                "drupal/search_api_autocomplete": "Provides auto complete for search boxes.",
+                "drupal/search_api_location": "Provides location searches.",
+                "drupal/search_api_spellcheck": "Provides spell checking and 'Did You Mean?'."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.0.0-alpha5",
+                    "datestamp": "1759236754",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "lachezar.valchev",
+                    "homepage": "https://www.drupal.org/user/1482368"
+                },
+                {
+                    "name": "mparker17",
+                    "homepage": "https://www.drupal.org/user/536298"
+                },
+                {
+                    "name": "skek",
+                    "homepage": "https://www.drupal.org/user/417078"
+                },
+                {
+                    "name": "sokru",
+                    "homepage": "https://www.drupal.org/user/388235"
+                },
+                {
+                    "name": "ygerasimov",
+                    "homepage": "https://www.drupal.org/user/257311"
+                }
+            ],
+            "description": "Provides a Search API backend for Elasticsearch (a powerful, distributed, RESTful search and analytics engine), using the official Elasticsearch PHP Client.",
+            "homepage": "https://www.drupal.org/project/elasticsearch_connector",
+            "support": {
+                "source": "https://git.drupalcode.org/project/elasticsearch_connector"
             }
         },
         {
@@ -9143,6 +9222,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "drupal/elasticsearch_connector": 15,
         "drupal/footnotes": 10,
         "drupal/inline_entity_form": 5,
         "drupal/single_user_role": 10

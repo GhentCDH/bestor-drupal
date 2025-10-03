@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes_search\Plugin\search_api\processor;
 
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\relationship_nodes_search\Processor\RelationInfoProcessorProperty;
+use Drupal\relationship_nodes_search\Processor\RelationProcessorProperty;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\Processor\EntityProcessorProperty;
 use Drupal\relationship_nodes_search\TypedData\RelationInfoData;
 use Drupal\search_api\Utility\Utility;
+use Drupal\search_api\SearchApiException;
 
 use Drupal\search_api\Processor\ProcessorProperty;
 
@@ -81,7 +82,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    */
   public function getPropertyDefinitions(?DatasourceInterface $datasource = NULL) {
     $properties = [];
-
     if (!$datasource || !$datasource->getEntityTypeId()) {
       return $properties;
     }
@@ -90,9 +90,12 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $relationship_node_types = [];
     foreach($node_types_in_index as $node_type_in_index){
       $related_relationships = $this->bundleInfoService->getRelationInfoForTargetBundle($node_type_in_index);
-      foreach($related_relationships as $related_relationship){
-        if(!in_array($related_relationship['relationship_bundle'], $relationship_node_types)){
-          $relationship_node_types[] = $related_relationship['relationship_bundle'];
+      if (!is_array($related_relationships)) {
+        continue;
+      }
+      foreach($related_relationships as $relation_node_type => $info){
+        if(!in_array($relation_node_type, $relationship_node_types)){
+          $relationship_node_types[] = $relation_node_type;
         }
       }
     }
@@ -109,10 +112,11 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         ],
       ];
       
-      $property = new RelationInfoProcessorProperty($definition);
+      $property = new RelationProcessorProperty($definition);
       $properties["relationship_info__{$relationship_node_type}"] = $property;
 
     }
+
     return $properties;
   }
 
@@ -122,14 +126,17 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    * {@inheritdoc}
    */
   public function addFieldValues(ItemInterface $item) {
+
     try {
       $entity = $item->getOriginalObject()->getValue();
+
     }
     catch (SearchApiException) {
       return;
     }
 
     $item_relation_info_list = $this->bundleInfoService->getRelationInfoForTargetBundle($entity->getType());
+
 
     if (!($entity instanceof EntityInterface) || empty($item_relation_info_list)) {
       return;
@@ -140,7 +147,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
 
     foreach ($item->getFields() as $field) {
       $relation_nodetype_name = $field->getPropertyPath();     
-      
       if ($field->getDatasourceId() != $item->getDatasourceId() || !str_starts_with( $relation_nodetype_name, $prefix) || !isset($field->getConfiguration()['nested_fields'])) {
         continue;
       }
@@ -148,26 +154,33 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $nested_fields = $field->getConfiguration()['nested_fields'];
       $relationship_node_type = substr($relation_nodetype_name, strlen($prefix));
 
-
+      dpm($nested_fields);
+      dpm($relationship_node_type);
+      dpm($item_relation_info_list);
       if(!is_array($nested_fields) || empty($nested_fields) || !isset($item_relation_info_list[$relationship_node_type])){
         continue;
       }
 
       $relation_info = $item_relation_info_list[$relationship_node_type];
-      $values = [];
-      $serialized = []; // ipv values, eenvoudiger - zonder custom typed data
-      
+      $serialized = [];
+      // hier is een probleem...
       foreach($relation_info['join_fields'] as $join_field){
+        dpm($join_field, 'join field');
         $result = $node_storage->getQuery()
           ->accessCheck(FALSE)
-          ->condition('type', $relationship_node_type)
+          //->condition('type', $relationship_node_type)
           ->condition($join_field, $entity->id())
           ->execute();
         
+          dpm($relationship_node_type, 'relation-node-type');
+          dpm($join_field, 'jkoin field');
+          dpm($entity->id(), 'id');
+
+
         if(empty($result)){
           continue;
         }
-
+        dpm($result, 'result');
         $entities = $node_storage->loadMultiple($result);
       
         if (!$entities) {
@@ -180,12 +193,10 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           foreach ($nested_fields as $nested_field){
                 $nested_values[$nested_field] = $relationship_entity->get($nested_field)->getValue();
           }
-           $values[] = new RelationInfoData($nested_values, $field->getDataDefinition());
            $serialized[] = $nested_values;
         }
       }
       if(!empty($values)){
-        dpm($values);
         dpm($serialized);
       }
       $field->setValues($serialized);

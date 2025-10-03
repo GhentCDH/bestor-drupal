@@ -1,13 +1,7 @@
 services:
   relationship_nodes_search.nested_relationship_mapping_subscriber:
     class: Drupal\relationship_nodes_search\EventSubscriber\NestedRelationshipMappingSubscriber
+    arguments:
+      - '@entity_field.manager'
     tags:
       - { name: event_subscriber }
-  typed_data.data_type.relation_info:
-    class: Drupal\relationship_nodes_search\TypedData\RelationInfoData
-    tags:
-      - { name: typed_data, data_type: relationship_info, label: 'Relation Info' }
-  relationship_nodes_search.relation_info_definition:
-    class: Drupal\relationship_nodes_search\TypedData\RelationInfoDefinition
-    tags:
-      - { name: typed_data, data_type: relationship_info }

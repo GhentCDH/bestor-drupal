@@ -28,6 +28,7 @@
         "drupal/core-project-message": "^10.3",
         "drupal/core-recommended": "^10.3",
         "drupal/ds": "^3.24",
+        "drupal/elasticsearch_connector": "^8.0@alpha",
         "drupal/entity_events": "^2.0",
         "drupal/entity_reference_modal": "^1.0",
         "drupal/field_group": "^4.0",

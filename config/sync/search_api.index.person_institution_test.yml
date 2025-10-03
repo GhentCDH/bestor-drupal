@@ -4,10 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_alternative_name
-    - search_api.server.bestor_elastic_docker
+    - search_api.server.elasticsearchconnectordocker
   module:
     - node
-    - search_api_elasticsearch_client
+    - relationship_nodes_search
 id: person_institution_test
 name: 'person institution test'
 description: ''
@@ -21,6 +21,24 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_alternative_name
+  relationship_info__relationnode__institut_concept__nested:
+    label: 'Related nodes of type relationnode__institut_concept'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_concept
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        - rn_related_entity_1
+        - rn_related_entity_2
+  relationship_info__relationnode__institut_document__nested:
+    label: 'Related nodes of type relationnode__institut_document'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_document
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        - rn_related_entity_1
+        - rn_related_entity_2
 datasource_settings:
   'entity:node':
     bundles:
@@ -37,11 +55,9 @@ processor_settings:
   custom_value: {  }
   entity_type: {  }
   language_with_fallback: {  }
+  relationship_indexer: {  }
   rendered_item: {  }
   reverse_entity_references: {  }
-  search_api_elasticsearch_client_date_range:
-    weights:
-      preprocess_index: 0
 tracker_settings:
   default:
     indexing_order: fifo
@@ -50,4 +66,4 @@ options:
   delete_on_fail: true
   index_directly: true
   track_changes_in_references: true
-server: bestor_elastic_docker
+server: elasticsearchconnectordocker
