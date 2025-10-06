@@ -9,6 +9,8 @@ display:
           label: 'Type MIME'
         status:
           label: État
+        count:
+          format_plural_string: !!binary MSBwbGFjZQNAY291bnQgcGxhY2Vz
         operations:
           label: Actions
       pager:

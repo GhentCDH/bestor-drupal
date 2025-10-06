@@ -66,9 +66,10 @@ class RelationBundleInfoService {
             'has_relationtype' => false
         ];
 
-        if(!isset($fields[$this->fieldNameResolver->getRelationTypeField()])){
+        if(!$this->settingsManager->isTypedRelationNodeType($bundle)){
             return $info;
         }
+
         $target_bundles = $this->getFieldTargetBundles($fields[$this->fieldNameResolver->getRelationTypeField()]);            
         
         if(count($target_bundles) != 1){
@@ -82,7 +83,7 @@ class RelationBundleInfoService {
 
         return $info;
     }
- 
+
 
     public function getRelationInfoForTargetBundle(string $target_bundle): array { 
         $all_bundles_info = $this->bundleInfo->getBundleInfo('node');

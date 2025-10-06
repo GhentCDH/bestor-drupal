@@ -4,10 +4,13 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_alternative_name
+    - field.storage.node.field_end_municipality
+    - field.storage.node.field_municipality
     - search_api.server.elasticsearchconnectordocker
   module:
     - node
     - relationship_nodes_search
+    - taxonomy
 id: person_institution_test
 name: 'person institution test'
 description: ''
@@ -21,24 +24,44 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_alternative_name
-  relationship_info__relationnode__institut_concept__nested:
-    label: 'Related nodes of type relationnode__institut_concept'
+  field_municipality:
+    label: Municipality
     datasource_id: 'entity:node'
-    property_path: relationship_info__relationnode__institut_concept
+    property_path: field_municipality
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_municipality
+  name:
+    label: 'Place of death » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_end_municipality:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_end_municipality
+      module:
+        - taxonomy
+  relationship_info__relationnode__person_institut__nested:
+    label: 'Related nodes of type relationnode__person_institut'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_institut
     type: relationship_nodes_search_nested_relationship
     configuration:
       nested_fields:
         - rn_related_entity_1
         - rn_related_entity_2
-  relationship_info__relationnode__institut_document__nested:
-    label: 'Related nodes of type relationnode__institut_document'
+        - rn_relation_type
+  relationship_info__relationnode__person_person__nested:
+    label: 'Related nodes of type relationnode__person_person'
     datasource_id: 'entity:node'
-    property_path: relationship_info__relationnode__institut_document
+    property_path: relationship_info__relationnode__person_person
     type: relationship_nodes_search_nested_relationship
     configuration:
       nested_fields:
         - rn_related_entity_1
         - rn_related_entity_2
+        - rn_relation_type
 datasource_settings:
   'entity:node':
     bundles:

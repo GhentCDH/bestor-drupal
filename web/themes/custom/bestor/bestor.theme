@@ -58,7 +58,9 @@ function bestor_theme_suggestions_node_alter(array &$suggestions, array $variabl
 }
 
 function bestor_form_alter(&$form, &$form_state, $form_id) {
+    dpm($form);
     if($form['#id'] === 'views-exposed-form-search-page-1') {
+        dpm($form);
         $form['#attributes']['class'][] = 'searchForm';
         $form['actions']['submit']['#attributes']['class'][] = 'icon-search';
         $form['actions']['submit']['#value'] = html_entity_decode("&#xe001;");

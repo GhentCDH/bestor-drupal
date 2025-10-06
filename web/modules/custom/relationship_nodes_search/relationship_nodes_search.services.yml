@@ -5,3 +5,11 @@ services:
       - '@entity_field.manager'
     tags:
       - { name: event_subscriber }
+  relationship_nodes_search.reindex_targets_on_relation_update:
+    class: Drupal\relationship_nodes_search\EventSubscriber\ReindexTargetsOnRelationUpdate
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_node_info_service'
+    tags:
+      - { name: event_subscriber }

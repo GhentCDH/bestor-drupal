@@ -19,7 +19,7 @@ function relationship_nodes_requirements($phase) {
                             '#title' => t('The following configuration issues must be resolved:'),
                             '#items' => $error_string,
                         ],
-                        'severity' => $phase == 'install' ? REQUIREMENT_ERROR : REQUIREMENT_WARNING,
+                        'severity' => REQUIREMENT_WARNING,
                     ];
                 } else {
                     $requirements['relationship_nodes_config'] = [
@@ -50,23 +50,13 @@ function relationship_nodes_requirements($phase) {
 
 
 function relationship_nodes_install($is_syncing) {
-if ($is_syncing) {
-        try {
-            $sync_storage = \Drupal::service('config.storage.sync');
-            $validationService = \Drupal::service('relationship_nodes.relation_validation_service');
-            
-            $errors = $validationService->validateAllCimRelationConfig($sync_storage);
-            
-            if (!empty($errors)) {
-                $errorFormatter = \Drupal::service('relationship_nodes.validation_error_formatter');
-                $message = $errorFormatter->formatValidationErrors('module_install', $errors);
-                throw new \Exception($message);
-            }
-        } catch (\Exception $e) {
-            \Drupal::logger('relationship_nodes')->error('Install validation failed: @error', ['@error' => $e->getMessage()]);
-            throw $e; 
-        }
+
+    print('test install');
+
+    if ($is_syncing) {
+        $installer = \Drupal::service('config.installer');
     }
+    print ('end install');
 }
 
 

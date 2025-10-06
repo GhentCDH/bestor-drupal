@@ -44,6 +44,15 @@ class FieldNameResolver {
     }
 
 
+    public function getOppositeRelatedEntityField(string $field_name): ?string {
+        return match($field_name){
+            $this->getRelatedEntityFields(1) => $this->getRelatedEntityFields(2),
+            $this->getRelatedEntityFields(2) => $this->getRelatedEntityFields(1),
+            default => null
+        };
+    }
+
+
     public function getOppositeMirrorField(string $field_name): ?string {
         return match($field_name){
             $this->getMirrorFields('string') => $this->getMirrorFields('entity_reference'),

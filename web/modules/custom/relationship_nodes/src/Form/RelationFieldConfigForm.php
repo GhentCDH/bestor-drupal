@@ -70,14 +70,12 @@ class RelationFieldConfigForm extends FormBase {
   }
 
   public function buildForm(array $form, FormStateInterface $form_state, FieldConfig $field_config = NULL) {
-    if(empty($field_config)){
-      return $form;
-    }
-    
+
     $this->fieldConfig = $field_config;
     $this->entityType = $field_config->getTargetEntityTypeId();
     $this->fieldName = $field_config->getName();
     $this->bundle = $field_config->getTargetBundle();
+
 
     $form['label'] = [
       '#type' => 'textfield',
