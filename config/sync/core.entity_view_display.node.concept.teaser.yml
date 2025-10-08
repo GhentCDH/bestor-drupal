@@ -47,6 +47,7 @@ hidden:
   field_description: true
   field_discipline: true
   field_period: true
+  field_references: true
   field_specialisation: true
   field_summary: true
   footnotes_group: true

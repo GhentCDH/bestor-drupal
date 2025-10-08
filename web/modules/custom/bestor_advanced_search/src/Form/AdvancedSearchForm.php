@@ -40,6 +40,7 @@ class AdvancedSearchForm extends FormBase {
     return $form['filters_wrapper'];
   }
 
+  
   /**
    * {@inheritdoc}
    */

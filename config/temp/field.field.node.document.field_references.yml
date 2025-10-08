@@ -1,0 +1,24 @@
+uuid: 359576f7-a4ec-4654-b508-cc8928af55f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_references
+    - filter.format.footnote
+    - node.type.document
+  module:
+    - text
+id: node.document.field_references
+field_name: field_references
+entity_type: node
+bundle: document
+label: References
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - footnote
+field_type: text_long

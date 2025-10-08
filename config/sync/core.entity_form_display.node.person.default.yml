@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_period
+    - field.field.node.person.field_references
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_summary
     - field.field.node.person.field_typology
@@ -25,6 +26,7 @@ dependencies:
     - paragraphs
     - path
     - relationship_nodes
+    - text
 third_party_settings:
   field_group:
     group_base_foprm:
@@ -73,6 +75,7 @@ third_party_settings:
     group_content:
       children:
         - field_description
+        - field_references
       label: Content
       region: content
       parent_name: group_base_foprm
@@ -483,6 +486,14 @@ content:
     weight: 4
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_references:
+    type: text_textarea
+    weight: 11
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete

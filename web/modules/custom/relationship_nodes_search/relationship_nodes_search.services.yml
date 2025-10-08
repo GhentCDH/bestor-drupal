@@ -13,3 +13,7 @@ services:
       - '@relationship_nodes.relation_node_info_service'
     tags:
       - { name: event_subscriber }
+  relationship_nodes_search.relation_view_service:
+    class: Drupal\relationship_nodes_search\Service\RelationViewService
+    arguments:
+      - '@relationship_nodes.field_name_resolver'

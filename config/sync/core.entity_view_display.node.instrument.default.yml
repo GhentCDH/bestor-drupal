@@ -95,6 +95,14 @@ content:
     weight: 0
     region: content
 hidden:
+  computed_relationshipfield__instrument__concept: true
+  computed_relationshipfield__instrument__document: true
+  computed_relationshipfield__instrument__institution: true
+  computed_relationshipfield__instrument__instrument: true
+  computed_relationshipfield__instrument__person: true
+  computed_relationshipfield__instrument__place: true
+  computed_relationshipfield__instrument__story: true
+  field_references: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

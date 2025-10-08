@@ -9,9 +9,12 @@ use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItem
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 
 
 class RelationSyncService {
+
+  use DependencySerializationTrait;
 
   protected EntityTypeManagerInterface $entityTypeManager;
   protected RelationNodeInfoService $nodeInfoService;

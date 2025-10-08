@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.article.body
     - field.field.node.article.field_image
+    - field.field.node.article.field_issued_by_bestor
     - node.type.article
   module:
     - media_library
@@ -29,47 +30,54 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 127
+    weight: 10
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
+  field_issued_by_bestor:
+    type: boolean_checkbox
+    weight: 11
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 2
+    weight: 1
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 15
+    weight: 6
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 120
+    weight: 9
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 16
+    weight: 7
     region: content
     settings:
       display_label: true
@@ -82,9 +90,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  translation:
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 3
     region: content
     settings:
       match_operator: CONTAINS

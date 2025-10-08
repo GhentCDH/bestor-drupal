@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.document.field_discipline
     - field.field.node.document.field_image
     - field.field.node.document.field_period
+    - field.field.node.document.field_references
     - field.field.node.document.field_specialisation
     - field.field.node.document.field_summary
     - node.type.document
@@ -19,6 +20,7 @@ dependencies:
     - paragraphs
     - path
     - relationship_nodes
+    - text
 third_party_settings:
   field_group:
     group_base_form:
@@ -43,6 +45,7 @@ third_party_settings:
     group_content:
       children:
         - field_description
+        - field_references
       label: Content
       region: content
       parent_name: group_base_form
@@ -426,6 +429,14 @@ content:
     weight: 3
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_references:
+    type: text_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
   field_specialisation:
     type: entity_reference_autocomplete

@@ -43,6 +43,7 @@ content:
     region: content
 hidden:
   body: true
+  field_issued_by_bestor: true
   field_location_text: true
   field_time_period: true
   footnotes_group: true

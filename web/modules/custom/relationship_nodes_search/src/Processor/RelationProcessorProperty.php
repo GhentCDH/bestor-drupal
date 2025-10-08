@@ -91,7 +91,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
 
 
   public function getDataType():string {
-    return $this->definition['type'] ?? 'string';
+    return 'string';
   }
 
 

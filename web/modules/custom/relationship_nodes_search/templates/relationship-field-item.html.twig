@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Template for a single relationship item.
+ */
+#}
+<div class="relationship-field-item">
+  {% for field_name, field_value in item %}
+    {% set field_info = fields[field_name] %}
+    <span class="field field--name-{{ field_name|clean_class }} field--type-{{ field_info.type }}">
+      {% if field_info.type == 'id' %}
+        <code>{{ field_value }}</code>
+      {% elseif field_info.type == 'title' %}
+        <strong>{{ field_value }}</strong>
+      {% else %}
+        {{ field_value }}
+      {% endif %}
+    </span>
+  {% endfor %}
+</div>

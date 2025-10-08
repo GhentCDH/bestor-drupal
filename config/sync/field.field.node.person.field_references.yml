@@ -1,0 +1,24 @@
+uuid: d29284fc-1d6e-4bed-a5ad-4c7a3f127c53
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_references
+    - filter.format.footnote
+    - node.type.person
+  module:
+    - text
+id: node.person.field_references
+field_name: field_references
+entity_type: node
+bundle: person
+label: References
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - footnote
+field_type: text_long

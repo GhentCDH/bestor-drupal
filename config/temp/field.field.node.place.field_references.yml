@@ -1,0 +1,24 @@
+uuid: 21adc0aa-6f4d-4358-be68-0ecbc3c6164a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_references
+    - filter.format.footnote
+    - node.type.place
+  module:
+    - text
+id: node.place.field_references
+field_name: field_references
+entity_type: node
+bundle: place
+label: References
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - footnote
+field_type: text_long

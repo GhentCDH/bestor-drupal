@@ -1,0 +1,23 @@
+uuid: 7b44ba75-0a14-44ef-9846-2b256e1c4c62
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_issued_by_bestor
+    - node.type.event
+id: node.event.field_issued_by_bestor
+field_name: field_issued_by_bestor
+entity_type: node
+bundle: event
+label: 'Issued by Bestor'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'Issued by Bestor'
+  off_label: 'Issued by external partner'
+field_type: boolean

@@ -1,0 +1,81 @@
+{#
+/**
+ * @file
+ * Template for rendering relationship field data.
+ *
+ * Available variables:
+ * - relationships: Array of all relationship items with selected fields
+ * - grouped: Relationships grouped by selected field (if grouping is enabled)
+ * - summary: Summary information (total count, field list, etc.)
+ * - fields: Field metadata (name, label, type)
+ * - row: The full Views result row
+ *
+ * Example usage:
+ * @code
+ * <div class="relationships-wrapper">
+ *   <h3>{{ summary.total }} Relationships</h3>
+ *   
+ *   {% if grouped %}
+ *     {% for group_name, items in grouped %}
+ *       <h4>{{ group_name }}</h4>
+ *       <ul>
+ *         {% for item in items %}
+ *           <li>
+ *             {% for field_name, field_value in item %}
+ *               <span class="field-{{ fields[field_name].type }}">
+ *                 {{ fields[field_name].label }}: {{ field_value }}
+ *               </span>
+ *             {% endfor %}
+ *           </li>
+ *         {% endfor %}
+ *       </ul>
+ *     {% endfor %}
+ *   {% else %}
+ *     <ul class="relationships-list">
+ *       {% for item in relationships %}
+ *         <li class="relationship-field-item">
+ *           {% if item.calculated_related_title %}
+ *             <strong>{{ item.calculated_related_title }}</strong>
+ *           {% endif %}
+ *           {% if item.calculated_relation_type_title %}
+ *             <span class="relation-type">({{ item.calculated_relation_type_title }})</span>
+ *           {% endif %}
+ *         </li>
+ *       {% endfor %}
+ *     </ul>
+ *   {% endif %}
+ * </div>
+ * @endcode
+ */
+#}
+<div class="relationship-field">
+-----
+  {% if relationships %}
+    {% if grouped %}
+      <div class="grouped-relationships">
+        {% for group_name, items in grouped %}
+          <div class="relationship-group">
+            <h4 class="group-title">{{ group_name|capitalize }}</h4>
+            <ul class="group-items">
+              {% for item in items %}
+                <li>
+                  {{ include('relationship-field-item.html.twig', {'item': item, 'fields': fields}) }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <ul class="relationships-list">
+        {% for item in relationships %}
+          <li>
+            {{ include('relationship-field-item.html.twig', {'item': item, 'fields': fields}) }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% else %}
+    <span class="no-relationships">{{ 'No relationships found'|t }}</span>
+  {% endif %}
+</div>

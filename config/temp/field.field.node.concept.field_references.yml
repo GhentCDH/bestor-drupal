@@ -1,0 +1,24 @@
+uuid: 10c9524e-d600-4fd3-93ac-d0d1bc379e7b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_references
+    - filter.format.footnote
+    - node.type.concept
+  module:
+    - text
+id: node.concept.field_references
+field_name: field_references
+entity_type: node
+bundle: concept
+label: References
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - footnote
+field_type: text_long

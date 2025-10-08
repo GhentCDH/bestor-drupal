@@ -166,6 +166,7 @@ hidden:
   computed_relationshipfield__person__instrument: true
   computed_relationshipfield__person__place: true
   computed_relationshipfield__person__story: true
+  field_references: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

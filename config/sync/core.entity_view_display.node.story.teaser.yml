@@ -35,11 +35,19 @@ content:
     weight: 100
     region: content
 hidden:
+  computed_relationshipfield__story__concept: true
+  computed_relationshipfield__story__document: true
+  computed_relationshipfield__story__institution: true
+  computed_relationshipfield__story__instrument: true
+  computed_relationshipfield__story__person: true
+  computed_relationshipfield__story__place: true
+  computed_relationshipfield__story__story: true
   field_alternative_name: true
   field_author: true
   field_description: true
   field_discipline: true
   field_period: true
+  field_references: true
   field_specialisation: true
   field_summary: true
   footnotes_group: true

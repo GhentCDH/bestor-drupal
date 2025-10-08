@@ -78,6 +78,7 @@ hidden:
   computed_relationshipfield__instrument__story: true
   field_author: true
   field_period: true
+  field_references: true
   field_summary: true
   footnotes_group: true
   langcode: true
