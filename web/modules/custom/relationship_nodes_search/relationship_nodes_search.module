@@ -26,12 +26,5 @@ function relationship_nodes_search_theme() {
       ],
       'template' => 'relationship-field',
     ],
-    'relationship_field_item' => [
-      'variables' => [
-        'item' => [],
-        'fields' => [],
-      ],
-      'template' => 'relationship-field-item',
-    ],
   ];
 }

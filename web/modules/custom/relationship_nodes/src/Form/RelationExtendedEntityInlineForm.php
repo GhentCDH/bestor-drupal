@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RelationExtendedEntityInlineForm extends NodeInlineForm {
 
+  
+
   protected RouteMatchInterface $routeMatch;
   protected FieldNameResolver $fieldNameResolver;
   protected ForeignKeyFieldResolver $foreignKeyResolver;
