@@ -53,7 +53,6 @@ services:
   relationship_nodes.parent_node_form_alter:
     class: Drupal\relationship_nodes\RelationEntity\UserInterface\FormAlter\ParentNodeFormAlter
     arguments: 
-      - '@relationship_nodes.relation_sync_service'
       - '@relationship_nodes.relation_form_helper'
   relationship_nodes.relation_bundle_form_handler:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler

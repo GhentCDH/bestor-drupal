@@ -3,7 +3,6 @@
 namespace Drupal\relationship_nodes\RelationEntity\UserInterface\FormAlter;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationExtensionWidgetSubmit;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper;
 
@@ -13,10 +12,8 @@ class ParentNodeFormAlter {
   protected RelationFormHelper $formHelper;
 
   public function __construct(
-    RelationSyncService $relationSyncService, 
     RelationFormHelper $formHelper
   ) {
-    $this->syncService = $relationSyncService;
     $this->formHelper = $formHelper;  
   }
 
@@ -36,12 +33,12 @@ class ParentNodeFormAlter {
     if ($target_entity->isNew()) {
       $form['actions']['submit']['#submit'][] = [$this, 'bindNewRelationsToParent'];
     }
-    
     RelationExtensionWidgetSubmit::updateDefaultSubmit($form, $form_state);
   }
 
 
   public function bindNewRelationsToParent(array &$form, FormStateInterface $form_state) {
+    $syncService = \Drupal::service('relationship_nodes.relation_sync_service');
     $this->syncService->bindNewRelationsToParent($form_state);
   }
 }
