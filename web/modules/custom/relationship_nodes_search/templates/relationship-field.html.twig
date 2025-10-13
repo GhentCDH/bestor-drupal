@@ -2,11 +2,17 @@
 /**
  * @file
  * Template for the relationship view field.
+ *
+ * Available variables:
+ * - relationships: Array of relationship items, each containing:
+ *   - field_name: Array with 'field_value' and 'link_url' keys
+ * - grouped: Array of relationships grouped by field value
+ * - summary: Array with 'total', 'fields', 'has_groups', 'group_count'
+ * - fields: Array of field metadata with 'name', 'label', 'weight', 'hide_label', 'is_link'
+ * - row: The full result row object
  */
 #}
 
-
------
 <div class="relationship-field">
   {% if relationships %}
     {% if grouped %}
@@ -19,20 +25,20 @@
                 <li class="relationship-item">
                   {% for field_name, field_config in fields %}
                     {% if item[field_name] is defined %}
-                      <span class="field field--name-{{ field_name|clean_class }} field--type-{{ field_config.type }}">
+                      <span class="field field--name-{{ field_name|clean_class }}">
+                      
                         {% if not field_config.hide_label %}
                           <span class="field-label">{{ field_config.label }}:</span>
                         {% endif %}
                         
                         <span class="field-value">
-                          {% if field_config.type == 'id' %}
-                            <code>{{ item[field_name] }}</code>
-                          {% elseif field_config.type == 'title' %}
-                            <strong>{{ item[field_name] }}</strong>
+                          {% if item[field_name].link_url %}
+                            {{ link(item[field_name].field_value, item[field_name].link_url, {'class': ['relationship-link']}) }}
                           {% else %}
-                            {{ item[field_name] }}
+                            {{ item[field_name].field_value }}
                           {% endif %}
                         </span>
+                        
                       </span>
                     {% endif %}
                   {% endfor %}
@@ -42,26 +48,27 @@
           </div>
         {% endfor %}
       </div>
+    
     {% else %}
       <ul class="relationships-list">
         {% for item in relationships %}
           <li class="relationship-item">
             {% for field_name, field_config in fields %}
               {% if item[field_name] is defined %}
-                <span class="field field--name-{{ field_name|clean_class }} field--type-{{ field_config.type }}">
+                <span class="field field--name-{{ field_name|clean_class }}">
+                  
                   {% if not field_config.hide_label %}
                     <span class="field-label">{{ field_config.label }}:</span>
                   {% endif %}
                   
                   <span class="field-value">
-                    {% if field_config.type == 'id' %}
-                      <code>{{ item[field_name] }}</code>
-                    {% elseif field_config.type == 'title' %}
-                      <strong>{{ item[field_name] }}</strong>
+                    {% if item[field_name].link_url %}
+                      {{ link(item[field_name].field_value, item[field_name].link_url, {'class': ['relationship-link']}) }}
                     {% else %}
-                      {{ item[field_name] }}
+                      {{ item[field_name].field_value }}
                     {% endif %}
                   </span>
+                  
                 </span>
               {% endif %}
             {% endfor %}
@@ -69,7 +76,10 @@
         {% endfor %}
       </ul>
     {% endif %}
+    
   {% else %}
-    <span class="no-relationships">{{ 'No relationships found'|t }}</span>
+    <div class="no-relationships">
+      <p>{{ 'No relationships found'|t }}</p>
+    </div>
   {% endif %}
 </div>

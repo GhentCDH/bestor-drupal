@@ -13,7 +13,13 @@ services:
       - '@relationship_nodes.relation_node_info_service'
     tags:
       - { name: event_subscriber }
-  relationship_nodes_search.relation_view_service:
-    class: Drupal\relationship_nodes_search\Service\RelationViewService
+  relationship_nodes_search.relation_search_service:
+    class: Drupal\relationship_nodes_search\Service\RelationSearchService
     arguments:
       - '@relationship_nodes.field_name_resolver'
+  relationship_nodes_search.nested_filter_builder:
+    class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFilterBuilder
+    decorates: elasticsearch_connector.query_filter_builder
+    arguments: 
+      - '@logger.channel.elasticsearch_connector'
+      - '@relationship_nodes_search.relation_search_service' 

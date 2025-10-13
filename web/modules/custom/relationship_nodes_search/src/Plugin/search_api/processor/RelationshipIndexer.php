@@ -20,6 +20,7 @@ use Drupal\search_api\SearchApiException;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider;
+use Drupal\relationship_nodes_search\Service\RelationSearchService;
 
 /**
  * Adds nested relationship data to specified fields.
@@ -43,7 +44,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   protected FieldNameResolver $fieldResolver;
   protected RelationBundleSettingsManager $settingsManager;
   protected MirrorTermProvider $mirrorProvider;
-  
+  protected RelationSearchService $relationSearchService; 
 
   /**
    * Constructs a RelationshipIndexer object.
@@ -56,7 +57,8 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     RelationBundleInfoService $bundleInfoService,
     FieldNameResolver $fieldResolver, 
     RelationBundleSettingsManager $settingsManager, 
-    MirrorTermProvider $mirrorProvider
+    MirrorTermProvider $mirrorProvider,
+    RelationSearchService $relationSearchService
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
@@ -64,6 +66,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $this->fieldResolver = $fieldResolver;
     $this->settingsManager = $settingsManager;
     $this->mirrorProvider = $mirrorProvider;
+    $this->relationSearchService = $relationSearchService;
   }
 
   /**
@@ -84,6 +87,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $container->get('relationship_nodes.field_name_resolver'),
       $container->get('relationship_nodes.relation_bundle_settings_manager'),
       $container->get('relationship_nodes.mirror_term_provider'),
+      $container->get('relationship_nodes_search.relation_search_service'),
     );
   }
 
@@ -215,12 +219,12 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
                 $nested_values[$nested_field] = $value;
           }
                 
-          
-          $nested_values['calculated_this_id'] = isset($nested_values[$join_field]) ? $nested_values[$join_field] : '';
-          $nested_values['calculated_this_title'] = $entity->label();
-          $nested_values['calculated_related_id'] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
+          $calculated_fields = $this->relationSearchService->getCalculatedFieldNames();
+          $nested_values[$calculated_fields['this_entity']['id']] = isset($nested_values[$join_field]) ? $nested_values[$join_field] : '';
+          $nested_values[$calculated_fields['this_entity']['label']] = $entity->label();
+          $nested_values[$calculated_fields['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
           $related_entity = $node_storage->load($nested_values[$other_field]);
-          $nested_values['calculated_related_title'] = !empty($related_entity) ? $related_entity->label() : '';
+          $nested_values[$calculated_fields['related_entity']['label']] = !empty($related_entity) ? $related_entity->label() : '';
           
           $node_type = $relationship_entity->getType();
           $relation_field = $this->fieldResolver->getRelationTypeField();
@@ -235,11 +239,11 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
             if($join_field == $this->fieldResolver->getRelatedEntityFields(2)){
 
               $mirror_array = $this->mirrorProvider->getMirrorArray($term_storage, (string) $nested_values[$relation_field]);
-              $nested_values['calculated_relation_type_id'] = reset(array_keys($mirror_array));
-              $nested_values['calculated_relation_type_title'] = reset($mirror_array);
+              $nested_values[$calculated_fields['relation_type']['id']] = reset(array_keys($mirror_array));
+              $nested_values[$calculated_fields['relation_type']['label']] = reset($mirror_array);
             } else {
-              $nested_values['calculated_relation_type_id'] = isset($nested_values[$relation_field]) ? $nested_values[$relation_field] : '';
-              $nested_values['calculated_relation_type_title'] = $default_label;
+              $nested_values[$calculated_fields['relation_type']['id']] = isset($nested_values[$relation_field]) ? $nested_values[$relation_field] : '';
+              $nested_values[$calculated_fields['relation_type']['label']] = $default_label;
             }
           }
               
