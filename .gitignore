@@ -8,6 +8,7 @@
 # Ignore configuration files that may contain sensitive information
 /web/sites/*/*settings.local.php
 /web/sites/*/*services*.yml
+!/web/sites/default/settings.local.php
 
 # Ignore paths that may contain user-generated content
 /web/sites/*/files
@@ -116,7 +117,6 @@ id_rsa*
 
 # Ignore configuration files with credentials
 config/local/
-settings.local.php
 services.local.yml
 *.secret.yml
 secrets.yml
