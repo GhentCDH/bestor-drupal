@@ -1,0 +1,121 @@
+# =============================================================================
+# Production
+# =============================================================================
+#
+# What to edit:
+# 1. Copy .env.example to .env (or prd.env for production-specific config)
+# 2. Update values in .env file (especially security settings!)
+# 3. Run: docker-compose -f compose.prod.yaml up -d --build
+# =============================================================================
+
+version: '3.8'
+
+services:
+  drupal:
+    container_name: ${PROJECT_NAME:-drupal}-prd
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.3}
+        PROJECT_NAME: ${PROJECT_NAME:-drupal-site}
+        ENVIRONMENT: production
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    volumes:
+      - ${PROJECT_NAME:-drupal}_files:/app/web/sites/default/files:rw
+      - ${PROJECT_NAME:-drupal}_private:/app/private:rw
+    env_file:
+      # All configuration in .env file
+      - prd.env
+    depends_on:
+      db:
+        condition: service_healthy
+      memcache:
+        condition: service_started
+    networks:
+      - drupal-network
+    restart: unless-stopped
+    tmpfs:
+      - /tmp:mode=1777
+    security_opt:
+      - no-new-privileges:true
+
+  db:
+    container_name: ${PROJECT_NAME:-drupal}-db-prd
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    command: --max-allowed-packet=256M
+    volumes:
+      - ${PROJECT_NAME:-drupal}_db_data_prd:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - drupal-network
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+  
+  memcache:
+    container_name: ${PROJECT_NAME:-drupal}-memcache-prd
+    image: memcached:latest
+    ports:
+      - "${MEMCACHE_PORT:-11211}:11211"
+    networks:
+      - drupal-network
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+  
+  elasticsearch:
+    container_name: ${PROJECT_NAME:-drupal}-elasticsearch-prd
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+      - "9300:9300"
+    volumes:
+      - ${PROJECT_NAME:-drupal}_elasticsearch_data_prd:/usr/share/elasticsearch/data
+    networks:
+      - drupal-network
+  adminer:
+        container_name: ${PROJECT_NAME:-drupal}-adminer-prd
+        image: adminer:latest
+        ports:
+          - "${ADMINER_PORT:-8081}:8080"
+        environment:
+          - ADMINER_DEFAULT_SERVER=db
+        depends_on:
+          - db
+        networks:
+          - drupal-network
+
+volumes:
+  ${PROJECT_NAME:-drupal}_db_data_prd:
+    name: ${PROJECT_NAME:-drupal}_db_data_prd
+  ${PROJECT_NAME:-drupal}_files:
+    name: ${PROJECT_NAME:-drupal}_files
+  ${PROJECT_NAME:-drupal}_private:
+    name: ${PROJECT_NAME:-drupal}_private
+  ${PROJECT_NAME:-drupal}_elasticsearch_data_prd:
+    name: ${PROJECT_NAME:-drupal}_elasticsearch_data_prd
+  
+
+networks:
+  drupal-network:
+    name: ${PROJECT_NAME:-drupal}_network_prd
+    driver: bridge

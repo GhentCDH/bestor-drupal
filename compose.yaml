@@ -1,105 +1,115 @@
+# =============================================================================
+# Development
+# =============================================================================
+#
+# What to edit:
+# 1. Copy .env.example to .env (or dev.env for development-specific config)
+# 2. Update values in .env file
+# 3. Run: docker-compose up -d --build
+# =============================================================================
+
+version: '3.8'
+
 services:
-  bestor-drupal:
-    container_name: bestor-drupal
-    platform: linux/x86_64
-    build: 
+  drupal:
+    container_name: ${PROJECT_NAME:-drupal}-dev
+    build:
       context: .
-      target: dev
+      dockerfile: Dockerfile
+      target: development
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.3}
+        PROJECT_NAME: ${PROJECT_NAME:-drupal-site}
+        ENVIRONMENT: development
     ports:
-      - 8091:80
-    env_file:
-      - dev.env
-    depends_on:
-      bestor-drupal-db:
-          condition: service_healthy
+      - "${WEB_PORT:-8080}:80"
     volumes:
-      - ./web/modules:/opt/drupal/web/modules
-      - ./web/sites:/opt/drupal/web/sites
-      - ./web/themes:/opt/drupal/web/themes
-      - ./web/profiles:/opt/drupal/web/profiles
-      - ./config:/opt/drupal/config
-      - ./composer.json:/opt/drupal/composer.json
-      - ./composer.lock:/opt/drupal/composer.lock
-      - ./startup_script.sh:/opt/drupal/startup_script.sh
-      - ./docker_data/drupal/vendor:/opt/drupal/vendor
-
-  bestor-drupal-prd:
-    container_name: bestor-drupal-prd
-    build: 
-      context: .
-      target: prd
-    ports:
-      - 8097:80
+      - ${PROJECT_NAME:-drupal}_sites_dev:/app/web/sites
+      - ${PROJECT_NAME:-drupal}_modules_custom_dev:/app/web/modules/custom
+      - ${PROJECT_NAME:-drupal}_themes_custom_dev:/app/web/themes/custom
+      - ${PROJECT_NAME:-drupal}_config_dev:/app/config
+      - ${PROJECT_NAME:-drupal}_private_dev:/app/private
     env_file:
-      - dev.env
+      # All configuration in .env file
+      - .env
     depends_on:
-      bestor-drupal-db:
-          condition: service_healthy
+      db:
+        condition: service_healthy
+      memcache:
+        condition: service_started
+    networks:
+      - drupal-network
 
-  bestor-drupal-db:
-    container_name: bestor-drupal-db
-    image: mariadb:10.11.10
-    ports:
-      - 127.0.0.1:3307:3306
-    env_file:
-      - dev.env
+  db:
+    container_name: ${PROJECT_NAME:-drupal}-db-dev
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    command: --max-allowed-packet=256M
     volumes:
-      - ./docker_data/db/data:/var/lib/mysql
-      - ./docker_data/db/initdb:/docker-entrypoint-initdb.d
-      - ./docker_data/db/my.cnf:/etc/mysql/my.cnf
-    restart: always
+      - ${PROJECT_NAME:-drupal}_db_data_dev:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    ports:
+      - "${DB_PORT:-3306}:3306"
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      start_period: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
-      retries: 3
-
-  bestor-memcache:
-    container_name: bestor-memcache
-    image: memcached:1.6.32-bookworm
-
-
-# uncomment the following block to use elasticsearch
-
-  bestor-elastic:
-    image: elasticsearch:8.15.3
-    environment:
-      discovery.type: single-node
-      network.host: 0.0.0.0
-      http.port: 9200
-      transport.host: localhost
-      cluster.name: docker-cluster
-      bootstrap.memory_lock: "true"
-      xpack.security.enabled: "false"
-      cluster.routing.allocation.disk.threshold_enabled: "false"
-      ES_JAVA_OPTS: -Xms2g -Xmx2g
-      TAKE_FILE_OWNERSHIP: 1"
+      retries: 5
+    networks:
+      - drupal-network
+  memcache:
+    container_name: ${PROJECT_NAME:-drupal}-memcache-dev
+    image: memcached
     ports:
-      - 9200:9200
-    env_file:
-      - dev.env
+      - "${MEMCACHE_PORT:-11211}:11211"
+    networks:
+      - drupal-network
+  adminer:
+        container_name: ${PROJECT_NAME:-drupal}-adminer-dev
+        image: adminer:latest
+        ports:
+          - "${ADMINER_PORT:-8081}:8080"
+        environment:
+          - ADMINER_DEFAULT_SERVER=db
+        depends_on:
+          - db
+        networks:
+          - drupal-network
+  elasticsearch:
+    container_name: ${PROJECT_NAME:-drupal}-elasticsearch-dev
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+      - "9300:9300"
     volumes:
-      - ./docker_data/elastic/data:/usr/share/elasticsearch/data
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-  
-  bestor-phpmyadmin:
-    container_name: bestor-phpmyadmin
-    image: phpmyadmin:latest
-    env_file:
-      - dev.env
-    ports:
-      - 8092:80
-    environment:
-      - PMA_HOST=bestor-drupal-db
-      - PMA_PORT=3306
-    depends_on:
-      bestor-drupal-db:
-        condition: service_healthy
-    restart: always
+      - ${PROJECT_NAME:-drupal}_elasticsearch_data_dev:/usr/share/elasticsearch/data
+    networks:
+      - drupal-network
+volumes:
+  ${PROJECT_NAME:-drupal}_db_data_dev:
+    name: ${PROJECT_NAME:-drupal}_db_data_dev
+  ${PROJECT_NAME:-drupal}_elasticsearch_data_dev:
+    name: ${PROJECT_NAME:-drupal}_elasticsearch_data_dev
+  ${PROJECT_NAME:-drupal}_sites_dev:
+    name: ${PROJECT_NAME:-drupal}_sites_dev
+  ${PROJECT_NAME:-drupal}_modules_custom_dev:
+    name: ${PROJECT_NAME:-drupal}_modules_custom_dev
+  ${PROJECT_NAME:-drupal}_themes_custom_dev:
+    name: ${PROJECT_NAME:-drupal}_themes_custom_dev
+  ${PROJECT_NAME:-drupal}_config_dev:
+    name: ${PROJECT_NAME:-drupal}_config_dev
+  ${PROJECT_NAME:-drupal}_private_dev:
+    name: ${PROJECT_NAME:-drupal}_private_dev
+
+networks:
+  drupal-network:
+    name: ${PROJECT_NAME:-drupal}_network_dev
+    driver: bridge

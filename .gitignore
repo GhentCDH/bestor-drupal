@@ -80,3 +80,73 @@ docker_data/elastic/data/*
 Thumbs.db
 web/modules/custom/bestor_migration/source/output.json
 docker_data/db/general.log
+
+# Ignore environment files (sensitive data)
+.env
+dev.env
+prd.env
+*.env.local
+*.env.*.local
+
+# Ignore other files that may contain sensitive information
+database/*
+docker_data/db/*.sql
+docker_data/db/bestor-dump.sql
+_sync_backup/*.sql
+
+# Ignore backup and dump files
+*.sql
+*.sql.gz
+*.sql.zip
+*.dump
+backup/
+backups/
+_backup/
+_backups/
+
+# Ignore private keys and certificates
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+id_rsa*
+*.pub
+
+# Ignore configuration files with credentials
+config/local/
+settings.local.php
+services.local.yml
+*.secret.yml
+secrets.yml
+credentials.json
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log files
+*.log
+logs/
+*.log.*
+
+# Temporary and cache files
+tmp/
+temp/
+cache/
+*.tmp
+*.cache
+
