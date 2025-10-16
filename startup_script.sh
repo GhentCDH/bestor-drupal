@@ -37,7 +37,7 @@ EOF
 fi
 
 # run drush
-sleep 100s # wait for the database to be ready
+# sleep 100s # wait for the database to be ready
 drush -y updatedb
 drush -y cache:rebuild
 

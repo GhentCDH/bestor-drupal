@@ -4,7 +4,7 @@ ARG PHP_VERSION=8.3
 # =============================================================================
 # Base Stage - Common dependencies and setup
 # =============================================================================
-FROM webdevops/php-apache:${PHP_VERSION} as base
+FROM webdevops/php-apache:${PHP_VERSION} AS base
 
 # Accept build arguments for customization
 ARG PROJECT_NAME=drupal-site
@@ -36,7 +36,7 @@ WORKDIR /app
 # =============================================================================
 # Development Stage
 # =============================================================================
-FROM base as development
+FROM base AS development
 
 # Development-friendly PHP settings (can be overridden via environment variables)
 ENV PHP_DISPLAY_ERRORS=1
@@ -62,7 +62,7 @@ EXPOSE 80
 # =============================================================================
 # Production Stage
 # =============================================================================
-FROM base as production
+FROM base AS production
 
 # Production PHP settings (can be overridden by environment variables)
 # Default values - will be overridden by compose file env_file

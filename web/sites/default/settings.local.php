@@ -29,6 +29,7 @@ $settings['trusted_host_patterns'] = [
   '^.+\.localhost$',
   '^bestor.*$',
   '^.*\.ugent\.be$',
+  '^\d+\.\d+\.\d+\.\d+$', // Allow direct IP access
   '^' . (getenv('PROJECT_NAME') ?: 'drupal') . '.*$',
 ];
 
