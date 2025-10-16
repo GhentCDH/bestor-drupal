@@ -98,3 +98,16 @@ if (empty($elasticsearch_host)) {
 $elasticsearch_url = sprintf('%s://%s:%s', $elasticsearch_scheme, $elasticsearch_host, $elasticsearch_port);
 
 $config['search_api.server.elasticsearchconnectordocker']['backend_config']['connector_config']['url'] = $elasticsearch_url;
+
+$settings['reverse_proxy'] = TRUE;
+
+// If you are behind a reverse proxy, you can specify the addresses of the proxy servers.
+// You can use CIDR notation to specify a range of addresses.
+// You can also use the special value 'REMOTE_ADDR' to trust the address of the immediate
+// client connected to your Drupal server (which may be another proxy).
+$settings['reverse_proxy_addresses'] = [
+  '172.18.56.0/24',
+];
+// You can also set the trusted headers if your proxy uses non-standard headers.
+
+$settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO | \Symfony\Component\HttpFoundation\Request::HEADER_FORWARDED;

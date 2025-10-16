@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo.outputs.name_lc }}:php-${{ matrix.php-version }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo.outputs.name_lc }}:php-${{ matrix.php-version }}-v0.1.0
           push: true
           build-args: |
             PHP_VERSION=${{ matrix.php-version }}
