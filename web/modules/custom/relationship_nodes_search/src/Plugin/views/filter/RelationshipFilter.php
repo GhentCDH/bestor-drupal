@@ -9,7 +9,7 @@ use Drupal\search_api\Entity\Index;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\relationship_nodes_search\Service\RelationSearchService;
-use Drupal\relationship_nodes_search\SearchAPI\Query\NestedFieldCondition;
+use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionGroup;
 
 /**
  * Filter for nested relationship data in Search API.
@@ -319,12 +319,12 @@ public function submitOptionsForm(&$form, FormStateInterface $form_state) {
         }
 
         $conditions = [];
-        foreach ($filter_field_settings as $field_name => $field_config) {
+        foreach ($filter_field_settings as $sub_field_name => $field_config) {
             if (empty($field_config['enabled'])) {
                 continue;
             }
 
-            $value = $this->value[$field_name]['value'] ?? $this->value[$field_name] ?? '';
+            $value = $this->value[$sub_field_name]['value'] ?? $this->value[$sub_field_name] ?? '';
             
             if ($value === '' || $value === NULL) {
                 continue;
@@ -332,8 +332,8 @@ public function submitOptionsForm(&$form, FormStateInterface $form_state) {
 
             $field_operator = '=';
 
-            if (!empty($field_config['expose_field_operator']) && isset($this->value[$field_name]['operator'])) {
-                $field_operator = $this->value[$field_name]['operator'];
+            if (!empty($field_config['expose_field_operator']) && isset($this->value[$sub_field_name]['operator'])) {
+                $field_operator = $this->value[$sub_field_name]['operator'];
             } elseif (!empty($field_config['field_operator'])) {
                 $field_operator = $field_config['field_operator'];
             }
@@ -343,7 +343,7 @@ public function submitOptionsForm(&$form, FormStateInterface $form_state) {
             }
 
             $conditions[] = [
-                'field' => $field_name,
+                'sub_field_name' => $sub_field_name,
                 'value' => $value,
                 'operator' => $field_operator,
             ];
@@ -353,12 +353,12 @@ public function submitOptionsForm(&$form, FormStateInterface $form_state) {
             return;
         }
 
-        $nested_field_condition = new NestedFieldCondition(strtoupper($operator));
+        $nested_field_condition = new NestedParentFieldConditionGroup(strtoupper($operator));
         $nested_field_condition->setParentFieldName($parent_field);
         
         foreach ($conditions as $condition) {
-            $nested_field_condition->addCondition(
-                $condition['field'],
+            $nested_field_condition->addSubFieldCondition(
+                $condition['sub_field_name'],
                 $condition['value'],
                 $condition['operator']
             );

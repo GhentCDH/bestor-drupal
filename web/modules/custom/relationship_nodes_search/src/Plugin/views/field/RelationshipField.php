@@ -88,6 +88,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
 
         foreach ($available_fields as $field_name) {
             $is_enabled = !empty($field_settings[$field_name]['enabled']);
+            $disabled_state = ['disabled' => [':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE]]];
 
             $link_option = $this->titleFieldHasMatchingIdField($field_name);
             $is_link = $is_enabled && $link_option && !empty($field_settings[$field_name]['link']);
@@ -119,11 +120,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
                 '#default_value' => $field_settings[$field_name]['label'] ?? $this->formatFieldLabel($field_name),
                 '#description' => $this->t('Custom label for this field.'),
                 '#size' => 30,
-                '#states' => [
-                    'disabled' => [
-                        ':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE],
-                    ],
-                ],
+                '#states' => $disabled_state
             ];
 
             $form['relation_display_settings']['field_settings'][$field_name]['weight'] = [
@@ -132,23 +129,26 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
                 '#default_value' => $field_settings[$field_name]['weight'] ?? 0,
                 '#description' => $this->t('Fields with lower weights appear first.'),
                 '#size' => 5,
-                '#states' => [
-                    'disabled' => [
-                        ':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE],
-                    ],
-                ],
+                '#states' => $disabled_state
             ];
 
             $form['relation_display_settings']['field_settings'][$field_name]['hide_label'] = [
                 '#type' => 'checkbox',
                 '#title' => $this->t('Hide label in output'),
                 '#default_value' => $field_settings[$field_name]['hide_label'] ?? FALSE,
-                '#states' => [
-                    'disabled' => [
-                        ':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE],
-                    ],
-                ],
+                '#states' => $disabled_state
             ];
+
+            if(!$this->relationSearchService->isPredefinedRelationField($field_name)){
+                $form['relation_display_settings']['field_settings'][$field_name]['multiple_separator'] = [
+                    '#type' => 'textfield',
+                    '#title' => $this->t('Multiple Values Separator'),
+                    '#default_value' => $field_settings[$field_name]['multiple_separator'] ?? ', ',
+                    '#description' => $this->t('Configure how to separate multiple values (only applies if this field has multiple values).'),
+                    '#size' => 10,
+                    '#states' => $disabled_state
+                ];
+            }
         }
 
         $form['relation_display_settings']['sort_by_field'] = [
@@ -261,18 +261,28 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
                     $value = $item[$field_name];
                     $is_link = !empty($settings['link']);
                     
-
-                    $item_with_values[$field_name] = [
-                        'field_value' => $value,
-                        'link_url' => null,
-                    ];
-                    
-                    if ($is_link) {
-                        $url = $this->relationSearchService->getUrlForField($field_name, $item);
-                        if ($url) {
-                            $item_with_values[$field_name]['link_url'] = $url;
+                    if ($this->relationSearchService->isPredefinedRelationField($field_name)) {
+                        $item_with_values[$field_name] = [
+                            'field_values' => [[
+                                'value' => $value,
+                                'link_url' => $is_link ? $this->relationSearchService->getUrlForField($field_name, $item) : null
+                            ]]
+                        ];
+                    } else {
+                        $value_arr = is_array($value) ? $value : [$value];
+                        $formatted_value_arr = [];
+                        foreach($value_arr as $single_value){
+                            $formatted_value_arr[] = ['value' => $single_value];
                         }
+                        $item_with_values[$field_name] = [
+                            'field_values' =>  $formatted_value_arr,
+                            'separator' => $settings['multiple_separator'] ?? ', ',
+                            'is_multiple' => count($value_arr) > 1,
+                        ];
+
                     }
+
+
                 }
             }
             if (!empty($item_with_values)) {
@@ -283,8 +293,12 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         if (!empty($this->options['sort_by_field']) && !empty($relationships)) {
             $sort_field = $this->options['sort_by_field'];
             usort($relationships, function($a, $b) use ($sort_field) {
-                $val_a = $a[$sort_field]['field_value'] ?? '';
-                $val_b = $b[$sort_field]['field_value'] ?? '';
+                if (!isset($a[$sort_field]) || !isset($b[$sort_field])) {
+                    return 0;
+                }
+                
+                $val_a = $a[$sort_field]['field_values'][0]['value'] ?? '';
+                $val_b = $b[$sort_field]['field_values'][0]['value'] ?? '';
                 
                 return strcasecmp($val_a, $val_b);
             });
@@ -294,8 +308,12 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         if (!empty($this->options['group_by_field']) && !empty($relationships)) {
             $group_field = $this->options['group_by_field'];
             foreach ($relationships as $item) {
-                $group_key = $item[$group_field]['field_value'] ?? 'ungrouped';
-        
+                if (!isset($item[$group_field])) {
+                    continue;
+                }                
+                
+                $group_key = $item[$group_field]['field_values'][0]['value'] ?? 'ungrouped';
+                
                 if (!isset($grouped[$group_key])) {
                     $grouped[$group_key] = [];
                 }
@@ -318,6 +336,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
                 'weight' => $settings['weight'] ?? 0,
                 'hide_label' => !empty($settings['hide_label']),
                 'is_link' => !empty($settings['link']),
+                'multiple_separator' => $settings['multiple_separator'] ?? ', '
             ];
         }
 

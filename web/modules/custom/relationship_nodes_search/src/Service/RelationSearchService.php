@@ -38,7 +38,6 @@ class RelationSearchService {
         }
 
         $result_fields = array_values($this->getCalculatedFieldNames('related_entity'));
-
         $relation_type_field = $this->fieldNameResolver->getRelationTypeField();
         if(in_array($relation_type_field, $nested_fields)){
             $replaced_fields[] = $relation_type_field;
@@ -65,9 +64,9 @@ class RelationSearchService {
 
         foreach($this->getCalculatedFieldNames() as $calculated_group){
             if(
-                isset($calculated_group['label']) && 
+                isset($calculated_group['name']) && 
                 isset($calculated_group['id']) &&
-                $calculated_group['label'] === $title_field_name && 
+                $calculated_group['name'] === $title_field_name && 
                 in_array($calculated_group['id'], $nested_fields)
             ){
                 return true;
@@ -90,36 +89,61 @@ class RelationSearchService {
             return [];
         }
 
-        return $this->getNestedFields($index_field);
+        return array_keys($this->getNestedFields($index_field));
     }
 
 
-    public function getCalculatedFieldNames(string $calculated_key = null, string $field =  null):array|string|null{
+    public function getCalculatedFieldNames(string $calculated_entity_key = null, string $property = null, bool $flatten = false):array|string|null{
         $calculated_fields = [
             'this_entity' => [
                 'id' => 'calculated_this_id',
-                'label' => 'calculated_this_label',
+                'name' => 'calculated_this_name',
             ],
             'related_entity' => [
                 'id' => 'calculated_related_id',
-                'label' => 'calculated_related_label',
+                'name' => 'calculated_related_name',
             ],
             'relation_type' => [
-                'id' => 'calculated_relation_type_id',
-                'label' => 'calculated_relation_type_label',
+                'name' => 'calculated_relation_type_name',
             ],
         ];
 
-       if ($calculated_key === null && $field === null){
-            return $calculated_fields;
-        } elseif($calculated_key !== null && $field === null && !empty($calculated_fields[$calculated_key])){
-            return $calculated_fields[$calculated_key];        
-        } elseif($calculated_key !== null && $field !== null && !empty($calculated_fields[$calculated_key][$field])){
-            return $calculated_fields[$calculated_key][$field];     
-        } 
+
+        if ($calculated_entity_key === null) {
+            if ($property === null) {
+                return $flatten ? $this->flattenFieldsArray($calculated_fields) : $calculated_fields;
+            }
+            
+            $result = [];
+            foreach ($calculated_fields as $key => $props) {
+                if (!empty($props[$property])) {
+                    $result[$key] = $props[$property];
+                }
+            }
+            return empty($result) ? null : ($flatten ? array_values($result) : $result);
+        }
+
+        $calculated_entity = $calculated_fields[$calculated_entity_key] ?? null;
         
-        return null;
-               
+        if (empty($calculated_entity)) {
+            return null;
+        }
+        
+        if ($property === null) {
+            return $flatten ? array_values($calculated_entity) : $calculated_entity;
+        }
+        
+        return $calculated_entity[$property] ?? null;
+             
+    }
+
+    public function isPredefinedRelationField(string $field_name):bool{
+        $calculated_fields = $this->getCalculatedFieldNames(null, null, true) ?? [];
+        $rn_related_entity_fields = array_values($this->fieldNameResolver->getRelatedEntityFields());
+        $rn_relationtype_field = [$this->fieldNameResolver->getRelationTypeField()];
+        $all_predefined = array_merge($calculated_fields, $rn_related_entity_fields, $rn_relationtype_field);
+    
+        return in_array($field_name, $all_predefined, true);
     }
 
     public function isNestedSapiField(Field $field):bool{
@@ -142,7 +166,7 @@ class RelationSearchService {
     public function getIdFieldForLabelField(string $field_name): ?string{
         $calculated_fields = $this->getCalculatedFieldNames();
         foreach($calculated_fields as $field_value_pair){
-            if(($field_value_pair['label'] ?? null) === $field_name){
+            if(($field_value_pair['name'] ?? null) === $field_name){
                 return  !empty($field_value_pair['id']) ? $field_value_pair['id'] : null;
             }
         }
@@ -154,26 +178,54 @@ class RelationSearchService {
         $calculated_fields = $this->getCalculatedFieldNames();
         
         foreach ($calculated_fields as $type => $field_value_pair) {
-            if (($field_value_pair['label'] ?? null) === $field_name) {
+            if (($field_value_pair['name'] ?? null) === $field_name) {
                 $id_field = $field_value_pair['id'] ?? null;
                 
                 if (!$id_field || !isset($item[$id_field])) {
                     return null;
                 }
                 
-                $entity_id = $item[$id_field];
-                
-                if(in_array($type, ['related_entity', 'this_entity'])){
-                    return Url::fromRoute('entity.node.canonical', [
-                        'node' => $entity_id
-                    ]);
-                } elseif($type === 'relation_type'){
-                    return Url::fromRoute('entity.taxonomy_term.canonical', [
-                        'taxonomy_term' => $entity_id
-                    ]);
-                }           
+                $parsed_value = $this->parseEntityReferenceValue($item[$id_field]);
+
+                if(empty($parsed_value['entity_type'] || empty($parsed_value['id']))){
+                    continue;
+                } 
+                $entity_type = $parsed_value['entity_type'];
+                $entity_id = $parsed_value['id'];
+                         
+                return Url::fromRoute('entity.' . $entity_type . '.canonical', [
+                    $entity_type => $entity_id
+                ]);
+                   
             }
         }
         return null;
+    }
+
+
+    public function parseEntityReferenceValue($value): ?array {
+        if (empty($value)) {
+            return null;
+        }
+        
+        if (is_string($value) && strpos($value, '/') !== false) {
+            [$type, $id] = explode('/', $value, 2);
+            return ['entity_type'=> $type, 'id'=> $id];
+        }
+
+        return null;
+    }
+
+
+    protected function flattenFieldsArray(array $calculated_fields):array{
+        $result = [];
+        foreach ($calculated_fields as $props) {
+            foreach($props as $field_name){
+                if(!empty($field_name)){
+                    $result[] = $field_name;
+                }
+            }
+        }
+        return $result;
     }
 }
