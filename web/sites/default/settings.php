@@ -286,7 +286,7 @@ $settings['config_sync_directory'] = '../config/sync';
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = 'b4cih_Br6hrYFWn73_P5cMVIs__UnTn4vf9WhtJxeLrfvnr9L-vf9OnPw1HcAkxnnrxCM7cajA';
+$settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: 'b4cih_Br6hrYFWn73_P5cMVIs__UnTn4vf9WhtJxeLrfvnr9L-vf9OnPw1HcAkxnnrxCM7cajA';
 
 /**
  * Deployment identifier.

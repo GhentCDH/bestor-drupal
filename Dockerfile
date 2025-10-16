@@ -81,7 +81,8 @@ COPY ./config /app/config
 
 # Install Composer dependencies WITHOUT dev packages
 RUN composer install --no-interaction --optimize-autoloader --no-dev \
-    && composer clear-cache
+    && composer clear-cache \
+    && ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
 # Make Drush executable and create symlink (must be before setting read-only permissions)
 # RUN chmod +x /app/vendor/drush/drush/drush \

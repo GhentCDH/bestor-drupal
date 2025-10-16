@@ -9,12 +9,13 @@
  */
 
 // Database configuration from environment variables
+// Using DB_* variables to match Docker Compose MySQL container config
 $databases['default']['default'] = [
-  'database' => getenv('DRUPAL_DATABASE_NAME') ?: 'drupal',
-  'username' => getenv('DRUPAL_DATABASE_USERNAME') ?: 'drupal',
-  'password' => getenv('DRUPAL_DATABASE_PASSWORD') ?: 'drupal',
-  'host' => getenv('DRUPAL_DATABASE_HOST') ?: 'db',
-  'port' => getenv('DRUPAL_DATABASE_PORT') ?: '3306',
+  'database' => getenv('DB_NAME') ?: 'drupal',
+  'username' => getenv('DB_USER') ?: 'drupal',
+  'password' => getenv('DB_PASSWORD') ?: 'drupal',
+  'host' => getenv('DB_HOST') ?: 'db',
+  'port' => getenv('DB_PORT_INTERNAL') ?: '3306',
   'driver' => 'mysql',
   'prefix' => '',
   'collation' => 'utf8mb4_general_ci',
@@ -27,6 +28,7 @@ $settings['trusted_host_patterns'] = [
   '^127\.0\.0\.1$',
   '^.+\.localhost$',
   '^bestor.*$',
+  '^.*\.ugent\.be$',
   '^' . (getenv('PROJECT_NAME') ?: 'drupal') . '.*$',
 ];
 
