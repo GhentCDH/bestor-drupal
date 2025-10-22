@@ -11,8 +11,21 @@ use Drupal\search_api\Item\Field;
 class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
   protected function getPropertiesList(array $properties, string $active_property_path, $base_url, ?string $datasource_id, string $parent_path = '', string $label_prefix = '', int $depth = 0, array $rows = []): array {
-
+    if($depth > 0 && str_starts_with($parent_path, 'relationship_info__')){
+      $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
+      $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, TRUE);
+      if( is_array($calculated_fields) && !empty($calculated_fields)){
+        foreach($properties as $property_name => $definition){
+          if(in_array($property_name, $calculated_fields)){
+            unset($properties[$property_name]);
+          }
+        }
+      }    
+    }
     $rows = parent::getPropertiesList($properties, $active_property_path, $base_url, $datasource_id, $parent_path, $label_prefix, $depth, $rows);
+    
+    
+    
     $remove_add_button = [];
     $related_entity_fields = \Drupal::service('relationship_nodes.field_name_resolver')->getRelatedEntityFields();
     foreach ($rows as $key => &$row) {
@@ -43,10 +56,13 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
       }
       
       else {
-
+        [$parent_field, $child_field] = explode(':', substr($machine_name, strlen('relationship_info__')), 2);
+        /*if(in_array($child_field, $calculated_fields)){
+          continue;
+        }*/
         $attributes = ['class' => ['relationship-child-checkbox']];
-        $parts = explode(':', $machine_name);
-        if (in_array(end($parts), $related_entity_fields)) {
+        
+        if (in_array($child_field, $related_entity_fields)) {
           $attributes['class'][] = 'is-disabled';
           $attributes['checked'] = 'checked';
           $attributes['disabled'] = 'disabled';
@@ -139,7 +155,6 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
         );
 
         $field->setConfiguration(['nested_fields' => $nested_fields_config]);
-
         $this->entity->addField($field);
         $this->messenger()->addStatus($this->t('Added relationship group with selected fields.'));
     }

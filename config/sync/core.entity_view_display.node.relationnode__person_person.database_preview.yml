@@ -1,32 +1,40 @@
-uuid: 87d8d9fb-96bc-4d15-a950-f8355747ada1
+uuid: 45f40f87-6093-4055-9ae2-c5511f57fceb
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_form_mode.node.relationship_subform
+    - core.entity_view_mode.node.database_preview
     - field.field.node.relationnode__person_person.field_location_text
     - field.field.node.relationnode__person_person.field_municipality
     - field.field.node.relationnode__person_person.rn_related_entity_1
     - field.field.node.relationnode__person_person.rn_related_entity_2
     - field.field.node.relationnode__person_person.rn_relation_type
     - node.type.relationnode__person_person
-id: node.relationnode__person_person.relationship_subform
+  module:
+    - user
+id: node.relationnode__person_person.database_preview
 targetEntityType: node
 bundle: relationnode__person_person
-mode: relationship_subform
-content: {  }
+mode: database_preview
+content:
+  field_municipality:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
 hidden:
-  created: true
   field_location_text: true
-  field_municipality: true
+  footnotes_group: true
   langcode: true
-  path: true
-  promote: true
   rn_related_entity_1: true
   rn_related_entity_2: true
   rn_relation_type: true
-  status: true
-  sticky: true
-  title: true
-  translation: true
-  uid: true
+  search_api_excerpt: true

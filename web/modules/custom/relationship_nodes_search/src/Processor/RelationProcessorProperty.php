@@ -7,6 +7,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
+use Drupal\relationship_nodes_search\Service\RelationSearchService;
 
 
 class RelationProcessorProperty extends ProcessorProperty implements ComplexDataDefinitionInterface{
@@ -50,11 +51,8 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
         continue;
       }
 
-
       $drupal_type = $field_definition->getType();
       $search_api_type = $this->mapFieldTypeToSearchApiType($drupal_type);
-
-
       $label = $this->convertToString($field_definition->getLabel());
       $description = $this->convertToString($field_definition->getDescription());
 
@@ -75,7 +73,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
         $this->drupalFieldInfo[$field_name]['target_type'] = $target_type;  
       }
     }
-    
+    $this->addCalculatedFieldDefinitions();
 
     return $this->propertyDefinitions;
   }
@@ -135,9 +133,28 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  public function drupalFieldIsReference(string $field_name): bool {
+      $field_info = $this->getDrupalFieldInfo($field_name);
+      return isset($field_info['type']) && $field_info['type'] === 'entity_reference';
+  }
+
+
+  public function getDrupalFieldTargetType(string $field_name): ?string {
+    if (!$this->drupalFieldIsReference($field_name)) {
+        return null;
+    }  
+    $field_info = $this->getDrupalFieldInfo($field_name);  
+    return $field_info['target_type'] ?? null;
+  } 
+
+
   public function buildNestedFieldsConfig(array $selected_fields): array {
     $config = [];
     $definitions = $this->getPropertyDefinitions();
+    $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
+    $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, true);
+    $calculated_fields = is_array($calculated_fields) ?  $calculated_fields : [];
+    $selected_fields = array_merge($selected_fields, $calculated_fields);
     foreach ($selected_fields as $field_name) {
       if (!isset($definitions[$field_name])) {
         continue;
@@ -155,6 +172,30 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
       }
     }
     return $config;
+  }
+
+
+  protected function addCalculatedFieldDefinitions(): void {
+
+    $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
+    if(!$relationSearchService instanceof RelationSearchService){
+      return;
+    }
+    $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, true);
+    $calculated_fields = is_array($calculated_fields) ?  $calculated_fields : [];
+
+    foreach ($calculated_fields as $field_name) {  
+      if (isset($this->propertyDefinitions[$field_name])) {
+        continue;
+      }
+      $property = DataDefinition::create('string')
+        ->setLabel($field_name)
+        ->setDescription('Calculated field')
+        ->setSetting('hidden', TRUE)
+        ->setSetting('readonly', TRUE)
+        ->setSetting('is_calculated', TRUE);
+      $this->propertyDefinitions[$field_name] = $property;
+    }
   }
 
 

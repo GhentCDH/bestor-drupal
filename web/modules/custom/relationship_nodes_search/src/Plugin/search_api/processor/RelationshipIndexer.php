@@ -106,7 +106,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   }
 
 
-
   /**
    * {@inheritdoc}
    */
@@ -183,6 +182,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
 
       $nested_fields_config = $field->getConfiguration()['nested_fields'];
       $relationship_node_type = substr($relation_nodetype_name, strlen($prefix));
+      
       if(!is_array($nested_fields_config) || empty($nested_fields_config) || !isset($item_relation_info_list[$relationship_node_type])){
         continue;
       }
@@ -208,64 +208,42 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           continue;
         }
 
-        $other_field = $this->fieldResolver->getOppositeRelatedEntityField($join_field);
+        $calculated_fields = $this->relationSearchService->getCalculatedFieldNames(null, null, true);
+        $calculated_fields = is_array($calculated_fields) ? $calculated_fields : [];
 
-        foreach($entities as $relationship_entity){
+        
+       foreach($entities as $relationship_entity){
           $nested_values = [];
           foreach ($nested_fields_config as $nested_field_name => $config){
-              $field_values = $relationship_entity->get($nested_field_name)->getValue();
-              if (empty($field_values)) {
-                  $nested_values[$nested_field_name] = NULL;
-                  continue;
-              }
-              
-              $values = [];
-              $drupal_field_info = $config['drupal_field'];
-              $is_ref = $drupal_field_info['type'] === 'entity_reference';
-              $target_type = $is_ref ? $drupal_field_info['target_type'] : null;
-
-              dpm($field_values);
-              foreach ($field_values as $field_value) {
-                $extracted = $this->extractSingleValue($field_value, $target_type);
-                if ($extracted !== NULL) {
-                  $values[] = $extracted;
-                }
-              }
-               
-              dpm($values);
-              $nested_values[$nested_field_name] = count($values) === 1 ? reset($values) : $values;
-          }
-
-          $calculated_fields = $this->relationSearchService->getCalculatedFieldNames();
-          $nested_values[$calculated_fields['this_entity']['id']] = isset($nested_values[$join_field]) ? $nested_values[$join_field] : '';
-          $nested_values[$calculated_fields['this_entity']['name']] = $entity->label();
-          $nested_values[$calculated_fields['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
-
-          $other_parsed = $this->relationSearchService->parseEntityReferenceValue($nested_values[$other_field] ?? null);
-          $related_entity = !empty($other_parsed['id']) ? $node_storage->load($other_parsed['id']) : null;
-          $nested_values[$calculated_fields['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
-          
-          $node_type = $relationship_entity->getType();
-          $relation_field = $this->fieldResolver->getRelationTypeField();
-          
-          if(
-            $this->settingsManager->isTypedRelationNodeType($node_type) &&
-            !empty($nested_values[$relation_field])
-          ){
-            $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-            $relation_parsed = $this->relationSearchService->parseEntityReferenceValue($nested_values[$relation_field]);
-            $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : null;
-            $default_label = $relation_term ? $relation_term->getName() : '';
-            if($join_field == $this->fieldResolver->getRelatedEntityFields(2) && !empty($relation_parsed['id'])){
-              $mirror_array = $this->mirrorProvider->getMirrorArray($term_storage, $relation_parsed['id']);
-              $nested_values[$calculated_fields['relation_type']['name']] = reset($mirror_array);
-            } else {
-              $nested_values[$calculated_fields['relation_type']['name']] = $default_label;
+            if(in_array($nested_field_name, $calculated_fields)){
+              continue; // calculated fields are processed below
             }
+            $field_values = $relationship_entity->get($nested_field_name)->getValue();
+            if (empty($field_values)) {
+              $nested_values[$nested_field_name] = NULL;
+              continue;
+            }
+
+            $values = [];
+            $drupal_field_info = $config['drupal_field'];
+            $is_ref = $drupal_field_info['type'] === 'entity_reference';
+            $target_type = $is_ref ? $drupal_field_info['target_type'] : null;
+
+            foreach ($field_values as $field_value) {
+              $extracted = $this->extractSingleValue($field_value, $target_type);
+              if ($extracted !== NULL) {
+                $values[] = $extracted;
+              }
+            }
+            
+            $nested_values[$nested_field_name] = count($values) === 1 ? reset($values) : $values;
           }
-              
+
+          $this->fillCalculatedFields($nested_values, $entity, $relationship_entity, $join_field);
+
           $serialized[] = $nested_values;
         }
+        
       }
       if(!empty($serialized)){
         //dpm($serialized);
@@ -275,12 +253,42 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     }  
   }
 
+
+  protected function fillCalculatedFields(array &$nested_values, $entity, $relationship_entity, string $join_field): void { 
+    $calculated_fields = $this->relationSearchService->getCalculatedFieldNames();
+    
+    $nested_values[$calculated_fields['this_entity']['id']] = isset($nested_values[$join_field]) ? $nested_values[$join_field] : '';
+    $nested_values[$calculated_fields['this_entity']['name']] = $entity->label();
+
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    $other_field = $this->fieldResolver->getOppositeRelatedEntityField($join_field);
+    $other_parsed = $this->relationSearchService->parseEntityReferenceValue($nested_values[$other_field] ?? null);
+    $related_entity = !empty($other_parsed['id']) ? $node_storage->load($other_parsed['id']) : null;
+    $nested_values[$calculated_fields['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
+    $nested_values[$calculated_fields['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
+
+    $relation_field = $this->fieldResolver->getRelationTypeField();
+    if ($this->settingsManager->isTypedRelationNodeType($relationship_entity->getType()) && !empty($nested_values[$relation_field])) {
+      $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');    
+      $relation_parsed = $this->relationSearchService->parseEntityReferenceValue($nested_values[$relation_field]);
+      $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : null;
+      $default_label = $relation_term ? $relation_term->getName() : '';
+
+      if ($join_field == $this->fieldResolver->getRelatedEntityFields(2) && !empty($relation_parsed['id'])) {
+        $mirror_array = $this->mirrorProvider->getMirrorArray($term_storage, $relation_parsed['id']);
+        $nested_values[$calculated_fields['relation_type']['name']] = reset($mirror_array);
+      } else {
+        $nested_values[$calculated_fields['relation_type']['name']] = $default_label;
+      }
+    }
+  }
+
+
   protected function extractSingleValue($value, $target_type = null) {
     if (empty($value)) {
         return NULL;
     }
-    
-    // Entity reference
+
     if (isset($value['target_id'])) {
         if(empty($target_type)){
             return $value['target_id'];
@@ -288,18 +296,14 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         return $target_type . '/' . $value['target_id'];   
     }
     
-    // Value field
     if (isset($value['value'])) {
         return $value['value'];
     }
     
-    // Fallback
     if (is_array($value)) {
         return reset($value) ?: NULL;
     }
     
     return $value;
-  }
-
-  
+  }  
 }

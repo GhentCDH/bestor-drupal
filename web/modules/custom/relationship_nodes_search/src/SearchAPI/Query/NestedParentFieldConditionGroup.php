@@ -3,7 +3,7 @@
 namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\search_api\Query\ConditionGroup;
-use Drupal\relationship_nodes_search\SearchAPI\Query\NestedSubFieldCondition;
+use Drupal\relationship_nodes_search\SearchAPI\Query\NestedChildFieldCondition;
 
 /**
  * Condition group for nested field queries.
@@ -29,13 +29,14 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
     return !empty($this->parentFieldName);
   }
 
-  public function addSubFieldCondition(string $subFieldName, $value, $operator = '=') {
+  public function addChildFieldCondition(string $childFieldName, $value, $operator = '=') {
     if (empty($this->parentFieldName)) {
       throw new \LogicException('Parent field name must be set before adding subfield conditions.');
     }
-
-    $condition = new NestedSubFieldCondition($subFieldName, $value, $operator);
+    $full_child_path = $this->parentFieldName . '.' . $childFieldName . '.keyword';
+    $condition = new NestedChildFieldCondition($full_child_path, $value, $operator);
     $condition->setParentFieldName($this->parentFieldName);
+    $condition->setChildFieldName($childFieldName);
     
     $this->conditions[] = $condition;
     return $this;
