@@ -11,7 +11,7 @@ class RelationFieldStorageValidationObject {
   protected string $fieldType;
   protected int $cardinality;
   protected ?string $targetType;
-  protected RelationFieldConfigurator $configurator;
+  protected RelationFieldConfigurator $fieldConfigurator;
   protected array $errors = [];
 
 

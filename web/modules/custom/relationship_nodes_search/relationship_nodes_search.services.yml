@@ -21,7 +21,7 @@ services:
       - '@logger.factory'
       - '@cache.default'
       - '@relationship_nodes.field_name_resolver'
-  relationship_nodes_search.nested_filter_builder:
+  relationship_nodes_search.nested_query_filter_builder:
     class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFilterBuilder
     decorates: elasticsearch_connector.query_filter_builder
     arguments: 

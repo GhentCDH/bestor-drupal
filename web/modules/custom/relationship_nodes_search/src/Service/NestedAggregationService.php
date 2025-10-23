@@ -23,12 +23,12 @@ class NestedAggregationService {
         [$parent, $child] = explode(':', $field_id, 2);
         $full_field_path = $this->relationSearchService->colonsToDots($field_id);
         return [
-            $field_id => [
+            $field_id . '_filtered' => [
                 'nested' => [
                     'path' => $parent,
                 ],
                 'aggs' => [
-                    'facet_values' => [
+                    $field_id => [
                         'terms' => [
                             'field' => $full_field_path . '.keyword',
                             'size' => $size,
@@ -53,5 +53,20 @@ class NestedAggregationService {
      */
     public function getUniqueValues(array $buckets): array {
         return array_column($buckets, 'key');
+    }
+
+    public function cleanFacetResults(array $facetData): array {
+        dpm($facetData, 'stert input');
+
+            foreach ($facetData as $key => $result) {
+            
+            if (strlen($result) >= 2 && 
+                str_starts_with($result, '"') && 
+                str_ends_with($result, '"')) {
+                $facetData [$key] = substr($result, 1, -1);
+            }
+            
+        }
+        return $facetData;
     }
 }

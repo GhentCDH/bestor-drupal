@@ -267,7 +267,7 @@ protected function valueForm(&$form, FormStateInterface $form_state) {
                 'raw' => $this->t('Raw value (ID)'),
                 'label' => $this->t('Label (entity name)'),
             ],
-            '#default_value' => $filter_field_settings[$field_name]['select_display_mode'] ?? 'label',
+            '#default_value' => $filter_field_settings[$field_name]['select_display_mode'] ?? 'raw',
             '#description' => $this->t('How to display options in the dropdown. Only applies to entity reference fields.'),
             '#states' => array_merge(
                 $disabled_state,
@@ -463,7 +463,6 @@ protected function addSelectWidget(array &$form, string $field_name, array $fiel
 protected function buildFilterConditions(): array {
     $filter_field_settings = $this->options['filter_field_settings'] ?? [];
     $conditions = [];
-dpm($filter_field_settings);
     foreach ($filter_field_settings as $child_field_name => $field_config) {
         if (empty($field_config['enabled'])) {
             continue;
@@ -480,7 +479,6 @@ dpm($filter_field_settings);
         if ($value === '' || $value === NULL) {
             continue;
         }
-        dpm($value, 'valueeee');
         $field_operator = $this->getFieldOperator($child_field_name, $field_config);
 
             $conditions[] = [
@@ -530,9 +528,7 @@ dpm($filter_field_settings);
                 $condition['operator']
             );
         }
-        dpm($nested_field_condition, 'nested_field_condition');
         $this->query->addConditionGroup($nested_field_condition);
-        dpm($this->query->getWhere());
     }
 
 
@@ -684,9 +680,7 @@ protected function getDropdownOptions(string $field_name, string $display_mode =
     }
     // NOT cached - fetch now (can happen on first exposed form load)
     try {
-        dpm($this->getIndex(), 'index bij getDropdownOptions');
         $options = $this->fetchOptionsFromIndex($field_name, $display_mode);
-        
         // Cache it
         $this->valueOptions[$field_name] = $options;
         \Drupal::cache()->set(
@@ -735,6 +729,7 @@ protected function fetchOptionsFromIndex(string $field_name, string $display_mod
     }
     
     $field_id = $real_field . ':' . $field_name;
+    $full_field_path = $this->relationSearchService->colonsToDots($field_id);
     
     $query = $index->query();
     $query->range(0, 0);
@@ -742,7 +737,7 @@ protected function fetchOptionsFromIndex(string $field_name, string $display_mod
     // Set facet configuration
     $query->setOption('search_api_facets', [
         $field_id => [
-            'field' => $field_id,
+            'field' =>  $full_field_path,
             'limit' => 0,
             'operator' => 'or',
             'min_count' => 1,
@@ -753,18 +748,17 @@ protected function fetchOptionsFromIndex(string $field_name, string $display_mod
     
     try {
         $results = $query->execute();
-        dpm($results, 'res fetch');
         $facets = $results->getExtraData('search_api_facets', []);
-        dpm($facets, 'facets fetch');
-        if (empty($facets[$full_field_path])) {
+        if (empty($facets[$field_id])) {
             return [];
         }
         
-        $unique_ids = array_column($facets[$full_field_path], 'filter');
-        return $this->convertIdsToOptions($unique_ids, $field_name, $display_mode);
+        $results = array_column($facets[$field_id], 'filter');
+        dpm($results);
+        $display_mode = 'raw'; // voorkom exception MOET VERWIJDERD WORDEN OP TERMIJN
+        return $this->convertFacetResultsToOptions($results, $field_name, $display_mode);
         
     } catch (\Exception $e) {
-        dpm('wekrt niet');
         \Drupal::logger('relationship_nodes_search')->error(
             'Failed to fetch dropdown options: @message',
             ['@message' => $e->getMessage()]
@@ -776,20 +770,20 @@ protected function fetchOptionsFromIndex(string $field_name, string $display_mod
 /**
  * Convert entity IDs to display options.
  */
-protected function convertIdsToOptions(array $ids, string $field_name, string $display_mode): array {
-    if (empty($ids)) {
+protected function convertFacetResultsToOptions(array $results, string $field_name, string $display_mode = 'raw'): array {
+    if (empty($results)) {
         return [];
     }
-    
+    $results = $this->nestedAggregationService->cleanFacetResults($results);
     if ($display_mode === 'raw') {
-        return array_combine($ids, $ids);
+        return array_combine($results, $results);
     }
     
     $target_type = $this->getTargetTypeForField($field_name);
     
     try {
         $storage = $this->entityTypeManager->getStorage($target_type);
-        $entities = $storage->loadMultiple($ids);
+        $entities = $storage->loadMultiple($results);
         
         $options = [];
         foreach ($entities as $id => $entity) {
@@ -799,7 +793,7 @@ protected function convertIdsToOptions(array $ids, string $field_name, string $d
         return $options;
     } catch (\Exception $e) {
         \Drupal::logger('relationship_nodes_search')->error('Failed to load entities: @message', ['@message' => $e->getMessage()]);
-        return array_combine($ids, $ids);
+        return array_combine($results, $results);
     }
 }
 

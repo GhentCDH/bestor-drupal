@@ -114,12 +114,12 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             ];
 
             if($link_option){
-                $display_mode = $field_settings[$field_name]['display_mode'] ?? 'default';
+                $display_mode = $field_settings[$field_name]['display_mode'] ?? 'raw';
                 $form['relation_display_settings']['field_settings'][$field_name]['display_mode'] = [
                     '#type' => 'radios',
                     '#title' => $this->t('Display mode'),
                     '#options' => [
-                        'default' => $this->t('The raw value (id)'),
+                        'raw' => $this->t('The raw value (id)'),
                         'label' => $this->t('Label'),
                         'link' => $this->t('Label as link'),
                     ],
@@ -341,7 +341,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
      */
     protected function processFieldValue(string $field_name, $raw_value, array $settings, array $item, Index $index, string $sapi_field): ?array {
         $value_arr = is_array($raw_value) ? $raw_value : [$raw_value];
-        $display_mode = $settings['display_mode'] ?? 'default';
+        $display_mode = $settings['display_mode'] ?? 'raw';
         $processed_values = [];
 
         foreach($value_arr as $raw_val){

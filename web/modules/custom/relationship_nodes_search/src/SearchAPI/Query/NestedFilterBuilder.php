@@ -47,10 +47,10 @@ class NestedFilterBuilder extends FilterBuilder {
             }
         }
 
-        dpm($subfilters);
+        dpm($subfilters, 'subfilters');
 
         $combined_subfilters = $this->wrapWithConjunction($subfilters, $condition_group->getConjunction());
-        dpm($combined_subfilters);
+        dpm($combined_subfilters, ' combined subfilters');
 
         $filters = [
             'nested' => [
@@ -58,7 +58,7 @@ class NestedFilterBuilder extends FilterBuilder {
                 'query' => $combined_subfilters
             ]
         ];
-        dpm($filters);
+        dpm($filters, ' filters');
         return ['filters' => $filters];
 
     }
