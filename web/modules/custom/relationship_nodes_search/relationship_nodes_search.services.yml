@@ -16,6 +16,10 @@ services:
   relationship_nodes_search.relation_search_service:
     class: Drupal\relationship_nodes_search\Service\RelationSearchService
     arguments:
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@logger.factory'
+      - '@cache.default'
       - '@relationship_nodes.field_name_resolver'
   relationship_nodes_search.nested_filter_builder:
     class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFilterBuilder
@@ -23,3 +27,15 @@ services:
     arguments: 
       - '@logger.channel.elasticsearch_connector'
       - '@relationship_nodes_search.relation_search_service' 
+  relationship_nodes_search.nested_facet_builder:
+    class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFacetParamBuilder
+    decorates: elasticsearch_connector.facet_builder
+    arguments:
+      - '@logger.channel.elasticsearch_connector'
+      - '@relationship_nodes_search.nested_aggregation_service'
+      - '@relationship_nodes_search.relation_search_service'
+  relationship_nodes_search.nested_aggregation_service:
+    class: Drupal\relationship_nodes_search\Service\NestedAggregationService
+    arguments:
+      - '@relationship_nodes_search.relation_search_service'
+  

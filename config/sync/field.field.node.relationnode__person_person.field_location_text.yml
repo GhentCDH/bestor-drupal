@@ -1,0 +1,19 @@
+uuid: a7bd6e93-cac2-406b-b502-e60d6af96d0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_location_text
+    - node.type.relationnode__person_person
+id: node.relationnode__person_person.field_location_text
+field_name: field_location_text
+entity_type: node
+bundle: relationnode__person_person
+label: 'location text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

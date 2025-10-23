@@ -32,11 +32,16 @@
                         {% endif %}
                         
                         <span class="field-value">
-                          {% if item[field_name].link_url %}
-                            {{ link(item[field_name].field_value, item[field_name].link_url, {'class': ['relationship-link']}) }}
-                          {% else %}
-                            {{ item[field_name].field_value }}
-                          {% endif %}
+                          {% for field_value in item[field_name].field_values %}
+                            {% if field_value.link_url %}
+                              {{ link(field_value.value, field_value.link_url, {'class': ['relationship-link']}) }}
+                            {% else %}
+                              {{ field_value.value }}
+                            {% endif %}
+                            {% if not loop.last and item[field_name].separator is defined %}
+                              {{ item[field_name].separator }}
+                            {% endif %}
+                          {% endfor %}
                         </span>
                         
                       </span>
@@ -62,11 +67,16 @@
                   {% endif %}
                   
                   <span class="field-value">
-                    {% if item[field_name].link_url %}
-                      {{ link(item[field_name].field_value, item[field_name].link_url, {'class': ['relationship-link']}) }}
-                    {% else %}
-                      {{ item[field_name].field_value }}
-                    {% endif %}
+                    {% for field_value in item[field_name].field_values %}
+                      {% if field_value.link_url %}
+                        {{ link(field_value.value, field_value.link_url, {'class': ['relationship-link']}) }}
+                      {% else %}
+                        {{ field_value.value }}
+                      {% endif %}
+                      {% if not loop.last and item[field_name].separator is defined %}
+                        {{ item[field_name].separator }}
+                      {% endif %}
+                    {% endfor %}
                   </span>
                   
                 </span>

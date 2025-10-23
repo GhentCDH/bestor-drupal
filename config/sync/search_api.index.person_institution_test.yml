@@ -12,16 +12,6 @@ name: 'person institution test'
 description: ''
 read_only: false
 field_settings:
-  relationship_info__relationnode__person_institut__nested:
-    label: 'Related nodes of type relationnode__person_institut'
-    datasource_id: 'entity:node'
-    property_path: relationship_info__relationnode__person_institut
-    type: relationship_nodes_search_nested_relationship
-    configuration:
-      nested_fields:
-        - rn_related_entity_1
-        - rn_related_entity_2
-        - rn_relation_type
   relationship_info__relationnode__person_person__nested:
     label: 'Related nodes of type relationnode__person_person'
     datasource_id: 'entity:node'
@@ -29,9 +19,55 @@ field_settings:
     type: relationship_nodes_search_nested_relationship
     configuration:
       nested_fields:
-        - rn_related_entity_1
-        - rn_related_entity_2
-        - rn_relation_type
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        field_location_text:
+          type: string
+          label: 'location text'
+          drupal_field:
+            machine_name: field_location_text
+            type: string
+        field_municipality:
+          type: string
+          label: Municipality
+          drupal_field:
+            machine_name: field_municipality
+            type: entity_reference
+            target_type: taxonomy_term
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
   title:
     label: Title
     datasource_id: 'entity:node'

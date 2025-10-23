@@ -2,7 +2,7 @@
 
 namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
-use Drupal\search_api\Query\ConditionGroup;
+use Drupal\search_api\Query\Condition;
 
 /**
  * Condition group for nested field queries.
@@ -10,9 +10,15 @@ use Drupal\search_api\Query\ConditionGroup;
  * This class extends the standard ConditionGroup to add support for
  * Elasticsearch nested queries by tracking the parent field path.
  */
-class NestedFieldCondition extends ConditionGroup {
+class NestedChildFieldCondition extends Condition {
 
   protected ?string $parentFieldName = null;
+  protected ?string $childFieldName = null;
+  
+
+  public function getParentFieldName(): ?string {
+    return $this->parentFieldName;
+  }
 
 
   public function setParentFieldName(string $parentFieldName): self {
@@ -20,11 +26,19 @@ class NestedFieldCondition extends ConditionGroup {
     return $this;
   }
 
-  public function getParentFieldName(): ?string {
-    return $this->parentFieldName;
+  
+  public function getChildFieldName(): ?string {
+    return $this->childFieldName;
   }
 
-  public function isNestedField(): bool {
+
+  public function setChildFieldName(string $childFieldName): self {
+    $this->childFieldName = $childFieldName;
+    return $this;
+  }
+
+
+  public function isNestedChildField(): bool {
     return !empty($this->parentFieldName);
   }
 }

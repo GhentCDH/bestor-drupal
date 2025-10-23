@@ -6,21 +6,26 @@ use Drupal\search_api\Form\IndexAddFieldsForm;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Utility\Utility;
+use Drupal\search_api\Item\Field;
 
 class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
-  protected function getPropertiesList(
-    array $properties,
-    string $active_property_path,
-    $base_url,
-    ?string $datasource_id,
-    string $parent_path = '',
-    string $label_prefix = '',
-    int $depth = 0,
-    array $rows = []
-  ): array {
-
+  protected function getPropertiesList(array $properties, string $active_property_path, $base_url, ?string $datasource_id, string $parent_path = '', string $label_prefix = '', int $depth = 0, array $rows = []): array {
+    if($depth > 0 && str_starts_with($parent_path, 'relationship_info__')){
+      $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
+      $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, TRUE);
+      if( is_array($calculated_fields) && !empty($calculated_fields)){
+        foreach($properties as $property_name => $definition){
+          if(in_array($property_name, $calculated_fields)){
+            unset($properties[$property_name]);
+          }
+        }
+      }    
+    }
     $rows = parent::getPropertiesList($properties, $active_property_path, $base_url, $datasource_id, $parent_path, $label_prefix, $depth, $rows);
+    
+    
+    
     $remove_add_button = [];
     $related_entity_fields = \Drupal::service('relationship_nodes.field_name_resolver')->getRelatedEntityFields();
     foreach ($rows as $key => &$row) {
@@ -28,13 +33,13 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
       if (!str_starts_with($machine_name, 'relationship_info__')) {
         continue;
       }
-  
+     
       if (substr_count($machine_name, ':') === 0) {
          $this->addFieldButtons[] = [
           '#type' => 'submit',
           '#name' => Utility::createCombinedId($datasource_id, $machine_name),
           '#value' => $this->t('Add'),
-          '#submit' => ['::addRelationshipGroup', '::save'],
+          '#submit' => ['::addNestedRelationField', '::save'],
           '#limit_validation_errors' => [],
           '#attributes' => [
             'class' => ['button', 'button--primary', 'button--extrasmall', 'relationship-parent-add'],
@@ -51,9 +56,13 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
       }
       
       else {
-
+        [$parent_field, $child_field] = explode(':', substr($machine_name, strlen('relationship_info__')), 2);
+        /*if(in_array($child_field, $calculated_fields)){
+          continue;
+        }*/
         $attributes = ['class' => ['relationship-child-checkbox']];
-        if (in_array(end(explode(':', $machine_name)), $related_entity_fields)) {
+        
+        if (in_array($child_field, $related_entity_fields)) {
           $attributes['class'][] = 'is-disabled';
           $attributes['checked'] = 'checked';
           $attributes['disabled'] = 'disabled';
@@ -91,7 +100,8 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
       return $form;
     }
 
-    public function addRelationshipGroup(array $form, FormStateInterface $form_state) {
+    // Handles the subission of the "add" button of a single (nested) relation field in the 'add fields to index' formDDD
+    public function addNestedRelationField(array $form, FormStateInterface $form_state) {
         $button = $form_state->getTriggeringElement();
         if (!$button || !isset($button['#property'])) {
             return;
@@ -106,14 +116,15 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
         }
 
         $all_table_rows = $form_state->getCompleteForm()['datasources']['datasource_entity:node']['table']['#rows'];
-         
 
         $nested_properties = [];
 
         $i = $row_key + 1;
 
         while(strtok($all_table_rows[$i]['machine_name']['data'], ':') == $property_path && isset($all_table_rows[$i]['relation_property'])){
-          if($all_table_rows[$i]['relation_property']['data']['#attributes']['checked'] == 'checked'){
+
+          $is_checked = $all_table_rows[$i]['relation_property']['data']['#attributes']['checked'] ?? NULL;
+          if($is_checked === 'checked'){
             $nested_properties[] = str_replace( $property_path . ':', '', $all_table_rows[$i]['machine_name']['data']);
           }     
           $i++;
@@ -133,13 +144,17 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
           return;
         }
 
-        $nested_properties = array_unique($nested_properties);
+        $nested_fields_config = $property->buildNestedFieldsConfig(array_unique($nested_properties));
         
-        /** @var \Drupal\search_api\Item\Field $field */
-        $field = $this->fieldsHelper->createFieldFromProperty($this->entity, $property, $datasource_id, $property_path , $property_path . '__nested', 'relationship_nodes_search_nested_relationship');
-        $field->setConfiguration(['nested_fields' => $nested_properties]);
+        $field = $this->fieldsHelper->createFieldFromProperty(
+          $this->entity, 
+          $property, 
+          $datasource_id, 
+          $property_path , 
+          $property_path . '__nested', 'relationship_nodes_search_nested_relationship'
+        );
 
-
+        $field->setConfiguration(['nested_fields' => $nested_fields_config]);
         $this->entity->addField($field);
         $this->messenger()->addStatus($this->t('Added relationship group with selected fields.'));
     }

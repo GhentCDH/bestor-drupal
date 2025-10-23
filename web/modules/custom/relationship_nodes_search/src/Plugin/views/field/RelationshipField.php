@@ -29,7 +29,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         $this->relationSearchService = $relationSearchService;
     }
     
-
+    
     public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
         return new static(
             $configuration,
@@ -40,6 +40,9 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     }
 
 
+    /**
+     * Inherit docs.
+     */
     public function defineOptions() {
         $options = parent::defineOptions();
         foreach($this->getDefaultRelationFieldOptions() as $option => $default){
@@ -49,6 +52,9 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     }
 
 
+    /**
+     * Inherit docs.
+     */
     public function buildOptionsForm(&$form, FormStateInterface $form_state) {
         parent::buildOptionsForm($form, $form_state);
         
@@ -62,7 +68,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             return;
         }
 
-        $available_fields = $this->relationSearchService->getCalculatedFields($index, $sapi_field);
+        $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_field);
         
         if (empty($available_fields)) {
             $form['info'] = [
@@ -86,11 +92,14 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
 
         $field_settings = $this->options['field_settings'] ?? [];
 
+        $index = $this->getIndex();
+        $sapi_field = $this->getSearchApiField(); 
+
         foreach ($available_fields as $field_name) {
             $is_enabled = !empty($field_settings[$field_name]['enabled']);
+            $disabled_state = ['disabled' => [':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE]]];
 
-            $link_option = $this->titleFieldHasMatchingIdField($field_name);
-            $is_link = $is_enabled && $link_option && !empty($field_settings[$field_name]['link']);
+            $link_option =  $this->relationSearchService->nestedFieldCanLink($index, $sapi_field, $field_name);
             
             $form['relation_display_settings']['field_settings'][$field_name] = [
                 '#type' => 'details',
@@ -105,25 +114,28 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             ];
 
             if($link_option){
-                 $form['relation_display_settings']['field_settings'][$field_name]['link'] = [
-                    '#type' => 'checkbox',
-                    '#title' => $this->t('Display this field as a link'),
-                    '#default_value' => $is_link,
+                $display_mode = $field_settings[$field_name]['display_mode'] ?? 'default';
+                $form['relation_display_settings']['field_settings'][$field_name]['display_mode'] = [
+                    '#type' => 'radios',
+                    '#title' => $this->t('Display mode'),
+                    '#options' => [
+                        'default' => $this->t('The raw value (id)'),
+                        'label' => $this->t('Label'),
+                        'link' => $this->t('Label as link'),
+                    ],
+                    '#default_value' => $display_mode,
+                    '#description' => $this->t('How to display this field value.'),
+                    '#states' => $disabled_state,
                 ];
-
             }
 
             $form['relation_display_settings']['field_settings'][$field_name]['label'] = [
                 '#type' => 'textfield',
                 '#title' => $this->t('Custom label'),
-                '#default_value' => $field_settings[$field_name]['label'] ?? $this->formatFieldLabel($field_name),
+                '#default_value' => $field_settings[$field_name]['label'] ?? $this->relationSearchService->formatCalculatedFieldLabel($field_name),
                 '#description' => $this->t('Custom label for this field.'),
                 '#size' => 30,
-                '#states' => [
-                    'disabled' => [
-                        ':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE],
-                    ],
-                ],
+                '#states' => $disabled_state
             ];
 
             $form['relation_display_settings']['field_settings'][$field_name]['weight'] = [
@@ -132,23 +144,26 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
                 '#default_value' => $field_settings[$field_name]['weight'] ?? 0,
                 '#description' => $this->t('Fields with lower weights appear first.'),
                 '#size' => 5,
-                '#states' => [
-                    'disabled' => [
-                        ':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE],
-                    ],
-                ],
+                '#states' => $disabled_state
             ];
 
             $form['relation_display_settings']['field_settings'][$field_name]['hide_label'] = [
                 '#type' => 'checkbox',
                 '#title' => $this->t('Hide label in output'),
                 '#default_value' => $field_settings[$field_name]['hide_label'] ?? FALSE,
-                '#states' => [
-                    'disabled' => [
-                        ':input[name="options[relation_display_settings][field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE],
-                    ],
-                ],
+                '#states' => $disabled_state
             ];
+
+            if(!$is_predefined){
+                $form['relation_display_settings']['field_settings'][$field_name]['multiple_separator'] = [
+                    '#type' => 'textfield',
+                    '#title' => $this->t('Multiple Values Separator'),
+                    '#default_value' => $field_settings[$field_name]['multiple_separator'] ?? ', ',
+                    '#description' => $this->t('Configure how to separate multiple values (only applies if this field has multiple values).'),
+                    '#size' => 10,
+                    '#states' => $disabled_state
+                ];
+            }
         }
 
         $form['relation_display_settings']['sort_by_field'] = [
@@ -175,7 +190,10 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         ];
     }
 
-    
+
+    /**
+     * Inherit docs.
+     */
     public function submitOptionsForm(&$form, FormStateInterface $form_state) {
         parent::submitOptionsForm($form, $form_state);
         $relation_options = $form_state->getValue(['options', 'relation_display_settings']);
@@ -186,14 +204,22 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         }
     }  
 
-   
+
+    /**
+     * Inherit docs.
+     */
     public function getValue(ResultRow $values, $field = NULL) {
-        $indexed_relation_fields = $this->getOriginalNestedFields();
+        $index = $this->getIndex();
+        $sapi_field = $this->getSearchApiField();      
+        if (!$index instanceof Index || empty($sapi_field)) {
+            return parent::getValue($values, $field);
+        }
+
         $values_arr = get_object_vars($values);
         if(empty($values_arr) || !is_array($values_arr)){
             return parent::getValue($values, $field);
         }
-        $sapi_field = $this->getSearchApiField();
+
         if(empty($values_arr[$sapi_field])){
             return parent::getValue($values, $field);
         }
@@ -205,6 +231,9 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     }
 
 
+    /**
+     * Override render and sort methods to prevent the default views rendering: force to use custom rendering.
+     */
     public function render(ResultRow $values) {
         $nested_data = $this->getValue($values);
         if (empty($nested_data) || !is_array($nested_data)) {
@@ -227,10 +256,6 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         ];
     }
 
-
-    /**
-     * Override render and sort methods to prevent the default views rendering: force to use custom rendering.
-     */
     public function clickSortable() {
         return FALSE;
     }
@@ -248,64 +273,149 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         return '';
     }
 
-
-    protected function prepareTemplateData(array $nested_data) {
-
+    /**
+     * Prepare the data to be send to the twig template
+     */
+    protected function prepareTemplateData(array $nested_data): array {
         $field_settings = $this->options['field_settings'] ?? [];
+        $index = $this->getIndex();
+        $sapi_field = $this->getSearchApiField();
 
+        if (!$index instanceof Index || empty($sapi_field)) {
+            return $this->getEmptyTemplateData();
+        }
+
+        $relationships = $this->buildRelationshipsArray($nested_data, $field_settings, $index, $sapi_field);
+        $relationships = $this->sortRelationships($relationships);
+        $grouped = $this->groupRelationships($relationships);
+        $fields = $this->buildFieldsMetadata($field_settings);
+        
+        return [
+            'relationships' => $relationships,
+            'grouped' => $grouped,
+            'summary' => $this->buildSummary($relationships, $fields, $grouped),
+            'fields' => $fields,
+        ];
+    }
+
+
+    /**
+     * Build relationships array from nested data.
+     */
+    protected function buildRelationshipsArray(array $nested_data, array $field_settings, Index $index, string $sapi_field): array {
         $relationships = [];
+        
         foreach ($nested_data as $item) {
             $item_with_values = [];
+            
             foreach ($field_settings as $field_name => $settings) {
-                if (!empty($settings['enabled']) && isset($item[$field_name])) {
-                    $value = $item[$field_name];
-                    $is_link = !empty($settings['link']);
-                    
-
-                    $item_with_values[$field_name] = [
-                        'field_value' => $value,
-                        'link_url' => null,
-                    ];
-                    
-                    if ($is_link) {
-                        $url = $this->relationSearchService->getUrlForField($field_name, $item);
-                        if ($url) {
-                            $item_with_values[$field_name]['link_url'] = $url;
-                        }
-                    }
+                if (empty($settings['enabled']) || !isset($item[$field_name])) {
+                    continue;
+                }
+                
+                $field_value = $this->processFieldValue(
+                    $field_name,
+                    $item[$field_name],
+                    $settings,
+                    $item,
+                    $index,
+                    $sapi_field
+                );
+                
+                if ($field_value !== null) {
+                    $item_with_values[$field_name] = $field_value;
                 }
             }
+            
             if (!empty($item_with_values)) {
                 $relationships[] = $item_with_values;
             }
         }
+        
+        return $relationships;
+    }
 
-        if (!empty($this->options['sort_by_field']) && !empty($relationships)) {
-            $sort_field = $this->options['sort_by_field'];
-            usort($relationships, function($a, $b) use ($sort_field) {
-                $val_a = $a[$sort_field]['field_value'] ?? '';
-                $val_b = $b[$sort_field]['field_value'] ?? '';
-                
-                return strcasecmp($val_a, $val_b);
-            });
+
+    /**
+     * Process a single field value based on its type and settings.
+     */
+    protected function processFieldValue(string $field_name, $raw_value, array $settings, array $item, Index $index, string $sapi_field): ?array {
+        $value_arr = is_array($raw_value) ? $raw_value : [$raw_value];
+        $display_mode = $settings['display_mode'] ?? 'default';
+        $processed_values = [];
+
+        foreach($value_arr as $raw_val){
+            $processed_values[] = $this->relationSearchService->processSingleFieldValue($raw_val, $display_mode);        
+        }
+        
+        return [
+            'field_values' => $processed_values,
+            'separator' => $settings['multiple_separator'] ?? ', ',
+            'is_multiple' => count($value_arr) > 1,
+        ];
+               
+    }
+
+
+    /**
+     * Sort relationships based on configured sort field.
+     */
+    protected function sortRelationships(array $relationships): array {
+        if (empty($this->options['sort_by_field']) || empty($relationships)) {
+            return $relationships;
+        }
+        
+        $sort_field = $this->options['sort_by_field'];
+        usort($relationships, function($a, $b) use ($sort_field) {
+            if (!isset($a[$sort_field]) || !isset($b[$sort_field])) {
+                return 0;
+            }
+            
+            $val_a = $a[$sort_field]['field_values'][0]['value'] ?? '';
+            $val_b = $b[$sort_field]['field_values'][0]['value'] ?? '';
+            
+            return strcasecmp($val_a, $val_b);
+        });
+        
+        return $relationships;
+    }
+
+
+    /**
+     * Group relationships based on configured group field.
+     */
+    protected function groupRelationships(array $relationships): array {
+        if (empty($this->options['group_by_field']) || empty($relationships)) {
+            return [];
         }
         
         $grouped = [];
-        if (!empty($this->options['group_by_field']) && !empty($relationships)) {
-            $group_field = $this->options['group_by_field'];
-            foreach ($relationships as $item) {
-                $group_key = $item[$group_field]['field_value'] ?? 'ungrouped';
+        $group_field = $this->options['group_by_field'];
         
-                if (!isset($grouped[$group_key])) {
-                    $grouped[$group_key] = [];
-                }
-                $grouped[$group_key][] = $item;
+        foreach ($relationships as $item) {
+            if (!isset($item[$group_field])) {
+                continue;
             }
+            
+            $group_key = $item[$group_field]['field_values'][0]['value'] ?? 'ungrouped';
+            
+            if (!isset($grouped[$group_key])) {
+                $grouped[$group_key] = [];
+            }
+            $grouped[$group_key][] = $item;
         }
+        
+        return $grouped;
+    }
 
+
+    /**
+     * Build fields metadata for template.
+     */
+    protected function buildFieldsMetadata(array $field_settings): array {
         $fields = [];
+        
         foreach ($field_settings as $field_name => $settings) {
-
             if (empty($settings['enabled'])) {
                 continue;
             }
@@ -314,10 +424,11 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
                 'name' => $field_name,
                 'label' => !empty($settings['label']) 
                     ? $settings['label'] 
-                    : $this->formatFieldLabel($field_name),
+                    :  $this->relationSearchService->formatCalculatedFieldLabel($field_name),
                 'weight' => $settings['weight'] ?? 0,
                 'hide_label' => !empty($settings['hide_label']),
-                'is_link' => !empty($settings['link']),
+                'display_mode' => $settings['display_mode'] ?? 'id',
+                'multiple_separator' => $settings['multiple_separator'] ?? ', '
             ];
         }
 
@@ -325,67 +436,53 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             return $a['weight'] <=> $b['weight'];
         });
         
-        $summary = [
+        return $fields;
+    }
+
+
+    /**
+     * Build summary data for template.
+     */
+    protected function buildSummary(array $relationships, array $fields, array $grouped): array {
+        return [
             'total' => count($relationships),
             'fields' => array_keys($fields),
             'has_groups' => !empty($grouped),
             'group_count' => count($grouped),
         ];
-             
+    }
+
+
+    /**
+     * Get empty template data structure.
+     */
+    protected function getEmptyTemplateData(): array {
         return [
-            'relationships' => $relationships,
-            'grouped' => $grouped,
-            'summary' => $summary,
-            'fields' => $fields,
+            'relationships' => [],
+            'grouped' => [],
+            'summary' => [
+                'total' => 0,
+                'fields' => [],
+                'has_groups' => false,
+                'group_count' => 0
+            ],
+            'fields' => [],
         ];
     }
 
-
-    protected function formatFieldLabel($field_name) {
-        $label = str_replace(['calculated_', '_'], ['', ' '], $field_name);
-        return ucfirst(trim($label));
-    }
-
-
-    protected function getCalculatedFields():array {
-        $index = $this->getIndex();
-        $sapi_field = $this->getSearchApiField();    
-        if (!$index instanceof Index || empty($sapi_field)) {
-            return [];
-        }
-
-        return $this->relationSearchService->getCalculatedFields($index, $sapi_field) ?? [];
-    }
-
-
-    protected function getOriginalNestedFields(): array {
-        $index = $this->getIndex();
-        $sapi_field = $this->getSearchApiField();      
-        if (!$index instanceof Index || empty($sapi_field)) {
-            return [];
-        }
-
-        return $this->relationSearchService->getOriginalNestedFields($index, $sapi_field) ?? [];
-    }
-
-
-    protected function titleFieldHasMatchingIdField(string $title_field_name):bool{
-        $index = $this->getIndex();
-        $sapi_field = $this->getSearchApiField();   
-        if (!$index instanceof Index || empty($sapi_field)) {
-            return false;
-        }
-
-        return $this->relationSearchService->titleFieldHasMatchingIdField($index, $sapi_field, $title_field_name);
-    }
-
-
+    
+    /**
+     * Get the name of the search api field.
+     */
     protected function getSearchApiField(): ?string {
         return $this->definition['search_api field'] ?? null; // With space - as such implemented in search api.
     }
 
 
-    protected function getDefaultRelationFieldOptions(){
+    /**
+     * Get an array of options for the field config form in views.
+     */
+    protected function getDefaultRelationFieldOptions(): array{
         return [
             'field_settings' => [],
             'sort_by_field' => '',
