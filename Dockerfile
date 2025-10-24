@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     nano \
     libmemcached-dev \
+    iptools-ping \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -44,14 +45,6 @@ ENV PHP_MEMORY_LIMIT=512M
 ENV PHP_MAX_EXECUTION_TIME=300
 ENV PHP_OPCACHE_ENABLE=0
 ENV ENVIRONMENT=development
-
-# Copy application files with writable permissions
-COPY --chown=application:application . /app
-
-# Install Composer dependencies with dev packages
-RUN composer install --no-interaction --optimize-autoloader
-
-RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
 RUN mkdir -p /app/web/sites/default/files \
     /app/config \

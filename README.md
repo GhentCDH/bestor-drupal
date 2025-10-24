@@ -2,10 +2,11 @@
 
 This repository contains the Drupal site for Bestor and is based on docker to provide the following services
 
-* MariaDB
+* MySQL
 * Elasticsearch
 * Memcache
 * [Drupal 10.3.6](https://hub.docker.com/_/drupal/tags?name=10.3.6) running PHP on Apache
+* Qdminer
 
 The Drupal site requires some additional configuration and setup. This is done via a [startup script](./startup_script.sh). The script does the following
 

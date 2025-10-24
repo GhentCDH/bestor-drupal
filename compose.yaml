@@ -8,11 +8,10 @@
 # 3. Run: docker-compose up -d --build
 # =============================================================================
 
-version: '3.8'
+name: ${PROJECT_NAME:-drupal}-dev
 
 services:
   drupal:
-    container_name: ${PROJECT_NAME:-drupal}-dev
     build:
       context: .
       dockerfile: Dockerfile
@@ -24,24 +23,25 @@ services:
     ports:
       - "${WEB_PORT:-8080}:80"
     volumes:
-      - ${PROJECT_NAME:-drupal}_sites_dev:/app/web/sites
-      - ${PROJECT_NAME:-drupal}_modules_custom_dev:/app/web/modules/custom
-      - ${PROJECT_NAME:-drupal}_themes_custom_dev:/app/web/themes/custom
-      - ${PROJECT_NAME:-drupal}_config_dev:/app/config
-      - ${PROJECT_NAME:-drupal}_private_dev:/app/private
+      - ./web/sites:/app/web/sites
+      - ./web/modules/custom:/app/web/modules/custom
+      - ./web/themes/custom:/app/web/themes/custom
+      - ./config:/app/config
+      - ./composer.json:/app/web/composer.json
+      - ./composer.lock:/app/web/composer.lock
+      - ./startup_script.sh:/app/web/startup_script.sh
+      - drupal_private:/app/private
+      - drupal_vendor:/app/vendor
     env_file:
       # All configuration in .env file
       - .env
     depends_on:
       db:
-        condition: service_healthy
+        condition: service_started
       memcache:
         condition: service_started
-    networks:
-      - drupal-network
 
   db:
-    container_name: ${PROJECT_NAME:-drupal}-db-dev
     image: mysql:8.0
     environment:
       - MYSQL_DATABASE=${DB_NAME}
@@ -50,26 +50,13 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     command: --max-allowed-packet=256M
     volumes:
-      - ${PROJECT_NAME:-drupal}_db_data_dev:/var/lib/mysql
-      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
-    ports:
-      - "${DB_PORT:-3306}:3306"
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - drupal-network
+      - drupal_db_data:/var/lib/mysql
+      - ./database/:/docker-entrypoint-initdb.d/:ro
+
   memcache:
-    container_name: ${PROJECT_NAME:-drupal}-memcache-dev
     image: memcached
-    ports:
-      - "${MEMCACHE_PORT:-11211}:11211"
-    networks:
-      - drupal-network
+
   adminer:
-        container_name: ${PROJECT_NAME:-drupal}-adminer-dev
         image: adminer:latest
         ports:
           - "${ADMINER_PORT:-8081}:8080"
@@ -77,39 +64,19 @@ services:
           - ADMINER_DEFAULT_SERVER=db
         depends_on:
           - db
-        networks:
-          - drupal-network
+
   elasticsearch:
-    container_name: ${PROJECT_NAME:-drupal}-elasticsearch-dev
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ports:
-      - "${ELASTICSEARCH_PORT:-9200}:9200"
-      - "9300:9300"
     volumes:
-      - ${PROJECT_NAME:-drupal}_elasticsearch_data_dev:/usr/share/elasticsearch/data
-    networks:
-      - drupal-network
-volumes:
-  ${PROJECT_NAME:-drupal}_db_data_dev:
-    name: ${PROJECT_NAME:-drupal}_db_data_dev
-  ${PROJECT_NAME:-drupal}_elasticsearch_data_dev:
-    name: ${PROJECT_NAME:-drupal}_elasticsearch_data_dev
-  ${PROJECT_NAME:-drupal}_sites_dev:
-    name: ${PROJECT_NAME:-drupal}_sites_dev
-  ${PROJECT_NAME:-drupal}_modules_custom_dev:
-    name: ${PROJECT_NAME:-drupal}_modules_custom_dev
-  ${PROJECT_NAME:-drupal}_themes_custom_dev:
-    name: ${PROJECT_NAME:-drupal}_themes_custom_dev
-  ${PROJECT_NAME:-drupal}_config_dev:
-    name: ${PROJECT_NAME:-drupal}_config_dev
-  ${PROJECT_NAME:-drupal}_private_dev:
-    name: ${PROJECT_NAME:-drupal}_private_dev
+      - drupal_elasticsearch_data:/usr/share/elasticsearch/data
 
-networks:
-  drupal-network:
-    name: ${PROJECT_NAME:-drupal}_network_dev
-    driver: bridge
+
+volumes:
+  drupal_db_data:
+  drupal_elasticsearch_data:
+  drupal_private:
+  drupal_vendor:

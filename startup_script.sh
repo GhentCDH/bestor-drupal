@@ -2,7 +2,7 @@
 
 # run composer install only if the environment variable is set
 if [ -n "$DRUPAL_RUN_COMPOSER" ]; then
-    composer install
+    composer install --no-interaction --optimize-autoloader
     # link drush
     ln -s /app/web/vendor/drush/drush/drush /usr/local/bin/drush
 fi
