@@ -252,7 +252,8 @@ protected function valueForm(&$form, FormStateInterface $form_state) {
             '#options' => [
                 'textfield' => $this->t('Text field'),
                 'select' => $this->t('Dropdown (from indexed values)'),
-                'entity_autocomplete' => $this->t('Entity autocomplete'),
+                // VVVV NOG TE IMPLEMENTEREN EVENTUEEL VVVV dpm
+                //'entity_autocomplete' => $this->t('Entity autocomplete'), 
             ],
             '#default_value' => $filter_field_settings[$field_name]['widget'] ?? 'textfield',
             '#states' => $disabled_state,
@@ -754,7 +755,6 @@ protected function fetchOptionsFromIndex(string $field_name, string $display_mod
         }
         
         $results = array_column($facets[$field_id], 'filter');
-        dpm($results);
         $display_mode = 'raw'; // voorkom exception MOET VERWIJDERD WORDEN OP TERMIJN
         return $this->convertFacetResultsToOptions($results, $field_name, $display_mode);
         

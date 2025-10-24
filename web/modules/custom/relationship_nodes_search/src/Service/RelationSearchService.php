@@ -149,7 +149,7 @@ class RelationSearchService {
     /**
      * Checks if a field is a parent index field, containing nested child fields.
      */
-    protected function isNestedSapiField(Field $parent_field):bool{
+    public function isNestedSapiField(Field $parent_field):bool{
         $index_field_config = $parent_field->getConfiguration() ?? [];
         if(!is_array($index_field_config) || empty($index_field_config['nested_fields'])){
             return false;

@@ -68,6 +68,14 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             return;
         }
 
+
+        // dit heironder verwijderen dpm
+        dpm($index->getFields()['relationship_info__relationnode__person_person__nested']);
+        dpm($index->getFields()['relationship_info__relationnode__person_person__nested']->getType());
+
+
+
+
         $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_field);
         
         if (empty($available_fields)) {
@@ -280,7 +288,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         $field_settings = $this->options['field_settings'] ?? [];
         $index = $this->getIndex();
         $sapi_field = $this->getSearchApiField();
-
+        
         if (!$index instanceof Index || empty($sapi_field)) {
             return $this->getEmptyTemplateData();
         }

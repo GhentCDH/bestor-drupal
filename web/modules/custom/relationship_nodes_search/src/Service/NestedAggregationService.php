@@ -56,7 +56,6 @@ class NestedAggregationService {
     }
 
     public function cleanFacetResults(array $facetData): array {
-        dpm($facetData, 'stert input');
 
             foreach ($facetData as $key => $result) {
             
