@@ -7,6 +7,7 @@ dependencies:
   - search_api:search_api
   - elasticsearch_connector:elasticsearch_connector
   - facets:facets_exposed_filters
+  - better_exposed_filters:better_exposed_filters
   - relationship_nodes:relationship_nodes
 services:
   - relationship_nodes_search.services.yml

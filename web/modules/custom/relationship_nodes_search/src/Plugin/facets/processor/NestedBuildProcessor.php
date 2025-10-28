@@ -25,8 +25,6 @@ class NestedBuildProcessor extends ProcessorPluginBase  implements BuildProcesso
      * {@inheritdoc}
      */
     public function build(FacetInterface $facet, array $results) {
-        dpm($facet, 'build facet');
-        dpm($results, 'build resultsx');
         return $results;
     }
 

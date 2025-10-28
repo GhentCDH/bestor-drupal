@@ -68,14 +68,6 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             return;
         }
 
-
-        // dit heironder verwijderen dpm
-        dpm($index->getFields()['relationship_info__relationnode__person_person__nested']);
-        dpm($index->getFields()['relationship_info__relationnode__person_person__nested']->getType());
-
-
-
-
         $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_field);
         
         if (empty($available_fields)) {

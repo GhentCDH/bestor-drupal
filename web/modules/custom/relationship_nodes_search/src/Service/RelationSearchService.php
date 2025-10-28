@@ -134,6 +134,26 @@ class RelationSearchService {
     }
 
 
+    public function getCalculatedFieldTargetType(string $field_name): ?string {
+        $calc_ids = $this->getCalculatedFieldNames(null,'id');
+        if(!in_array($field_name, $calc_ids)){
+            return null;
+        }
+        foreach($calc_ids as $calculated_entity_key => $calc_id){
+            if($calc_id !== $field_name){
+                continue;
+            }
+            if(in_array($calculated_entity_key, ['this_entity', 'related_entity'])){
+                return 'node';
+            } elseif ($calculated_entity_key === 'relation_type'){
+                return 'taxonomy_term';
+            }
+            break;
+        }
+        return null;
+    }
+
+
     /**
      * Checks if a field is a calculated field created by this module.
      */
@@ -230,7 +250,6 @@ class RelationSearchService {
     public function getNestedFieldTargetType(Index $index, string $parent_field_name, string $nested_field_name): ?string {
         $parent_field = $this->getIndexFieldInstance($index, $parent_field_name);
         $property = $parent_field instanceof Field ? $this->getNestedFieldProperty($parent_field) : null;
-        
         return $property ? $property->getDrupalFieldTargetType($nested_field_name) : null;
     }
 
@@ -340,5 +359,20 @@ public function getIndexFieldInstance(Index $index, string $field_name):?Field{
 
 
     return ['parent' => $parent, 'child' => $child];
+  }
+
+  public function extractIntIdsFromStringIds(array $string_id_array, string $entity_type){
+    $result = [];
+    $prefix = $entity_type . '/';
+    foreach($string_id_array as $string_id){
+        if(!is_string($string_id) || !str_starts_with($string_id, $prefix) ){
+            continue;
+        }
+        $cleaned = substr($string_id, strlen($prefix));
+        if (is_numeric($cleaned)) {
+             $result[] = (int) $cleaned;
+        }
+    }
+    return $result;
   }
 }

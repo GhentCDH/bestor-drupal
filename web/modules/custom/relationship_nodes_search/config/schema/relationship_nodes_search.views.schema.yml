@@ -1,0 +1,48 @@
+views.filter.search_api_relationship_filter:
+  type: views.filter.search_api
+  label: 'Search API Nested Relationship Filter'
+  mapping:
+    value:
+      type: sequence
+      label: 'Filter values'
+      sequence:
+        type: mapping
+        label: 'Nested field configuration'
+        mapping:
+          value:
+            type: string
+            label: 'Value'
+          operator:
+            type: string
+            label: 'Operator'
+    filter_field_settings:
+      type: sequence
+      label: 'Field settings'
+      sequence:
+        type: mapping
+        label: 'Nested child field settings'
+        mapping:
+          enabled:
+            type: boolean
+            label: 'Field enabled'
+          widget:
+            type: string
+            label: 'Widget type'
+          label:
+            type: label
+            label: 'Label override'
+          placeholder:
+            type: string
+            label: 'Placeholder text'
+          field_operator:
+            type: string
+            label: 'Field operator'
+          select_display_mode:
+            type: string
+            label: 'Select display mode'
+    operator:
+      type: string
+      label: 'Group operator (AND/OR)'
+    expose_operators:
+      type: boolean
+      label: 'Expose operator selector'

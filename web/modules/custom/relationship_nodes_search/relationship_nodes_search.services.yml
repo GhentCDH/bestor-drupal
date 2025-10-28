@@ -38,4 +38,19 @@ services:
     class: Drupal\relationship_nodes_search\Service\NestedAggregationService
     arguments:
       - '@relationship_nodes_search.relation_search_service'
-  
+  relationship_nodes_search.nested_filter_configuration_helper:
+    class: Drupal\relationship_nodes_search\Service\NestedFilterConfigurationHelper
+    arguments: 
+      - '@entity_type.manager'
+      - '@logger.factory'
+      - '@cache.default'
+      - '@relationship_nodes_search.relation_search_service'
+      - '@relationship_nodes_search.nested_aggregation_service' 
+  relationship_nodes_search.nested_filter_exposed_widget_helper:
+    class: Drupal\relationship_nodes_search\Service\NestedFilterExposedWidgetHelper
+    arguments: 
+      - '@entity_type.manager'
+      - '@logger.factory'
+      - '@cache.default'
+      - '@relationship_nodes_search.relation_search_service'
+      - '@relationship_nodes_search.nested_aggregation_service' 
