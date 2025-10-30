@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     nano \
     libmemcached-dev \
-    iptools-ping \
+    iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -47,10 +47,19 @@ ENV PHP_OPCACHE_ENABLE=0
 ENV ENVIRONMENT=development
 
 RUN mkdir -p /app/web/sites/default/files \
-    /app/config \
     /app/private
 
+# Copy application files
+COPY --chown=application:application composer.json composer.lock /app/
+COPY --chown=application:application ./web /app/web
+COPY --chown=application:application ./config /app/config
+
+COPY scripts/startup_script.sh /startup_script.sh
+RUN chmod +x /startup_script.sh
+
 EXPOSE 80
+
+CMD ["/startup_script.sh"]
 
 # =============================================================================
 # Production Stage
@@ -69,18 +78,15 @@ ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
 ENV ENVIRONMENT=production
 
 # Copy application files
-COPY --chown=application:application . /app
-COPY ./config /app/config
+COPY --chown=application:application composer.json composer.lock /app/
 
 # Install Composer dependencies WITHOUT dev packages
 RUN composer install --no-interaction --optimize-autoloader --no-dev \
     && composer clear-cache \
     && ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
-# Make Drush executable and create symlink (must be before setting read-only permissions)
-# RUN chmod +x /app/vendor/drush/drush/drush \
-#     && ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush \
-#     && chmod +x /usr/local/bin/drush
+COPY --chown=application:application ./web /app/web
+COPY --chown=application:application ./config /app/config
 
 # Create necessary directories (including PHP storage and temp)
 RUN mkdir -p /app/web/sites/default/files \
@@ -90,57 +96,5 @@ RUN mkdir -p /app/web/sites/default/files \
     /app/config \
     /app/private \
     /tmp
-
-# Set permissions for writable directories in production
-RUN chown -R application:application /app/web/sites/default/files \
-    && chmod -R 775 /app/web/sites/default/files \
-    && chown -R application:application /app/private \
-    && chmod -R 775 /app/private \
-    && chown -R application:application /tmp \
-    && chmod -R 1777 /tmp
-
-# Make application code read-only (except writable directories)
-# Keep these writable: files, private, config, PHP storage, vendor/drush
-RUN find /app -type f -not -path "/app/web/sites/default/files/*" \
-    -not -path "/app/private/*" \
-    -not -path "/app/config/*" \
-    -not -path "/app/vendor/drush/*" \
-    -not -path "/app/web/sites/simpletest/*" \
-    -exec chmod 444 {} \; \
-    && find /app -type d -not -path "/app/web/sites/default/files/*" \
-    -not -path "/app/private/*" \
-    -not -path "/app/config/*" \
-    -not -path "/app/vendor/drush/*" \
-    -not -path "/app/web/sites/simpletest/*" \
-    -exec chmod 555 {} \;
-
-# Ensure sites directory itself is writable for PHP storage
-RUN chmod 755 /app/web/sites/default \
-    && chown -R application:application /app/web/sites/default
-
-# Keep Drush executable in production
-RUN chmod +x /app/vendor/drush/drush/drush \
-    && chmod +x /app/vendor/bin/drush 2>/dev/null || true
-
-# Protect settings.php
-RUN if [ -f /app/web/sites/default/settings.php ]; then \
-    chmod 444 /app/web/sites/default/settings.php; \
-    chmod 444 /app/web/sites/default/settings.local.php; \
-    fi
-
-# Config directory should be writable for config sync
-RUN chown -R application:application /app/config \
-    && chmod -R 755 /app/config
-
-# Remove unnecessary files in production
-RUN rm -rf /app/.git \
-    /app/.gitignore \
-    /app/.editorconfig \
-    /app/README.md \
-    /app/web/INSTALL.txt \
-    /app/web/README.md \
-    /app/docs/ \
-    /app/.idea \
-    /app/.devcontainer
 
 EXPOSE 80

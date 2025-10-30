@@ -22,3 +22,9 @@ drush *arg:
 
 cache-rebuild:
   @docker exec bestor-drupal drush cr
+
+rebuild:
+    @echo -e 'Rebuilding from scratch...'
+    docker compose down -v
+    docker compose up -d --build
+    docker logs bestor-drupal -f

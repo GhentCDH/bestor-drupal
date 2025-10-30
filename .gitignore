@@ -151,3 +151,5 @@ cache/
 *.tmp
 *.cache
 
+# Imported files for image initialization
+initial-content/
