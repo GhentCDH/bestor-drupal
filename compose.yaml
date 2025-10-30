@@ -25,7 +25,7 @@ services:
       - "${WEB_PORT:-8080}:80"
     volumes:
       - ./config:/app/config
-      - ./startup_script.sh:/app/web/startup_script.sh
+      - ./initial-content:/app/initial-content:ro
       - ./scripts:/app/scripts:ro
       - drupal_private:/app/web/sites/default/private
       - drupal_files:/app/web/sites/default/files
