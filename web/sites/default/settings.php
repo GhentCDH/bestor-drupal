@@ -117,18 +117,9 @@ if (getenv('MEMCACHE_HOST')) {
 /**
  * Elasticsearch configuration.
  */
-$elasticsearch_host = getenv('SEARCH_API_SERVER_HOST');
-$elasticsearch_port = getenv('SEARCH_API_SERVER_PORT') ?: '9200';
-$elasticsearch_scheme = getenv('SEARCH_API_SCHEME') ?: 'http';
-
-if (empty($elasticsearch_host)) {
-  $project_name = getenv('PROJECT_NAME') ?: 'drupal-project';
-  $env_type = getenv('ENVIRONMENT') ?: 'development';
-  // If production, use '-elasticsearch-prd', otherwise '-elasticsearch-dev'.
-  $suffix = ($env_type === 'production') ? 'elasticsearch-prd' : 'elasticsearch-dev';
-  $elasticsearch_host = $project_name . '-' . $suffix;
-}
-
+$elasticsearch_host = getenv('ELASTIC_HOST');
+$elasticsearch_port = getenv('ELASTIC_PORT');
+$elasticsearch_scheme = getenv('ELASTIC_SCHEME');
 $elasticsearch_url = sprintf('%s://%s:%s', $elasticsearch_scheme, $elasticsearch_host, $elasticsearch_port);
 
 $config['search_api.server.elasticsearchconnectordocker']['backend_config']['connector_config']['url'] = $elasticsearch_url;
