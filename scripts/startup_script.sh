@@ -17,14 +17,17 @@ chmod -R 775 /app/web/sites/default/files
 
 # Copy the imported images from mediawiki to files if they exist
 # and if this has not already been done
-if [ -d /app/initial-content ] && [ ! -f /app/web/sites/default/private/.initial_content_imported ]; then
+IMPORT_LOCK='/app/web/sites/default/private/.initial_content_imported'
+if [ -d /app/initial-content ] \
+  && [ ! -f "$IMPORT_LOCK" ] \
+  && [ "$DRUPAL_RUN_IMAGE_IMPORT" = true ]; then
     echo "Copying imported images to files directory..."
     cp -r /app/initial-content/imported /app/web/sites/default/files
 
     # Set proper permissions
     chown -R application:application /app/web/sites/default/files/imported
 
-    touch /app/web/sites/default/private/.initial_content_imported
+    touch "$IMPORT_LOCK"
     echo "Initial content import completed."
 fi
 
