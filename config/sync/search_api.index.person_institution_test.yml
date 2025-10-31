@@ -5,6 +5,7 @@ dependencies:
   config:
     - search_api.server.elasticsearchconnectordocker
   module:
+    - search_api
     - node
     - relationship_nodes_search
 id: person_institution_test
