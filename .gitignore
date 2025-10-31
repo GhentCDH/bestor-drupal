@@ -67,20 +67,8 @@
 web/modules/contrib
 web/themes/contrib
 
-# Ignore docker db data
-docker_data/db/data/*
-!docker_data/db/data/.gitkeep
-
-docker_data/drupal/vendor/*
-!docker_data/drupal/vendor/.gitkeep
-
-docker_data/elastic/data/*
-!docker_data/elastic/data/.gitkeep
-
 .DS_Store
-Thumbs.db
 web/modules/custom/bestor_migration/source/output.json
-docker_data/db/general.log
 
 # Ignore environment files (sensitive data)
 .env
@@ -90,9 +78,7 @@ prd.env
 *.env.*.local
 
 # Ignore other files that may contain sensitive information
-database/*
-docker_data/db/*.sql
-docker_data/db/bestor-dump.sql
+initdb/
 _sync_backup/*.sql
 
 # Ignore backup and dump files
@@ -153,3 +139,7 @@ cache/
 
 # Imported files for image initialization
 initial-content/
+
+# Local settings file 
+# (might be useful for development overrides)
+web/sites/default/settings.local.php
