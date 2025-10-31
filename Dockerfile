@@ -35,9 +35,9 @@ COPY --chown=application:application composer.json composer.lock /app/
 COPY --chown=application:application ./web /app/web
 COPY --chown=application:application ./config /app/config
 
-COPY scripts/startup_script.sh /startup_script.sh
-RUN chmod +x /startup_script.sh
+COPY scripts/startup.sh /startup.sh
+RUN chmod +x /startup.sh
 
 EXPOSE 80
 
-CMD ["/startup_script.sh"]
+CMD ["/startup.sh"]
