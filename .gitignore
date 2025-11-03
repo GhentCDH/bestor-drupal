@@ -78,14 +78,9 @@ prd.env
 *.env.*.local
 
 # Ignore other files that may contain sensitive information
-initdb/
 _sync_backup/*.sql
 
-# Ignore backup and dump files
-*.sql
-*.sql.gz
-*.sql.zip
-*.dump
+# Ignore backup files
 backup/
 backups/
 _backup/
@@ -143,3 +138,4 @@ initial-content/
 # Local settings file 
 # (might be useful for development overrides)
 web/sites/default/settings.local.php
+config/sync/.htaccess

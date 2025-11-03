@@ -1,14 +1,17 @@
 #!/bin/sh
 
+ln -s /app/initial-content/imported /app/web/sites/default/files/imported
+chown application:application /app/web/sites/default/files/imported
+chmod 775 /app/web/sites/default/files/imported
+
 # run composer install only if the environment variable is set
 if [ -n "$DRUPAL_RUN_COMPOSER" ]; then
-    composer install --no-interaction --optimize-autoloader # TODO: asdf
+    composer install --no-interaction --optimize-autoloader
     # link drush
     ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 fi
 
 # fix .htaccess permissions
-# TODO: check if still necessary
 if [ -f /app/web/sites/default/files/.htaccess ]; then
     chown application:application /app/web/sites/default/files/.htaccess
     chmod 644 /app/web/sites/default/files/.htaccess
@@ -16,6 +19,7 @@ fi
 
 # run drush
 
+# This can be used to perform the data import locally
 if [ "$DRUPAL_FRESH_INSTALL" = true ]; then
     # Site is not installed yet, perform installation procedure
     drush site:install -y \
@@ -35,12 +39,12 @@ if [ "$DRUPAL_FRESH_INSTALL" = true ]; then
     drush search-api:reset-tracker 2>/dev/null || true
     drush search-api:rebuild-tracker 2>/dev/null || true
     drush search-api:index
-##### else
+else
     # Site is already installed, just run some updates
-    ##### drush -y updatedb -vvv # NOTE: in production
+    drush -y updatedb -vvv # NOTE: in production
 
     # Fix search API if needed
-    ##### drush search-api:reset-tracker 2>/dev/null || true
+    drush search-api:reset-tracker 2>/dev/null || true
 fi
 
 # Always import config if the environment variable is set

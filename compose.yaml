@@ -13,20 +13,19 @@ services:
       - 8080:80
     volumes:
       - ./config:/app/config
-      - ./initial-content/imported:/app/web/sites/default/files/imported:ro
+      - ./initial-content:/app/initial-content:ro
       - ./scripts:/app/scripts:ro
       - ./composer.json:/app/composer.json
       - ./composer.lock:/app/composer.lock
-      - ./web/sites/default/files/.htaccess:/app/web/sites/default/files/.htaccess
-      - ./web/sites/default/settings.php:/app/web/sites/default/settings.php
-      - drupal_private:/app/web/sites/default/private
-      - drupal_files:/app/web/sites/default/files
+      - ./web/modules/custom:/app/web/modules/custom
+      - ./web/themes/custom:/app/web/themes/custom
+      - ./web/sites/default:/app/web/sites/default
       - drupal_vendor:/app/vendor
     env_file:
       - .env
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
       memcache:
         condition: service_started
       elasticsearch:
@@ -44,6 +43,12 @@ services:
     volumes:
       - drupal_db_data:/var/lib/mysql
       - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   memcache:
     image: memcached
@@ -69,6 +74,5 @@ services:
 volumes:
   drupal_db_data:
   drupal_elasticsearch_data:
-  drupal_private:
   drupal_vendor:
   drupal_files:
