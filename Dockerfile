@@ -21,21 +21,46 @@ RUN apt-get update && apt-get install -y \
     nano \
     libmemcached-dev \
     iputils-ping \
+    memcached \
+    libmemcached-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
+RUN mkdir -p /app/web/sites/default/files
+RUN chown -R application:application /app/web/sites/default/files
+RUN chmod -R 775 /app/web/sites/default/files
+
+# =============================================================================
+# Development Stage
+# =============================================================================
+
 FROM base AS development
 
-RUN mkdir -p /app/web/sites/default/files /app/private
+COPY scripts/startup-dev.sh /startup.sh
+RUN chmod +x /startup.sh
+
+EXPOSE 80
+
+CMD ["/startup.sh"]
+
+# =============================================================================
+# Production Stage
+# =============================================================================
+
+FROM base as production
 
 # Copy application files
 COPY --chown=application:application composer.json composer.lock /app/
 COPY --chown=application:application ./web /app/web
 COPY --chown=application:application ./config /app/config
 
-COPY scripts/startup.sh /startup.sh
+RUN composer install --no-interaction --optimize-autoloader
+RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
+
+
+COPY scripts/startup-prod.sh /startup.sh
 RUN chmod +x /startup.sh
 
 EXPOSE 80

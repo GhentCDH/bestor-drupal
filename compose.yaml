@@ -13,8 +13,12 @@ services:
       - 8080:80
     volumes:
       - ./config:/app/config
-      - ./initial-content:/app/initial-content:ro
+      - ./initial-content/imported:/app/web/sites/default/files/imported:ro
       - ./scripts:/app/scripts:ro
+      - ./composer.json:/app/composer.json
+      - ./composer.lock:/app/composer.lock
+      - ./web/sites/default/files/.htaccess:/app/web/sites/default/files/.htaccess
+      - ./web/sites/default/settings.php:/app/web/sites/default/settings.php
       - drupal_private:/app/web/sites/default/private
       - drupal_files:/app/web/sites/default/files
       - drupal_vendor:/app/vendor
