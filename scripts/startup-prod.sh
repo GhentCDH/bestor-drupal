@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# ensure proper permissions for imported media files
+chown application:application /app/web/sites/default/files/imported
+chmod 775 /app/web/sites/default/files/imported
+
 # run drush
 drush -y updatedb # NOTE: in production
 

@@ -59,7 +59,6 @@ COPY --chown=application:application ./config /app/config
 RUN composer install --no-interaction --optimize-autoloader
 RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
-
 COPY scripts/startup-prod.sh /startup.sh
 RUN chmod +x /startup.sh
 

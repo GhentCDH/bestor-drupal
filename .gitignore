@@ -68,7 +68,6 @@ web/modules/contrib
 web/themes/contrib
 
 .DS_Store
-web/modules/custom/bestor_migration/source/output.json
 
 # Ignore environment files (sensitive data)
 .env
