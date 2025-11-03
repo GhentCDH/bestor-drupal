@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo.outputs.name_lc }}:{{github.ref_name}}, ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo.outputs.name_lc }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo.outputs.name_lc }}:${{github.ref_name}}, ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo.outputs.name_lc }}:latest
           push: true
           build-args: |
             PHP_VERSION=${{ matrix.php-version }}
