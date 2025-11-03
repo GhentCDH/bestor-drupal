@@ -63,6 +63,16 @@ $settings['entity_update_backup'] = TRUE;
 $settings['state_cache'] = TRUE;
 
 /**
+ * Public file base URL
+ */
+$settings['file_public_path'] = 'sites/default/files';
+
+/**
+ * Optimized assets path:
+ */
+$settings['file_assets_path'] = 'sites/default/files';
+
+/**
  * Node migration type.
  *
  * This is used to force the migration system to use the classic node migrations
@@ -80,6 +90,11 @@ $settings['locale_translation_auto_update'] = FALSE;
 $settings['config_exclude_modules'] = ['devel', 'devel_generate'];
 
 $config['system.site']['name'] = getenv('DRUPAL_SITE_NAME');
+
+$settings['trusted_host_patterns'] = [
+  '^' . preg_quote(getenv('DOMAIN'), '/') . '$',
+];
+
 
 /**
  * Database connection settings.
@@ -143,7 +158,6 @@ $settings['reverse_proxy_addresses'] = [
 $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO | \Symfony\Component\HttpFoundation\Request::HEADER_FORWARDED;
 
 // Load local settings if available.
-$local_settings = __DIR__ . '/settings.local.php';
-if (file_exists($local_settings)) {
-  include $local_settings;
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+  include $app_root . '/' . $site_path . '/settings.local.php';
 }
