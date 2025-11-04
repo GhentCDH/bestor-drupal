@@ -75,4 +75,3 @@ volumes:
   drupal_db_data:
   drupal_elasticsearch_data:
   drupal_vendor:
-  drupal_files:
