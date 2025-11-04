@@ -1,5 +1,7 @@
 #!/bin/sh
 
+sleep 20
+
 # Ensure files directory and imported symlink exist with correct ownership and permissions
 FILES_DIR="/app/web/sites/default/files"
 IMPORTED_IMG_PATH="$FILES_DIR/imported"
@@ -61,8 +63,6 @@ if [ -f "$FILES_HTACCESS" ]; then
     chown application:application "$FILES_HTACCESS"
     chmod 644 "$FILES_HTACCESS"
 fi
-
-# run drush
 
 # This can be used to perform the data import locally
 if [ "$DRUPAL_FRESH_INSTALL" = true ]; then
