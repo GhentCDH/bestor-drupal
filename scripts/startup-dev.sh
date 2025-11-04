@@ -1,8 +1,45 @@
 #!/bin/sh
 
-ln -s /app/initial-content/imported /app/web/sites/default/files/imported
-chown application:application /app/web/sites/default/files/imported
-chmod 775 /app/web/sites/default/files/imported
+# Ensure files directory and imported symlink exist with correct ownership and permissions
+FILES_DIR="/app/web/sites/default/files"
+IMPORTED_IMG_PATH="$FILES_DIR/imported"
+IMPORTED_IMG_SOURCE="/app/initial-content/imported"
+OWNER="application:application"
+DIR_MODE="775"
+
+# Create default files directory if missing; fix permissions/ownership if needed
+if [ ! -d "$FILES_DIR" ]; then
+    mkdir -p -m "$DIR_MODE" "$FILES_DIR"
+    chown "$OWNER" "$FILES_DIR"
+else
+    current_owner="$(stat -c '%U:%G' "$FILES_DIR" 2>/dev/null || echo '')"
+    if [ "$current_owner" != "$OWNER" ]; then
+        chown "$OWNER" "$FILES_DIR"
+    fi
+    current_mode="$(stat -c '%a' "$FILES_DIR" 2>/dev/null || echo '')"
+    if [ "$current_mode" != "$DIR_MODE" ]; then
+        chmod "$DIR_MODE" "$FILES_DIR"
+    fi
+fi
+
+# Ensure the imported images symlink exists and points to the correct target
+if [ -L "$IMPORTED_IMG_PATH" ]; then
+    link_target="$(readlink "$IMPORTED_IMG_PATH" 2>/dev/null || echo '')"
+    if [ "$link_target" != "$IMPORTED_IMG_SOURCE" ]; then
+        rm -f "$IMPORTED_IMG_PATH"
+        ln -s "$IMPORTED_IMG_SOURCE" "$IMPORTED_IMG_PATH"
+    fi
+elif [ -e "$IMPORTED_IMG_PATH" ]; then
+    # Exists but is not a symlink; replace it
+    rm -rf "$IMPORTED_IMG_PATH"
+    ln -s "$IMPORTED_IMG_SOURCE" "$IMPORTED_IMG_PATH"
+else
+    ln -s "$IMPORTED_IMG_SOURCE" "$IMPORTED_IMG_PATH"
+fi
+
+# Try to ensure the target has correct ownership/permissions (chown/chmod follow symlinks)
+chown "$OWNER" "$IMPORTED_IMG_PATH" 2>/dev/null || true
+chmod "$DIR_MODE" "$IMPORTED_IMG_PATH" 2>/dev/null || true
 
 # run composer install only if the environment variable is set
 if [ -n "$DRUPAL_RUN_COMPOSER" ]; then
@@ -11,10 +48,18 @@ if [ -n "$DRUPAL_RUN_COMPOSER" ]; then
     ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 fi
 
+# ensure .htaccess exists in files; copy from default if present and missing
+DEFAULT_HTACCESS="/app/web/sites/default/.htaccess"
+FILES_HTACCESS="/app/web/sites/default/files/.htaccess"
+
+if [ -f "$DEFAULT_HTACCESS" ] && [ ! -f "$FILES_HTACCESS" ]; then
+    cp "$DEFAULT_HTACCESS" "$FILES_HTACCESS"
+fi
+
 # fix .htaccess permissions
-if [ -f /app/web/sites/default/files/.htaccess ]; then
-    chown application:application /app/web/sites/default/files/.htaccess
-    chmod 644 /app/web/sites/default/files/.htaccess
+if [ -f "$FILES_HTACCESS" ]; then
+    chown application:application "$FILES_HTACCESS"
+    chmod 644 "$FILES_HTACCESS"
 fi
 
 # run drush
@@ -62,3 +107,4 @@ echo "Running deploy hooks..."
 printf "\n\nRunning supervisord\n\n\n"
 # start the main container command
 exec supervisord
+
