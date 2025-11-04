@@ -9,16 +9,19 @@ This repository contains the Drupal site for Bestor and is based on docker to pr
 - Adminer
 
 This repository contains configuration files for the drupal site in `config/sync` directory.
-The entrypoint of the drupal container makes sure that a drupal site is actually installed on the first run,
-and imports the synced configurations from this directory. (see [`startup.sh`](./startup.sh))
+The development entrypoint of the drupal container imports the synced
+configurations from this directory at startup. (see [`startup-dev.sh`](./scripts/startup-dev.sh))
 
-Since this drupal site uses data from the original Bestor MediaWiki site, the database will have to be migrated using
-the `migrate` crate in [Bestor-parser](https://github.com/GhentCDH/Bestor-parser/tree/main/migrate).
-This migration also copies all media files from the MediaWiki to a configurable location.
-These files should be copied to `initial-content` directory of this repository before starting the drupal site with the
-`DRUPAL_RUN_IMAGE_IMPORT` set to `true` in the `.env` file.
+This repository contains an SQL dump which is used to initialize the database.
+The site then contains a limited amount of example pages.
+
+Note that the images that are used by this example site are not included in the Git repo.
+If you need to have them, make sure to put them in the `./initial-content/imported` directory.
 
 ## Getting started
+
+First of all, you need an `.env` file.
+You can copy the one at `dev.env` to `.env` to get started.
 
 If you have the command runner `just` installed, you can simply run:
 `just rebuild` every time you want to start out fresh.
@@ -26,7 +29,7 @@ If you have the command runner `just` installed, you can simply run:
 Otherwise, to start all services run
 `docker compose up -d --build`
 
-The startup script in the drupal container will take a while (especially on the first run).
+The startup script in the drupal container will take about a minute.
 To see what it is doing, you can run `docker logs bestor-drupal -f`.
 Wait until you see `Running supervisord` or other apache-related log messages.
 
