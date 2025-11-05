@@ -44,6 +44,7 @@
         "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
         "drupal/rabbit_hole": "^1.0",
         "drupal/ruhi": "^10.2",
+        "drupal/sdc_component_library": "^1.0",
         "drupal/search_api": "^1.38",
         "drupal/search_api_glossary": "^4.2",
         "drupal/single_user_role": "^1.0@beta",

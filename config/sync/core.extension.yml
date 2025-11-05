@@ -69,6 +69,7 @@ module:
   rabbit_hole: 0
   relationship_nodes: 0
   relationship_nodes_search: 0
+  sdc_component_library: 0
   search_api: 0
   search_api_glossary: 0
   single_user_role: 0

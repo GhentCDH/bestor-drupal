@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4afec079c5131f404434197e3b30507",
+    "content-hash": "72666c9b29d16e898dca98152f1df828",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3407,6 +3407,68 @@
             "homepage": "https://www.drupal.org/project/ruhi",
             "support": {
                 "source": "https://git.drupalcode.org/project/ruhi"
+            }
+        },
+        {
+            "name": "drupal/sdc_component_library",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sdc_component_library.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/sdc_component_library-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "46cf208b9e402b05920364c9bec47866840e8e9c"
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1759912173",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Yustin Troost",
+                    "homepage": "https://www.drupal.org/u/yustintr",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "fabianderijk",
+                    "homepage": "https://www.drupal.org/user/278745"
+                },
+                {
+                    "name": "wiibe",
+                    "homepage": "https://www.drupal.org/user/3696476"
+                },
+                {
+                    "name": "yustintr",
+                    "homepage": "https://www.drupal.org/user/3751896"
+                }
+            ],
+            "description": "Provides a page with a component preview using a custom Twig template.",
+            "homepage": "http://drupal.org/project/sdc_component_library",
+            "keywords": [
+                "Drupal",
+                "sdc_component_library"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/admin_toolbar",
+                "issues": "https://www.drupal.org/project/issues/admin_toolbar"
             }
         },
         {
