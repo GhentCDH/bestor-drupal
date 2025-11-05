@@ -54,3 +54,4 @@ services:
       - '@cache.default'
       - '@relationship_nodes_search.relation_search_service'
       - '@relationship_nodes_search.nested_aggregation_service' 
+      - '@relationship_nodes_search.nested_filter_configuration_helper' 

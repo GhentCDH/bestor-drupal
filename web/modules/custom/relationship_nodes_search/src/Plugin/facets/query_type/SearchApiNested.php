@@ -64,15 +64,10 @@ class SearchApiNested extends SearchApiString implements ContainerFactoryPluginI
 
 
 
-
-
-
-
      dpm($this->query, 'DEZE QUERY JMOET AANGEWPAFG WORDEN');
      if ($query->getProcessingLevel() === QueryInterface::PROCESSING_FULL) {
         // Set the options for the actual query.
         $options = &$query->getOptions();
-        dpm($options, 'options');
         $options['search_api_facets'][$field_identifier] = $this->getFacetOptions();
       }
 

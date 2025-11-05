@@ -80,15 +80,15 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
         }
 
         $index = $this->getIndex();
-        $real_field = $this->getRealField();  
-        if (!$index instanceof Index || empty($real_field)) {
+        $sapi_fld_nm = $this->getSapiField();  
+        if (!$index instanceof Index || empty($sapi_fld_nm)) {
             $form['error'] = [
                 '#markup' => $this->t('Cannot load index or field configuration.'),
             ];
             return;
         }
         
-        $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $real_field);
+        $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_fld_nm);
         if (empty($available_fields)) {
             $form['info'] = [
                 '#markup' => $this->t('No nested fields available. Please configure nested fields in the Search API index.'),
@@ -156,7 +156,14 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     /*
     * Exposed Form
     */
-protected function valueForm(&$form, FormStateInterface $form_state) {
+protected function valueForm(&$form, FormStateInterface $form_state):void {
+    $index = $this->getIndex();
+    $sapi_fld_nm = $this->getSapiField();
+
+    if (!$index instanceof Index || empty($sapi_fld_nm)) {
+        return;
+    }
+
     $form['value'] = [
         '#type' => 'container',
         '#tree' => TRUE,
@@ -168,19 +175,26 @@ protected function valueForm(&$form, FormStateInterface $form_state) {
     }
 
     // If exposed, build exposed field widgets
+    
     $field_settings = $this->getFieldSettings();
     $enabled_fields = $this->filterWidgetHelper->getEnabledAndSortedFields($field_settings);    
     if (empty($enabled_fields)) {
         return;
     }
-    foreach ($enabled_fields as $child_field_name => $field_config) {
-        $this->buildExposedFieldWidget($form, $child_field_name, $field_config);
+
+    $exp_op = $this->options['expose_operators'] ?? false;
+
+    foreach ($enabled_fields as $child_fld_nm => $field_config) {
+        $field_value = $this->value[$child_fld_nm] ?? null;
+        $path = ['value', $child_fld_nm];
+        $this->filterWidgetHelper->buildExposedFieldWidget($form, $path, $index, $sapi_fld_nm, $child_fld_nm, $field_config, $field_value, $exp_op);
     }
+    dpm($form, 'form value form relatiopship filter');
 }
     
 
 
-    public function query() {
+    public function query():void {
         if (!$this->getQuery()) {
             return;
         }
@@ -194,124 +208,19 @@ protected function valueForm(&$form, FormStateInterface $form_state) {
     }
 
 
-
-    /**
-     * Build exposed field widget in exposed filter.
-     */
-    protected function buildExposedFieldWidget(array &$form, string $child_field_name, array $field_config): void {
-        $widget_type = $field_config['widget'] ?? 'textfield';
-        $label = $field_config['label'] ?? $this->relationSearchService->formatCalculatedFieldLabel($child_field_name);
-        $required = !empty($field_config['required']);
-        $placeholder = $field_config['placeholder'] ?? '';
-        $expose_operators = $this->options['expose_operators'] ?? FALSE;
-        $expose_field_operator = !empty($field_config['expose_field_operator']);
-
-        $form['value'][$child_field_name] = [
-            '#type' => 'container',
-            '#attributes' => ['class' => ['relationship-filter-field-wrapper']],
-        ];
-
-        if ($expose_operators && $expose_field_operator) {
-            $this->addOperatorWidget($form, $child_field_name, $field_config);
-        }
-
-        switch ($widget_type) {
-            case 'entity_autocomplete':
-                $this->addEntityAutocompleteWidget($form, $child_field_name, $label, $required, $placeholder);
-                break;
-
-            case 'select':
-                $this->addSelectWidget($form, $child_field_name, $field_config, $label, $required);
-                break;
-
-            case 'textfield':
-            default:
-                $this->addTextfieldWidget($form, $child_field_name, $label, $required, $placeholder);
-                break;
-        }
-    }
-
-    /**
-     * Add operator selector widget.
-     */
-    protected function addOperatorWidget(array &$form, string $field_name, array $field_config): void {
-        $form['value'][$field_name]['operator'] = [
-            '#type' => 'select',
-            '#title' => $this->t('Operator'),
-            '#options' => $this->filterConfigurator->getOperatorOptions(),
-            '#default_value' => $this->value[$field_name]['operator'] ?? $field_config['field_operator'] ?? '=',
-            '#attributes' => ['class' => ['relationship-filter-operator']],
-        ];
-    }
-
-    /**
-     * Add entity autocomplete widget.
-     */
-    protected function addEntityAutocompleteWidget(array &$form, string $field_name, string $label, bool $required, string $placeholder): void {
-        $target_type =  $this->filterConfigurator->getTargetTypeForField($field_name);
-        $default_entity = $this->getDefaultEntityValue($field_name, $target_type);
-        
-        $form['value'][$field_name]['value'] = [
-            '#type' => 'entity_autocomplete',
-            '#title' => $label,
-            '#target_type' => $target_type,
-            '#default_value' => $default_entity,
-            '#required' => $required,
-            '#placeholder' => $placeholder,
-        ];
-    }
-
-
-    /**
-     * Add dropdown select widget.
-     */
-protected function addSelectWidget(array &$form, string $field_name, array $field_config, string $label, bool $required): void {
-    $display_mode = $field_config['select_display_mode'] ?? 'raw';
-    $index = $this->getIndex();
-    $real_field = $this->getRealField();
-
-    $options = $this->filterWidgetHelper->getDropdownOptions($index, $real_field, $field_name, $display_mode);
-    if (!$required && !empty($options)) {
-        $options = ['' => $this->t('- Any -')] + $options;
-    }
-    
-    $form['value'][$field_name]['value'] = [
-        '#type' => 'select',
-        '#title' => $label,
-        '#options' => $options,
-        '#default_value' => $this->value[$field_name]['value'] ?? $this->value[$field_name] ?? '',
-        '#required' => $required,
-        '#empty_option' => $required ? NULL : $this->t('- Any -'),
-    ];
-}
-
-
-    /**
-     * Add textfield widget.
-     */
-    protected function addTextfieldWidget(array &$form, string $field_name, string $label, bool $required, string $placeholder): void {
-        $form['value'][$field_name]['value'] = [
-            '#type' => 'textfield',
-            '#title' => $label,
-            '#default_value' => $this->value[$field_name]['value'] ?? $this->value[$field_name] ?? '',
-            '#required' => $required,
-            '#placeholder' => $placeholder,
-        ];
-    }
-
     /**
      * Build filter conditions from form values.
      */
 protected function buildFilterConditions(): array {
     $filter_field_settings = $this->getFieldSettings();
     $conditions = [];
-    foreach ($filter_field_settings as $child_field_name => $field_config) {
+    foreach ($filter_field_settings as $child_fld_nm => $field_config) {
         if (empty($field_config['enabled'])) {
             continue;
         }
 
         if ($this->options['exposed']) {
-            $value = $this->value[$child_field_name]['value'] ?? $this->value[$child_field_name] ?? '';
+            $value = $this->value[$child_fld_nm]['value'] ?? $this->value[$child_fld_nm] ?? '';
         } 
 
         else {
@@ -321,10 +230,10 @@ protected function buildFilterConditions(): array {
         if ($value === '' || $value === NULL) {
             continue;
         }
-        $field_operator = $this->getFieldOperator($child_field_name, $field_config);
+        $field_operator = $this->getFieldOperator($child_fld_nm, $field_config);
 
             $conditions[] = [
-                'child_field_name' => $child_field_name,
+                'child_field_name' => $child_fld_nm,
                 'value' => $value,
                 'operator' => $field_operator,
             ];
@@ -336,11 +245,11 @@ protected function buildFilterConditions(): array {
     /**
      * Get the operator for a specific field.
      */
-    protected function getFieldOperator(string $field_name, array $field_config): string {
+    protected function getFieldOperator(string $child_fld_nm, array $field_config): string {
         $field_operator = '=';
 
-        if (!empty($field_config['expose_field_operator']) && isset($this->value[$field_name]['operator'])) {
-            $field_operator = $this->value[$field_name]['operator'];
+        if (!empty($field_config['expose_field_operator']) && isset($this->value[$child_fld_nm]['operator'])) {
+            $field_operator = $this->value[$child_fld_nm]['operator'];
         } elseif (!empty($field_config['field_operator'])) {
             $field_operator = $field_config['field_operator'];
         }
@@ -353,14 +262,14 @@ protected function buildFilterConditions(): array {
      */
     protected function applyNestedConditions(array $conditions): void {
         $operator = $this->options['operator'] ?? 'and';
-        $parent_field = $this->getRealField();
+        $sapi_fld_nm = $this->getSapiField();
 
-        if (empty($parent_field)) {
+        if (empty($sapi_fld_nm)) {
             return;
         }
 
         $nested_field_condition = new NestedParentFieldConditionGroup(strtoupper($operator));
-        $nested_field_condition->setParentFieldName($parent_field);
+        $nested_field_condition->setParentFieldName($sapi_fld_nm);
         
         foreach ($conditions as $condition) {
             $nested_field_condition->addChildFieldCondition(
@@ -376,40 +285,23 @@ protected function buildFilterConditions(): array {
     /**
      * Get target entity type for autocomplete field.
      */
-    protected function getTargetTypeForField(string $field_name): string {
+    protected function getTargetTypeForField(string $child_fld_nm): string {
         $index = $this->getIndex();
-        $real_field = $this->getRealField();
+        $sapi_fld_nm = $this->getSapiField();
         
-        if ($index instanceof Index && !empty($real_field)) {
-            $target_type = $this->relationSearchService->getNestedFieldTargetType($index, $real_field, $field_name);
+        if ($index instanceof Index && !empty($sapi_fld_nm)) {
+            $target_type = $this->relationSearchService->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
             if ($target_type) {
                 return $target_type;
             }
         }
         
         // Fallback based on field name
-        if (strpos($field_name, 'relation_type') !== false) {
+        if (strpos($child_fld_nm, 'relation_type') !== false) {
             return 'taxonomy_term';
         }
         
         return 'node';
-    }
-
-    /**
-     * Get default entity value for autocomplete field.
-     */
-    protected function getDefaultEntityValue(string $field_name, string $target_type) {
-        $value = $this->value[$field_name]['value'] ?? $this->value[$field_name] ?? NULL;
-        
-        if (empty($value) || !is_numeric($value)) {
-            return NULL;
-        }
-
-        try {
-            return $this->entityTypeManager->getStorage($target_type)->load($value);
-        } catch (\Exception $e) {
-            return NULL;
-        }
     }
 
 
@@ -426,9 +318,9 @@ protected function buildFilterConditions(): array {
     }
 
     /**
-     * Get the real field name for this filter.
+     * Get the real field name for this filter in the index.
      */
-    protected function getRealField(): ?string {
+    protected function getSapiField(): ?string {
         return $this->definition['real field'] ?? null;
     }
 
