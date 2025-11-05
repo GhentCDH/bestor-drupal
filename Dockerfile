@@ -1,57 +1,68 @@
-FROM  drupal:10.4.6-php8.3-apache-bookworm AS drupal-base
+ARG PHP_VERSION
+# =============================================================================
+# Base Stage - Common dependencies and setup
+# =============================================================================
+FROM webdevops/php-apache:${PHP_VERSION} AS base
 
-# add a basic editor
-RUN apt-get update  && apt-get install -y nano micro 
+# Set apache document root and index file
+ENV WEB_DOCUMENT_ROOT="/app/web"
+ENV WEB_DOCUMENT_INDEX="index.php"
 
-# add a zip tool to expand php composer dependencies
-RUN apt-get update  && apt-get install -y zip 
+# Install common tools needed for Drupal
+# CUSTOMIZATION: Add any additional packages your project needs here
+RUN apt-get update && apt-get install -y \
+    git \
+    zip \
+    unzip \
+    mariadb-client \
+    vim \
+    wget \
+    curl \
+    nano \
+    libmemcached-dev \
+    iputils-ping \
+    memcached \
+    libmemcached-tools \
+    && rm -rf /var/lib/apt/lists/*
 
-## Install memcache
-RUN apt-get update  && apt-get install -y curl
-RUN curl -sSLf https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o /usr/local/bin/install-php-extensions && \
-	chmod +x /usr/local/bin/install-php-extensions && \
-	install-php-extensions memcache
+# Set working directory
+WORKDIR /app
 
-## Copy and run the startup script
-COPY startup_script.sh /opt/drupal/
-RUN chmod +x /opt/drupal/startup_script.sh
-CMD ["/opt/drupal/startup_script.sh"]
+RUN mkdir -p /app/web/sites/default/files
+RUN chown -R application:application /app/web/sites/default/files
+RUN chmod -R 775 /app/web/sites/default/files
 
-# target environment
-# run composer install
-WORKDIR /opt/drupal
+# =============================================================================
+# Development Stage
+# =============================================================================
 
+FROM base AS development
 
-##  ---------------------
-##  Production
-##  ---------------------
-FROM drupal-base AS prd
+COPY scripts/startup-dev.sh /startup.sh
+RUN chmod +x /startup.sh
 
-# Copy local Drupal files to the container
-COPY web/sites                    /opt/drupal/web/sites
-#COPY web/modules                  /opt/drupal/web/modules
-#COPY web/themes                   /opt/drupal/web/themes
-#COPY web/profiles                 /opt/drupal/web/profiles
-COPY config                       /opt/drupal/config
-COPY docker_data/drupal/vendor    /opt/drupal/vendor
-COPY composer.json                /opt/drupal/
-COPY composer.lock                /opt/drupal/
+EXPOSE 80
 
-## install composer dependencies, but not dev dependencies
-RUN composer install --no-dev
+CMD ["/startup.sh"]
 
-## link drush to the standard path
-RUN ln -s /opt/drupal/vendor/drush/drush/drush /usr/local/bin/drush
+# =============================================================================
+# Production Stage
+# =============================================================================
 
+FROM base as production
 
-##  ---------------------
-##  Development
-##  ---------------------
-FROM drupal-base AS dev
+# Copy application files
+COPY --chown=application:application composer.json composer.lock /app/
+COPY --chown=application:application ./web /app/web
+COPY --chown=application:application ./config /app/config
 
-#Adds some network diagnostic tools to the dev container
-RUN apt-get update  && apt-get install -y iputils-ping telnet
-# Create custom configuration to disable opcache
-RUN echo "opcache.enable=0" > /usr/local/etc/php/conf.d/disable-opcache.ini
-# Upscale memory limit to 512M
-RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/set_mem_limit.ini 
+RUN composer install --no-interaction --optimize-autoloader
+RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
+
+COPY scripts/startup-prod.sh /startup.sh
+RUN chmod +x /startup.sh
+
+EXPOSE 80
+
+CMD ["/startup.sh"]
+

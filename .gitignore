@@ -8,6 +8,7 @@
 # Ignore configuration files that may contain sensitive information
 /web/sites/*/*settings.local.php
 /web/sites/*/*services*.yml
+!/web/sites/default/settings.local.php
 
 # Ignore paths that may contain user-generated content
 /web/sites/*/files
@@ -66,17 +67,77 @@
 web/modules/contrib
 web/themes/contrib
 
-# Ignore docker db data
-docker_data/db/data/*
-!docker_data/db/data/.gitkeep
+.DS_Store
 
-docker_data/drupal/vendor/*
-!docker_data/drupal/vendor/.gitkeep
+# Ignore environment files (sensitive data)
+.env
+dev.env
+prd.env
+*.env.local
+*.env.*.local
 
-docker_data/elastic/data/*
-!docker_data/elastic/data/.gitkeep
+# Ignore other files that may contain sensitive information
+_sync_backup/*.sql
 
+# Ignore backup files
+backup/
+backups/
+_backup/
+_backups/
+
+# Ignore private keys and certificates
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+id_rsa*
+*.pub
+
+# Ignore configuration files with credentials
+config/local/
+services.local.yml
+*.secret.yml
+secrets.yml
+credentials.json
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
 .DS_Store
 Thumbs.db
-web/modules/custom/bestor_migration/source/output.json
-docker_data/db/general.log
+desktop.ini
+
+
+# Log files
+*.log
+logs/
+*.log.*
+
+# Temporary and cache files
+tmp/
+temp/
+cache/
+*.tmp
+*.cache
+
+# Imported files for image initialization
+initial-content/
+
+# Local settings file 
+# (might be useful for development overrides)
+web/sites/default/settings.local.php
+config/sync/.htaccess
+
+docker_data
+
