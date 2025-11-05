@@ -8,11 +8,11 @@ DIR_MODE="775"
 # Create default files directory if missing; fix permissions/ownership if needed
 if [ ! -d "$FILES_DIR" ]; then
     mkdir -p -m "$DIR_MODE" "$FILES_DIR"
-    chown "$OWNER" "$FILES_DIR"
+    chown -R "$OWNER" "$FILES_DIR"
 else
     current_owner="$(stat -c '%U:%G' "$FILES_DIR" 2>/dev/null || echo '')"
     if [ "$current_owner" != "$OWNER" ]; then
-        chown "$OWNER" "$FILES_DIR"
+        chown -R "$OWNER" "$FILES_DIR"
     fi
     current_mode="$(stat -c '%a' "$FILES_DIR" 2>/dev/null || echo '')"
     if [ "$current_mode" != "$DIR_MODE" ]; then
