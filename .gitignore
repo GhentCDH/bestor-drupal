@@ -138,3 +138,5 @@ initial-content/
 # (might be useful for development overrides)
 web/sites/default/settings.local.php
 config/sync/.htaccess
+
+docker_data
