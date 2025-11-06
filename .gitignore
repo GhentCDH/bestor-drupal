@@ -140,3 +140,4 @@ web/sites/default/settings.local.php
 config/sync/.htaccess
 
 docker_data
+

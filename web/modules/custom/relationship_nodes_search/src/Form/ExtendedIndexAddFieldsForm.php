@@ -145,7 +145,7 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
         }
 
         $nested_fields_config = $property->buildNestedFieldsConfig(array_unique($nested_properties));
-        
+
         $field = $this->fieldsHelper->createFieldFromProperty(
           $this->entity, 
           $property, 

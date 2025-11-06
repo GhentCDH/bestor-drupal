@@ -3,6 +3,7 @@ name: bestor-dev
 services:
   drupal:
     container_name: bestor-drupal
+    platform: linux/amd64 
     build:
       context: .
       dockerfile: Dockerfile

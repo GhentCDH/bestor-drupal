@@ -10,8 +10,10 @@ start:
 enter:
   docker exec -it bestor-drupal bash
 
-drush *arg:
-  docker exec -it bestor-drupal drush {{arg}}
+reindex:
+  docker exec -it bestor-drupal drush search-api:reset-tracker
+  docker exec -it bestor-drupal drush search-api:rebuild-tracker
+  docker exec -it bestor-drupal drush search-api:index
 
 cache-rebuild:
   @docker exec bestor-drupal drush cr
@@ -24,3 +26,6 @@ rebuild:
     docker compose down -v
     docker compose up -d --build
     docker logs bestor-drupal -f
+
+drush *arg:
+  docker exec -it bestor-drupal drush {{arg}}

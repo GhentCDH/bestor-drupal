@@ -49,25 +49,27 @@ class RelationSearchService {
         }
 
         $related_entity_fields = $this->fieldNameResolver->getRelatedEntityFields();
-        $replaced_fields = [];
+        $remove = [];
         foreach($related_entity_fields as $related_entity_field){
             if(!in_array($related_entity_field, $nested_fields)){
                 // Misconfigured relationship object
                 return [];
             }
-            // Unset - a default 'other entity' field will be added below.
-            $replaced_fields[] = $related_entity_field;
+            // Unset - 'other entity' field is to be used.
+            $remove[] = $related_entity_field;
         }
 
-        $result_fields = array_values($this->getCalculatedFieldNames('related_entity'));
         $relation_type_field = $this->fieldNameResolver->getRelationTypeField();
         if(in_array($relation_type_field, $nested_fields)){
-            $replaced_fields[] = $relation_type_field;
-            $result_fields = array_merge($result_fields, array_values($this->getCalculatedFieldNames('relation_type')));
+            $remove[] = $relation_type_field;
+        } else {
+            foreach($this->getCalculatedFieldNames('relation_type', null, true) as $relation_type_field){
+                $remove[] = $relation_type_field;
+            }
         }
 
         foreach($nested_fields as $nested_field){
-            if(in_array($nested_field, $replaced_fields)){
+            if(in_array($nested_field, $remove)){
                 continue;
             }
             $result_fields[] = $nested_field;
@@ -132,6 +134,26 @@ class RelationSearchService {
     }
 
 
+    public function getCalculatedFieldTargetType(string $field_name): ?string {
+        $calc_ids = $this->getCalculatedFieldNames(null,'id');
+        if(!in_array($field_name, $calc_ids)){
+            return null;
+        }
+        foreach($calc_ids as $calculated_entity_key => $calc_id){
+            if($calc_id !== $field_name){
+                continue;
+            }
+            if(in_array($calculated_entity_key, ['this_entity', 'related_entity'])){
+                return 'node';
+            } elseif ($calculated_entity_key === 'relation_type'){
+                return 'taxonomy_term';
+            }
+            break;
+        }
+        return null;
+    }
+
+
     /**
      * Checks if a field is a calculated field created by this module.
      */
@@ -147,7 +169,7 @@ class RelationSearchService {
     /**
      * Checks if a field is a parent index field, containing nested child fields.
      */
-    protected function isNestedSapiField(Field $parent_field):bool{
+    public function isNestedSapiField(Field $parent_field):bool{
         $index_field_config = $parent_field->getConfiguration() ?? [];
         if(!is_array($index_field_config) || empty($index_field_config['nested_fields'])){
             return false;
@@ -195,7 +217,7 @@ class RelationSearchService {
     }
 
 
-    public function processSingleFieldValue($value, $display_mode = 'default'){
+    public function processSingleFieldValue($value, $display_mode = 'raw'){
         $result = ['value' => $value, 'link_url' => null];
         if(!in_array($display_mode, ['label', 'link'])){ // options only available if reference
             return $result;
@@ -228,7 +250,6 @@ class RelationSearchService {
     public function getNestedFieldTargetType(Index $index, string $parent_field_name, string $nested_field_name): ?string {
         $parent_field = $this->getIndexFieldInstance($index, $parent_field_name);
         $property = $parent_field instanceof Field ? $this->getNestedFieldProperty($parent_field) : null;
-        
         return $property ? $property->getDrupalFieldTargetType($nested_field_name) : null;
     }
 
@@ -317,26 +338,41 @@ public function getIndexFieldInstance(Index $index, string $field_name):?Field{
     [$parent, $child] = explode(':', $path, 2);
     $parent = trim($parent);
     $child  = trim($child);
-
     if(empty($parent) || empty($child)){
         return null;
     }
-    $parent_field = $this->getIndexFieldInstance($index, $parent);
-    if(!$parent_field instanceof Field){
-        return null;
-    }
 
-    $prop = $this->getNestedFieldProperty($parent_field);
-    if(!$prop instanceof RelationProcessorProperty){
-      return null;
-    }
-
-    $all_nested = $this->getAllNestedChildFieldNames($parent_field);
+    $all_nested = $this->getAllNestedChildFieldNames($index, $parent);
 
     if(!in_array($child, $all_nested)){
         return null;
     }
 
+    $parent_field = $this->getIndexFieldInstance($index, $parent);
+   
+
+    $prop = $this->getNestedFieldProperty($parent_field);
+
+    if(!$prop instanceof RelationProcessorProperty){
+      return null;
+    }
+
+
     return ['parent' => $parent, 'child' => $child];
+  }
+
+  public function extractIntIdsFromStringIds(array $string_id_array, string $entity_type){
+    $result = [];
+    $prefix = $entity_type . '/';
+    foreach($string_id_array as $string_id){
+        if(!is_string($string_id) || !str_starts_with($string_id, $prefix) ){
+            continue;
+        }
+        $cleaned = substr($string_id, strlen($prefix));
+        if (is_numeric($cleaned)) {
+             $result[] = (int) $cleaned;
+        }
+    }
+    return $result;
   }
 }

@@ -31,6 +31,7 @@ module:
   entity_reference_modal: 0
   entity_reference_revisions: 0
   facets: 0
+  facets_exposed_filters: 0
   facets_summary: 0
   field: 0
   field_group: 0
@@ -68,6 +69,7 @@ module:
   rabbit_hole: 0
   relationship_nodes: 0
   relationship_nodes_search: 0
+  sdc_component_library: 0
   search_api: 0
   search_api_glossary: 0
   single_user_role: 0

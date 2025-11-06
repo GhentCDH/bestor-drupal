@@ -1,141 +1,145 @@
 {
-  "name": "drupal/recommended-project",
-  "description": "Project template for Drupal projects with a relocated document root",
-  "type": "project",
-  "license": "GPL-2.0-or-later",
-  "homepage": "https://www.drupal.org/project/drupal",
-  "support": {
-    "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
-    "chat": "https://www.drupal.org/node/314178"
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
+    "name": "drupal/recommended-project",
+    "description": "Project template for Drupal projects with a relocated document root",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/drupal",
+    "support": {
+        "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
+        "chat": "https://www.drupal.org/node/314178"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "composer/installers": "^2.0",
+        "cweagans/composer-patches": "~1.0",
+        "drupal/admin_toolbar": "^3.5",
+        "drupal/amswap": "^3.2",
+        "drupal/base_field_override_ui": "^1.2",
+        "drupal/better_exposed_filters": "^7.0",
+        "drupal/bootstrap5": "^4.0",
+        "drupal/config_perms": "^2.3",
+        "drupal/config_views": "^2.1",
+        "drupal/core-composer-scaffold": "^10.3",
+        "drupal/core-project-message": "^10.3",
+        "drupal/core-recommended": "^10.3",
+        "drupal/ds": "^3.24",
+        "drupal/elasticsearch_connector": "^8.0@alpha",
+        "drupal/entity_events": "^2.0",
+        "drupal/entity_reference_modal": "^1.0",
+        "drupal/field_group": "^4.0",
+        "drupal/footnotes": "^4.0@beta",
+        "drupal/geofield": "^1.61",
+        "drupal/inline_entity_form": "^3.0@RC",
+        "drupal/media_entity_slideshow": "^2.5",
+        "drupal/media_entity_soundcloud": "^3.2",
+        "drupal/media_iframe": "^1.0",
+        "drupal/memcache": "^2.7",
+        "drupal/migrate_plus": "^6.0",
+        "drupal/paragraphs": "^1.18",
+        "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
+        "drupal/rabbit_hole": "^1.0",
+        "drupal/ruhi": "^10.2",
+        "drupal/sdc_component_library": "^1.0",
+        "drupal/search_api": "^1.38",
+        "drupal/search_api_glossary": "^4.2",
+        "drupal/single_user_role": "^1.0@beta",
+        "drupal/thex": "^10.0",
+        "drupal/twig_tweak": "^3.4",
+        "drush/drush": "^12.5",
+        "elasticsearch/elasticsearch": "^8.11"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true,
+            "cweagans/composer-patches": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+    	"enable-patching": true,
+  	   	"patches": {
+  	    	"drupal/core":{
+                "Sort out and fix language fallback inconsistencies":"https://www.drupal.org/files/issues/2023-01-30/drupal-fix_fallback-2951294-58.patch"
+            },
+            "drupal/facets": {
+                "https://www.drupal.org/project/facets/issues/3488396":"https://www.drupal.org/files/issues/2025-02-04/255.diff"      
+            },
+            "drupal/search_api_glossary":{
+                "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch"
+            }            	                                                           
+    	},
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            }
+        },
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
+        },
+        "drupal-core-project-message": {
+            "include-keys": [
+                "homepage",
+                "support"
+            ],
+            "post-create-project-cmd-message": [
+                "<bg=blue;fg=white>                                                         </>",
+                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
+                "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
+                "<bg=blue;fg=white>                                                         </>",
+                "",
+                "<bg=yellow;fg=black>Next steps</>:",
+                "  * Install the site: https://www.drupal.org/docs/installing-drupal",
+                "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
+                "  * Get support: https://www.drupal.org/support",
+                "  * Get involved with the Drupal community:",
+                "      https://www.drupal.org/getting-involved",
+                "  * Remove the plugin that prints this message:",
+                "      composer remove drupal/core-project-message"
+            ]
+        }
+    },
+    "require-dev": {
+        "drupal/devel": "^5.3"
     }
-  ],
-  "require": {
-    "composer/installers": "^2.0",
-    "cweagans/composer-patches": "~1.0",
-    "drupal/admin_toolbar": "^3.5",
-    "drupal/amswap": "^3.2",
-    "drupal/base_field_override_ui": "^1.2",
-    "drupal/better_exposed_filters": "^7.0",
-    "drupal/bootstrap5": "^4.0",
-    "drupal/config_perms": "^2.3",
-    "drupal/config_views": "^2.1",
-    "drupal/core-composer-scaffold": "^10.3",
-    "drupal/core-project-message": "^10.3",
-    "drupal/core-recommended": "^10.3",
-    "drupal/ds": "^3.24",
-    "drupal/elasticsearch_connector": "^8.0@alpha",
-    "drupal/entity_events": "^2.0",
-    "drupal/entity_reference_modal": "^1.0",
-    "drupal/field_group": "^4.0",
-    "drupal/footnotes": "^4.0@beta",
-    "drupal/geofield": "^1.61",
-    "drupal/inline_entity_form": "^3.0@RC",
-    "drupal/media_entity_slideshow": "^2.5",
-    "drupal/media_entity_soundcloud": "^3.2",
-    "drupal/media_iframe": "^1.0",
-    "drupal/memcache": "^2.7",
-    "drupal/migrate_plus": "^6.0",
-    "drupal/paragraphs": "^1.18",
-    "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
-    "drupal/rabbit_hole": "^1.0",
-    "drupal/ruhi": "^10.2",
-    "drupal/search_api": "^1.38",
-    "drupal/search_api_glossary": "^4.2",
-    "drupal/single_user_role": "^1.0@beta",
-    "drupal/thex": "^10.0",
-    "drupal/twig_tweak": "^3.4",
-    "drush/drush": "^12.5",
-    "elasticsearch/elasticsearch": "^8.11"
-  },
-  "conflict": {
-    "drupal/drupal": "*"
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": true,
-  "config": {
-    "allow-plugins": {
-      "composer/installers": true,
-      "drupal/core-composer-scaffold": true,
-      "drupal/core-project-message": true,
-      "phpstan/extension-installer": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "php-http/discovery": true,
-      "cweagans/composer-patches": true
-    },
-    "sort-packages": true
-  },
-  "extra": {
-    "enable-patching": true,
-    "patches": {
-      "drupal/core": {
-        "Sort out and fix language fallback inconsistencies": "https://www.drupal.org/files/issues/2023-01-30/drupal-fix_fallback-2951294-58.patch"
-      },
-      "drupal/facets": {
-        "https://www.drupal.org/project/facets/issues/3488396": "https://www.drupal.org/files/issues/2025-02-04/255.diff"
-      }
-    },
-    "drupal-scaffold": {
-      "locations": {
-        "web-root": "web/"
-      }
-    },
-    "installer-paths": {
-      "web/core": [
-        "type:drupal-core"
-      ],
-      "web/libraries/{$name}": [
-        "type:drupal-library"
-      ],
-      "web/modules/contrib/{$name}": [
-        "type:drupal-module"
-      ],
-      "web/profiles/contrib/{$name}": [
-        "type:drupal-profile"
-      ],
-      "web/themes/contrib/{$name}": [
-        "type:drupal-theme"
-      ],
-      "drush/Commands/contrib/{$name}": [
-        "type:drupal-drush"
-      ],
-      "web/modules/custom/{$name}": [
-        "type:drupal-custom-module"
-      ],
-      "web/profiles/custom/{$name}": [
-        "type:drupal-custom-profile"
-      ],
-      "web/themes/custom/{$name}": [
-        "type:drupal-custom-theme"
-      ]
-    },
-    "drupal-core-project-message": {
-      "include-keys": [
-        "homepage",
-        "support"
-      ],
-      "post-create-project-cmd-message": [
-        "<bg=blue;fg=white>                                                         </>",
-        "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
-        "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
-        "<bg=blue;fg=white>                                                         </>",
-        "",
-        "<bg=yellow;fg=black>Next steps</>:",
-        "  * Install the site: https://www.drupal.org/docs/installing-drupal",
-        "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
-        "  * Get support: https://www.drupal.org/support",
-        "  * Get involved with the Drupal community:",
-        "      https://www.drupal.org/getting-involved",
-        "  * Remove the plugin that prints this message:",
-        "      composer remove drupal/core-project-message"
-      ]
-    }
-  },
-  "require-dev": {
-    "drupal/devel": "^5.3"
-  }
 }

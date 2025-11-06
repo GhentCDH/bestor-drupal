@@ -101,6 +101,18 @@ if [ "$DRUPAL_RUN_CONFIG_IMPORT" = true ]; then
     drush -y cache:rebuild
 fi
 
+# Ensure admin user exists and has the correct password, even if environment variables changed
+if [ drush user:information "$DRUPAL_ADMIN_USER" > /dev/null 2>&1 ]; then
+    printf "\x1b[33mSet admin user password if not already set\x1b[0m\n"
+    drush user:password "$DRUPAL_ADMIN_USER" --password="$DRUPAL_ADMIN_PW" 2>/dev/null || true
+else
+    printf "\x1b[31mAdmin user does not exist, creating superuser and setting password\x1b[0m\n"
+    drush user:create "$DRUPAL_ADMIN_USER" --password="$DRUPAL_ADMIN_PW" --mail="$DRUPAL_ADMIN_EMAIL" --roles="administrator"
+    drush -y cache:rebuild
+fi
+
+
+
 echo "Running deploy hooks..."
 ##### drush deploy:hook
 

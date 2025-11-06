@@ -133,7 +133,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $definition = [
         'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
         'description' => $this->t('All related @type nodes, with selectable fields.', ['@type' => $relationship_node_type]),
-        'type' => 'string', 
+        'type' => 'array', 
         'processor_id' => $this->getPluginId(),
         'is_list' => TRUE,
         'definition_class_settings' => [
@@ -143,7 +143,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       
       $property = new RelationProcessorProperty($definition);
       $properties["relationship_info__{$relationship_node_type}"] = $property;
-
     }
 
     return $properties;

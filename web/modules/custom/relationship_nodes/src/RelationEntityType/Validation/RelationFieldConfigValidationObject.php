@@ -17,7 +17,7 @@ class RelationFieldConfigValidationObject {
   protected ?array $targetBundles;
   protected ?StorageInterface $storage;
   protected FieldNameResolver $fieldNameResolver;
-  protected RelationFieldConfigurator $configurator;
+  protected RelationFieldConfigurator $fieldConfigurator;
   protected RelationBundleSettingsManager $settingsManager;
   
   protected array $errors = [];

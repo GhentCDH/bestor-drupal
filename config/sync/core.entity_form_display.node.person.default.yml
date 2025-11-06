@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_period
+    - field.field.node.person.field_publications
     - field.field.node.person.field_references
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_summary
@@ -486,6 +487,14 @@ content:
     weight: 4
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_publications:
+    type: string_textfield
+    weight: 29
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_references:
     type: text_textarea

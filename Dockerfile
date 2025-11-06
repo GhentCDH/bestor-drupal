@@ -65,3 +65,4 @@ RUN chmod +x /startup.sh
 EXPOSE 80
 
 CMD ["/startup.sh"]
+

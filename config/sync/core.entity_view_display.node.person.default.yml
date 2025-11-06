@@ -12,6 +12,8 @@ dependencies:
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
     - field.field.node.person.field_period
+    - field.field.node.person.field_publications
+    - field.field.node.person.field_references
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_summary
     - field.field.node.person.field_typology
@@ -119,6 +121,14 @@ content:
       separator: '<i class="fa-solid fa-arrow-right"></i>'
     third_party_settings: {  }
     weight: 13
+    region: content
+  field_publications:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 16
     region: content
   field_specialisation:
     type: entity_reference_label
