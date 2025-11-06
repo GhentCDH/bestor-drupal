@@ -5,7 +5,7 @@ This repository contains the Drupal site for Bestor and is based on docker to pr
 - MySQL
 - Elasticsearch
 - Memcache
-- [Drupal 10.3.6](https://hub.docker.com/_/drupal/tags?name=10.3.6) running PHP on Apache
+- [Webdevops](https://hub.docker.com/r/webdevops/php) running PHP on Apache
 - Adminer
 
 This repository contains configuration files for the drupal site in `config/sync` directory.
@@ -26,6 +26,7 @@ You can copy the one at `dev.env` to `.env` to get started.
 To build and start all services, run
 
 ```sh
+cp dev.env .env
 docker compose up -d --build`
 ```
 
@@ -41,6 +42,8 @@ of the Bestor drupal site.
 
 To run `drush` open a command line in the container and simply run drush. It is available on PATH in the container.
 If you have `just`, you can also do `just drush <command>` (e.g. `just drush cr`).
+
+To reindex the elasticsearch index call the following `just reindex`.
 
 ## Media files
 

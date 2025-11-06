@@ -56,7 +56,7 @@ COPY --chown=application:application composer.json composer.lock /app/
 COPY --chown=application:application ./web /app/web
 COPY --chown=application:application ./config /app/config
 
-RUN composer install --no-interaction --optimize-autoloader
+RUN composer install --no-interaction --optimize-autoloader --no-dev
 RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
 COPY scripts/startup-prod.sh /startup.sh

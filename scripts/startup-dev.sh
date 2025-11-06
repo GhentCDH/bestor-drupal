@@ -45,9 +45,11 @@ chmod "$DIR_MODE" "$IMPORTED_IMG_PATH" 2>/dev/null || true
 
 # run composer install only if the environment variable is set
 if [ -n "$DRUPAL_RUN_COMPOSER" ]; then
-    composer install --no-interaction --optimize-autoloader
+    composer install --no-interaction --optimize-autoloader 
     # link drush
     ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
+    # enable devel module for development environments and dpm function
+    drush en devel -y
 fi
 
 # ensure .htaccess exists in files; copy from default if present and missing
