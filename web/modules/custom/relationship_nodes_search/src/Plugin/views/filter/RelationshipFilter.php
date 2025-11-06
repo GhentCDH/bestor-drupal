@@ -114,8 +114,8 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
             '#description' => $this->t('When exposed, allow users to choose the comparison operator for each field.'),
         ];
 
-        $filter_field_settings = $this->getFieldSettings();
-        $this->filterConfigurator->buildNestedWidgetConfigForm($form, $available_fields, $filter_field_settings);
+        $child_fld_settings = $this->getFieldSettings();
+        $this->filterConfigurator->buildNestedWidgetConfigForm($form, $available_fields, $child_fld_settings);
     }
 
     
@@ -139,8 +139,8 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
             return parent::adminSummary();
         }
 
-        $field_settings =  $this->getFieldSettings();
-        $enabled = $this->filterWidgetHelper->getEnabledFields($field_settings);
+        $child_fld_settings =  $this->getFieldSettings();
+        $enabled = $this->filterWidgetHelper->getEnabledFields($child_fld_settings);
         if (empty($enabled)) {
             return $this->t('Not configured');
         }
@@ -164,32 +164,13 @@ protected function valueForm(&$form, FormStateInterface $form_state):void {
         return;
     }
 
-    $form['value'] = [
-        '#type' => 'container',
-        '#tree' => TRUE,
-    ];
-
-    // If not exposed, show text fields for value inputs
-    if (!$this->options['exposed']) {
-        return;
-    }
-
-    // If exposed, build exposed field widgets
-    
-    $field_settings = $this->getFieldSettings();
-    $enabled_fields = $this->filterWidgetHelper->getEnabledAndSortedFields($field_settings);    
-    if (empty($enabled_fields)) {
-        return;
-    }
-
+    $child_fld_settings = $this->options['exposed'] ? $this->getFieldSettings() : [];
+    $child_fld_values = is_array($this->value) ? $this->value : [];
     $exp_op = $this->options['expose_operators'] ?? false;
 
-    foreach ($enabled_fields as $child_fld_nm => $field_config) {
-        $field_value = $this->value[$child_fld_nm] ?? null;
-        $path = ['value', $child_fld_nm];
-        $this->filterWidgetHelper->buildExposedFieldWidget($form, $path, $index, $sapi_fld_nm, $child_fld_nm, $field_config, $field_value, $exp_op);
-    }
-    dpm($form, 'form value form relatiopship filter');
+    $this->filterWidgetHelper->buildExposedFieldWidget(
+        $form, ['value'], $index, $sapi_fld_nm, $child_fld_settings, $child_fld_values, $exp_op
+    );
 }
     
 
@@ -212,9 +193,9 @@ protected function valueForm(&$form, FormStateInterface $form_state):void {
      * Build filter conditions from form values.
      */
 protected function buildFilterConditions(): array {
-    $filter_field_settings = $this->getFieldSettings();
+    $child_fld_settings = $this->getFieldSettings();
     $conditions = [];
-    foreach ($filter_field_settings as $child_fld_nm => $field_config) {
+    foreach ($child_fld_settings as $child_fld_nm => $field_config) {
         if (empty($field_config['enabled'])) {
             continue;
         }

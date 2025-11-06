@@ -405,16 +405,16 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     protected function buildFieldsMetadata(array $field_settings): array {
         $fields = [];
         
-        foreach ($field_settings as $field_name => $settings) {
+        foreach ($field_settings as $child_fld_nm => $settings) {
             if (empty($settings['enabled'])) {
                 continue;
             }
             
-            $fields[$field_name] = [
-                'name' => $field_name,
+            $fields[$child_fld_nm] = [
+                'name' => $child_fld_nm,
                 'label' => !empty($settings['label']) 
                     ? $settings['label'] 
-                    :  $this->relationSearchService->formatCalculatedFieldLabel($field_name),
+                    :  $this->relationSearchService->formatCalculatedFieldLabel($child_fld_nm),
                 'weight' => $settings['weight'] ?? 0,
                 'hide_label' => !empty($settings['hide_label']),
                 'display_mode' => $settings['display_mode'] ?? 'id',

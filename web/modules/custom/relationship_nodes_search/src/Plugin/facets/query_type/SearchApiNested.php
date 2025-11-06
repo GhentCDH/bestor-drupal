@@ -53,7 +53,7 @@ class SearchApiNested extends SearchApiString implements ContainerFactoryPluginI
 
   /**
    * Applies active filters as a nested condition group to the Search API query.
-   */
+   *//*
   public function execute() {
     $facet = $this->facet;
     $query = $this->query;
@@ -68,7 +68,7 @@ class SearchApiNested extends SearchApiString implements ContainerFactoryPluginI
      if ($query->getProcessingLevel() === QueryInterface::PROCESSING_FULL) {
         // Set the options for the actual query.
         $options = &$query->getOptions();
-        $options['search_api_facets'][$field_identifier] = $this->getFacetOptions();
+        $options['search_api_facets'][ $parent_field] = $this->getFacetOptions();
       }
 
 
@@ -112,7 +112,7 @@ class SearchApiNested extends SearchApiString implements ContainerFactoryPluginI
     }
 
     $query->addConditionGroup($condition_group);
-  }
+  }*/
 
   /**
    * Determine whether this facet uses a nested field.
@@ -123,20 +123,5 @@ class SearchApiNested extends SearchApiString implements ContainerFactoryPluginI
     return strpos($field_identifier, ':') !== false;
   }
 
-  /**
-   * Get dropdown options for exposed filters (integration point with Facets Exposed Filters).
-   */
-  public function getFilterOptions(FacetInterface $facet, string $display_mode = 'label'): array {
-    $query = $this->query;
-    $index = $query->getIndex();
-    $field_id = $facet->getFieldIdentifier();
-
-    $path = $this->relationSearchService->validateNestedPath($index, $field_id);
-    if (empty($path)) {
-      return [];
-    }
-
-    return $this->filterWidgetHelper->getDropdownOptions($index, $path['parent'], $path['child'], $display_mode);
-  }
 
 }

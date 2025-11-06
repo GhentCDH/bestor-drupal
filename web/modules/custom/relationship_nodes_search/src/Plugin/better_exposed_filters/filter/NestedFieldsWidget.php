@@ -75,56 +75,71 @@ class NestedFieldsWidget extends FilterWidgetBase implements ContainerFactoryPlu
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form = parent::buildConfigurationForm($form, $form_state);
-
     $index = $this->getIndex();
-    $sapi_field = $this->getSapiField();
-  
+    $sapi_fld_nm = $this->getSapiFieldName();
 
-    if (empty($index) || empty($sapi_field)) {
+    if (empty($index) || empty($sapi_fld_nm)) {
       $form['error'] = [
         '#markup' => $this->t('Cannot load index or field configuration.'),
       ];
       return $form;
     }
     
-    $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_field);
-    if (empty($available_fields)) {
+    $available_fld_nms = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_fld_nm);
+    if (empty($available_fld_nms)) {
       $form['info'] = [
         '#markup' => $this->t('No nested fields available. Please configure nested fields in the Search API index.'),
       ];
       return $form;
     }
 
-    $filter_field_settings = $this->getFieldSettings();
-    $this->filterConfigurator->buildNestedWidgetConfigForm($form['advanced'], $available_fields, $filter_field_settings, true);
+    $child_fld_settings = $this->getChildFieldSettings();
+    $facet_id = $this->handler->realField;
+    $this->filterConfigurator->buildNestedWidgetConfigForm($form['advanced'], $available_fld_nms, $child_fld_settings, $facet_id);
     return $form;
   }
+
+
+
 
   public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     parent::exposedFormAlter($form, $form_state);
     $index = $this->getIndex();
-    $sapi_field = $this->getSapiField();
-    if(empty($index) || empty($sapi_field)){
+    $sapi_fld_nm = $this->getSapiFieldName();
+
+    if(empty($index) || empty($sapi_fld_nm)){
       return;
     }
-    // zie erelationshipfitler > er zal van daar naar een gemene klasse (ie exposedwidgethelper) moeten verplaatst worden om code duplicatie te vermijden
+    
     $field_id = $this->getExposedFilterFieldId();
-     if (isset($form[$field_id])) {
-      $form[$field_id]['#type'] = 'container';
-      $form[$field_id]['#tree'] = TRUE;
+     if (!isset($form[$field_id])) {
+      return;
     }
 
-    $field_settings = $this->getFieldSettings();
-    $enabled_fields = $this->filterWidgetHelper->getEnabledAndSortedFields($field_settings);    
-    foreach ($enabled_fields as $child_field => $field_config) {
-        $field_value = $this->value[$child_field] ?? null;
-        $this->filterWidgetHelper->buildExposedFieldWidget($form, $index, $sapi_field, $child_field, $field_config, $field_value);
-    }
+    $form[$field_id] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Filter by @field', ['@field' => $sapi_fld_nm]),
+      '#tree' => true,
+      '#attributes' => ['class' => ['relationship-parent-fieldset']],
+      'fields' => [
+        '#type' => 'container',
+        '#tree' => true,
+        '#attributes' => ['class' => ['relationship-subfields-wrapper']]
+      ]
+    ];
 
-    dpm($form, 'form in exposed form alter of nested fields widget');
+    $child_fld_settings = $this->getChildFieldSettings();
+    $child_fld_values = is_array($this->value) ? $this->value : [];
+
+     $this->filterWidgetHelper->buildExposedFieldWidget(
+      $form, [$field_id, 'fields'], $index, $sapi_fld_nm, $child_fld_settings, $child_fld_values
+     );
   }
 
-  protected function getFieldSettings():array{
+
+
+
+  protected function getChildFieldSettings():array{
       return $this->configuration['advanced']['filter_field_settings'] ?? [];
   }
 
@@ -136,7 +151,7 @@ class NestedFieldsWidget extends FilterWidgetBase implements ContainerFactoryPlu
     return $index instanceof Index ? $index : null;
   }
 
-  protected function getSapiField(): ?string {
+  protected function getSapiFieldName(): ?string {
     return $this->handler->configuration["search_api_field_identifier"] ?? null;
   }
 

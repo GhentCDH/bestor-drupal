@@ -153,7 +153,6 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
     $definitions = $this->getPropertyDefinitions();
     $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
     $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, true);
-    $calculated_fields = is_array($calculated_fields) ?  $calculated_fields : [];
     $selected_fields = array_merge($selected_fields, $calculated_fields);
     foreach ($selected_fields as $field_name) {
       if (!isset($definitions[$field_name])) {
@@ -182,7 +181,6 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
       return;
     }
     $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, true);
-    $calculated_fields = is_array($calculated_fields) ?  $calculated_fields : [];
 
     foreach ($calculated_fields as $field_name) {  
       if (isset($this->propertyDefinitions[$field_name])) {

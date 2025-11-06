@@ -41,8 +41,8 @@ class NestedFilterExposedWidgetHelper {
     /**
      * Get enabled fields from configuration.
      */
-    public function getEnabledFields(array $filter_field_settings): array {
-        return array_filter($filter_field_settings, function($config) {
+    public function getEnabledFields(array $child_fld_settings): array {
+        return array_filter($child_fld_settings, function($config) {
             return !empty($config['enabled']);
         });
     }
@@ -50,8 +50,8 @@ class NestedFilterExposedWidgetHelper {
     /**
      * Get enabled fields sorted by weight.
      */
-    public function getEnabledAndSortedFields(array $filter_field_settings): array {
-        $enabled = $this->getEnabledFields($filter_field_settings);
+    public function getEnabledAndSortedFields(array $child_fld_settings): array {
+        $enabled = $this->getEnabledFields($child_fld_settings);
 
         uasort($enabled, function($a, $b) {
             return ($a['weight'] ?? 0) <=> ($b['weight'] ?? 0);
@@ -60,17 +60,17 @@ class NestedFilterExposedWidgetHelper {
         return $enabled;
     }
 
-    public function getDropdownOptions(Index $index, string $parent_field, string $child_field, string $display_mode = 'label'): array {
-        $cache_key = $this->getCacheKey($index, $parent_field, $child_field, $display_mode);
+    public function getDropdownOptions(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'label'): array {
+        $cache_key = $this->getCacheKey($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
         if (1 == 2 && $cached = $this->cache->get($cache_key)) {
             $this->loggerFactory->get('relationship_nodes_search')->debug(
                 'Cache hit for dropdown options [@field] with @count items',
-                ['@field' => $child_field, '@count' => count($cached->data ?? [])]
+                ['@field' => $child_fld_nm, '@count' => count($cached->data ?? [])]
             );
             return $cached->data;
         }
         try {
-            $options = $this->fetchOptionsFromIndex($index, $parent_field, $child_field, $display_mode);
+            $options = $this->fetchOptionsFromIndex($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
             $this->cache->set($cache_key, $options, Cache::PERMANENT, ['relationship_filter_options']);
            
             return $options;
@@ -78,19 +78,19 @@ class NestedFilterExposedWidgetHelper {
         catch (\Exception $e) {
             $this->loggerFactory->get('relationship_nodes_search')->error(
                 'Failed to fetch options for @index:@field: @message',
-                ['@index' => $index->id(), '@field' => $child_field, '@message' => $e->getMessage()]
+                ['@index' => $index->id(), '@field' => $child_fld_nm, '@message' => $e->getMessage()]
             );
             return [];
         }
     }
 
     
-    protected function getCacheKey(Index $index, string $parent_field, string $child_field, string $display_mode = 'label', array $extra_context = []): string {
+    protected function getCacheKey(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'label', array $extra_context = []): string {
         $parts = [
             'relationship_filter',
             $index->id(),
-            str_replace([':', '.', '/'], '_', $parent_field),
-            str_replace([':', '.', '/'], '_', $child_field),
+            str_replace([':', '.', '/'], '_', $sapi_fld_nm),
+            str_replace([':', '.', '/'], '_', $child_fld_nm),
             $display_mode,
         ];
 
@@ -102,8 +102,8 @@ class NestedFilterExposedWidgetHelper {
         return implode(':', $parts);
     }
 
-    protected function fetchOptionsFromIndex(Index $index, string $parent_field, string $child_field, string $display_mode): array {
-        $field_id = $parent_field . ':' . $child_field;
+    protected function fetchOptionsFromIndex(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode): array {
+        $field_id = $sapi_fld_nm . ':' . $child_fld_nm;
         $full_field_path = $this->relationSearchService->colonsToDots($field_id);
 
         $query = $index->query();
@@ -125,10 +125,10 @@ class NestedFilterExposedWidgetHelper {
         }
 
         $facet_values = array_column($facets[$field_id], 'filter');
-        return $this->convertFacetResultsToOptions($facet_values, $index, $parent_field, $child_field, $display_mode);
+        return $this->convertFacetResultsToOptions($facet_values, $index, $sapi_fld_nm, $child_fld_nm, $display_mode);
     }
 
-    public function convertFacetResultsToOptions(array $results, Index $index, string $parent_field, string $child_field, string $display_mode = 'raw'): array {
+    public function convertFacetResultsToOptions(array $results, Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'raw'): array {
         if (empty($results)) {
             return [];
         }
@@ -138,14 +138,12 @@ class NestedFilterExposedWidgetHelper {
             return array_combine($results, $results);
         }
 
-        $target_type = $this->relationSearchService->isCalculatedChildField($child_field) 
-            ? $this->relationSearchService->getCalculatedFieldTargetType($child_field)
-            : $this->relationSearchService->getNestedFieldTargetType($index, $parent_field, $child_field);
-        
+        $target_type = $this->relationSearchService->isCalculatedChildField($child_fld_nm) 
+            ? $this->relationSearchService->getCalculatedFieldTargetType($child_fld_nm)
+            : $this->relationSearchService->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
         if(!in_array($target_type, ['node', 'taxonomy_term'])){
             return [];
         }
-
         try {
             $int_ids = $this->relationSearchService->extractIntIdsFromStringIds($results, $target_type);
             $storage = $this->entityTypeManager->getStorage($target_type);
@@ -161,46 +159,79 @@ class NestedFilterExposedWidgetHelper {
         }
     }
 
-     /**
-     * Build exposed field widget in exposed filter.
-     */
     public function buildExposedFieldWidget(
         array &$form, 
         array $path,
         Index $index,
-        string $parent_field_name,
-        string $child_field_name, 
+        string $sapi_fld_nm,
+        array $child_fld_settings,
+        array $child_fld_values = [],
+        bool $expose_operators = false,  
+    ): void {
+
+        $child_flds_container = [
+            '#type' => 'container',
+            '#tree' => true,
+            '#attributes' => ['class' => ['relationship-child-field-wrapper']],
+        ];
+
+        $this->setFormNestedValue($form, $path, $child_flds_container);
+
+        if(empty($child_fld_settings)){
+            return;
+        }
+
+        $enabled_fields = $this->getEnabledAndSortedFields($child_fld_settings);
+        foreach ($enabled_fields as $child_fld_nm => $child_fld_config) {
+            $child_fld_value = $child_fld_values[$child_fld_nm] ?? null;
+            $child_path = array_merge($path, [$child_fld_nm]);
+            $this->buildChildFieldElement(
+                $form, $child_path, $index, $sapi_fld_nm, $child_fld_nm, $child_fld_config, $child_fld_value, $expose_operators
+            );
+        }
+    }
+
+     /**
+     * Build exposed field widget in exposed filter.
+     */
+    protected function buildChildFieldElement(
+        array &$form, 
+        array $path,
+        Index $index,
+        string $sapi_fld_nm,
+        string $child_fld_nm, 
         array $field_config, 
         ?array $field_value = null,
         bool $expose_operators = false,  
     ): void {
         $widget_type = $field_config['widget'] ?? 'textfield';
-        $label = $field_config['label'] ?? $this->relationSearchService->formatCalculatedFieldLabel($child_field_name);
+        $label = $field_config['label'] ?? $this->relationSearchService->formatCalculatedFieldLabel($child_fld_nm);
         $required = !empty($field_config['required']);
         $placeholder = $field_config['placeholder'] ?? '';
         $expose_field_operator = !empty($field_config['expose_field_operator']);
 
-        $form['value'][$child_field_name] = [
+        $child_fld_container = [
             '#type' => 'container',
             '#attributes' => ['class' => ['relationship-filter-field-wrapper']],
         ];
+        $this->setFormNestedValue($form, $path, $child_fld_container);
 
         if ($expose_operators && $expose_field_operator) {
-            $this->addOperatorWidget($form, $child_field_name, $field_config, $field_value);
+            $this->addOperatorWidget($form, $path, $field_config, $field_value);
         }
 
         switch ($widget_type) {
             case 'entity_autocomplete':
-                $this->addEntityAutocompleteWidget($form, $child_field_name, $label, $required, $placeholder);
+                $this->addEntityAutocompleteWidget($form, $path, $child_fld_nm, $label, $required, $placeholder, $field_value);
                 break;
 
             case 'select':
-                $this->addSelectWidget($form, $index, $parent_field_name, $child_field_name, $field_config, $label, $required, $field_value);
+                $this->addSelectWidget($form, $path, $index, $sapi_fld_nm, $child_fld_nm, $field_config, $label, $required, $field_value);
                 break;
 
             case 'textfield':
             default:
-                $this->addTextfieldWidget($form, $child_field_name, $label, $required, $placeholder, $field_value);
+                $this->addTextfieldWidget($form, $path, $child_fld_nm, $label, $required, $placeholder, $field_value);
                 break;
         }
     }
@@ -208,86 +239,60 @@ class NestedFilterExposedWidgetHelper {
     /**
      * Add operator selector widget.
      */
-    protected function addOperatorWidget(array &$form, string $field_name, array $field_config, ?array $field_value = null): void {
-        $form['value'][$field_name]['operator'] = [
+    protected function addOperatorWidget(array &$form, array $path, array $field_config, ?array $field_value = null): void {
+        $path[] = 'operator';
+        $operator = [
             '#type' => 'select',
             '#title' => $this->t('Operator'),
             '#options' => $this->filterConfigurator->getOperatorOptions(),
             '#default_value' => $field_value['operator'] ?? $field_config['field_operator'] ?? '=',
             '#attributes' => ['class' => ['relationship-filter-operator']],
         ];
+        $this->setFormNestedValue($form, $path, $operator);
     }
 
-    /**
-     * Add entity autocomplete widget.
-     */
-    protected function addEntityAutocompleteWidget(array &$form, string $field_name, string $label, bool $required, string $placeholder): void {
-        $target_type =  $this->filterConfigurator->getTargetTypeForField($field_name);
-        $default_entity = $this->getDefaultEntityValue($field_name, $target_type);
-        
-        $form['value'][$field_name]['value'] = [
-            '#type' => 'entity_autocomplete',
-            '#title' => $label,
-            '#target_type' => $target_type,
-            '#default_value' => $default_entity,
-            '#required' => $required,
-            '#placeholder' => $placeholder,
-        ];
-    }
+
 
 
     /**
      * Add dropdown select widget.
      */
-    protected function addSelectWidget(array &$form, Index $index, string $sapi_field, string $field_name, array $field_config, string $label, bool $required, ?array $field_value = null): void {
+    protected function addSelectWidget(array &$form, array $path, Index $index, string $sapi_fld_nm, string $child_fld_nm, array $field_config, string $label, bool $required, ?array $field_value = null): void {
         $display_mode = $field_config['select_display_mode'] ?? 'raw';
     
-        $options = $this->getDropdownOptions($index, $sapi_field, $field_name, $display_mode);
+        $options = $this->getDropdownOptions($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
         if (!$required && !empty($options)) {
             $options = ['' => $this->t('- Any -')] + $options;
         }
-        
-        $form['value'][$field_name]['value'] = [
+        $path[] = 'value';
+        $value = [
             '#type' => 'select',
             '#title' => $label,
             '#options' => $options,
-            '#default_value' => $field_value['value'] ?? $this->value[$field_name] ?? '',
+            '#default_value' => $field_value['value'] ?? '',
             '#required' => $required,
             '#empty_option' => $required ? NULL : $this->t('- Any -'),
         ];
+        $this->setFormNestedValue($form, $path, $value);
     }
 
 
     /**
      * Add textfield widget.
      */
-    protected function addTextfieldWidget(array &$form, string $field_name, string $label, bool $required, string $placeholder, ?array $field_value = null): void {
-        $form['value'][$field_name]['value'] = [
+    protected function addTextfieldWidget(array &$form, array $path, string $child_fld_nm, string $label, bool $required, string $placeholder, ?array $field_value = null): void {
+        $path[] = 'value';
+        $value = [
             '#type' => 'textfield',
             '#title' => $label,
-            '#default_value' => $field_value['value'] ?? $this->value[$field_name] ?? '',
+            '#default_value' => $field_value['value'] ?? '',
             '#required' => $required,
             '#placeholder' => $placeholder,
         ];
+        $this->setFormNestedValue($form, $path, $value);
     }
 
 
-    /**
-     * Get default entity value for autocomplete field.
-     */
-    protected function getDefaultEntityValue(string $field_name, string $target_type) {
-        $value = $this->value[$field_name]['value'] ?? $this->value[$field_name] ?? NULL;
-        
-        if (empty($value) || !is_numeric($value)) {
-            return NULL;
-        }
-
-        try {
-            return $this->entityTypeManager->getStorage($target_type)->load($value);
-        } catch (\Exception $e) {
-            return NULL;
-        }
-    }
 
     protected function setFormNestedValue(array &$form, array $path, $value): void {
         $ref =&$form;
@@ -299,4 +304,34 @@ class NestedFilterExposedWidgetHelper {
         }
         $ref = $value;
     }
+
+    
+    /* // ENTITY AUTOCOMPLETE NOT YET IMPLEMENTED (CF CONFIG HELPER)
+    protected function addEntityAutocompleteWidget(array &$form, array $path, string $child_fld_nm, string $label, bool $required, string $placeholder, ?array $field_value = null): void {
+        $target_type =  $this->filterConfigurator->getTargetTypeForField($child_fld_nm);
+        $default_entity = $this->getDefaultEntityValue($child_fld_nm, $target_type, $field_value);
+        $path[] = 'value';
+        $value = [
+            '#type' => 'entity_autocomplete',
+            '#title' => $label,
+            '#target_type' => $target_type,
+            '#default_value' => $default_entity,
+            '#required' => $required,
+            '#placeholder' => $placeholder,
+        ];
+        $this->setFormNestedValue($form, $path, $value);
+    }
+  
+    protected function getDefaultEntityValue(string $child_fld_nm, string $target_type, ?array $field_value = null) {   
+        if (empty($field_value) || !is_numeric($field_value)) {
+            return null;
+        }
+
+        try {
+            return $this->entityTypeManager->getStorage($target_type)->load($field_value);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }*/
+    
 }

@@ -35,7 +35,7 @@ class NestedFilterConfigurationHelper {
     }
 
 
-    public function buildNestedWidgetConfigForm(array &$form, array $all_child_fields, array $child_field_settings, bool $is_facet = false): void {
+    public function buildNestedWidgetConfigForm(array &$form, array $child_fld_nms, array $child_fld_settings, string $facet_id = null): void {
         $form['filter_field_settings'] = [
             '#type' => 'fieldset',
             '#title' => $this->t('Filter fields'),
@@ -43,53 +43,57 @@ class NestedFilterConfigurationHelper {
             '#tree' => TRUE,
         ];
 
-        foreach ($all_child_fields as $field_name) {
-            $is_enabled = !empty($child_field_settings[$field_name]['enabled']);
-            $disabled_state = $this->getFieldDisabledState($field_name);
-            
-            $form['filter_field_settings'][$field_name] = [
+        foreach ($child_fld_nms as $child_fld_nm) {
+            $is_enabled = !empty($child_fld_settings[$child_fld_nm]['enabled']);
+            $disabled_state = $this->getFieldDisabledState($child_fld_nm, $facet_id);
+            $form['filter_field_settings'][$child_fld_nm] = [
                 '#type' => 'details',
-                '#title' => $field_name,
+                '#title' => $child_fld_nm,
                 '#open' => $is_enabled,
             ];
 
-            $this->addFieldEnableCheckbox($form, $field_name, $child_field_settings);
-            $this->addFieldLabel($form, $field_name, $child_field_settings, $disabled_state);
-            $this->addFieldWidget($form, $field_name, $child_field_settings, $disabled_state);
-            $this->addFieldWeight($form, $field_name, $child_field_settings, $disabled_state);
-            if(!$is_facet) $this->addFieldRequired($form, $field_name, $child_field_settings, $disabled_state);
-            $this->addFieldPlaceholder($form, $field_name, $child_field_settings, $disabled_state);
-            if(!$is_facet) $this->addFieldOperator($form, $field_name, $child_field_settings, $disabled_state);
-            if(!$is_facet) $this->addExposeFieldOperator($form, $field_name, $child_field_settings, $disabled_state);
-            if(!$is_facet) $this->addFieldValueField($form, $field_name, $child_field_settings, $disabled_state);
+            $is_facet = !empty($facet_id);
+            $this->addFieldEnableCheckbox($form, $child_fld_nm, $child_fld_settings);
+            $this->addFieldLabel($form, $child_fld_nm, $child_fld_settings, $disabled_state);
+            $this->addFieldWidget($form, $child_fld_nm, $child_fld_settings, $disabled_state, $facet_id);
+            $this->addFieldWeight($form, $child_fld_nm, $child_fld_settings, $disabled_state);
+            if(!$is_facet) $this->addFieldRequired($form, $child_fld_nm, $child_fld_settings, $disabled_state);
+            $this->addFieldPlaceholder($form, $child_fld_nm, $child_fld_settings, $disabled_state);
+            if(!$is_facet) $this->addFieldOperator($form, $child_fld_nm, $child_fld_settings, $disabled_state);
+            if(!$is_facet) $this->addExposeFieldOperator($form, $child_fld_nm, $child_fld_settings, $disabled_state);
+            if(!$is_facet) $this->addFieldValueField($form, $child_fld_nm, $child_fld_settings, $disabled_state);
         }
     }
 
 
-    protected function getFieldDisabledState(string $field_name): array {
+    protected function getFieldDisabledState(string $child_fld_nm, string $facet_id = null): array {
+        $input_el_name = empty($facet_id)
+            ? 'options[filter_field_settings][' . $child_fld_nm . '][enabled]'
+            : 'exposed_form_options[bef][filter]['. $facet_id. '][configuration][advanced][filter_field_settings]['.  $child_fld_nm .'][enabled]';
+        
         return [
             'disabled' => [
-                ':input[name="options[filter_field_settings][' . $field_name . '][enabled]"]' => ['checked' => FALSE],
+                ':input[name="' . $input_el_name . '"]' => ['checked' => FALSE],
             ],
         ];
     }
 
 
-    protected function addFieldEnableCheckbox(array &$form, string $field_name, array $filter_field_settings): void {
-        $form['filter_field_settings'][$field_name]['enabled'] = [
+    protected function addFieldEnableCheckbox(array &$form, string $child_fld_nm, array $child_fld_settings): void {
+        $form['filter_field_settings'][$child_fld_nm]['enabled'] = [
             '#type' => 'checkbox',
             '#title' => $this->t('Enable this filter field'),
-            '#default_value' => !empty($filter_field_settings[$field_name]['enabled']),
+            '#default_value' => !empty($child_fld_settings[$child_fld_nm]['enabled']),
         ];
     }
 
 
-    protected function addFieldLabel(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-        $form['filter_field_settings'][$field_name]['label'] = [
+    protected function addFieldLabel(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+        $form['filter_field_settings'][$child_fld_nm]['label'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Label'),
-            '#default_value' => $filter_field_settings[$field_name]['label'] 
-                ?? $this->relationSearchService->formatCalculatedFieldLabel($field_name),
+            '#default_value' => $child_fld_settings[$child_fld_nm]['label'] 
+                ?? $this->relationSearchService->formatCalculatedFieldLabel($child_fld_nm),
             '#description' => $this->t('Label shown to users when exposed.'),
             '#size' => 30,
             '#states' => $disabled_state,
@@ -97,87 +101,91 @@ class NestedFilterConfigurationHelper {
     }
 
 
-    protected function addFieldWidget(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-        $form['filter_field_settings'][$field_name]['widget'] = [
+    protected function addFieldWidget(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state, string $facet_id = null): void {
+        $form['filter_field_settings'][$child_fld_nm]['widget'] = [
             '#type' => 'select',
             '#title' => $this->t('Widget type'),
             '#options' => [
                 'textfield' => $this->t('Text field'),
                 'select' => $this->t('Dropdown (from indexed values)'),
-                // VVVV NOG TE IMPLEMENTEREN EVENTUEEL VVVV dpm
-                //'entity_autocomplete' => $this->t('Entity autocomplete'), 
+                /* // ENTITY AUTOCOMPLETE NOT YET IMPLEMENTED (CF WIDGET HELPER) 
+                'entity_autocomplete' => $this->t('Entity autocomplete'), */
             ],
-            '#default_value' => $filter_field_settings[$field_name]['widget'] ?? 'textfield',
+            '#default_value' => $child_fld_settings[$child_fld_nm]['widget'] ?? 'textfield',
             '#states' => $disabled_state,
             '#description' => $this->t('Dropdown automatically loads all unique values from the search index.'),
         ];
         
         // Display mode for dropdown options
-        $form['filter_field_settings'][$field_name]['select_display_mode'] = [
+        $input_el_name = empty($facet_id)
+            ? 'options[filter_field_settings][' . $child_fld_nm . '][widget]'
+            : 'exposed_form_options[bef][filter]['. $facet_id. '][configuration][advanced][filter_field_settings]['.  $child_fld_nm .'][widget]';
+        
+        $form['filter_field_settings'][$child_fld_nm]['select_display_mode'] = [
             '#type' => 'radios',
             '#title' => $this->t('Display mode for dropdown options'),
             '#options' => [
                 'raw' => $this->t('Raw value (ID)'),
                 'label' => $this->t('Label (entity name)'),
             ],
-            '#default_value' => $filter_field_settings[$field_name]['select_display_mode'] ?? 'raw',
+            '#default_value' => $child_fld_settings[$child_fld_nm]['select_display_mode'] ?? 'raw',
             '#description' => $this->t('How to display options in the dropdown. Only applies to entity reference fields.'),
             '#states' => array_merge(
                 $disabled_state,
                 [
                     'visible' => [
-                        ':input[name="options[filter_field_settings][' . $field_name . '][widget]"]' => ['value' => 'select'],
+                        ':input[name="' . $input_el_name . '"]' => ['value' => 'select'],
                     ],
                 ]
             ),
         ];
     }
- protected function addFieldWeight(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-        $form['filter_field_settings'][$field_name]['weight'] = [
+ protected function addFieldWeight(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+        $form['filter_field_settings'][$child_fld_nm]['weight'] = [
             '#type' => 'number',
             '#title' => $this->t('Weight'),
-            '#default_value' => $filter_field_settings[$field_name]['weight'] ?? 0,
+            '#default_value' => $child_fld_settings[$child_fld_nm]['weight'] ?? 0,
             '#description' => $this->t('Fields with lower weights appear first.'),
             '#size' => 5,
             '#states' => $disabled_state,
         ];
     }
-protected function addFieldRequired(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-        $form['filter_field_settings'][$field_name]['required'] = [
+protected function addFieldRequired(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+        $form['filter_field_settings'][$child_fld_nm]['required'] = [
             '#type' => 'checkbox',
             '#title' => $this->t('Required'),
-            '#default_value' => $filter_field_settings[$field_name]['required'] ?? FALSE,
+            '#default_value' => $child_fld_settings[$child_fld_nm]['required'] ?? FALSE,
             '#description' => $this->t('Make this field required when exposed.'),
             '#states' => $disabled_state,
         ];
     }
 
-     protected function addFieldPlaceholder(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-        $form['filter_field_settings'][$field_name]['placeholder'] = [
+     protected function addFieldPlaceholder(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+        $form['filter_field_settings'][$child_fld_nm]['placeholder'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Placeholder'),
-            '#default_value' => $filter_field_settings[$field_name]['placeholder'] ?? '',
+            '#default_value' => $child_fld_settings[$child_fld_nm]['placeholder'] ?? '',
             '#description' => $this->t('Placeholder text for the filter field.'),
             '#states' => $disabled_state,
         ];
     }
 
-        protected function addFieldOperator(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-        $form['filter_field_settings'][$field_name]['field_operator'] = [
+        protected function addFieldOperator(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+        $form['filter_field_settings'][$child_fld_nm]['field_operator'] = [
             '#type' => 'select',
             '#title' => $this->t('Operator'),
             '#options' => $this->getOperatorOptions(),
-            '#default_value' => $filter_field_settings[$field_name]['field_operator'] ?? '=',
+            '#default_value' => $child_fld_settings[$child_fld_nm]['field_operator'] ?? '=',
             '#description' => $this->t('Comparison operator for this field.'),
             '#states' => $disabled_state,
         ];
     }
 
-        protected function addExposeFieldOperator(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-        $form['filter_field_settings'][$field_name]['expose_field_operator'] = [
+        protected function addExposeFieldOperator(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+        $form['filter_field_settings'][$child_fld_nm]['expose_field_operator'] = [
             '#type' => 'checkbox',
             '#title' => $this->t('Let user choose operator'),
-            '#default_value' => $filter_field_settings[$field_name]['expose_field_operator'] ?? FALSE,
+            '#default_value' => $child_fld_settings[$child_fld_nm]['expose_field_operator'] ?? FALSE,
             '#description' => $this->t('Override global setting for this specific field.'),
             '#states' => array_merge(
                 $disabled_state,
@@ -190,11 +198,11 @@ protected function addFieldRequired(array &$form, string $field_name, array $fil
         ];
     }
 
-    protected function addFieldValueField(array &$form, string $field_name, array $filter_field_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$field_name]['value'] = [
+    protected function addFieldValueField(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+    $form['filter_field_settings'][$child_fld_nm]['value'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Value'),
-        '#default_value' => $filter_field_settings[$field_name]['value'] ?? '',
+        '#default_value' => $child_fld_settings[$child_fld_nm]['value'] ?? '',
         '#description' => $this->t('Filter value (only used when filter is not exposed).'),
         '#states' => array_merge(
             $disabled_state,

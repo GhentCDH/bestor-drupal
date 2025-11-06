@@ -11,8 +11,8 @@ class NestedRelationshipMappingSubscriber implements EventSubscriberInterface {
 
   protected EntityFieldManagerInterface $entityFieldManager;
 
-  public function __construct(EntityFieldManagerInterface $entity_field_manager) {
-    $this->entityFieldManager = $entity_field_manager;
+  public function __construct(EntityFieldManagerInterface $entityFieldManager) {
+    $this->entityFieldManager = $entityFieldManager;
   }
 
   public static function getSubscribedEvents(): array {
@@ -30,15 +30,14 @@ class NestedRelationshipMappingSubscriber implements EventSubscriberInterface {
   }
 
     public function onFieldMapping(FieldMappingEvent $event): void {
-    $field = $event->getField();
+    $sapi_fld = $event->getField();
     
-    if ($field->getType() !== 'relationship_nodes_search_nested_relationship') {
+    if ($sapi_fld->getType() !== 'relationship_nodes_search_nested_relationship') {
       return;
     }
 
     $event->setParam([
       'type' => 'nested',
-
     ]);
 
     
