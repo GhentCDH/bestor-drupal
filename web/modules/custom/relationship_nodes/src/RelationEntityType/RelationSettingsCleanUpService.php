@@ -6,6 +6,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
+use Drupal\search_api\Entity\Index;
 
 
 class RelationSettingsCleanUpService {
@@ -25,8 +26,10 @@ class RelationSettingsCleanUpService {
     }
 
      public function removeModuleSettings(): void {
+
         $this->unsetRnEntitySettings();
         $this->cleanFormDisplays();
+
      }
 
 

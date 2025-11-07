@@ -274,7 +274,8 @@ class RelationBundleInfoService
             if (!($field_config instanceof FieldConfig)) {
                 continue;
             }
-            $target_bundle = reset($this->getFieldTargetBundles($field_config));
+            $target_bundles = $this->getFieldTargetBundles($field_config);
+            $target_bundle = reset($target_bundles);
             if ($target_bundle === $vocab->id()) {
                 $result[$node_type_id] = $node_type;
             }

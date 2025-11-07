@@ -154,7 +154,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    * {@inheritdoc}
    */
   public function addFieldValues(ItemInterface $item) {
-
+    dpm('start');
     try {
       $entity = $item->getOriginalObject()->getValue();
 
@@ -196,7 +196,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           ->condition($join_field, $entity->id())
           ->execute();
         
-
+        dpm($result, 'reresult');
         if(empty($result)){
           continue;
         }

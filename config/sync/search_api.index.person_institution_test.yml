@@ -3,9 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.server.elasticsearchconnectordocker
+    - search_api.server.esconnectordocker
   module:
-    - search_api
     - node
     - relationship_nodes_search
 id: person_institution_test
@@ -104,4 +103,4 @@ options:
   delete_on_fail: true
   index_directly: true
   track_changes_in_references: true
-server: elasticsearchconnectordocker
+server: esconnectordocker
