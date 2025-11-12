@@ -43,6 +43,8 @@ RUN chmod +x /startup.sh
 
 EXPOSE 80
 
+ENV php.opcache.enable=0
+
 CMD ["/startup.sh"]
 
 # =============================================================================
@@ -61,6 +63,15 @@ RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
 COPY scripts/startup-prod.sh /startup.sh
 RUN chmod +x /startup.sh
+
+ENV php.opcache.enable=1
+ENV php.opcache.memory_consumption=256
+ENV php.opcache.interned_strings_buffer=64
+ENV php.opcache.max_accelerated_files=50000
+ENV php.opcache.max_wasted_percentage=15
+ENV php.opcache.save_comments=1
+ENV php.opcache.revalidate_freq=2
+ENV php.opcache.validate_timestamps=1
 
 EXPOSE 80
 
