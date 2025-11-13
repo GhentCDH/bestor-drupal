@@ -119,6 +119,7 @@ class NestedFilterExposedWidgetHelper {
         ]);
 
         $results = $query->execute();
+        dpm($results, 'fetch option results');
         $facets = $results->getExtraData('search_api_facets', []);
         if (empty($facets[$field_id])) {
             return [];
@@ -168,7 +169,6 @@ class NestedFilterExposedWidgetHelper {
         array $child_fld_values = [],
         bool $expose_operators = false,  
     ): void {
-
         $child_flds_container = [
             '#type' => 'container',
             '#tree' => true,

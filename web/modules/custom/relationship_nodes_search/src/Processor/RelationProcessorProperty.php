@@ -14,10 +14,12 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
 
   protected ?array $propertyDefinitions = NULL;
   protected ?array $drupalFieldInfo = NULL;
+  protected ?array $calculatedFieldNames = NULL;
 
 
-  public function __construct(array $definition) {
+  public function __construct(array $definition, ?array $calculatedFieldNames = NULL) {
     parent::__construct($definition);
+    $this->calculatedFieldNames = $calculatedFieldNames;
   }
 
  
@@ -124,7 +126,6 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
 
 
   public function getDrupalFieldInfo(string $field_name): ?array {
-    // Ensure properties are loaded
     if ($this->drupalFieldInfo === NULL) {
       $this->getPropertyDefinitions();
     }
@@ -149,11 +150,13 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
 
 
   public function buildNestedFieldsConfig(array $selected_fields): array {
+    if ($this->calculatedFieldNames === NULL) {
+      return [];
+    }
+
     $config = [];
     $definitions = $this->getPropertyDefinitions();
-    $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
-    $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, true);
-    $selected_fields = array_merge($selected_fields, $calculated_fields);
+    $selected_fields = array_merge($selected_fields, $this->calculatedFieldNames);
     foreach ($selected_fields as $field_name) {
       if (!isset($definitions[$field_name])) {
         continue;
@@ -176,13 +179,11 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
 
   protected function addCalculatedFieldDefinitions(): void {
 
-    $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
-    if(!$relationSearchService instanceof RelationSearchService){
+    if ($this->calculatedFieldNames === NULL) {
       return;
     }
-    $calculated_fields = $relationSearchService->getCalculatedFieldNames(null, null, true);
 
-    foreach ($calculated_fields as $field_name) {  
+    foreach ($this->calculatedFieldNames as $field_name) {  
       if (isset($this->propertyDefinitions[$field_name])) {
         continue;
       }

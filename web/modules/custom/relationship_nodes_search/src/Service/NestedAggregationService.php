@@ -30,7 +30,7 @@ class NestedAggregationService {
                 'aggs' => [
                     $field_id => [
                         'terms' => [
-                            'field' => $full_field_path . '.keyword',
+                            'field' => $full_field_path,
                             'size' => $size,
                         ],
                     ],
@@ -44,7 +44,8 @@ class NestedAggregationService {
      * Extract buckets from aggregation response.
      */
     public function extractBuckets(array $response, string $agg_id): array {
-        return $response['aggregations'][$agg_id]['facet_values']['buckets'] ?? [];
+        $nested_key = $agg_id . '_filtered';
+        return $response['aggregations'][$nested_key][$agg_id]['buckets'] ?? [];
     }
 
 

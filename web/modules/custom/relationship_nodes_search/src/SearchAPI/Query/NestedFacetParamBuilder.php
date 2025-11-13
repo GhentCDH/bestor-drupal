@@ -32,8 +32,6 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
     public function buildFacetParams(QueryInterface $query, array $indexFields, array $facetFilters = []) {
         $aggs = [];
         $facets = $query->getOption('search_api_facets', []);
-        dpm($query, 'query facet pqarams');
-        dpm($facets, 'build Facets Params');
         if (empty($facets)) {
             return $aggs;
         }
@@ -80,8 +78,6 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
         if ($size === 0) {
             $size = self::UNLIMITED_FACET_SIZE;
         }
-        dpm($facet_id, 'facet igd');
-
         $agg = $this->nestedAggregationService->buildNestedAggregation($facet_id, $size);
 
         // Apply post filters if needed

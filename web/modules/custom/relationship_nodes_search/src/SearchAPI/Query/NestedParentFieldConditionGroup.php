@@ -33,7 +33,7 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
     if (empty($this->parentFieldName)) {
       throw new \LogicException('Parent field name must be set before adding subfield conditions.');
     }
-    $full_child_path = $this->parentFieldName . '.' . $childFieldName . '.keyword';
+    $full_child_path = $this->parentFieldName . '.' . $childFieldName;
     $condition = new NestedChildFieldCondition($full_child_path, $value, $operator);
     $condition->setParentFieldName($this->parentFieldName);
     $condition->setChildFieldName($childFieldName);

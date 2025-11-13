@@ -116,6 +116,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     }
 
     $node_types_in_index = $datasource->getConfiguration()['bundles']['selected']  ?? [];
+    
     $relationship_node_types = [];
     foreach($node_types_in_index as $node_type_in_index){
       $related_relationships = $this->bundleInfoService->getRelationInfoForTargetBundle($node_type_in_index);
@@ -129,6 +130,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       }
     }
 
+    $calc_fld_nms = $this->relationSearchService->getCalculatedFieldNames(null, null, true);
     foreach($relationship_node_types as $relationship_node_type){
       $definition = [
         'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
@@ -141,7 +143,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         ],
       ];
       
-      $property = new RelationProcessorProperty($definition);
+      $property = new RelationProcessorProperty($definition, $calc_fld_nms);
       $properties["relationship_info__{$relationship_node_type}"] = $property;
     }
 
@@ -154,7 +156,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    * {@inheritdoc}
    */
   public function addFieldValues(ItemInterface $item) {
-    dpm('start');
     try {
       $entity = $item->getOriginalObject()->getValue();
 
@@ -196,7 +197,6 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           ->condition($join_field, $entity->id())
           ->execute();
         
-        dpm($result, 'reresult');
         if(empty($result)){
           continue;
         }
@@ -242,11 +242,12 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         }
         
       }
-      if(!empty($serialized)){
-        //dpm($serialized);
+      if(empty($serialized)){
+        // Index an explicit empty nested object so ES knows to clear the field
+        $sapi_fld->setValues([[]]);
+      } else {
+        $sapi_fld->setValues($serialized);
       }
-
-      $sapi_fld->setValues($serialized);
     }  
   }
 

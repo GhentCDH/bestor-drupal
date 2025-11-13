@@ -12,6 +12,12 @@ use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleIn
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 
 
+/**
+ * Service for fetching information about relation nodes.
+ *
+ * Provides methods to inspect relation connections between nodes,
+ * fetch join fields, referencing relations, and related entity values.
+ */
 class RelationNodeInfoService {
 
     protected EntityTypeManagerInterface $entityTypeManager;
@@ -36,7 +42,20 @@ class RelationNodeInfoService {
     }
 
 
-    public function getJoinFields(Node $relation_node, Node $target_node = NULL, array $field_names): array {
+    /**
+     * Returns the 'related entity' fields in the relation node that reference a given target node.
+     *
+     * @param Node $relation_node
+     *   The relation node to inspect.
+     * @param Node|null $target_node
+     *   The target node to check connections against.
+     * @param array $field_names
+     *   List of field names to check for references.
+     *
+     * @return array
+     *   Array of 'related entity' field names that reference the target node.
+     */
+    public function getJoinFields(Node $relation_node, ?Node $target_node = NULL, array $field_names): array {
         $result = [];
         $bundle_connections = $this->bundleInfoService->getBundleConnectionInfo($relation_node->getType(), $target_node->getType());
         
@@ -57,11 +76,24 @@ class RelationNodeInfoService {
                 }
             }
         }
-
        return $result;
     }
 
 
+    /**
+     * Returns the connection info between a relation node and a target node.
+     * 
+     * @param Node $relation_node
+     *  The relation node to inspect.
+     * @param Node|null $target_node
+     *  The target node to check connections against.
+     *
+     * @return array
+     *   Array containing:
+     *     - 'relation_state': 'unrelated', 'related', or error message.
+     *     - 'join_fields': array of fields that connect nodes (if any).
+     *     - 'relation_info': optional additional relation metadata.
+     */
     public function getEntityConnectionInfo(Node $relation_node, ?Node $target_node = NULL): array {
         if(empty($target_node)){
              $target_node = $this->routeMatch->getParameter('node');
@@ -100,7 +132,18 @@ class RelationNodeInfoService {
         return $result;
     }
 
-   
+
+    /**
+     * Returns all relation nodes that reference a given target node through a specific relation bundle.
+     *
+     * @param Node $target_node
+     * @param string $relation_bundle
+     * @param array $join_fields
+     *   Optional: list of 'related entity' fields through which the target node is referenced (in the relation bundle).
+     *
+     * @return array
+     *   Array of referencing relation node objects, keyed by their ID.
+     */
     public function getReferencingRelations(Node $target_node, string $relation_bundle, array $join_fields = []): array {
         $target_bundle = $target_node->getType();
         if(empty($join_fields)){
@@ -127,6 +170,15 @@ class RelationNodeInfoService {
     }
 
 
+    /**
+     * Get a list of all nodes that are related to a given target node (grouped by the relation bundle that connects them).
+     *
+     * @param Node $target_node
+     *
+     * @return array
+     *  Associative array of associative arrays.
+     *  The outer array is keyed by the relation bundle names and has arrays of related nodes as value [node_id => Node,...].
+     */
     public function getAllReferencingRelations(Node $target_node): array {
         $result = [];
         $target_bundle_info = $this->bundleInfoService->getRelationInfoForTargetBundle($target_node->getType());    
@@ -147,6 +199,15 @@ class RelationNodeInfoService {
     }
 
 
+    /**
+     * Returns the target entity IDs for all related entity fields in a relation node.
+     *
+     * @param Node $relation_node
+     *
+     * @return array|null
+     *  Associative array of related enity field names => array of target IDs, or NULL if not a relation node type.
+     *  E.g. ['related_entity_field_1' => 101, 'related_entity_field_2' => 202]
+     */
     public function getRelatedEntityValues(Node $relation_node): ?array {      
         if(!$this->settingsManager->isRelationNodeType($relation_node->getType())){
             return null;
@@ -167,7 +228,15 @@ class RelationNodeInfoService {
         return $result;   
     }
 
-
+    
+    /**
+     * Extracts target IDs from an entity reference field list.
+     *
+     * @param EntityReferenceFieldItemList $list
+     *
+     * @return array
+     *   Array of target entity IDs.
+     */
     public function getFieldListTargetIds(EntityReferenceFieldItemList $list): array{
         $result = []; 
         foreach ($list->getValue() as $item) {

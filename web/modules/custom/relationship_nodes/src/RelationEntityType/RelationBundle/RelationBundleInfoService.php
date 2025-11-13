@@ -333,8 +333,8 @@ class RelationBundleInfoService
             if (!($field_config) || empty($field_config['settings']['handler_settings']['target_bundles'])) {
                 continue;
             }
-
-            $target_bundle = reset($field_config['settings']['handler_settings']['target_bundles']);
+            $target_bundles = $field_config['settings']['handler_settings']['target_bundles'];
+            $target_bundle = reset($target_bundles);
             if ($target_bundle === $vocab->id()) {
                 $result[$node_config_name] = $node_config_data;
             }

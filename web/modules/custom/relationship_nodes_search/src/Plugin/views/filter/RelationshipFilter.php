@@ -115,7 +115,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
         ];
 
         $child_fld_settings = $this->getFieldSettings();
-        $this->filterConfigurator->buildNestedWidgetConfigForm($form, $available_fields, $child_fld_settings);
+        $this->filterConfigurator->buildNestedWidgetConfigForm($form, $index, $sapi_fld_nm, $available_fields, $child_fld_settings);
     }
 
     
@@ -159,7 +159,6 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
 protected function valueForm(&$form, FormStateInterface $form_state):void {
     $index = $this->getIndex();
     $sapi_fld_nm = $this->getSapiField();
-
     if (!$index instanceof Index || empty($sapi_fld_nm)) {
         return;
     }

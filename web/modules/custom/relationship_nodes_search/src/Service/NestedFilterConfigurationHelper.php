@@ -8,6 +8,7 @@ use Drupal\search_api\Entity\Index;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\relationship_nodes_search\Service\NestedAggregationService;
 
 
 class NestedFilterConfigurationHelper {
@@ -35,7 +36,14 @@ class NestedFilterConfigurationHelper {
     }
 
 
-    public function buildNestedWidgetConfigForm(array &$form, array $child_fld_nms, array $child_fld_settings, string $facet_id = null): void {
+    public function buildNestedWidgetConfigForm(
+        array &$form, 
+        Index $index, 
+        string $sapi_fld_nm, 
+        array $child_fld_nms, 
+        array $child_fld_settings, 
+        string $facet_id = null
+    ): void {
         $form['filter_field_settings'] = [
             '#type' => 'fieldset',
             '#title' => $this->t('Filter fields'),
@@ -55,7 +63,7 @@ class NestedFilterConfigurationHelper {
             $is_facet = !empty($facet_id);
             $this->addFieldEnableCheckbox($form, $child_fld_nm, $child_fld_settings);
             $this->addFieldLabel($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-            $this->addFieldWidget($form, $child_fld_nm, $child_fld_settings, $disabled_state, $facet_id);
+            $this->addFieldWidget($form, $index, $sapi_fld_nm, $child_fld_nm, $child_fld_settings, $disabled_state, $facet_id);
             $this->addFieldWeight($form, $child_fld_nm, $child_fld_settings, $disabled_state);
             if(!$is_facet) $this->addFieldRequired($form, $child_fld_nm, $child_fld_settings, $disabled_state);
             $this->addFieldPlaceholder($form, $child_fld_nm, $child_fld_settings, $disabled_state);
@@ -101,7 +109,7 @@ class NestedFilterConfigurationHelper {
     }
 
 
-    protected function addFieldWidget(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state, string $facet_id = null): void {
+    protected function addFieldWidget(array &$form, Index $index, string $sapi_fld_nm, string $child_fld_nm, array $child_fld_settings, array $disabled_state, string $facet_id = null): void {
         $form['filter_field_settings'][$child_fld_nm]['widget'] = [
             '#type' => 'select',
             '#title' => $this->t('Widget type'),
@@ -121,24 +129,26 @@ class NestedFilterConfigurationHelper {
             ? 'options[filter_field_settings][' . $child_fld_nm . '][widget]'
             : 'exposed_form_options[bef][filter]['. $facet_id. '][configuration][advanced][filter_field_settings]['.  $child_fld_nm .'][widget]';
         
-        $form['filter_field_settings'][$child_fld_nm]['select_display_mode'] = [
-            '#type' => 'radios',
-            '#title' => $this->t('Display mode for dropdown options'),
-            '#options' => [
-                'raw' => $this->t('Raw value (ID)'),
-                'label' => $this->t('Label (entity name)'),
-            ],
-            '#default_value' => $child_fld_settings[$child_fld_nm]['select_display_mode'] ?? 'raw',
-            '#description' => $this->t('How to display options in the dropdown. Only applies to entity reference fields.'),
-            '#states' => array_merge(
-                $disabled_state,
-                [
-                    'visible' => [
-                        ':input[name="' . $input_el_name . '"]' => ['value' => 'select'],
-                    ],
-                ]
-            ),
-        ];
+        if($this->relationSearchService->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm)){    
+            $form['filter_field_settings'][$child_fld_nm]['select_display_mode'] = [
+                '#type' => 'radios',
+                '#title' => $this->t('Display mode for dropdown options'),
+                '#options' => [
+                    'raw' => $this->t('Raw value (ID)'),
+                    'label' => $this->t('Label (entity name)'),
+                ],
+                '#default_value' => $child_fld_settings[$child_fld_nm]['select_display_mode'] ?? 'raw',
+                '#description' => $this->t('How to display options in the dropdown. Only applies to entity reference fields.'),
+                '#states' => array_merge(
+                    $disabled_state,
+                    [
+                        'visible' => [
+                            ':input[name="' . $input_el_name . '"]' => ['value' => 'select'],
+                        ],
+                    ]
+                ),
+            ];
+        }
     }
  protected function addFieldWeight(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
         $form['filter_field_settings'][$child_fld_nm]['weight'] = [
