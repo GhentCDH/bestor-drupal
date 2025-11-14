@@ -3,25 +3,26 @@
 namespace Drupal\relationship_nodes_search\Service;
 
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
+use Drupal\relationship_nodes_search\Service\ElasticMappingInspector;
 
 
 class NestedAggregationService {
 
-    protected RelationSearchService $relationSearchService;
+    protected ElasticMappingInspector $mappingInspector;
 
 
-    public function __construct(RelationSearchService $relationSearchService) {
-        $this->relationSearchService = $relationSearchService;
+    public function __construct(ElasticMappingInspector $mappingInspector) {
+        $this->mappingInspector = $mappingInspector;
     }
 
 
     /**
      * Build aggregation for a nested field to get unique values.
      */
-    public function buildNestedAggregation(string $field_id, int $size = 10000): array {
+    public function buildNestedAggregation(Index $index, string $field_id, int $size = 10000): array {
         [$parent, $child] = explode(':', $field_id, 2);
-        $full_field_path = $this->relationSearchService->colonsToDots($field_id);
+        $query_field_path = $this->mappingInspector->getElasticQueryFieldPath($index, $parent, $child);
+   
         return [
             $field_id . '_filtered' => [
                 'nested' => [
@@ -30,7 +31,7 @@ class NestedAggregationService {
                 'aggs' => [
                     $field_id => [
                         'terms' => [
-                            'field' => $full_field_path,
+                            'field' => $query_field_path,
                             'size' => $size,
                         ],
                     ],

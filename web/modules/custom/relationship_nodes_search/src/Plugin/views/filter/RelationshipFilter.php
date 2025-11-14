@@ -13,6 +13,7 @@ use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionG
 use Drupal\relationship_nodes_search\Service\NestedAggregationService;
 use Drupal\relationship_nodes_search\Service\NestedFilterConfigurationHelper;
 use Drupal\relationship_nodes_search\Service\NestedFilterExposedWidgetHelper;
+use Drupal\relationship_nodes_search\Service\ElasticMappingInspector;
 use Drupal\Core\Cache\Cache;
 
 /**
@@ -28,6 +29,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     protected RelationSearchService $relationSearchService;
     protected NestedFilterConfigurationHelper $filterConfigurator;
     protected NestedFilterExposedWidgetHelper $filterWidgetHelper;
+    protected ElasticMappingInspector $mappingInspector;
     protected ?array $valueOptions = NULL;
 
 
@@ -38,13 +40,15 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
         NestedAggregationService $nestedAggregationService,
         RelationSearchService $relationSearchService,
         NestedFilterConfigurationHelper $filterConfigurator,
-        NestedFilterExposedWidgetHelper $filterWidgetHelper
+        NestedFilterExposedWidgetHelper $filterWidgetHelper,
+        ElasticMappingInspector $mappingInspector
     ) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
         $this->nestedAggregationService = $nestedAggregationService;
         $this->relationSearchService = $relationSearchService;
         $this->filterConfigurator = $filterConfigurator;
         $this->filterWidgetHelper = $filterWidgetHelper;
+        $this->mappingInspector = $mappingInspector;
     }
     
 
@@ -57,6 +61,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
             $container->get('relationship_nodes_search.relation_search_service'),
             $container->get('relationship_nodes_search.nested_filter_configuration_helper'),
             $container->get('relationship_nodes_search.nested_filter_exposed_widget_helper'),
+            $container->get('relationship_nodes_search.elastic_mapping_inspector')
         );
     }
 
@@ -243,22 +248,26 @@ protected function buildFilterConditions(): array {
     protected function applyNestedConditions(array $conditions): void {
         $operator = $this->options['operator'] ?? 'and';
         $sapi_fld_nm = $this->getSapiField();
+        $index = $this->getIndex();
 
-        if (empty($sapi_fld_nm)) {
+        if (empty($sapi_fld_nm) || !$index instanceof Index) {
             return;
         }
 
-        $nested_field_condition = new NestedParentFieldConditionGroup(strtoupper($operator));
-        $nested_field_condition->setParentFieldName($sapi_fld_nm);
+        $nested_fld_condition = new NestedParentFieldConditionGroup(strtoupper($operator));
+        $nested_fld_condition
+            ->setParentFieldName($sapi_fld_nm)
+            ->setIndex($index)
+            ->setMappingInspector($this->mappingInspector);
         
         foreach ($conditions as $condition) {
-            $nested_field_condition->addChildFieldCondition(
+            $nested_fld_condition->addChildFieldCondition(
                 $condition['child_field_name'],
                 $condition['value'],
                 $condition['operator']
             );
         }
-        $this->query->addConditionGroup($nested_field_condition);
+        $this->query->addConditionGroup($nested_fld_condition);
     }
 
 

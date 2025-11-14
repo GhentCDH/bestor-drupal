@@ -7,6 +7,7 @@ use Drupal\search_api\Query\QueryInterface;
 use Psr\Log\LoggerInterface;
 use Drupal\relationship_nodes_search\Service\RelationSearchService;
 use Drupal\relationship_nodes_search\Service\NestedAggregationService;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Extended Facet builder with nested field support.
@@ -35,6 +36,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
         if (empty($facets)) {
             return $aggs;
         }
+dpm($indexFields, 'index fields');
 
         $index = $query->getIndex();
         foreach ($facets as $facet_id => $facet) {
@@ -51,7 +53,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
                 if(!$this->checkFieldInIndex($indexFields, $parsed_names['parent'])){
                     continue;
                 }
-                $aggs += $this->buildNestedTermBucketAgg($facet_id, $facet, $facetFilters);
+                $aggs += $this->buildNestedTermBucketAgg($index, $facet_id, $facet, $facetFilters);
             }
         }
         return $aggs;
@@ -73,12 +75,12 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
      * 
      * Creates an Elasticsearch nested aggregation for fields within nested objects.
      */
-    protected function buildNestedTermBucketAgg(string $facet_id, array $facet, array $postFilter): array {
+    protected function buildNestedTermBucketAgg(Index $index, string $facet_id, array $facet, array $postFilter): array {
         $size = $facet['limit'] ?? self::DEFAULT_FACET_SIZE;
         if ($size === 0) {
             $size = self::UNLIMITED_FACET_SIZE;
         }
-        $agg = $this->nestedAggregationService->buildNestedAggregation($facet_id, $size);
+        $agg = $this->nestedAggregationService->buildNestedAggregation($index, $facet_id, $size);
 
         // Apply post filters if needed
         if (!empty($postFilter)) {
