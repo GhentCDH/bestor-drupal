@@ -7,19 +7,15 @@ use Drupal\search_api\Query\Condition;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\SearchApiException;
 use Psr\Log\LoggerInterface;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
 use Drupal\search_api\Item\Field;
 use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionGroup;
 
 
 class NestedFilterBuilder extends FilterBuilder {
 
-    protected RelationSearchService $relationSearchService;
-
     
-    public function __construct(LoggerInterface $logger, RelationSearchService $relationSearchService) {
+    public function __construct(LoggerInterface $logger) {
         parent::__construct($logger);
-        $this->relationSearchService = $relationSearchService;
     }
 
 
@@ -39,6 +35,10 @@ class NestedFilterBuilder extends FilterBuilder {
      */
     protected function buildNestedFieldConditionFilters(NestedParentFieldConditionGroup $condition_group, array $index_fields): array {
         $parent = $condition_group->getParentFieldName();
+        if (empty($parent)) {
+            return [];
+        }
+
         $subfilters = [];
         
         foreach ($condition_group->getConditions() as $condition) {
@@ -47,18 +47,19 @@ class NestedFilterBuilder extends FilterBuilder {
             }
         }
 
+        if (empty($subfilters)) {
+            return [];
+        }
 
         $combined_subfilters = $this->wrapWithConjunction($subfilters, $condition_group->getConjunction());
 
-
-        $filters = [
-            'nested' => [
-                'path' => $parent,
-                'query' => $combined_subfilters
+        return [
+            'filters' => [
+                'nested' => [
+                    'path' => $parent,
+                    'query' => $combined_subfilters
+                ]
             ]
         ];
-
-        return ['filters' => $filters];
-
     }
 }

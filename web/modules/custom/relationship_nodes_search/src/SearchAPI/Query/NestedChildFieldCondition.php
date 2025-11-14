@@ -39,6 +39,6 @@ class NestedChildFieldCondition extends Condition {
 
 
   public function isNestedChildField(): bool {
-    return !empty($this->parentFieldName);
+    return !empty($this->parentFieldName) && !empty($this->childFieldName);
   }
 }

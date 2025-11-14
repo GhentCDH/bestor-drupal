@@ -20,7 +20,9 @@ use Drupal\search_api\SearchApiException;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
+use Drupal\relationship_nodes_search\Service\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\Service\CalculatedFieldHelper;
+
 
 /**
  * Adds nested relationship data to specified fields.
@@ -44,7 +46,8 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   protected FieldNameResolver $fieldResolver;
   protected RelationBundleSettingsManager $settingsManager;
   protected MirrorTermProvider $mirrorProvider;
-  protected RelationSearchService $relationSearchService; 
+  protected ChildFieldEntityReferenceHelper $childReferenceHelper;
+  protected CalculatedFieldHelper $calculatedFieldHelper; 
 
   /**
    * Constructs a RelationshipIndexer object.
@@ -58,7 +61,8 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     FieldNameResolver $fieldResolver, 
     RelationBundleSettingsManager $settingsManager, 
     MirrorTermProvider $mirrorProvider,
-    RelationSearchService $relationSearchService
+    ChildFieldEntityReferenceHelper $childReferenceHelper,
+    CalculatedFieldHelper $calculatedFieldHelper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
@@ -66,7 +70,8 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $this->fieldResolver = $fieldResolver;
     $this->settingsManager = $settingsManager;
     $this->mirrorProvider = $mirrorProvider;
-    $this->relationSearchService = $relationSearchService;
+    $this->childReferenceHelper = $childReferenceHelper;
+    $this->calculatedFieldHelper = $calculatedFieldHelper;
   }
 
   /**
@@ -87,7 +92,8 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $container->get('relationship_nodes.field_name_resolver'),
       $container->get('relationship_nodes.relation_bundle_settings_manager'),
       $container->get('relationship_nodes.mirror_term_provider'),
-      $container->get('relationship_nodes_search.relation_search_service'),
+      $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
+      $container->get('relationship_nodes_search.calculated_field_helper'),
     );
   }
 
@@ -130,7 +136,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       }
     }
 
-    $calc_fld_nms = $this->relationSearchService->getCalculatedFieldNames(null, null, true);
+    $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(null, null, true);
     foreach($relationship_node_types as $relationship_node_type){
       $definition = [
         'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
@@ -207,7 +213,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           continue;
         }
 
-        $calc_fld_nms = $this->relationSearchService->getCalculatedFieldNames(null, null, true);
+        $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(null, null, true);
        
        foreach($entities as $relationship_entity){
           $nested_values = [];
@@ -253,14 +259,14 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
 
 
   protected function fillCalculatedFields(array &$nested_values, $entity, $relationship_entity, string $join_field): void { 
-    $calc_fld_nms = $this->relationSearchService->getCalculatedFieldNames();
+    $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames();
     
     $nested_values[$calc_fld_nms['this_entity']['id']] = isset($nested_values[$join_field]) ? $nested_values[$join_field] : '';
     $nested_values[$calc_fld_nms['this_entity']['name']] = $entity->label();
 
     $node_storage = $this->entityTypeManager->getStorage('node');
     $other_field = $this->fieldResolver->getOppositeRelatedEntityField($join_field);
-    $other_parsed = $this->relationSearchService->parseEntityReferenceValue($nested_values[$other_field] ?? null);
+    $other_parsed = $this->childReferenceHelper->parseEntityReferenceValue($nested_values[$other_field] ?? null);
     $related_entity = !empty($other_parsed['id']) ? $node_storage->load($other_parsed['id']) : null;
     $nested_values[$calc_fld_nms['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
     $nested_values[$calc_fld_nms['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
@@ -268,7 +274,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $relation_field = $this->fieldResolver->getRelationTypeField();
     if ($this->settingsManager->isTypedRelationNodeType($relationship_entity->getType()) && !empty($nested_values[$relation_field])) {
       $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');    
-      $relation_parsed = $this->relationSearchService->parseEntityReferenceValue($nested_values[$relation_field]);
+      $relation_parsed = $this->childReferenceHelper->parseEntityReferenceValue($nested_values[$relation_field]);
       $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : null;
       $default_label = $relation_term ? $relation_term->getName() : '';
 

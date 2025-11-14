@@ -9,6 +9,8 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\relationship_nodes_search\Service\NestedAggregationService;
+use Drupal\relationship_nodes_search\Service\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\Service\ChildFieldEntityReferenceHelper;
 
 
 class NestedFilterConfigurationHelper {
@@ -18,20 +20,23 @@ class NestedFilterConfigurationHelper {
     protected EntityTypeManagerInterface $entityTypeManager;
     protected LoggerChannelFactoryInterface $loggerFactory;
     protected CacheBackendInterface $cache;
-    protected RelationSearchService $relationSearchService;
+    protected ChildFieldEntityReferenceHelper $childReferenceHelper;
+    protected CalculatedFieldHelper $calculatedFieldHelper;
     protected NestedAggregationService $nestedAggregationService;
 
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager,
         LoggerChannelFactoryInterface $loggerFactory,
         CacheBackendInterface $cache,
-        RelationSearchService $relationSearchService,
+        ChildFieldEntityReferenceHelper $childReferenceHelper,
+        CalculatedFieldHelper $calculatedFieldHelper,
         NestedAggregationService $nestedAggregationService
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->loggerFactory = $loggerFactory;
         $this->cache = $cache;
-        $this->relationSearchService = $relationSearchService;
+        $this->childReferenceHelper = $childReferenceHelper;
+        $this->calculatedFieldHelper = $calculatedFieldHelper;
         $this->nestedAggregationService = $nestedAggregationService;
     }
 
@@ -101,7 +106,7 @@ class NestedFilterConfigurationHelper {
             '#type' => 'textfield',
             '#title' => $this->t('Label'),
             '#default_value' => $child_fld_settings[$child_fld_nm]['label'] 
-                ?? $this->relationSearchService->formatCalculatedFieldLabel($child_fld_nm),
+                ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
             '#description' => $this->t('Label shown to users when exposed.'),
             '#size' => 30,
             '#states' => $disabled_state,
@@ -129,7 +134,7 @@ class NestedFilterConfigurationHelper {
             ? 'options[filter_field_settings][' . $child_fld_nm . '][widget]'
             : 'exposed_form_options[bef][filter]['. $facet_id. '][configuration][advanced][filter_field_settings]['.  $child_fld_nm .'][widget]';
         
-        if($this->relationSearchService->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm)){    
+        if($this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm)){    
             $form['filter_field_settings'][$child_fld_nm]['select_display_mode'] = [
                 '#type' => 'radios',
                 '#title' => $this->t('Display mode for dropdown options'),

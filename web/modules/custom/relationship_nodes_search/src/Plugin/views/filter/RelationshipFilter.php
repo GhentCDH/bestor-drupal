@@ -8,13 +8,14 @@ use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Drupal\search_api\Entity\Index;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
 use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionGroup;
 use Drupal\relationship_nodes_search\Service\NestedAggregationService;
 use Drupal\relationship_nodes_search\Service\NestedFilterConfigurationHelper;
 use Drupal\relationship_nodes_search\Service\NestedFilterExposedWidgetHelper;
 use Drupal\relationship_nodes_search\Service\ElasticMappingInspector;
 use Drupal\Core\Cache\Cache;
+use Drupal\relationship_nodes_search\Service\NestedFieldHelper;
+use Drupal\relationship_nodes_search\Service\ChildFieldEntityReferenceHelper;
 
 /**
  * Filter for nested relationship data in Search API.
@@ -26,7 +27,8 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     use SearchApiFilterTrait;
 
     protected NestedAggregationService $nestedAggregationService;
-    protected RelationSearchService $relationSearchService;
+    protected NestedFieldHelper $nestedFieldHelper;
+    protected ChildFieldEntityReferenceHelper $childReferenceHelper;
     protected NestedFilterConfigurationHelper $filterConfigurator;
     protected NestedFilterExposedWidgetHelper $filterWidgetHelper;
     protected ElasticMappingInspector $mappingInspector;
@@ -38,14 +40,16 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
         string $plugin_id,
         mixed $plugin_definition,
         NestedAggregationService $nestedAggregationService,
-        RelationSearchService $relationSearchService,
+        NestedFieldHelper $nestedFieldHelper,
+        ChildFieldEntityReferenceHelper $childReferenceHelper,
         NestedFilterConfigurationHelper $filterConfigurator,
         NestedFilterExposedWidgetHelper $filterWidgetHelper,
         ElasticMappingInspector $mappingInspector
     ) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
         $this->nestedAggregationService = $nestedAggregationService;
-        $this->relationSearchService = $relationSearchService;
+        $this->nestedFieldHelper = $nestedFieldHelper;
+        $this->childReferenceHelper = $childReferenceHelper;
         $this->filterConfigurator = $filterConfigurator;
         $this->filterWidgetHelper = $filterWidgetHelper;
         $this->mappingInspector = $mappingInspector;
@@ -58,7 +62,8 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
             $plugin_id,
             $plugin_definition,
             $container->get('relationship_nodes_search.nested_aggregation_service'),
-            $container->get('relationship_nodes_search.relation_search_service'),
+            $container->get('relationship_nodes_search.nested_field_helper'),
+            $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
             $container->get('relationship_nodes_search.nested_filter_configuration_helper'),
             $container->get('relationship_nodes_search.nested_filter_exposed_widget_helper'),
             $container->get('relationship_nodes_search.elastic_mapping_inspector')
@@ -93,7 +98,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
             return;
         }
         
-        $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_fld_nm);
+        $available_fields = $this->nestedFieldHelper->getProcessedNestedChildFieldNames($index, $sapi_fld_nm);
         if (empty($available_fields)) {
             $form['info'] = [
                 '#markup' => $this->t('No nested fields available. Please configure nested fields in the Search API index.'),
@@ -279,7 +284,7 @@ protected function buildFilterConditions(): array {
         $sapi_fld_nm = $this->getSapiField();
         
         if ($index instanceof Index && !empty($sapi_fld_nm)) {
-            $target_type = $this->relationSearchService->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
+            $target_type = $this->childReferenceHelper->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
             if ($target_type) {
                 return $target_type;
             }

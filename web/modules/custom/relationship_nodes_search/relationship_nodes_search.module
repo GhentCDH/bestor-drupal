@@ -1,10 +1,6 @@
 <?php
 
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\relationship_nodes_search\Form\ExtendedIndexAddFieldsForm;
-use Drupal\search_api\Query\QueryInterface;
-use Drupal\relationship_nodes_search\Processor\RelationProcessorProperty;
-use Drupal\relationship_nodes_search\SearchAPI\Query\NestedFacetParamBuilder; 
 
 
 function relationship_nodes_search_module_implements_alter(&$implementations, $hook) {

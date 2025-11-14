@@ -9,6 +9,9 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\relationship_nodes_search\Service\NestedFilterConfigurationHelper;
+use Drupal\relationship_nodes_search\Service\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\Service\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\Service\NestedFieldHelper;
 
 
 class NestedFilterExposedWidgetHelper {
@@ -18,7 +21,9 @@ class NestedFilterExposedWidgetHelper {
     protected EntityTypeManagerInterface $entityTypeManager;
     protected LoggerChannelFactoryInterface $loggerFactory;
     protected CacheBackendInterface $cache;
-    protected RelationSearchService $relationSearchService;
+    protected NestedFieldHelper $nestedFieldHelper; 
+    protected ChildFieldEntityReferenceHelper $childReferenceHelper;
+    protected CalculatedFieldHelper $calculatedFieldHelper;
     protected NestedAggregationService $nestedAggregationService;
     protected NestedFilterConfigurationHelper $filterConfigurator;
 
@@ -26,14 +31,18 @@ class NestedFilterExposedWidgetHelper {
         EntityTypeManagerInterface $entityTypeManager,
         LoggerChannelFactoryInterface $loggerFactory,
         CacheBackendInterface $cache,
-        RelationSearchService $relationSearchService,
+        NestedFieldHelper $nestedFieldHelper,
+        ChildFieldEntityReferenceHelper $childReferenceHelper,
+        CalculatedFieldHelper $calculatedFieldHelper,
         NestedAggregationService $nestedAggregationService,
         NestedFilterConfigurationHelper $filterConfigurator
     ) {
         $this->entityTypeManager = $entityTypeManager;
         $this->loggerFactory = $loggerFactory;
         $this->cache = $cache;
-        $this->relationSearchService = $relationSearchService;
+        $this->nestedFieldHelper = $nestedFieldHelper;
+        $this->childReferenceHelper = $childReferenceHelper;
+        $this->calculatedFieldHelper = $calculatedFieldHelper;
         $this->nestedAggregationService = $nestedAggregationService;
         $this->filterConfigurator = $filterConfigurator;
     }
@@ -104,7 +113,7 @@ class NestedFilterExposedWidgetHelper {
 
     protected function fetchOptionsFromIndex(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode): array {
         $field_id = $sapi_fld_nm . ':' . $child_fld_nm;
-        $full_field_path = $this->relationSearchService->colonsToDots($field_id);
+        $full_field_path = $this->nestedFieldHelper->colonsToDots($field_id);
 
         $query = $index->query();
         $query->range(0, 0);
@@ -133,20 +142,20 @@ class NestedFilterExposedWidgetHelper {
         if (empty($results)) {
             return [];
         }
-        $results = $this->nestedAggregationService->cleanFacetResults($results);
+        $results = $this->nestedAggregationService->parseNestedFacetResults($results);
         
         if ($display_mode === 'raw') {
             return array_combine($results, $results);
         }
 
-        $target_type = $this->relationSearchService->isCalculatedChildField($child_fld_nm) 
-            ? $this->relationSearchService->getCalculatedFieldTargetType($child_fld_nm)
-            : $this->relationSearchService->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
+        $target_type = $this->calculatedFieldHelper->isCalculatedChildField($child_fld_nm) 
+            ? $this->calculatedFieldHelper->getCalculatedFieldTargetType($child_fld_nm)
+            : $this->childReferenceHelper->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
         if(!in_array($target_type, ['node', 'taxonomy_term'])){
             return [];
         }
         try {
-            $int_ids = $this->relationSearchService->extractIntIdsFromStringIds($results, $target_type);
+            $int_ids = $this->childReferenceHelper->extractIntIdsFromStringIds($results, $target_type);
             $storage = $this->entityTypeManager->getStorage($target_type);
             $entities = $storage->loadMultiple($int_ids);
             $options = [];
@@ -205,7 +214,7 @@ class NestedFilterExposedWidgetHelper {
         bool $expose_operators = false,  
     ): void {
         $widget_type = $field_config['widget'] ?? 'textfield';
-        $label = $field_config['label'] ?? $this->relationSearchService->formatCalculatedFieldLabel($child_fld_nm);
+        $label = $field_config['label'] ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm);
         $required = !empty($field_config['required']);
         $placeholder = $field_config['placeholder'] ?? '';
         $expose_field_operator = !empty($field_config['expose_field_operator']);

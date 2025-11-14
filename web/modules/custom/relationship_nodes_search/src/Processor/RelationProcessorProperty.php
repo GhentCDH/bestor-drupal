@@ -7,7 +7,6 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
 
 
 class RelationProcessorProperty extends ProcessorProperty implements ComplexDataDefinitionInterface{

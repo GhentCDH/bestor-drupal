@@ -5,15 +5,10 @@ namespace Drupal\relationship_nodes_search\EventSubscriber;
 use Drupal\elasticsearch_connector\Event\FieldMappingEvent;
 use Drupal\elasticsearch_connector\Event\SupportsDataTypeEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
+
 
 class NestedRelationshipMappingSubscriber implements EventSubscriberInterface {
 
-  protected EntityFieldManagerInterface $entityFieldManager;
-
-  public function __construct(EntityFieldManagerInterface $entityFieldManager) {
-    $this->entityFieldManager = $entityFieldManager;
-  }
 
   public static function getSubscribedEvents(): array {
     return [

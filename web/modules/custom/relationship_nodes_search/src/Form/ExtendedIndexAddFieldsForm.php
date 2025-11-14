@@ -12,8 +12,8 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
   protected function getPropertiesList(array $props, string $active_prop_path, $base_url, ?string $datasource_id, string $parent_path = '', string $label_prefix = '', int $depth = 0, array $rows = []): array {
     if($depth > 0 && str_starts_with($parent_path, 'relationship_info__')){
-      $relationSearchService = \Drupal::service('relationship_nodes_search.relation_search_service');
-      $calc_fld_nms = $relationSearchService->getCalculatedFieldNames(null, null, TRUE);
+      $calculatedFieldHelper = \Drupal::service('relationship_nodes_search.calculated_field_helper');
+      $calc_fld_nms = $calculatedFieldHelper->getCalculatedFieldNames(null, null, TRUE);
       if(!empty($calc_fld_nms)){
         foreach($props as $prop_nm => $def){
           if(in_array($prop_nm, $calc_fld_nms)){

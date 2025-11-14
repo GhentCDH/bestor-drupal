@@ -20,12 +20,6 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
   protected ?ElasticMappingInspector $mappingInspector = null;
 
 
-  public function __construct($conjunction = 'AND', array $tags = [], ?Index $index = null, ?ElasticMappingInspector $mappingInspector = null) {
-    parent::__construct($conjunction, $tags);
-    $this->index = $index;
-    $this->mappingInspector = $mappingInspector;
-  }
-
 
   public function setIndex(Index $index): self {
     $this->index = $index;
@@ -55,22 +49,18 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
   }
 
 
-  public function addChildFieldCondition(string $child_fld_nm, $value, $operator = '=') {
-    if (empty($this->parentFieldName)) {
-      throw new \LogicException('Parent field name must be set before adding subfield conditions.');
+  public function addChildFieldCondition(string $child_fld_nm, $value, $operator = '='): self {
+    if (!$this->parentFieldName || !$this->index || !$this->mappingInspector) {
+      throw new \LogicException('Parent field, index and mapping inspector must be set before adding subfield conditions.');
     }
 
-    if ($this->index && $this->mappingInspector) {
-      $path = $this->mappingInspector->getElasticQueryFieldPath($this->index, $this->parentFieldName, $child_fld_nm);
-    } else {
-      $path = $this->parentFieldName . '.' . $child_fld_nm . '.keyword';
-    }
+    $path = $this->mappingInspector->getElasticQueryFieldPath($this->index, $this->parentFieldName, $child_fld_nm);
+  
     $condition = new NestedChildFieldCondition($path, $value, $operator);
     $condition->setParentFieldName($this->parentFieldName);
     $condition->setChildFieldName($child_fld_nm);
     
     $this->conditions[] = $condition;
-    dpm($this, 'this this');
     return $this;
   }
 }

@@ -7,8 +7,10 @@ use Drupal\search_api\Plugin\views\field\SearchApiStandard;
 use Drupal\views\ResultRow;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
 use Drupal\search_api\Entity\Index;
+use Drupal\relationship_nodes_search\Service\NestedFieldHelper;
+use Drupal\relationship_nodes_search\Service\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\Service\CalculatedFieldHelper;
 
 
 /**
@@ -16,17 +18,23 @@ use Drupal\search_api\Entity\Index;
  */
 class RelationshipField extends SearchApiStandard implements ContainerFactoryPluginInterface {
     
-    protected RelationSearchService $relationSearchService;
+    protected NestedFieldHelper $nestedFieldHelper;
+    protected ChildFieldEntityReferenceHelper $childReferenceHelper;
+    protected CalculatedFieldHelper $calculatedFieldHelper;
 
 
     public function __construct(
         array $configuration,
         string $plugin_id,
         mixed $plugin_definition,
-        RelationSearchService $relationSearchService,
+        NestedFieldHelper $nestedFieldHelper,
+        ChildFieldEntityReferenceHelper $childReferenceHelper,
+        CalculatedFieldHelper $calculatedFieldHelper,
     ) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
-        $this->relationSearchService = $relationSearchService;
+        $this->nestedFieldHelper = $nestedFieldHelper;
+        $this->childReferenceHelper = $childReferenceHelper;
+        $this->calculatedFieldHelper = $calculatedFieldHelper;
     }
     
     
@@ -35,7 +43,9 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             $configuration,
             $plugin_id,
             $plugin_definition,
-            $container->get('relationship_nodes_search.relation_search_service'),
+            $container->get('relationship_nodes_search.nested_field_helper'),
+            $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
+            $container->get('relationship_nodes_search.calculated_field_helper'),
         );
     }
 
@@ -68,7 +78,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             return;
         }
 
-        $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_fld_nm);
+        $available_fields = $this->nestedFieldHelper->getProcessedNestedChildFieldNames($index, $sapi_fld_nm);
         
         if (empty($available_fields)) {
             $form['info'] = [
@@ -96,7 +106,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             $is_enabled = !empty($field_settings[$child_fld_nm]['enabled']);
             $disabled_state = ['disabled' => [':input[name="options[relation_display_settings][field_settings][' . $child_fld_nm . '][enabled]"]' => ['checked' => FALSE]]];
 
-            $link_option =  $this->relationSearchService->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm);
+            $link_option =  $this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm);
             
             $form['relation_display_settings']['field_settings'][$child_fld_nm] = [
                 '#type' => 'details',
@@ -129,7 +139,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
             $form['relation_display_settings']['field_settings'][$child_fld_nm]['label'] = [
                 '#type' => 'textfield',
                 '#title' => $this->t('Custom label'),
-                '#default_value' => $field_settings[$child_fld_nm]['label'] ?? $this->relationSearchService->formatCalculatedFieldLabel($child_fld_nm),
+                '#default_value' => $field_settings[$child_fld_nm]['label'] ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
                 '#description' => $this->t('Custom label for this field.'),
                 '#size' => 30,
                 '#states' => $disabled_state
@@ -335,7 +345,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         $processed_values = [];
 
         foreach($value_arr as $raw_val){
-            $processed_values[] = $this->relationSearchService->processSingleFieldValue($raw_val, $display_mode);        
+            $processed_values[] = $this->childReferenceHelper->processSingleFieldValue($raw_val, $display_mode);        
         }
         
         return [
@@ -414,7 +424,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
                 'name' => $child_fld_nm,
                 'label' => !empty($settings['label']) 
                     ? $settings['label'] 
-                    :  $this->relationSearchService->formatCalculatedFieldLabel($child_fld_nm),
+                    :  $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
                 'weight' => $settings['weight'] ?? 0,
                 'hide_label' => !empty($settings['hide_label']),
                 'display_mode' => $settings['display_mode'] ?? 'id',

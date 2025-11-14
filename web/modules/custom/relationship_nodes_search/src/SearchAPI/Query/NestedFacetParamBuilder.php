@@ -5,9 +5,9 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 use Drupal\elasticsearch_connector\SearchAPI\Query\FacetParamBuilder;
 use Drupal\search_api\Query\QueryInterface;
 use Psr\Log\LoggerInterface;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
 use Drupal\relationship_nodes_search\Service\NestedAggregationService;
 use Drupal\search_api\Entity\Index;
+use Drupal\relationship_nodes_search\Service\NestedFieldHelper;
 
 /**
  * Extended Facet builder with nested field support.
@@ -15,16 +15,16 @@ use Drupal\search_api\Entity\Index;
 class NestedFacetParamBuilder extends FacetParamBuilder {
 
     protected NestedAggregationService $nestedAggregationService;
-    protected RelationSearchService $relationSearchService;
+    protected NestedFieldHelper $nestedFieldHelper;
 
     public function __construct(
         LoggerInterface $logger, 
         NestedAggregationService $nestedAggregationService,
-        RelationSearchService $relationSearchService,
+        NestedFieldHelper $nestedFieldHelper,
     ) {
         parent::__construct($logger);
         $this->nestedAggregationService = $nestedAggregationService;
-        $this->relationSearchService = $relationSearchService;
+        $this->nestedFieldHelper = $nestedFieldHelper;
     }
 
     /**
@@ -42,7 +42,7 @@ dpm($indexFields, 'index fields');
         foreach ($facets as $facet_id => $facet) {
     
             $es_field_id = $facet['field']; 
-            $parsed_names = $this->relationSearchService->validateNestedPath($index, $facet_id);
+            $parsed_names = $this->nestedFieldHelper->validateNestedPath($index, $facet_id);
             if(empty($parsed_names['parent'])){
                 if(!$this->checkFieldInIndex($indexFields, $es_field_id)){
                     continue;
