@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Template for the component c-label.
+ */
+#}
+
+{% set label_classes = [
+  'c-label',
+  required ? component_name ~ '--required',
+]|merge(c_label_radio_utility_classes ?: []) %}
+
+<label {{ attributes.addClass(label_classes) }}>
+  {% if title %} {{ title }} {% endif %} {% if required %} <span class="{{ component_name }}__required">*</span>{% endif %}
+</label>

@@ -1,0 +1,8 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-label {
+  margin-block-end: functions.rem(12px);
+  display: block;
+}

@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Template for the component c-input.
+ */
+#}
+
+{% set input_classes = [
+  'c-input',
+]|merge(c_input_utility_classes ?: []) %}
+
+<input {{ attributes.addClass(input_classes) }}>
+{% block children %}
+  {% if children %}
+    {{ children }}
+  {% endif %}
+{% endblock %}

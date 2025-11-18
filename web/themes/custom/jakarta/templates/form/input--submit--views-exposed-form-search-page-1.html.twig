@@ -10,6 +10,7 @@
  * @see template_preprocess_input()
  */
 #}
+
 {% set content %}
   {{ include('jakarta:c-icon', {
     icon: 'search',
@@ -21,4 +22,4 @@
   attr_variant: 'default',
   color: 'primary',
   title: content,
-}, with_context = false) }}
+}) }}
