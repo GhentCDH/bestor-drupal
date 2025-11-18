@@ -52,6 +52,9 @@ fi
 echo "Running deploy hooks..."
 drush deploy:hook
 
+echo "Setting admin password"
+drush user:password admin "$DRUPAL_ADMIN_PW"
+
 echo "Running supervisord!"
 # start the main container command
 exec supervisord
