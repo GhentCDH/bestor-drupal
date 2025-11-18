@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Template for the component c-language-picker.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-language-picker' %}
+
+{% set custom_component_classes = [
+  'h-layout-position-relative',
+]|merge(c_language_picker_utility_classes ?: []) %}
+
+{% block component_content %}
+  {% if toggle %}
+    <div class="{{ component_name }}__toggle" data-language-picker-toggle>
+      {{ toggle }}
+      {{ include ('jakarta:c-icon', {
+        icon: 'caret',
+      }, with_context = false) }}
+    </div>
+  {% endif %}
+  {% if links %}
+    <div class="{{ component_name }}__links">
+      {{ links }}
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,5 @@
+@use "sass:math";
+
+@function em($size, $default: 16px) {
+  @return math.div($size, $default) * 1em;
+}

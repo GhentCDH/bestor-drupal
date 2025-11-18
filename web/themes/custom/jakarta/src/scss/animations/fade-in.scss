@@ -1,0 +1,8 @@
+@use "./../variables";
+
+// avoid glitch on initial load
+[data-animation="fade-in"]:not([data-animation-initial-ignore]) {
+  @media screen and (min-width: variables.$breakpoints-mobile) {
+    opacity: 0;
+  }
+}

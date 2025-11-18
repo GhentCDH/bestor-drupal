@@ -1,0 +1,81 @@
+@use "./../variables";
+
+.h-color {
+  &-light {
+    color: var(--color-light);
+  }
+
+  &-dark {
+    color: var(--color-dark);
+  }
+
+  &-primary {
+    color: var(--color-primary);
+  }
+
+  &-secondary {
+    color: var(--color-secondary);
+  }
+
+  &-grey {
+    color: var(--color-grey);
+  }
+}
+
+.h-bg-color {
+  &-dark,
+  &-primary,
+  &-secondary {
+    color: var(--color-light);
+
+    .text-formatted a:not(.c-btn),
+    a:not(.c-btn) {
+      border-bottom-color: var(--color-light);
+
+      &:hover,
+      &:focus {
+        color: var(--color-light);
+      }
+    }
+  }
+
+  &-light {
+    background-color: var(--color-light);
+  }
+
+  &-dark {
+    background-color: var(--color-dark);
+  }
+
+  &-grey {
+    background-color: var(--color-grey);
+  }
+
+  &-primary {
+    background-color: var(--color-primary);
+  }
+
+  &-secondary {
+    background-color: var(--color-secondary);
+  }
+}
+
+.h-bg-color-dark,
+.h-bg-color-primary,
+.h-bg-color-secondary,
+.h-color-dark,
+.h-color-light {
+  a:not(.c-btn),
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5 {
+    color: inherit;
+  }
+}

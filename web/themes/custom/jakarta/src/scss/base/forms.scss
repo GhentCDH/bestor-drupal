@@ -1,0 +1,219 @@
+@use "./../variables";
+@use "./../mixins";
+@use "./../functions";
+
+// Wrap all the form elements in .site-wrapper to not conflict with Drupal's backend.
+.site-wrapper {
+  // Global input reset theming.
+  input,
+  textarea,
+  select {
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    outline: none;
+    border-radius: 0;
+    border: none;
+    line-height: inherit;
+    box-shadow: none;
+    color: inherit;
+
+    $placeholder-prefixes: (
+      ":-ms-input-placeholder",
+      "::-moz-placeholder",
+      ":-moz-placeholder",
+      "::-webkit-input-placeholder"
+    );
+
+    @each $placeholder-prefix in $placeholder-prefixes {
+      &#{$placeholder-prefix} {
+        color: var(--color-grey);
+      }
+    }
+  }
+
+  // Specific jakarta forms.
+  textarea,
+  select,
+  input:not([type="checkbox"], [type="radio"], [type="submit"], [type="file"]) {
+    padding: functions.rem(12px) functions.rem(27px);
+    width: 100%;
+    max-width: 100%;
+    appearance: none;
+    transition: all 100ms linear;
+    background-color: var(--color-grey-light);
+    color: var(--color-text);
+    border-radius: functions.rem(15px);
+    font-weight: var(--font-weight-regular);
+    border: 1px solid var(--color-grey-light);
+
+    &:focus {
+      border-color: var(--color-grey);
+    }
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  select {
+    background-image: url("../../img/form-icon-select.svg");
+    background-repeat: no-repeat;
+    background-position: right functions.rem(10px) center;
+    padding-right: functions.rem(35px) !important;
+  }
+
+  select::-ms-expand {
+    display: none;
+  }
+
+  label,
+  legend {
+    margin-bottom: functions.rem(6px);
+    display: block;
+
+    &.form-required {
+      &::after {
+        content: " *";
+      }
+    }
+  }
+
+  .form-item,
+  #ajax-wrapper .form-item {
+    margin-bottom: functions.rem(30px);
+  }
+
+  .form-item {
+    &.error {
+      label {
+        color: var(--color-error);
+      }
+    }
+  }
+
+  .description {
+    font-style: italic;
+    font-size: functions.rem(12px);
+    margin-top: functions.rem(3px);
+  }
+
+  .form-actions {
+    margin-top: 30px;
+  }
+
+  .js-form-type-checkbox,
+  .js-form-type-radio,
+  .form-type-checkbox,
+  .form-type-radio,
+  .facets-widget-checkbox .facet-item {
+    input {
+      opacity: 0;
+      position: absolute;
+    }
+
+    label {
+      position: relative;
+      padding-left: functions.rem(26px);
+      font-weight: inherit;
+      margin: 0;
+      display: inline-block;
+      cursor: pointer;
+
+      &::before {
+        transition: all 200ms ease;
+        position: absolute;
+        left: 0;
+        top: functions.rem(5px);
+        content: "";
+        width: functions.rem(16px);
+        height: functions.rem(16px);
+        background: var(--color-grey);
+      }
+    }
+
+    a {
+      text-decoration: underline;
+    }
+  }
+
+  .js-form-type-checkbox,
+  .form-type-checkbox,
+  .facets-widget-checkbox .facet-item {
+    label {
+      &::before {
+        border-radius: functions.rem(2px);
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+
+    input:checked + label {
+      &::before {
+        background-image: url("../../img/form-icon-check.svg");
+        background-color: var(--color-primary);
+      }
+    }
+  }
+
+  .js-form-type-radio,
+  .form-type-radio {
+    label {
+      &::before {
+        border-radius: 100%;
+        top: functions.rem(7px);
+      }
+    }
+
+    input:checked + label {
+      &::before {
+        background-color: var(--color-primary);
+      }
+    }
+  }
+
+  .form-radios,
+  .form-checkboxes {
+    .form-item {
+      margin-bottom: 0;
+
+      &:not(:first-child) {
+        margin-top: functions.rem(5px);
+      }
+    }
+  }
+
+  .form-managed-file {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: functions.rem(20px);
+  }
+
+  .captcha {
+    margin-top: functions.rem(20px);
+  }
+
+  .webform-flexbox {
+    margin: 0 -25px;
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      margin: 0 -45px;
+    }
+
+    .webform-flex--container {
+      margin: 0 25px;
+
+      @media screen and (min-width: variables.$breakpoints-desktop) {
+        margin: 0 45px;
+      }
+    }
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+}

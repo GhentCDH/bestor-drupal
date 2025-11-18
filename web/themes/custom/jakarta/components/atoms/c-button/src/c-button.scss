@@ -1,0 +1,83 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-button {
+  display: inline-flex;
+  transition: var(--transition-eased);
+  background: transparent;
+  position: relative;
+  align-items: center;
+  text-decoration: none;
+  text-transform: none;
+  line-height: 1;
+  z-index: 1;
+  font-size: 1em;
+}
+
+// DEFAULT.
+.c-button--default {
+  border-radius: functions.rem(10px);
+  padding: functions.rem(15px) functions.rem(16px);
+
+  // COLOR.
+  &.c-button--color-primary {
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    color: var(--color-dark);
+
+    &:focus,
+    &:hover {
+      background: transparent;
+      border-color: var(--color-dark);
+      color: var(--color-dark);
+    }
+  }
+
+  &.c-button--color-white {
+    background: var(--color-light);
+    border: 1px solid var(--color-light);
+    color: var(--color-dark);
+
+    &:focus,
+    &:hover {
+      background: transparent;
+      border-color: var(--color-dark);
+      color: var(--color-dark);
+    }
+  }
+}
+
+// OUTLINE.
+.c-button--outline {
+  border-radius: functions.rem(10px);
+  padding: functions.rem(15px) functions.rem(16px);
+  background: transparent;
+  border: 1px solid var(--color-dark);
+  color: var(--color-dark);
+
+  &:focus,
+  &:hover {
+    background: var(--color-light);
+    border-color: var(--color-light);
+    color: var(--color-dark);
+  }
+}
+
+// LINK.
+.c-button--link {
+  color: var(--color-dark);
+
+  .c-icon {
+    font-size: functions.rem(8px);
+    padding-inline-end: functions.rem(12px);
+    transition: inherit;
+  }
+
+  &:focus,
+  &:hover {
+    .c-icon {
+      padding-inline-end: functions.rem(20px);
+    }
+  }
+}

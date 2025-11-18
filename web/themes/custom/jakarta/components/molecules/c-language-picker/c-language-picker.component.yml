@@ -1,0 +1,21 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Language picker'
+status: stable
+group: Molecules
+description: "A component that displays a language picker."
+props:
+  type: object
+  properties:
+    c_language_picker_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  toggle:
+    title: Toggle
+    description: 'The toggle for the language picker.'
+  links:
+    title: Links
+    description: 'The links for the language picker.'

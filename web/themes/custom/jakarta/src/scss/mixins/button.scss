@@ -1,0 +1,13 @@
+@mixin button-reset {
+  font-weight: var(--font-weight-base);
+  padding: 0;
+  border: 0;
+  background: none;
+  min-width: auto;
+
+  &:focus,
+  &:hover {
+    background-color: transparent;
+    transform: none;
+  }
+}

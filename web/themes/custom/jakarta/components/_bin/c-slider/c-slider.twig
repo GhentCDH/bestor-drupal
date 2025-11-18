@@ -1,0 +1,24 @@
+{% set c_attributes = create_attribute(c_attributes|default({})) %}
+
+{% set c_name = "c-slider" %}
+
+{% set classes = [
+  c_name,
+  'swiper',
+] %}
+
+<div {{ c_attributes.addClass(classes) }} data-slider-trigger="{{ type }}">
+  <div class="{{ c_name ~ '__wrapper swiper-wrapper' }}">
+    {% for item in items %}
+      <div class="{{ c_name ~ '__slide swiper-slide' }}">
+        {{ item }}
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="{{ c_name ~ '__btns' }}">
+    <div class="{{ c_name ~ '__btn' }} swiper-button-prev c-btn"></div>
+    <div class="{{ c_name ~ '__btn' }} swiper-button-next c-btn"></div>
+  </div>
+</div>

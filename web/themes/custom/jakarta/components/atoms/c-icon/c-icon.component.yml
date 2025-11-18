@@ -1,0 +1,28 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Icon'
+status: stable
+group: Atoms
+description: "A component that displays an icon."
+props:
+  type: object
+  properties:
+    position:
+      type: string
+      title: Position
+      description: 'Set icon in the pseudo before or after.'
+      default: 'before'
+    standalone:
+      type: boolean
+      title: Standalone
+      description: 'Whether the icon is a standalone icon or not.'
+      default: false
+    c_icon_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  icon:
+    title: Icon
+    description: 'The icon.'

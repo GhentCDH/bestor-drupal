@@ -1,0 +1,31 @@
+name: Jakarta
+type: theme
+description: 'Sitetrip starter theme'
+package: Custom
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11
+base theme: false
+libraries:
+  - jakarta/global-styling
+libraries-override:
+  system/base: false
+ckeditor5-stylesheets:
+ - dist/css/wysiwyg.css
+stylesheets-remove:
+  - views.module.css
+  - user.module.css
+  - system.theme.css
+  - core/themes/classy/css/components/file.css
+regions:
+  nav_left: Nav (left)
+  nav: Nav (middle)
+  nav_right: Nav (right)
+  precontent: Precontent
+  sidebar: Sidebar
+  content: Content
+  subcontent: Subcontent
+  footer_1: Footer top left
+  footer_2: Footer top right
+  footer_3: Footer bottom left
+  footer_4: Footer bottom right
+  footer: Footer (centered)
+  overlay: Overlay

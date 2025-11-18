@@ -1,0 +1,18 @@
+:root {
+  // Global colors.
+  --color-light: #FFFFFF;
+  --color-grey-light: #F8F8F8;
+  --color-grey-medium: #BFBEBE;
+  --color-grey: #676666;
+  --color-dark: #000000;
+  --color-primary: #F36D63;
+  --color-secondary: #000000;
+  --color-tertiary: #FFFAF0;
+
+  // Specific use colors.
+  --color-background: var(--color-light);
+  --color-text: var(--color-dark);
+  --color-text-link: var(--color-text);
+  --color-text-link-hover: var(--color-primary);
+  --color-error: #a94442;
+}

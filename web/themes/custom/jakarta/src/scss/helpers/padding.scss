@@ -1,0 +1,11 @@
+@use "./../variables";
+@use "./../mixins";
+
+.h-padding-default {
+  @include mixins.padding-top-default;
+  @include mixins.padding-bottom-default;
+}
+
+.h-padding-top-default {
+  @include mixins.padding-top-default;
+}

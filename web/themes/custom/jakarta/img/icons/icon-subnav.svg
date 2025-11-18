@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="7px" viewBox="0 0 10 7" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>Arrow_Right</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M2.54936728,-0.929643759 C2.42259807,-1.02516623 2.22242231,-1.02317677 2.09873647,-0.925165132 C1.97505063,-0.827153497 1.97319088,-0.669045165 2.09454985,-0.569235487 L7.2244464,3.49785694 L2.09424984,7.56400154 C2.00242367,7.63689183 1.97481837,7.74613749 2.02418331,7.84128398 C2.07354826,7.93643046 2.19027681,7.99896187 2.32045851,7.9999984 C2.40570231,8.00024046 2.48738861,7.97303021 2.54666718,7.92464677 L7.90487247,3.67675782 C8.03064807,3.57814834 8.03185499,3.41779176 7.90757257,3.31800823 L2.54936728,-0.929643759 Z" id="path-1"></path>
+    </defs>
+    <g id="Componenten-losangeles" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Subnavigatie-variant-2" transform="translate(-729.000000, -47.000000)">
+            <g id="Element-/-Dropdown-/-Arrows-/-Down" transform="translate(729.000000, 47.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Arrow_Right" fill="#000000" transform="translate(5.000000, 3.500000) rotate(-270.000000) translate(-5.000000, -3.500000) " xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

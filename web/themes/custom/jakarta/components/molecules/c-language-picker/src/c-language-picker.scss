@@ -1,0 +1,56 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-language-picker__toggle {
+  display: flex;
+  align-items: center;
+  gap: functions.rem(5px);
+  font-size: functions.rem(18px);
+  cursor: pointer;
+  transition: var(--transition-link);
+
+  .c-icon {
+    font-size: functions.rem(5px);
+    transition: var(--transition-eased);
+
+    .is-open & {
+      transform: rotate(180deg);
+    }
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--color-text-link-hover);
+  }
+}
+
+.c-language-picker__links {
+  background: var(--color-light);
+  border-radius: functions.rem(20px);
+  box-shadow: 0 16px 32px rgb(0 0 0 / 40%);
+  padding: functions.rem(20px) functions.rem(30px);
+  display: inline-block;
+  pointer-events: none;
+  opacity: 0;
+  position: absolute;
+  top: calc(100% + #{functions.rem(7.5px)});
+  left: 0;
+  z-index: 20;
+  transition: var(--transition-eased);
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: functions.rem(10px);
+  }
+
+  .is-active {
+    display: none;
+  }
+
+  .is-open & {
+    pointer-events: all;
+    opacity: 1;
+  }
+}

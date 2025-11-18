@@ -1,0 +1,14 @@
+name: Button
+props:
+  type: object
+  required:
+    - title
+  properties:
+    title:
+      type: string
+      title: Title
+      description: The title of the button.
+    link:
+      type: string
+      title: Link
+      description: The url of the button.

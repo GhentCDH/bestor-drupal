@@ -1,0 +1,20 @@
+uuid: b3d3840a-e927-4f37-ae37-16671e22494b
+langcode: en
+status: true
+dependencies:
+  theme:
+    - jakarta
+_core:
+  default_config_hash: 0wp40IlneQ7aL73yYH8uecnISk55xnGbzU3xxLdjPV8
+id: jakarta_page_title
+theme: jakarta
+region: content
+weight: -6
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

@@ -1,0 +1,21 @@
+name: Testimonial
+props:
+  type: object
+  required:
+    - text
+    - name
+    - image
+  properties:
+    text:
+      type: string
+      title: Text
+      description: The text to display.
+    name:
+      type: string
+      title: Name
+      description: The name.
+    image:
+      type: image
+      title: Image
+      description: The image.
+

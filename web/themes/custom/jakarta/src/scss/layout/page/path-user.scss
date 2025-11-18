@@ -1,0 +1,15 @@
+@use "./../../variables";
+@use "./../../mixins";
+@use "./../../functions";
+
+.path-user {
+  .main {
+    padding-left: var(--grid-offset);
+    padding-right: var(--grid-offset);
+    max-width: functions.rem(800px);
+    margin-left: auto;
+    margin-right: auto;
+
+    @include mixins.margin-bottom-default;
+  }
+}

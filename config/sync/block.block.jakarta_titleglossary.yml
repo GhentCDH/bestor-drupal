@@ -1,0 +1,29 @@
+uuid: 3984746d-e74e-4890-8cdc-0d689222a2fa
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.title_glossary
+  module:
+    - facets
+    - system
+  theme:
+    - jakarta
+id: jakarta_titleglossary
+theme: jakarta
+region: sidebar
+weight: -5
+provider: null
+plugin: 'facet_block:title_glossary'
+settings:
+  id: 'facet_block:title_glossary'
+  label: Glossary
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: bestor_titleglossary
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/database\r\n/advanced-search-concepts"

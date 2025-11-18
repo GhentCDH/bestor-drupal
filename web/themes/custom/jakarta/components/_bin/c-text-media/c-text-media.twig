@@ -1,0 +1,33 @@
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-text-media" %}
+
+{% set classes = [
+  c_name,
+  media_position ? c_name ~ "--media-position-" ~ media_position,
+  bg_color ? 'h-bg-color-' ~ bg_color,
+  'h-padding-default'
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  <div class="{{ c_name ~ '__media h-image-full-width' }}">
+    {{ media }}
+  </div>
+  <div class="{{ c_name ~ '__content' }}">
+    {% if title %}
+      <div class="{{ c_name ~ '__title' }}">
+        {{ title }}
+      </div>
+    {% endif %}
+    {% if text %}
+      <div class="{{ c_name ~ '__text h-text-wysiwyg' }}">
+        {{ text }}
+      </div>
+    {% endif %}
+    {% if button %}
+      <div class="{{ c_name ~ '__button h-margin-top-20' }}">
+        {{ button }}
+      </div>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,12 @@
+{# c-heading.story.twig #}
+{# h2 #}
+{{ include('jakarta:c-heading', {
+  content: 'Lorem ipsum dolor sit amet',
+}, with_context = false) }}
+
+{# h3 #}
+{{ include('jakarta:c-heading', {
+  content: 'Lorem ipsum dolor sit amet',
+  heading_tag: 'h3',
+  heading_class: 'h3',
+}, with_context = false) }}

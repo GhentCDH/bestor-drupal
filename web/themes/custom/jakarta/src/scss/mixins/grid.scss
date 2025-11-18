@@ -1,0 +1,24 @@
+@mixin grid-flex-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin grid-flex-item($cols) {
+  width: calc(#{$cols} / var(--grid-total-columns) * 100%);
+}
+
+@mixin grid-push-left($cols) {
+  margin-left: calc(#{$cols} / var(--grid-total-columns) * 100%);
+}
+
+@mixin grid-push-right($cols) {
+  margin-right: calc(#{$cols} / var(--grid-total-columns) * 100%);
+}
+
+@mixin grid-padding-right($cols) {
+  padding-right: calc(#{$cols} / var(--grid-total-columns) * 100%);
+}
+
+@mixin grid-padding-left($cols) {
+  padding-left: calc(#{$cols} / var(--grid-total-columns) * 100%);
+}

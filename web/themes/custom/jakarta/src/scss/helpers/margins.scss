@@ -1,0 +1,45 @@
+@use "./../variables";
+@use "./../mixins";
+@use "./../functions";
+
+$margins: (
+  "5": 5px,
+  "10": 10px,
+  "20": 20px,
+  "30": 30px,
+  "40": 40px,
+  "50": 50px,
+);
+
+@each $name, $margin in $margins {
+  .h-margin-bottom-#{$name} {
+    margin-bottom: functions.rem($margin);
+  }
+
+  .h-margin-top-#{$name} {
+    margin-top: functions.rem($margin);
+  }
+}
+
+.h-margin-children-none {
+  * {
+    margin: 0 !important;
+  }
+}
+
+.h-margin-default {
+  @include mixins.margin-top-default;
+  @include mixins.margin-bottom-default;
+}
+
+.h-margin-top-default {
+  @include mixins.margin-top-default;
+}
+
+.h-margin-bottom-default {
+  @include mixins.margin-bottom-default;
+}
+
+.h-margin-top-cta {
+  margin-top: functions.rem(30px);
+}

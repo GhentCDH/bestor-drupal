@@ -1,0 +1,35 @@
+name: Banner
+props:
+  type: object
+  required:
+    - title
+    - text
+    - media (1)
+    - media (2)
+  properties:
+    title:
+      type: string
+      title: Title
+      description: The title of the banner.
+    text:
+      type: string
+      title: Text
+      description: The text of the banner.
+    media (1):
+      type: object
+      title: Media 1
+      description: The first media object for the banner.
+      properties:
+        url:
+          type: string
+          title: URL
+          description: The URL of the first media object.
+    media (2):
+      type: object
+      title: Media 2
+      description: The second media object for the banner.
+      properties:
+        url:
+          type: string
+          title: URL
+          description: The URL of the second media object.

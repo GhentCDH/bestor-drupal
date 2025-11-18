@@ -1,0 +1,40 @@
+name: ctextmedia
+props:
+  type: object
+  required:
+    - title
+    - text
+    - media
+  properties:
+      # The text to display.
+      title:
+        type: string
+        title: Text
+        description: The text to display.
+      # The text to display.
+      text:
+        type: string
+        title: Text
+        description: The text to display.
+      # The image to display.
+      media:
+        type: string
+        title: Media
+        description: The image or video to display.
+      # The media position
+      media_position:
+        type: string
+        title: Media position
+        description: Position left or right.
+      button:
+        type: object
+        title: Button
+        properties:
+          text:
+            type: string
+            title: Text
+            description: The text to display.
+          url:
+            type: string
+            title: URL
+            description: The URL to link to.

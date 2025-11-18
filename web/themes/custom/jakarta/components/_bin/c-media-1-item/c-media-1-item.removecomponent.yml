@@ -1,0 +1,29 @@
+name: Text
+props:
+  type: object
+  required:
+    - title
+    - text
+  properties:
+      # The title to display.
+      title:
+        type: string
+        title: Text
+        description: The text to display.
+      # The text to display.
+      text:
+        type: string
+        title: Text
+        description: The text to display.
+      button:
+        type: object
+        title: Button
+        properties:
+          text:
+            type: string
+            title: Text
+            description: The text to display.
+          url:
+            type: string
+            title: URL
+            description: The URL to link to.

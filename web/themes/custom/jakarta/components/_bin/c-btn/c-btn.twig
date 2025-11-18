@@ -1,0 +1,33 @@
+{#
+title,
+icon,
+icon_position (before/after),
+link,
+c_attributes
+#}
+
+{% set c_attributes = create_attribute(c_attributes|default({})) %}
+
+{% set c_name = "c-btn" %}
+
+{% set classes = [
+  c_name,
+  type ? c_name ~ "--type-" ~ type,
+  color ? c_name ~ "--color-" ~ color,
+  icon ? c_name ~ "--icon",
+  icon ? c_name ~ "--icon-" ~ icon,
+  icon_position ? c_name ~ "--icon-" ~ icon_position,
+  size ? c_name ~ "--size-" ~ size,
+] %}
+
+{% set element = link ? 'a' : 'div' %}
+{% if link %}
+  {% set c_attributes = c_attributes.setAttribute('href', link) %}
+{% endif %}
+
+<{{ element }} {{ c_attributes.addClass(classes) }}>
+{{ title }}
+  {% if icon %}
+    <div class="{{ c_name ~ '__icon' }} {{ 'icons-' ~ icon }}"></div>
+  {% endif %}
+</{{ element }}>

@@ -1,0 +1,22 @@
+// @use './../../variables';
+// @use './../../mixins';
+//
+// .view-articles {
+//   @include mixins.layout-container;
+//   .view-content {
+//     margin-bottom: -60px;
+//     @media screen and (min-width: variables.$breakpoints-mobile) {
+//       @include mixins.grid-flex-wrapper;
+//       flex-wrap: wrap;
+//     }
+//   }
+//   .views-row {
+//     margin-bottom: 60px;
+//     @media screen and (min-width: variables.$breakpoints-mobile) {
+//       @include mixins.grid-flex-item(6);
+//     }
+//     @media screen and (min-width: variables.$breakpoints-mobile-large) {
+//       @include mixins.grid-flex-item(4);
+//     }
+//   }
+// }

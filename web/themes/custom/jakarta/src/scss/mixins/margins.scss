@@ -1,0 +1,30 @@
+@use "../functions";
+@use "../variables/breakpoints" as variables;
+
+@mixin margin-top-default {
+  & {
+    margin-top: functions.rem(60px);
+
+    @media screen and (min-width: variables.$breakpoints-mobile) {
+      margin-top: functions.rem(90px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      margin-top: functions.rem(150px);
+    }
+  }
+}
+
+@mixin margin-bottom-default {
+  & {
+    margin-bottom: functions.rem(60px);
+
+    @media screen and (min-width: variables.$breakpoints-mobile) {
+      margin-bottom: functions.rem(90px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      margin-bottom: functions.rem(150px);
+    }
+  }
+}

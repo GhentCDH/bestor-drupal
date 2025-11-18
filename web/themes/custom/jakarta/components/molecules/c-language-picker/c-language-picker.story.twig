@@ -1,0 +1,12 @@
+{# c-language-picker.story.twig #}
+{% set links %}
+  <ul class="links">
+    <li class="is-active"><a href="#">NL</a></li>
+    <li><a href="#">EN</a></li>
+    <li><a href="#">FR</a></li>
+  </ul>
+{% endset %}
+{{ include('jakarta:c-language-picker', {
+  toggle: 'NL',
+  links,
+}, with_context = false) }}

@@ -1,0 +1,105 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-columns__wrapper {
+//   @include mixins.grid-flex-wrapper;
+//
+//   align-items: flex-start;
+// }
+//
+// .c-columns__title {
+//   @include mixins.grid-flex-item(16);
+//   @include mixins.grid-push-left(4);
+//
+//   @media screen and (min-width: variables.$breakpoints-mobile-large) {
+//     @include mixins.grid-flex-item(20);
+//     @include mixins.grid-push-left(2);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-item(22);
+//     @include mixins.grid-push-left(1);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-desktop) {
+//     @include mixins.grid-flex-item(3);
+//     @include mixins.grid-push-left(1);
+//
+//     position: sticky;
+//     padding-top: functions.rem(40px);
+//     top: 0;
+//   }
+// }
+//
+// .c-columns__content {
+//   @include mixins.grid-flex-item(20);
+//   @include mixins.grid-push-left(2);
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-item(22);
+//     @include mixins.grid-push-left(1);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-desktop) {
+//     @include mixins.grid-flex-item(17);
+//     @include mixins.grid-push-left(2);
+//   }
+// }
+//
+// .c-columns__items {
+//   --grid-gutter: 40px;
+//
+//   @include mixins.grid-flex-wrapper;
+//
+//   row-gap: var(--grid-gutter);
+//
+//   @media screen and (min-width: variables.$breakpoints-desktop) {
+//     --grid-gutter: 80px;
+//   }
+//
+//   > div {
+//     @include mixins.grid-flex-item(24);
+//
+//     @media screen and (min-width: variables.$breakpoints-mobile-large) {
+//       @include mixins.grid-flex-item(12);
+//     }
+//   }
+// }
+//
+// /**
+//   * Variations.
+//  */
+//
+// // 2 Columns grid.
+// .c-columns--items-row-2 {
+//   .c-columns__items {
+//     > div {
+//       /*@media screen and (min-width: variables.$breakpoints-mobile-large) {
+//         @include mixins.grid-flex-item(12);
+//       }*/
+//     }
+//   }
+// }
+//
+// // 3 Columns grid.
+// .c-columns--items-row-3 {
+//   .c-columns__items {
+//     > div {
+//       @media screen and (min-width: variables.$breakpoints-desktop-large) {
+//         @include mixins.grid-flex-item(8);
+//       }
+//     }
+//   }
+// }
+//
+// // 4 Columns grid.
+// .c-columns--items-row-4 {
+//   .c-columns__items {
+//     > div {
+//       @media screen and (min-width: variables.$breakpoints-desktop-large) {
+//         @include mixins.grid-flex-item(6);
+//       }
+//     }
+//   }
+// }

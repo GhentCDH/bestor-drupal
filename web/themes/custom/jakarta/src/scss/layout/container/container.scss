@@ -1,0 +1,33 @@
+@use "./../../variables";
+@use "./../../mixins";
+
+.container {
+  @include mixins.layout-container;
+}
+
+.container-row--size-20 {
+  @include mixins.grid-push-left(1);
+  @include mixins.grid-flex-item(22);
+
+  @media screen and (min-width: variables.$breakpoints-desktop-large) {
+    @include mixins.grid-push-left(2);
+    @include mixins.grid-flex-item(20);
+  }
+
+  > * {
+    --grid-total-columns: 20;
+  }
+}
+
+/*
+.container-row {
+  @include mixins.grid-flex-wrapper;
+
+  &__content {
+    &--size-20 {
+      @include mixins.grid-push-left(1);
+      @include mixins.grid-flex-item(20);
+    }
+  }
+}
+*/

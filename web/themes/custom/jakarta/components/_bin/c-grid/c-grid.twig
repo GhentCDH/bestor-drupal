@@ -1,0 +1,25 @@
+{#
+parameters: {
+  items,
+  layout (items-2, items-3, items-4),
+  rowgap (default, small, medium large),
+}
+#}
+
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-grid" %}
+
+{% set classes = [
+  c_name,
+  layout ? c_name ~ '--layout-' ~ layout,
+  rowgap ? c_name ~ '--rowgap-' ~ rowgap,
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  {% for key, item in items %}
+    <div class="{{ c_name ~ '__item' }}">
+      {{ item }}
+    </div>
+  {% endfor %}
+</div>

@@ -1,0 +1,198 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-page-header {
+  padding-block: functions.rem(20px);
+}
+
+.c-page-header__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  // Branding.
+  .block-system-branding-block {
+    flex-shrink: 0;
+    flex-grow: 1;
+
+    @media screen and (min-width: variables.$breakpoints-menu-switch) {
+      flex-grow: 0;
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      margin-inline-end: functions.rem(50px);
+    }
+  }
+
+  // Search.
+  .block-views-exposed-filter-blocksearch-page-1 {
+    display: none;
+    position: relative;
+
+    .form-item-fullsearch {
+      margin-bottom: 0;
+
+      input {
+        padding-block: functions.rem(29px);
+        padding-inline-start: functions.rem(100px);
+        max-inline-size: functions.rem(590px);
+        width: 100%;
+        font-size: functions.rem(18px);
+      }
+    }
+
+    .form-actions {
+      margin-top: 0;
+      position: absolute;
+      top: 50%;
+      left: functions.rem(29px);
+      transform: translateY(-50%);
+      z-index: 5;
+
+      .c-button {
+        padding: functions.rem(10px);
+        border: 0;
+        background: transparent;
+      }
+
+      .c-icon {
+        font-size: functions.rem(25px);
+        color: var(--color-grey);
+      }
+    }
+
+    @media screen and (min-width: variables.$breakpoints-menu-switch) {
+      display: block;
+      flex-grow: 1;
+    }
+  }
+
+  // Menu.
+  .menu--main {
+    display: none;
+
+    // Level 1.
+    & > .menu {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: clamp(1rem, 3vw, 45px);
+
+      > .menu__item {
+        flex-shrink: 0;
+
+        > a {
+          font-size: functions.rem(18px);
+        }
+      }
+
+        // Level 2.
+      .menu__item--expanded {
+        position: relative;
+
+        & > a {
+          display: flex;
+          align-items: center;
+          gap: functions.rem(7px);
+          position: relative;
+
+          &::after {
+            content: "\e902";
+            font-family: icons, sans-serif !important;
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            font-size: functions.rem(5px);
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: var(--transition-eased);
+          }
+        }
+
+        .menu {
+          display: flex;
+          background: var(--color-light);
+          border-radius: functions.rem(20px);
+          box-shadow: 0 16px 32px rgb(0 0 0 / 40%);
+          padding: functions.rem(20px) functions.rem(30px);
+          pointer-events: none;
+          opacity: 0;
+          flex-direction: column;
+          gap: functions.rem(10px);
+          position: absolute;
+          top: calc(100% + #{functions.rem(7.5px)});
+          left: 0;
+          z-index: 20;
+          transition: var(--transition-eased);
+          visibility: hidden;
+
+          a {
+            white-space: nowrap;
+          }
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0 0 functions.rem(-12.5px) 0;
+          display: none;
+        }
+
+        &:focus-within,
+        &:hover,
+        &:focus {
+          & > a {
+            color: var(--color-text-link-hover);
+
+            &::after {
+              transform: rotate(180deg);
+            }
+          }
+
+          .menu {
+            opacity: 1;
+            pointer-events: all;
+            visibility: visible;
+          }
+
+          &::before {
+            display: block;
+          }
+        }
+      }
+    }
+
+    @media screen and (min-width: variables.$breakpoints-menu-switch) {
+      display: block;
+      margin-inline-start: auto;
+    }
+  }
+
+  // Language picker.
+  .c-language-picker {
+    display: none;
+
+    @media screen and (min-width: variables.$breakpoints-menu-switch) {
+      display: block;
+    }
+  }
+
+  // Hamburger.
+  .c-hamburger {
+    @media screen and (min-width: variables.$breakpoints-menu-switch) {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: variables.$breakpoints-menu-switch) {
+    gap: functions.rem(25px);
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    gap: functions.rem(45px);
+  }
+}

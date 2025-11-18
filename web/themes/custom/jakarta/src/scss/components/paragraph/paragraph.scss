@@ -1,0 +1,26 @@
+@use "./../../variables";
+@use "./../../mixins";
+@use "./../../functions";
+
+.paragraph {
+  position: relative;
+  scroll-margin-top: var(--header-mobile-height);
+
+  @media screen and (min-width: variables.$breakpoints-menu-switch) {
+    scroll-margin-top: 0;
+  }
+}
+
+// Paragraph types with no margin-top when first.
+.paragraph:first-child {
+  &.c-banner {
+    margin-top: 0 !important;
+  }
+}
+
+// Paragraph types with no margin-bottom when last.
+.paragraph:last-child {
+  &.c-banner {
+    margin-bottom: 0 !important;
+  }
+}

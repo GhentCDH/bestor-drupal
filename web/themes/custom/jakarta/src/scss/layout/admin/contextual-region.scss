@@ -1,0 +1,17 @@
+@use "./../../variables";
+@use "./../../functions";
+
+html[data-once="node-preview"] {
+  --gin-toolbar-y-offset: 0;
+  --gin-toolbar-x-offset: 0;
+}
+
+.contextual-region.focus {
+  background-color: rgb(0 0 0 / 10%);
+  outline-width: 2px;
+  outline-color: var(--color-primary);
+}
+
+.node-preview-container {
+  display: none;
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "no-descending-specificity": null,
+    "selector-class-pattern": null,
+    "max-line-length": null,
+    "scss/at-extend-no-missing-placeholder": null
+  },
+  "ignoreFiles": ["src/scss/vendor/**/*.scss"]
+}

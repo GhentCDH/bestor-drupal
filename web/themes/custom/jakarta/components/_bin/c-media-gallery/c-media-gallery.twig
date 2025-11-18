@@ -1,0 +1,35 @@
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-media-gallery" %}
+
+{% set classes = [
+  c_name,
+] %}
+
+{% set remaining = items|length - 4 %}
+
+<div {{ attributes.addClass(classes) }}>
+  <div class="{{ c_name ~ '__grid'}}">
+    <div class="{{ c_name ~ '__left'}}">
+      {{ items.0 }}
+    </div>
+    <div class="{{ c_name ~ '__right'}}">
+      <div class="{{ c_name ~ '__right-top'}}">
+        {{ items.1 }}
+      </div>
+      <div class="{{ c_name ~ '__right-btm'}}">
+        {{ items.2 }}
+        {{ items.3 }}
+      </div>
+    </div>
+  </div>
+
+  {% for key, item in items|slice(4) %}
+    {% set image_uri = item['#media'].field_media_image.entity.uri.value %}
+    {% set image_popup = image_uri | image_style('lightbox')  %}
+    {{ image_popup }}
+    {% include  'jakarta:c-lightbox' with {
+      url: image_popup,
+    } %}
+  {% endfor %}
+</div>

@@ -1,0 +1,23 @@
+uuid: 2273b770-a41c-47e3-999c-44abc655a892
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - views
+  theme:
+    - jakarta
+id: jakarta_exposedformsearchpage_1
+theme: jakarta
+region: nav
+weight: -7
+provider: null
+plugin: 'views_exposed_filter_block:search-page_1'
+settings:
+  id: 'views_exposed_filter_block:search-page_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility: {  }

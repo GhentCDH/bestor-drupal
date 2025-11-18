@@ -1,0 +1,22 @@
+uuid: 725b53ec-2cfa-4228-9407-18965f2b2b58
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - jakarta
+_core:
+  default_config_hash: bkXrlEqyl1SXlHWCtpnGKex7fy_CbrZUV9yrnpZhe3s
+id: jakarta_breadcrumbs
+theme: jakarta
+region: content
+weight: -5
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

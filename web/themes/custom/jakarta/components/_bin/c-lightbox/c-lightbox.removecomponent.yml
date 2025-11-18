@@ -1,0 +1,16 @@
+name: Lightbox
+props:
+  type: object
+
+
+# Copy vendor CSS files to dist
+#vendorCss:
+#  node_modules/glightbox/dist/css/glightbox.min.css: {}
+
+#libraryOverrides:
+#  css:
+#    theme:
+#      ../../dist/css/vendor/glightbox.min.css: { minified: true }
+#      c-lightbox.css: {}
+#  js:
+#    c-lightbox.js: { attributes: { type: module, defer: true }, minified: true }

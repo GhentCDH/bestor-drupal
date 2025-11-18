@@ -1,0 +1,33 @@
+@use "./../variables";
+@use "./../mixins";
+
+.visually-hidden {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  height: 1px;
+  width: 1px;
+  word-wrap: normal;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.h-layout-display-block {
+  display: block;
+}
+
+.h-layout-grow-parent {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.h-layout-position-relative {
+  position: relative;
+}
+
+.h-layout-height-100 {
+  height: 100%;
+}

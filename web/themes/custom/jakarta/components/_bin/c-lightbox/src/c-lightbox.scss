@@ -1,0 +1,51 @@
+// .c-lightbox {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//
+//   img {
+//     transform: scale(1);
+//     transition: 600ms transform ease-out;
+//   }
+//
+//   > .field {
+//     overflow: hidden;
+//     width: 100%;
+//   }
+//
+//   &:hover {
+//     img {
+//       transform: scale(1.02);
+//     }
+//
+//     &::after {
+//       opacity: 0.8 !important;
+//     }
+//   }
+// }
+//
+// .media--type-remote-video {
+//   .c-lightbox {
+//     &::before {
+//       content: '';
+//       position: absolute;
+//       width: 20px;
+//       height: 20px;
+//       z-index: 20;
+//       background: url("../../img/icon-video.svg") no-repeat center center;
+//       background-size: contain;
+//     }
+//
+//     &::after {
+//       content: '';
+//       position: absolute;
+//       z-index: 10;
+//       opacity: 0.4;
+//       width: 60px;
+//       height: 60px;
+//       background: #ffffff;
+//       transition: 400ms opacity linear;
+//       border-radius: 50%;
+//     }
+//   }
+// }

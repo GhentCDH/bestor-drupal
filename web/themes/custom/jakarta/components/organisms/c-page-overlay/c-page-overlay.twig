@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Template for the component c-page-overlay.
+ */
+#}
+
+{% set overlay_classes = [
+  'c-page-overlay',
+]|merge(c_page_overlay_utility_classes ?: []) %}
+
+{% if page.overlay %}
+  <aside {{ attributes.addClass(overlay_classes) }}>
+    {% if page.overlay %}
+      {{ page.overlay }}
+    {% endif %}
+  </aside>
+{% endif %}

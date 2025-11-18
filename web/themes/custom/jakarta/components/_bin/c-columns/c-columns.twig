@@ -1,0 +1,26 @@
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-columns" %}
+
+{% set classes = [
+  c_name,
+  layout ? c_name ~ '--layout-' ~ layout,
+  items_row ? c_name ~ '--items-row-' ~ items_row,
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  <div class="{{ c_name ~ '__wrapper' }}">
+    {% if title %}
+      <div class="{{ c_name ~ '__title h-margin-children-none h-margin-gap' }}">
+        {{ title }}
+      </div>
+    {% endif %}
+    <div class="{{ c_name ~ '__content' }}">
+      {% if items %}
+        <div class="{{ c_name ~ '__items' }}">
+            {{ items }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

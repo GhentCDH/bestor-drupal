@@ -1,0 +1,74 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-media-1-item {
+//   background: url('../../img/bg.jpg') no-repeat center center;
+//   background-size: cover;
+// }
+//
+//
+// .c-media-1-item__wrapper {
+//   @include mixins.grid-flex-wrapper;
+// }
+//
+// .c-media-1-item__title {
+//   @include mixins.grid-flex-item(16);
+//   @include mixins.grid-push-left(4);
+//
+//   @media screen and (min-width: variables.$breakpoints-mobile-large) {
+//     @include mixins.grid-flex-item(12);
+//     @include mixins.grid-push-left(6);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-item(6);
+//     @include mixins.grid-push-left(1);
+//
+//     padding-top: functions.rem(40px);
+//   }
+// }
+//
+// .c-media-1-item__media {
+//   @include mixins.grid-flex-item(20);
+//   @include mixins.grid-push-left(2);
+//
+//   padding-top: functions.rem(80px);
+//   padding-bottom: functions.rem(80px);
+//
+//   @media screen and (min-width: variables.$breakpoints-mobile-large) {
+//     @include mixins.grid-flex-item(16);
+//     @include mixins.grid-push-left(4);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-item(6);
+//     @include mixins.grid-push-left(2);
+//
+//     padding-top: 0;
+//     padding-bottom: 0;
+//   }
+// }
+//
+// .c-media-1-item__content {
+//   @include mixins.grid-flex-item(16);
+//   @include mixins.grid-push-left(4);
+//
+//   @media screen and (min-width: variables.$breakpoints-mobile-large) {
+//     @include mixins.grid-flex-item(12);
+//     @include mixins.grid-push-left(6);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-item(5);
+//     @include mixins.grid-push-left(2);
+//
+//     margin-top: auto;
+//     padding-bottom: functions.rem(40px);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-desktop) {
+//     @include mixins.grid-flex-item(4);
+//     @include mixins.grid-push-left(3);
+//   }
+// }

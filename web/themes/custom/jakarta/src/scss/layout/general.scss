@@ -1,0 +1,10 @@
+@use "./../variables";
+@use "./../mixins";
+
+* {
+  box-sizing: border-box;
+}
+
+.site-wrapper {
+  width: 100%;
+}

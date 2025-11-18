@@ -1,0 +1,26 @@
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-quote" %}
+
+{% set classes = [
+  c_name,
+  'h-text-align-center',
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  {% if text %}
+    <div class="{{ c_name ~ '__text' }}">
+      {{ text }}
+    </div>
+  {% endif %}
+  {% if name %}
+    <div class="{{ c_name ~ '__name' }}">
+      {{ name }}
+    </div>
+  {% endif %}
+  {% if function %}
+    <div class="{{ c_name ~ '__function' }}">
+      {{ function }}
+    </div>
+  {% endif %}
+</div>

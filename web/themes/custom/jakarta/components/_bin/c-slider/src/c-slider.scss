@@ -1,0 +1,78 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+// @use "./../../../src/scss/base/icons";
+// @use "sass:map";
+//
+// .c-slider {
+//   --offset: 20px;
+//   --swiper-navigation-sides-offset: 0;
+//
+//
+//   @media screen and (min-width: variables.$breakpoints-mobile) {
+//     --offset: 40px;
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     --offset: 60px;
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-desktop) {
+//     --offset: 80px;
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-desktop-large) {
+//     --offset: 100px;
+//   }
+// }
+//
+// .c-slider__btns {
+//   display: flex;
+//   justify-content: center;
+//   gap: functions.rem(15px);
+//   margin-bottom: var(--offset);
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     position: absolute;
+//     margin-bottom: 0;
+//     right: var(--offset);
+//     bottom: var(--offset);
+//   }
+// }
+//
+// .c-slider__btn {
+//   margin: 0;
+//
+//   &::before {
+//     @include icons.icons;
+//
+//     content: map.get(icons.$icons, "arrow");
+//     font-size: functions.rem(15px);
+//
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       font-size: functions.rem(20px);
+//     }
+//   }
+//
+//   &.c-btn {
+//     height: 43px;
+//     width: 56px;
+//     border-radius: 70px;
+//
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       height: 68px;
+//       width: 89px;
+//       border-radius: 110px;
+//     }
+//   }
+//
+//   &.swiper-button-prev {
+//     &:before {
+//       transform: rotate(180deg);
+//     }
+//   }
+//
+//   &::after {
+//     display: none;
+//   }
+// }

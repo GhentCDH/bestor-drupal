@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Template for the component c-hamburger.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-hamburger' %}
+
+{% set hamburger_attributes = hamburger_attributes ?: create_attribute() %}
+
+{% set hamburger_classes = [
+  component_name ~ '-button',
+]|merge(hamburger_utility_classes ?: []) %}
+
+{% block component_content %}
+  <a {{ hamburger_attributes.setAttribute('role', 'button').addClass(hamburger_classes).setAttribute('data-overlay-trigger', '') }}>
+    <span class="{{ component_name }}-button__inner" aria-hidden="true">
+      <span class="{{ component_name }}__line"></span>
+      <span class="{{ component_name }}__line"></span>
+      <span class="{{ component_name }}__line"></span>
+    </span>
+    <span class="visually-hidden">Menu</span>
+  </a>
+{% endblock %}

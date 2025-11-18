@@ -1,0 +1,33 @@
+@use "../variables/breakpoints" as variables;
+
+@mixin layout-container {
+  padding-left: var(--grid-offset);
+  padding-right: var(--grid-offset);
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(var(--grid-width) + var(--grid-offset) * 2);
+  width: 100%;
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    padding-left: var(--grid-offset-desktop);
+    padding-right: var(--grid-offset-desktop);
+  }
+}
+
+@mixin layout-center-div($width, $height) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: $width;
+  height: $height;
+  margin-left: -$width / 2;
+  margin-top: -$height / 2;
+}
+
+@mixin layout-full-div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}

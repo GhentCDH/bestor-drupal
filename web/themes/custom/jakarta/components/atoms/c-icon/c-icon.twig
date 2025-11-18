@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Template for the component c-icon.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-icon' %}
+{% set component_element = 'i' %}
+
+{% set custom_component_classes = [
+  component_name,
+  component_name ~ '--' ~ icon,
+  position == 'after' ? component_name ~ '--' ~ icon ~ '--after' : component_name ~ '--' ~ icon ~ '--before',
+  standalone ? component_name ~ '--standalone',
+]|merge(c_icon_utility_classes ?: []) %}

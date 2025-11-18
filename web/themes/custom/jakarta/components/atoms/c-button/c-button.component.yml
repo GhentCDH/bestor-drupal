@@ -1,0 +1,51 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Button'
+status: stable
+group: Atoms
+description: "A component that displays a button."
+variants:
+  default:
+    title: Default
+  outline:
+    title: Outline
+  link:
+    title: Link
+props:
+  type: object
+  properties:
+    html_tag:
+      title: HTML tag
+      description: 'Type of button tag.'
+      type: string
+      examples:
+        - a
+      enum:
+        - a
+        - button
+      'meta:enum':
+        a: 'Anchor tag'
+        button: 'Button tag'
+      default: a
+    color:
+      title: Color
+      description: 'The color of the button.'
+      type: string
+      examples:
+        - primary
+      enum:
+        - primary
+        - white
+      'meta:enum':
+        primary: 'Primary'
+        white: 'White'
+      default: primary
+    c_button_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  button_content:
+    title: Content
+    description: 'The content of the button.'

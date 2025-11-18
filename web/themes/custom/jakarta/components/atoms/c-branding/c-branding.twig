@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Template for the component c-branding.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-branding' %}
+
+{% set custom_component_classes = [
+  'image-children-display-block',
+]|merge(c_branding_utility_classes ?: []) %}
+
+{% block component_content %}
+  <a href="{{ path('<front>') }}" rel="home" class="{{ component_name }}__logo">
+    {{ logo }}
+  </a>
+{% endblock %}

@@ -1,0 +1,5 @@
+<div {{ attributes }}>
+    {% for item in items %}
+        {{ item.content }}{{ loop.last==false ? ', ' }}
+    {% endfor %}
+</div>

@@ -1,0 +1,18 @@
+name: Slider
+props:
+  type: object
+  required:
+    - slider_type
+    - items
+
+# Copy vendor CSS files to dist
+#vendorCss:
+#  node_modules/swiper/swiper-bundle.min.css: {}
+
+#libraryOverrides:
+#  css:
+#    theme:
+##      ../../dist/css/vendor/swiper-bundle.min.css: { minified: true }
+#      c-slider.css: {}
+##  js:
+##    c-slider.js: { attributes: { type: module, defer: true }, minified: true }

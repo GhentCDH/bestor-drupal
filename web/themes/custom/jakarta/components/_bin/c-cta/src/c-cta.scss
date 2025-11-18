@@ -1,0 +1,27 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-card {
+//   img {
+//     transform: scale(1);
+//     transition: 300ms linear all;
+//   }
+//
+//   &:focus,
+//   &:hover {
+//     img {
+//       transform: scale(1.03);
+//     }
+//   }
+// }
+//
+// .c-card__media {
+//   margin-bottom: 35px;
+// }
+//
+// .c-card__title {
+//   h2 {
+//     margin-bottom: functions.rem(5px);
+//   }
+// }

@@ -1,0 +1,56 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+$hamburger-width: 27px;
+$hamburger-height: 16px;
+$hamburger-line-color: var(--color-dark);
+$hamburger-line-height: 2px;
+$hamburger-line-border-radius: 2px;
+
+.c-hamburger-button {
+  z-index: 30;
+  position: relative;
+}
+
+.c-hamburger-button__inner {
+  display: block;
+  width: $hamburger-width;
+  height: $hamburger-height;
+  position: relative;
+  cursor: pointer;
+
+  .c-hamburger__line {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 100%;
+    height: $hamburger-line-height;
+    border-radius: $hamburger-line-border-radius;
+    background-color: $hamburger-line-color;
+    transition: all 0.3s ease;
+
+    &:nth-child(1) {
+      transform: translate(0, calc($hamburger-height / 2 * -1));
+
+      .overlay-open & {
+        transform: translate(0, 0) rotate(45deg);
+      }
+    }
+
+    &:nth-child(2) {
+      .overlay-open & {
+        opacity: 0;
+      }
+    }
+
+    &:nth-child(3) {
+      transform: translate(0, calc($hamburger-height / 2));
+
+      .overlay-open & {
+        transform: translate(0, 0) rotate(-45deg);
+      }
+    }
+  }
+}

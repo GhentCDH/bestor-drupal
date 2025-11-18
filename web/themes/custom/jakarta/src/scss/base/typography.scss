@@ -1,0 +1,174 @@
+@use "./../variables";
+@use "./../mixins";
+@use "./../functions";
+
+// Usability and accessibility
+// https://betterwebtype.com/articles/2019/06/16/5-keys-to-accessible-web-typography/
+// https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
+
+html {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 100%;
+  font-family: var(--font-family-base);
+  font-variant-ligatures: none;
+  text-rendering: optimizelegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-size: clamp(var(--font-size-base), 1.04vw, 20px);
+  line-height: var(--font-size-base-line-height);
+  font-weight: var(--font-weight-base);
+}
+
+strong {
+  font-weight: var(--font-weight-bold);
+}
+
+// Headers
+h1,
+h2,
+h3,
+h4,
+h5,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5 {
+  font-family: var(--font-family-title);
+  font-weight: var(--font-weight-regular);
+  color: inherit;
+  margin: 0;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+// Headers
+h1,
+.h1 {
+  margin-bottom: functions.rem(20px);
+  font-size: clamp(var(--font-h1-size), 1.6vw, 28px);
+}
+
+h2,
+.h2 {
+  margin-bottom: functions.rem(20px);
+  line-height: 1.675;
+  font-size: clamp(var(--font-h2-size), 1.6vw, 28px);
+  text-transform: uppercase;
+}
+
+h3,
+.h3 {
+  margin-bottom: functions.rem(10px);
+  font-size: clamp(var(--font-h3-size), 1.6vw, 28px);
+}
+
+h4,
+.h4 {
+  margin-bottom: functions.rem(10px);
+  font-size: clamp(var(--font-h4-size), 1.6vw, 28px);
+}
+
+h5,
+.h5 {
+  margin-bottom: functions.rem(10px);
+}
+
+h6,
+.h6 {
+  margin-bottom: functions.rem(10px);
+}
+
+ol,
+ul,
+p {
+  margin: 0 0 functions.rem(25px);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+blockquote {
+  line-height: 1.2;
+  font-size: functions.rem(34px);
+  font-style: italic;
+  font-weight: var(--font-weight-semibold);
+
+  &::before {
+    content: "«";
+    margin-right: functions.rem(2px);
+  }
+
+  &::after {
+    content: "»";
+    margin-left: 1px;
+  }
+
+  p {
+    display: inline;
+  }
+}
+
+@mixin wysiwyg {
+  a {
+    &:not(.c-btn) {
+      text-decoration: underline;
+    }
+  }
+
+  ol,
+  ul {
+    margin: 0 0 functions.rem(25px);
+    padding: 0;
+
+    li {
+      position: relative;
+      padding-left: functions.rem(25px);
+      margin-bottom: functions.rem(5px);
+
+      &::marker {
+        display: none;
+      }
+
+      &::before {
+        color: var(--color-primary);
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+
+  ul li {
+    &::before {
+      content: "•";
+    }
+  }
+
+  ol li {
+    counter-increment: list;
+
+    &::before {
+      content: counter(list) ".";
+    }
+  }
+
+  p + h4,
+  ul + h4,
+  p + h3,
+  ul + h3,
+  p + h2,
+  ul + h2 {
+    margin-top: functions.rem(40px);
+  }
+}
+
+// WYSIWYG formatting.
+.ck-editor__editable,
+.site-wrapper .h-text-wysiwyg {
+  @include wysiwyg;
+}

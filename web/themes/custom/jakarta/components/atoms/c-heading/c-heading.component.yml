@@ -1,0 +1,60 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Heading'
+status: stable
+group: Atoms
+description: "A component that displays a heading."
+props:
+  type: object
+  properties:
+    heading_tag:
+      title: HTML Tag
+      description: 'Type of heading tag.'
+      type: string
+      examples:
+        - h2
+      enum:
+        - h1
+        - h2
+        - h3
+        - h4
+        - h5
+        - h6
+      meta:enum:
+        1: H1
+        2: H2
+        3: H3
+        4: H4
+        5: H5
+        6: H6
+      default: h2
+    heading_class:
+      title: HTML Class
+      description: 'Class of heading tag.'
+      type: string
+      examples:
+        - h2
+      enum:
+        - h1
+        - h2
+        - h3
+        - h4
+        - h5
+        - h6
+      meta:enum:
+        1: H1
+        2: H2
+        3: H3
+        4: H4
+        5: H5
+        6: H6
+      default: h2
+    c_heading_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  content:
+    title: Content
+    description: 'The content of the heading.'

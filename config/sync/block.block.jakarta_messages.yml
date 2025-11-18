@@ -1,0 +1,22 @@
+uuid: 640eed3d-6d93-4d23-99e5-eb419e504e26
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - jakarta
+_core:
+  default_config_hash: '-XVizLHAsOW5B_cHrBPWjug4zSFAVPbqe1qD7rvtvj0'
+id: jakarta_messages
+theme: jakarta
+region: precontent
+weight: -8
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

@@ -1,0 +1,22 @@
+uuid: d9ad5d79-6493-4deb-bb63-af394fef0071
+langcode: en
+status: true
+dependencies:
+  theme:
+    - jakarta
+_core:
+  default_config_hash: ZykEloyzMZEEYtEdhiRaOlIe554pLM_miW1kIFQqTuA
+id: jakarta_local_tasks
+theme: jakarta
+region: content
+weight: -9
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility: {  }

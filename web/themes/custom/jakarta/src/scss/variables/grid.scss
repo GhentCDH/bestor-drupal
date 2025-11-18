@@ -1,0 +1,9 @@
+@use "./../variables/breakpoints";
+
+:root {
+  --grid-offset: 20px;
+  --grid-offset-desktop: 80px;
+  --grid-gutter: 80px;
+  --grid-width: 1760px;
+  --grid-total-columns: 24;
+}

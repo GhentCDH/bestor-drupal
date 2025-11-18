@@ -1,0 +1,30 @@
+// .c-sitetrip {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+//
+//   &:hover {
+//     .c-sitetrip__text {
+//       clip-path: inset(0% 0% 0% 0%);
+//     }
+//
+//     .c-sitetrip__logo {
+//       transform: rotate(80deg);
+//     }
+//   }
+// }
+//
+// .c-sitetrip__text {
+//   font-size: 12px;
+//   text-transform: uppercase;
+//   font-weight: var(--font-weight-bold);
+//   transition: 500ms ease clip-path;
+//   clip-path: inset(0% 0% 0% 100%);
+// }
+//
+// .c-sitetrip__logo {
+//   width: 32px;
+//   height: 32px;
+//   background: url("../../img/icon-sitetrip.svg") no-repeat center center;
+//   transition: 700ms ease transform;
+// }

@@ -1,0 +1,18 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Page Overlay'
+status: stable
+group: Organisms
+description: "A component that displays the page overlay."
+props:
+  type: object
+  properties:
+    c_page_overlay_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  page_overlay_content:
+    title: Page overlay content
+    description: 'The content of the overlay.'

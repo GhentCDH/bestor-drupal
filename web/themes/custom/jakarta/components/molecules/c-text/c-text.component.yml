@@ -1,0 +1,44 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Text'
+status: stable
+group: Molecules
+description: "A component that displays text."
+variants:
+  default:
+    title: Default
+  intro:
+    title: Intro
+props:
+  type: object
+  properties:
+    columns:
+      title: 'Columns'
+      description: "Choose the columns of the text."
+      type: string
+      examples:
+        - 1
+      enum:
+        - 1
+        - 2
+      'meta:enum':
+        1: '1'
+        2: '2'
+      default: 1
+    c_text_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: 'Title'
+    description: 'The title to display.'
+    examples:
+        - <p>I am title</p>
+  text:
+    title: 'Text'
+    description: 'The text to display.'
+  button:
+    title: 'Button'
+    description: 'The button to display.'

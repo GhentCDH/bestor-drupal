@@ -1,0 +1,22 @@
+// @use "./../../variables";
+// @use "./../../functions";
+//
+// .page-footer-centered {
+//   padding: functions.rem(65px) 0;
+//
+//   .menu {
+//     margin-bottom: functions.rem(30px);
+//     display: inline-flex;
+//     align-items: center;
+//
+//     &__item {
+//       &:not(:first-child) {
+//         margin-left: functions.rem(10px);
+//       }
+//
+//       a {
+//         border-bottom: 1px solid var(--color-text);
+//       }
+//     }
+//   }
+// }

@@ -1,0 +1,41 @@
+{% set c_attributes = create_attribute(c_attributes|default({})) %}
+
+{% set c_name = "c-banner" %}
+
+{% set classes = [
+  c_name,
+  layout ? cName ~ "--layout-" ~ layout,
+  layout ? 'h-text-align-' ~ layout
+] %}
+
+<div {{ c_attributes.addClass(classes) }}>
+  {% if media_large %}
+    <div class="{{ c_name ~ '__media-large' }}">
+      {{ media_large }}
+    </div>
+  {% endif %}
+  <div class="{{ c_name ~ '__wrapper' }}">
+    {% if title %}
+      <div class="{{ c_name ~ '__title' }}">
+        {{ title }}
+      </div>
+    {% endif %}
+    {% if media_small %}
+      <div class="{{ c_name ~ '__media-small' }}">
+        {{ media_small }}
+      </div>
+    {% endif %}
+    <div class="{{ c_name ~ '__content' }}">
+      {% if text %}
+        <div class="{{ c_name ~ '__text h-text-wysiwyg' }}">
+          {{ text }}
+        </div>
+      {% endif %}
+      {% if button %}
+        <div class="{{ c_name ~ '__button h-margin-top-20' }}">
+          {{ cta }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

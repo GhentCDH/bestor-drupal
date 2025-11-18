@@ -1,0 +1,42 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+@mixin icons {
+  font-family: icons, sans-serif !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="c-icon-"],
+[class*="c-icon-"],
+[class*="child-anchor-icons-"] a {
+  &::before {
+    @include icons;
+  }
+}
+
+$icons: (
+  "facebook": "\e900",
+  "instagram": "\e901",
+  "caret": "\e902",
+  "youtube": "\e903",
+  "linkedin": "\e904",
+  "pinterest": "\e905",
+  "caret-link": "\e906",
+  "search": "\e907",
+);
+
+@each $name, $glyph in $icons {
+  .c-icon--#{$name}--after::after,
+  .c-icon--#{$name}--before::before,
+  .child-anchor-icons-#{$name} a::before {
+    content: $glyph;
+  }
+}

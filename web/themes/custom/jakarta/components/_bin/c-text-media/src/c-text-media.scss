@@ -1,0 +1,53 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-text-media__wrapper {
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-wrapper;
+//   }
+// }
+//
+// .c-text-media__media {
+//   margin-bottom: functions.rem(30px);
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-item(6);
+//
+//     margin-bottom: 0;
+//   }
+// }
+//
+// .c-text-media__content {
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-flex-item(5);
+//     @include mixins.grid-push-left(1);
+//     @include mixins.grid-padding-right(1);
+//
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//   }
+// }
+//
+// /**
+//   Media positions: Left / Right.
+//  */
+//
+// .c-text-media--media-position-left {
+//   .c-text-media__media__inner {
+//     margin-left: calc(var(--grid-offset) * -1);
+//   }
+// }
+//
+// .c-text-media--media-position-right {
+//   .c-text-media__wrapper {
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       flex-direction: row-reverse;
+//     }
+//   }
+//
+//   .c-text-media__media__inner {
+//     margin-right: calc(var(--grid-offset) * -1);
+//   }
+// }
