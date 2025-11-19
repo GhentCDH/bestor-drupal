@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service;
+namespace Drupal\relationship_nodes_search\Service\Field;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Item\Field;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes_search\Processor\RelationProcessorProperty;
-use Drupal\relationship_nodes_search\Service\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
 
 /**
  * Service for inspecting nested field structures in Search API indices.
@@ -25,6 +25,32 @@ class NestedFieldHelper {
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
         $this->calculatedFieldHelper = $calculatedFieldHelper;
+    }
+
+
+    /**
+     * Extract parent field name from Views plugin definition.
+     * 
+     * Helper method for Views plugins to get their configured field name.
+     *
+     * @param array $definition
+     *   The plugin definition array.
+     *
+     * @return string|null
+     *   The field name, or NULL if not found.
+     */
+    public function getPluginParentFieldName(array $definition): ?string {
+        // Field handlers use 'search_api field' (with space)
+        if (isset($definition['search_api field'])) {
+            return $definition['search_api field'];
+        }
+        
+        // Filter handlers use 'real field'
+        if (isset($definition['real field'])) {
+            return $definition['real field'];
+        }
+        
+        return null;
     }
 
 
@@ -153,6 +179,39 @@ class NestedFieldHelper {
         
         $sapi_fld = $index_flds[$sapi_fld_nm];
         return $sapi_fld instanceof Field ? $sapi_fld : null;      
+    }
+
+
+    /**
+     * Validate index and field configuration for a Views plugin.
+     * 
+     * Common validation helper for plugin configuration forms.
+     *
+     * @param Index|null $index
+     *   The Search API index.
+     * @param string|null $field_name
+     *   The parent field name.
+     *
+     * @return array{index: Index, field_name: string, available_fields: array}|null
+     *   Validation result with index, field name, and available child fields.
+     *   Returns NULL if validation fails.
+     */
+    public function validatePluginFieldConfiguration (?Index $index, ?string $field_name): ?array {
+        if (!$index instanceof Index || empty($field_name)) {
+            return null;
+        }
+        
+        $available_fields = $this->getProcessedNestedChildFieldNames($index, $field_name);
+        
+        if (empty($available_fields)) {
+            return null;
+        }
+        
+        return [
+            'index' => $index,
+            'field_name' => $field_name,
+            'available_fields' => $available_fields,
+        ];
     }
 
 

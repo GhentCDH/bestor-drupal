@@ -47,15 +47,15 @@ class RelationNodeInfoService {
      *
      * @param Node $relation_node
      *   The relation node to inspect.
-     * @param Node|null $target_node
-     *   The target node to check connections against.
      * @param array $field_names
      *   List of field names to check for references.
+     * @param Node|null $target_node
+     *   The target node to check connections against.
      *
      * @return array
      *   Array of 'related entity' field names that reference the target node.
      */
-    public function getJoinFields(Node $relation_node, ?Node $target_node = NULL, array $field_names): array {
+    public function getJoinFields(Node $relation_node, array $field_names, ?Node $target_node = NULL): array {
         $result = [];
         $bundle_connections = $this->bundleInfoService->getBundleConnectionInfo($relation_node->getType(), $target_node->getType());
         
@@ -110,7 +110,7 @@ class RelationNodeInfoService {
             return $result;
         }
 
-        $connections = $this->getJoinFields($relation_node, $target_node, $bundle_connections['join_fields']) ?? [];
+        $connections = $this->getJoinFields($relation_node, $bundle_connections['join_fields'], $target_node) ?? [];
 
         switch(count($connections)){
             case 0:

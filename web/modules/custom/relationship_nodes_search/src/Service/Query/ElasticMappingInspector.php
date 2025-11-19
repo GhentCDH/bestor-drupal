@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service;
+namespace Drupal\relationship_nodes_search\Service\Query;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -15,66 +15,12 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 class ElasticMappingInspector {
 
     protected array $mappingCache = [];
+    protected array $fieldMappingCache = [];
     protected LoggerChannelFactoryInterface $loggerFactory;
 
     
     public function __construct(LoggerChannelFactoryInterface $loggerFactory) {
         $this->loggerFactory = $loggerFactory;
-    }
-
-
-    /**
-     * Returns the correct field path to use in a query (with or without ".keyword").
-     *
-     * @param Index $index
-     * @param string $sapi_fld_nm
-     *  The parent field name
-     * @param string $child_fld_nm
-     * The nested child field name
-     *
-     * @return string
-     *  The complete field path for querying (e.g., "parent.child.keyword").
-     */
-    public function getElasticQueryFieldPath(Index $index, string $sapi_fld_nm, string $child_fld_nm): string {
-        $path_base = $sapi_fld_nm . '.' . $child_fld_nm;
-        if ($this->needsKeywordSuffix($index, $sapi_fld_nm, $child_fld_nm)) {
-            return $path_base . '.keyword';
-        }
-        return $path_base;
-    }
-  
-
-    /**
-     * Check if a field needs the ".keyword" suffix for aggregations or filters.
-     *
-     * @param Index $index
-     *   The Search API index.
-     * @param string $sapi_fld_nm
-     * The parent field name
-     * @param string $child_fld_nm
-     * The nested child field name
-     *
-     * @return bool
-     *   TRUE if ".keyword" is needed, FALSE otherwise.
-     */
-    public function needsKeywordSuffix(Index $index, string $sapi_fld_nm, string $child_fld_nm): bool {
-        $mapping = $this->getFieldMapping($index, $sapi_fld_nm, $child_fld_nm);
-        
-        if (!$mapping) {
-            return false;
-        }
-
-        // Already a keyword field - no suffix needed
-        if (isset($mapping['type']) && $mapping['type'] === 'keyword') {
-            return false;
-        }
-
-        // Text field with keyword subfield - suffix needed
-        if (isset($mapping['type']) && $mapping['type'] === 'text') {
-            return isset($mapping['fields']['keyword']);
-        }
-
-        return false;
     }
 
   
@@ -92,9 +38,15 @@ class ElasticMappingInspector {
      *   The field mapping array, or NULL if not found.
      */
     public function getFieldMapping(Index $index, string $sapi_fld_nm, string $child_fld_nm): ?array {
+        $cache_key = $index->id() . ':' . $sapi_fld_nm . ':' . $child_fld_nm;
+        if (isset($this->fieldMappingCache[$cache_key])) {
+            return $this->fieldMappingCache[$cache_key];
+        }
+
         $all_mappings = $this->getIndexMappings($index);
 
         if (!isset($all_mappings[$sapi_fld_nm])) {
+            $this->fieldMappingCache[$cache_key] = null; 
             return null;
         }
 
@@ -102,14 +54,19 @@ class ElasticMappingInspector {
 
         // Check nested field properties
         if (($parent_mapping['type'] ?? '') === 'nested' && isset($parent_mapping['properties'][$child_fld_nm])) {
-            return $parent_mapping['properties'][$child_fld_nm];
+            $result = $parent_mapping['properties'][$child_fld_nm];
+            $this->fieldMappingCache[$cache_key] = $result;
+            return $result;
         }
 
         // Fallback to direct properties
         if (isset($parent_mapping['properties'][$child_fld_nm])) {
-            return $parent_mapping['properties'][$child_fld_nm];
+            $result = $parent_mapping['properties'][$child_fld_nm];
+            $this->fieldMappingCache[$cache_key] = $result;
+            return $result;
         }
 
+        $this->fieldMappingCache[$cache_key] = null; 
         return null;
     }
 
@@ -134,10 +91,8 @@ class ElasticMappingInspector {
         try {
             $server = $index->getServerInstance();
             $backend = $server->getBackend();
-
             $client = $backend->getClient();
-        
-            
+               
             $response = $client->indices()->getMapping(['index' => $index_id]);
             
             // Extract properties from response
@@ -156,17 +111,23 @@ class ElasticMappingInspector {
     }
 
 
-  /**
-   * Clears cached mappings (for a specific index or all indices).
-   *
-   * @param string|null $index_id
-   *    Optional index ID to clear. If NULL, clears all cached mappings.
-   */
-  public function clearCache(?string $index_id = null): void {
-    if ($index_id) {
-      unset($this->mappingCache[$index_id]);
-    } else {
-      $this->mappingCache = [];
+    /**
+     * Clears cached mappings (for a specific index or all indices).
+     *
+     * @param string|null $index_id
+     *    Optional index ID to clear. If NULL, clears all cached mappings.
+     */
+    public function clearCache(?string $index_id = null): void {
+        if ($index_id) {
+            unset($this->mappingCache[$index_id]);
+            foreach (array_keys($this->fieldMappingCache) as $key) {
+                if (str_starts_with($key, $index_id . ':')) {
+                    unset($this->fieldMappingCache[$key]);
+                }
+            }
+        } else {
+            $this->mappingCache = [];
+            $this->fieldMappingCache = [];
+        }
     }
-  }
 }

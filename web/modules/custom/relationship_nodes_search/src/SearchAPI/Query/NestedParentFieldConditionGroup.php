@@ -4,63 +4,102 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\search_api\Query\ConditionGroup;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\SearchAPI\Query\NestedChildFieldCondition;
-use Drupal\relationship_nodes_search\Service\ElasticMappingInspector;
+use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
 
 /**
  * Condition group for nested field queries.
  * 
  * This class extends the standard ConditionGroup to add support for
- * Elasticsearch nested queries by tracking the parent field path.
+ * Elasticsearch nested queries by tracking the parent field path and
+ * using the query builder to resolve correct field paths.
  */
 class NestedParentFieldConditionGroup extends ConditionGroup {
 
-  protected ?string $parentFieldName = null;
-  protected ?Index $index = null;
-  protected ?ElasticMappingInspector $mappingInspector = null;
+    protected ?string $parentFieldName = null;
+    protected ?Index $index = null;
+    protected ?NestedQueryStructureBuilder $queryBuilder = null;
 
 
-
-  public function setIndex(Index $index): self {
-    $this->index = $index;
-    return $this;
-  }
-
-
-  public function setMappingInspector(ElasticMappingInspector $mappingInspector): self {
-    $this->mappingInspector = $mappingInspector;
-    return $this;
-  }
-
-
-  public function setParentFieldName(string $parent_fld_nm): self {
-    $this->parentFieldName = $parent_fld_nm;
-    return $this;
-  }
-
-
-  public function getParentFieldName(): ?string {
-    return $this->parentFieldName;
-  }
-
-
-  public function isNestedParentField(): bool {
-    return !empty($this->parentFieldName);
-  }
-
-
-  public function addChildFieldCondition(string $child_fld_nm, $value, $operator = '='): self {
-    if (!$this->parentFieldName || !$this->index || !$this->mappingInspector) {
-      throw new \LogicException('Parent field, index and mapping inspector must be set before adding subfield conditions.');
+    /**
+     * Sets the Search API index.
+     */
+    public function setIndex(Index $index): self {
+        $this->index = $index;
+        return $this;
     }
 
-    $path = $this->mappingInspector->getElasticQueryFieldPath($this->index, $this->parentFieldName, $child_fld_nm);
+
+    /**
+     * Sets the query builder for field path resolution.
+     */
+    public function setQueryBuilder(NestedQueryStructureBuilder $queryBuilder): self {
+        $this->queryBuilder = $queryBuilder;
+        return $this;
+    }
+
+
+    /**
+     * Sets the parent field name.
+     */
+    public function setParentFieldName(string $parent_fld_nm): self {
+        $this->parentFieldName = $parent_fld_nm;
+        return $this;
+    }
+
+
+    /**
+     * Gets the parent field name.
+     */
+    public function getParentFieldName(): ?string {
+        return $this->parentFieldName;
+    }
+
+
+    /**
+     * Checks if this is a nested parent field condition group.
+     */
+    public function isNestedParentField(): bool {
+        return !empty($this->parentFieldName);
+    }
+
+
+    /**
+     * Adds a child field condition.
+     *
+     * Uses the query builder to resolve the correct Elasticsearch field path,
+     * including .keyword suffixes where needed.
+     *
+     * @param string $child_fld_nm
+     *   The child field name within the nested object.
+     * @param mixed $value
+     *   The value to filter on.
+     * @param string $operator
+     *   The comparison operator (=, !=, <, >, etc.).
+     *
+     * @return $this
+     *
+     * @throws \LogicException
+     *   If required dependencies (parent field, index, query builder) are not set.
+     */
+    public function addChildFieldCondition(string $child_fld_nm, $value, string $operator = '='): self {
+        if (!$this->parentFieldName || !$this->index || !$this->queryBuilder) {
+            throw new \LogicException(
+                'Parent field name, index, and query builder must be set before adding child field conditions.'
+            );
+        }
+
+        // Resolve the full Elasticsearch field path (e.g., "field_relationships.role.keyword")
+        $path = $this->queryBuilder->getElasticQueryFieldPath(
+            $this->index, 
+            $this->parentFieldName, 
+            $child_fld_nm
+        );
   
-    $condition = new NestedChildFieldCondition($path, $value, $operator);
-    $condition->setParentFieldName($this->parentFieldName);
-    $condition->setChildFieldName($child_fld_nm);
-    
-    $this->conditions[] = $condition;
-    return $this;
-  }
+        $condition = new NestedChildFieldCondition($path, $value, $operator);
+        $condition->setParentFieldName($this->parentFieldName);
+        $condition->setChildFieldName($child_fld_nm);
+        
+        $this->conditions[] = $condition;
+        return $this;
+    }
 }

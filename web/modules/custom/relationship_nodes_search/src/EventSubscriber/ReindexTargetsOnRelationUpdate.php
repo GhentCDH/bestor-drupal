@@ -3,6 +3,8 @@
 namespace Drupal\relationship_nodes_search\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\node\Entity\Node;
@@ -17,17 +19,23 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
-  protected EntityTypeManagerInterface $entityTypeManager;  
+  protected EntityTypeManagerInterface $entityTypeManager; 
+  protected CacheTagsInvalidatorInterface $cacheTagsInvalidator;
+  protected LoggerChannelFactoryInterface $loggerFactory; 
   protected RelationBundleSettingsManager $settingsManager;
   protected RelationNodeInfoService $nodeInfoService;
 
 
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    CacheTagsInvalidatorInterface $cacheTagsInvalidator,
+    LoggerChannelFactoryInterface $loggerFactory,
     RelationBundleSettingsManager $settingsManager,
     RelationNodeInfoService $nodeInfoService
   ) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->cacheTagsInvalidator = $cacheTagsInvalidator;
+    $this->loggerFactory = $loggerFactory;
     $this->settingsManager = $settingsManager;
     $this->nodeInfoService = $nodeInfoService;
   }
@@ -104,16 +112,62 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
       return;
     }
 
-    // Load all Search API indexes.
+    $this->trackItemsInIndexes($sapi_ids);
+    
+    // Invalidate cache for this specific relation bundle
+    $relation_bundle = $entity->bundle();
+    $this->invalidateRelationshipCache($relation_bundle, $unique_ids);
+    $this->logReindexOperation($event_name, $entity->id(), $relation_bundle, count($sapi_ids));
+  }
+
+
+  /**
+   * Track items in all active Search API indexes.
+   */
+  protected function trackItemsInIndexes(array $sapi_ids): void {
     $index_storage = $this->entityTypeManager->getStorage('search_api_index');
     $indexes = $index_storage->loadMultiple();
 
-    // For each active index with node datasources, queue the IDs for reindexing.
     foreach ($indexes as $index) {
-        if (!$index->status() || !$index->isValidDatasource('entity:node')) {
-            continue;
-        }
-        $index->trackItemsUpdated('entity:node', $sapi_ids);
+      if (!$index->status() || !$index->isValidDatasource('entity:node')) {
+        continue;
+      }
+      $index->trackItemsUpdated('entity:node', $sapi_ids);
     }
+  }
+
+
+  /**
+   * Invalidate dropdown option caches for affected relationships.
+   */
+  protected function invalidateRelationshipCache(string $relation_bundle, array $affected_node_ids): void {
+    // Invalidate general relationship options cache
+    $cache_tags = ['relationship_filter_options'];
+    
+    // Add specific tags for this relation bundle
+    $cache_tags[] = 'relationship_filter_options:' . $relation_bundle;
+    
+    // Add tags for affected nodes (if they have relationship fields displayed)
+    foreach ($affected_node_ids as $nid) {
+      $cache_tags[] = 'relationship_filter_options:node:' . $nid;
+    }
+    
+    $this->cacheTagsInvalidator->invalidateTags($cache_tags);
+  }
+
+
+  /**
+   * Log reindex operation for debugging.
+   */
+  protected function logReindexOperation(string $event_type, int $relation_id, string $bundle, int $affected_count): void {
+    $this->loggerFactory->get('relationship_nodes_search')->info(
+      'Reindexing triggered by @event on relation node @id (bundle: @bundle). Affected items: @count',
+      [
+        '@event' => $event_type,
+        '@id' => $relation_id,
+        '@bundle' => $bundle,
+        '@count' => $affected_count,
+      ]
+    );
   }
 }

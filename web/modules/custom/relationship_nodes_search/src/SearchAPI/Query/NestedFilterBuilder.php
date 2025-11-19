@@ -3,19 +3,24 @@
 namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\elasticsearch_connector\SearchAPI\Query\FilterBuilder;
-use Drupal\search_api\Query\Condition;
 use Drupal\search_api\Query\ConditionGroupInterface;
-use Drupal\search_api\SearchApiException;
 use Psr\Log\LoggerInterface;
-use Drupal\search_api\Item\Field;
-use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionGroup;
+use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
 
-
+/**
+ * Extended FilterBuilder met nested field support.
+ */
 class NestedFilterBuilder extends FilterBuilder {
 
     
-    public function __construct(LoggerInterface $logger) {
+    protected NestedQueryStructureBuilder $queryBuilder;
+
+    public function __construct(
+        LoggerInterface $logger,
+        NestedQueryStructureBuilder $queryBuilder
+    ) {
         parent::__construct($logger);
+        $this->queryBuilder = $queryBuilder;
     }
 
 
@@ -35,7 +40,9 @@ class NestedFilterBuilder extends FilterBuilder {
      */
     protected function buildNestedFieldConditionFilters(NestedParentFieldConditionGroup $condition_group, array $index_fields): array {
         $parent = $condition_group->getParentFieldName();
+        
         if (empty($parent)) {
+            $this->logger->warning('NestedParentFieldConditionGroup without parent field name');
             return [];
         }
 
@@ -53,13 +60,6 @@ class NestedFilterBuilder extends FilterBuilder {
 
         $combined_subfilters = $this->wrapWithConjunction($subfilters, $condition_group->getConjunction());
 
-        return [
-            'filters' => [
-                'nested' => [
-                    'path' => $parent,
-                    'query' => $combined_subfilters
-                ]
-            ]
-        ];
+        return ['filters' => $this->queryBuilder->buildNestedFilter($parent, $combined_subfilters)];
     }
 }

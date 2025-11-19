@@ -20,8 +20,10 @@ use Drupal\search_api\SearchApiException;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider;
-use Drupal\relationship_nodes_search\Service\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\Service\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\Service\Field\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 
 /**
@@ -42,6 +44,8 @@ use Drupal\relationship_nodes_search\Service\CalculatedFieldHelper;
 class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFactoryPluginInterface {
 
   protected EntityTypeManagerInterface $entityTypeManager;
+  protected EntityFieldManagerInterface $entityFieldManager;
+  protected LoggerChannelFactoryInterface $loggerFactory;
   protected RelationBundleInfoService $bundleInfoService;
   protected FieldNameResolver $fieldResolver;
   protected RelationBundleSettingsManager $settingsManager;
@@ -56,16 +60,20 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     array $configuration, 
     $plugin_id, 
     $plugin_definition, 
-    EntityTypeManagerInterface $entity_type_manager, 
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityFieldManagerInterface $entityFieldManager,
+    LoggerChannelFactoryInterface $loggerFactory, 
     RelationBundleInfoService $bundleInfoService,
     FieldNameResolver $fieldResolver, 
     RelationBundleSettingsManager $settingsManager, 
     MirrorTermProvider $mirrorProvider,
     ChildFieldEntityReferenceHelper $childReferenceHelper,
-    CalculatedFieldHelper $calculatedFieldHelper,
+    CalculatedFieldHelper $calculatedFieldHelper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityFieldManager = $entityFieldManager;
+    $this->loggerFactory = $loggerFactory;
     $this->bundleInfoService = $bundleInfoService;
     $this->fieldResolver = $fieldResolver;
     $this->settingsManager = $settingsManager;
@@ -88,12 +96,14 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
+      $container->get('entity_field.manager'),
+      $container->get('logger.factory'),
       $container->get('relationship_nodes.relation_bundle_info_service'),
       $container->get('relationship_nodes.field_name_resolver'),
       $container->get('relationship_nodes.relation_bundle_settings_manager'),
       $container->get('relationship_nodes.mirror_term_provider'),
       $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
-      $container->get('relationship_nodes_search.calculated_field_helper'),
+      $container->get('relationship_nodes_search.calculated_field_helper')
     );
   }
 
@@ -149,7 +159,12 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
         ],
       ];
       
-      $property = new RelationProcessorProperty($definition, $calc_fld_nms);
+      $property = new RelationProcessorProperty(
+        $definition, 
+        $this->entityFieldManager,
+        $this->loggerFactory->get('relationship_nodes_search'),
+        $calc_fld_nms
+      );
       $properties["relationship_info__{$relationship_node_type}"] = $property;
     }
 
@@ -166,12 +181,15 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $entity = $item->getOriginalObject()->getValue();
 
     }
-    catch (SearchApiException) {
+    catch (SearchApiException $e) {
+      $this->loggerFactory->get('relationship_nodes_search')->error(
+        'Failed to get entity from search item: @message',
+        ['@message' => $e->getMessage()]
+      );
       return;
     }
 
     $item_relation_info_list = $this->bundleInfoService->getRelationInfoForTargetBundle($entity->getType());
-
 
     if (!($entity instanceof EntityInterface) || empty($item_relation_info_list)) {
       return;
@@ -197,6 +215,14 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $serialized = [];
 
       foreach($relation_info['join_fields'] as $join_field){
+        if(!in_array($join_field, $this->fieldResolver->getRelatedEntityFields())){
+          $this->loggerFactory->get('relationship_nodes_search')->error(
+            'Invalid join field name: @field',
+            ['@field' => $join_field]
+          );
+          continue;
+        }
+        
         $result = $node_storage->getQuery()
           ->accessCheck(FALSE)
           ->condition('type', $relationship_node_type)
@@ -207,21 +233,56 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           continue;
         }
 
+        try {
         $entities = $node_storage->loadMultiple($result);
+        }
+        catch (\Exception $e) {
+          $this->loggerFactory->get('relationship_nodes_search')->error(
+            'Failed to load relationship entities for node @nid (type: @type): @message',
+            [
+              '@nid' => $entity->id(),
+              '@type' => $relationship_node_type,
+              '@message' => $e->getMessage()
+            ]
+          );
+          continue;
+        }
       
-        if (!$entities) {
+        if (empty($entities)) {
+          $this->loggerFactory->get('relationship_nodes_search')->warning(
+            'Query found @count relationship nodes but loadMultiple returned empty for node @nid (type: @type)',
+            [
+              '@count' => count($result),
+              '@nid' => $entity->id(),
+              '@type' => $relationship_node_type
+            ]
+          );
           continue;
         }
 
         $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(null, null, true);
        
-       foreach($entities as $relationship_entity){
+        foreach($entities as $relationship_entity){
           $nested_values = [];
           foreach ($child_fld_configs as $child_fld_nm => $child_fld_config){
             if(in_array($child_fld_nm, $calc_fld_nms)){
               continue; // calculated fields are processed below
             }
-            $field_values = $relationship_entity->get($child_fld_nm)->getValue();
+            try {
+              $field_values = $relationship_entity->get($child_fld_nm)->getValue();
+            }
+            catch (\Exception $e) {
+              $this->loggerFactory->get('relationship_nodes_search')->warning(
+                'Failed to get field value for @field on relationship node @rel_nid: @message',
+                [
+                  '@field' => $child_fld_nm,
+                  '@rel_nid' => $relationship_entity->id(),
+                  '@message' => $e->getMessage()
+                ]
+              );
+              $nested_values[$child_fld_nm] = NULL;
+              continue;
+            }
             if (empty($field_values)) {
               $nested_values[$child_fld_nm] = NULL;
               continue;
@@ -242,7 +303,18 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
             $nested_values[$child_fld_nm] = count($values) === 1 ? reset($values) : $values;
           }
 
-          $this->fillCalculatedFields($nested_values, $entity, $relationship_entity, $join_field);
+          try {
+            $this->fillCalculatedFields($nested_values, $entity, $relationship_entity, $join_field);
+          }
+          catch (\Exception $e) {
+            $this->loggerFactory->get('relationship_nodes_search')->error(
+              'Failed to fill calculated fields for relationship @rel_nid: @message',
+              [
+                '@rel_nid' => $relationship_entity->id(),
+                '@message' => $e->getMessage()
+              ]
+            );
+          }
 
           $serialized[] = $nested_values;
         }

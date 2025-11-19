@@ -5,25 +5,25 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 use Drupal\elasticsearch_connector\SearchAPI\Query\FacetParamBuilder;
 use Drupal\search_api\Query\QueryInterface;
 use Psr\Log\LoggerInterface;
-use Drupal\relationship_nodes_search\Service\NestedAggregationService;
+use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\NestedFieldHelper;
+use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
 
 /**
  * Extended Facet builder with nested field support.
  */
 class NestedFacetParamBuilder extends FacetParamBuilder {
 
-    protected NestedAggregationService $nestedAggregationService;
+    protected NestedQueryStructureBuilder $queryBuilder;
     protected NestedFieldHelper $nestedFieldHelper;
 
     public function __construct(
         LoggerInterface $logger, 
-        NestedAggregationService $nestedAggregationService,
+        NestedQueryStructureBuilder $queryBuilder,
         NestedFieldHelper $nestedFieldHelper,
     ) {
         parent::__construct($logger);
-        $this->nestedAggregationService = $nestedAggregationService;
+        $this->queryBuilder = $queryBuilder;
         $this->nestedFieldHelper = $nestedFieldHelper;
     }
 
@@ -36,23 +36,18 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
         if (empty($facets)) {
             return $aggs;
         }
-dpm($indexFields, 'index fields');
 
         $index = $query->getIndex();
         foreach ($facets as $facet_id => $facet) {
-    
-            $es_field_id = $facet['field']; 
             $parsed_names = $this->nestedFieldHelper->validateNestedPath($index, $facet_id);
+            $check_field = $parsed_names['parent'] ?? $facet['field'];
+            if (!$this->checkFieldInIndex($indexFields, $check_field)) {
+                continue;
+            }
+
             if(empty($parsed_names['parent'])){
-                if(!$this->checkFieldInIndex($indexFields, $es_field_id)){
-                    continue;
-                }
                 $aggs += $this->buildTermBucketAgg($facet_id, $facet, $facetFilters);;
             } else {
-                $parent = $parsed_names['parent'];
-                if(!$this->checkFieldInIndex($indexFields, $parsed_names['parent'])){
-                    continue;
-                }
                 $aggs += $this->buildNestedTermBucketAgg($index, $facet_id, $facet, $facetFilters);
             }
         }
@@ -75,19 +70,13 @@ dpm($indexFields, 'index fields');
      * 
      * Creates an Elasticsearch nested aggregation for fields within nested objects.
      */
-    protected function buildNestedTermBucketAgg(Index $index, string $facet_id, array $facet, array $postFilter): array {
-        $size = $facet['limit'] ?? self::DEFAULT_FACET_SIZE;
-        if ($size === 0) {
-            $size = self::UNLIMITED_FACET_SIZE;
-        }
-        $agg = $this->nestedAggregationService->buildNestedAggregation($index, $facet_id, $size);
-
-        // Apply post filters if needed
-        if (!empty($postFilter)) {
-            $agg = $this->applyPostFiltersToNestedAgg($facet_id, $facet, $agg, $postFilter, $parentName);
-        }
-
-        return $agg;
+    protected function buildNestedTermBucketAgg(Index $index, string $facet_id, array $facet, array $postFilters): array {
+        return $this->queryBuilder->buildNestedAggregation(
+            $index, 
+            $facet_id, 
+            $this->getFacetSize($facet), 
+            $this->buildPostFilter($facet_id, $facet, $postFilters)
+        );
     }
 
     /**
@@ -96,54 +85,30 @@ dpm($indexFields, 'index fields');
      * Post filters allow facets to interact with each other (e.g., when multiple
      * facets are selected, each facet's counts reflect the other selections).
      */
-    protected function applyPostFiltersToNestedAgg(string $facet_id, array $facet, array $agg, array $postFilter, string $nestedParentPath): array {
+    protected function buildPostFilter(string $facet_id, array $facet, array $postFilters): ?array {
         $filters = [];
 
-        foreach ($postFilter as $filter_facet_id => $filter) {
-        // Skip the current facet if using OR operator
-        // (OR facets should show all options regardless of selection)
-        if ($filter_facet_id == $facet_id && ($facet['operator'] ?? 'and') === 'or') {
-            continue;
-        }
-        $filters[] = $filter;
+        foreach ($postFilters as $filter_facet_id => $filter) {
+            // Skip the current facet if using OR operator
+            // (OR facets should show all options regardless of selection)
+            if ($filter_facet_id == $facet_id && ($facet['operator'] ?? 'and') === 'or') {
+                continue;
+            }
+            $filters[] = $filter;
         }
 
         if (empty($filters)) {
-        return $agg;
+            return null;
         }
 
-        // Simplify if only one filter
-        if (count($filters) == 1) {
-        $filters = array_pop($filters);
-        }
+        $conjunction = ($facet['operator'] ?? 'and') === 'or' ? 'OR' : 'AND';
+        return $this->queryBuilder->combineFilters($filters, $conjunction);
+    }
 
-        $filtered_facet_id = sprintf('%s_filtered', $facet_id);
 
-        // Determine boolean operator based on facet operator setting
-        switch ($facet['operator'] ?? 'and') {
-        case 'or':
-            $facet_operator = 'should';
-            break;
-
-        case 'and':
-        default:
-            $facet_operator = 'must';
-            break;
-        }
-
-        // Wrap the aggregation in a filter aggregation
-        $agg = [
-        $filtered_facet_id => [
-            'filter' => [
-            'bool' => [
-                $facet_operator => $filters,
-            ],
-            ],
-            'aggs' => $agg,
-        ],
-        ];
-
-        return $agg;
+    protected function getFacetSize(array $facet): int {
+        $size = $facet['limit'] ?? self::DEFAULT_FACET_SIZE;
+        return $size === 0 ? self::UNLIMITED_FACET_SIZE : $size;
     }
 
 }

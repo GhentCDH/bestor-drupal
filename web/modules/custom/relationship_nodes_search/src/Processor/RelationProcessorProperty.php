@@ -7,17 +7,28 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Psr\Log\LoggerInterface;
 
 
 class RelationProcessorProperty extends ProcessorProperty implements ComplexDataDefinitionInterface{
 
   protected ?array $propertyDefinitions = NULL;
   protected ?array $drupalFieldInfo = NULL;
+  protected EntityFieldManagerInterface $entityFieldManager;
+  protected LoggerInterface $logger;
   protected ?array $calculatedFieldNames = NULL;
 
 
-  public function __construct(array $definition, ?array $calculatedFieldNames = NULL) {
+  public function __construct(
+    array $definition, 
+    EntityFieldManagerInterface $entityFieldManager,
+    LoggerInterface $logger,
+    ?array $calculatedFieldNames = NULL
+  ) {
     parent::__construct($definition);
+    $this->entityFieldManager = $entityFieldManager;
+    $this->logger = $logger;
     $this->calculatedFieldNames = $calculatedFieldNames;
   }
 
@@ -36,12 +47,11 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
       return $this->propertyDefinitions;
     }
 
-    $entity_field_manager = \Drupal::service('entity_field.manager');
     try {
-      $field_definitions = $entity_field_manager->getFieldDefinitions('node', $bundle);
+      $field_definitions = $this->entityFieldManager->getFieldDefinitions('node', $bundle);
     }
     catch (\Exception $e) {
-      \Drupal::logger('relationship_nodes_search')->error('Error loading field definitions: @message', [
+      $this->logger->error('Error loading field definitions: @message', [
         '@message' => $e->getMessage(),
       ]);
       return $this->propertyDefinitions;
