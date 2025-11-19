@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Template for the component c-socials.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-socials' %}
+{% set custom_component_classes = c_socials_utility_classes %}
+
+{% block component_content %}
+  {% if title %}
+    <div class="{{ c_name }}__title h-margin-bottom-15">
+      {{ title }}
+    </div>
+  {% endif %}
+  {% if social_media %}
+    <div class="{{ c_name }}__social-media">
+      {{ social_media }}
+    </div>
+  {% endif %}
+{% endblock %}

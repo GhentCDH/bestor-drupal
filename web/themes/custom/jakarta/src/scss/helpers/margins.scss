@@ -5,6 +5,7 @@
 $margins: (
   "5": 5px,
   "10": 10px,
+  "15": 15px,
   "20": 20px,
   "30": 30px,
   "40": 40px,
@@ -13,11 +14,11 @@ $margins: (
 
 @each $name, $margin in $margins {
   .h-margin-bottom-#{$name} {
-    margin-bottom: functions.rem($margin);
+    margin-block-end: functions.rem($margin);
   }
 
   .h-margin-top-#{$name} {
-    margin-top: functions.rem($margin);
+    margin-block-start: functions.rem($margin);
   }
 }
 
@@ -41,5 +42,5 @@ $margins: (
 }
 
 .h-margin-top-cta {
-  margin-top: functions.rem(30px);
+  margin-block-start: functions.rem(30px);
 }

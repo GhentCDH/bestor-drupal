@@ -11,11 +11,15 @@ props:
       title: Position
       description: 'Set icon in the pseudo before or after.'
       default: 'before'
+      examples:
+        - before
     standalone:
       type: boolean
       title: Standalone
       description: 'Whether the icon is a standalone icon or not.'
-      default: false
+      default: 0
+      examples:
+        - 0
     c_icon_utility_classes:
       type: array
       items:

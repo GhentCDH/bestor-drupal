@@ -1,0 +1,13 @@
+{# c-tab.story.twig #}
+{# default #}
+{{ include('jakarta:c-tab', {
+  title: 'Nieuws',
+  id: 'news'
+}, with_context = false) }}
+
+{# active #}
+{{ include('jakarta:c-tab', {
+  title: 'Nieuws',
+  id: 'news',
+  is_active: 1,
+}, with_context = false) }}

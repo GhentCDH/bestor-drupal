@@ -64,13 +64,14 @@ h2,
 h3,
 .h3 {
   margin-bottom: functions.rem(10px);
-  font-size: clamp(var(--font-h3-size), 1.6vw, 28px);
+  font-size: clamp(var(--font-h3-size), 1.6vw, 26px);
 }
 
 h4,
 .h4 {
   margin-bottom: functions.rem(10px);
-  font-size: clamp(var(--font-h4-size), 1.6vw, 28px);
+  font-size: clamp(var(--font-h4-size), 1.6vw, 19px);
+  font-weight: var(--font-weight-medium);
 }
 
 h5,

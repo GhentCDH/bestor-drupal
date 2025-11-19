@@ -1,0 +1,28 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Tab'
+status: stable
+group: Atoms
+description: "A component that displays a tab."
+props:
+  type: object
+  properties:
+    is_active:
+      title: 'Is active'
+      description: 'Whether the tab is active or not.'
+      type: boolean
+      default: 0
+      examples:
+        - 0
+    c_tab_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: Title
+    description: 'The title for the tab.'
+  id:
+    title: Id
+    description: 'The id for the tab.'

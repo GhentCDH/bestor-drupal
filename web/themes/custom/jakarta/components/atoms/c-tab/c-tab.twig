@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Template for the component c-tab.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-tab' %}
+
+{% set custom_component_classes = [
+  is_active ? 'is-active',
+]|merge(c_tab_utility_classes ?: []) %}
+
+{% if id %}
+  {% do attributes.setAttribute('id', id) %}
+{% endif %}
+
+{% block component_content %}
+  {% if title %}
+    /{{ title }}
+  {% endif %}
+{% endblock %}

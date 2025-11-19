@@ -34,11 +34,6 @@ slots:
   title:
     title: 'Title'
     description: 'The title to display.'
-    examples:
-        - <p>I am title</p>
   text:
     title: 'Text'
     description: 'The text to display.'
-  button:
-    title: 'Button'
-    description: 'The button to display.'

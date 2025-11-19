@@ -1,0 +1,17 @@
+{# c-socials.story.twig #}
+{% set social_media %}
+  <a href="#">
+    {{ include('jakarta:c-icon', {
+      icon: 'facebook',
+    }, with_context = false) }}
+  </a>
+  <a href="#">
+    {{ include('jakarta:c-icon', {
+      icon: 'instagram',
+    }, with_context = false) }}
+  </a>
+{% endset %}
+{{ include('jakarta:c-socials', {
+  title: 'Volg ons',
+  social_media,
+}, with_context = false) }}
