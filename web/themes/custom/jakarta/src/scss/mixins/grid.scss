@@ -1,3 +1,5 @@
+@use "../variables/breakpoints" as variables;
+
 @mixin grid-flex-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -21,4 +23,28 @@
 
 @mixin grid-padding-left($cols) {
   padding-left: calc(#{$cols} / var(--grid-total-columns) * 100%);
+}
+
+// GRID NEW.
+@mixin grid-wrapper($gap: var(--grid-gutter-mobile)) {
+  display: grid;
+  grid-template-rows: repeat(var(--grid-total-rows, 1), 1fr);
+  grid-template-columns: repeat(var(--grid-total-columns-mobile, 4), 1fr);
+  gap: $gap;
+
+  @media screen and (min-width: variables.$breakpoints-tablet) {
+    grid-template-columns: repeat(var(--grid-total-columns-tablet, 8), 1fr);
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    grid-template-columns: repeat(var(--grid-total-columns, 8), 1fr);
+  }
+}
+
+@mixin grid-item($i) {
+  grid-column: auto / span #{$i};
+}
+
+@mixin grid-item-start($i) {
+  grid-column-start: #{$i};
 }

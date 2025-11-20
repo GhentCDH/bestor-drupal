@@ -1,0 +1,64 @@
+{#
+/**
+ * @file
+ * Template for the component c-page-intro.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-page-intro' %}
+
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant|clean_class,
+]|merge(c_page_intro_utility_classes ?: []) %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__wrapper">
+    <div class="{{ component_name }}__inner">
+      {% if breadcrumb %}
+        <div class="{{ component_name }}__breadcrumb">
+          {{ breadcrumb }}
+        </div>
+      {% endif %}
+
+      {% if title %}
+        <div class="{{ component_name }}__title">
+          {{ include('jakarta:c-heading', {
+            content: title,
+            heading_tag: 'h1',
+            heading_class: 'h1',
+          }, with_context = false) }}
+        </div>
+      {% endif %}
+      {% if attr_variant is same as ('lemma') %}
+        {% if meta %}
+          <div class="{{ component_name }}__meta">
+            {{ meta }}
+          </div>
+        {% endif %}
+
+        {% if print %}
+          <div class="{{ component_name }}__print">
+            {{ print }}
+          </div>
+        {% endif %}
+
+        {% if share %}
+          <div class="{{ component_name }}__share">
+            {{ share }}
+          </div>
+        {% endif %}
+      {% endif %}
+      {% if attr_variant is same as ('search') %}
+        {% if search %}
+          <div class="{{ component_name }}__search">
+            {{ search }}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

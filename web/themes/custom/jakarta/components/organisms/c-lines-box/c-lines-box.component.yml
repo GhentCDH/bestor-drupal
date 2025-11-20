@@ -1,0 +1,21 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Lines Box'
+status: stable
+group: Organisms
+description: "A component that displays lines box."
+props:
+  type: object
+  properties:
+    c_lines_box_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: Title
+    description: 'The title to display.'
+  lines:
+    title: Lines
+    description: 'The lines to display.'

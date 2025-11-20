@@ -12,13 +12,13 @@
 
 {% block component_content %}
   {% if title %}
-    <div class="{{ c_name }}__title h-margin-bottom-15">
+    <div class="{{ component_name }}__title h-margin-bottom-15">
       {{ title }}
     </div>
   {% endif %}
-  {% if social_media %}
-    <div class="{{ c_name }}__social-media">
-      {{ social_media }}
+  {% if social_medias %}
+    <div class="{{ component_name }}__social-medias">
+      {{ social_medias }}
     </div>
   {% endif %}
 {% endblock %}

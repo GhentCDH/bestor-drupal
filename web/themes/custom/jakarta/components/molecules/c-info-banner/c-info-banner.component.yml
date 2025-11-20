@@ -15,4 +15,4 @@ props:
 slots:
   text:
     title: Text
-    description: 'The text for the info banner.'
+    description: 'The text to display.'

@@ -1,0 +1,40 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Page Intro'
+status: stable
+group: Organisms
+description: "A component that displays page intro."
+variants:
+  default:
+    title: Default
+  lemma:
+    title: Lemma
+  search:
+    title: Search
+props:
+  type: object
+  properties:
+    c_page_intro_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  breadcrumb:
+    title: Breadcrumb
+    description: 'The breadcrumb to display.'
+  title:
+    title: Title
+    description: 'The title to display.'
+  meta:
+    title: Meta
+    description: 'The meta to display.'
+  print:
+    title: Print
+    description: 'The print to display.'
+  share:
+    title: Share
+    description: 'The share to display.'
+  search:
+    title: Search
+    description: 'The search to display.'

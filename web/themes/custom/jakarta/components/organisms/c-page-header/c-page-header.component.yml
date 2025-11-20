@@ -15,4 +15,4 @@ props:
 slots:
   page_header_content:
     title: Page header content
-    description: 'The content of the header.'
+    description: 'The content to display.'

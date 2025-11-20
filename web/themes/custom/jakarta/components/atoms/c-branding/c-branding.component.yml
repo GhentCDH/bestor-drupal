@@ -15,4 +15,4 @@ props:
 slots:
   logo:
     title: Logo
-    description: 'The logo for the branding.'
+    description: 'The logo to display.'

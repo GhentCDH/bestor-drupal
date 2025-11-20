@@ -1,0 +1,13 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-media-1-item {
+  $self: &;
+
+  #{$self}__meta-data {
+    font-size: functions.rem(15px);
+    font-style: italic;
+    margin-block-start: functions.rem(18px);
+  }
+}

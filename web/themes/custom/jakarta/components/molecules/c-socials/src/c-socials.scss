@@ -5,7 +5,7 @@
 .c-socials {
   $self: &;
 
-  #{$self}__social-media {
+  #{$self}__social-medias {
     display: flex;
     align-items: center;
     gap: functions.rem(20px);

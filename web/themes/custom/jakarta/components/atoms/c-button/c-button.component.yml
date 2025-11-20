@@ -48,4 +48,4 @@ props:
 slots:
   button_content:
     title: Content
-    description: 'The content of the button.'
+    description: 'The content to display.'

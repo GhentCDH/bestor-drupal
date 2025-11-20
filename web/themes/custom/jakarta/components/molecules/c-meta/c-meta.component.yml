@@ -15,7 +15,7 @@ props:
 slots:
   data:
     title: Date
-    description: 'The data for the meta.'
+    description: 'The data to display.'
   read_time:
     title: Read Time
-    description: 'The read time for the meta.'
+    description: 'The read time to display.'

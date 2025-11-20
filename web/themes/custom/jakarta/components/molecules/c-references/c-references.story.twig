@@ -1,0 +1,14 @@
+{# c-references.story.twig #}
+{% set references %}
+  <ul class="links">
+    <li># Naam van de voetnoot</li>
+    <li># Naam van de voetnoot</li>
+    <li># Naam van de voetnoot</li>
+    <li># Naam van de voetnoot</li>
+    <li># Naam van de voetnoot</li>
+  </ul>
+{% endset %}
+{{ include('jakarta:c-references', {
+  title: 'References',
+  references,
+}, with_context = false) }}

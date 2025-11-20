@@ -1,0 +1,66 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-cta {
+  $self: &;
+
+  padding-block: functions.rem(60px);
+  text-align: center;
+
+  #{$self}__inner {
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-flex-wrapper;
+    }
+  }
+
+  #{$self}__content {
+    border: 1px solid var(--color-dark);
+    padding: functions.rem(88.5px) functions.rem(20px) functions.rem(40px);
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: functions.rem(-1px);
+      right: functions.rem(-1px);
+      background: url("./c-cta-corner.svg");
+      width: functions.rem(177.5px);
+      height: functions.rem(48.5px);
+      display: block;
+    }
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-flex-item(6);
+      @include mixins.grid-push-left(6);
+
+      padding: functions.rem(96px) functions.rem(100px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      padding-inline: functions.rem(160px);
+    }
+  }
+
+  #{$self}__title,
+  #{$self}__text, {
+    text-align: center;
+  }
+
+  #{$self}__links {
+    margin-block-start: functions.rem(36px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: functions.rem(15px) functions.rem(35px);
+  }
+
+  @media screen and (min-width: variables.$breakpoints-tablet) {
+    padding-block: functions.rem(110px);
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    padding-block: functions.rem(160px);
+  }
+}

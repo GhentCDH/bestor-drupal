@@ -15,7 +15,7 @@ props:
 slots:
   toggle:
     title: Toggle
-    description: 'The toggle for the dropdown.'
+    description: 'The toggle to display.'
   dropdown_items:
     title: Dropdown Items
-    description: 'The dropdown items for the dropdown.'
+    description: 'The dropdown items to display.'

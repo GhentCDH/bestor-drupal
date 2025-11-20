@@ -29,4 +29,4 @@ props:
 slots:
   icon:
     title: Icon
-    description: 'The icon.'
+    description: 'The icon to display.'

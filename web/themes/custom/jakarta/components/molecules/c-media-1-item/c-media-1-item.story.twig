@@ -1,0 +1,36 @@
+{# c-media-1-item.story.twig #}
+{# simple #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/960/500" width="960" height="500" alt="Test image">
+{% endset %}
+<div>
+  {{ include('jakarta:c-media-1-item', {
+    media,
+    attr_variant: 'media_only',
+  }) }}
+</div>
+
+{# with lightbox #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/960/500" width="960" height="500" alt="Test image">
+{% endset %}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-media-1-item', {
+    media,
+    media_uri: 'https://picsum.photos/id/24/960/500',
+    add_lightbox: 1,
+    attr_variant: 'media_only',
+  }) }}
+</div>
+
+{# with caption #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/960/500" width="960" height="500" alt="Test image">
+{% endset %}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-media-1-item', {
+    media,
+    caption: 'Lorem ipsum dolor',
+    attr_variant: 'media_w_caption',
+  }) }}
+</div>

@@ -1,0 +1,30 @@
+{# c-cta.story.twig #}
+{% set title %}
+  Call to action title
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+{% endset %}
+{% set link %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: 'First link',
+  }, with_context = false) }}
+{% endset %}
+{% set link_secondary %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'link',
+    title: 'Second link',
+  }, with_context = false) }}
+{% endset %}
+<div>
+  {{ include('jakarta:c-cta', {
+    title,
+    text,
+    link,
+    link_secondary,
+  }) }}
+</div>

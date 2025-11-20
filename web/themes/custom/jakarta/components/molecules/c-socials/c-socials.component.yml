@@ -15,7 +15,7 @@ props:
 slots:
   title:
     title: Title
-    description: 'The title for the socials.'
-  social_media:
-    title: Social Media
-    description: 'The social media for the socials.'
+    description: 'The title to display.'
+  social_medias:
+    title: Social Medias
+    description: 'The social medias to display.'

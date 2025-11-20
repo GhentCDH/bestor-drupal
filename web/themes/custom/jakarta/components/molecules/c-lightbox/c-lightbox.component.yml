@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Lightbox'
+status: stable
+group: Molecules
+description: "A component that displays a lightbox."
+props:
+  type: object
+  properties: {}
+slots:
+  uri:
+    title: URI
+    description: 'The uri of the lightbox.'
+  content:
+    title: Content
+    description: 'The content of the lightbox.'
+
+# Copy vendor files to dist
+vendorCss:
+  node_modules/glightbox/dist/css/glightbox.min.css: {}
+
+libraryOverrides:
+  css:
+    theme:
+      ../../../dist/css/vendor/glightbox.min.css: { minified: true }

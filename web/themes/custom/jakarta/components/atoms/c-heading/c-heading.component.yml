@@ -57,4 +57,4 @@ props:
 slots:
   content:
     title: Content
-    description: 'The content of the heading.'
+    description: 'The content to display.'

@@ -22,7 +22,7 @@ props:
 slots:
   title:
     title: Title
-    description: 'The title for the tab.'
+    description: 'The title to display.'
   id:
     title: Id
-    description: 'The id for the tab.'
+    description: 'The id to display.'

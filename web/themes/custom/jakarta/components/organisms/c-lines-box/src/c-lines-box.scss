@@ -1,0 +1,51 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-lines-box {
+  $self: &;
+
+  #{$self}__wrapper {
+    padding: functions.rem(60px) var(--grid-offset-mobile);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-wrapper(0);
+      padding-block: functions.rem(135px);
+      padding-inline: 0;
+    }
+  }
+
+  #{$self}__inner {
+    border: 1px solid var(--color-dark);
+    padding: functions.rem(88.5px) functions.rem(20px) functions.rem(40px);
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: functions.rem(-1px);
+      right: functions.rem(-1px);
+      background: url("./c-lines-box-corner.svg");
+      width: functions.rem(177.5px);
+      height: functions.rem(48.5px);
+      display: block;
+    }
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-item(10);
+      @include mixins.grid-item-start(2);
+      padding: functions.rem(75px) functions.rem(80px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(22);
+      @include mixins.grid-item-start(2);
+    }
+  }
+
+  #{$self}__lines {
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      margin-block-start: functions.rem(40px);
+    }
+  }
+}

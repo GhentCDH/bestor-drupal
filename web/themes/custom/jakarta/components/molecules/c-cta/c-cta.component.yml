@@ -1,0 +1,27 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'CTA'
+status: stable
+group: Molecules
+description: "A component that displays a call to action."
+props:
+  type: object
+  properties:
+    c_cta_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: 'Title'
+    description: 'The title to display.'
+  text:
+    title: 'Text'
+    description: 'The text to display.'
+  link:
+    title: 'Link'
+    description: 'The link to display.'
+  link_secondary:
+    title: 'Link secondary'
+    description: 'The link secondary to display.'

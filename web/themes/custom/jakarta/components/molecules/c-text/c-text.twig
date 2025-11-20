@@ -19,14 +19,14 @@
 
 {% block component_content %}
   {% if title %}
-    <div class="{{ c_name }}__title">
+    <div class="{{ component_name }}__title">
       {{ include('jakarta:c-heading', {
         content: title,
       }, with_context = false) }}
     </div>
   {% endif %}
   {% if text %}
-    <div class="{{ c_name }}__text h-text-wysiwyg">
+    <div class="{{ component_name }}__text h-text-wysiwyg">
       {{ text }}
     </div>
   {% endif %}

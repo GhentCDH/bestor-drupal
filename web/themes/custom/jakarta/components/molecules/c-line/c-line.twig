@@ -1,0 +1,46 @@
+{#
+/**
+ * @file
+ * Template for the component c-line.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-line' %}
+
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant|clean_class,
+]|merge(c_line_utility_classes ?: []) %}
+
+{% block component_content %}
+  {% if url %}
+    <a href="{{ url }}" class="{{ component_name }}__link">
+  {% endif %}
+  {% if title %}
+    <div class="{{ component_name }}__title">
+      {{ title }}
+    </div>
+  {% endif %}
+  {% if attr_variant is same as ('default') %}
+    {% if author %}
+      <div class="{{ component_name }}__author">
+        {{ author }}
+      </div>
+    {% endif %}
+    {% if date %}
+      <div class="{{ component_name }}__date">
+        {{ date }}
+      </div>
+    {% endif %}
+  {% else %}
+    {{ include ('jakarta:c-icon', {
+      icon: 'link',
+    }, with_context = false) }}
+  {% endif %}
+  {% if url %}
+    </a>
+  {% endif %}
+{% endblock %}

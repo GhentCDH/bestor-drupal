@@ -1,0 +1,21 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'References'
+status: stable
+group: Molecules
+description: "A component that displays references."
+props:
+  type: object
+  properties:
+    c_references_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: Title
+    description: 'The title to display.'
+  references:
+    title: References
+    description: 'The references to display.'

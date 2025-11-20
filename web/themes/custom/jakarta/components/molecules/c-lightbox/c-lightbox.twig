@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Template for the component c-lightbox.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-lightbox' %}
+
+{% block component_content %}
+  <a class="glightbox-link" href="{{ uri }}" data-lightbox-custom>
+    {{ content }}
+  </a>
+{% endblock %}

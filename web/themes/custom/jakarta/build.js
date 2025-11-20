@@ -19,7 +19,7 @@ const watchDirectories = [
   componentsDir
 ];
 
-// Move generated CSS ans JS files from dist back to component directory
+// Move generated CSS and JS files from dist back to component directory
 const SDCmoveFilesPlugin = {
   name: 'SDCmoveFilesPlugin',
   setup(build) {
@@ -160,7 +160,7 @@ const copyVendorCss = async () => {
       const ymlData = YAML.parse(file);
 
       // If there is vendor CSS
-      if (ymlData.vendorCss) {
+      if (ymlData && ymlData.vendorCss) {
         // Copy the vendor CSS files
         await Promise.all(Object.keys(ymlData.vendorCss).map(async (vendorFile) => {
           await fs.copy(vendorFile, `${outdir}/css/vendor/${vendorFile.split('/').pop()}`);

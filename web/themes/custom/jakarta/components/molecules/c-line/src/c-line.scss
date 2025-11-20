@@ -1,0 +1,64 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-line {
+  $self: &;
+
+  padding-block-end: functions.rem(16px);
+  border-block-end: 1px solid var(--color-dark);
+
+  #{$self}__title {
+    font-family: var(--font-family-title);
+    font-weight: var(--font-weight-medium);
+    font-size: functions.rem(19px);
+    line-height: 1.6;
+  }
+
+  // DEFAULT.
+  &--default {
+    #{$self}__link {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: functions.rem(10px);
+
+      @media screen and (min-width: variables.$breakpoints-mobile-large) {
+        flex-wrap: nowrap;
+        gap: functions.rem(30px);
+      }
+    }
+
+    #{$self}__author {
+      @media screen and (min-width: variables.$breakpoints-mobile-large) {
+        margin-inline-start: auto;
+        flex-shrink: 0;
+      }
+    }
+
+    #{$self}__date {
+      @media screen and (min-width: variables.$breakpoints-mobile-large) {
+        margin-inline-start: clamp(30px, 16%, 230px);
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  // TITLE ONLY.
+  &--title-only {
+    #{$self}__link {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: functions.rem(10px);
+
+      .c-icon {
+        font-size: functions.rem(18px);
+      }
+    }
+  }
+
+  + #{$self} {
+    margin-block-start: functions.rem(40px);
+  }
+}

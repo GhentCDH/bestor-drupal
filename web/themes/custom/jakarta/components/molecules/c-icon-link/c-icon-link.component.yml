@@ -15,10 +15,10 @@ props:
 slots:
   url:
     title: Url
-    description: 'The url for the icon link.'
+    description: 'The url to display.'
   icon:
     title: Icon
-    description: 'The icon for the icon link.'
+    description: 'The icon to display.'
   text:
     title: Text
-    description: 'The text for the icon link.'
+    description: 'The text to display.'

@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Template for the component c-lemma-sidebar.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-lemma-sidebar' %}
+
+{% set custom_component_classes = c_lemma_sidebar_utility_classes %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__wrapper">
+    {% if buttons %}
+      <div class="{{ component_name }}__buttons">
+        {{ buttons }}
+      </div>
+    {% endif %}
+    {% if table_of_contents %}
+      <div class="{{ component_name }}__table-of-contents">
+        {{ table_of_contents }}
+      </div>
+    {% endif %}
+    {% if related_items %}
+      <div class="{{ component_name }}__related-items">
+        {{ related_items }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

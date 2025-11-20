@@ -1,0 +1,32 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Line'
+status: stable
+group: Molecules
+description: "A component that displays a line."
+variants:
+  default:
+    title: Default
+  title_only:
+    title: Title Only
+props:
+  type: object
+  properties:
+    c_line_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: 'Title'
+    description: 'The title to display.'
+  url:
+    title: 'Url'
+    description: 'The url to display.'
+  author:
+    title: 'Author'
+    description: 'The author to display.'
+  date:
+    title: 'Date'
+    description: 'The date to display.'

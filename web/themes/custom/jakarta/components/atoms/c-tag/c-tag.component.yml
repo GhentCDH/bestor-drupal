@@ -35,4 +35,4 @@ props:
 slots:
   content:
     title: Content
-    description: 'The content of the tag.'
+    description: 'The content to display.'

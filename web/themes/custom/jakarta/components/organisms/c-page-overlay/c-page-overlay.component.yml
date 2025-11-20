@@ -15,4 +15,4 @@ props:
 slots:
   page_overlay_content:
     title: Page overlay content
-    description: 'The content of the overlay.'
+    description: 'The content to display.'

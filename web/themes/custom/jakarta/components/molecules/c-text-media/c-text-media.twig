@@ -19,12 +19,12 @@
 
 {% block component_content %}
   {% if media %}
-    <div class="{{ c_name }}__media h-image-children-display-block h-image-full-width">
+    <div class="{{ component_name }}__media h-image-children-display-block h-image-full-width">
       {{ media }}
     </div>
   {% endif %}
   {% if text %}
-    <div class="{{ c_name }}__text h-text-wysiwyg">
+    <div class="{{ component_name }}__text h-text-wysiwyg">
       {{ text }}
     </div>
   {% endif %}

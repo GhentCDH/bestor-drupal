@@ -15,7 +15,7 @@ props:
 slots:
   toggle:
     title: Toggle
-    description: 'The toggle for the language picker.'
+    description: 'The toggle to display.'
   links:
     title: Links
-    description: 'The links for the language picker.'
+    description: 'The links to display.'
