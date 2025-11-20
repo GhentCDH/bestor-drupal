@@ -52,17 +52,6 @@
     }
   }
 
-  textarea {
-    resize: none;
-  }
-
-  select {
-    background-image: url("../../img/form-icon-select.svg");
-    background-repeat: no-repeat;
-    background-position: right functions.rem(10px) center;
-    padding-right: functions.rem(35px) !important;
-  }
-
   select::-ms-expand {
     display: none;
   }

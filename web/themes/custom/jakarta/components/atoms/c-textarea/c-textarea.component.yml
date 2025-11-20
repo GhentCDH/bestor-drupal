@@ -1,0 +1,18 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Textarea'
+status: stable
+group: Atoms
+description: "A component that displays a textarea."
+props:
+  type: object
+  properties:
+    c_textarea_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  value:
+    title: Value
+    description: 'The value of the textarea.'
