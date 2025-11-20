@@ -82,7 +82,6 @@ class NestedFilterDropdownOptionsProvider {
 
     try {
       $options = $this->fetchOptionsFromIndex($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
-      
       // Cache tags include bundle for granular invalidation
       $cache_tags = [
         'relationship_filter_options',
@@ -138,7 +137,6 @@ class NestedFilterDropdownOptionsProvider {
       // Execute and extract facet values
       $results = $query->execute();
       $facet_values = $this->facetResultParser->extractTrimmedFacetValues($results, $field_id);
-
       if (empty($facet_values)) {
         return [];
       }
@@ -298,7 +296,7 @@ class NestedFilterDropdownOptionsProvider {
    *   Cache key.
    */
   protected function getCacheKey(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode): string {
-    $current_language = $this->languageManager->getCurrentLanguage()->getId();  // ← NIEUW
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
     
     $parts = [
         'relationship_filter_options',
@@ -307,7 +305,7 @@ class NestedFilterDropdownOptionsProvider {
         str_replace([':', '.', '/'], '_', $child_fld_nm),
         $display_mode,
         $this->currentUser->id(),
-        $current_language,  // ← NIEUW (7e element)
+        $current_language,
     ];
 
     return implode(':', $parts);
