@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../components/molecules/c-dropdown/src/c-dropdown.js"],
+  "sourcesContent": ["((Drupal, once) => {\n  /**\n   * Toggle dropdown.\n   *\n   * @param _$trigger\n   */\n  function toggleDropdown(_$trigger) {\n    _$trigger.parentElement.classList.toggle('is-open');\n  }\n\n  /**\n   * Initialize dropdown.\n   *\n   * @param props\n   */\n  function init(props) {\n    props._$triggers.forEach(_$trigger => {\n      _$trigger.addEventListener('click', () => {\n        toggleDropdown(_$trigger);\n      });\n    });\n  }\n\n  Drupal.behaviors.dropdown = {\n    attach(context) {\n      const _$triggers = once('trigger', '[data-dropdown-toggle]', context)\n\n      // If there are triggers.\n      if (_$triggers) {\n        init({_$triggers});\n      }\n    }\n  };\n})(Drupal, once);"],
+  "mappings": ";CAAC,CAACA,SAAQC,UAAS;AAMjB,WAAS,eAAe,WAAW;AACjC,cAAU,cAAc,UAAU,OAAO,SAAS;AAAA,EACpD;AAOA,WAAS,KAAK,OAAO;AACnB,UAAM,WAAW,QAAQ,eAAa;AACpC,gBAAU,iBAAiB,SAAS,MAAM;AACxC,uBAAe,SAAS;AAAA,MAC1B,CAAC;AAAA,IACH,CAAC;AAAA,EACH;AAEA,EAAAD,QAAO,UAAU,WAAW;AAAA,IAC1B,OAAO,SAAS;AACd,YAAM,aAAaC,MAAK,WAAW,0BAA0B,OAAO;AAGpE,UAAI,YAAY;AACd,aAAK,EAAC,WAAU,CAAC;AAAA,MACnB;AAAA,IACF;AAAA,EACF;AACF,GAAG,QAAQ,IAAI;",
+  "names": ["Drupal", "once"]
+}

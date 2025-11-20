@@ -33,6 +33,7 @@ $icons: (
   "search": "\e907",
   "x": "\e908",
   "bluesky": "\e909",
+  "clock": "\e90a",
 );
 
 @each $name, $glyph in $icons {

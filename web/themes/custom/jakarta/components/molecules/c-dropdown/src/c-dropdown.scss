@@ -1,0 +1,56 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-dropdown {
+  $self: &;
+
+  background: var(--color-grey-light);
+  border-radius: functions.rem(15px);
+
+  #{$self}__toggle {
+    padding: functions.rem(14.5px) functions.rem(21px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: functions.rem(10px);
+    cursor: pointer;
+
+    .c-icon {
+      font-size: functions.rem(5px);
+      transition: var(--transition-eased);
+    }
+  }
+
+  #{$self}__items {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .4s ease-in;
+
+    &__inner {
+      padding: functions.rem(4px) functions.rem(21px) functions.rem(23px);
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        gap: functions.rem(17px);
+
+        a {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &.is-open {
+    #{$self}__toggle {
+      .c-icon {
+        transform: rotate(180deg);
+      }
+    }
+
+    #{$self}__items {
+      max-height: 1000px;
+    }
+  }
+}

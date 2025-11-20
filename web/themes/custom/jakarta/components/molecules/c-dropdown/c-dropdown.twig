@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Template for the component c-dropdown.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-dropdown' %}
+
+{% set custom_component_classes = [
+  'h-layout-position-relative',
+]|merge(c_dropdown_utility_classes ?: []) %}
+
+{% block component_content %}
+  {% if toggle %}
+    <div class="{{ component_name }}__toggle" data-dropdown-toggle>
+      {{ toggle }}
+      {{ include ('jakarta:c-icon', {
+        icon: 'caret',
+      }, with_context = false) }}
+    </div>
+  {% endif %}
+  {% if dropdown_items %}
+    <div class="{{ component_name }}__items">
+      <div class="{{ component_name }}__items__inner">
+        {{ dropdown_items }}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

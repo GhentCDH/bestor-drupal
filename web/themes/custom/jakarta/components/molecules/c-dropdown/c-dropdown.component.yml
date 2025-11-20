@@ -1,0 +1,21 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Dropdown'
+status: stable
+group: Molecules
+description: "A component that displays a dropdown."
+props:
+  type: object
+  properties:
+    c_dropdown_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  toggle:
+    title: Toggle
+    description: 'The toggle for the dropdown.'
+  dropdown_items:
+    title: Dropdown Items
+    description: 'The dropdown items for the dropdown.'

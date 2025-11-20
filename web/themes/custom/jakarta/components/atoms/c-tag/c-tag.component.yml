@@ -1,0 +1,38 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Tag'
+status: stable
+group: Atoms
+description: "A component that displays a tag."
+variants:
+  corner_down:
+    title: Corner Down
+  corner_up:
+    title: Corner Up
+props:
+  type: object
+  properties:
+    color:
+      title: Color
+      description: 'The color of the tag.'
+      type: string
+      examples:
+        - primary
+      enum:
+        - primary
+        - grey
+        - beige
+      'meta:enum':
+        primary: 'Primary'
+        grey: 'Grey'
+        beige: 'Beige'
+      default: primary
+    c_tag_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  content:
+    title: Content
+    description: 'The content of the tag.'
