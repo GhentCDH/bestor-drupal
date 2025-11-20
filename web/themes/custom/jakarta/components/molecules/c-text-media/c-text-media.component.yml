@@ -1,0 +1,43 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Text Media'
+status: stable
+group: Molecules
+description: "A component that displays text media."
+props:
+  type: object
+  properties:
+    media_position:
+      type: string
+      title: Media Position
+      description: 'The media position of the text media.'
+      enum:
+        - left
+        - right
+      'meta:enum':
+        left: 'Left'
+        right: 'Right'
+      default: left
+    media_layout:
+      type: string
+      title: Media Layout
+      description: 'The media layout of the text media.'
+      enum:
+        - '50_50'
+        - 'image_33'
+      'meta:enum':
+        50_50: '50/50'
+        image_33: 'Image 33%'
+      default: '50_50'
+    c_text_media_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  media:
+    title: 'Media'
+    description: 'The media to display.'
+  text:
+    title: 'Text'
+    description: 'The text to display.'

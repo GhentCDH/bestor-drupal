@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Template for the component c-info-banner.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-info-banner' %}
+{% set custom_component_classes = c_info_banner_utility_classes %}
+
+{% block component_content %}
+  {% if text %}
+    <div class="{{ component_name }}__text h-text-wysiwyg">
+      {{ text }}
+    </div>
+  {% endif %}
+{% endblock %}

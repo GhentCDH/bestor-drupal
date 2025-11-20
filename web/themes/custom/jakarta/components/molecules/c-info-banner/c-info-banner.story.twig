@@ -1,0 +1,7 @@
+{# c-info-banner.story.twig #}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, <a href="#">consectetur adipiscing elit</a>. Quisque id viverra nibh.</p>
+{% endset %}
+{{ include('jakarta:c-info-banner', {
+  text,
+}, with_context = false) }}

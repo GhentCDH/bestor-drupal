@@ -1,0 +1,18 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-info-banner {
+  $self: &;
+
+  background: var(--color-grey-light);
+  padding: functions.rem(28px);
+  text-align: center;
+
+  #{$self}__text {
+    font-family: var(--font-family-title);
+    font-weight: var(--font-weight-medium);
+    font-size: functions.rem(19px);
+    line-height: 1.6;
+  }
+}

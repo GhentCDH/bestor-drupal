@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for the component c-text-media.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-text-media' %}
+
+{% set attr_media_position = media_position ?: attr['attributes']['media_position'] %}
+{% set attr_media_layout = media_layout ?: attr['attributes']['media_layout'] %}
+
+{% set custom_component_classes = [
+  attr_media_position ? component_name ~ '--media-position-' ~ attr_media_position|clean_class,
+  attr_media_layout ? component_name ~ '--media-layout-' ~ attr_media_layout|clean_id,
+]|merge(c_text_media_utility_classes ?: []) %}
+
+{% block component_content %}
+  {% if media %}
+    <div class="{{ c_name }}__media h-image-children-display-block h-image-full-width">
+      {{ media }}
+    </div>
+  {% endif %}
+  {% if text %}
+    <div class="{{ c_name }}__text h-text-wysiwyg">
+      {{ text }}
+    </div>
+  {% endif %}
+{% endblock %}

@@ -119,6 +119,7 @@ blockquote {
   a {
     &:not(.c-btn) {
       text-decoration: underline;
+      text-underline-offset: 15%;
     }
   }
 
