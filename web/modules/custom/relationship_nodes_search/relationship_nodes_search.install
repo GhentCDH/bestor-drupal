@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @file
+ * Uninstall functions for relationship_nodes_search module.
+ */
+
+
+/**
+ * Implements hook_uninstall().
+ */
 function relationship_nodes_search_uninstall() {
     $view_storage = \Drupal::entityTypeManager()->getStorage('view');
     $views = $view_storage->loadMultiple();
@@ -34,7 +43,8 @@ function relationship_nodes_search_uninstall() {
                 }
             }
         }
-    
+        unset($display);
+
         if ($changed) {
             $view->set('display', $displays);
             try {

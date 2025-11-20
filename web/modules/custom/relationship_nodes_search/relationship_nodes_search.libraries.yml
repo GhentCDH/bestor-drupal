@@ -1,5 +1,5 @@
 relationship_form:
-  version: 1.x
+  version: VERSION
   js:
     js/relationship_form.js: {}
   dependencies:
@@ -10,4 +10,5 @@ vocab_confirm:
     js/vocab_confirm.js: {}
   dependencies:
     - core/drupal
+    - core/once
     - core/jquery

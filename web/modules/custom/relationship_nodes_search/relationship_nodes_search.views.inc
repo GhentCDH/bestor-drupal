@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @file
+ * Provides Views integration for relationship_nodes_search.
+ */
+
+
+/**
+ * Implements hook_views_data_alter().
+ */
 function relationship_nodes_search_views_data_alter(array &$data) {
   foreach ($data as $table_name => &$table) {
     if (!str_starts_with($table_name, 'search_api_index_')) {

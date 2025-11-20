@@ -1,4 +1,14 @@
+/**
+ * @file
+ * Handles parent/child checkbox relationship behavior in the index field config form.
+ * 
+ * Disables parent "add" buttons when no child checkboxes are selected.
+ */
+
+
 (function (Drupal, once) {
+  'use strict';
+
   Drupal.behaviors.relationshipForm = {
     attach(context) {
       once('relationship-checkbox', '.relationship-child-checkbox', context).forEach((checkbox) => {
