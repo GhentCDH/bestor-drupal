@@ -1,175 +1,48 @@
 <?php
 
-use Drupal\search_api\Entity\Index;
-use Drupal\views\Views;
-
-
 function relationship_nodes_search_uninstall() {
-    // Get indexes en fields that need cleaning.
-    $index_storage = \Drupal::entityTypeManager()->getStorage('search_api_index');
-    $indexes = $index_storage->loadMultiple();
-    $nested_fields_by_index = [];
-    foreach ($indexes as $index_id => $index) {
-      $nested_fld_ids = [];
-      foreach ($index->getFields() as $field_id => $field) {
-        $field_config = $field->getConfiguration();
-        if (!empty($field_config['nested_fields'])) {
-          $nested_fld_ids[] = $field_id;
+    $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+    $views = $view_storage->loadMultiple();
+    
+    foreach ($views as $view) {
+        // Skip views provided by this module (they'll be deleted automatically)
+        if ($view->status() && strpos($view->getConfigDependencyName(), 'relationship_nodes_search') !== false) {
+            continue;
         }
-      }
-      $nested_fields_by_index[$index_id] = [
-        'index' => $index,
-        'nested_field_ids' => $nested_fld_ids
-      ];
-    }
-
-    if(empty($nested_fields_by_index)){
-        return;
-    }
-
-    // Clean up Search API indexes
-    _relationship_nodes_search_cleanup_indexes($nested_fields_by_index);
-    
-    // Clean up Views
-    _relationship_nodes_search_cleanup_views($nested_fields_by_index);
-    
-    // Clear caches
-    drupal_flush_all_caches();
-  
-    \Drupal::messenger()->addWarning(t('Relationship nodes search module uninstalled. Please review your Search API indexes and Views for any remaining references.'));
-}
-
-/**
- * Remove relationship fields from all Search API indexes.
- */
-function _relationship_nodes_search_cleanup_indexes(array $nested_fields_by_index){  
-  foreach ($nested_fields_by_index as $index_id => $nested_info) {
-    $index = $nested_info['index'];
-    foreach ($nested_info['nested_field_ids'] as $field_id) {
-      try {
-        $index->removeField($field_id);
-        \Drupal::logger('relationship_nodes_search')->notice(
-          'Removed field @field from index @index',
-          ['@field' => $field_id, '@index' => $index->id()]
-        );
-      }
-      catch (\Exception $e) {
-        \Drupal::logger('relationship_nodes_search')->error(
-          'Failed to remove field @field from index @index: @message',
-          [
-            '@field' => $field_id,
-            '@index' => $index->id(),
-            '@message' => $e->getMessage()
-          ]
-        );
-      }
-    }
-    // Remove processor
-    if ($index->isValidProcessor('relationship_indexer')) {
-       try {
-        $index->removeProcessor('relationship_indexer');
-      }
-      catch (\Exception $e) {
-        \Drupal::logger('relationship_nodes_search')->warning(
-          'Failed to remove processor from index @index: @message',
-          ['@index' => $index->id(), '@message' => $e->getMessage()]
-        );
-      }
-    }
-    
-    // Save index
-    try {
-      $index->save();
-      \Drupal::messenger()->addStatus(t('Cleaned up index: @index', ['@index' => $index->label()]));
-    }
-    catch (\Exception $e) {
-      \Drupal::messenger()->addError(t('Failed to clean up index @index: @message', [
-        '@index' => $index->label(),
-        '@message' => $e->getMessage()
-      ]));
-      
-    }
-  }
-}
-
-/**
- * Remove relationship filters and fields from all Views.
- */
-function _relationship_nodes_search_cleanup_views($nested_fields_by_index) {
-  $view_storage = \Drupal::entityTypeManager()->getStorage('view');
-  $views = $view_storage->loadMultiple();
-  
-  $fields_by_base_table = [];
-
-  foreach ($nested_fields_by_index as $index_id => $nested_info) {
-    $base_table = 'search_api_index_' . $index_id;
-    $fields_by_base_table[$base_table] = $nested_info['nested_field_ids'];
-  }
-
-  foreach ($views as $view) {
-    $base_table = $view->get('base_table');
-    
-    // Skip views that are not based on a search api index with nested fields
-    if (!isset($fields_by_base_table[$base_table])) {
-      continue;
-    }
-    
-    $changed = false;
-    $nested_fld_ids = $fields_by_base_table[$base_table];
-    
-    // Get all displays as an array we can modify
-    $displays = $view->get('display');
-    
-    foreach ($displays as $display_id => &$display) {
-      // Remove filters
-      if (!empty($display['display_options']['filters'])) {
-        foreach ($display['display_options']['filters'] as $filter_id => $filter) {
-          $remove_filter = false;
-          
-          if (($filter['plugin_id'] ?? '') === 'search_api_relationship_filter') {
-            $remove_filter = true;
-          } elseif(isset($filter['field'])) {
-            $fld_nm = $filter['field'];
-            $cleaned_fld_nm = str_replace('facets_', '', $fld_nm);
-            if (in_array($fld_nm, $nested_fld_ids, true) || in_array($cleaned_fld_nm, $nested_fld_ids, true)) {
-            $remove_filter = true;
-            }
-          }
-          if($remove_filter){
-            unset($display['display_options']['filters'][$filter_id]);
-            $changed = true;
-          }
-        }
-      }
-      
-      // Remove fields
-      if (!empty($display['display_options']['fields'])) {
-        foreach ($display['display_options']['fields'] as $field_id => $field) {
-
-          if (isset($field['field']) && in_array($field['field'], $nested_fld_ids, true)) {
-            unset($display['display_options']['fields'][$field_id]);
-            $changed = true;
-          }
-        }
-      }
-    }
- 
-    if ($changed) {
-      $view->set('display', $displays);
-      
-      try {
-        $view->save();
         
-        \Drupal::messenger()->addStatus(t('Cleaned up view: @view', [
-          '@view' => $view->label(),
-        ]));
-      }
-      catch (\Exception $e) {
-        \Drupal::messenger()->addError(t('Failed to clean up view @view: @message', [
-          '@view' => $view->label(),
-          '@message' => $e->getMessage()
-        ]));
-      }
+        $changed = false;
+        $displays = $view->get('display');
+        
+        foreach ($displays as $display_id => &$display) {
+            // Remove fields
+            if (!empty($display['display_options']['fields'])) {
+                foreach ($display['display_options']['fields'] as $field_id => $field) {
+                    if (($field['plugin_id'] ?? '') === 'search_api_relationship_field') {
+                        unset($display['display_options']['fields'][$field_id]);
+                        $changed = true;
+                    }
+                }
+            }
+
+            // Remove filters
+            if (!empty($display['display_options']['filters'])) {
+                foreach ($display['display_options']['filters'] as $filter_id => $filter) {
+                    if (($filter['plugin_id'] ?? '') === 'search_api_relationship_filter') {
+                        unset($display['display_options']['filters'][$filter_id]);
+                        $changed = true;
+                    }
+                }
+            }
+        }
+    
+        if ($changed) {
+            $view->set('display', $displays);
+            try {
+                $view->save();
+            }
+            catch (\Exception $e) {
+                \Drupal::messenger()->addError(t('Failed to clean up view @view', ['@view' => $view->label()]));
+            }
+        }
     }
-  }
 }

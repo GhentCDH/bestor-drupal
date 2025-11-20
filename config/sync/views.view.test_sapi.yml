@@ -144,8 +144,8 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          link_to_item: 0
-          use_highlighting: 0
+          link_to_item: false
+          use_highlighting: false
           multi_type: separator
           multi_separator: ', '
           field_settings:
