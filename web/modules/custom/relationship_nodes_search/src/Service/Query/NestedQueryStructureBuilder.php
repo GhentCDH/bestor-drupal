@@ -16,7 +16,12 @@ class NestedQueryStructureBuilder {
 
     protected ElasticMappingInspector $mappingInspector;
 
-
+    /**
+     * Constructs a NestedQueryStructureBuilder object.
+     *
+     * @param ElasticMappingInspector $mappingInspector
+     *   The Elasticsearch mapping inspector service.
+     */
     public function __construct(ElasticMappingInspector $mappingInspector) {
         $this->mappingInspector = $mappingInspector;
     }
@@ -25,23 +30,29 @@ class NestedQueryStructureBuilder {
     /**
      * Builds a nested aggregation for a specific field.
      *
+     * Creates an Elasticsearch nested aggregation with optional post-filtering
+     * for facet interaction. Structure varies based on whether a filter is provided:
+     * - With filter: nested → filter → terms aggregation
+     * - Without filter: nested → terms aggregation
+     *
      * @param Index $index
      *   The Search API index.
      * @param string $field_id
-     *   The field identifier in "parent:child" format.
+     *   The field identifier in "parent:child" format (e.g., "parent_field:child_field").
      * @param int $size
-     *   Maximum number of unique values to return.
+     *   Maximum number of unique values to return (default: 10000).
      * @param array|null $filter
-     *   Optional filter to apply (used for facet interaction/post-filters).
+     *   Optional Elasticsearch filter for facet interaction/post-filters.
+     *   If NULL, no filter wrapper is added.
      *
      * @return array
-     *   The Elasticsearch aggregation structure.
+     *   The Elasticsearch aggregation structure with key "{field_id}_filtered".
      */
     public function buildNestedAggregation(Index $index, string $field_id, int $size = 10000, ?array $filter = null): array {
         [$parent, $child] = explode(':', $field_id, 2);
         $query_field_path = $this->getElasticQueryFieldPath($index, $parent, $child);
    
-        // Basis terms aggregation
+        // Base terms aggregation
         $agg_structure = [
             $field_id => [
                 'terms' => [
@@ -51,7 +62,7 @@ class NestedQueryStructureBuilder {
             ],
         ];
 
-        // Wrap in filter aggregation indien nodig (voor facet interaction)
+        // Wrap in filter aggregation if needed (for facet interaction)
         if ($filter !== null) {
             $agg_structure = [
                 $field_id . '_filtered' => [
@@ -74,12 +85,15 @@ class NestedQueryStructureBuilder {
 
     
     /**
-     * Bouwt een nested filter structure.
+     * Builds a nested filter structure.
      *
-     * @param string $parent_path Parent field path
-     * @param array $subfilters Array van subfilters (moet al gecombineerd zijn met bool/must/should)
+     * @param string $parent_path 
+     *   Parent field path.
+     * @param array $subfilters 
+     *   Array of subfilters (must already be combined with bool/must/should).
      *
-     * @return array Elasticsearch nested filter
+     * @return array 
+     *   Elasticsearch nested filter structure.
      */
     public function buildNestedFilter(string $parent_path, array $subfilters): array {
         return [
@@ -93,6 +107,14 @@ class NestedQueryStructureBuilder {
 
     /**
      * Combines multiple filters with boolean conjunction.
+     *
+     * @param array $filters
+     *   Array of filter structures to combine.
+     * @param string $conjunction
+     *   Conjunction type: 'AND' or 'OR'.
+     *
+     * @return array
+     *   Combined filter structure, or empty array if no filters provided.
      */
     public function combineFilters(array $filters, string $conjunction): array {
         if (empty($filters)) {

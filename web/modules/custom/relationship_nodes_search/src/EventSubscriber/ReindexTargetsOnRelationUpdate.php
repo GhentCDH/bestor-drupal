@@ -14,8 +14,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
 /**
- * Event subscriber that triggers Search API reindexing
- * when a relation node (linking two entities) is created, updated, or deleted.
+ * Event subscriber that triggers Search API reindexing for relationship changes.
+ *
+ * When a relation node (linking two entities) is created, updated, or deleted,
+ * this subscriber ensures that all affected target nodes are marked for
+ * reindexing in Search API.
  */
 class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
@@ -42,10 +45,7 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
 
   /**
-   * Registers the entity events (cf entity_events contrib module) this subscriber listens to.
-   *
-   * Whenever a relation node is inserted, updated, or deleted,
-   * the `trackRelatedEntitiesForReindexing()` method will be executed.
+   * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
     return [
@@ -56,6 +56,18 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
   }
 
 
+  /**
+   * Tracks related entities for Search API reindexing.
+   *
+   * When a relation node changes, identifies all affected target entities
+   * and marks them for reindexing. For UPDATE events, includes both old
+   * and new target entities.
+   *
+   * @param EntityEvent $event
+   *   The entity event.
+   * @param string $event_name
+   *   The event name (INSERT, UPDATE, or PREDELETE).
+   */
   public function trackRelatedEntitiesForReindexing(EntityEvent $event, string $event_name): void {
     
     // Only process if the entity is a recognized relation node type.
@@ -122,7 +134,10 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
 
   /**
-   * Track items in all active Search API indexes.
+   * Tracks items in all active Search API indexes.
+   *
+   * @param array $sapi_ids
+   *   Array of Search API item IDs (format: 'nid:langcode').
    */
   protected function trackItemsInIndexes(array $sapi_ids): void {
     $index_storage = $this->entityTypeManager->getStorage('search_api_index');
@@ -138,7 +153,12 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
 
   /**
-   * Invalidate dropdown option caches for affected relationships.
+   * Invalidates dropdown option caches for affected relationships.
+   *
+   * @param string $relation_bundle
+   *   The relation bundle machine name.
+   * @param array $affected_node_ids
+   *   Array of affected node IDs.
    */
   protected function invalidateRelationshipCache(string $relation_bundle, array $affected_node_ids): void {
     // Invalidate general relationship options cache
@@ -157,7 +177,16 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
 
   /**
-   * Log reindex operation for debugging.
+   * Logs reindex operation for debugging.
+   *
+   * @param string $event_type
+   *   The event type (INSERT, UPDATE, or PREDELETE).
+   * @param int $relation_id
+   *   The relation node ID.
+   * @param string $bundle
+   *   The relation bundle machine name.
+   * @param int $affected_count
+   *   Number of affected Search API items.
    */
   protected function logReindexOperation(string $event_type, int $relation_id, string $bundle, int $affected_count): void {
     $this->loggerFactory->get('relationship_nodes_search')->info(

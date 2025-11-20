@@ -11,11 +11,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
+/**
+ * Extended form for adding fields to Search API index.
+ *
+ * Provides special handling for nested relationship fields, including:
+ * - Parent/child field selection with checkboxes
+ * - Automatic inclusion of calculated fields
+ * - Custom "Add" button behavior for relationship groups
+ */
 class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
   protected FieldNameResolver $fieldNameResolver;
   protected CalculatedFieldHelper $calculatedFieldHelper;
   
+
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->fieldNameResolver = $container->get('relationship_nodes.field_name_resolver');
@@ -24,6 +33,12 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
   }
 
 
+  /**
+   * {@inheritdoc}
+   *
+   * Filters out calculated fields from nested relationship properties
+   * and adds custom checkbox/button UI for relationship field selection.
+   */
   protected function getPropertiesList(array $props, string $active_prop_path, $base_url, ?string $datasource_id, string $parent_path = '', string $label_prefix = '', int $depth = 0, array $rows = []): array {
     if($depth > 0 && str_starts_with($parent_path, 'relationship_info__')){
       $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(null, null, TRUE);
@@ -65,9 +80,7 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
       } else {
         [$sapi_fld_nm, $child_fld_nm] = explode(':', substr($machine_name, strlen('relationship_info__')), 2);
-        /*if(in_array($child_fld_nm, $calculated_fields)){
-          continue;
-        }*/
+
         $attributes = ['class' => ['relationship-child-checkbox']];
         
         if (in_array($child_fld_nm, $related_entity_flds)) {
@@ -101,6 +114,9 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public function preRenderForm(array $form): array {
     $form = parent::preRenderForm($form);
     $form['#attached']['library'][] = 'relationship_nodes_search/relationship_form';
@@ -108,7 +124,18 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
   }
 
 
-  // Handles the subission of the "add" button of a single (nested) relation field in the 'add fields to index' formDDD
+  /**
+   * Form submission handler for adding nested relation fields.
+   *
+   * Handles the submission of the "add" button for a single nested relation
+   * field group. Collects all selected child fields and creates a Search API
+   * field with nested configuration.
+   *
+   * @param array $form
+   *   The form array.
+   * @param FormStateInterface $form_state
+   *   The form state.
+   */
   public function addNestedRelationField(array $form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();
     if (!$button || !isset($button['#property'])) {

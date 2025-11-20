@@ -7,14 +7,25 @@ use Drupal\search_api\Query\ConditionGroupInterface;
 use Psr\Log\LoggerInterface;
 use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
 
+
 /**
- * Extended FilterBuilder met nested field support.
+ * Extended filter builder with nested field support.
+ *
+ * Decorates the standard FilterBuilder to add support for nested Elasticsearch
+ * queries when encountering NestedParentFieldConditionGroup conditions.
  */
 class NestedFilterBuilder extends FilterBuilder {
-
-    
+   
     protected NestedQueryStructureBuilder $queryBuilder;
 
+    /**
+     * Constructs a NestedFilterBuilder object.
+     *
+     * @param LoggerInterface $logger
+     *   The logger service.
+     * @param NestedQueryStructureBuilder $queryBuilder
+     *   The query structure builder service.
+     */
     public function __construct(
         LoggerInterface $logger,
         NestedQueryStructureBuilder $queryBuilder
@@ -36,7 +47,18 @@ class NestedFilterBuilder extends FilterBuilder {
 
 
     /**
-     * Extended FilterBuilder with nested field support.
+     * Builds filters for nested field conditions.
+     *
+     * Constructs an Elasticsearch nested query with proper path and child
+     * conditions for filtering on nested relationship fields.
+     *
+     * @param NestedParentFieldConditionGroup $condition_group
+     *   The nested condition group.
+     * @param array $index_fields
+     *   The index fields configuration.
+     *
+     * @return array
+     *   The nested filter structure.
      */
     protected function buildNestedFieldConditionFilters(NestedParentFieldConditionGroup $condition_group, array $index_fields): array {
         $parent = $condition_group->getParentFieldName();

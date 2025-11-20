@@ -14,6 +14,8 @@ use Drupal\relationship_nodes_search\Service\Widget\NestedFilterDropdownOptionsP
  * 
  * Handles the creation of form elements for exposed filters,
  * including operator selectors, select dropdowns, and text fields.
+ * 
+ * @todo Implement entity autocomplete widget support (see commented methods).
  */
 class NestedExposedFormBuilder {
 
@@ -23,7 +25,17 @@ class NestedExposedFormBuilder {
     protected CalculatedFieldHelper $calculatedFieldHelper;
     protected NestedFilterDropdownOptionsProvider $dropdownProvider;
 
-
+    
+    /**
+     * Constructs a NestedExposedFormBuilder object.
+     *
+     * @param FilterOperatorHelper $operatorHelper
+     *   The filter operator helper service.
+     * @param CalculatedFieldHelper $calculatedFieldHelper
+     *   The calculated field helper service.
+     * @param NestedFilterDropdownOptionsProvider $dropdownProvider
+     *   The dropdown options provider service.
+     */
     public function __construct(
         FilterOperatorHelper $operatorHelper,
         CalculatedFieldHelper $calculatedFieldHelper,
@@ -197,6 +209,18 @@ class NestedExposedFormBuilder {
 
     /**
      * Add operator selector widget.
+     *
+     * Creates a select dropdown for choosing the comparison operator
+     * (equals, greater than, etc.).
+     *
+     * @param array $form
+     *   The form array (passed by reference).
+     * @param array $path
+     *   Form element path.
+     * @param array $field_config
+     *   Field configuration.
+     * @param array|null $field_value
+     *   Current field value.
      */
     protected function addOperatorWidget(array &$form, array $path, array $field_config, ?array $field_value = null): void {
         $path[] = 'operator';
@@ -214,7 +238,20 @@ class NestedExposedFormBuilder {
     /**
      * Add dropdown select widget.
      *
-     * Options must be provided in $field_config['options'].
+     * Creates a select dropdown with options provided in field configuration.
+     *
+     * @param array $form
+     *   The form array (passed by reference).
+     * @param array $path
+     *   Form element path.
+     * @param array $field_config
+     *   Field configuration (must include 'options' key).
+     * @param string $label
+     *   Field label.
+     * @param bool $required
+     *   Whether the field is required.
+     * @param array|null $field_value
+     *   Current field value.
      */
     protected function addSelectWidget(
         array &$form,
@@ -225,10 +262,6 @@ class NestedExposedFormBuilder {
         ?array $field_value = null
     ): void {
         $options = $field_config['options'] ?? [];
-
-        if (!$required && !empty($options)) {
-        $options = ['' => $this->t('- Any -')] + $options;
-        }
 
         $path[] = 'value';
         $value = [
@@ -245,6 +278,21 @@ class NestedExposedFormBuilder {
 
     /**
      * Add textfield widget.
+     *
+     * Creates a simple text input field.
+     *
+     * @param array $form
+     *   The form array (passed by reference).
+     * @param array $path
+     *   Form element path.
+     * @param string $label
+     *   Field label.
+     * @param bool $required
+     *   Whether the field is required.
+     * @param string $placeholder
+     *   Placeholder text.
+     * @param array|null $field_value
+     *   Current field value.
      */
     protected function addTextfieldWidget(
         array &$form,
@@ -298,6 +346,16 @@ class NestedExposedFormBuilder {
 
     /**
      * Set a nested value in form array.
+     *
+     * Navigates through the form array using the path keys and sets the value
+     * at the final location, creating intermediate arrays as needed.
+     *
+     * @param array $form
+     *   The form array (passed by reference).
+     * @param array $path
+     *   Array of keys representing the path to the value.
+     * @param mixed $value
+     *   The value to set.
      */
     protected function setFormNestedValue(array &$form, array $path, $value): void {
         $ref = &$form;

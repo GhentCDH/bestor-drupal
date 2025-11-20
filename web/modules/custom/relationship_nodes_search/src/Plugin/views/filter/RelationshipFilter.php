@@ -31,6 +31,26 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     protected FilterOperatorHelper $operatorHelper;
 
 
+    /**
+     * Constructs a RelationshipFilter object.
+     *
+     * @param array $configuration
+     *   The plugin configuration.
+     * @param string $plugin_id
+     *   The plugin ID.
+     * @param mixed $plugin_definition
+     *   The plugin definition.
+     * @param NestedFieldHelper $nestedFieldHelper
+     *   The nested field helper service.
+     * @param NestedExposedFormBuilder $exposedFormBuilder
+     *   The exposed form builder service.
+     * @param NestedFieldViewsFilterConfigurator $filterConfigurator
+     *   The filter configurator service.
+     * @param NestedQueryStructureBuilder $queryBuilder
+     *   The query builder service.
+     * @param FilterOperatorHelper $operatorHelper
+     *   The operator helper service.
+     */
     public function __construct(
         array $configuration,
         string $plugin_id,
@@ -50,6 +70,9 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
         return new static(
             $configuration,
@@ -64,6 +87,9 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function defineOptions() {
         $options = parent::defineOptions();   
         foreach ($this->getDefaultFilterOptions() as $option => $default) {
@@ -73,9 +99,9 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     }
 
 
-    /*
-    * Configuration views admin form
-    */
+    /**
+     * {@inheritdoc}
+     */
     public function buildOptionsForm(&$form, FormStateInterface $form_state) {
         parent::buildOptionsForm($form, $form_state);
         if (isset($form['expose']['multiple'])) {
@@ -120,6 +146,9 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     }
 
     
+    /**
+     * {@inheritdoc}
+     */
     public function submitOptionsForm(&$form, FormStateInterface $form_state) {
         parent::submitOptionsForm($form, $form_state);    
         $this->filterConfigurator->savePluginOptions(
@@ -130,9 +159,9 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     }
 
 
-    /*
-    * Create title/description of the filter, visible in the views admin config form
-    */
+     /**
+     * {@inheritdoc}
+     */
     public function adminSummary() {
         if (!$this->isExposed()) {
             return parent::adminSummary();
@@ -152,28 +181,31 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
         ]);
     }
 
-    /*
-    * Exposed Form
-    */
-protected function valueForm(&$form, FormStateInterface $form_state):void {
-    $index = $this->getIndex();
-    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);
-    if (!$index instanceof Index || empty($sapi_fld_nm)) {
-        return;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function valueForm(&$form, FormStateInterface $form_state):void {
+        $index = $this->getIndex();
+        $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);
+        if (!$index instanceof Index || empty($sapi_fld_nm)) {
+            return;
+        }
+
+        $child_fld_settings = $this->options['exposed'] ? $this->getFieldSettings() : [];
+        $child_fld_values = is_array($this->value) ? $this->value : [];
+
+        $exp_op = $this->options['expose_operators'] ?? false;
+
+        $this->exposedFormBuilder->buildExposedFieldWidget(
+            $form, ['value'], $index, $sapi_fld_nm, $child_fld_settings, $child_fld_values, $exp_op
+        );
     }
 
-    $child_fld_settings = $this->options['exposed'] ? $this->getFieldSettings() : [];
-    $child_fld_values = is_array($this->value) ? $this->value : [];
 
-    $exp_op = $this->options['expose_operators'] ?? false;
-
-    $this->exposedFormBuilder->buildExposedFieldWidget(
-        $form, ['value'], $index, $sapi_fld_nm, $child_fld_settings, $child_fld_values, $exp_op
-    );
-}
-    
-
-
+    /**
+     * {@inheritdoc}
+     */
     public function query():void {
         if (!$this->getQuery()) {
             return;

@@ -15,6 +15,8 @@ use Drupal\relationship_nodes_search\Service\ConfigForm\NestedFieldViewsFieldCon
 
 
 /**
+ * Views field plugin for displaying nested relationship data.
+ *
  * @ViewsField("search_api_relationship_field")
  */
 class RelationshipField extends SearchApiStandard implements ContainerFactoryPluginInterface {
@@ -24,7 +26,24 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     protected ChildFieldEntityReferenceHelper $childReferenceHelper;
     protected CalculatedFieldHelper $calculatedFieldHelper;
 
-
+    /**
+     * Constructs a RelationshipField object.
+     *
+     * @param array $configuration
+     *   The plugin configuration.
+     * @param string $plugin_id
+     *   The plugin ID.
+     * @param mixed $plugin_definition
+     *   The plugin definition.
+     * @param NestedFieldHelper $nestedFieldHelper
+     *   The nested field helper service.
+     * @param NestedFieldViewsFieldConfigurator $fieldConfigurator
+     *   The field configurator service.
+     * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+     *   The child reference helper service.
+     * @param CalculatedFieldHelper $calculatedFieldHelper
+     *   The calculated field helper service.
+     */
     public function __construct(
         array $configuration,
         string $plugin_id,
@@ -41,7 +60,10 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         $this->calculatedFieldHelper = $calculatedFieldHelper;
     }
     
-    
+
+    /**
+     * {@inheritdoc}
+     */
     public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
         return new static(
             $configuration,
@@ -56,7 +78,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
 
 
     /**
-     * Inherit docs.
+     * {@inheritdoc}
      */
     public function defineOptions() {
         $options = parent::defineOptions();
@@ -68,7 +90,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
 
 
     /**
-     * Inherit docs.
+     * {@inheritdoc}
      */
     public function buildOptionsForm(&$form, FormStateInterface $form_state) {
         parent::buildOptionsForm($form, $form_state);
@@ -137,7 +159,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
 
 
     /**
-     * Inherit docs.
+     * {@inheritdoc}
      */
     public function submitOptionsForm(&$form, FormStateInterface $form_state) {
         parent::submitOptionsForm($form, $form_state);
@@ -151,7 +173,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
 
 
     /**
-     * Inherit docs.
+     * {@inheritdoc}
      */
     public function getValue(ResultRow $values, $field = NULL) {
         $index = $this->getIndex();
@@ -177,7 +199,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
 
 
     /**
-     * Override render and sort methods to prevent the default views rendering: force to use custom rendering.
+     * {@inheritdoc}
      */
     public function render(ResultRow $values) {
         $nested_data = $this->getValue($values);
@@ -206,21 +228,33 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function clickSortable() {
         return FALSE;
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderItems($items) {
         return [];
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function advancedRender(ResultRow $values) {
         return $this->render($values);
     }
 
-    
+
+    /**
+     * {@inheritdoc}
+     */
     public function render_item($count, $item) {
         return '';
     }

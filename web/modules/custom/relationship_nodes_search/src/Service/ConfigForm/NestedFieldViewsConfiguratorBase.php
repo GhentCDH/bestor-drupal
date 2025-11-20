@@ -22,6 +22,14 @@ abstract class NestedFieldViewsConfiguratorBase {
   protected NestedFieldHelper $nestedFieldHelper;
 
 
+  /**
+   * Constructs a NestedFieldViewsConfiguratorBase object.
+   *
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
+   * @param NestedFieldHelper $nestedFieldHelper
+   *   The nested field helper service.
+   */
   public function __construct(
     CalculatedFieldHelper $calculatedFieldHelper,
     NestedFieldHelper $nestedFieldHelper
@@ -67,7 +75,14 @@ abstract class NestedFieldViewsConfiguratorBase {
 
 
   /**
-   * Add field enable checkbox.
+   * Adds field enable checkbox.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param array $child_fld_settings
+   *   Current field settings.
    */
   protected function addFieldEnableCheckbox(array &$form, string $child_fld_nm, array $child_fld_settings): void {
     $form['filter_field_settings'][$child_fld_nm]['enabled'] = [
@@ -79,7 +94,16 @@ abstract class NestedFieldViewsConfiguratorBase {
 
 
   /**
-   * Add field label configuration.
+   * Adds field label configuration.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param array $child_fld_settings
+   *   Current field settings.
+   * @param array $disabled_state
+   *   Form API states configuration.
    */
   protected function addFieldLabel(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
     $form['filter_field_settings'][$child_fld_nm]['label'] = [
@@ -95,7 +119,16 @@ abstract class NestedFieldViewsConfiguratorBase {
 
 
   /**
-   * Add weight configuration.
+   * Adds weight configuration.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param array $child_fld_settings
+   *   Current field settings.
+   * @param array $disabled_state
+   *   Form API states configuration.
    */
   protected function addFieldWeight(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
     $form['filter_field_settings'][$child_fld_nm]['weight'] = [
@@ -110,7 +143,15 @@ abstract class NestedFieldViewsConfiguratorBase {
 
 
   /**
-   * Get form state for disabling fields when checkbox unchecked.
+   * Gets form state for disabling fields when checkbox unchecked.
+   *
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param string|null $context_prefix
+   *   Optional prefix for the form element path.
+   *
+   * @return array
+   *   Form API states configuration.
    */
   protected function getFieldDisabledState(string $child_fld_nm, ?string $context_prefix = null): array {
     $base_path = $context_prefix

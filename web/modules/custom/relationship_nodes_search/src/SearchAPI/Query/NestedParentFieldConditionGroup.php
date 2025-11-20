@@ -7,11 +7,11 @@ use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
 
 /**
- * Condition group for nested field queries.
- * 
- * This class extends the standard ConditionGroup to add support for
- * Elasticsearch nested queries by tracking the parent field path and
- * using the query builder to resolve correct field paths.
+ * Condition group for nested parent field queries.
+ *
+ * Extends the standard ConditionGroup to add support for Elasticsearch nested
+ * queries by tracking the parent field path and using the query builder to
+ * resolve correct field paths including .keyword suffixes.
  */
 class NestedParentFieldConditionGroup extends ConditionGroup {
 
@@ -22,6 +22,11 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
 
     /**
      * Sets the Search API index.
+     *
+     * @param Index $index
+     *   The Search API index.
+     *
+     * @return $this
      */
     public function setIndex(Index $index): self {
         $this->index = $index;
@@ -31,6 +36,11 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
 
     /**
      * Sets the query builder for field path resolution.
+     *
+     * @param NestedQueryStructureBuilder $queryBuilder
+     *   The query structure builder.
+     *
+     * @return $this
      */
     public function setQueryBuilder(NestedQueryStructureBuilder $queryBuilder): self {
         $this->queryBuilder = $queryBuilder;
@@ -40,6 +50,11 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
 
     /**
      * Sets the parent field name.
+     *
+     * @param string $parent_fld_nm
+     *   The parent field name.
+     *
+     * @return $this
      */
     public function setParentFieldName(string $parent_fld_nm): self {
         $this->parentFieldName = $parent_fld_nm;
@@ -49,6 +64,9 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
 
     /**
      * Gets the parent field name.
+     *
+     * @return string|null
+     *   The parent field name, or NULL if not set.
      */
     public function getParentFieldName(): ?string {
         return $this->parentFieldName;
@@ -57,6 +75,9 @@ class NestedParentFieldConditionGroup extends ConditionGroup {
 
     /**
      * Checks if this is a nested parent field condition group.
+     *
+     * @return bool
+     *   TRUE if parent field name is set, FALSE otherwise.
      */
     public function isNestedParentField(): bool {
         return !empty($this->parentFieldName);

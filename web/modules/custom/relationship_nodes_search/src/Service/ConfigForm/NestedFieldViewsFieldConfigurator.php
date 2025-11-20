@@ -15,6 +15,16 @@ class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
 
 
+  /**
+   * Constructs a NestedFieldViewsFieldConfigurator object.
+   *
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
+   * @param NestedFieldHelper $nestedFieldHelper
+   *   The nested field helper service.
+   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+   *   The child reference helper service.
+   */
   public function __construct(
     CalculatedFieldHelper $calculatedFieldHelper,
     NestedFieldHelper $nestedFieldHelper,

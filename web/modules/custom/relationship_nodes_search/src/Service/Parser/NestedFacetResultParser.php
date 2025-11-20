@@ -54,23 +54,6 @@ class NestedFacetResultParser {
 
   
     /**
-     * Extracts bucket data from an Elasticsearch aggregation response.
-     *
-     * @param array $response
-     *   The full Elasticsearch response.
-     * @param string $agg_id
-     *   The aggregation identifier.
-     *
-     * @return array
-     *   Array of bucket data.
-     */
-    public function extractBuckets(array $response, string $agg_id): array {
-        $nested_key = $agg_id . '_filtered';
-        return $response['aggregations'][$nested_key][$agg_id]['buckets'] ?? [];
-    }
-
-
-    /**
      * Extracts unique values from aggregation buckets.
      *
      * @param array $buckets

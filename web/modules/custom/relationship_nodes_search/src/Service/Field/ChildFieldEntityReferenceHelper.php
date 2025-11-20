@@ -21,6 +21,21 @@ class ChildFieldEntityReferenceHelper {
     protected NestedFieldHelper $nestedFieldHelper; 
     protected CalculatedFieldHelper $calculatedFieldHelper; 
 
+
+    /**
+     * Constructs a ChildFieldEntityReferenceHelper object.
+     *
+     * @param EntityTypeManagerInterface $entityTypeManager
+     *   The entity type manager.
+     * @param LanguageManagerInterface $languageManager
+     *   The language manager.
+     * @param LoggerChannelFactoryInterface $loggerFactory
+     *   The logger factory.
+     * @param NestedFieldHelper $nestedFieldHelper
+     *   The nested field helper service.
+     * @param CalculatedFieldHelper $calculatedFieldHelper
+     *   The calculated field helper service.
+     */
     public function __construct(
         EntityTypeManagerInterface $entityTypeManager,
         LanguageManagerInterface $languageManager,

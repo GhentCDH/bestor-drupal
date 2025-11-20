@@ -18,16 +18,28 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
   protected FilterOperatorHelper $operatorHelper;
 
 
-public function __construct(
-  CalculatedFieldHelper $calculatedFieldHelper,
-  NestedFieldHelper $nestedFieldHelper,
-  ChildFieldEntityReferenceHelper $childReferenceHelper,
-  FilterOperatorHelper $operatorHelper
-) {
-  parent::__construct($calculatedFieldHelper, $nestedFieldHelper);
-  $this->childReferenceHelper = $childReferenceHelper;
-  $this->operatorHelper = $operatorHelper;
-}
+  /**
+   * Constructs a NestedFieldViewsFilterConfigurator object.
+   *
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
+   * @param NestedFieldHelper $nestedFieldHelper
+   *   The nested field helper service.
+   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+   *   The child reference helper service.
+   * @param FilterOperatorHelper $operatorHelper
+   *   The operator helper service.
+   */
+  public function __construct(
+    CalculatedFieldHelper $calculatedFieldHelper,
+    NestedFieldHelper $nestedFieldHelper,
+    ChildFieldEntityReferenceHelper $childReferenceHelper,
+    FilterOperatorHelper $operatorHelper
+  ) {
+    parent::__construct($calculatedFieldHelper, $nestedFieldHelper);
+    $this->childReferenceHelper = $childReferenceHelper;
+    $this->operatorHelper = $operatorHelper;
+  }
 
 
   /**

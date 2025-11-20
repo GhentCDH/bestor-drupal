@@ -5,6 +5,7 @@ namespace Drupal\relationship_nodes_search\Plugin\search_api\data_type;
 use Drupal\search_api\DataType\DataTypePluginBase;
 
 /**
+ * Provides a data type for nested relationship objects.
  *
  * @SearchApiDataType(
  *   id = "relationship_nodes_search_nested_relationship",
@@ -13,4 +14,5 @@ use Drupal\search_api\DataType\DataTypePluginBase;
  * )
  */
 class NestedRelationshipDataType extends DataTypePluginBase {
+
 }

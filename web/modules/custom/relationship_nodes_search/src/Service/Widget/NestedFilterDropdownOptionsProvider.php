@@ -33,6 +33,28 @@ class NestedFilterDropdownOptionsProvider {
   protected NestedFacetResultParser $facetResultParser;
 
 
+  /**
+   * Constructs a NestedFilterDropdownOptionsProvider object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   * @param CacheBackendInterface $cache
+   *   The cache backend service.
+   * @param LoggerChannelFactoryInterface $loggerFactory
+   *   The logger factory service.
+   * @param AccountProxyInterface $currentUser
+   *   The current user service.
+   * @param LanguageManagerInterface $languageManager
+   *   The language manager service.
+   * @param NestedFieldHelper $nestedFieldHelper
+   *   The nested field helper service.
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
+   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+   *   The child field entity reference helper service.
+   * @param NestedFacetResultParser $facetResultParser
+   *   The facet result parser service.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     CacheBackendInterface $cache,
@@ -60,18 +82,21 @@ class NestedFilterDropdownOptionsProvider {
    * Get dropdown options for a field.
    *
    * Retrieves unique values from Elasticsearch index with caching.
+   * Results are cached per user and language to ensure proper access
+   * control and multilingual support.
    *
-   * @param \Drupal\search_api\Entity\Index $index
+   * @param Index $index
    *   The search index.
    * @param string $sapi_fld_nm
-   *   Parent field name.
+   *   Parent field name (e.g., 'relationship_info__parent').
    * @param string $child_fld_nm
-   *   Child field name.
+   *   Child field name (e.g., 'person', 'calculated_related_id').
    * @param string $display_mode
-   *   Display mode: 'raw' or 'label'.
+   *   Display mode: 'raw' (show IDs) or 'label' (show entity labels).
    *
    * @return array
-   *   Options array suitable for form select element.
+   *   Options array suitable for form select element (value => label).
+   *   Returns empty array on error.
    */
   public function getDropdownOptions(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'label'): array {
     $cache_key = $this->getCacheKey($index, $sapi_fld_nm, $child_fld_nm, $display_mode);

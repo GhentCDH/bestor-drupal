@@ -10,7 +10,12 @@ use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Psr\Log\LoggerInterface;
 
-
+/**
+ * Processor property for relationship fields with nested field definitions.
+ *
+ * Provides property definitions for relationship node fields and manages
+ * calculated fields for Search API indexing.
+ */
 class RelationProcessorProperty extends ProcessorProperty implements ComplexDataDefinitionInterface{
 
   protected ?array $propertyDefinitions = NULL;
@@ -20,6 +25,18 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   protected ?array $calculatedFieldNames = NULL;
 
 
+  /**
+   * Constructs a RelationProcessorProperty object.
+   *
+   * @param array $definition
+   *   The property definition.
+   * @param EntityFieldManagerInterface $entityFieldManager
+   *   The entity field manager.
+   * @param LoggerInterface $logger
+   *   The logger service.
+   * @param array|null $calculatedFieldNames
+   *   Optional array of calculated field names.
+   */
   public function __construct(
     array $definition, 
     EntityFieldManagerInterface $entityFieldManager,
@@ -32,7 +49,10 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
     $this->calculatedFieldNames = $calculatedFieldNames;
   }
 
- 
+
+  /**
+   * {@inheritdoc}
+   */
   public function getPropertyDefinitions():array {
     if ($this->propertyDefinitions !== NULL) {
       return $this->propertyDefinitions;
@@ -90,32 +110,53 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public function getPropertyDefinition($name):?DataDefinitionInterface {
     $definitions = $this->getPropertyDefinitions();
     return $definitions[$name] ?? NULL;
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public function getMainPropertyName():?string {
     return NULL;
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public function getProcessorId():?string {
     return $this->definition['processor_id'] ?? NULL;
   }
 
 
+  /**
+   * Gets the bundle from the definition.
+   *
+   * @return string|null
+   *   The bundle machine name, or NULL if not set.
+   */
   public function getBundle():?string {
     return $this->definition['definition_class_settings']['bundle'] ?? NULL;
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public function getDataType():string {
     return 'string';
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public function getLabel(): string {
     $label = $this->definition['label'] ?? '';
     if (is_object($label) && method_exists($label, '__toString')) {
@@ -125,6 +166,9 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public function getDescription(): string {
     $description = $this->definition['description'] ?? '';
     if (is_object($description) && method_exists($description, '__toString')) {
@@ -134,6 +178,15 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  /**
+   * Gets Drupal field information for a specific field.
+   *
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return array|null
+   *   Field information array, or NULL if not found.
+   */
   public function getDrupalFieldInfo(string $field_name): ?array {
     if ($this->drupalFieldInfo === NULL) {
       $this->getPropertyDefinitions();
@@ -143,12 +196,30 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  /**
+   * Checks if a Drupal field is an entity reference.
+   *
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return bool
+   *   TRUE if the field is an entity reference, FALSE otherwise.
+   */
   public function drupalFieldIsReference(string $field_name): bool {
       $field_info = $this->getDrupalFieldInfo($field_name);
       return isset($field_info['type']) && $field_info['type'] === 'entity_reference';
   }
 
 
+  /**
+   * Gets the target entity type for an entity reference field.
+   *
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return string|null
+   *   The target entity type, or NULL if not a reference field.
+   */
   public function getDrupalFieldTargetType(string $field_name): ?string {
     if (!$this->drupalFieldIsReference($field_name)) {
         return null;
@@ -158,6 +229,15 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   } 
 
 
+  /**
+   * Builds nested fields configuration for selected fields.
+   *
+   * @param array $selected_fields
+   *   Array of selected field names.
+   *
+   * @return array
+   *   Configuration array for nested fields.
+   */
   public function buildNestedFieldsConfig(array $selected_fields): array {
     if ($this->calculatedFieldNames === NULL) {
       return [];
@@ -186,6 +266,9 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  /**
+   * Adds calculated field definitions to property definitions.
+   */
   protected function addCalculatedFieldDefinitions(): void {
 
     if ($this->calculatedFieldNames === NULL) {
@@ -207,6 +290,15 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  /**
+   * Maps Drupal field type to Search API type.
+   *
+   * @param string $drupal_type
+   *   The Drupal field type.
+   *
+   * @return string
+   *   The corresponding Search API type.
+   */
   protected function mapFieldTypeToSearchApiType(string $drupal_type): string {
     $type_map = [
       'entity_reference' => 'string',
@@ -230,6 +322,15 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   }
 
 
+  /**
+   * Converts a value to string safely.
+   *
+   * @param mixed $value
+   *   The value to convert.
+   *
+   * @return string
+   *   The string representation.
+   */
   protected function convertToString($value): string {
     if (is_object($value) && method_exists($value, '__toString')) {
       return (string) $value;

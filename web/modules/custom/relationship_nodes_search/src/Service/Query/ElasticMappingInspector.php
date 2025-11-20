@@ -19,6 +19,12 @@ class ElasticMappingInspector {
     protected LoggerChannelFactoryInterface $loggerFactory;
 
     
+    /**
+     * Constructs an ElasticMappingInspector object.
+     *
+     * @param LoggerChannelFactoryInterface $loggerFactory
+     *   The logger factory service.
+     */
     public function __construct(LoggerChannelFactoryInterface $loggerFactory) {
         $this->loggerFactory = $loggerFactory;
     }

@@ -9,14 +9,29 @@ use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
 use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
 
+
 /**
- * Extended Facet builder with nested field support.
+ * Extended facet builder with nested field support.
+ *
+ * Builds Elasticsearch aggregation parameters for both regular and nested
+ * relationship fields, with support for facet interaction through post-filters.
  */
 class NestedFacetParamBuilder extends FacetParamBuilder {
 
     protected NestedQueryStructureBuilder $queryBuilder;
     protected NestedFieldHelper $nestedFieldHelper;
 
+
+    /**
+     * Constructs a NestedFacetParamBuilder object.
+     *
+     * @param LoggerInterface $logger
+     *   The logger service.
+     * @param NestedQueryStructureBuilder $queryBuilder
+     *   The query structure builder service.
+     * @param NestedFieldHelper $nestedFieldHelper
+     *   The nested field helper service.
+     */
     public function __construct(
         LoggerInterface $logger, 
         NestedQueryStructureBuilder $queryBuilder,
@@ -26,6 +41,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
         $this->queryBuilder = $queryBuilder;
         $this->nestedFieldHelper = $nestedFieldHelper;
     }
+
 
     /**
      * {@inheritdoc}
@@ -46,7 +62,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
             }
 
             if(empty($parsed_names['parent'])){
-                $aggs += $this->buildTermBucketAgg($facet_id, $facet, $facetFilters);;
+                $aggs += $this->buildTermBucketAgg($facet_id, $facet, $facetFilters);
             } else {
                 $aggs += $this->buildNestedTermBucketAgg($index, $facet_id, $facet, $facetFilters);
             }
@@ -55,6 +71,17 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
     }
 
 
+    /**
+     * Checks if a field exists in the index.
+     *
+     * @param array $indexFields
+     *   Array of index fields.
+     * @param string $field_name
+     *   The field name to check.
+     *
+     * @return bool
+     *   TRUE if field exists, FALSE otherwise.
+     */
     protected function checkFieldInIndex(array $indexFields , string $field_name):bool{
         if (!isset($indexFields[$field_name])) {
             $this->logger->warning('Unknown facet field: %field', ['%field' => $field_name]);
@@ -64,11 +91,22 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
     }
 
 
-
     /**
      * Builds a nested bucket aggregation.
-     * 
+     *
      * Creates an Elasticsearch nested aggregation for fields within nested objects.
+     *
+     * @param Index $index
+     *   The Search API index.
+     * @param string $facet_id
+     *   The facet identifier.
+     * @param array $facet
+     *   The facet configuration.
+     * @param array $postFilters
+     *   Post-filters for facet interaction.
+     *
+     * @return array
+     *   The nested aggregation structure.
      */
     protected function buildNestedTermBucketAgg(Index $index, string $facet_id, array $facet, array $postFilters): array {
         return $this->queryBuilder->buildNestedAggregation(
@@ -79,11 +117,22 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
         );
     }
 
+
     /**
-     * Apply post filters to nested aggregation.
+     * Builds post filter for nested aggregation.
      *
      * Post filters allow facets to interact with each other (e.g., when multiple
      * facets are selected, each facet's counts reflect the other selections).
+     *
+     * @param string $facet_id
+     *   The facet identifier.
+     * @param array $facet
+     *   The facet configuration.
+     * @param array $postFilters
+     *   Available post-filters.
+     *
+     * @return array|null
+     *   Combined filter structure, or NULL if no filters apply.
      */
     protected function buildPostFilter(string $facet_id, array $facet, array $postFilters): ?array {
         $filters = [];
@@ -106,6 +155,15 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
     }
 
 
+    /**
+     * Gets the facet size from configuration.
+     *
+     * @param array $facet
+     *   The facet configuration.
+     *
+     * @return int
+     *   The facet size (0 means unlimited).
+     */
     protected function getFacetSize(array $facet): int {
         $size = $facet['limit'] ?? self::DEFAULT_FACET_SIZE;
         return $size === 0 ? self::UNLIMITED_FACET_SIZE : $size;

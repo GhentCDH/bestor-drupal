@@ -83,7 +83,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   }
 
   /**
-   * {@inheritdoc}s
+   * {@inheritdoc}
    */
   public static function create(
     ContainerInterface $container, 
