@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Field;
+namespace Drupal\relationship_nodes_search\FieldHelper;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\search_api\Entity\Index;
 use Drupal\Core\Language\LanguageManagerInterface;
 

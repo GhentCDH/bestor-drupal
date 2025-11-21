@@ -1,18 +1,18 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\ConfigForm;
+namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\Service\Field\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\Service\Query\FilterOperatorHelper;
-use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
-use Drupal\relationship_nodes_search\Service\ConfigForm\NestedFieldViewsConfiguratorBase;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\Views\Config\NestedFieldViews\ConfiguratorBase;
 
 /**
  * Configuration form builder for Views filter fields.
  */
-class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBase {
+class NestedFieldViewsFilterConfigurator extends NestedFieldViews\ConfiguratorBase {
 
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
   protected FilterOperatorHelper $operatorHelper;

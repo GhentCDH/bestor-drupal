@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Field;
+namespace Drupal\relationship_nodes_search\FieldHelper;
 
 /**
  * Service for managing calculated fields in relationship searches.

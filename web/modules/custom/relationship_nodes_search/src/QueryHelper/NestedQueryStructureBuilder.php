@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Query;
+namespace Drupal\relationship_nodes_search\QueryHelper;
 
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\Query\ElasticMappingInspector;
+use Drupal\relationship_nodes_search\QueryHelper\ElasticMappingInspector;
 
 
 /**

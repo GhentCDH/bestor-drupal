@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Widget;
+namespace Drupal\relationship_nodes_search\Views\Widget;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -8,10 +8,10 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\Service\Field\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\Service\Parser\NestedFacetResultParser;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\Parser\NestedFacetResultParser;
 use Drupal\Core\Language\LanguageManagerInterface; 
 
 /**

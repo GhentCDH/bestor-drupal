@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Parser;
+namespace Drupal\relationship_nodes_search\Parser;
 
 use Drupal\search_api\Query\ResultSetInterface;
 

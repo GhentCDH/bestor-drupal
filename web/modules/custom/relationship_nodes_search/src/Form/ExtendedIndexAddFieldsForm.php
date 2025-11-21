@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Utility\Utility;
 use Drupal\search_api\Item\Field;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
 /**

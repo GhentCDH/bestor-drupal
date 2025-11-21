@@ -1,3 +1,5 @@
+# Routing configuration for Relationship Nodes module.
+
 relationship_nodes.relation_node_field_form:
   path: '/admin/structure/types/manage/{node_type}/fields/relationship-nodes-edit/{field_config}'
   defaults:
@@ -11,7 +13,7 @@ relationship_nodes.relation_node_field_form:
     node_type:
       type: entity:node_type
     field_config:
-      type: entity:field_configa
+      type: entity:field_config
 relationship_nodes.relation_taxonomy_term_field_form:
   path: '/admin/structure/taxonomy/manage/{taxonomy_vocabulary}/overview/fields/relationship-nodes-edit/{field_config}'
   defaults:

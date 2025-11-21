@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Query;
+namespace Drupal\relationship_nodes_search\QueryHelper;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 

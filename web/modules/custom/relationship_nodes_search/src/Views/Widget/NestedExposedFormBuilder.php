@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Widget;
+namespace Drupal\relationship_nodes_search\Views\Widget;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\Query\FilterOperatorHelper;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\Service\Widget\NestedFilterDropdownOptionsProvider;
+use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\Views\Widget\NestedFilterDropdownOptionsProvider;
 
 
 /**

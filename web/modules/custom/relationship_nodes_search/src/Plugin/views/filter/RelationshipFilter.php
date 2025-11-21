@@ -9,11 +9,11 @@ use Drupal\search_api\Entity\Index;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionGroup;
-use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
-use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
-use Drupal\relationship_nodes_search\Service\Widget\NestedExposedFormBuilder;
-use Drupal\relationship_nodes_search\Service\ConfigForm\NestedFieldViewsFilterConfigurator;
-use Drupal\relationship_nodes_search\Service\Query\FilterOperatorHelper;
+use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\Views\Widget\NestedExposedFormBuilder;
+use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFilterConfigurator;
+use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
 
 /**
  * Filter for nested relationship data in Search API.

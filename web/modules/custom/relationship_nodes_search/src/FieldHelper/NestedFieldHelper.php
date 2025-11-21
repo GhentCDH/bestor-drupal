@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Field;
+namespace Drupal\relationship_nodes_search\FieldHelper;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Item\Field;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes_search\Processor\RelationProcessorProperty;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 
 /**
  * Service for inspecting nested field structures in Search API indices.

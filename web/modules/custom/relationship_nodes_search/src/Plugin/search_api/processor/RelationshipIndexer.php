@@ -20,8 +20,8 @@ use Drupal\search_api\SearchApiException;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider;
-use Drupal\relationship_nodes_search\Service\Field\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 

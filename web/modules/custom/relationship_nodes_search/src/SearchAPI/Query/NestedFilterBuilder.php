@@ -5,7 +5,7 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 use Drupal\elasticsearch_connector\SearchAPI\Query\FilterBuilder;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
+use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 
 
 /**

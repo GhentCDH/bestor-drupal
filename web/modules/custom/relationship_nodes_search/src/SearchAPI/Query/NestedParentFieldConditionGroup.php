@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\search_api\Query\ConditionGroup;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
+use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 
 /**
  * Condition group for nested parent field queries.

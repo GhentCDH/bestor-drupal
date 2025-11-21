@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\ConfigForm;
+namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\Field\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -14,7 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
  * Provides shared form elements and validation helpers for Views plugins
  * (both filter and field handlers).
  */
-abstract class NestedFieldViewsConfiguratorBase {
+abstract class NestedFieldViews\ConfiguratorBase {
 
   use StringTranslationTrait;
 
@@ -23,7 +23,7 @@ abstract class NestedFieldViewsConfiguratorBase {
 
 
   /**
-   * Constructs a NestedFieldViewsConfiguratorBase object.
+   * Constructs a NestedFieldViews\ConfiguratorBase object.
    *
    * @param CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper service.

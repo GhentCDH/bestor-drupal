@@ -5,9 +5,9 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 use Drupal\elasticsearch_connector\SearchAPI\Query\FacetParamBuilder;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
+use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 
 
 /**

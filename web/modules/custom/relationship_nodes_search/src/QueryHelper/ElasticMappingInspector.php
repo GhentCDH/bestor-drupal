@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\Service\Query;
+namespace Drupal\relationship_nodes_search\QueryHelper;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
