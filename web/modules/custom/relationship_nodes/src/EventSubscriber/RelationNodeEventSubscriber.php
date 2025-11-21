@@ -92,21 +92,21 @@ class RelationNodeEventSubscriber implements EventSubscriberInterface {
    *   The generated label.
    */
   private function generateRelationLabel(Node $relation_node): string{
-      $related_entities = $this->nodeInfoService->getRelatedEntityValues($relation_node);
-      $title_parts = [];
-      $node_storage = $this->entityTypeManager->getStorage('node');
-      foreach($related_entities as $field_values){
-          $node_titles = [];
-          foreach($field_values as $nid){
-              $node = $node_storage->load($nid);
-              if ($node instanceof Node) {
-                  $node_titles[] = $node->getTitle();
-              }
-          }
-          if (!empty($node_titles)) {
-              $title_parts[] = implode(', ', $node_titles);
-          }
+    $related_entities = $this->nodeInfoService->getRelatedEntityValues($relation_node);
+    $title_parts = [];
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    foreach($related_entities as $field_values){
+      $node_titles = [];
+      foreach($field_values as $nid){
+        $node = $node_storage->load($nid);
+        if ($node instanceof Node) {
+          $node_titles[] = $node->getTitle();
+        }
       }
-      return 'Relationship '  . implode(' - ', $title_parts);
+      if (!empty($node_titles)) {
+        $title_parts[] = implode(', ', $node_titles);
+      }
+    }
+    return 'Relationship '  . implode(' - ', $title_parts);
   }
 }
