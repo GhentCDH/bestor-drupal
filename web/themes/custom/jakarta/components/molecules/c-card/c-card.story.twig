@@ -1,0 +1,79 @@
+{# c-card.story.twig #}
+{% set tag %}
+  {{ include('jakarta:c-tag', {
+    attr_variant: 'corner_down',
+    color: 'primary',
+    content: 'News about Bestor',
+  }, with_context = false) }}
+{% endset %}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/320/211" width="320" height="211" alt="Test image">
+{% endset %}
+{% set authors %}
+  <ul>
+    <li>Naam naam</li>
+  </ul>
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+{% endset %}
+
+{# horizontal #}
+<div style="max-width: 780px;">
+  {{ include('jakarta:c-card', {
+    tag,
+    media,
+    date: '22.05.25',
+    title: 'Titel van nieuwsbericht. Deze zijn soms lang en kunnen over 2 lijnen worden weergegeven',
+    text,
+    url: '#',
+    attr_variant: 'horizontal',
+  }, with_context = false) }}
+</div>
+
+{# horizontal - external #}
+{% set media_2 %}
+  <img loading="lazy" src="https://picsum.photos/id/24/199/302" width="199" height="302" alt="Test image">
+{% endset %}
+<div class="h-margin-top-40" style="max-width: 720px;">
+{{ include('jakarta:c-card', {
+  media: media_2,
+  title: 'Name publications',
+  authors,
+  text,
+  url: '#',
+  is_external_link: '1',
+  attr_variant: 'horizontal',
+}, with_context = false) }}
+</div>
+
+{# vertical #}
+{% set tag_2 %}
+  {{ include('jakarta:c-tag', {
+    attr_variant: 'corner_up',
+    color: 'beige',
+    content: 'Concept',
+  }, with_context = false) }}
+{% endset %}
+{% set media_3 %}
+  <img loading="lazy" src="https://picsum.photos/id/24/402/456" width="402" height="456" alt="Test image">
+{% endset %}
+{% set authors_2 %}
+  <ul>
+    <li>Naam naam</li>
+    <li>Naam naam</li>
+  </ul>
+{% endset %}
+<div class="h-margin-top-40" style="max-width: 402px;">
+  {{ include('jakarta:c-card', {
+    tag: tag_2,
+    media: media_3,
+    title: 'Name publications',
+    authors: authors_2,
+    read_time: '5 min.',
+    text,
+    url: '#',
+    is_external_link: '1',
+    attr_variant: 'vertical',
+  }, with_context = false) }}
+</div>

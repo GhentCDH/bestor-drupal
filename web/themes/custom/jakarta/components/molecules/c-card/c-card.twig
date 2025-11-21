@@ -1,0 +1,82 @@
+{#
+/**
+ * @file
+ * Template for the component c-card.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-card' %}
+
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant|clean_class,
+]|merge(c_card_utility_classes ?: []) %}
+
+{% block component_content %}
+  {% if url %}
+    <a href="{{ url }}" class="{{ component_name }}__link">
+  {% endif %}
+  {% if tag %}
+    <div class="{{ component_name }}__tag">
+      {{ tag }}
+    </div>
+  {% endif %}
+  {% if media %}
+    <div class="{{ component_name }}__media">
+      {{ media }}
+    </div>
+  {% endif %}
+  <div class="{{ component_name }}__content">
+    {% if date %}
+      <div class="{{ component_name }}__date">
+        {{ date }}
+      </div>
+    {% endif %}
+    {% if title %}
+      <div class="{{ component_name }}__title">
+        {{ include('jakarta:c-heading', {
+          content: title,
+          heading_tag: attr_variant is same as ('horizontal') ? 'h4' : 'h3',
+          heading_class: attr_variant is same as ('horizontal') ? 'h4' : 'h3',
+        }, with_context = false) }}
+      </div>
+    {% endif %}
+    {% if attr_variant is same as ('horizontal') %}
+      {% if authors %}
+        <div class="{{ component_name }}__authors">
+          {{ authors }}
+        </div>
+      {% endif %}
+    {% endif %}
+    {% if text %}
+      <div class="{{ component_name }}__text h-text-wysiwyg">
+        {{ text }}
+      </div>
+    {% endif %}
+  </div>
+  {% if attr_variant is same as ('vertical') %}
+    {% if authors or read_time %}
+      <div class="{{ component_name }}__meta">
+        {% if authors %}
+          <div class="{{ component_name }}__authors">
+            {{ authors }}
+          </div>
+        {% endif %}
+        {% if read_time %}
+          <div class="{{ component_name }}__read-time">
+            {{ include ('jakarta:c-icon', {
+              icon: 'clock',
+            }, with_context = false) }}
+            {{ read_time }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endif %}
+  {% if url %}
+    </a>
+  {% endif %}
+{% endblock %}
