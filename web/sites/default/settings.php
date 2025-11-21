@@ -139,6 +139,12 @@ $elasticsearch_url = sprintf('%s://%s:%s', $elasticsearch_scheme, $elasticsearch
 
 $config['search_api.server.elasticsearchconnectordocker']['backend_config']['connector_config']['url'] = $elasticsearch_url;
 
+if (getenv('ELASTIC_AUTH_USER') and getenv('ELASTIC_AUTH_PASSWORD')) {
+  $config['search_api.server.elasticsearchconnectordocker']['backend_config']['connector_config']['authentication_type'] = 'Basic';
+  $config['elasticsearch_connector.cluster.elasticsearchconnectordocker']['backend_config']['connector_config']['basic_auth_username'] = getenv('ELASTIC_AUTH_USER');
+  $config['elasticsearch_connector.cluster.elasticsearchconnectordocker']['backend_config']['connector_config']['basic_auth_password'] = getenv('ELASTIC_AUTH_PASSWORD');
+}
+
 /**
  * Reverse proxy configuration
  *
