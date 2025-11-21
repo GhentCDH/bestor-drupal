@@ -5,19 +5,26 @@
 .c-cta {
   $self: &;
 
-  padding-block: functions.rem(60px);
   text-align: center;
 
-  #{$self}__inner {
+  #{$self}__wrapper {
+    padding-block: functions.rem(60px);
+
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-flex-wrapper;
+      @include mixins.grid-wrapper(0);
+      padding-block: functions.rem(135px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      padding-block: functions.rem(160px);
     }
   }
 
-  #{$self}__content {
+  #{$self}__inner {
     border: 1px solid var(--color-dark);
     padding: functions.rem(88.5px) functions.rem(20px) functions.rem(40px);
     position: relative;
+    border-top-left-radius: functions.rem(20px);
 
     &::after {
       content: "";
@@ -31,14 +38,15 @@
     }
 
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-flex-item(6);
-      @include mixins.grid-push-left(6);
-
-      padding: functions.rem(96px) functions.rem(100px);
+      @include mixins.grid-item(8);
+      @include mixins.grid-item-start(3);
+      padding: functions.rem(95px) functions.rem(80px);
     }
 
     @media screen and (min-width: variables.$breakpoints-desktop) {
-      padding-inline: functions.rem(160px);
+      @include mixins.grid-item(12);
+      @include mixins.grid-item-start(7);
+      padding: functions.rem(95px) functions.rem(160px);
     }
   }
 
@@ -54,13 +62,5 @@
     align-items: center;
     justify-content: center;
     gap: functions.rem(15px) functions.rem(35px);
-  }
-
-  @media screen and (min-width: variables.$breakpoints-tablet) {
-    padding-block: functions.rem(110px);
-  }
-
-  @media screen and (min-width: variables.$breakpoints-desktop) {
-    padding-block: functions.rem(160px);
   }
 }

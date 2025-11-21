@@ -11,9 +11,11 @@
 {% set custom_component_classes = c_info_banner_utility_classes %}
 
 {% block component_content %}
-  {% if text %}
-    <div class="{{ component_name }}__text h-text-wysiwyg">
-      {{ text }}
-    </div>
-  {% endif %}
+  <div class="{{ component_name }}__wrapper container">
+    {% if text %}
+      <div class="{{ component_name }}__text h-text-wysiwyg">
+        {{ text }}
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

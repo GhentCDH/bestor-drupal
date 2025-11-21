@@ -14,30 +14,32 @@
 ]|merge(c_cta_utility_classes ?: []) %}
 
 {% block component_content %}
-  <div class="{{ component_name }}__inner">
-    <div class="{{ component_name }}__content">
-      {% if title %}
-        <div class="{{ component_name }}__title">
-          {{ include('jakarta:c-heading', {
-            content: title,
-          }, with_context = false) }}
-        </div>
-      {% endif %}
-      {% if text %}
-        <div class="{{ component_name }}__text h-text-wysiwyg">
-          {{ text }}
-        </div>
-      {% endif %}
-      {% if link or link_secondary %}
-        <div class="{{ component_name }}__links">
-          {% if link %}
-            {{ link }}
-          {% endif %}
-          {% if link_secondary %}
-            {{ link_secondary }}
-          {% endif %}
-        </div>
-      {% endif %}
+  <div class="{{ component_name }}__wrapper container">
+    <div class="{{ component_name }}__inner">
+{#      <div class="{{ component_name }}__content">#}
+        {% if title %}
+          <div class="{{ component_name }}__title">
+            {{ include('jakarta:c-heading', {
+              content: title,
+            }, with_context = false) }}
+          </div>
+        {% endif %}
+        {% if text %}
+          <div class="{{ component_name }}__text h-text-wysiwyg">
+            {{ text }}
+          </div>
+        {% endif %}
+        {% if link or link_secondary %}
+          <div class="{{ component_name }}__links">
+            {% if link %}
+              {{ link }}
+            {% endif %}
+            {% if link_secondary %}
+              {{ link_secondary }}
+            {% endif %}
+          </div>
+        {% endif %}
+{#      </div>#}
     </div>
   </div>
 {% endblock %}

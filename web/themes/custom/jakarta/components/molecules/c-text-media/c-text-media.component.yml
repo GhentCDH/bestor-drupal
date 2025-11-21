@@ -28,6 +28,13 @@ props:
         50_50: '50/50'
         image_33: 'Image 33%'
       default: '50_50'
+    add_container:
+      type: boolean
+      title: Add Container
+      description: 'Add a container to the text media.'
+      default: 1
+      examples:
+        - 1
     c_text_media_utility_classes:
       type: array
       items:

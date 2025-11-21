@@ -24,6 +24,13 @@ props:
         1: '1'
         2: '2'
       default: 1
+    add_container:
+      type: boolean
+      title: Add Container
+      description: 'Add a container to the text.'
+      default: 1
+      examples:
+        - 1
     c_text_utility_classes:
       type: array
       items:

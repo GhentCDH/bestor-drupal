@@ -15,6 +15,7 @@
 {% set custom_component_classes = [
   attr_media_position ? component_name ~ '--media-position-' ~ attr_media_position|clean_class,
   attr_media_layout ? component_name ~ '--media-layout-' ~ attr_media_layout|clean_id,
+  add_container ? 'container',
 ]|merge(c_text_media_utility_classes ?: []) %}
 
 {% block component_content %}

@@ -7,15 +7,6 @@
 
   text-align: center;
 
-  #{$self}__wrapper {
-    padding: 0 var(--grid-offset-mobile);
-
-    @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-wrapper(0);
-      padding-inline: 0;
-    }
-  }
-
   #{$self}__inner {
     padding: functions.rem(88.5px) functions.rem(20px) functions.rem(40px);
     position: relative;
@@ -39,14 +30,10 @@
     }
 
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-item(10);
-      @include mixins.grid-item-start(2);
       padding: functions.rem(90px) functions.rem(80px);
     }
 
     @media screen and (min-width: variables.$breakpoints-desktop) {
-      @include mixins.grid-item(22);
-      @include mixins.grid-item-start(2);
       padding: functions.rem(145px) functions.rem(80px) functions.rem(105px);
     }
   }

@@ -6,12 +6,10 @@
   $self: &;
 
   #{$self}__wrapper {
-    padding: functions.rem(60px) var(--grid-offset-mobile);
+    padding-block: functions.rem(60px);
 
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-wrapper(0);
       padding-block: functions.rem(135px);
-      padding-inline: 0;
     }
   }
 
@@ -33,14 +31,7 @@
     }
 
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-item(10);
-      @include mixins.grid-item-start(2);
       padding: functions.rem(75px) functions.rem(80px);
-    }
-
-    @media screen and (min-width: variables.$breakpoints-desktop) {
-      @include mixins.grid-item(22);
-      @include mixins.grid-item-start(2);
     }
   }
 

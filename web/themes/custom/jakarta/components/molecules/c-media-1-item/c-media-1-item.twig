@@ -16,6 +16,7 @@
   attr_variant ? component_name ~ '--' ~ attr_variant|clean_class,
   'h-image-children-display-block',
   'h-image-full-width',
+  add_container ? 'container',
 ]|merge(c_media_1_item_utility_classes ?: []) %}
 
 {% block component_content %}

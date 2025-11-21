@@ -5,7 +5,7 @@
 .c-references {
   $self: &;
 
-  padding: functions.rem(60px) functions.rem(20px);
+  padding-block: functions.rem(60px);
 
   #{$self}__inner {
     @include mixins.grid-wrapper(0);
@@ -47,6 +47,6 @@
   }
 
   @media screen and (min-width: variables.$breakpoints-tablet) {
-    padding: functions.rem(115px) 0;
+    padding-block: functions.rem(115px);
   }
 }

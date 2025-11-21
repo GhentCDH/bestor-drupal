@@ -5,19 +5,7 @@
 .c-page-intro {
   $self: &;
 
-  padding: functions.rem(50px) functions.rem(20px) 0;
-
-  #{$self}__inner {
-    @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-item(10);
-      @include mixins.grid-item-start(2);
-    }
-
-    @media screen and (min-width: variables.$breakpoints-desktop) {
-      @include mixins.grid-item(22);
-      @include mixins.grid-item-start(2);
-    }
-  }
+  padding-block: functions.rem(50px);
 
   #{$self}__breadcrumb {
     margin-block-end: functions.rem(40px);
@@ -85,10 +73,5 @@
         margin-block-start: 0;
       }
     }
-  }
-
-  @media screen and (min-width: variables.$breakpoints-tablet) {
-    @include mixins.grid-wrapper(0);
-    padding-inline: 0;
   }
 }

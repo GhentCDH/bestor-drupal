@@ -18,6 +18,13 @@ props:
       default: 0
       examples:
         - 0
+    add_container:
+      type: boolean
+      title: Add Container
+      description: 'Add a container to the media 1 item.'
+      default: 1
+      examples:
+        - 1
     c_media_1_item_utility_classes:
       type: array
       items:
