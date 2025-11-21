@@ -10,11 +10,10 @@
   #{$self}__wrapper {
     padding: 0 var(--grid-offset-mobile);
 
-    // @media screen and (min-width: variables.$breakpoints-tablet) {
-    //   @include mixins.grid-wrapper(0);
-    //   padding-block: functions.rem(135px);
-    //   padding-inline: 0;
-    // }
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-wrapper(0);
+      padding-inline: 0;
+    }
   }
 
   #{$self}__inner {
@@ -29,31 +28,55 @@
       left: functions.rem(-1px);
       background: url("./c-search-corner.svg");
       background-size: auto 100%;
-      // width: functions.rem(319px);
-      // height: functions.rem(93px);
       width: functions.rem(171px);
       height: functions.rem(50px);
       display: block;
+
+      @media screen and (min-width: variables.$breakpoints-desktop) {
+        width: functions.rem(319px);
+        height: functions.rem(93px);
+      }
+    }
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-item(10);
+      @include mixins.grid-item-start(2);
+      padding: functions.rem(90px) functions.rem(80px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(22);
+      @include mixins.grid-item-start(2);
+      padding: functions.rem(145px) functions.rem(80px) functions.rem(105px);
     }
   }
 
   #{$self}__title {
     margin-block-end: functions.rem(60px);
+    max-inline-size: functions.rem(905px);
+    margin-inline: auto;
   }
 
   #{$self}__form {
     position: relative;
+    max-inline-size: functions.rem(905px);
+    margin-inline: auto;
 
     .form-item {
       margin-bottom: 0;
 
       input {
         background: var(--color-light);
-        padding-inline: functions.rem(160px) functions.rem(40px);
-        padding-block: functions.rem(41px);
+        padding-inline: functions.rem(80px) functions.rem(20px);
+        padding-block: functions.rem(31px);
         border-radius: functions.rem(30px);
         font-size: functions.rem(20px);
         width: 100%;
+
+        @media screen and (min-width: variables.$breakpoints-desktop) {
+          padding-inline: functions.rem(160px) functions.rem(40px);
+          padding-block: functions.rem(41px);
+        }
       }
     }
 
@@ -61,7 +84,7 @@
       margin-top: 0;
       position: absolute;
       top: 50%;
-      left: functions.rem(50px);
+      left: functions.rem(20px);
       transform: translateY(-50%);
       z-index: 5;
 
@@ -72,14 +95,29 @@
       }
 
       .c-icon {
-        font-size: functions.rem(44px);
+        font-size: functions.rem(22px);
         color: var(--color-dark);
+
+        @media screen and (min-width: variables.$breakpoints-desktop) {
+          font-size: functions.rem(44px);
+        }
+      }
+
+      @media screen and (min-width: variables.$breakpoints-desktop) {
+        left: functions.rem(50px);
       }
     }
   }
 
   #{$self}__links {
     margin-block-start: functions.rem(70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: functions.rem(15px);
+    max-inline-size: functions.rem(1155px);
+    margin-inline: auto;
   }
 
   #{$self}__footnote {
@@ -88,5 +126,7 @@
     font-size: functions.rem(19px);
     line-height: 1.6;
     margin-block-start: functions.rem(90px);
+    max-inline-size: functions.rem(1155px);
+    margin-inline: auto;
   }
 }
