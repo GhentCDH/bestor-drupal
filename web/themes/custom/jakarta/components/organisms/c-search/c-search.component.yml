@@ -1,12 +1,12 @@
 $schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
-name: 'Lines Box'
+name: 'Search'
 status: stable
 group: Organisms
-description: "A component that displays a lines box."
+description: "A component that displays a search."
 props:
   type: object
   properties:
-    c_lines_box_utility_classes:
+    c_search_utility_classes:
       type: array
       items:
         type: string
@@ -16,6 +16,12 @@ slots:
   title:
     title: Title
     description: 'The title to display.'
-  lines:
-    title: Lines
-    description: 'The lines to display.'
+  form:
+    title: Form
+    description: 'The form to display.'
+  links:
+    title: Links
+    description: 'The links to display.'
+  footnote:
+    title: Footnote
+    description: 'The footnote to display.'

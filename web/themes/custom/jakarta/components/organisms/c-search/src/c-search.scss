@@ -1,0 +1,92 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-search {
+  $self: &;
+
+  text-align: center;
+
+  #{$self}__wrapper {
+    padding: 0 var(--grid-offset-mobile);
+
+    // @media screen and (min-width: variables.$breakpoints-tablet) {
+    //   @include mixins.grid-wrapper(0);
+    //   padding-block: functions.rem(135px);
+    //   padding-inline: 0;
+    // }
+  }
+
+  #{$self}__inner {
+    padding: functions.rem(88.5px) functions.rem(20px) functions.rem(40px);
+    position: relative;
+    border-top-right-radius: functions.rem(20px);
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: functions.rem(-1px);
+      left: functions.rem(-1px);
+      background: url("./c-search-corner.svg");
+      background-size: auto 100%;
+      // width: functions.rem(319px);
+      // height: functions.rem(93px);
+      width: functions.rem(171px);
+      height: functions.rem(50px);
+      display: block;
+    }
+  }
+
+  #{$self}__title {
+    margin-block-end: functions.rem(60px);
+  }
+
+  #{$self}__form {
+    position: relative;
+
+    .form-item {
+      margin-bottom: 0;
+
+      input {
+        background: var(--color-light);
+        padding-inline: functions.rem(160px) functions.rem(40px);
+        padding-block: functions.rem(41px);
+        border-radius: functions.rem(30px);
+        font-size: functions.rem(20px);
+        width: 100%;
+      }
+    }
+
+    .form-actions {
+      margin-top: 0;
+      position: absolute;
+      top: 50%;
+      left: functions.rem(50px);
+      transform: translateY(-50%);
+      z-index: 5;
+
+      .c-button {
+        padding: functions.rem(10px);
+        border: 0;
+        background: transparent;
+      }
+
+      .c-icon {
+        font-size: functions.rem(44px);
+        color: var(--color-dark);
+      }
+    }
+  }
+
+  #{$self}__links {
+    margin-block-start: functions.rem(70px);
+  }
+
+  #{$self}__footnote {
+    font-family: var(--font-family-title);
+    font-weight: var(--font-weight-medium);
+    font-size: functions.rem(19px);
+    line-height: 1.6;
+    margin-block-start: functions.rem(90px);
+  }
+}

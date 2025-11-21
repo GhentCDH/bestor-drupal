@@ -24,13 +24,13 @@
 
 .h-bg-color {
   &-dark,
-  &-primary,
   &-secondary {
     color: var(--color-light);
 
-    .text-formatted a:not(.c-btn),
-    a:not(.c-btn) {
-      border-bottom-color: var(--color-light);
+    .h-text-wysiwyg a:not(.c-button),
+    .text-formatted a:not(.c-button),
+    a:not(.c-button) {
+      color: var(--color-light);
 
       &:hover,
       &:focus {
@@ -53,6 +53,15 @@
 
   &-primary {
     background-color: var(--color-primary);
+
+    .h-text-wysiwyg a:not(.c-button),
+    .text-formatted a:not(.c-button),
+    a:not(.c-button) {
+      &:hover,
+      &:focus {
+        color: var(--color-tertiary);
+      }
+    }
   }
 
   &-secondary {
