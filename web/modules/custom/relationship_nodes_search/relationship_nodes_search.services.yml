@@ -27,13 +27,13 @@ services:
     class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFilterBuilder
     decorates: elasticsearch_connector.query_filter_builder
     arguments: 
-      - '@logger.channel.elasticsearch_connector'
+      - '@logger.factory' 
       - '@relationship_nodes_search.nested_query_structure_builder'
   relationship_nodes_search.nested_facet_builder:
     class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFacetParamBuilder
     decorates: elasticsearch_connector.facet_builder
     arguments:
-      - '@logger.channel.elasticsearch_connector'
+      - '@logger.factory' 
       - '@relationship_nodes_search.nested_query_structure_builder'
       - '@relationship_nodes_search.nested_field_helper'
   relationship_nodes_search.nested_facet_result_parser:

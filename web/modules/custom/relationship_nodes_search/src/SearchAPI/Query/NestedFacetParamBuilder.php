@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\elasticsearch_connector\SearchAPI\Query\FacetParamBuilder;
 use Drupal\search_api\Query\QueryInterface;
-use Psr\Log\LoggerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\relationship_nodes_search\Service\Query\NestedQueryStructureBuilder;
 use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes_search\Service\Field\NestedFieldHelper;
@@ -25,7 +25,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
     /**
      * Constructs a NestedFacetParamBuilder object.
      *
-     * @param LoggerInterface $logger
+     * @param LoggerChannelFactoryInterface $logger
      *   The logger service.
      * @param NestedQueryStructureBuilder $queryBuilder
      *   The query structure builder service.
@@ -33,7 +33,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
      *   The nested field helper service.
      */
     public function __construct(
-        LoggerInterface $logger, 
+        LoggerChannelFactoryInterface $logger, 
         NestedQueryStructureBuilder $queryBuilder,
         NestedFieldHelper $nestedFieldHelper,
     ) {
@@ -84,7 +84,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
      */
     protected function checkFieldInIndex(array $indexFields , string $field_name):bool{
         if (!isset($indexFields[$field_name])) {
-            $this->logger->warning('Unknown facet field: %field', ['%field' => $field_name]);
+            $this->loggerFactory->get('relationship_nodes_search')->warning('Unknown facet field: %field', ['%field' => $field_name]);
             return false;
         }
         return true;
