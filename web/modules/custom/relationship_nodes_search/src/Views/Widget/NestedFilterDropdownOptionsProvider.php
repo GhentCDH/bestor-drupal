@@ -277,7 +277,7 @@ class NestedFilterDropdownOptionsProvider {
       }
 
 
-      // Log if some entities failed to load
+      // Log if some entities failed to load or were filtered by access control
       if (count($entities) < count($numeric_ids)) {
         $loaded_ids = array_keys($entities);
         $missing_ids = array_diff($numeric_ids, $loaded_ids);

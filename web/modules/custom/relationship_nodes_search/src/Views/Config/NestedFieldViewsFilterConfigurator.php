@@ -7,12 +7,12 @@ use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
 use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
-use Drupal\relationship_nodes_search\Views\Config\NestedFieldViews\ConfiguratorBase;
+use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsConfiguratorBase;
 
 /**
  * Configuration form builder for Views filter fields.
  */
-class NestedFieldViewsFilterConfigurator extends NestedFieldViews\ConfiguratorBase {
+class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBase {
 
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
   protected FilterOperatorHelper $operatorHelper;

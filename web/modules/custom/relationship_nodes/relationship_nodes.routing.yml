@@ -1,5 +1,3 @@
-# Routing configuration for Relationship Nodes module.
-
 relationship_nodes.relation_node_field_form:
   path: '/admin/structure/types/manage/{node_type}/fields/relationship-nodes-edit/{field_config}'
   defaults:

@@ -13,9 +13,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\search_api\Processor\EntityProcessorProperty;
-use Drupal\relationship_nodes_search\TypedData\RelationInfoData;
-use Drupal\search_api\Utility\Utility;
 use Drupal\search_api\SearchApiException;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\search_api\Processor\ProcessorProperty;
@@ -24,6 +21,7 @@ use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper
 use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\search_api\Entity\Index;
 
 
 /**
@@ -53,8 +51,34 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
   protected CalculatedFieldHelper $calculatedFieldHelper; 
 
+
   /**
    * Constructs a RelationshipIndexer object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   * @param EntityFieldManagerInterface $entityFieldManager
+   *   The entity field manager service.
+   * @param LoggerChannelFactoryInterface $loggerFactory
+   *   The logger factory service.
+   * @param RelationBundleInfoService $bundleInfoService
+   *   The relation bundle info service.
+   * @param FieldNameResolver $fieldResolver
+   *   The field name resolver service.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The relation bundle settings manager service.
+   * @param MirrorTermProvider $mirrorProvider
+   *   The mirror term provider service.
+   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+   *   The child field entity reference helper service.
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
    */
   public function __construct(
     array $configuration, 
@@ -111,7 +135,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   /**
    * {@inheritdoc}
    */
-    public static function supportsIndex(\Drupal\search_api\IndexInterface $index) {
+    public static function supportsIndex(Index $index) {
     // Check if the index has entity datasources.
     foreach ($index->getDatasources() as $datasource) {
       if ($datasource->getEntityTypeId()) {
@@ -146,7 +170,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       }
     }
 
-    $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(null, null, true);
+    $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(NULL, NULL, TRUE);
     foreach($relationship_node_types as $relationship_node_type){
       $definition = [
         'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
@@ -260,7 +284,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           continue;
         }
 
-        $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(null, null, true);
+        $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(NULL, NULL, TRUE);
        
         foreach($entities as $relationship_entity){
           $nested_values = [];
@@ -291,7 +315,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
             $values = [];
             $drupal_field_info = $child_fld_config['drupal_field'];
             $is_ref = $drupal_field_info['type'] === 'entity_reference';
-            $target_type = $is_ref ? $drupal_field_info['target_type'] : null;
+            $target_type = $is_ref ? $drupal_field_info['target_type'] : NULL;
 
             foreach ($field_values as $field_value) {
               $extracted = $this->extractSingleValue($field_value, $target_type);
@@ -330,7 +354,24 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   }
 
 
-  protected function fillCalculatedFields(array &$nested_values, $entity, $relationship_entity, string $join_field): void { 
+  /**
+   * Fills calculated fields for a relationship.
+   *
+   * @param array $nested_values
+   *   The nested values array (passed by reference).
+   * @param EntityInterface $entity
+   *   The target entity.
+   * @param EntityInterface $relationship_entity
+   *   The relationship entity.
+   * @param string $join_field
+   *   The join field name.
+   */
+  protected function fillCalculatedFields(
+    array &$nested_values, 
+    EntityInterface $entity, 
+    EntityInterface $relationship_entity, 
+    string $join_field
+  ): void { 
     $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames();
     
     $nested_values[$calc_fld_nms['this_entity']['id']] = isset($nested_values[$join_field]) ? $nested_values[$join_field] : '';
@@ -338,8 +379,8 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
 
     $node_storage = $this->entityTypeManager->getStorage('node');
     $other_field = $this->fieldResolver->getOppositeRelatedEntityField($join_field);
-    $other_parsed = $this->childReferenceHelper->parseEntityReferenceValue($nested_values[$other_field] ?? null);
-    $related_entity = !empty($other_parsed['id']) ? $node_storage->load($other_parsed['id']) : null;
+    $other_parsed = $this->childReferenceHelper->parseEntityReferenceValue($nested_values[$other_field] ?? NULL);
+    $related_entity = !empty($other_parsed['id']) ? $node_storage->load($other_parsed['id']) : NULL;
     $nested_values[$calc_fld_nms['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
     $nested_values[$calc_fld_nms['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
 
@@ -347,10 +388,10 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     if ($this->settingsManager->isTypedRelationNodeType($relationship_entity->getType()) && !empty($nested_values[$relation_field])) {
       $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');    
       $relation_parsed = $this->childReferenceHelper->parseEntityReferenceValue($nested_values[$relation_field]);
-      $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : null;
+      $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : NULL;
       $default_label = $relation_term ? $relation_term->getName() : '';
 
-      if ($join_field == $this->fieldResolver->getRelatedEntityFields(2) && !empty($relation_parsed['id'])) {
+      if ($join_field === $this->fieldResolver->getRelatedEntityFields(2) && !empty($relation_parsed['id'])) {
         $mirror_array = $this->mirrorProvider->getMirrorArray($term_storage, $relation_parsed['id']);
         $nested_values[$calc_fld_nms['relation_type']['name']] = reset($mirror_array);
       } else {
@@ -360,7 +401,23 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   }
 
 
-  protected function extractSingleValue($value, $target_type = null) {
+  /**
+   * Extracts a single value from a field value array.
+   *
+   * Handles different field value structures:
+   * - Entity references: returns 'entity_type/id' format
+   * - Simple values: returns the 'value' key
+   * - Arrays: returns first element
+   *
+   * @param mixed $value
+   *   The field value to extract from.
+   * @param string|null $target_type
+   *   The target entity type for entity reference fields.
+   *
+   * @return mixed|null
+   *   The extracted value, or NULL if empty.
+   */
+  protected function extractSingleValue(mixed $value, ?string $target_type = NULL): mixed {
     if (empty($value)) {
         return NULL;
     }

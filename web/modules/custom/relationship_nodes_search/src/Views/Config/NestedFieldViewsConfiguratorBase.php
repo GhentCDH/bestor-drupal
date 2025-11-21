@@ -14,7 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
  * Provides shared form elements and validation helpers for Views plugins
  * (both filter and field handlers).
  */
-abstract class NestedFieldViews\ConfiguratorBase {
+abstract class NestedFieldViewsConfiguratorBase {
 
   use StringTranslationTrait;
 
@@ -23,7 +23,7 @@ abstract class NestedFieldViews\ConfiguratorBase {
 
 
   /**
-   * Constructs a NestedFieldViews\ConfiguratorBase object.
+   * Constructs a NestedFieldViewsConfiguratorBase object.
    *
    * @param CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper service.
@@ -67,7 +67,7 @@ abstract class NestedFieldViews\ConfiguratorBase {
       $form['error'] = [
         '#markup' => $this->t('Cannot load index or field configuration, or no nested fields available.'),
       ];
-      return null;
+      return NULL;
     }
     
     return $config;
@@ -153,7 +153,7 @@ abstract class NestedFieldViews\ConfiguratorBase {
    * @return array
    *   Form API states configuration.
    */
-  protected function getFieldDisabledState(string $child_fld_nm, ?string $context_prefix = null): array {
+  protected function getFieldDisabledState(string $child_fld_nm, ?string $context_prefix = NULL): array {
     $base_path = $context_prefix
       ? $context_prefix . '[filter_field_settings][' . $child_fld_nm . '][enabled]'
       : 'options[filter_field_settings][' . $child_fld_nm . '][enabled]';
@@ -180,7 +180,7 @@ abstract class NestedFieldViews\ConfiguratorBase {
    * @param string|null $wrapper_key
    *   Optional wrapper key (e.g., 'relation_display_settings').
    */
-  public function savePluginOptions($form_state, array $default_options, array &$options, ?string $wrapper_key = null): void {
+  public function savePluginOptions($form_state, array $default_options, array &$options, ?string $wrapper_key = NULL): void {
     foreach ($default_options as $option => $default) {
       if ($wrapper_key) {
         $value = $form_state->getValue(['options', $wrapper_key, $option]);

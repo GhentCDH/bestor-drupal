@@ -15,12 +15,24 @@ class RnFieldDeleteController extends ControllerBase {
     protected RelationBundleSettingsManager $settingsManager;
     protected FieldConfigUiUpdater $uiUpdater;
 
+
+    /**
+     * Constructs a RnFieldDeleteController object.
+     *
+     * @param RelationBundleSettingsManager $settingsManager
+     *   The settings manager service.
+     * @param FieldConfigUiUpdater $uiUpdater
+     *   The UI updater service.
+     */
     public function __construct(RelationBundleSettingsManager $settingsManager, FieldConfigUiUpdater $uiUpdater) {
         $this->settingsManager = $settingsManager;
         $this->uiUpdater = $uiUpdater;
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public static function create(ContainerInterface $container): self {
         return new static(
             $container->get('relationship_nodes.relation_bundle_settings_manager'),
@@ -29,6 +41,15 @@ class RnFieldDeleteController extends ControllerBase {
     }
 
     
+    /**
+     * Deletes a field configuration.
+     *
+     * @param FieldConfig $field_config
+     *   The field configuration entity.
+     *
+     * @return RedirectResponse
+     *   Redirect response to the field list.
+     */
     public function delete(FieldConfig $field_config):RedirectResponse {
         $rn_field = (bool) $field_config->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
         $relation_entity = $this->settingsManager->isRelationEntity($field_config->getTargetBundle());

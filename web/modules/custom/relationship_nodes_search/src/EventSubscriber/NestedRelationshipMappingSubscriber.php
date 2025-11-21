@@ -10,7 +10,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscriber for Elasticsearch nested relationship field mapping.
  *
- * Configures Elasticsearch to use 'nested' type for relationship fields.
+ * Configures Elasticsearch to use 'nested' type for relationship fields,
+ * enabling nested object queries and aggregations on relationship data.
  */
 class NestedRelationshipMappingSubscriber implements EventSubscriberInterface {
 
@@ -32,9 +33,11 @@ class NestedRelationshipMappingSubscriber implements EventSubscriberInterface {
    *   The supports data type event.
    */
   public function onSupportsDataType(SupportsDataTypeEvent $event): void {
-    if ($event->getType() === 'relationship_nodes_search_nested_relationship') {
-      $event->setIsSupported(TRUE);
+    if ($event->getType() !== 'relationship_nodes_search_nested_relationship') {
+      return;
     }
+
+    $event->setIsSupported(TRUE);
   }
 
 
@@ -51,8 +54,10 @@ class NestedRelationshipMappingSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    // Map to Elasticsearch nested type for relationship data.
+    // Properties are automatically mapped from nested field configuration.
     $event->setParam([
       'type' => 'nested',
-    ]);  
+    ]);
   }
 }

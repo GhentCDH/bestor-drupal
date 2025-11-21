@@ -4,8 +4,9 @@ relationship_form:
     js/relationship_form.js: {}
   dependencies:
     - core/drupal
+    - core/once
 vocab_confirm:
-  version: 1.0
+  version: VERSION
   js:
     js/vocab_confirm.js: {}
   dependencies:

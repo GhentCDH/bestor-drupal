@@ -22,13 +22,27 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
-  protected EntityTypeManagerInterface $entityTypeManager; 
+  protected EntityTypeManagerInterface $entityTypeManager;
   protected CacheTagsInvalidatorInterface $cacheTagsInvalidator;
-  protected LoggerChannelFactoryInterface $loggerFactory; 
+  protected LoggerChannelFactoryInterface $loggerFactory;
   protected RelationBundleSettingsManager $settingsManager;
   protected RelationNodeInfoService $nodeInfoService;
 
 
+  /**
+   * Constructs a ReindexTargetsOnRelationUpdate object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param CacheTagsInvalidatorInterface $cacheTagsInvalidator
+   *   The cache tags invalidator.
+   * @param LoggerChannelFactoryInterface $loggerFactory
+   *   The logger factory.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The relation bundle settings manager.
+   * @param RelationNodeInfoService $nodeInfoService
+   *   The relation node info service.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     CacheTagsInvalidatorInterface $cacheTagsInvalidator,
@@ -69,64 +83,63 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
    *   The event name (INSERT, UPDATE, or PREDELETE).
    */
   public function trackRelatedEntitiesForReindexing(EntityEvent $event, string $event_name): void {
-    
-    // Only process if the entity is a recognized relation node type.
+    // Only process if entity is a recognized relation node type.
     $entity = $event->getEntity();
     if (!$entity instanceof Node || !$this->settingsManager->isRelationNodeType($entity->bundle())) {
-        return;
+      return;
     }
 
     // Get the currently related entity IDs from this relation node.
-    $field_values = $this->nodeInfoService->getRelatedEntityValues($entity);
+    $related_entity_values = $this->nodeInfoService->getRelatedEntityValues($entity);
 
-    // Prepare array to hold all IDs (old + new) for reindexing.
+    // Collect IDs from both old and new entity references for reindexing.
     $all_ids = [];
 
     // If this is an UPDATE event, include IDs from the original entity as well.
     if ($event_name === EntityEventType::UPDATE && property_exists($entity, 'original')) {
-        $old_values = $this->nodeInfoService->getRelatedEntityValues($entity->original) ?? [];
-        foreach ($old_values as $ids) {
-            if (!empty($ids) && is_array($ids)) {
-                $all_ids = array_merge($all_ids, $ids);
-            }
+      $old_values = $this->nodeInfoService->getRelatedEntityValues($entity->original) ?? [];
+      foreach ($old_values as $ids) {
+        if (!empty($ids) && is_array($ids)) {
+          $all_ids = array_merge($all_ids, $ids);
         }
+      }
     }
 
     // Merge the new/current related IDs.
-    if (!empty($field_values)) {
-        foreach ($field_values as $ids) {
-            if (!empty($ids) && is_array($ids)) {
-                $all_ids = array_merge($all_ids, $ids);
-            }
+    if (!empty($related_entity_values)) {
+      foreach ($related_entity_values as $ids) {
+        if (!empty($ids) && is_array($ids)) {
+          $all_ids = array_merge($all_ids, $ids);
         }
+      }
     }
 
     // Remove duplicates and ensure we have IDs to reindex.
     $unique_ids = array_unique($all_ids);
     if (empty($unique_ids)) {
-        return;
+      return;
     }
 
     $node_storage = $this->entityTypeManager->getStorage('node');
     $target_nodes = $node_storage->loadMultiple($unique_ids);
 
-    //Search api ids, are strings of the format nid:lang_code (eg '101:en')
+    // Search API IDs are strings in the format "nid:langcode" (e.g., "101:en").
     $sapi_ids = [];
-    foreach($target_nodes as $nid => $target_node){
-      //Get the languages that are available for a specific target node
+    foreach ($target_nodes as $nid => $target_node) {
+      // Get the languages that are available for a specific target node.
       $node_languages = array_keys($target_node->getTranslationLanguages());
-      foreach($node_languages as $language_code){
+      foreach ($node_languages as $language_code) {
         $sapi_ids[] = $nid . ':' . $language_code;
       }
-    }  
+    }
 
-    if(empty($sapi_ids)){
+    if (empty($sapi_ids)) {
       return;
     }
 
     $this->trackItemsInIndexes($sapi_ids);
-    
-    // Invalidate cache for this specific relation bundle
+
+    // Invalidate cache for this specific relation bundle.
     $relation_bundle = $entity->bundle();
     $this->invalidateRelationshipCache($relation_bundle, $unique_ids);
     $this->logReindexOperation($event_name, $entity->id(), $relation_bundle, count($sapi_ids));

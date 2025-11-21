@@ -60,7 +60,7 @@ function relationship_nodes_requirements($phase) {
 /**
  * Implements hook_uninstall().
  */
-function relationship_nodes_uninstall($is_syncing){
+function relationship_nodes_uninstall($is_syncing) {
     $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
-    $cleanupService->removeModuleSettings(); //Potentially, a lot of entity types need to be saved, which can take a while.
+    $cleanupService->removeModuleSettings(); // Potentially, a lot of entity types need to be saved, which can take a while.
 }

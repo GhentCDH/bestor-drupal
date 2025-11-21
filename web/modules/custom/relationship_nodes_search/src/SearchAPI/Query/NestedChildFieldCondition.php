@@ -13,8 +13,8 @@ use Drupal\search_api\Query\Condition;
  */
 class NestedChildFieldCondition extends Condition {
 
-  protected ?string $parentFieldName = null;
-  protected ?string $childFieldName = null;
+  protected ?string $parentFieldName = NULL;
+  protected ?string $childFieldName = NULL;
   
 
   /**

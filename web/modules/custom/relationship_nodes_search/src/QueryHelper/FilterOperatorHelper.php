@@ -62,22 +62,54 @@ class FilterOperatorHelper {
   }
 
 
-    /**
-     * Validate and sanitize an operator value.
-     * 
-     * Returns the operator if valid, otherwise returns the default operator.
-     *
-     * @param string|null $operator
-     *   The operator to validate.
-     *
-     * @return string
-     *   The validated operator or default.
-     */
-    public function sanitizeOperator(?string $operator): string {
-        if (empty($operator)) {
-            return $this->getDefaultOperator();
-        }
-        
-        return $this->isValidOperator($operator) ? $operator : $this->getDefaultOperator();
+  /**
+   * Determines the operator for a field condition from config and form values.
+   *
+   * Checks if the operator should come from exposed form input or from
+   * the field configuration, then sanitizes it.
+   *
+   * @param array $field_config
+   *   The field configuration array.
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param array $form_values
+   *   The form values array (typically $this->value from the filter).
+   *
+   * @return string
+   *   The sanitized operator.
+   */
+  public function determineFieldOperator(array $field_config, string $child_fld_nm, array $form_values): string {
+    // First check exposed form value
+    if (!empty($field_config['expose_field_operator']) && isset($form_values[$child_fld_nm]['operator'])) {
+      return $this->sanitizeOperator($form_values[$child_fld_nm]['operator']);
     }
+    
+    // Fall back to configured operator
+    if (!empty($field_config['field_operator'])) {
+      return $this->sanitizeOperator($field_config['field_operator']);
+    }
+    
+    // Return default if no operator configured
+    return $this->getDefaultOperator();
+  }
+
+
+  /**
+   * Validate and sanitize an operator value.
+   * 
+   * Returns the operator if valid, otherwise returns the default operator.
+   *
+   * @param string|null $operator
+   *   The operator to validate.
+   *
+   * @return string
+   *   The validated operator or default.
+   */
+  public function sanitizeOperator(?string $operator): string {
+    if (empty($operator)) {
+      return $this->getDefaultOperator();
+    }
+    
+    return $this->isValidOperator($operator) ? $operator : $this->getDefaultOperator();
+  }
 }

@@ -25,6 +25,9 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
   protected CalculatedFieldHelper $calculatedFieldHelper;
   
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->fieldNameResolver = $container->get('relationship_nodes.field_name_resolver');
@@ -40,17 +43,18 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
    * and adds custom checkbox/button UI for relationship field selection.
    */
   protected function getPropertiesList(array $props, string $active_prop_path, $base_url, ?string $datasource_id, string $parent_path = '', string $label_prefix = '', int $depth = 0, array $rows = []): array {
-    if($depth > 0 && str_starts_with($parent_path, 'relationship_info__')){
-      $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(null, null, TRUE);
-      if(!empty($calc_fld_nms)){
-        foreach($props as $prop_nm => $def){
-          if(in_array($prop_nm, $calc_fld_nms)){
+    // Filter out calculated fields from nested relationship properties.
+    if ($depth > 0 && str_starts_with($parent_path, 'relationship_info__')) {
+      $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(NULL, NULL, TRUE);
+      if (!empty($calc_fld_nms)) {
+        foreach ($props as $prop_nm => $def) {
+          if (in_array($prop_nm, $calc_fld_nms)) {
             unset($props[$prop_nm]);
           }
         }
       }    
     }
-    $rows = parent::getPropertiesList($props, $active_prop_path, $base_url, $datasource_id, $parent_path, $label_prefix, $depth, $rows);  
+    $rows = parent::getPropertiesList($props, $active_prop_path, $base_url, $datasource_id, $parent_path, $label_prefix, $depth, $rows);
     $remove_add_button = [];
     $related_entity_flds = $this->fieldNameResolver->getRelatedEntityFields();
     foreach ($rows as $key => &$row) {
@@ -60,7 +64,7 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
       }
      
       if (substr_count($machine_name, ':') === 0) {
-         $this->addFieldButtons[] = [
+        $this->addFieldButtons[] = [
           '#type' => 'submit',
           '#name' => Utility::createCombinedId($datasource_id, $machine_name),
           '#value' => $this->t('Add'),
@@ -73,11 +77,10 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
           '#ajax' => [
             'wrapper' => $this->formIdAttribute,
           ],
-          '#property' => isset($props[$machine_name])? $props[$machine_name] : null ,
+          '#property' => isset($props[$machine_name]) ? $props[$machine_name] : NULL,
           '#row_key' => $key,
           '#datasource_key' => 'datasource_entity:node'
         ];
-
       } else {
         [$sapi_fld_nm, $child_fld_nm] = explode(':', substr($machine_name, strlen('relationship_info__')), 2);
 
@@ -99,13 +102,13 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
       }    
     }
 
-    if(!empty($remove_add_button)){
+    if (!empty($remove_add_button)) {
       foreach($this->addFieldButtons as $i => $add_button){
-        if(in_array($add_button['#row_key'], $remove_add_button)){
+        if (in_array($add_button['#row_key'], $remove_add_button)) {
           unset($this->addFieldButtons[$i]);
           $remove_add_button = array_diff($remove_add_button, [$i]);
         }
-        if(empty($remove_add_button)){
+        if (empty($remove_add_button)) {
           break;
         }
       }
@@ -143,7 +146,7 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
     }
 
     $prop = $button['#property'];
-    $row_key = $button['#row_key'] ?? null;
+    $row_key = $button['#row_key'] ?? NULL;
     [$datasource_id, $prop_path] = Utility::splitCombinedId($button['#name']);
 
     if (!$prop_path) {
@@ -154,37 +157,40 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
 
     $nested_props = [];
 
+    // Collect pre-checked child fields from form structure.
     $i = $row_key + 1;
-
-    while(strtok($all_table_rows[$i]['machine_name']['data'], ':') == $prop_path && isset($all_table_rows[$i]['relation_property'])){
+    while (strtok($all_table_rows[$i]['machine_name']['data'], ':') == $prop_path && isset($all_table_rows[$i]['relation_property'])) {
       $is_checked = $all_table_rows[$i]['relation_property']['data']['#attributes']['checked'] ?? NULL;
-      if($is_checked === 'checked'){
+      if ($is_checked === 'checked') {
         $nested_props[] = str_replace( $prop_path . ':', '', $all_table_rows[$i]['machine_name']['data']);
       }     
       $i++;
     }
 
+    // Collect user-selected child fields from form input.
     $all_user_input = $form_state->getUserInput();
     $fld_prefix = 'relationship_nested_' . str_replace(':', '__', $prop_path) . '__';
 
     foreach ($all_user_input as $input_field => $user_input) {
-      if(str_starts_with($input_field, $fld_prefix) && $user_input == 1){
+      if (str_starts_with($input_field, $fld_prefix) && $user_input == 1) {
         $child_fld_nm = str_replace($fld_prefix, '', $input_field);
         $nested_props[] = $child_fld_nm;
       }   
     }
     
-    if(empty($nested_props)){
+    if (empty($nested_props)) {
       return;
     }
 
+    // Build nested field configuration.
     $child_fld_config = $prop->buildNestedFieldsConfig(array_unique($nested_props));
 
+    // Create Search API field.
     $sapi_fld = $this->fieldsHelper->createFieldFromProperty(
-      $this->entity, 
-      $prop, 
-      $datasource_id, 
-      $prop_path , 
+      $this->entity,
+      $prop,
+      $datasource_id,
+      $prop_path, 
       $prop_path . '__nested', 'relationship_nodes_search_nested_relationship'
     );
 

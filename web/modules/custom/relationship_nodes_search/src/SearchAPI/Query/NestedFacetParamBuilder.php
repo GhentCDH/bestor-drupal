@@ -18,155 +18,155 @@ use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
  */
 class NestedFacetParamBuilder extends FacetParamBuilder {
 
-    protected NestedQueryStructureBuilder $queryBuilder;
-    protected NestedFieldHelper $nestedFieldHelper;
+  protected NestedQueryStructureBuilder $queryBuilder;
+  protected NestedFieldHelper $nestedFieldHelper;
 
 
-    /**
-     * Constructs a NestedFacetParamBuilder object.
-     *
-     * @param LoggerChannelFactoryInterface $logger
-     *   The logger service.
-     * @param NestedQueryStructureBuilder $queryBuilder
-     *   The query structure builder service.
-     * @param NestedFieldHelper $nestedFieldHelper
-     *   The nested field helper service.
-     */
-    public function __construct(
-        LoggerChannelFactoryInterface $logger, 
-        NestedQueryStructureBuilder $queryBuilder,
-        NestedFieldHelper $nestedFieldHelper,
-    ) {
-        parent::__construct($logger);
-        $this->queryBuilder = $queryBuilder;
-        $this->nestedFieldHelper = $nestedFieldHelper;
+  /**
+   * Constructs a NestedFacetParamBuilder object.
+   *
+   * @param LoggerChannelFactoryInterface $logger
+   *   The logger service.
+   * @param NestedQueryStructureBuilder $queryBuilder
+   *   The query structure builder service.
+   * @param NestedFieldHelper $nestedFieldHelper
+   *   The nested field helper service.
+   */
+  public function __construct(
+    LoggerChannelFactoryInterface $logger, 
+    NestedQueryStructureBuilder $queryBuilder,
+    NestedFieldHelper $nestedFieldHelper
+  ) {
+    parent::__construct($logger);
+    $this->queryBuilder = $queryBuilder;
+    $this->nestedFieldHelper = $nestedFieldHelper;
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildFacetParams(QueryInterface $query, array $indexFields, array $facetFilters = []) {
+    $aggs = [];
+    $facets = $query->getOption('search_api_facets', []);
+    if (empty($facets)) {
+      return $aggs;
     }
 
+    $index = $query->getIndex();
+    foreach ($facets as $facet_id => $facet) {
+      $parsed_names = $this->nestedFieldHelper->validateNestedPath($index, $facet_id);
+      $check_field = $parsed_names['parent'] ?? $facet['field'];
+      if (!$this->checkFieldInIndex($indexFields, $check_field)) {
+        continue;
+      }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildFacetParams(QueryInterface $query, array $indexFields, array $facetFilters = []) {
-        $aggs = [];
-        $facets = $query->getOption('search_api_facets', []);
-        if (empty($facets)) {
-            return $aggs;
-        }
+      if (empty($parsed_names['parent'])) {
+        $aggs += $this->buildTermBucketAgg($facet_id, $facet, $facetFilters);
+      } else {
+        $aggs += $this->buildNestedTermBucketAgg($index, $facet_id, $facet, $facetFilters);
+      }
+    }
+    return $aggs;
+  }
 
-        $index = $query->getIndex();
-        foreach ($facets as $facet_id => $facet) {
-            $parsed_names = $this->nestedFieldHelper->validateNestedPath($index, $facet_id);
-            $check_field = $parsed_names['parent'] ?? $facet['field'];
-            if (!$this->checkFieldInIndex($indexFields, $check_field)) {
-                continue;
-            }
 
-            if(empty($parsed_names['parent'])){
-                $aggs += $this->buildTermBucketAgg($facet_id, $facet, $facetFilters);
-            } else {
-                $aggs += $this->buildNestedTermBucketAgg($index, $facet_id, $facet, $facetFilters);
-            }
-        }
-        return $aggs;
+  /**
+   * Checks if a field exists in the index.
+   *
+   * @param array $indexFields
+   *   Array of index fields.
+   * @param string $field_name
+   *   The field name to check.
+   *
+   * @return bool
+   *   TRUE if field exists, FALSE otherwise.
+   */
+  protected function checkFieldInIndex(array $indexFields, string $field_name): bool {
+    if (!isset($indexFields[$field_name])) {
+      $this->loggerFactory->get('relationship_nodes_search')->warning('Unknown facet field: %field', ['%field' => $field_name]);
+      return FALSE;
+    }
+    return TRUE;
+  }
+
+
+  /**
+   * Builds a nested bucket aggregation.
+   *
+   * Creates an Elasticsearch nested aggregation for fields within nested objects.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $facet_id
+   *   The facet identifier.
+   * @param array $facet
+   *   The facet configuration.
+   * @param array $postFilters
+   *   Post-filters for facet interaction.
+   *
+   * @return array
+   *   The nested aggregation structure.
+   */
+  protected function buildNestedTermBucketAgg(Index $index, string $facet_id, array $facet, array $postFilters): array {
+    return $this->queryBuilder->buildNestedAggregation(
+      $index, 
+      $facet_id, 
+      $this->getFacetSize($facet), 
+      $this->buildPostFilter($facet_id, $facet, $postFilters)
+    );
+  }
+
+
+  /**
+   * Builds post filter for nested aggregation.
+   *
+   * Post filters allow facets to interact with each other (e.g., when multiple
+   * facets are selected, each facet's counts reflect the other selections).
+   *
+   * @param string $facet_id
+   *   The facet identifier.
+   * @param array $facet
+   *   The facet configuration.
+   * @param array $postFilters
+   *   Available post-filters.
+   *
+   * @return array|null
+   *   Combined filter structure, or NULL if no filters apply.
+   */
+  protected function buildPostFilter(string $facet_id, array $facet, array $postFilters): ?array {
+    $filters = [];
+
+    foreach ($postFilters as $filter_facet_id => $filter) {
+      // Skip the current facet if using OR operator
+      // (OR facets should show all options regardless of selection)
+      if ($filter_facet_id == $facet_id && ($facet['operator'] ?? 'and') === 'or') {
+        continue;
+      }
+      $filters[] = $filter;
     }
 
-
-    /**
-     * Checks if a field exists in the index.
-     *
-     * @param array $indexFields
-     *   Array of index fields.
-     * @param string $field_name
-     *   The field name to check.
-     *
-     * @return bool
-     *   TRUE if field exists, FALSE otherwise.
-     */
-    protected function checkFieldInIndex(array $indexFields , string $field_name):bool{
-        if (!isset($indexFields[$field_name])) {
-            $this->loggerFactory->get('relationship_nodes_search')->warning('Unknown facet field: %field', ['%field' => $field_name]);
-            return false;
-        }
-        return true;
+    if (empty($filters)) {
+      return NULL;
     }
 
-
-    /**
-     * Builds a nested bucket aggregation.
-     *
-     * Creates an Elasticsearch nested aggregation for fields within nested objects.
-     *
-     * @param Index $index
-     *   The Search API index.
-     * @param string $facet_id
-     *   The facet identifier.
-     * @param array $facet
-     *   The facet configuration.
-     * @param array $postFilters
-     *   Post-filters for facet interaction.
-     *
-     * @return array
-     *   The nested aggregation structure.
-     */
-    protected function buildNestedTermBucketAgg(Index $index, string $facet_id, array $facet, array $postFilters): array {
-        return $this->queryBuilder->buildNestedAggregation(
-            $index, 
-            $facet_id, 
-            $this->getFacetSize($facet), 
-            $this->buildPostFilter($facet_id, $facet, $postFilters)
-        );
-    }
+    $conjunction = ($facet['operator'] ?? 'and') === 'or' ? 'OR' : 'AND';
+    return $this->queryBuilder->combineFilters($filters, $conjunction);
+  }
 
 
-    /**
-     * Builds post filter for nested aggregation.
-     *
-     * Post filters allow facets to interact with each other (e.g., when multiple
-     * facets are selected, each facet's counts reflect the other selections).
-     *
-     * @param string $facet_id
-     *   The facet identifier.
-     * @param array $facet
-     *   The facet configuration.
-     * @param array $postFilters
-     *   Available post-filters.
-     *
-     * @return array|null
-     *   Combined filter structure, or NULL if no filters apply.
-     */
-    protected function buildPostFilter(string $facet_id, array $facet, array $postFilters): ?array {
-        $filters = [];
-
-        foreach ($postFilters as $filter_facet_id => $filter) {
-            // Skip the current facet if using OR operator
-            // (OR facets should show all options regardless of selection)
-            if ($filter_facet_id == $facet_id && ($facet['operator'] ?? 'and') === 'or') {
-                continue;
-            }
-            $filters[] = $filter;
-        }
-
-        if (empty($filters)) {
-            return null;
-        }
-
-        $conjunction = ($facet['operator'] ?? 'and') === 'or' ? 'OR' : 'AND';
-        return $this->queryBuilder->combineFilters($filters, $conjunction);
-    }
-
-
-    /**
-     * Gets the facet size from configuration.
-     *
-     * @param array $facet
-     *   The facet configuration.
-     *
-     * @return int
-     *   The facet size (0 means unlimited).
-     */
-    protected function getFacetSize(array $facet): int {
-        $size = $facet['limit'] ?? self::DEFAULT_FACET_SIZE;
-        return $size === 0 ? self::UNLIMITED_FACET_SIZE : $size;
-    }
+  /**
+   * Gets the facet size from configuration.
+   *
+   * @param array $facet
+   *   The facet configuration.
+   *
+   * @return int
+   *   The facet size (0 means unlimited).
+   */
+  protected function getFacetSize(array $facet): int {
+    $size = $facet['limit'] ?? self::DEFAULT_FACET_SIZE;
+    return $size === 0 ? self::UNLIMITED_FACET_SIZE : $size;
+  }
 
 }

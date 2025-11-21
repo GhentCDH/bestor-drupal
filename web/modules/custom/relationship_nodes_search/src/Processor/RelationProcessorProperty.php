@@ -53,7 +53,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   /**
    * {@inheritdoc}
    */
-  public function getPropertyDefinitions():array {
+  public function getPropertyDefinitions(): array {
     if ($this->propertyDefinitions !== NULL) {
       return $this->propertyDefinitions;
     }
@@ -113,7 +113,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   /**
    * {@inheritdoc}
    */
-  public function getPropertyDefinition($name):?DataDefinitionInterface {
+  public function getPropertyDefinition($name): ?DataDefinitionInterface {
     $definitions = $this->getPropertyDefinitions();
     return $definitions[$name] ?? NULL;
   }
@@ -122,7 +122,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   /**
    * {@inheritdoc}
    */
-  public function getMainPropertyName():?string {
+  public function getMainPropertyName(): ?string {
     return NULL;
   }
 
@@ -130,7 +130,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   /**
    * {@inheritdoc}
    */
-  public function getProcessorId():?string {
+  public function getProcessorId(): ?string {
     return $this->definition['processor_id'] ?? NULL;
   }
 
@@ -141,7 +141,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
    * @return string|null
    *   The bundle machine name, or NULL if not set.
    */
-  public function getBundle():?string {
+  public function getBundle(): ?string {
     return $this->definition['definition_class_settings']['bundle'] ?? NULL;
   }
 
@@ -149,7 +149,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
   /**
    * {@inheritdoc}
    */
-  public function getDataType():string {
+  public function getDataType(): string {
     return 'string';
   }
 
@@ -185,7 +185,8 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
    *   The field name.
    *
    * @return array|null
-   *   Field information array, or NULL if not found.
+   *   Field information array containing machine_name, type, and optionally
+   *   target_type for entity references, or NULL if not found.
    */
   public function getDrupalFieldInfo(string $field_name): ?array {
     if ($this->drupalFieldInfo === NULL) {
@@ -222,21 +223,27 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
    */
   public function getDrupalFieldTargetType(string $field_name): ?string {
     if (!$this->drupalFieldIsReference($field_name)) {
-        return null;
+        return NULL;
     }  
     $field_info = $this->getDrupalFieldInfo($field_name);  
-    return $field_info['target_type'] ?? null;
+    return $field_info['target_type'] ?? NULL;
   } 
 
 
   /**
    * Builds nested fields configuration for selected fields.
    *
+   * Creates configuration array with type, label, and Drupal field info
+   * for each selected field. Automatically includes calculated fields.
+   *
    * @param array $selected_fields
    *   Array of selected field names.
    *
    * @return array
-   *   Configuration array for nested fields.
+   *   Configuration array for nested fields with structure:
+   *   - type: Search API data type
+   *   - label: Field label
+   *   - drupal_field: Array with machine_name, type, and optionally target_type
    */
   public function buildNestedFieldsConfig(array $selected_fields): array {
     if ($this->calculatedFieldNames === NULL) {
@@ -268,6 +275,9 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
 
   /**
    * Adds calculated field definitions to property definitions.
+   *
+   * Creates property definitions for all calculated fields with appropriate
+   * settings (hidden, readonly, is_calculated).
    */
   protected function addCalculatedFieldDefinitions(): void {
 
@@ -324,6 +334,9 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
 
   /**
    * Converts a value to string safely.
+   *
+   * Handles TranslatableMarkup objects and other types that may have
+   * __toString() methods.
    *
    * @param mixed $value
    *   The value to convert.

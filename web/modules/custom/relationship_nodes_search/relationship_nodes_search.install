@@ -15,11 +15,11 @@ function relationship_nodes_search_uninstall() {
     
     foreach ($views as $view) {
         // Skip views provided by this module (they'll be deleted automatically)
-        if ($view->status() && strpos($view->getConfigDependencyName(), 'relationship_nodes_search') !== false) {
+        if ($view->status() && strpos($view->getConfigDependencyName(), 'relationship_nodes_search') !== FALSE) {
             continue;
         }
         
-        $changed = false;
+        $changed = FALSE;
         $displays = $view->get('display');
         
         foreach ($displays as $display_id => &$display) {
@@ -28,7 +28,7 @@ function relationship_nodes_search_uninstall() {
                 foreach ($display['display_options']['fields'] as $field_id => $field) {
                     if (($field['plugin_id'] ?? '') === 'search_api_relationship_field') {
                         unset($display['display_options']['fields'][$field_id]);
-                        $changed = true;
+                        $changed = TRUE;
                     }
                 }
             }
@@ -38,7 +38,7 @@ function relationship_nodes_search_uninstall() {
                 foreach ($display['display_options']['filters'] as $filter_id => $filter) {
                     if (($filter['plugin_id'] ?? '') === 'search_api_relationship_filter') {
                         unset($display['display_options']['filters'][$filter_id]);
-                        $changed = true;
+                        $changed = TRUE;
                     }
                 }
             }

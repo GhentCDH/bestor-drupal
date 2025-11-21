@@ -407,7 +407,7 @@ class RelationValidationService {
     }
 
 
-    public function displayCimFieldDependencieValidationErrors(string $config_name, ConfigImporterEvent $event, StorageInterface $storage): void {
+    public function displayCimFieldDependenciesValidationErrors(string $config_name, ConfigImporterEvent $event, StorageInterface $storage): void {
 
         $errors = $this->validateCimFieldDependencies($config_name, $storage);
 

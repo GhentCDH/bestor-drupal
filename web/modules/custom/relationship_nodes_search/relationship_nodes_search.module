@@ -10,7 +10,7 @@ use Drupal\relationship_nodes_search\Form\ExtendedIndexAddFieldsForm;
 
 /**
  * Implements hook_module_implements_alter().
- * 
+ *
  * Ensures the search_api_query_alter runs last to properly handle nested queries.
  */
 function relationship_nodes_search_module_implements_alter(&$implementations, $hook) {

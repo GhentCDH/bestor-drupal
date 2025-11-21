@@ -60,7 +60,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     }
     foreach ($this->getDeletedFieldsToValidate($storage_comparer) as $field_config_name) {   
       //Prevent the deletion of fields used by the module
-      $this->validationService->displayCimFieldDependencieValidationErrors($field_config_name, $event, $source_storage);
+      $this->validationService->displayCimFieldDependenciesValidationErrors($field_config_name, $event, $source_storage);
     }
   }
 
@@ -86,24 +86,24 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
       $target_extensions = $target_storage->read('core.extension');
 
 
-      if(isset($source_extensions['module']['relationship_nodes']) && !isset($target_extensions['module']['relationship_nodes'])){
+      if (isset($source_extensions['module']['relationship_nodes']) && !isset($target_extensions['module']['relationship_nodes'])) {
        return 'disabling';
       }
-      if(!isset($source_extensions['module']['relationship_nodes']) && isset($target_extensions['module']['relationship_nodes'])){
+      if (!isset($source_extensions['module']['relationship_nodes']) && isset($target_extensions['module']['relationship_nodes'])) {
         return 'enabling';
       }
-      return null;
+      return NULL;
   }
 
 
-   protected function getUpdatedBundleConfigsToValidate(StorageComparerInterface $storage_comparer):array{
+   protected function getUpdatedBundleConfigsToValidate(StorageComparerInterface $storage_comparer): array {
     $result = [];
     $operations = ['create', 'update'];
     foreach ($storage_comparer->getAllCollectionNames() as $collection) {
       foreach ($operations as $op) {
         $change_list = $storage_comparer->getChangelist($op, $collection) ?? [];
         foreach ($change_list as $config_name) {
-          if(str_starts_with($config_name, 'taxonomy.vocabulary.') || str_starts_with($config_name, 'node.type.')){
+          if (str_starts_with($config_name, 'taxonomy.vocabulary.') || str_starts_with($config_name, 'node.type.')) {
             $result[] = $config_name;
           }
         }
@@ -112,13 +112,13 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     return $result;
    }
 
-  protected function getUpdatedRelationBundleConfigs(StorageComparerInterface $storage_comparer):array{
+  protected function getUpdatedRelationBundleConfigs(StorageComparerInterface $storage_comparer): array {
     $result = [];
     $all_updated_bundles = $this->getUpdatedBundleConfigsToValidate($storage_comparer);
     $source_storage = $storage_comparer->getSourceStorage();
     foreach ($all_updated_bundles as $bundle_config_name) {
       $config_data = $source_storage->read($bundle_config_name);
-      if($config_data && $this->settingsManager->isCimRelationEntity($config_data)){
+      if ($config_data && $this->settingsManager->isCimRelationEntity($config_data)) {
         $result[$bundle_config_name] = $config_data;
       }        
     }
@@ -128,15 +128,15 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   protected function fromConfigToEntities(array $config_list){
     $load = ['node_type' => [], 'taxonomy_vocabulary' => [],];
     $result = [];
-    foreach($config_list as $config_name => $config_data){
+    foreach ($config_list as $config_name => $config_data) {
       $class_names = $this->settingsManager->getConfigFileEntityClasses($config_name);
       $entity_type = $class_names['entity_type_id'];
-      if(isset($load[$entity_type])){
+      if (isset($load[$entity_type])) {
         $load[$entity_type][] = $class_names['bundle'];
       }
     }
-    foreach($load as $entity_type => $entities){
-      if(empty($entities)){
+    foreach ($load as $entity_type => $entities){
+      if (empty($entities)) {
         continue;
       }
       $entity_list = $this->entityTypeManager->getStorage($entity_type)->loadMultiple($entities);
@@ -145,12 +145,12 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     return $result;
   }
 
-  protected function getDeletedFieldsToValidate(StorageComparerInterface $storage_comparer):array{
+  protected function getDeletedFieldsToValidate(StorageComparerInterface $storage_comparer): array {
     $result = [];
     foreach ($storage_comparer->getAllCollectionNames() as $collection) {
       $change_list = $storage_comparer->getChangelist('delete', $collection) ?? [];
       foreach ($change_list as $config_name) {
-        if(
+        if (
           str_starts_with($config_name, 'field.storage.taxonomy_term.') || 
           str_starts_with($config_name, 'field.storage.node.') || 
           str_starts_with($config_name, 'field.field.taxonomy_term') ||

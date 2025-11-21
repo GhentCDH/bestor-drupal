@@ -6,11 +6,12 @@ use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsConfiguratorBase;
 
 /**
  * Configuration form builder for Views field display.
  */
-class NestedFieldViewsFieldConfigurator extends NestedFieldViews\ConfiguratorBase {
+class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase {
 
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
 
