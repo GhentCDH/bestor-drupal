@@ -19,6 +19,7 @@
     border: 1px solid var(--color-dark);
     padding: functions.rem(88.5px) functions.rem(20px) functions.rem(40px);
     position: relative;
+    border-top-left-radius: functions.rem(20px);
 
     &::after {
       content: "";

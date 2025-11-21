@@ -1,0 +1,23 @@
+{# c-info-box.story.twig #}
+{% set title %}
+  About Bestor
+{% endset %}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/466/300" width="466" height="300" alt="Test image">
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+{% endset %}
+{% set link %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: 'More about us',
+  }, with_context = false) }}
+{% endset %}
+{{ include('jakarta:c-info-box', {
+  title,
+  media,
+  text,
+}) }}

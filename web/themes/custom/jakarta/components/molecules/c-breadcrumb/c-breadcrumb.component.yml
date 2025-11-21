@@ -1,0 +1,14 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Breadcrumb'
+status: stable
+group: Molecules
+description: "A component that displays a breadcrumb."
+props:
+  type: object
+  properties:
+    c_breadcrumb_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'

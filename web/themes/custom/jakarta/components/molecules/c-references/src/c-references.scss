@@ -14,10 +14,6 @@
   #{$self}__title,
   #{$self}__references {
     @include mixins.grid-item(4);
-
-    // @media screen and (min-width: variables.$breakpoints-tablet) {
-    //   @include mixins.grid-item(5);
-    // }
   }
 
   #{$self}__title {

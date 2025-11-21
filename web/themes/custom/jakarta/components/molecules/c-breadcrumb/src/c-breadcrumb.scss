@@ -1,0 +1,15 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-breadcrumb {
+  $self: &;
+
+  font-size: functions.rem(14px);
+
+  #{$self}__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: functions.rem(5px);
+  }
+}

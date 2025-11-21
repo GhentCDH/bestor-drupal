@@ -5,6 +5,90 @@
 .c-page-intro {
   $self: &;
 
-  #{$self}__wrapper {
+  padding: functions.rem(50px) functions.rem(20px) 0;
+
+  #{$self}__inner {
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-item(10);
+      @include mixins.grid-item-start(2);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(22);
+      @include mixins.grid-item-start(2);
+    }
+  }
+
+  #{$self}__breadcrumb {
+    margin-block-end: functions.rem(40px);
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      margin-block-end: functions.rem(80px);
+    }
+  }
+
+  #{$self}__title {
+    h1 {
+      margin-block-end: 0;
+    }
+  }
+
+  #{$self}__lemma-wrapper {
+    margin-block-start: functions.rem(10px);
+    display: flex;
+    flex-direction: column;
+    gap: functions.rem(5px);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  #{$self}__meta {
+    font-size: clamp(calc(var(--font-h3-size) * 0.75), 3vw, var(--font-h3-size));
+    font-family: var(--font-family-title);
+    line-height: 1.25;
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      margin-inline-end: auto;
+    }
+  }
+
+  #{$self}__share {
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      margin-inline-start: functions.rem(30px);
+    }
+  }
+
+  &--search {
+    #{$self}__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+
+      @media screen and (min-width: variables.$breakpoints-tablet) {
+        flex-wrap: wrap;
+        flex-direction: row;
+      }
+    }
+
+    #{$self}__breadcrumb {
+      width: 100%;
+    }
+
+    #{$self}__search {
+      margin-block-start: functions.rem(10px);
+
+      @media screen and (min-width: variables.$breakpoints-tablet) {
+        margin-block-start: 0;
+      }
+    }
+  }
+
+  @media screen and (min-width: variables.$breakpoints-tablet) {
+    @include mixins.grid-wrapper(0);
+    padding-inline: 0;
   }
 }

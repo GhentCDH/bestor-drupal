@@ -7,18 +7,7 @@
  * - breadcrumb: Breadcrumb trail items.
  */
 #}
+
 {% if breadcrumb %}
-  <nav class="breadcrumbs" role="navigation" aria-labelledby="system-breadcrumb">
-    <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
-    <ol class="breadcrumbs-list" itemscope itemtype="http://schema.org/BreadcrumbList">
-    {% for key, item in breadcrumb %}
-      <li class="breadcrumbs-list__item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-        <a href="{{ (item.url) ? item.url : path('<current>') }}" itemprop="item">
-          <span class="breadcrumbs-list__item__text" itemprop="name">{{ item.text }}</span>
-        </a>
-        <meta itemprop="position" content="{{ key + 1 }}" />
-      </li>
-    {% endfor %}
-    </ol>
-  </nav>
+  {{ include('jakarta:c-breadcrumb') }}
 {% endif %}
