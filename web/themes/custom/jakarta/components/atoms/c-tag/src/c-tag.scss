@@ -26,11 +26,12 @@
   }
 }
 
+// CORNER UP.
 .c-tag--corner-up {
   .c-tag__content {
     z-index: 1;
     padding: functions.rem(9px) functions.rem(5px) functions.rem(3px) functions.rem(18px);
-    font-size: clamp(var(--font-h4-size), 1.6vw, 19px);
+    font-size: var(--font-h4-size);
     font-weight: var(--font-weight-medium);
     line-height: 1.25;
   }
