@@ -7,14 +7,13 @@
 }
 
 .c-page-overlay {
-  font-size: functions.rem(20px);
-  background: var(--color-light);
+  // background: var(--color-light);
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  padding: var(--grid-offset);
+  padding: functions.rem(70px) var(--grid-offset-mobile) functions.rem(30px);
   overflow: auto;
   z-index: 25;
   clip-path: inset(0% 0% 100% 0%);
@@ -26,6 +25,32 @@
 
   @media screen and (min-width: variables.$breakpoints-menu-switch) {
     display: none;
+  }
+
+  .menu--main {
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: functions.rem(10px);
+
+      a {
+        font-size: functions.rem(20px);
+      }
+    }
+  }
+
+  .block-language {
+    margin-top: functions.rem(40px);
+
+    .links {
+      display: flex;
+      gap: functions.rem(10px);
+
+      .is-active {
+        text-decoration: underline;
+        text-underline-offset: functions.rem(4px);
+      }
+    }
   }
 
   // ul.menu {
