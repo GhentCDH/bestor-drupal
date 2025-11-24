@@ -6,7 +6,6 @@ namespace Drupal\relationship_nodes_search\Plugin\search_api\processor;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\relationship_nodes_search\Processor\RelationProcessorProperty;
 use Drupal\search_api\Datasource\DatasourceInterface;
-use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\Core\Entity\EntityInterface;
