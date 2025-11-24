@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Template for the component c-identity-kit-item.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-identity-kit-item' %}
+{% set custom_component_classes = c_info_banner_utility_classes %}
+
+{% block component_content %}
+  {% if title %}
+    <div class="{{ component_name }}__title">
+      {{ include('jakarta:c-heading', {
+        content: title,
+        heading_tag: 'h4',
+        heading_class: 'h4',
+      }, with_context = false) }}
+    </div>
+  {% endif %}
+  {% if values %}
+    <div class="{{ component_name }}__values">
+      {{ values }}
+    </div>
+  {% endif %}
+{% endblock %}
