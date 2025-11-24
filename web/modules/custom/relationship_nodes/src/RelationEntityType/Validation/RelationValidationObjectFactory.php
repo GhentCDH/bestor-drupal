@@ -9,6 +9,7 @@ use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 use Drupal\field\Entity\FieldStorageConfig;
 
 
@@ -34,15 +35,19 @@ class RelationValidationObjectFactory {
    *   The field configurator.
    * @param RelationBundleSettingsManager $settingsManager
    *   The settings manager.
+   * @param RelationBundleInfoService $bundleInfoService
+   *   The bundle info service.
    */
   public function __construct(
     FieldNameResolver $fieldNameResolver,
     RelationFieldConfigurator $fieldConfigurator,
     RelationBundleSettingsManager $settingsManager,
+    RelationBundleInfoService $bundleInfoService
   ) {
     $this->fieldNameResolver = $fieldNameResolver;
     $this->fieldConfigurator = $fieldConfigurator;
     $this->settingsManager = $settingsManager;
+    $this->bundleInfoService = $bundleInfoService;
   }
 
 

@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\RelationSettingsCleanUpService;
-use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationService;
+use Drupal\relationship_nodes\RelationEntityType\Validation\ConfigImportValidationService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
@@ -24,7 +24,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   protected EntityTypeManagerInterface $entityTypeManager;
   protected RelationSettingsCleanUpService $cleanupService;  
   protected RelationBundleSettingsManager $settingsManager;
-  protected RelationValidationService $validationService;
+  protected ConfigImportValidationService $cimValidationService;
   protected RelationFieldConfigurator $fieldConfigurator;
 
 
@@ -37,7 +37,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
    *   The cleanup service.
    * @param RelationBundleSettingsManager $settingsManager
    *   The settings manager.
-   * @param RelationValidationService $validationService
+   * @param ConfigImportValidationService $cimValidationService
    *   The validation service.
    * @param RelationFieldConfigurator $fieldConfigurator
    *   The field configurator.
@@ -46,13 +46,13 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     EntityTypeManagerInterface $entityTypeManager,     
     RelationSettingsCleanUpService $cleanupService,
     RelationBundleSettingsManager $settingsManager,
-    RelationValidationService $validationService,
+    ConfigImportValidationService $cimValidationService,
     RelationFieldConfigurator $fieldConfigurator
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->cleanupService = $cleanupService;
     $this->settingsManager = $settingsManager;
-    $this->validationService = $validationService;
+    $this->cimValidationService = $cimValidationService;
     $this->fieldConfigurator = $fieldConfigurator;
   }
 
@@ -82,11 +82,11 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     
     foreach ($this->getUpdatedBundleConfigsToValidate($storage_comparer) as $bundle_config_name) {   
       // Validate all relation node bundles and their linked fields.
-      $this->validationService->displayBundleCimValidationErrors($bundle_config_name, $event, $source_storage);
+      $this->cimValidationService->displayBundleCimValidationErrors($bundle_config_name, $event, $source_storage);
     }
     foreach ($this->getDeletedFieldsToValidate($storage_comparer) as $field_config_name) {   
       // Prevent deletion of fields used by the module.
-      $this->validationService->displayCimFieldDependenciesValidationErrors($field_config_name, $event, $source_storage);
+      $this->cimValidationService->displayCimFieldDependenciesValidationErrors($field_config_name, $event, $source_storage);
     }
   }
 

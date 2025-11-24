@@ -143,11 +143,18 @@ class MirrorTermProvider{
   /**
    * Gets mirror options for select widget.
    *
+   * Transforms term options to show mirror labels instead of original labels.
+   * For example, if term "Parent" has mirror "Child", the option will show
+   * "Child" instead of "Parent" when the field is the second related entity.
+   *
    * @param array $options
-   *   The original options array.
+   *   The original options array in format [term_id => label].
+   *   Example: [1 => 'Parent', 2 => 'Sibling', '_none' => '- None -']
    *
    * @return array
-   *   The mirrored options array.
+   *   The mirrored options array in the same format [term_id => mirror_label].
+   *   Non-numeric keys (like '_none') are preserved with original labels.
+   *   Example: [1 => 'Child', 2 => 'Sibling', '_none' => '- None -']
    */
   public function getMirrorOptions(array $options): array {
     if (empty($options)) {

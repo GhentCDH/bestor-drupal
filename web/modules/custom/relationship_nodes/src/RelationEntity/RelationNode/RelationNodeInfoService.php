@@ -95,18 +95,41 @@ class RelationNodeInfoService {
 
 
   /**
-   * Returns the connection info between a relation node and a target node.
+   * Gets the connection info between a relation node and a target node.
+   * 
+   * Returns information about how a specific relation node connects to a target node,
+   * including which fields create the connection and whether it's valid.
    * 
    * @param Node $relation_node
-   *  The relation node to inspect.
+   *   The relation node to inspect (e.g., "Partnership between X and Y").
    * @param Node|null $target_node
-   *  The target node to check connections against.
+   *   The target node to check connections against (e.g., node "X").
+   *   If NULL, uses the current route parameter.
    *
    * @return array
-   *   Array containing:
-   *     - 'relation_state': 'unrelated', 'related', or error message.
-   *     - 'join_fields': array of fields that connect nodes (if any).
-   *     - 'relation_info': optional additional relation metadata.
+   *   Array with keys:
+   *   - 'relation_state': string
+   *     * 'unrelated': no connection found
+   *     * 'related': valid single connection found
+   *     * 'Error: duplicate relations': multiple conflicting connections found
+   *   - 'join_fields': array of field names that connect the nodes
+   *     Example: ['rn_related_entity_1'] or ['rn_related_entity_1', 'rn_related_entity_2']
+   *   - 'relation_info': array (optional) with relation bundle metadata
+   *     * 'has_relationtype': bool
+   *     * 'vocabulary': string (vocab machine name if typed relation)
+   *   
+   *   Returns empty array if target node is invalid.
+   *   
+   * @example
+   *   // For a "Partnership" relation between Company A (nid:1) and Company B (nid:2)
+   *   // When checking from Company A's perspective:
+   *   $info = $service->getEntityConnectionInfo($partnership_node, $company_a_node);
+   *   // Returns:
+   *   // [
+   *   //   'relation_state' => 'related',
+   *   //   'join_fields' => ['rn_related_entity_1'],
+   *   //   'relation_info' => ['has_relationtype' => TRUE, 'vocabulary' => 'partnership_types']
+   *   // ]
    */
   public function getEntityConnectionInfo(Node $relation_node, ?Node $target_node = NULL): array {
     if (empty($target_node)) {

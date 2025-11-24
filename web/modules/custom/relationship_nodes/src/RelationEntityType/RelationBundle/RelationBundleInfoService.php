@@ -382,16 +382,21 @@ class RelationBundleInfoService {
 
 
   /**
-    * Gets all relation vocabularies from configuration import storage.
-    *
-    * @param StorageInterface $storage
-    *   The configuration storage.
-    * @param string|null $type
-    *   Optional vocabulary type to filter by.
-    *
-    * @return array
-    *   Array of configuration data keyed by config name.
-    */
+   * Gets all relation vocabularies from configuration import storage.
+   *
+   * @param StorageInterface $storage
+   *   The configuration storage to read from (typically sync storage).
+   * @param string|null $type
+   *   Optional vocabulary type to filter by:
+   *   - 'string': vocabularies using string mirror fields
+   *   - 'entity_reference': vocabularies using term reference mirror fields
+   *   - NULL: all relation vocabularies
+   *
+   * @return array
+   *   Array of configuration data arrays keyed by config name.
+   *   Keys are like 'taxonomy.vocabulary.relation_types'.
+   *   Each value is the full config data array with 'third_party_settings', etc.
+   */
   public function getAllCimRelationVocabs(StorageInterface $storage, string $type = null): array {
     $all_vocabs = $this->getAllCimRelationBundles($storage, 'taxonomy_vocabulary') ?? [];
     if ($type === null) {
