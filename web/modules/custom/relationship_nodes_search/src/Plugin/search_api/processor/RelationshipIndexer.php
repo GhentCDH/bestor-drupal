@@ -22,7 +22,7 @@ use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper
 use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\search_api\Entity\Index;
+use Drupal\search_api\IndexInterface;
 
 
 /**

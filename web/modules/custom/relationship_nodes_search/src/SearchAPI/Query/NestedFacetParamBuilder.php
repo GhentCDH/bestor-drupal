@@ -84,7 +84,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
    */
   protected function checkFieldInIndex(array $indexFields, string $field_name): bool {
     if (!isset($indexFields[$field_name])) {
-      $this->loggerFactory->get('relationship_nodes_search')->warning('Unknown facet field: %field', ['%field' => $field_name]);
+      $this->logger->warning('Unknown facet field: %field', ['%field' => $field_name]);
       return FALSE;
     }
     return TRUE;
