@@ -1,0 +1,20 @@
+uuid: f33f3f10-ab5d-430e-af74-d4f1628f6647
+langcode: en
+status: true
+dependencies:
+  module:
+    - language
+  theme:
+    - jakarta
+id: jakarta_languageswitcher_overlay
+theme: jakarta
+region: overlay
+weight: -7
+provider: null
+plugin: 'language_block:language_interface'
+settings:
+  id: 'language_block:language_interface'
+  label: 'Language switcher'
+  label_display: '0'
+  provider: language
+visibility: {  }

@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Template for the component c-input-checkbox.
+ */
+#}
+
+{% set input_checkbox_classes = [
+  'c-input-checkbox',
+]|merge(c_input_checkbox_utility_classes ?: []) %}
+
+<input {{ attributes.addClass(input_checkbox_classes) }}>
+{% block children %}
+  {% if children %}
+    {{ children }}
+  {% endif %}
+{% endblock %}

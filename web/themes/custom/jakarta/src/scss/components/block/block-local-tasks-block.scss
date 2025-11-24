@@ -1,0 +1,14 @@
+@use "./../../mixins";
+@use "./../../functions";
+
+.block-local-tasks-block {
+  position: fixed;
+  right: functions.rem(10px);
+  bottom: functions.rem(10px);
+  z-index: 40;
+
+  ul:not(.contextual-links) {
+    display: flex;
+    column-gap: functions.rem(10px);
+  }
+}

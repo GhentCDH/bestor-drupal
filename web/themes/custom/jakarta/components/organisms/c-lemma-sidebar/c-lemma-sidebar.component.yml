@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Lemma Sidebar'
+status: stable
+group: Organisms
+description: "A component that displays lemma sidebar."
+props:
+  type: object
+  properties:
+    c_page_intro_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  buttons:
+    title: Buttons
+    description: 'The buttons to display.'
+  table_of_contents:
+    title: Table of Contents
+    description: 'The table of contents to display.'
+  related_items:
+    title: Related Items
+    description: 'The related items to display.'

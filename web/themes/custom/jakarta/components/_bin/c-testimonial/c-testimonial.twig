@@ -1,0 +1,32 @@
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-testimonial" %}
+
+{% set classes = [
+  c_name
+] %}
+
+<div {{ attributes.addClass(classes) }} data-animation-trigger>
+  {% if title %}
+    <div class="{{ c_name ~ '__title' }} h-text-align-center" data-animation="fade-in" data-delay="0.2">
+      {{ title }}
+    </div>
+  {% endif %}
+  {% if media %}
+    <div class="{{ c_name ~ '__media' }}">
+      <div data-parallax="1" data-distance="50">
+        {{ media }}
+      </div>
+    </div>
+  {% endif %}
+  {% if text %}
+    <div class="{{ c_name ~ '__text' }} h5" data-animation="fade-in" data-delay="0.6">
+      {{ text }}
+    </div>
+  {% endif %}
+  {% if name %}
+    <div class="{{ c_name ~ '__name' }}" data-animation="fade-in" data-delay="0.8">
+      {{ name }}
+    </div>
+  {% endif %}
+</div>

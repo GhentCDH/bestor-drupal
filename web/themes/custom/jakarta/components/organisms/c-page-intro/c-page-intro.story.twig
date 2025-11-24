@@ -1,0 +1,54 @@
+{# c-page-intro.story.twig #}
+{% set breadcrumb %}
+  {{ drupal_breadcrumb() }}
+{% endset %}
+{% set meta %}
+  <p>Auteur / Naam, Naam</p>
+{% endset %}
+{% set print %}
+  {{ include('jakarta:c-icon-link', {
+    url: '#',
+    icon: 'print',
+    text: 'Print',
+  }, with_context = false) }}
+{% endset %}
+{% set share %}
+  {{ include('jakarta:c-icon-link', {
+    url: '#',
+    icon: 'share',
+    text: 'Share',
+  }, with_context = false) }}
+{% endset %}
+{% set search %}
+  <p>Drupal search form</p>
+{% endset %}
+{# default #}
+<div>
+  {{ include('jakarta:c-page-intro', {
+    breadcrumb,
+    title: 'Publications',
+    attr_variant: 'default',
+  }, with_context = false) }}
+</div>
+
+{# lemma #}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-page-intro', {
+    breadcrumb,
+    title: 'Institution',
+    meta,
+    print,
+    share,
+    attr_variant: 'lemma',
+  }, with_context = false) }}
+</div>
+
+{# search #}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-page-intro', {
+    breadcrumb,
+    title: 'Search',
+    search,
+    attr_variant: 'search',
+  }, with_context = false) }}
+</div>

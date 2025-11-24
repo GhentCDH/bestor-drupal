@@ -1,0 +1,43 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-lines-box {
+  $self: &;
+
+  #{$self}__wrapper {
+    padding-block: functions.rem(60px);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      padding-block: functions.rem(135px);
+    }
+  }
+
+  #{$self}__inner {
+    border: 1px solid var(--color-dark);
+    padding: functions.rem(88.5px) functions.rem(20px) functions.rem(40px);
+    position: relative;
+    border-top-left-radius: functions.rem(20px);
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: functions.rem(-1px);
+      right: functions.rem(-1px);
+      background: url("./c-lines-box-corner.svg");
+      width: functions.rem(177.5px);
+      height: functions.rem(48.5px);
+      display: block;
+    }
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      padding: functions.rem(75px) functions.rem(80px);
+    }
+  }
+
+  #{$self}__lines {
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      margin-block-start: functions.rem(40px);
+    }
+  }
+}

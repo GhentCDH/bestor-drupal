@@ -1,0 +1,22 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Hamburger'
+status: stable
+group: Atoms
+description: "A component that displays a hamburger."
+props:
+  type: object
+  properties:
+    c_hamburger_attributes:
+      type: Drupal\Core\Template\Attribute
+    c_hamburger_wrapper_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes for wrapper.'
+    c_hamburger_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Hamburger utility classes
+      description: 'Additional utility classes.'

@@ -1,0 +1,22 @@
+uuid: 00c40dfa-f32c-4259-ae65-1d77e00f31ea
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - jakarta
+_core:
+  default_config_hash: UwY0mRxOiK3osgwS7m6BBZywbn-Cw7xZ969ygYGKhWA
+id: jakarta_content
+theme: jakarta
+region: content
+weight: -4
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

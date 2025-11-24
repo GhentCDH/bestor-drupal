@@ -1,0 +1,13 @@
+global-styling:
+  version: 1.x
+  css:
+    theme:
+      node_modules/modern-normalize/modern-normalize.css: {}
+      https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap: { external: true }
+      dist/css/style.css: {}
+  js:
+      dist/js/main.js: {}
+  dependencies:
+    - core/once
+    - core/drupal
+    - core/drupalSettings

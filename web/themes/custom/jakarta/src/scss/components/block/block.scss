@@ -1,0 +1,7 @@
+.block {
+  &.block-paragraph-block {
+    & > .contextual {
+      display: none !important;
+    }
+  }
+}

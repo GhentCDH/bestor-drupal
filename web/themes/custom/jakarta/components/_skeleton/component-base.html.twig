@@ -1,0 +1,35 @@
+{# Set component name. #}
+{% set c_name = component_name|default('c-component-base') %}
+
+{# Set component html element. #}
+{% set c_element = component_element|default('div') %}
+
+{# Strip basic elements. #}
+{% set clean_url = url|render|striptags|trim %}
+{% set clean_title = title|render|striptags|trim %}
+
+{# Extend extra librar(y)(ies)#}
+{% block library_extend %}
+{% endblock %}
+
+{% set component_classes = [
+  c_name,
+  variant ? c_name ~ '--' ~ variant|clean_class,
+  component_size ? c_name ~ '--' ~ component_size|render|striptags|trim|clean_class,
+  clean_url ? 'w-link',
+  media|render|striptags('<img><picture>')|trim ? 'w-media-img' : 'no-media',
+  media|render|striptags('<iframe><video>')|trim ? 'w-media-vid',
+] %}
+
+{# Merge custom classes. #}
+{% set classes = component_classes|merge(custom_component_classes ?: []) %}
+
+{% block component %}
+  <{{ c_element }} {{ attributes.addClass(classes) }}>
+    {{ title_prefix }}
+    {{ title_suffix }}
+
+    {% block component_content %}
+    {% endblock %}
+  </{{ c_element }}>
+{% endblock %}

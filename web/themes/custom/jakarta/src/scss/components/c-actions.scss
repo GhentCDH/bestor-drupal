@@ -1,0 +1,21 @@
+@use "./../variables";
+@use "./../functions";
+
+.c-actions {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  column-gap: functions.rem(30px);
+  row-gap: functions.rem(25px);
+}
+
+.c-actions__item {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.h-text-align-center {
+  .c-actions {
+    justify-content: center;
+  }
+}

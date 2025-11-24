@@ -1,66 +1,66 @@
 <?php
-use Drupal\Core\Config\ConfigImporter;
 
+/**
+ * @file
+ * Install, update and uninstall functions for the Relationship Nodes module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
 function relationship_nodes_requirements($phase) {
-    $requirements = [];
-    if ($phase == 'install' || $phase == 'runtime') {
-        try {
-            if (\Drupal::hasService('relationship_nodes.relation_validation_service')) {
-                $bundleValidator = \Drupal::service('relationship_nodes.relation_validation_service');
-                $validation_errors = $bundleValidator->validateAllRelationConfig();
-                if (!empty($validation_errors)) {
-                    $errorFormatter = \Drupal::service('relationship_nodes.validation_error_formatter');
-                    $error_string = $errorFormatter->formatValidationErrors('relationship_nodes', $validation_errors);
-                    $requirements['relationship_nodes_config'] = [
-                        'title' => t('Relationship Nodes Configuration'),
-                        'value' => t('Configuration validation failed'),
-                        'description' => [
-                            '#theme' => 'item_list',
-                            '#title' => t('The following configuration issues must be resolved:'),
-                            '#items' => $error_string,
-                        ],
-                        'severity' => REQUIREMENT_WARNING,
-                    ];
-                } else {
-                    $requirements['relationship_nodes_config'] = [
-                        'title' => t('Relationship Nodes Configuration'),
-                        'value' => t('Configuration validated successfully'),
-                        'severity' => REQUIREMENT_OK,
-                    ];
-                }
-            } else {
-                $requirements['relationship_nodes_config'] = [
-                    'title' => t('Relationship Nodes Configuration'),
-                    'value' => t('Validation service unavailable'),
-                    'description' => t('Configuration validation will be available once the module is fully loaded.'),
-                    'severity' => REQUIREMENT_INFO,
-                ];
-            }
-        } catch (Exception $e) {
-            $requirements['relationship_nodes_config'] = [
-                'title' => t('Relationship Nodes Configuration'),
-                'value' => t('Validation failed'),
-                'description' => t('Error during validation: @error', ['@error' => $e->getMessage()]),
-                'severity' => REQUIREMENT_ERROR,
-            ];
+  $requirements = [];
+  if ($phase == 'install' || $phase == 'runtime') {
+    try {
+      if (\Drupal::hasService('relationship_nodes.relation_validation_service')) {
+        $bundleValidator = \Drupal::service('relationship_nodes.relation_validation_service');
+        $validation_errors = $bundleValidator->validateAllRelationConfig();
+        if (!empty($validation_errors)) {
+          $errorFormatter = \Drupal::service('relationship_nodes.validation_error_formatter');
+          $error_string = $errorFormatter->formatValidationErrors('relationship_nodes', $validation_errors);
+          $requirements['relationship_nodes_config'] = [
+            'title' => t('Relationship Nodes Configuration'),
+            'value' => t('Configuration validation failed'),
+            'description' => [
+              '#theme' => 'item_list',
+              '#title' => t('The following configuration issues must be resolved:'),
+              '#items' => $error_string,
+            ],
+            'severity' => REQUIREMENT_WARNING,
+          ];
+        } else {
+          $requirements['relationship_nodes_config'] = [
+            'title' => t('Relationship Nodes Configuration'),
+            'value' => t('Configuration validated successfully'),
+            'severity' => REQUIREMENT_OK,
+          ];
         }
+      } else {
+        $requirements['relationship_nodes_config'] = [
+          'title' => t('Relationship Nodes Configuration'),
+          'value' => t('Validation service unavailable'),
+          'description' => t('Configuration validation will be available once the module is fully loaded.'),
+          'severity' => REQUIREMENT_INFO,
+        ];
+      }
+    } 
+    catch (\Exception $e) {
+      $requirements['relationship_nodes_config'] = [
+        'title' => t('Relationship Nodes Configuration'),
+        'value' => t('Validation failed'),
+        'description' => t('Error during validation: @error', ['@error' => $e->getMessage()]),
+        'severity' => REQUIREMENT_ERROR,
+      ];
     }
-    return $requirements;
+  }
+  return $requirements;
 }
 
 
-function relationship_nodes_install($is_syncing) {
-
-    print('test install');
-
-    if ($is_syncing) {
-        $installer = \Drupal::service('config.installer');
-    }
-    print ('end install');
-}
-
-
-function relationship_nodes_uninstall($is_syncing){
-    $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
-    $cleanupService->removeModuleSettings(); //Potentially, a lot of entity types need to be saved, which can take a while.
+/**
+ * Implements hook_uninstall().
+ */
+function relationship_nodes_uninstall($is_syncing) {
+  $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
+  $cleanupService->removeModuleSettings(); // Potentially, a lot of entity types need to be saved, which can take a while.
 }

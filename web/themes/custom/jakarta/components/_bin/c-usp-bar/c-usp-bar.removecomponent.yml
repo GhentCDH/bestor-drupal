@@ -1,0 +1,6 @@
+name: USP bar
+props:
+  type: object
+  required:
+    - items
+  properties:

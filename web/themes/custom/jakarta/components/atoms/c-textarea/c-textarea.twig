@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Template for the component c-textarea.
+ */
+#}
+
+{% set textarea_classes = [
+  'c-textarea',
+]|merge(c_textarea_utility_classes ?: []) %}
+
+<textarea {{ attributes.addClass(textarea_classes) }} >{{ value }}</textarea>

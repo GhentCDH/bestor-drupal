@@ -1,0 +1,22 @@
+{# c-lines-box.story.twig #}
+{% set lines %}
+  {{ include('jakarta:c-line', {
+    url: '#',
+    title: 'Lorem ipsum',
+    attr_variant: 'title_only',
+  }, with_context = false) }}
+  {{ include('jakarta:c-line', {
+    url: '#',
+    title: 'Lorem ipsum',
+    attr_variant: 'title_only',
+  }, with_context = false) }}
+  {{ include('jakarta:c-line', {
+    url: '#',
+    title: 'Lorem ipsum',
+    attr_variant: 'title_only',
+  }, with_context = false) }}
+{% endset %}
+{{ include('jakarta:c-lines-box', {
+  title: 'Publications',
+  lines,
+}, with_context = false) }}

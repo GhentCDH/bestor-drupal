@@ -1,0 +1,23 @@
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-usp-bar" %}
+
+{% set classes = [
+  c_name,
+  layout ? c_name ~ '--layout-' ~ layout,
+  items_row ? c_name ~ '--items-row-' ~ items_row,
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  <div class="container h-padding-top-default">
+    <div class="{{ c_name ~ '__wrapper' }}">
+      <div class="{{ c_name ~ '__content' }}">
+        {% if items %}
+          <div class="{{ c_name ~ '__items' }}">
+              {{ items }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

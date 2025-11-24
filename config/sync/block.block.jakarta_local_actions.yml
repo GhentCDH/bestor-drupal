@@ -1,0 +1,20 @@
+uuid: f517c5ce-b010-4c4b-b719-556c706fdbe9
+langcode: en
+status: true
+dependencies:
+  theme:
+    - jakarta
+_core:
+  default_config_hash: Qcu3915PqsvF5a5wJOjSj4ywxWXHhBv2Vaske1S6OWM
+id: jakarta_local_actions
+theme: jakarta
+region: content
+weight: -7
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

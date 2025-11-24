@@ -1,0 +1,1 @@
+((a,g)=>{function i(e){e.parentElement.classList.toggle("is-open")}function n(e){e._$triggers.forEach(t=>{t.addEventListener("click",()=>{i(t)})})}a.behaviors.languagePicker={attach(e){let t=g("trigger","[data-language-picker-toggle]",e);t&&n({_$triggers:t})}}})(Drupal,once);

@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Icon Link'
+status: stable
+group: Molecules
+description: "A component that displays a link with icon."
+props:
+  type: object
+  properties:
+    c_icon_link_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  url:
+    title: Url
+    description: 'The url to display.'
+  icon:
+    title: Icon
+    description: 'The icon to display.'
+  text:
+    title: Text
+    description: 'The text to display.'

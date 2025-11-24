@@ -1,0 +1,21 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Socials'
+status: stable
+group: Molecules
+description: "A component that displays socials."
+props:
+  type: object
+  properties:
+    c_socials_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: Title
+    description: 'The title to display.'
+  social_medias:
+    title: Social Medias
+    description: 'The social medias to display.'

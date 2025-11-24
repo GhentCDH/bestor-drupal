@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Template for the component c-search.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-search' %}
+{% set custom_component_classes = c_search_utility_classes %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__wrapper container">
+    <div class="{{ component_name }}__inner h-bg-color-primary">
+      {% if title %}
+        <div class="{{ component_name }}__title">
+          {{ include('jakarta:c-heading', {
+            content: title,
+            heading_tag: 'h1',
+            heading_class: 'h1',
+          }, with_context = false) }}
+        </div>
+      {% endif %}
+      {% if form %}
+      <div class="{{ component_name }}__form">
+        {{ drupal_entity('block', 'jakarta_exposedformsearchpage_1') }}
+      </div>
+      {% endif %}
+      {% if links %}
+        <div class="{{ component_name }}__links">
+          {{ links }}
+        </div>
+      {% endif %}
+      {% if footnote %}
+        <div class="{{ component_name }}__footnote h-text-wysiwyg">
+          {{ footnote }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

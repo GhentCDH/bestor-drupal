@@ -1,0 +1,38 @@
+@use "../functions";
+@use "../variables/breakpoints" as variables;
+
+@mixin padding-top-default {
+  & {
+    padding-top: functions.rem(90px);
+
+    @media screen and (min-width: variables.$breakpoints-mobile) {
+      padding-top: functions.rem(90px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      padding-top: functions.rem(150px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop-large) {
+      padding-top: functions.rem(200px);
+    }
+  }
+}
+
+@mixin padding-bottom-default {
+  & {
+    padding-bottom: functions.rem(90px);
+
+    @media screen and (min-width: variables.$breakpoints-mobile) {
+      padding-bottom: functions.rem(90px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      padding-bottom: functions.rem(150px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop-large) {
+      padding-bottom: functions.rem(200px);
+    }
+  }
+}

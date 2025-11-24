@@ -1,0 +1,29 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-icon-link {
+  $self: &;
+
+  #{$self}__link {
+    display: flex;
+    align-items: center;
+    gap: functions.rem(12px);
+
+    &:hover,
+    &:focus {
+      #{$self}__icon {
+        color: var(--color-text-link-hover);
+      }
+    }
+  }
+
+  #{$self}__icon {
+    font-size: functions.rem(20px);
+    transition: inherit;
+  }
+
+  #{$self}__text {
+    color: var(--color-text);
+  }
+}

@@ -1,0 +1,21 @@
+name: Quote
+props:
+  type: object
+  required:
+    - text
+    - name
+    - function
+  properties:
+    text:
+      type: string
+      title: Text
+      description: The text to display.
+    name:
+      type: string
+      title: Name
+      description: The name.
+    function:
+      type: string
+      title: Function
+      description: The function.
+

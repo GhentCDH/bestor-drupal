@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Template for the component c-heading.
+ *
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-heading' %}
+{% set component_element = heading_tag|default('h2') %}
+
+{% set heading_class = heading_class|default(component_element) %}
+
+{% set custom_component_classes = [
+  heading_class,
+]|merge(c_heading_utility_classes ?: []) %}
+
+{% block component_content %}
+  {{- content|render|striptags('<span>')|raw -}}
+{% endblock %}

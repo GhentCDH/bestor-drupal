@@ -1,0 +1,49 @@
+{#
+/**
+ * @file
+ * Template for the component c-button.
+ *
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-button' %}
+{% set component_element = html_tag|default('a') %}
+
+{% set attr = attr ?: button_content[0]['#url'].options %}
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+{% set attr_color = color ?: attr['attributes']['color'] %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant,
+  attr_color ? component_name ~ '--color-' ~ attr_color,
+  not attr_color and color ? component_name ~ '--color-' ~ color,
+]|merge(c_button_utility_classes ?: []) %}
+
+{% if attr['attributes']['target'] %}
+  {% do attributes.setAttribute('target', attr['attributes']['target']) %}
+{% endif %}
+
+{% set button_url = url ?: button_content[0]['#url'] %}
+{% set button_title = title ?: button_content[0]['#title'] %}
+
+{% block component %}
+  {% if html_tag == 'button' %}
+    <button {{ attributes.addClass(classes).addClass(custom_component_classes).setAttribute('id', id) }}>
+  {% else %}
+    <a href="{{ button_url }}" {{ attributes.addClass(classes).addClass(custom_component_classes).setAttribute('id', id) }}>
+  {% endif %}
+  {% block component_content %}
+    {% if attr_variant == 'link' %}
+      {{ include('jakarta:c-icon', {
+        icon: 'caret-link',
+      }, with_context = false) }}
+    {% endif %}
+    {{ button_title }}
+  {% endblock %}
+  {% if html_tag == 'button' %}
+    </button>
+  {% else %}
+    </a>
+  {% endif %}
+{% endblock %}

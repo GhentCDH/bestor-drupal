@@ -1,0 +1,26 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-text {
+  $self: &;
+
+  &--intro {
+    #{$self}__text {
+      font-size: functions.rem(18px);
+    }
+  }
+
+  &--columns-2 {
+    #{$self}__text {
+      @media screen and (min-width: variables.$breakpoints-tablet) {
+        column-count: 2;
+        column-gap: calc(var(--grid-gutter) / 2);
+      }
+
+      @media screen and (min-width: variables.$breakpoints-desktop) {
+        column-gap: var(--grid-gutter);
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Template for the component c-text.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-text' %}
+
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+{% set attr_columns = columns ?: attr['attributes']['columns'] %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant,
+  attr_columns ? component_name ~ '--columns-' ~ attr_columns,
+  add_container ? 'container',
+]|merge(c_text_utility_classes ?: []) %}
+
+{% block component_content %}
+  {% if title %}
+    <div class="{{ component_name }}__title">
+      {{ include('jakarta:c-heading', {
+        content: title,
+      }, with_context = false) }}
+    </div>
+  {% endif %}
+  {% if text %}
+    <div class="{{ component_name }}__text h-text-wysiwyg">
+      {{ text }}
+    </div>
+  {% endif %}
+{% endblock %}

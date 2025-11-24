@@ -1,0 +1,25 @@
+{% set attributes = create_attribute() %}
+
+{% set c_name = "c-form" %}
+
+{% set classes = [
+  c_name,
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  <div class="{{ c_name ~ '__content' }}">
+    {% if title %}
+      <div class="{{ c_name ~ '__title' }}">
+        {{ title }}
+      </div>
+    {% endif %}
+    {% if text %}
+      <div class="{{ c_name ~ '__text' }} h-text-wysiwyg">
+        {{ text }}
+      </div>
+    {% endif %}
+  </div>
+  <div class="{{ c_name ~ '__form' }}">
+    {{ form }}
+  </div>
+</div>

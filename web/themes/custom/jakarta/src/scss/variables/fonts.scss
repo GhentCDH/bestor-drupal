@@ -1,0 +1,42 @@
+@use "./../variables/breakpoints";
+
+@font-face {
+  font-family: "TT Firs Neue";
+  src: url("/themes/custom/jakarta/fonts/tt-firs-neue/tt-firs-neue-regular.ttf") format('truetype');
+  src:
+      url("/themes/custom/jakarta/fonts/tt-firs-neue/tt-firs-neue-regular.woff") format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Firs Neue";
+  src: url("/themes/custom/jakarta/fonts/tt-firs-neue/tt-firs-neue-medium.ttf") format('truetype');
+  src:
+      url("/themes/custom/jakarta/fonts/tt-firs-neue/tt-firs-neue-medium.woff") format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-family-base: "Libre Baskerville", serif;
+  --font-family-title: "TT Firs Neue", "Arial", sans-serif;
+  --font-size-base: 16px;
+  --font-size-base-line-height: 1.875;
+  --font-weight-thin: 100;
+  --font-weight-light: 300;
+  --font-weight-book: 400;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+  --font-weight-base: var(--font-weight-regular);
+
+  --font-h1-size: 55px;
+  --font-h2-size: 41px;
+  --font-h3-size: 26px;
+  --font-h4-size: 19px;
+}

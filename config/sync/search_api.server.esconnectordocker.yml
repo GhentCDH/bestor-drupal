@@ -1,0 +1,21 @@
+uuid: 514c924e-113f-493b-b5e4-3b1fc962d482
+langcode: en
+status: true
+dependencies:
+  module:
+    - elasticsearch_connector
+id: esconnectordocker
+name: ESConnectorDocker
+description: ''
+backend: elasticsearch
+backend_config:
+  connector: standard
+  connector_config:
+    url: 'http://elasticsearch:9200'
+    enable_debug_logging: false
+  advanced:
+    fuzziness: auto
+    prefix: ''
+    suffix: ''
+    synonyms:
+      - ''

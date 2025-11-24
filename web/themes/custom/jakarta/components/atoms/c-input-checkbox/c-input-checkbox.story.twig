@@ -1,0 +1,12 @@
+{# c-input.story.twig #}
+{# for story purposes only #}
+{% set attributes = create_attribute() %}
+{% do attributes.setAttribute('type', 'checkbox') %}
+{% do attributes.setAttribute('id', 'check-ex') %}
+{# for story purposes only #}
+
+{{ include('jakarta:c-input-checkbox') }}
+
+{# for story purposes only #}
+<label for="check-ex">I am label</label>
+{# for story purposes only #}

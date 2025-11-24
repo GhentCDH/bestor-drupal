@@ -1,0 +1,21 @@
+// @use "./../../variables";
+// @use "./../../mixins";
+// @use "./../../functions";
+//
+// .views-exposed-form {
+//   @include mixins.layout-container;
+//   .form--inline {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: flex-end;
+//     margin: 0 functions.rem(-20px) functions.rem(50px);
+//
+//     .form-item {
+//       margin: 0 functions.rem(20px);
+//     }
+//
+//     .description {
+//       display: none;
+//     }
+//   }
+// }

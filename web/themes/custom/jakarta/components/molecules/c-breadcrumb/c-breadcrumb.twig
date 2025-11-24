@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for the component c-breadcrumb.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-breadcrumb' %}
+{% set component_element = 'nav' %}
+
+{% do attributes.setAttribute('role', 'navigation').setAttribute('aria-labelledby', 'system-breadcrumb') %}
+{% set custom_component_classes = c_breadcrumb_utility_classes %}
+
+{% block component_content %}
+  <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
+  <ol class="{{ component_name }}__list" itemscope itemtype="http://schema.org/BreadcrumbList">
+    {% for key, item in breadcrumb %}
+      <li class="{{ component_name }}--list__item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+        <a href="{{ (item.url) ? item.url : path('<current>') }}" itemprop="item">
+          <span class="{{ component_name }}__list__item__text" itemprop="name">{{ item.text }}</span>
+        </a>
+        <meta itemprop="position" content="{{ key + 1 }}" />
+        {% if not loop.last %}
+          /
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+{% endblock %}

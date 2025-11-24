@@ -1,0 +1,48 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-testimonial {
+//   --grid-total-columns: 16;
+// }
+//
+// .c-testimonial__title {
+//   margin-bottom: functions.rem(40px);
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     margin-bottom: functions.rem(90px);
+//   }
+// }
+//
+// .c-testimonial__text {
+//   p {
+//     &::before {
+//       content: "“";
+//     }
+//     &::after {
+//       content: "”";
+//     }
+//   }
+// }
+//
+// .c-testimonial__name {
+//   text-align: right;
+//   margin-top: 10px;
+// }
+//
+// .c-testimonial__media {
+//   @include mixins.grid-flex-item(6);
+//   @include mixins.grid-push-left(2);
+//
+//   margin-bottom: functions.rem(40px);
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     margin-bottom: functions.rem(80px);
+//   }
+//
+//   .portrait {
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       width: calc(4 / 6 * 100%);
+//     }
+//   }
+// }

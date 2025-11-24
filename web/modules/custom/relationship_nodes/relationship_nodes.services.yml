@@ -1,108 +1,48 @@
 services:
-  relationship_nodes.target_node_event_subscriber:
-    class: Drupal\relationship_nodes\EventSubscriber\TargetNodeEventSubscriber
-    arguments: 
-      - '@relationship_nodes.relation_node_info_service'
-      - '@relationship_nodes.relation_sync_service'
-    tags:
-      - { name: event_subscriber }
-  relationship_nodes.field_config_ui_updater:
-    class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater
-    arguments: 
-      - '@entity_type.manager'
-      - '@current_route_match'
-      - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.relation_field_configurator'
-  relationship_nodes.field_name_resolver:
-    class: Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver
-    arguments:
-      - '@config.factory'
-  relationship_nodes.foreign_key_field_resolver:
-    class: Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver
-    arguments:
-      - '@current_route_match' 
-      - '@relationship_nodes.relation_bundle_info_service'
-      - '@relationship_nodes.relation_node_info_service'
-  relationship_nodes.mirror_term_auto_updater:
-    class: Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermAutoUpdater
-    arguments:
-      - '@entity_type.manager'
-      - '@relationship_nodes.field_name_resolver'
   relationship_nodes.mirror_term_event_subscriber:
     class: Drupal\relationship_nodes\EventSubscriber\MirrorTermEventSubscriber
-    arguments: 
+    arguments:
       - '@relationship_nodes.mirror_term_auto_updater'
       - '@relationship_nodes.relation_bundle_settings_manager'
     tags:
-      - { name: event_subscriber }
-  relationship_nodes.mirror_term_provider:
-    class: Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider
-    arguments: 
-      - '@entity_type.manager'
-      - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.foreign_key_field_resolver'
-      - '@relationship_nodes.relation_form_helper'
-  relationship_nodes.node_type_form_alter:
-    class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\NodeTypeFormAlter
-    arguments:
-      - '@relationship_nodes.relation_bundle_form_handler'
-      - '@relationship_nodes.relation_validation_service'    
-      - '@relationship_nodes.relation_bundle_settings_manager'
-  relationship_nodes.parent_node_form_alter:
-    class: Drupal\relationship_nodes\RelationEntity\UserInterface\FormAlter\ParentNodeFormAlter
-    arguments: 
-      - '@relationship_nodes.relation_form_helper'
-  relationship_nodes.relation_bundle_form_handler:
-    class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler
-    arguments: 
-      - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.relation_field_configurator'
-      - '@relationship_nodes.field_config_ui_updater' 
-  relationship_nodes.relation_bundle_info_service:
-    class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService
-    arguments:
-      - '@entity_type.manager'
-      - '@entity_field.manager'
-      - '@entity_type.bundle.info' 
-      - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.relation_field_configurator'
-  relationship_nodes.relation_bundle_settings_manager:
-    class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager
-    arguments: 
-      - '@entity_type.manager'
+      - {name: event_subscriber}
   relationship_nodes.relation_config_import_subscriber:
     class: Drupal\relationship_nodes\EventSubscriber\RelationConfigImportSubscriber
     arguments:
       - '@entity_type.manager'
       - '@relationship_nodes.relation_settings_cleanup_service'
       - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.relation_validation_service' 
+      - '@relationship_nodes.relation_validation_service'
       - '@relationship_nodes.relation_field_configurator'
     tags:
-      - { name: event_subscriber }
-  relationship_nodes.relation_entity_form_handler:
-    class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationEntityFormHandler
-    arguments: 
-      - '@relationship_nodes.field_name_resolver'
+      - {name: event_subscriber}
+  relationship_nodes.relation_node_event_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\RelationNodeEventSubscriber
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_node_info_service'
+    tags:
+      - {name: event_subscriber}
+  relationship_nodes.target_node_event_subscriber:
+    class: Drupal\relationship_nodes\EventSubscriber\TargetNodeEventSubscriber
+    arguments:
+      - '@relationship_nodes.relation_node_info_service'
       - '@relationship_nodes.relation_sync_service'
-      - '@relationship_nodes.relation_form_helper'
+    tags:
+      - {name: event_subscriber}
+  relationship_nodes.foreign_key_field_resolver:
+    class: Drupal\relationship_nodes\RelationEntity\RelationNode\ForeignKeyFieldResolver
+    arguments:
+      - '@current_route_match'
+      - '@relationship_nodes.relation_bundle_info_service'
+      - '@relationship_nodes.relation_node_info_service'
   relationship_nodes.relation_entity_validator:
     class: Drupal\relationship_nodes\RelationEntity\RelationNode\RelationEntityValidator
     arguments:
       - '@current_route_match'
       - '@relationship_nodes.relation_node_info_service'
       - '@relationship_nodes.foreign_key_field_resolver'
-  relationship_nodes.relation_field_configurator: 
-    class: Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator
-    arguments: 
-      - '@entity_type.manager'
-      - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes.relation_bundle_settings_manager'
-  relationship_nodes.relation_form_helper: 
-    class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper
   relationship_nodes.relation_node_info_service:
     class: Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService
     arguments:
@@ -111,36 +51,96 @@ services:
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_bundle_info_service'
       - '@relationship_nodes.relation_bundle_settings_manager'
-  relationship_nodes.relation_settings_cleanup_service:
-    class: Drupal\relationship_nodes\RelationEntityType\RelationSettingsCleanUpService
-    arguments:
-      - '@entity_type.manager'
-      - '@relationship_nodes.relation_bundle_info_service'
-      - '@relationship_nodes.relation_field_configurator'    
   relationship_nodes.relation_sync_service:
     class: Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService
-    arguments: 
+    arguments:
       - '@entity_type.manager'
       - '@relationship_nodes.relation_node_info_service'
       - '@relationship_nodes.foreign_key_field_resolver'
       - '@relationship_nodes.relation_form_helper'
-  relationship_nodes.relation_node_event_subscriber:
-    class: Drupal\relationship_nodes\EventSubscriber\RelationNodeEventSubscriber
-    arguments: 
-      - '@entity_type.manager'
-      - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.relation_node_info_service'
-    tags:
-      - { name: event_subscriber }
-  relationship_nodes.virtual_field_adder:
-    class: Drupal\relationship_nodes\RelationEntityType\RelationField\VirtualFieldAdder
+  relationship_nodes.mirror_term_auto_updater:
+    class: Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermAutoUpdater
     arguments:
-      - '@relationship_nodes.relation_bundle_info_service'
+      - '@entity_type.manager'
+      - '@relationship_nodes.field_name_resolver'
+  relationship_nodes.mirror_term_provider:
+    class: Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.field_name_resolver'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.foreign_key_field_resolver'
+      - '@relationship_nodes.relation_form_helper'
+  relationship_nodes.relation_entity_form_handler:
+    class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationEntityFormHandler
+    arguments:
+      - '@relationship_nodes.field_name_resolver'
+      - '@relationship_nodes.relation_sync_service'
+      - '@relationship_nodes.relation_form_helper'
+  relationship_nodes.relation_form_helper:
+    class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationFormHelper
+  relationship_nodes.field_config_ui_updater:
+    class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater
+    arguments:
+      - '@entity_type.manager'
+      - '@current_route_match'
+      - '@relationship_nodes.field_name_resolver'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_field_configurator'
+  relationship_nodes.node_type_form_alter:
+    class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\NodeTypeFormAlter
+    arguments:
+      - '@relationship_nodes.relation_bundle_form_handler'
+      - '@relationship_nodes.relation_validation_service'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+  relationship_nodes.parent_node_form_alter:
+    class: Drupal\relationship_nodes\RelationEntity\UserInterface\FormAlter\ParentNodeFormAlter
+    arguments:
+      - '@relationship_nodes.relation_form_helper'
   relationship_nodes.vocab_form_alter:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\VocabFormAlter
     arguments:
       - '@relationship_nodes.relation_bundle_form_handler'
       - '@relationship_nodes.relation_bundle_settings_manager'
+  relationship_nodes.relation_bundle_form_handler:
+    class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBundleFormHandler
+    arguments:
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_field_configurator'
+      - '@relationship_nodes.field_config_ui_updater'
+  relationship_nodes.relation_bundle_info_service:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@entity_type.bundle.info'
+      - '@relationship_nodes.field_name_resolver'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+      - '@relationship_nodes.relation_field_configurator'
+  relationship_nodes.relation_bundle_settings_manager:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager
+    arguments:
+      - '@entity_type.manager'
+  relationship_nodes.field_name_resolver:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver
+    arguments:
+      - '@config.factory'
+  relationship_nodes.relation_field_configurator:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.field_name_resolver'
+      - '@relationship_nodes.relation_bundle_settings_manager'
+  relationship_nodes.virtual_field_adder:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationField\VirtualFieldAdder
+    arguments:
+      - '@relationship_nodes.relation_bundle_info_service'
+  relationship_nodes.relation_settings_cleanup_service:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationSettingsCleanUpService
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.relation_bundle_info_service'
+      - '@relationship_nodes.relation_field_configurator'
   relationship_nodes.relation_validation_object_factory:
     class: Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationObjectFactory
     arguments:

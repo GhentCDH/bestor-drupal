@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for the component c-references.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-references' %}
+
+{% set custom_component_classes = [
+  'h-bg-color-tertiary',
+]|merge(c_references_utility_classes ?: []) %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__inner container">
+    {% if title %}
+      <div class="{{ component_name }}__title">
+        {{ include('jakarta:c-heading', {
+          content: title,
+        }, with_context = false) }}
+      </div>
+    {% endif %}
+    {% if references %}
+      <div class="{{ component_name }}__references">
+        {{ references }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,51 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-usp-bar {
+//   .container {
+//     background: url('../../img/logo-bg.svg') no-repeat left bottom;
+//     padding-bottom: functions.rem(120px);
+//
+//     @media screen and (min-width: variables.$breakpoints-desktop-small) {
+//       padding-bottom: functions.rem(160px);
+//     }
+//   }
+// }
+//
+// .c-usp-bar__wrapper {
+//   @include mixins.grid-flex-wrapper;
+// }
+//
+// .c-usp-bar__content {
+//   @include mixins.grid-flex-item(20);
+//   @include mixins.grid-push-left(2);
+//
+//   @media screen and (min-width: variables.$breakpoints-tablet) {
+//     @include mixins.grid-push-left(6);
+//     @include mixins.grid-flex-item(16);
+//   }
+//
+//   @media screen and (min-width: variables.$breakpoints-desktop) {
+//     @include mixins.grid-push-left(6);
+//     @include mixins.grid-flex-item(16);
+//   }
+// }
+//
+// .c-usp-bar__items {
+//   --grid-total-columns: 16;
+//
+//   @include mixins.grid-flex-wrapper;
+//
+//   justify-content: space-between;
+//
+//   > div {
+//     margin-bottom: functions.rem(80px);
+//
+//     @media screen and (min-width: variables.$breakpoints-desktop-small) {
+//       @include mixins.grid-flex-item(4);
+//
+//       margin-bottom: 0;
+//     }
+//   }
+// }

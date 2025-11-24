@@ -1,0 +1,11 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-select {
+  background-image: url("/themes/custom/jakarta/img/form-icon-select.svg");
+  background-size: functions.rem(11px) auto;
+  background-repeat: no-repeat;
+  background-position: right functions.rem(23px) center;
+  padding-right: functions.rem(45px) !important;
+}

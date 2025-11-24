@@ -1,0 +1,48 @@
+{# c-text.story.twig #}
+{# intro #}
+{% set title %}
+  Introduction
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+{% endset %}
+<div>
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'intro',
+    columns: '1',
+  }) }}
+</div>
+
+{# default #}
+{% set title %}
+  Default
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+{% endset %}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'default',
+    columns: '1',
+  }) }}
+</div>
+
+{# default - 2 columns #}
+{% set title %}
+  Default - 2 columns
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+{% endset %}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'default',
+    columns: '2',
+  }) }}
+</div>

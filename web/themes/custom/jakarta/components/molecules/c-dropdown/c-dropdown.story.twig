@@ -1,0 +1,12 @@
+{# c-dropdown.story.twig #}
+{% set dropdown_items %}
+  <ul class="links">
+    <li><a href="#">Titel 1</a></li>
+    <li><a href="#">Titel 2</a></li>
+    <li><a href="#">Titel 3</a></li>
+  </ul>
+{% endset %}
+{{ include('jakarta:c-dropdown', {
+  toggle: 'Inhoudstafel',
+  dropdown_items,
+}, with_context = false) }}

@@ -1,0 +1,64 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-two-columns--layout-5-6 {
+//   .c-two-columns__left {
+//     @include mixins.grid-flex-item(12);
+//
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       @include mixins.grid-flex-item(6);
+//     }
+//
+//     @media screen and (min-width: variables.$breakpoints-desktop) {
+//       @include mixins.grid-flex-item(5);
+//     }
+//   }
+//
+//   .c-two-columns__right {
+//     @include mixins.grid-flex-item(12);
+//
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       @include mixins.grid-flex-item(6);
+//     }
+//   }
+// }
+//
+// .c-two-columns--layout-6-5 {
+//   justify-content: space-between;
+//   align-items: flex-start;
+//
+//   .c-two-columns__left {
+//     @include mixins.grid-flex-item(12);
+//
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       @include mixins.grid-flex-item(6);
+//     }
+//   }
+//
+//   .c-two-columns__right {
+//     @include mixins.grid-flex-item(12);
+//
+//     @media screen and (min-width: variables.$breakpoints-tablet) {
+//       @include mixins.grid-flex-item(5);
+//     }
+//   }
+// }
+//
+// .c-two-columns--layout-4-8  {
+//   .c-two-columns__left {
+//     @include mixins.grid-flex-item(12);
+//
+//     @media screen and (min-width: variables.$breakpoints-mobile) {
+//       @include mixins.grid-flex-item(4);
+//     }
+//   }
+//
+//   .c-two-columns__right {
+//     @include mixins.grid-flex-item(12);
+//
+//     @media screen and (min-width: variables.$breakpoints-mobile) {
+//       @include mixins.grid-flex-item(8);
+//     }
+//   }
+// }

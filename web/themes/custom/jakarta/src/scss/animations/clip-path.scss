@@ -1,0 +1,8 @@
+@use "./../variables";
+
+// avoid glitch on initial load
+[data-animation="clip-path"]:not([data-animation-initial-ignore]) {
+  @media screen and (min-width: variables.$breakpoints-mobile) {
+    clip-path: inset(0% 0% 0% 100%);
+  }
+}

@@ -1,0 +1,1 @@
+((n,e)=>{function i(t){t.parentElement.classList.toggle("is-open")}function r(t){t._$triggers.forEach(o=>{o.addEventListener("click",()=>{i(o)})})}n.behaviors.dropdown={attach(t){let o=e("trigger","[data-dropdown-toggle]",t);o&&r({_$triggers:o})}}})(Drupal,once);

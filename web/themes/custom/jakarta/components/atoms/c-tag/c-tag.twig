@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Template for the component c-tag.
+ *
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-tag' %}
+
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+{% set attr_color = color ?: attr['attributes']['color'] %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant|clean_class,
+  attr_color ? component_name ~ '--color-' ~ attr_color,
+  not attr_color and color ? component_name ~ '--color-' ~ color,
+]|merge(c_tag_utility_classes ?: []) %}
+
+{% block component_content %}
+  <span class="{{ component_name }}__content">{{ content }}</span>
+  <span class="{{ component_name }}__corner"></span>
+{% endblock %}

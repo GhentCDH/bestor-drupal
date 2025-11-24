@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Template for the component c-icon-link.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-icon-link' %}
+{% set custom_component_classes = c_icon_link_utility_classes %}
+
+{% block component_content %}
+  {% if url %}
+    <a href="{{ url }}" class="{{ component_name }}__link">
+  {% endif %}
+  {% if icon %}
+    <div class="{{ component_name }}__icon">
+      {{ include ('jakarta:c-icon', {
+        icon,
+      }, with_context = false) }}
+    </div>
+  {% endif %}
+  {% if text %}
+    <div class="{{ component_name }}__text">
+      {{ text }}
+    </div>
+  {% endif %}
+  {% if url %}
+    </a>
+  {% endif %}
+{% endblock %}

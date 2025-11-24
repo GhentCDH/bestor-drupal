@@ -1,0 +1,126 @@
+@use "./../variables";
+@use "./../mixins";
+@use "./../functions";
+
+// Wrap all the form elements in .site-wrapper to not conflict with Drupal's backend.
+.site-wrapper {
+  // Global input reset theming.
+  input,
+  textarea,
+  select {
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    outline: none;
+    border-radius: 0;
+    border: none;
+    line-height: inherit;
+    box-shadow: none;
+    color: inherit;
+
+    $placeholder-prefixes: (
+      ":-ms-input-placeholder",
+      "::-moz-placeholder",
+      ":-moz-placeholder",
+      "::-webkit-input-placeholder"
+    );
+
+    @each $placeholder-prefix in $placeholder-prefixes {
+      &#{$placeholder-prefix} {
+        color: var(--color-grey);
+      }
+    }
+  }
+
+  // Specific jakarta forms.
+  textarea,
+  select,
+  input:not([type="checkbox"], [type="radio"], [type="submit"], [type="file"]) {
+    padding: functions.rem(12px) functions.rem(27px);
+    width: 100%;
+    max-width: 100%;
+    appearance: none;
+    transition: all 100ms linear;
+    background-color: var(--color-grey-light);
+    color: var(--color-text);
+    border-radius: functions.rem(15px);
+    font-weight: var(--font-weight-regular);
+    border: 1px solid var(--color-grey-light);
+
+    &:focus {
+      border-color: var(--color-grey);
+    }
+  }
+
+  select::-ms-expand {
+    display: none;
+  }
+
+  legend {
+    margin-bottom: functions.rem(6px);
+    display: block;
+
+    &.form-required {
+      &::after {
+        content: " *";
+      }
+    }
+  }
+
+  .form-item,
+  #ajax-wrapper .form-item {
+    margin-bottom: functions.rem(20px);
+  }
+
+  .form-item {
+    &.error {
+      label {
+        color: var(--color-error);
+      }
+    }
+  }
+
+  .description {
+    font-style: italic;
+    font-size: functions.rem(12px);
+    margin-top: functions.rem(3px);
+  }
+
+  .form-actions {
+    margin-top: 30px;
+  }
+
+  .form-managed-file {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: functions.rem(20px);
+  }
+
+  .captcha {
+    margin-top: functions.rem(20px);
+  }
+
+  .webform-flexbox {
+    margin: 0 -25px;
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      margin: 0 -45px;
+    }
+
+    .webform-flex--container {
+      margin: 0 25px;
+
+      @media screen and (min-width: variables.$breakpoints-desktop) {
+        margin: 0 45px;
+      }
+    }
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+}

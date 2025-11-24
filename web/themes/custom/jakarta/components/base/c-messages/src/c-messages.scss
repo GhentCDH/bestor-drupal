@@ -1,0 +1,34 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-messages {
+  padding: functions.rem(12px) functions.rem(20px);
+  margin: 0 0 functions.rem(40px) 0;
+  border: 1px solid transparent;
+  border-radius: functions.rem(3px);
+}
+
+.c-messages--layout-info {
+  color: #383d41;
+  background-color: #e2e3e5;
+  border-color: #d6d8db;
+}
+
+.c-messages--layout-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+.c-messages--layout-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.c-messages--layout-status {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}

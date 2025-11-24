@@ -1,0 +1,22 @@
+uuid: b59e60b1-d133-4f70-8ebb-2d8157f34a13
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - jakarta
+_core:
+  default_config_hash: shyFiIz1w4vot2_W7PjcxaT2JSAxboxfNBrHfLKtPfE
+id: jakarta_help
+theme: jakarta
+region: content
+weight: -8
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

@@ -1,6 +1,15 @@
+/**
+ * @file
+ * Handles confirmation dialog for mirror field changes.
+ */
+
+
 (function ($, Drupal, once) {
+  'use strict';
+
   Drupal.behaviors.mirrorChangeConfirm = {
     attach: function (context, settings) {
+      // Handle save button click
       once('relationship-nodes-modal-save', '#relationship-nodes-modal-save', context)
         .forEach(function (el) {
           $(el).on('click', function (e) {
@@ -11,6 +20,7 @@
           });
         });
 
+      // Handle cancel button click
       once('relationship-nodes-modal-cancel', '#relationship-nodes-modal-cancel', context)
         .forEach(function (el) {
           $(el).on('click', function (e) {

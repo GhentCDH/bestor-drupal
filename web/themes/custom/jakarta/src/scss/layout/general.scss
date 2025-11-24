@@ -1,0 +1,30 @@
+@use "./../variables";
+@use "./../mixins";
+
+* {
+  box-sizing: border-box;
+}
+
+.site-wrapper {
+  width: 100%;
+}
+
+// OVERRIDE COMPONENTS OVERVIEW.
+.components-preview__wrapper {
+  grid-template-areas:
+    "sidebar"
+    "main"
+    "a11y";
+  grid-template-rows: auto;
+  grid-template-columns: 1fr;
+}
+
+.components-preview__sidebar {
+  .components-preview__provider {
+    margin: 20px 0;
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    max-height: 300px;
+  }
+}

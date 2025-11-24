@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Template for the component c-input-radio.
+ */
+#}
+
+{% set input_radio_classes = [
+  'c-input-radio',
+]|merge(c_input_radio_utility_classes ?: []) %}
+
+<input {{ attributes.addClass(input_radio_classes) }}>
+{% block children %}
+  {% if children %}
+    {{ children }}
+  {% endif %}
+{% endblock %}

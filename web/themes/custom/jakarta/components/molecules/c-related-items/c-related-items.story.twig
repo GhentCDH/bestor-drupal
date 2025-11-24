@@ -1,0 +1,12 @@
+{# c-related-items.story.twig #}
+{% set items %}
+  <ul class="links">
+    <li><a href="#">Naam concept</a> (type relatie)</li>
+    <li><a href="#">Naam concept</a> (type relatie)</li>
+    <li><a href="#">Naam concept</a> (type relatie)</li>
+  </ul>
+{% endset %}
+{{ include('jakarta:c-related-items', {
+  title: 'Related items',
+  items,
+}, with_context = false) }}

@@ -19,7 +19,7 @@ dependencies:
     - field.storage.node.field_wikidata_entry
     - field.storage.paragraph.field_formatted_text
     - field.storage.paragraph.field_title
-    - search_api.server.elasticsearchconnectordocker
+    - search_api.server.esconnectordocker
   module:
     - node
     - paragraphs
@@ -370,4 +370,4 @@ options:
   delete_on_fail: true
   index_directly: false
   track_changes_in_references: false
-server: elasticsearchconnectordocker
+server: esconnectordocker

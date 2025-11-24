@@ -144,8 +144,8 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          link_to_item: 0
-          use_highlighting: 0
+          link_to_item: false
+          use_highlighting: false
           multi_type: separator
           multi_separator: ', '
           field_settings:
@@ -250,66 +250,6 @@ display:
                   collapsible_disable_automatic_open: false
                   is_secondary: false
                   hide_label: false
-              facets_relationship_info__relationnode__person_person__nested:
-                plugin_id: nested_fields_widget
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  is_secondary: false
-                  hide_label: false
-                  filter_field_settings:
-                    field_location_text:
-                      enabled: 0
-                      label: 'Field location text'
-                      widget: textfield
-                      select_display_mode: raw
-                      weight: '0'
-                      placeholder: ''
-                    field_municipality:
-                      enabled: 0
-                      label: 'Field municipality'
-                      widget: textfield
-                      select_display_mode: raw
-                      weight: '0'
-                      placeholder: ''
-                    calculated_this_id:
-                      enabled: 0
-                      label: 'This id'
-                      widget: textfield
-                      select_display_mode: raw
-                      weight: '0'
-                      placeholder: ''
-                    calculated_this_name:
-                      enabled: 0
-                      label: 'This name'
-                      widget: textfield
-                      select_display_mode: raw
-                      weight: '0'
-                      placeholder: ''
-                    calculated_related_id:
-                      enabled: 1
-                      label: 'Related id'
-                      widget: textfield
-                      select_display_mode: label
-                      weight: '8'
-                      placeholder: ''
-                    calculated_related_name:
-                      enabled: 0
-                      label: 'Related name'
-                      widget: textfield
-                      select_display_mode: raw
-                      weight: '0'
-                      placeholder: ''
-                    calculated_relation_type_name:
-                      enabled: 0
-                      label: 'Relation type name'
-                      widget: textfield
-                      select_display_mode: raw
-                      weight: '0'
-                      placeholder: ''
               facets_title:
                 plugin_id: default
                 advanced:
@@ -703,7 +643,8 @@ display:
           admin_label: ''
           plugin_id: search_api_language
           operator: in
-          value: {  }
+          value:
+            '***LANGUAGE_site_default***': '***LANGUAGE_site_default***'
           group: 1
           exposed: true
           expose:
@@ -737,60 +678,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        facets_relationship_info__relationnode__person_person__nested:
-          id: facets_relationship_info__relationnode__person_person__nested
-          table: search_api_index_person_institution_test
-          field: facets_relationship_info__relationnode__person_person__nested
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: facets_filter
-          operator: '='
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: 'Related nodes of type relationnode__person_person'
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: relationship_info__relationnode__person_person__nested
-            required: false
-            remember: false
-            multiple: true
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              redactor: '0'
-              web_manager: '0'
-              administrator: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          hierarchy: false
-          label_display: visible
-          facet:
-            query_operator: or
-            min_count: 1
-            show_numbers: false
-            processor_configs:
-              nested_build_processor:
-                weights:
-                  pre_query: 0
-                  build: 0
-                settings: {  }
         facets_title:
           id: facets_title
           table: search_api_index_person_institution_test
@@ -850,7 +737,7 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_relation_type_name:
+            field_municipality:
               value: ''
             calculated_related_id:
               value: ''
@@ -899,13 +786,13 @@ display:
               expose_field_operator: 0
               value: ''
             field_municipality:
-              enabled: false
-              widget: textfield
+              enabled: true
+              widget: select
               label: 'Field municipality'
               placeholder: ''
               field_operator: '='
               select_display_mode: raw
-              weight: 0
+              weight: '0'
               required: 0
               expose_field_operator: 0
               value: ''
@@ -960,7 +847,7 @@ display:
               placeholder: ''
               field_operator: '='
               select_display_mode: raw
-              weight: '-1'
+              weight: '-2'
               required: 0
               expose_field_operator: 0
               value: ''

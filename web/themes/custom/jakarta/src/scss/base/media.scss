@@ -1,0 +1,15 @@
+.site-wrapper {
+  img,
+  svg {
+    vertical-align: top;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+    vertical-align: top;
+  }
+}

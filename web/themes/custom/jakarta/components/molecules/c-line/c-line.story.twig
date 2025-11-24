@@ -1,0 +1,16 @@
+{# c-line.story.twig #}
+{# default #}
+{{ include('jakarta:c-line', {
+  url: '#',
+  title: 'Lorem ipsum',
+  author: 'Auteur: Naam Achternaam',
+  date: 'Gewijzigd: 25.10.25',
+  attr_variant: 'default',
+}, with_context = false) }}
+
+{# title_only #}
+{{ include('jakarta:c-line', {
+  url: '#',
+  title: 'Lorem ipsum',
+  attr_variant: 'title_only',
+}, with_context = false) }}

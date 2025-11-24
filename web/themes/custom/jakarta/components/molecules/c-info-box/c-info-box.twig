@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Template for the component c-info-box.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-info-box' %}
+{% set custom_component_classes = c_info_box_utility_classes %}
+
+{% block component_content %}
+  {% if title %}
+    <div class="{{ component_name }}__title">
+      {{ include('jakarta:c-heading', {
+        content: title,
+      }, with_context = false) }}
+    </div>
+  {% endif %}
+  {% if media %}
+    <div class="{{ component_name }}__media h-image-full-width h-image-children-display-block">
+      {{ media }}
+    </div>
+  {% endif %}
+  {% if text %}
+    <div class="{{ component_name }}__text">
+      {{ text }}
+    </div>
+  {% endif %}
+  {% if link %}
+    <div class="{{ component_name }}__link">
+      {{ link }}
+    </div>
+  {% endif %}
+{% endblock %}

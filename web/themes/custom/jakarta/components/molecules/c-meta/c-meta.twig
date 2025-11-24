@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Template for the component c-meta.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-meta' %}
+{% set custom_component_classes = c_meta_utility_classes %}
+
+{% block component_content %}
+  {% if date %}
+    <div class="{{ component_name }}__date">
+      {{ 'Date of last modification'|t }}:
+      {{ date }}
+    </div>
+  {% endif %}
+  {% if read_time %}
+    <div class="{{ component_name }}__read-time">
+      {{ include ('jakarta:c-icon', {
+        icon: 'clock',
+      }, with_context = false) }}
+      {{ read_time }}
+    </div>
+  {% endif %}
+{% endblock %}

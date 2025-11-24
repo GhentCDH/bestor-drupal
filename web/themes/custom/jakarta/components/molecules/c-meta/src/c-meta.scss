@@ -1,0 +1,27 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-meta {
+  $self: &;
+
+  padding-block-end: functions.rem(30px);
+  border-block-end: 1px solid var(--color-dark);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: functions.rem(20px);
+
+  #{$self}__read-time {
+    display: flex;
+    align-items: center;
+    gap: functions.rem(15px);
+
+
+    .c-icon {
+      font-size: functions.rem(24px);
+      line-height: 1;
+    }
+  }
+}

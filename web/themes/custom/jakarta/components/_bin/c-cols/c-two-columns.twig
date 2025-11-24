@@ -1,0 +1,19 @@
+{% set c_attributes = create_attribute(c_attributes|default({})) %}
+
+{% set c_name = "c-two-columns" %}
+
+{% set classes = [
+  c_name,
+  layout ? c_name ~ "--layout-" ~ layout,
+  justify ? "grid--justify-" ~ justify,
+  'grid'
+] %}
+
+<div{{ c_attributes.addClass(classes) }}>
+  <div class="{{ c_name ~ '__left' }}">
+    {% block left %}{% endblock %}
+  </div>
+  <div class="{{ c_name ~ '__right' }}">
+    {% block right %}{% endblock %}
+  </div>
+</div>

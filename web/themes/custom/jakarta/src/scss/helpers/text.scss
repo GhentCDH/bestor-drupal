@@ -1,0 +1,40 @@
+@use "./../variables";
+@use "./../functions";
+
+$transforms: (lowercase, uppercase, none);
+
+@each $transform in $transforms {
+  .h-text-transform-#{$transform} {
+    text-transform: $transform;
+  }
+}
+
+$weights: (
+  bold: var(--font-weight-bold),
+  semibold: var(--font-weight-semibold),
+);
+
+@each $name, $weight in $weights {
+  .h-font-weight-#{$name} {
+    font-weight: $weight;
+  }
+}
+
+$aligns: (start, center, end);
+
+@each $align in $aligns {
+  .h-text-align-#{$align} {
+    text-align: $align;
+  }
+}
+
+$sizes: (
+  small: 14px,
+  medium: 20px,
+);
+
+@each $name, $size in $sizes {
+  .h-font-size-#{$name} {
+    font-size: functions.rem($size);
+  }
+}

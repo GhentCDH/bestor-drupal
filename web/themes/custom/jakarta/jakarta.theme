@@ -1,0 +1,392 @@
+<?php
+
+/**
+ * @file
+ * Contains the jakarta theme file.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\language\Entity\ConfigurableLanguage;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_preprocess_HOOK() for HTML document templates.
+ */
+function jakarta_preprocess_html(&$variables) {
+  $status = \Drupal::requestStack()->getCurrentRequest()->attributes->get('exception');
+  if($status && $status->getStatusCode() == '404') {
+    $variables['attributes']['class'][] = 'page-404';
+  } else if($status && $status->getStatusCode() == '403') {
+    $variables['attributes']['class'][] = 'page-403';
+  }
+}
+
+/**
+ * Adding theme suggestions for content block types.
+ *
+ * Implements hook_theme_suggestions_HOOK_alter() for form templates.
+ */
+function jakarta_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  if (isset($variables['elements']['content']['#block_content'])) {
+    $suggestions[] = 'block__bundle__' . $variables['elements']['content']['#block_content']->bundle();
+    $suggestions[] = 'block__bundle__' . $variables['elements']['content']['#block_content']->bundle() . '__' . $variables['elements']['content']['#view_mode'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for field.
+ *
+ * Adding theme suggestions on view modes for fields.
+ */
+function jakarta_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  // Build a variable with field information.
+  $element = $variables['element'];
+
+  // Sanitize #view_mode.
+  $sanitized_view_mode = str_replace('.', '_', $element['#view_mode']);
+
+  $suggestions[] = 'field__' . $element['#entity_type'] . '__' . $element['#field_name'] . '__' . $sanitized_view_mode;
+  $suggestions[] = 'field__' . $element['#entity_type'] . '__' . $element['#field_name'] . '__' . $element['#bundle'] . '__' . $sanitized_view_mode;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * Adding theme suggestions based on view modes for taxonomy.
+ */
+function jakarta_theme_suggestions_taxonomy_term_alter(&$suggestions, $variables) {
+  $elements = $variables['elements'];
+
+  if (isset($elements['#taxonomy_term'], $elements['#theme'], $elements['#view_mode'])) {
+    $term = $elements['#taxonomy_term'];
+
+    if (is_object($term)) {
+      $suggestions[] = $elements['#theme'] . '__' . $term->bundle() . '__' . $elements['#view_mode'];
+      $suggestions[] = $elements['#theme'] . '__' . $term->id() . '__' . $elements['#view_mode'];
+      $suggestions[] = $elements['#theme'] . '__' . $elements['#view_mode'];
+    }
+  }
+}
+
+/**
+ * Implements of template_preprocess_block().
+ *
+ * Adding block bundle as variable.
+ */
+function jakarta_preprocess_block(&$variables) {
+  if (isset($variables['elements']['content']['#block_content'])) {
+    $variables['bundle'] = $variables['elements']['content']['#block_content']->bundle();
+  }
+
+  if ($variables['base_plugin_id'] === 'language_block') {
+    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $variables['language'] = strtoupper($language);
+  }
+}
+
+function jakarta_preprocess_links__language_block(&$variables) {
+  foreach ($variables['links'] as $i => $link) {
+    /* @var ConfigurableLanguage $linkLanguage */
+    $linkLanguage = $link['link']['#options']['language'];
+    $variables['links'][$i]['link']['#title'] = strtoupper($linkLanguage->get('id'));
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.
+ */
+function jakarta_preprocess_field(&$variables) {
+  // If the field is of a paragraph.
+  if ($variables['entity_type'] === 'paragraph' || $variables['entity_type'] === 'taxonomy_term') {
+    // If a title field.
+    if ($variables['field_name'] === 'field_title' || $variables['field_name'] === 'field_title_long') {
+      // Get the entity.
+      $entity = $variables['element']['#object'];
+      // Pass bundle to template.
+      $variables['entity_bundle'] = $entity->bundle();
+      $variables['entity_view_mode'] = $variables['element']['#view_mode'];
+
+      // If the entity has a main title field.
+      if ($entity->hasField('field_main_title')) {
+        // Get the value.
+        $main_title = $entity->get('field_main_title')->first();
+
+        // If there is a value.
+        if (!is_null($main_title)) {
+          $main_title = $entity->get('field_main_title')
+            ->first()
+            ->getValue()['value'];
+          $variables['main_title'] = $main_title;
+        }
+      }
+
+      // Check if on front page, add as variable.
+      $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+
+      // Get the current node.
+      $node = \Drupal::routeMatch()->getParameter('node');
+      // If a real node.
+      if ($node instanceof NodeInterface) {
+        $variables['node_bundle'] = $node->bundle();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.
+ */
+/*function jakarta_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() === 'job') {
+    $options = [
+      'query' => [
+        'job' => $variables['node']->id(),
+      ],
+      'attributes' => [
+        'class' => [
+          'node-job-teaser__apply',
+        ],
+      ],
+    ];
+
+    $url = Url::fromRoute('entity.node.canonical', ['node' => 38], $options);
+    $link = Link::fromTextAndUrl(t('Apply now'), $url);
+    $variables['apply_url'] = $link->toRenderable();
+  }
+}*/
+
+/**
+ * Add classes to a paragraph that contain the entity bundle of the next or prev paragraph.
+ */
+function _jakarta_add_next_prev_paragraph_classes(&$variables) {
+  // If there are items and part of a node.
+  if ($variables['entity_type'] === 'node' || $variables['entity_type'] === 'taxonomy_term' || $variables['entity_type'] === 'paragraph') {
+    // Loop over the items.
+    foreach ($variables['items'] as $key => &$item) {
+      // If it contains a paragraph.
+      if (isset($item['content']['#paragraph'])) {
+        // Add an attributes class array if there isn't one.
+        if (!isset($item['content']['#attributes']['class'])) {
+          $item['content']['#attributes']['class'] = [];
+        }
+
+        // If the first item.
+        if ($key === 0) {
+          $item['content']['#attributes']['class'][] = 'paragraph--first';
+        }
+
+        // Get the previous paragraph if there is one.
+        if (isset($variables['items'][$key - 1])) {
+          $previousParagraph = $variables['items'][$key - 1]['content']['#paragraph'];
+
+          // Add the previous paragraph bundle as a class.
+          $cleanClass = Html::getClass($previousParagraph->bundle());
+          $item['content']['#attributes']['class'][] = 'prev-paragraph-' . $cleanClass;
+        }
+
+        // Get the next paragraph if there is one.
+        if (isset($variables['items'][$key + 1])) {
+          $nextParagraph = $variables['items'][$key + 1]['content']['#paragraph'];
+          // Add the next paragraph bundle as a class.
+          $cleanClass = Html::getClass($nextParagraph->bundle());
+          $item['content']['#attributes']['class'][] = 'next-paragraph-' . $cleanClass;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field__field_content.
+ */
+function jakarta_preprocess_field__field_content(&$variables) {
+  // Add next and prev classes.
+  _jakarta_add_next_prev_paragraph_classes($variables);
+}
+
+function _jakarta_add_default_button_classes(&$variables) {
+  // If there are items.
+  if ($variables['items']) {
+    // Get the entity.
+    $entity = $variables['element']['#object'];
+
+    // Set default classes.
+    $buttonClass = 'c-btn';
+    $buttonClassType = 'c-btn--type-default';
+    $buttonColor = '';
+    $buttonSize = '';
+
+    // Set paragraphs with inline buttons.
+    $inlineParagraphs = [];
+
+    // If the paragraph is one with inline buttons, alter the button class.
+    if (in_array($entity->bundle(), $inlineParagraphs, TRUE)) {
+      $buttonClassType = 'c-btn--type-inline';
+    }
+
+    // Set paragraphs with buttons who need a light color.
+    $lightColorParagraphs = [];
+
+    // If the entity has a bg color field.
+    if ($entity->hasField('field_bgcolor') && !$entity->get('field_bgcolor')->isEmpty()) {
+      // Get the value.
+      $bannerLayoutValue = $entity->get('field_bgcolor')->value;
+      // Ex: If the bg color isn't grey, do something ...
+      if ($bannerLayoutValue !== 'grey') {
+        // Add paragraph type.
+        $lightColorParagraphs[] = $entity->bundle();
+      }
+    }
+
+    // If the paragraph is one with light buttons, change button class.
+    if (in_array($entity->bundle(), $lightColorParagraphs, TRUE)) {
+      $buttonColor = 'c-btn--color-light';
+    }
+
+    // Loop.
+    foreach ($variables['items'] as &$item) {
+      // If there are no classes yet, add empty array.
+      if (!isset($item['content']['#options']['attributes']['class'])) {
+        $item['content']['#options']['attributes']['class'] = [];
+      }
+      // Add extra classes.
+      $item['content']['#options']['attributes']['class'][] = $buttonClass;
+      $item['content']['#options']['attributes']['class'][] = $buttonClassType;
+      $item['content']['#options']['attributes']['class'][] = $buttonColor;
+      $item['content']['#options']['attributes']['class'][] = $buttonSize;
+    }
+  }
+}
+
+function _jakarta_add_inline_button_classes(&$variables) {
+  // If there are items.
+  if ($variables['items']) {
+    // Get the entity.
+    $entity = $variables['element']['#object'];
+
+    // Set default classes.
+    $buttonClass = 'c-btn';
+    $buttonClassType = 'c-btn--type-inline';
+    $buttonColor = '';
+
+    // Set paragraphs with default buttons.
+    $defaultParagraphs = [];
+
+    // If the paragraph is one with inline buttons, change button class.
+    if (in_array($entity->bundle(), $defaultParagraphs, TRUE)) {
+      $buttonClassType = 'c-btn--type-default';
+    }
+
+    // Set paragraphs with light buttons.
+    $lightColorParagraphs = [];
+
+    // If the entity has a bg color field.
+    if ($entity->hasField('field_bgcolor') && !$entity->get('field_bgcolor')->isEmpty()) {
+      // Get the value.
+      $bannerLayoutValue = $entity->get('field_bgcolor')->value;
+      // Ex: If the bg color isn't grey, do something ...
+      if ($bannerLayoutValue !== 'grey') {
+        // Add paragraph type.
+        $lightColorParagraphs[] = $entity->bundle();
+      }
+    }
+
+    // If the paragraph is one with light buttons, change button class.
+    if (in_array($entity->bundle(), $lightColorParagraphs, TRUE)) {
+      $buttonColor = 'c-btn--color-light';
+    }
+
+    // Loop.
+    foreach ($variables['items'] as &$item) {
+      // If there are no classes yet, add empty array.
+      if (!isset($item['content']['#options']['attributes']['class'])) {
+        $item['content']['#options']['attributes']['class'] = [];
+      }
+
+      // Add extra classes.
+      $item['content']['#options']['attributes']['class'][] = $buttonClass;
+      $item['content']['#options']['attributes']['class'][] = $buttonClassType;
+      $item['content']['#options']['attributes']['class'][] = $buttonColor;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field__field_cta.
+ */
+function jakarta_preprocess_field__field_cta(&$variables) {
+  _jakarta_add_default_button_classes($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field__field_link.
+ */
+function jakarta_preprocess_field__field_link(&$variables) {
+  _jakarta_add_inline_button_classes($variables);
+}
+
+/**
+ * Implements theme_preprocess_input().
+ */
+function jakarta_preprocess_input(&$variables) {
+  $element = $variables['element'];
+
+  if ($element['#type'] === 'submit') {
+    $variables['attributes']['class'][] = 'c-btn';
+    if (str_contains($element['#id'], 'search')) {
+      $variables['attributes']['class'][] = 'c-btn--type-search';
+    }
+    else {
+      $variables['attributes']['class'][] = 'c-btn--type-default';
+    }
+  }
+}
+
+/**
+ * Implements MYTHEME_preprocess_breadcrumb().
+ */
+function jakarta_preprocess_breadcrumb(&$variables) {
+  if ($variables['breadcrumb']) {
+    $request = \Drupal::request();
+    $route_match = \Drupal::routeMatch();
+    $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+
+    if (!empty($page_title)) {
+      $variables['breadcrumb'][] = [
+        'text' => $page_title,
+        'attributes' => new Attribute(['class' => ['active']])
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function jakarta_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (isset($form['actions']['submit'])) {
+    $build_info = $form_state->getBuildInfo();
+    if ($build_info && isset($build_info['base_form_id'])) {
+      $form['actions']['submit']['#attributes']['class'][] = 'jakarta-' . $build_info['base_form_id'];
+    }
+    $form['actions']['submit']['#attributes']['class'][] = 'jakarta-' . $form_id;
+    $form['actions']['submit']['#attributes']['class'][] = 'jakarta-' . $form['#id'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function jakarta_theme_suggestions_input_alter(array &$suggestions, array &$variables) {
+  if ($variables['element']['#type'] === 'submit') {
+    foreach ($variables['element']['#attributes']['class'] as $delta => $class) {
+      if (stripos($class, 'jakarta-') !== FALSE) {
+        $form_id = str_replace('jakarta-', '', $class);
+        unset($variables['element']['#attributes']['class'][$delta]);
+        $suggestions[] = 'input__submit__' . str_replace('-', '_', $form_id);
+      }
+    }
+  }
+}

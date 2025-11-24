@@ -1,0 +1,12 @@
+@use "sass:math";
+
+// https://cloudfour.com/thinks/the-ems-have-it-proportional-media-queries-ftw/
+$breakpoints-mobile: math.div(480px, 16px) * 1em;
+$breakpoints-mobile-large: math.div(736px, 16px) * 1em;
+$breakpoints-tablet: math.div(980px, 16px) * 1em;
+$breakpoints-desktop-small: math.div(1150px, 16px) * 1em;
+$breakpoints-desktop: math.div(1440px, 16px) * 1em;
+$breakpoints-desktop-large: math.div(1600px, 16px) * 1em;
+$breakpoints-desktop-max: math.div(1920px, 16px) * 1em;
+$breakpoints-site-max: math.div(1920px, 16px) * 1em;
+$breakpoints-menu-switch: math.div(1100px, 16px) * 1em;

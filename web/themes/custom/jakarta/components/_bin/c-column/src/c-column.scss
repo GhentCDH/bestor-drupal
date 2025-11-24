@@ -1,0 +1,37 @@
+// @use "./../../../src/scss/variables/breakpoints" as variables;
+// @use "./../../../src/scss/functions";
+// @use "./../../../src/scss/mixins";
+//
+// .c-column {
+//   --color-text-link-hover: var(--color-text);
+// }
+//
+// .c-column__media {
+//   margin-bottom: functions.rem(35px);
+//   position: relative;
+//   overflow: hidden;
+//
+//   img {
+//     transition: 600ms ease-out transform;
+//
+//     .trigger-hover:hover & {
+//       transform: scale(1.07);
+//     }
+//   }
+// }
+//
+// .c-column__bottom {
+//   padding: 0 functions.rem(15px);
+//   gap: functions.rem(20px);
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: flex-start;
+//
+//   .c-btn {
+//     flex-shrink: 0;
+//   }
+// }
+//
+// .c-column__title {
+//   margin-bottom: functions.rem(10px);
+// }

@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Template for the component c-media-1-item.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-media-1-item' %}
+
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+{% set media_uri = media_uri ?: (media.0 ? media.0.0.0['#item'].entity.uri.value|image_style('lightbox') : '#') %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant|clean_class,
+  'h-image-children-display-block',
+  'h-image-full-width',
+  add_container ? 'container',
+]|merge(c_media_1_item_utility_classes ?: []) %}
+
+{% block component_content %}
+  {% if media %}
+    {% if add_lightbox %}
+      {{ include('jakarta:c-lightbox', {
+        uri: media_uri,
+        content: media,
+        caption: caption|render|striptags|trim,
+      }, with_context = false) }}
+    {% else %}
+      {{ media }}
+    {% endif %}
+  {% endif %}
+  {% if not attr_variant is same as ('media_only') %}
+    {% if caption %}
+      <div class="{{ component_name }}__meta-data">
+        {{ caption }}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endblock %}

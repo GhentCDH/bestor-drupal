@@ -1,0 +1,15 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Messages'
+status: stable
+group: _base
+description: "A component that displays (Drupal) messages."
+props:
+  type: object
+  properties:
+    layout:
+      type: string
+      title: 'Title'
+slots:
+  content:
+    title: Content
+    description: Slot for the content.

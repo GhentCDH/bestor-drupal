@@ -1,0 +1,71 @@
+jakarta.mobile-small:
+  label: mobile-small
+  mediaQuery: 'all and (min-width: 0px)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.mobile:
+  label: mobile
+  mediaQuery: 'all and (min-width: 480px)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.mobile-large:
+  label: mobile-large
+  mediaQuery: 'all and (min-width: 736px)'
+  weight: 2
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.tablet:
+  label: tablet
+  mediaQuery: 'all and (min-width: 980px)'
+  weight: 3
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.desktop-small:
+  label: desktop-small
+  mediaQuery: 'all and (min-width: 1150px)'
+  weight: 4
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.desktop:
+  label: desktop
+  mediaQuery: 'all and (min-width: 1440px)'
+  weight: 5
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.desktop-large:
+  label: desktop-large
+  mediaQuery: 'all and (min-width: 1600px)'
+  weight: 6
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.desktop-xlarge:
+  label: desktop-xlarge
+  mediaQuery: 'all and (min-width: 1920px)'
+  weight: 7
+  multipliers:
+    - 1x
+    - 2x
+
+jakarta.desktop-xxlarge:
+  label: desktop-xxlarge
+  mediaQuery: 'all and (min-width: 2400px)'
+  weight: 7
+  multipliers:
+    - 1x
+    - 2x

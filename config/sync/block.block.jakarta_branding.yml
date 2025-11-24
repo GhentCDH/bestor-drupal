@@ -1,0 +1,25 @@
+uuid: f78636d3-a0d0-4a6b-bdb7-d622564e65c8
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - jakarta
+_core:
+  default_config_hash: 3Axi0P3qQP2BYHA-a_DQfCspgbHNvcT8BlKbO_ufvog
+id: jakarta_branding
+theme: jakarta
+region: nav_left
+weight: -8
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: false
+visibility: {  }

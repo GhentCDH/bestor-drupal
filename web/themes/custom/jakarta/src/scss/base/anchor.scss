@@ -1,0 +1,15 @@
+@use "./../variables";
+
+.site-wrapper {
+  a:not(.c-button) {
+    color: var(--color-text-link);
+    outline: 0 !important;
+    text-decoration: none;
+    transition: var(--transition-link);
+
+    &:hover,
+    &:focus {
+      color: var(--color-text-link-hover);
+    }
+  }
+}

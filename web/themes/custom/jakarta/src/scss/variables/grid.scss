@@ -1,0 +1,12 @@
+@use "./../variables/breakpoints";
+
+:root {
+  --grid-offset: 80px;
+  --grid-offset-mobile: 20px;
+  --grid-gutter: 80px;
+  --grid-gutter-mobile: 30px;
+  --grid-width: 1760px;
+  --grid-total-columns: 24;
+  --grid-total-columns-tablet: 12;
+  --grid-total-columns-mobile: 4;
+}

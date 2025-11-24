@@ -1,0 +1,20 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-lemma-sidebar {
+  $self: &;
+
+  #{$self}__wrapper,
+  #{$self}__related-items {
+    display: flex;
+    flex-direction: column;
+    gap: functions.rem(30px);
+  }
+
+  #{$self}__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: functions.rem(30px);
+  }
+}

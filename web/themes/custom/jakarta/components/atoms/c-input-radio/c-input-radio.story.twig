@@ -1,0 +1,12 @@
+{# c-input.story.twig #}
+{# for story purposes only #}
+{% set attributes = create_attribute() %}
+{% do attributes.setAttribute('type', 'radio') %}
+{% do attributes.setAttribute('id', 'radio-ex') %}
+{# for story purposes only #}
+
+{{ include('jakarta:c-input-radio') }}
+
+{# for story purposes only #}
+<label for="radio-ex">I am label</label>
+{# for story purposes only #}

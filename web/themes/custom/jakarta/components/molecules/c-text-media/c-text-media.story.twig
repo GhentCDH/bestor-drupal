@@ -1,0 +1,64 @@
+{# c-text-media.story.twig #}
+{# 50/50 #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/400/510" width="510" height="400" alt="Test image">
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id viverra nibh. Phasellus non dapibus tellus, sit amet maximus urna. Nunc eu augue tincidunt, pulvinar lacus ac, ullamcorper augue. Aliquam suscipit sem elit, ut fermentum tellus malesuada nec. Curabitur maximus placerat orci id bibendum. Aliquam ullamcorper lectus eu leo consectetur hendrerit. Fusce gravida elementum tortor, aliquet fermentum dui porttitor sit amet. Maecenas consequat laoreet metus a mattis. Cras ut magna et quam congue volutpat eget eu neque. Curabitur ut enim sollicitudin, eleifend nibh ut.</p>
+{% endset %}
+<div>
+  {{ include('jakarta:c-text-media', {
+    media,
+    text,
+    media_position: 'left',
+    media_layout: '50_50',
+  }) }}
+</div>
+
+{# 50/50 - right #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/400/510" width="510" height="400" alt="Test image">
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id viverra nibh. Phasellus non dapibus tellus, sit amet maximus urna. Nunc eu augue tincidunt, pulvinar lacus ac, ullamcorper augue. Aliquam suscipit sem elit, ut fermentum tellus malesuada nec. Curabitur maximus placerat orci id bibendum. Aliquam ullamcorper lectus eu leo consectetur hendrerit. Fusce gravida elementum tortor, aliquet fermentum dui porttitor sit amet. Maecenas consequat laoreet metus a mattis. Cras ut magna et quam congue volutpat eget eu neque. Curabitur ut enim sollicitudin, eleifend nibh ut.</p>
+{% endset %}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-text-media', {
+    media,
+    text,
+    media_position: 'right',
+    media_layout: '50_50',
+  }) }}
+</div>
+
+{# image_33 #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/400/510" width="510" height="400" alt="Test image">
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id viverra nibh. Phasellus non dapibus tellus, sit amet maximus urna. Nunc eu augue tincidunt, pulvinar lacus ac, ullamcorper augue. Aliquam suscipit sem elit, ut fermentum tellus malesuada nec. Curabitur maximus placerat orci id bibendum. Aliquam ullamcorper lectus eu leo consectetur hendrerit. Fusce gravida elementum tortor, aliquet fermentum dui porttitor sit amet. Maecenas consequat laoreet metus a mattis. Cras ut magna et quam congue volutpat eget eu neque. Curabitur ut enim sollicitudin, eleifend nibh ut.</p>
+{% endset %}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-text-media', {
+    media,
+    text,
+    media_position: 'left',
+    media_layout: 'image_33',
+  }) }}
+</div>
+
+{# image_33 - right #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/400/510" width="510" height="400" alt="Test image">
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id viverra nibh. Phasellus non dapibus tellus, sit amet maximus urna. Nunc eu augue tincidunt, pulvinar lacus ac, ullamcorper augue. Aliquam suscipit sem elit, ut fermentum tellus malesuada nec. Curabitur maximus placerat orci id bibendum. Aliquam ullamcorper lectus eu leo consectetur hendrerit. Fusce gravida elementum tortor, aliquet fermentum dui porttitor sit amet. Maecenas consequat laoreet metus a mattis. Cras ut magna et quam congue volutpat eget eu neque. Curabitur ut enim sollicitudin, eleifend nibh ut.</p>
+{% endset %}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-text-media', {
+    media,
+    text,
+    media_position: 'right',
+    media_layout: 'image_33',
+  }) }}
+</div>

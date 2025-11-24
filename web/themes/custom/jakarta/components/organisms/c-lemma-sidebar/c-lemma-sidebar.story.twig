@@ -1,0 +1,57 @@
+{# c-lemma-sidebar.story.twig #}
+{% set buttons %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: 'Suggestion',
+  }, with_context = false) }}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: 'Quote',
+  }, with_context = false) }}
+{% endset %}
+{% set table_of_contents %}
+  {% set dropdown_items %}
+    <ul class="links">
+      <li><a href="#">Titel 1</a></li>
+      <li><a href="#">Titel 2</a></li>
+      <li><a href="#">Titel 3</a></li>
+    </ul>
+  {% endset %}
+  {{ include('jakarta:c-dropdown', {
+    toggle: 'Inhoudstafel',
+    dropdown_items,
+  }, with_context = false) }}
+{% endset %}
+{% set related_items %}
+  {% set items %}
+    <ul class="links">
+      <li><a href="#">Naam concept</a> (type relatie)</li>
+      <li><a href="#">Naam concept</a> (type relatie)</li>
+      <li><a href="#">Naam concept</a> (type relatie)</li>
+    </ul>
+  {% endset %}
+  {{ include('jakarta:c-related-items', {
+    title: 'Related items',
+    items,
+  }, with_context = false) }}
+  {% set items_2 %}
+    <ul class="links">
+      <li><a href="#">Naam document</a> (type relatie)</li>
+      <li><a href="#">Naam document</a> (type relatie)</li>
+      <li><a href="#">Naam document</a> (type relatie)</li>
+    </ul>
+  {% endset %}
+  {{ include('jakarta:c-related-items', {
+    title: 'Related items',
+    items: items_2,
+  }, with_context = false) }}
+{% endset %}
+{{ include('jakarta:c-lemma-sidebar', {
+  buttons,
+  table_of_contents,
+  related_items,
+}, with_context = false) }}

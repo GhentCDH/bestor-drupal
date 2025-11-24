@@ -1,0 +1,26 @@
+{# c-heading.story.twig #}
+{# h1 #}
+{{ include('jakarta:c-heading', {
+  content: 'Lorem ipsum dolor sit amet',
+  heading_tag: 'h1',
+  heading_class: 'h1',
+}, with_context = false) }}
+
+{# h2 #}
+{{ include('jakarta:c-heading', {
+  content: 'Lorem ipsum dolor sit amet',
+}, with_context = false) }}
+
+{# h3 #}
+{{ include('jakarta:c-heading', {
+  content: 'Lorem ipsum dolor sit amet',
+  heading_tag: 'h3',
+  heading_class: 'h3',
+}, with_context = false) }}
+
+{# h4 #}
+{{ include('jakarta:c-heading', {
+  content: 'Lorem ipsum dolor sit amet',
+  heading_tag: 'h4',
+  heading_class: 'h4',
+}, with_context = false) }}

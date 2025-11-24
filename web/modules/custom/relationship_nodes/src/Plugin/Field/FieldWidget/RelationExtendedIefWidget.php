@@ -28,55 +28,55 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class RelationExtendedIefWidget extends InlineEntityFormSimple {
 
-    protected RelationEntityFormHandler $relationFormHandler;
+  protected RelationEntityFormHandler $relationFormHandler;
 
-    public function __construct(
-        $plugin_id,
-        $plugin_definition,
-        FieldDefinitionInterface $field_definition,
-        array $settings,
-        array $third_party_settings,
-        EntityTypeBundleInfoInterface $entity_type_bundle_info,
-        EntityTypeManagerInterface $entity_type_manager,
-        EntityDisplayRepositoryInterface $entity_display_repository,
-        RelationEntityFormHandler $relationFormHandler
-        ) {
-        parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_bundle_info, $entity_type_manager, $entity_display_repository);
-        $this->relationFormHandler = $relationFormHandler; 
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    array $third_party_settings,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityDisplayRepositoryInterface $entity_display_repository,
+    RelationEntityFormHandler $relationFormHandler
+    ) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_bundle_info, $entity_type_manager, $entity_display_repository);
+    $this->relationFormHandler = $relationFormHandler; 
+  }
+
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['third_party_settings'],
+      $container->get('entity_type.bundle.info'),
+      $container->get('entity_type.manager'),
+      $container->get('entity_display.repository'),
+      $container->get('relationship_nodes.relation_entity_form_handler')
+    );
+  }
+
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+    $element = parent::formElement($items, $delta, $element, $form, $form_state);
+    if(!empty($element['inline_entity_form'])){
+      $element['inline_entity_form']['#relation_extended_widget'] = true;
     }
+    return $element;
+  }
 
-    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-        return new static(
-            $plugin_id,
-            $plugin_definition,
-            $configuration['field_definition'],
-            $configuration['settings'],
-            $configuration['third_party_settings'],
-            $container->get('entity_type.bundle.info'),
-            $container->get('entity_type.manager'),
-            $container->get('entity_display.repository'),
-            $container->get('relationship_nodes.relation_entity_form_handler')
-        );
-    }
-
-    public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-        $element = parent::formElement($items, $delta, $element, $form, $form_state);
-        if(!empty($element['inline_entity_form'])){
-            $element['inline_entity_form']['#relation_extended_widget'] = true;
-        }
-        return $element;
-    }
-
-    public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state) {
-        parent::extractFormValues($items, $form, $form_state);
-        $field_name = $this->fieldDefinition->getName();
-        $parents = array_merge($form['#parents'], [$field_name]);
-        $ief_id = $this->makeIefId($parents);
-        $form_state->set(['inline_entity_form', $ief_id, 'relation_extended_widget'], true);
-    }
+  public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state) {
+    parent::extractFormValues($items, $form, $form_state);
+    $field_name = $this->fieldDefinition->getName();
+    $parents = array_merge($form['#parents'], [$field_name]);
+    $ief_id = $this->makeIefId($parents);
+    $form_state->set(['inline_entity_form', $ief_id, 'relation_extended_widget'], true);
+  }
 
 
-    public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
-        return $this->relationFormHandler->clearEmptyRelationsFromInput($values, $form, $form_state, $this->fieldDefinition->getName());
-    }
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+    return $this->relationFormHandler->clearEmptyRelationsFromInput($values, $form, $form_state, $this->fieldDefinition->getName());
+  }
 }

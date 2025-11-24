@@ -8,12 +8,12 @@ use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Drupal\search_api\Entity\Index;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\relationship_nodes_search\Service\RelationSearchService;
 use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionGroup;
-use Drupal\relationship_nodes_search\Service\NestedAggregationService;
-use Drupal\relationship_nodes_search\Service\NestedFilterConfigurationHelper;
-use Drupal\relationship_nodes_search\Service\NestedFilterExposedWidgetHelper;
-use Drupal\Core\Cache\Cache;
+use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\Views\Widget\NestedExposedFormBuilder;
+use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFilterConfigurator;
+use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
 
 /**
  * Filter for nested relationship data in Search API.
@@ -22,319 +22,338 @@ use Drupal\Core\Cache\Cache;
  */
 class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPluginInterface {
 
-    use SearchApiFilterTrait;
+  use SearchApiFilterTrait;
 
-    protected NestedAggregationService $nestedAggregationService;
-    protected RelationSearchService $relationSearchService;
-    protected NestedFilterConfigurationHelper $filterConfigurator;
-    protected NestedFilterExposedWidgetHelper $filterWidgetHelper;
-    protected ?array $valueOptions = NULL;
-
-
-    public function __construct(
-        array $configuration,
-        string $plugin_id,
-        mixed $plugin_definition,
-        NestedAggregationService $nestedAggregationService,
-        RelationSearchService $relationSearchService,
-        NestedFilterConfigurationHelper $filterConfigurator,
-        NestedFilterExposedWidgetHelper $filterWidgetHelper
-    ) {
-        parent::__construct($configuration, $plugin_id, $plugin_definition);
-        $this->nestedAggregationService = $nestedAggregationService;
-        $this->relationSearchService = $relationSearchService;
-        $this->filterConfigurator = $filterConfigurator;
-        $this->filterWidgetHelper = $filterWidgetHelper;
-    }
-    
-
-    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-        return new static(
-            $configuration,
-            $plugin_id,
-            $plugin_definition,
-            $container->get('relationship_nodes_search.nested_aggregation_service'),
-            $container->get('relationship_nodes_search.relation_search_service'),
-            $container->get('relationship_nodes_search.nested_filter_configuration_helper'),
-            $container->get('relationship_nodes_search.nested_filter_exposed_widget_helper'),
-        );
-    }
+  protected NestedFieldHelper $nestedFieldHelper;
+  protected NestedExposedFormBuilder $exposedFormBuilder;
+  protected NestedFieldViewsFilterConfigurator $filterConfigurator;
+  protected NestedQueryStructureBuilder $queryBuilder;
+  protected FilterOperatorHelper $operatorHelper;
 
 
-    public function defineOptions() {
-        $options = parent::defineOptions();   
-        foreach ($this->getDefaultFilterOptions() as $option => $default) {
-            $options[$option] = ['default' => $default];
-        } 
-        return $options;
-    }
+  /**
+   * Constructs a RelationshipFilter object.
+   *
+   * @param array $configuration
+   *    The plugin configuration.
+   * @param string $plugin_id
+   *    The plugin ID.
+   * @param mixed $plugin_definition
+   *    The plugin definition.
+   * @param NestedFieldHelper $nestedFieldHelper
+   *    The nested field helper service.
+   * @param NestedExposedFormBuilder $exposedFormBuilder
+   *    The exposed form builder service.
+   * @param NestedFieldViewsFilterConfigurator $filterConfigurator
+   *    The filter configurator service.
+   * @param NestedQueryStructureBuilder $queryBuilder
+   *    The query builder service.
+   * @param FilterOperatorHelper $operatorHelper
+   *    The operator helper service.
+   */
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    NestedFieldHelper $nestedFieldHelper,
+    NestedExposedFormBuilder $exposedFormBuilder,
+    NestedFieldViewsFilterConfigurator $filterConfigurator,
+    NestedQueryStructureBuilder $queryBuilder,
+    FilterOperatorHelper $operatorHelper
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->nestedFieldHelper = $nestedFieldHelper;
+    $this->exposedFormBuilder = $exposedFormBuilder;
+    $this->filterConfigurator = $filterConfigurator;
+    $this->queryBuilder = $queryBuilder;
+    $this->operatorHelper = $operatorHelper;
+  }
 
 
-    /*
-    * Configuration views admin form
-    */
-    public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-        parent::buildOptionsForm($form, $form_state);
-        if (isset($form['expose']['multiple'])) {
-            $form['expose']['multiple']['#access'] = FALSE;
-        }
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('relationship_nodes_search.nested_field_helper'),
+      $container->get('relationship_nodes_search.nested_exposed_form_builder'),
+      $container->get('relationship_nodes_search.nested_field_views_filter_configurator'),
+      $container->get('relationship_nodes_search.nested_query_structure_builder'),
+      $container->get('relationship_nodes_search.filter_operator_helper')
+    );
+  }
 
-        $index = $this->getIndex();
-        $sapi_fld_nm = $this->getSapiField();  
-        if (!$index instanceof Index || empty($sapi_fld_nm)) {
-            $form['error'] = [
-                '#markup' => $this->t('Cannot load index or field configuration.'),
-            ];
-            return;
-        }
-        
-        $available_fields = $this->relationSearchService->getProcessedNestedChildFieldNames($index, $sapi_fld_nm);
-        if (empty($available_fields)) {
-            $form['info'] = [
-                '#markup' => $this->t('No nested fields available. Please configure nested fields in the Search API index.'),
-            ];
-            return;
-        }
 
-        $form['operator'] = [
-            '#type' => 'radios',
-            '#title' => $this->t('Operator'),
-            '#options' => [
-                'and' => $this->t('AND - All conditions must match'),
-                'or' => $this->t('OR - Any condition can match'),
-            ],
-            '#default_value' => $this->options['operator'] ?? 'and',
-            '#description' => $this->t('How to combine multiple filter fields.'),
-        ];
+  /**
+   * {@inheritdoc}
+   */
+  public function defineOptions() {
+    $options = parent::defineOptions();   
+    foreach ($this->getDefaultFilterOptions() as $option => $default) {
+      $options[$option] = ['default' => $default];
+    } 
+    return $options;
+  }
 
-        $form['expose_operators'] = [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Allow users to select operators'),
-            '#default_value' => $this->options['expose_operators'] ?? FALSE,
-            '#description' => $this->t('When exposed, allow users to choose the comparison operator for each field.'),
-        ];
 
-        $filter_field_settings = $this->getFieldSettings();
-        $this->filterConfigurator->buildNestedWidgetConfigForm($form, $available_fields, $filter_field_settings);
+  /**
+   * {@inheritdoc}
+   */
+  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+    parent::buildOptionsForm($form, $form_state);
+    if (isset($form['expose']['multiple'])) {
+      $form['expose']['multiple']['#access'] = FALSE;
     }
 
-    
-    public function submitOptionsForm(&$form, FormStateInterface $form_state) {
-        parent::submitOptionsForm($form, $form_state);
-        
-        foreach ($this->getDefaultFilterOptions() as $option => $default) {
-            $value = $form_state->getValue(['options', $option]);
-            if (isset($value)) {
-                $this->options[$option] = $value;
-            }
-        }
-    }
+    $config = $this->filterConfigurator->validateAndPreparePluginForm(
+      $this->getIndex(),
+      $this->definition,
+      $form
+    );
+    if (!$config) {
+      return;
+    } 
 
-
-    /*
-    * Create title/description of the filter, visible in the views admin config form
-    */
-    public function adminSummary() {
-        if (!$this->isExposed()) {
-            return parent::adminSummary();
-        }
-
-        $field_settings =  $this->getFieldSettings();
-        $enabled = $this->filterWidgetHelper->getEnabledFields($field_settings);
-        if (empty($enabled)) {
-            return $this->t('Not configured');
-        }
-
-        $operator = $this->options['operator'] ?? 'and';
-        
-        return $this->t('@count fields (@operator)', [
-            '@count' => count($enabled),
-            '@operator' => strtoupper($operator),
-        ]);
-    }
-
-    /*
-    * Exposed Form
-    */
-protected function valueForm(&$form, FormStateInterface $form_state):void {
-    $index = $this->getIndex();
-    $sapi_fld_nm = $this->getSapiField();
-
-    if (!$index instanceof Index || empty($sapi_fld_nm)) {
-        return;
-    }
-
-    $form['value'] = [
-        '#type' => 'container',
-        '#tree' => TRUE,
+    $form['operator'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Operator'),
+      '#options' => [
+          'and' => $this->t('AND - All conditions must match'),
+          'or' => $this->t('OR - Any condition can match'),
+      ],
+      '#default_value' => $this->options['operator'] ?? 'and',
+      '#description' => $this->t('How to combine multiple filter fields.'),
     ];
 
-    // If not exposed, show text fields for value inputs
-    if (!$this->options['exposed']) {
-        return;
-    }
+    $form['expose_operators'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow users to select operators'),
+      '#default_value' => $this->options['expose_operators'] ?? FALSE,
+      '#description' => $this->t('When exposed, allow users to choose the comparison operator for each field.'),
+    ];
 
-    // If exposed, build exposed field widgets
-    
-    $field_settings = $this->getFieldSettings();
-    $enabled_fields = $this->filterWidgetHelper->getEnabledAndSortedFields($field_settings);    
-    if (empty($enabled_fields)) {
-        return;
-    }
+    $child_fld_settings = $this->getFieldSettings();
+    $this->filterConfigurator->buildConfigForm(
+      $form, 
+      $config['index'], 
+      $config['field_name'], 
+      $config['available_fields'], 
+      $child_fld_settings
+    );
+  }
 
-    $exp_op = $this->options['expose_operators'] ?? false;
-
-    foreach ($enabled_fields as $child_fld_nm => $field_config) {
-        $field_value = $this->value[$child_fld_nm] ?? null;
-        $path = ['value', $child_fld_nm];
-        $this->filterWidgetHelper->buildExposedFieldWidget($form, $path, $index, $sapi_fld_nm, $child_fld_nm, $field_config, $field_value, $exp_op);
-    }
-    dpm($form, 'form value form relatiopship filter');
-}
-    
-
-
-    public function query():void {
-        if (!$this->getQuery()) {
-            return;
-        }
-
-        $conditions = $this->buildFilterConditions();
-        if (empty($conditions)) {
-            return;
-        }
-
-        $this->applyNestedConditions($conditions);
-    }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function submitOptionsForm(&$form, FormStateInterface $form_state) {
+    parent::submitOptionsForm($form, $form_state);    
+    $this->filterConfigurator->savePluginOptions(
+      $form_state,
+      $this->getDefaultFilterOptions(),
+      $this->options
+    );
+  }
 
 
     /**
-     * Build filter conditions from form values.
-     */
-protected function buildFilterConditions(): array {
-    $filter_field_settings = $this->getFieldSettings();
+   * {@inheritdoc}
+   */
+  public function adminSummary() {
+    if (!$this->isExposed()) {
+      return parent::adminSummary();
+    }
+
+    $child_fld_settings =  $this->getFieldSettings();
+    $enabled = $this->exposedFormBuilder->getEnabledFields($child_fld_settings);
+    if (empty($enabled)) {
+      return $this->t('Not configured');
+    }
+
+    $operator = $this->options['operator'] ?? 'and';
+    
+    return $this->t('@count fields (@operator)', [
+      '@count' => count($enabled),
+      '@operator' => strtoupper($operator),
+    ]);
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function valueForm(&$form, FormStateInterface $form_state):void {
+    $index = $this->getIndex();
+    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);
+    if (!$index instanceof Index || empty($sapi_fld_nm)) {
+      return;
+    }
+
+    $child_fld_settings = $this->options['exposed'] ? $this->getFieldSettings() : [];
+    $child_fld_values = is_array($this->value) ? $this->value : [];
+
+    $exp_op = $this->options['expose_operators'] ?? FALSE;
+
+    $this->exposedFormBuilder->buildExposedFieldWidget(
+      $form, ['value'], $index, $sapi_fld_nm, $child_fld_settings, $child_fld_values, $exp_op
+    );
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function query():void {
+    if (!$this->getQuery()) {
+      return;
+    }
+
+    $conditions = $this->buildFilterConditions();
+    if (empty($conditions)) {
+      return;
+    }
+
+    $this->applyNestedConditions($conditions);
+  }
+
+
+  /**
+   * Builds filter conditions from form values.
+   *
+   * Extracts enabled field values and their operators from the form state,
+   * sanitizes input, and returns structured condition arrays.
+   *
+   * @return array
+   *   Array of condition arrays, each containing:
+   *   - child_field_name: the nested field name
+   *   - value: the filter value
+   *   - operator: the comparison operator
+   */
+  protected function buildFilterConditions(): array {
+    $child_fld_settings = $this->getFieldSettings();
     $conditions = [];
-    foreach ($filter_field_settings as $child_fld_nm => $field_config) {
-        if (empty($field_config['enabled'])) {
-            continue;
-        }
+    
+    foreach ($child_fld_settings as $child_fld_nm => $field_config) {
+      if (empty($field_config['enabled'])) {
+        continue;
+      }
 
-        if ($this->options['exposed']) {
-            $value = $this->value[$child_fld_nm]['value'] ?? $this->value[$child_fld_nm] ?? '';
-        } 
+      // Get value
+      if ($this->options['exposed']) {
+        $value = $this->value[$child_fld_nm]['value'] ?? $this->value[$child_fld_nm] ?? '';
+      } else {
+        $value = $field_config['value'] ?? '';
+      }
+      
+      if (is_string($value)) {
+        $value = $this->sanitizeFieldValue($value);
+      }
+      
+      if ($value === '' || $value === NULL) {
+        continue;
+      }
 
-        else {
-            $value = $field_config['value'] ?? '';
-        }
-        
-        if ($value === '' || $value === NULL) {
-            continue;
-        }
-        $field_operator = $this->getFieldOperator($child_fld_nm, $field_config);
+      $operator = $this->operatorHelper->determineFieldOperator($field_config, $child_fld_nm, $this->value);
 
-            $conditions[] = [
-                'child_field_name' => $child_fld_nm,
-                'value' => $value,
-                'operator' => $field_operator,
-            ];
-        }
-        return $conditions;
-}
+      $conditions[] = [
+        'child_field_name' => $child_fld_nm,
+        'value' => $value,
+        'operator' => $operator,
+      ];
+    }
+    
+    return $conditions;
+  }
 
 
-    /**
-     * Get the operator for a specific field.
-     */
-    protected function getFieldOperator(string $child_fld_nm, array $field_config): string {
-        $field_operator = '=';
+  /**
+   * Applies nested conditions to the search query.
+   *
+   * Creates a NestedParentFieldConditionGroup and adds all child field
+   * conditions to it, then adds the group to the query.
+   *
+   * @param array $conditions
+   *   Array of condition arrays from buildFilterConditions().
+   */
+  protected function applyNestedConditions(array $conditions): void {
+    $operator = $this->options['operator'] ?? 'and';
+    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);
+    $index = $this->getIndex();
 
-        if (!empty($field_config['expose_field_operator']) && isset($this->value[$child_fld_nm]['operator'])) {
-            $field_operator = $this->value[$child_fld_nm]['operator'];
-        } elseif (!empty($field_config['field_operator'])) {
-            $field_operator = $field_config['field_operator'];
-        }
-
-        return $this->isValidOperator($field_operator) ? $field_operator : '=';
+    if (empty($sapi_fld_nm) || !$index instanceof Index) {
+      return;
     }
 
-    /**
-     * Apply nested conditions to the query.
-     */
-    protected function applyNestedConditions(array $conditions): void {
-        $operator = $this->options['operator'] ?? 'and';
-        $sapi_fld_nm = $this->getSapiField();
-
-        if (empty($sapi_fld_nm)) {
-            return;
-        }
-
-        $nested_field_condition = new NestedParentFieldConditionGroup(strtoupper($operator));
-        $nested_field_condition->setParentFieldName($sapi_fld_nm);
-        
-        foreach ($conditions as $condition) {
-            $nested_field_condition->addChildFieldCondition(
-                $condition['child_field_name'],
-                $condition['value'],
-                $condition['operator']
-            );
-        }
-        $this->query->addConditionGroup($nested_field_condition);
+    $nested_fld_condition = new NestedParentFieldConditionGroup(strtoupper($operator));
+    $nested_fld_condition
+      ->setParentFieldName($sapi_fld_nm)
+      ->setIndex($index)
+      ->setQueryBuilder($this->queryBuilder);
+    
+    foreach ($conditions as $condition) {
+      $nested_fld_condition->addChildFieldCondition(
+        $condition['child_field_name'],
+        $condition['value'],
+        $condition['operator']
+      );
     }
+    $this->query->addConditionGroup($nested_fld_condition);
+  }
 
 
-    /**
-     * Get target entity type for autocomplete field.
-     */
-    protected function getTargetTypeForField(string $child_fld_nm): string {
-        $index = $this->getIndex();
-        $sapi_fld_nm = $this->getSapiField();
-        
-        if ($index instanceof Index && !empty($sapi_fld_nm)) {
-            $target_type = $this->relationSearchService->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
-            if ($target_type) {
-                return $target_type;
-            }
-        }
-        
-        // Fallback based on field name
-        if (strpos($child_fld_nm, 'relation_type') !== false) {
-            return 'taxonomy_term';
-        }
-        
-        return 'node';
+  /**
+   * Gets the field settings from options.
+   *
+   * @return array
+   *   The filter field settings array.
+   */
+  protected function getFieldSettings(): array {
+    return $this->options['filter_field_settings'] ?? [];
+  }
+
+
+  /**
+   * Sanitizes a single field value.
+   *
+   * Removes HTML tags, trims whitespace, and limits length to 255 characters.
+   *
+   * @param string $value
+   *   The value to sanitize.
+   *
+   * @return string
+   *   The sanitized value.
+   */
+  protected function sanitizeFieldValue(string $value): string {
+    // Remove HTML tags
+    $value = strip_tags($value);
+    
+    // Trim whitespace
+    $value = trim($value);
+    
+    // Limit length
+    if (mb_strlen($value) > 255) {
+      $value = mb_substr($value, 0, 255);
     }
+    
+    return $value;
+  }
 
 
-    protected function getFieldSettings():array{
-        return $this->options['filter_field_settings'] ?? [];
-    }
-
-
-    /**
-     * Check if operator is valid.
-     */
-    protected function isValidOperator(string $operator): bool {
-        return array_key_exists($operator, $this->filterConfigurator->getOperatorOptions());
-    }
-
-    /**
-     * Get the real field name for this filter in the index.
-     */
-    protected function getSapiField(): ?string {
-        return $this->definition['real field'] ?? null;
-    }
-
-    /**
-     * Get default filter options.
-     */
-    protected function getDefaultFilterOptions(): array {
-        return [
-            'value' => [],
-            'filter_field_settings' => [],
-            'operator' => 'and',
-            'expose_operators' => FALSE,
-        ];
-    }
-
-
+  /**
+   * Gets default filter options.
+   *
+   * @return array
+   *   Array of default option values.
+   */
+  protected function getDefaultFilterOptions(): array {
+    return [
+      'value' => [],
+      'filter_field_settings' => [],
+      'operator' => 'and',
+      'expose_operators' => FALSE,
+    ];
+  }
 }

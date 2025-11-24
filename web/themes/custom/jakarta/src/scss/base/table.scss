@@ -1,0 +1,34 @@
+@use "./../variables";
+@use "./../functions";
+
+.site-wrapper {
+  table {
+    margin: 0;
+    overflow: scroll;
+    display: block;
+    width: 100%;
+    border-collapse: collapse;
+
+    @media screen and (min-width: variables.$breakpoints-mobile) {
+      display: table;
+    }
+
+    tr {
+      border-bottom: 1px solid var(--color-grey);
+    }
+
+    td {
+      padding: functions.rem(5px);
+    }
+
+    th {
+      padding: functions.rem(5px);
+      text-align: left;
+    }
+
+    .form-item,
+    p {
+      margin: 0;
+    }
+  }
+}

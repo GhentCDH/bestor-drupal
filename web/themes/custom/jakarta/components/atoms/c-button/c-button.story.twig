@@ -1,0 +1,38 @@
+{# c-button.story.twig #}
+<div>
+  {# default #}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: 'Default primary button',
+  }, with_context = false) }}
+</div>
+
+<div>
+  {# default - white #}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'white',
+    title: 'Default white button',
+  }, with_context = false) }}
+</div>
+
+<div>
+  {# outline #}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'outline',
+    title: 'Outline button',
+  }, with_context = false) }}
+</div>
+
+<div>
+  {# link #}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'link',
+    title: 'Link button',
+  }, with_context = false) }}
+</div>

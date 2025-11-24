@@ -14,8 +14,9 @@ use Symfony\Component\Validator\Constraint;
  *   label = @Translation("Term Mirror Validation", context = "Validation"),
  * )
  */
+
 class ValidRelatedEntitiesConstraint extends Constraint {
-   public $incomplete = 'A relation cannot have empty related item fields.';
-   public $selfReferring = 'An item cannot have a relation with itself.';
+  public $incomplete = 'A relation cannot have empty related item fields.';
+  public $selfReferring = 'An item cannot have a relation with itself.';
 }
 

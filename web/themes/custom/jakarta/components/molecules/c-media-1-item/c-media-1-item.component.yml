@@ -1,0 +1,40 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Media 1 Item'
+status: stable
+group: Molecules
+description: "A component that displays a media 1 item."
+variants:
+  media_only:
+    title: Media Only
+  media_w_caption:
+    title: Media With Caption
+props:
+  type: object
+  properties:
+    add_lightbox:
+      type: boolean
+      title: Add lightbox
+      description: 'Add a lightbox to the media 1 item.'
+      default: 0
+      examples:
+        - 0
+    add_container:
+      type: boolean
+      title: Add Container
+      description: 'Add a container to the media 1 item.'
+      default: 1
+      examples:
+        - 1
+    c_media_1_item_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  media:
+    title: Media
+    description: 'The media to display. Can be an image or video.'
+  caption:
+    title: Caption
+    description: 'The caption to display.'

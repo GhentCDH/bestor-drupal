@@ -1,0 +1,17 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-branding__logo {
+  display: block;
+  max-inline-size: functions.rem(150px);
+
+  img,
+  svg {
+    width: 100%;
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    max-inline-size: functions.rem(215px);
+  }
+}

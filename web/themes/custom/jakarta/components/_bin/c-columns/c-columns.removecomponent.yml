@@ -1,0 +1,17 @@
+name: Column
+props:
+  type: object
+  required:
+    - title
+    - text
+  properties:
+    # The title to display.
+    title:
+      type: string
+      title: Text
+      description: The text to display.
+    # The text to display.
+    text:
+      type: string
+      title: Text
+      description: The text to display.

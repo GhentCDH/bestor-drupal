@@ -1,0 +1,28 @@
+uuid: 599a1134-ba25-4254-95c1-b79fca50f502
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.active_facets
+  module:
+    - facets_summary
+    - system
+  theme:
+    - jakarta
+id: jakarta_activefacets
+theme: jakarta
+region: sidebar
+weight: -8
+provider: null
+plugin: 'facets_summary_block:active_facets'
+settings:
+  id: 'facets_summary_block:active_facets'
+  label: 'active facets'
+  label_display: visible
+  provider: facets_summary
+  context_mapping: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /database

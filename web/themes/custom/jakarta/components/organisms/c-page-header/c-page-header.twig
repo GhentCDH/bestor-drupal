@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for the component c-page-header.
+ */
+#}
+
+{% set header_classes = [
+  'c-page-header',
+]|merge(c_page_header_utility_classes ?: []) %}
+
+{% if page.nav_left or page.nav or page.nav_right %}
+  <header {{ attributes.setAttribute('role', 'banner').addClass(header_classes) }}>
+    <div class="container">
+      <div class="c-page-header__inner">
+        {% block page_header_content %}
+          {% if page.nav_left %}
+            {{ page.nav_left }}
+          {% endif %}
+          {% if page.nav %}
+            {{ page.nav }}
+          {% endif %}
+          {% if page.nav_right %}
+            {{ page.nav_right }}
+          {% endif %}
+          {{ include('jakarta:c-hamburger', with_context = false) }}
+        {% endblock %}
+      </div>
+    </div>
+  </header>
+{% endif %}

@@ -1,0 +1,22 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-tab {
+  font-size: clamp(var(--font-h3-size), 1.6vw, 26px);
+  font-family: var(--font-family-title);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.25;
+  color: var(--color-grey-medium);
+  cursor: pointer;
+  transition: var(--transition-link);
+
+  &:hover,
+  &:focus {
+    color: var(--color-text-link-hover);
+  }
+
+  &.is-active {
+    color: var(--color-text);
+  }
+}

@@ -1,0 +1,11 @@
+{# c-select.story.twig #}
+{# for story purposes only #}
+{% set attributes = create_attribute() %}
+{% set options = [
+  { type: 'option', value: '1', label: 'Option 1' },
+  { type: 'option', value: '2', label: 'Option 2' },
+  { type: 'option', value: '3', label: 'Option 3' },
+] %}
+{# for story purposes only #}
+
+{{ include('jakarta:c-select') }}

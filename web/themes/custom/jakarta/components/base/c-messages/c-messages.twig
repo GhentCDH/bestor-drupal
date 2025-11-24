@@ -1,0 +1,10 @@
+{% set c_name = "c-messages" %}
+
+{% set classes = [
+  c_name,
+  layout ? c_name ~ '--layout-' ~ layout
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  {% block content %}{% endblock %}
+</div>
