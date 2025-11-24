@@ -64,7 +64,7 @@ class NestedFilterBuilder extends FilterBuilder {
     $parent = $condition_group->getParentFieldName();
     
     if (empty($parent)) {
-      $this->loggerFactory->get('relationship_nodes_search')->warning('NestedParentFieldConditionGroup without parent field name');
+       $this->logger->warning('NestedParentFieldConditionGroup without parent field name');
       return [];
     }
 
