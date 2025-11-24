@@ -42,6 +42,11 @@
           heading_tag: attr_variant is same as ('horizontal') ? 'h4' : 'h3',
           heading_class: attr_variant is same as ('horizontal') ? 'h4' : 'h3',
         }, with_context = false) }}
+        {% if is_external_link %}
+          {{ include('jakarta:c-icon', {
+            icon: 'link',
+          }, with_context = false) }}
+        {% endif %}
       </div>
     {% endif %}
     {% if attr_variant is same as ('horizontal') %}
@@ -56,8 +61,13 @@
         {{ text }}
       </div>
     {% endif %}
+    {% if extras %}
+      <div class="{{ component_name }}__extras">
+        {{ extras }}
+      </div>
+    {% endif %}
   </div>
-  {% if attr_variant is same as ('vertical') %}
+  {% if attr_variant in ['vertical', 'vertical_outline'] %}
     {% if authors or read_time %}
       <div class="{{ component_name }}__meta">
         {% if authors %}

@@ -73,7 +73,56 @@
     read_time: '5 min.',
     text,
     url: '#',
-    is_external_link: '1',
     attr_variant: 'vertical',
   }, with_context = false) }}
+</div>
+
+{# vertical_outline #}
+{% set tag_3 %}
+  {{ include('jakarta:c-tag', {
+    attr_variant: 'corner_down',
+    color: 'primary',
+    content: 'Concept',
+  }, with_context = false) }}
+{% endset %}
+{% set extras %}
+  <ul>
+    <li>
+      {{ include('jakarta:c-icon', {
+        icon: 'birthdate',
+      }, with_context = false) }}
+      dd/mm/jaar (plaats)
+    </li>
+    <li>
+      {{ include('jakarta:c-icon', {
+        icon: 'death',
+      }, with_context = false) }}
+      dd/mm/jaar
+    </li>
+  </ul>
+{% endset %}
+<div class="h-margin-top-40" style="display: flex; flex-direction: row; gap: 40px;">
+  <div style="max-width: 400px;">
+    {{ include('jakarta:c-card', {
+      tag: tag_3,
+      title: 'Name concept',
+      authors: authors_2,
+      read_time: '5 min.',
+      text,
+      url: '#',
+      attr_variant: 'vertical_outline',
+    }, with_context = false) }}
+  </div>
+  <div style="max-width: 400px;">
+    {{ include('jakarta:c-card', {
+      tag: tag_3,
+      title: 'Name concept',
+      authors: authors_2,
+      read_time: '10 min.',
+      text,
+      extras,
+      url: '#',
+      attr_variant: 'vertical_outline',
+    }, with_context = false) }}
+  </div>
 </div>

@@ -51,6 +51,7 @@
   .c-tag__content,
   .c-tag__corner {
     background: var(--color-primary);
+    color: var(--color-text);
   }
 }
 
@@ -59,6 +60,7 @@
   .c-tag__content,
   .c-tag__corner {
     background: var(--color-grey-light);
+    color: var(--color-text);
   }
 }
 
@@ -67,5 +69,6 @@
   .c-tag__content,
   .c-tag__corner {
     background: var(--color-tertiary);
+    color: var(--color-text);
   }
 }

@@ -65,13 +65,13 @@ h2,
 h3,
 .h3 {
   margin-bottom: functions.rem(10px);
-  font-size: clamp(calc(var(--font-h3-size) * 0.75), 3vw, var(--font-h3-size));
+  font-size: clamp(var(--font-h4-size), 3vw, var(--font-h3-size));
 }
 
 h4,
 .h4 {
   margin-bottom: functions.rem(10px);
-  font-size: clamp(calc(var(--font-h4-size) * 0.75), 3vw, var(--font-h4-size));
+  font-size: var(--font-h4-size);
   font-weight: var(--font-weight-medium);
 }
 

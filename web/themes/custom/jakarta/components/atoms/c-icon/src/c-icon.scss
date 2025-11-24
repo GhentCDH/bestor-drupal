@@ -37,6 +37,11 @@ $icons: (
   "link": "\e90b",
   "print": "\e90c",
   "share": "\e90d",
+  "pen": "\e90e",
+  "marker": "\e90f",
+  "light": "\e910",
+  "death": "\e911",
+  "birthdate": "\e912",
 );
 
 @each $name, $glyph in $icons {
