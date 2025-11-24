@@ -69,6 +69,18 @@ class VirtualFieldAdder {
           'type' => 'relation_extended_ief_widget',
           'weight' => 0,
         ])
+        ->setDisplayOptions('view', [
+          'type' => 'relationship_formatter',
+          'weight' => 10,
+          'label' => 'above',
+          'settings' => [
+            'show_relation_type' => TRUE,
+            'show_field_labels' => TRUE,
+            'link_entities' => TRUE,
+            'group_by_type' => FALSE,
+            'separator' => ', ',
+          ],
+        ])
         ->setDisplayConfigurable('form', TRUE)
         ->setDisplayConfigurable('view', TRUE)
         ->setSetting('handler_settings', [

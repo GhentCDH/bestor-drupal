@@ -23,6 +23,7 @@ dependencies:
     - datetime_range
     - entity_reference_revisions
     - link
+    - relationship_nodes
     - user
 id: node.person.default
 targetEntityType: node
@@ -38,11 +39,14 @@ content:
     weight: 14
     region: content
   computed_relationshipfield__person__person:
-    type: entity_reference_entity_view
+    type: relationship_formatter
     label: above
     settings:
-      view_mode: default
-      link: true
+      show_relation_type: true
+      show_field_labels: true
+      link_entities: true
+      group_by_type: false
+      separator: ', '
     third_party_settings: {  }
     weight: 15
     region: content

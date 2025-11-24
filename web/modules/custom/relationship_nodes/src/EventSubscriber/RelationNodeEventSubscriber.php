@@ -93,6 +93,9 @@ class RelationNodeEventSubscriber implements EventSubscriberInterface {
    */
   private function generateRelationLabel(Node $relation_node): string {
     $related_entities = $this->nodeInfoService->getRelatedEntityValues($relation_node);
+    if (empty($related_entities)) {
+      return 'Relationship (no entities)';
+    }
     $title_parts = [];
     $node_storage = $this->entityTypeManager->getStorage('node');
     foreach ($related_entities as $field_values) {

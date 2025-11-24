@@ -87,6 +87,12 @@ services:
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.relation_bundle_settings_manager'
       - '@relationship_nodes.relation_field_configurator'
+  relationship_nodes.relationship_data_display_builder:
+    class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationshipDataDisplayBuilder
+    arguments:
+      - '@relationship_nodes.relation_node_info_service'
+      - '@relationship_nodes.field_name_resolver'
+      - '@entity_type.manager'
   relationship_nodes.node_type_form_alter:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\NodeTypeFormAlter
     arguments:
@@ -123,8 +129,6 @@ services:
       - '@entity_type.manager'
   relationship_nodes.field_name_resolver:
     class: Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver
-    arguments:
-      - '@config.factory'
   relationship_nodes.relation_field_configurator:
     class: Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator
     arguments:
