@@ -21,7 +21,7 @@ use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper
 use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\search_api\Entity\Index;
+use Drupal\search_api\IndexInterface;
 
 
 /**
@@ -135,7 +135,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   /**
    * {@inheritdoc}
    */
-    public static function supportsIndex(Index $index) {
+    public static function supportsIndex(IndexInterface $index) {
     // Check if the index has entity datasources.
     foreach ($index->getDatasources() as $datasource) {
       if ($datasource->getEntityTypeId()) {
