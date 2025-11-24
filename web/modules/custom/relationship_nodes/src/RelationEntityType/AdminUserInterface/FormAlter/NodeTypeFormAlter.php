@@ -9,6 +9,12 @@ use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\RelationBund
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationService;
 
+
+/**
+ * Form alter service for node type forms.
+ *
+ * Adds relationship nodes configuration to node type forms.
+ */
 class NodeTypeFormAlter {
 
   use StringTranslationTrait;
@@ -17,6 +23,17 @@ class NodeTypeFormAlter {
   protected RelationValidationService $validationService;
   protected RelationBundleSettingsManager $settingsManager;
 
+
+  /**
+   * Constructs a NodeTypeFormAlter object.
+   *
+   * @param RelationBundleFormHandler $formHandler
+   *   The form handler.
+   * @param RelationValidationService $validationService
+   *   The validation service.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   */
   public function __construct(
     RelationBundleFormHandler $formHandler,
     RelationValidationService $validationService,
@@ -27,9 +44,20 @@ class NodeTypeFormAlter {
     $this->settingsManager = $settingsManager;
   }
 
+
+  /**
+   * Alters node type forms to add relationship nodes settings.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   * @param string $form_id
+   *   The form ID.
+   */
   public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
     $node_type = $this->formHandler->getFormEntity($form_state);
-    if(!$node_type instanceof NodeType){
+    if (!$node_type instanceof NodeType) {
       return;
     }
 
@@ -50,7 +78,6 @@ class NodeTypeFormAlter {
       '#default_value' => $this->settingsManager->getProperty($node_type, 'enabled'),
       '#description' => $this->t('If this is checked, this content type will be validated as a relationship node. It gets two "related entity fields" that need to be configured.'),
     ];
-
 
     $form['relationship_nodes']['typed_relation'] = [
       '#type' => 'checkbox',
@@ -78,5 +105,4 @@ class NodeTypeFormAlter {
     $form['#validate'][] = [$this->validationService, 'displayFormStateValidationErrors'];
     $form['actions']['submit']['#submit'][] = [$this->formHandler,  'handleSubmission'];
   }
-
 }

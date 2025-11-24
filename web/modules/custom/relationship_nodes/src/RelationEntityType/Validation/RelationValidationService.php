@@ -17,10 +17,15 @@ use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationOb
 use Drupal\relationship_nodes\RelationEntityType\Validation\RelationBundleValidationObject;
 use Drupal\relationship_nodes\RelationEntityType\Validation\RelationFieldConfigValidationObject;
 use Drupal\relationship_nodes\RelationEntityType\Validation\RelationFieldStorageValidationObject;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundleRelationBundleInfoService;
 use Drupal\relationship_nodes\RelationEntityType\Validation\ValidationErrorFormatter;
 
 
+/**
+ * Service for validating relationship nodes configuration.
+ *
+ * Provides comprehensive validation for bundles, fields, and entire
+ * relationship node configurations.
+ */
 class RelationValidationService {
 
   protected EntityTypeManagerInterface $entityTypeManager;
@@ -32,6 +37,24 @@ class RelationValidationService {
   protected ValidationErrorFormatter $errorFormatter;
 
 
+  /**
+   * Constructs a RelationValidationService.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   * @param RelationBundleInfoService $bundleInfoService
+   *   The bundle info service.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   * @param RelationValidationObjectFactory $validationFactory
+   *   The validation object factory.
+   * @param ValidationErrorFormatter $errorFormatter
+   *   The error formatter.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     FieldNameResolver $fieldNameResolver,
@@ -52,11 +75,13 @@ class RelationValidationService {
 
 
   /**
-   * 1. VALIDATE A SINGLE RELATION BUNDLE (vocab or node type)
-   */
-  
-  /**
-   * 1.1. entity validator (for node types and vocabs)
+   * Gets validation errors for a bundle entity.
+   *
+   * @param ConfigEntityBundleBase $entity
+   *   The bundle entity.
+   *
+   * @return array
+   *   Array of validation errors.
    */
   protected function getBundleValidationErrors(ConfigEntityBundleBase $entity): array {
     $errors = [];
@@ -81,8 +106,14 @@ class RelationValidationService {
   
   
   /**
-  * 1.2. Form submit validator for relation-enabled node types and vocabularies
-  */
+   * Gets validation errors from form state.
+   *
+   * @param FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
   protected function getFormStateValidationErrors(FormStateInterface $form_state): array {
     $errors = [];
 
@@ -108,6 +139,14 @@ class RelationValidationService {
   }
 
 
+  /**
+   * Displays form state validation errors.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   */
   public function displayFormStateValidationErrors(array &$form, FormStateInterface $form_state): void {
     $errors = $this->getFormStateValidationErrors($form_state);
     if (empty($errors)) {
@@ -120,8 +159,16 @@ class RelationValidationService {
 
 
   /**
-  * 1.3. Validates a single entity config import file
-  */
+   * Gets validation errors for a bundle configuration import.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
   protected function getBundleCimValidationErrors(string $config_name, StorageInterface $storage): array {
     $errors = []; 
     $validator = $this->validationFactory->fromBundleConfigFile($config_name, $storage);
@@ -142,6 +189,16 @@ class RelationValidationService {
   }
 
 
+  /**
+   * Displays bundle configuration import validation errors.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   * @param ConfigImporterEvent $event
+   *   The config import event.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   */
   public function displayBundleCimValidationErrors(string $config_name, ConfigImporterEvent $event, StorageInterface $storage): void {
     $errors = $this->getBundleCimValidationErrors($config_name, $storage);
     if (empty($errors)) {
@@ -154,14 +211,15 @@ class RelationValidationService {
   }
 
 
-
   /**
-   * 2. VALIDATE A SINGLE FIELD (field storage config or field config)
+   * Gets validation errors for a field storage.
+   *
+   * @param FieldStorageConfig $storage
+   *   The field storage configuration.
+   *
+   * @return array
+   *   Array of validation errors.
    */
-
-  /**
-  * 2.1. Validates a single field storage
-  */
   public function getFieldStorageValidationErrors(FieldStorageConfig $storage): array {
     $errors = [];
     $validator = $this->validationFactory->fromFieldStorage($storage);
@@ -183,9 +241,15 @@ class RelationValidationService {
 
 
   /**
-  * 2.2. Validates a single field storage import file
-  */
-  public function getFieldStorageCimValidationErrors(array $config_data):array{
+   * Gets validation errors for a field storage configuration import.
+   *
+   * @param array $config_data
+   *   The configuration data.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
+  public function getFieldStorageCimValidationErrors(array $config_data): array {
     $errors = [];
     $validator = $this->validationFactory->fromFieldStorageConfigFile($config_data);
     if (!$validator instanceof RelationFieldStorageValidationObject) {
@@ -206,8 +270,16 @@ class RelationValidationService {
 
 
   /**
-  * 2.3. Validates a single field config (with or without its storage)
-  */
+   * Gets validation errors for a field configuration.
+   *
+   * @param FieldConfig $field_config
+   *   The field configuration.
+   * @param bool $include_storage_validation
+   *   Whether to include storage validation.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
   public function getFieldConfigValidationErrors(FieldConfig $field_config, bool $include_storage_validation = true): array {
     $errors = []; 
     $context = [
@@ -247,8 +319,16 @@ class RelationValidationService {
 
 
   /**
-  * 2.4. Validates a single field config import file
-  */
+   * Gets validation errors for a field configuration import.
+   *
+   * @param array $config_data
+   *   The configuration data.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
   protected function getFieldConfigCimValidationErrors(array $config_data, StorageInterface $storage): array {
     $errors = []; 
     $validator = $this->validationFactory->fromFieldConfigConfigFile($config_data, $storage);
@@ -271,12 +351,16 @@ class RelationValidationService {
 
 
   /**
-  * 3. VALIDATE EXISTING ENTITIES
-  */
-
-  /**
-  * 3.1. Validates a node type/vocab's existing fields
-  */
+   * Validates existing fields for an entity.
+   *
+   * @param ConfigEntityBundleBase $entity
+   *   The bundle entity.
+   * @param array|null $rn_settings
+   *   Optional relationship nodes settings.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
   protected function validateEntityExistingFields(ConfigEntityBundleBase $entity, ?array $rn_settings = null): array {
     $errors = [];
     $existing_fields = $this->fieldConfigurator->getBundleFieldsStatus($entity, $rn_settings)['existing'];
@@ -299,19 +383,28 @@ class RelationValidationService {
     return $errors; 
   }
 
+
   /**
-  * 3.2. Validates the fields in a config import
-  */
-  protected function validateCimExistingFields(string $config_name, StorageInterface $storage):array{
+   * Validates existing fields in a configuration import.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
+  protected function validateCimExistingFields(string $config_name, StorageInterface $storage): array {
     $errors = [];
     $existing_fields = $this->fieldConfigurator->getCimFieldsStatus($config_name, $storage)['existing'] ?? [];
-    foreach($existing_fields as $field => $field_info){
+    foreach ($existing_fields as $field => $field_info) {
       $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
       $error_context = [
         '@field' => $field,
         '@bundle' => !empty($entity_classes['bundle']) ? $entity_classes['bundle'] : '',
       ];
-      if(!isset($field_info['config_file_data'])){
+      if (!isset($field_info['config_file_data'])) {
         $errors[] = [
           'error_code' => 'missing_config_file_data',
           'context' => $error_context
@@ -320,9 +413,9 @@ class RelationValidationService {
       }
 
       $field_storage_config = $this->getFieldStorageCimForFieldCim($field_info['config_file_data'], $storage);
-      if(!empty($field_storage_config)){
+      if (!empty($field_storage_config)) {
         $field_storage_errors = $this->getFieldStorageCimValidationErrors($field_storage_config);
-        if(!empty($field_storage_errors)){
+        if (!empty($field_storage_errors)) {
           $errors = array_merge($errors, $field_storage_errors);
         }  
       } else {
@@ -333,7 +426,7 @@ class RelationValidationService {
       }
 
       $field_errors = $this->getFieldConfigCimValidationErrors($field_info['config_file_data'], $storage);
-      if(!empty($field_errors)){
+      if (!empty($field_errors)) {
         $errors = array_merge($errors, $field_errors);
       }
     }
@@ -341,7 +434,18 @@ class RelationValidationService {
   }
 
 
-  public function validateCimFieldDependencies(string $config_name, StorageInterface $storage) {
+  /**
+   * Validates field dependencies in configuration import.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of validation errors.
+   */
+  public function validateCimFieldDependencies(string $config_name, StorageInterface $storage): array {
     if (!empty($storage->read($config_name))) {
       return [];
     }
@@ -369,7 +473,7 @@ class RelationValidationService {
 
     $entity_type_id = $field_info['entity_type_id'];
 
-    if(!in_array($entity_type_id, ['node_type', 'taxonomy_vocabulary'])){
+    if (!in_array($entity_type_id, ['node_type', 'taxonomy_vocabulary'])) {
       return [];
     }
 
@@ -402,7 +506,17 @@ class RelationValidationService {
   }
 
 
-  public function displayCimFieldDependenciesValidationErrors(string $config_name, ConfigImporterEvent $event, StorageInterface $storage): void {
+  /**
+   * Displays field dependencies validation errors for configuration import.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   * @param ConfigImporterEvent $event
+   *   The config import event.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   */
+    public function displayCimFieldDependenciesValidationErrors(string $config_name, ConfigImporterEvent $event, StorageInterface $storage): void {
 
     $errors = $this->validateCimFieldDependencies($config_name, $storage);
 
@@ -415,14 +529,14 @@ class RelationValidationService {
     $event->getConfigImporter()->logError($error_message); 
   }
 
-  /**
-  * 4. VALIDATE ALL ENTITIES
-  */
 
   /**
-  * 4.1. Validates the config of all node types and vocabs and returns all collected errors
-  */  
-  protected function validateAllRelationBundles():array{
+   * Validates all relation bundles.
+   *
+   * @return array
+   *   Array of all validation errors.
+   */
+  protected function validateAllRelationBundles(): array {
     $all_errors = [];
     
     foreach ($this->bundleInfoService->getAllRelationBundles() as $bundle_name => $entity) {
@@ -436,8 +550,11 @@ class RelationValidationService {
 
 
   /**
-  * 4.2. Validates the config of all fields (both storage and field config) and returns all collected errors
-  */
+   * Validates all relation fields.
+   *
+   * @return array
+   *   Array of all validation errors.
+   */
   protected function validateAllRelationFields(): array {
     $all_errors = [];
     $rn_fields = $this->fieldConfigurator->getAllRnCreatedFields();
@@ -453,13 +570,13 @@ class RelationValidationService {
       } elseif ($field instanceof FieldConfig) {
         $field_config = true;
         $config_errors = $this->getFieldConfigValidationErrors($field);
-        if(!empty($config_errors)){
+        if (!empty($config_errors)) {
           $all_errors = array_merge($all_errors, $config_errors);
         }       
       }
       if (!in_array($field_name, $relation_field_names)) {
         $context = ['@field' => $field_name];
-        if($field_config){
+        if ($field_config) {
           $context['@bundle'] = $field->getTargetBundle();
         }
         $all_errors[] = [
@@ -471,6 +588,16 @@ class RelationValidationService {
     return $all_errors;
   }
 
+
+  /**
+   * Validates all relation bundles in configuration import.
+   *
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of all validation errors.
+   */
   protected function validateAllCimRelationBundles(StorageInterface $storage): array {
     $all_errors = [];
     
@@ -483,6 +610,16 @@ class RelationValidationService {
     return $all_errors;
   }
 
+
+  /**
+   * Validates all relation fields in configuration import.
+   *
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of all validation errors.
+   */
   protected function validateAllCimRelationFields(StorageInterface $storage): array {
     $all_errors = [];
     $rn_fields = $this->fieldConfigurator->getAllCimRnCreatedFields($storage);
@@ -523,12 +660,15 @@ class RelationValidationService {
       }
     }
     return $all_errors;
-}
+  }
 
 
-  /*
-  * 4.3 Validates all the required config of this module: nodetypes, vocabs, fields (both storage and config)
-  */    
+  /**
+   * Validates all relation configuration.
+   *
+   * @return array
+   *   Array of all validation errors.
+   */
   public function validateAllRelationConfig(): array {      
     return array_merge(
       // Validate bundles config and existing fields related to this bundle
@@ -539,6 +679,15 @@ class RelationValidationService {
   }   
 
 
+  /**
+   * Validates all relation configuration in configuration import.
+   *
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of all validation errors.
+   */
   public function validateAllCimRelationConfig(StorageInterface $storage): array {      
     return array_merge(
         $this->validateAllCimRelationBundles($storage), 
@@ -546,6 +695,15 @@ class RelationValidationService {
     );
   }   
 
+
+  /**
+   * Displays all configuration import validation errors.
+   *
+   * @param ConfigImporterEvent $event
+   *   The config import event.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   */
   public function displayAllCimValidationErrors(ConfigImporterEvent $event, StorageInterface $storage): void {
     $errors = $this->validateAllCimRelationConfig($storage);
     if (empty($errors)) {
@@ -558,9 +716,17 @@ class RelationValidationService {
 
   
 
-  /*
-  * 5. Helper function(s)
-  */ 
+  /**
+   * Gets field storage configuration for a field configuration import.
+   *
+   * @param array $field_config_data
+   *   The field configuration data.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array|null
+   *   The field storage configuration data or NULL.
+   */
   protected function getFieldStorageCimForFieldCim(array $field_config_data, StorageInterface $storage): ?array {
     $dependency_config = [];
     if (!empty($field_config_data['dependencies']['config'])) {
@@ -569,7 +735,7 @@ class RelationValidationService {
 
     $field_storage_config_name = '';
     foreach ($dependency_config as $dependency) {
-      if (str_starts_with($dependency,'field.storage.')) {
+      if (str_starts_with($dependency, 'field.storage.')) {
         $field_storage_config_name = $dependency;
         break;
       }
@@ -583,6 +749,17 @@ class RelationValidationService {
   }
 
 
+  /**
+   * Gets field configurations that depend on a field storage configuration.
+   *
+   * @param string $storage_config_name
+   *   The field storage configuration name.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array|null
+   *   Array of dependent field configurations or NULL.
+   */
   protected function getFieldCimForFieldStorageCim(string $storage_config_name, StorageInterface $storage): ?array {
     $dependent_field_config = [];
     $all_fields = $storage->listAll('field.field.');

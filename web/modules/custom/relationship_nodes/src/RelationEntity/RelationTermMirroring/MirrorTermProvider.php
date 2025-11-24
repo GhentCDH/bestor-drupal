@@ -14,7 +14,11 @@ use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSe
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
 
-
+/**
+ * Service for providing mirror term functionality.
+ *
+ * Handles mirror term logic for relationship type vocabularies.
+ */
 class MirrorTermProvider{
 
   protected EntityTypeManagerInterface $entityTypeManager;
@@ -24,6 +28,20 @@ class MirrorTermProvider{
   protected RelationFormHelper $formHelper;
 
 
+  /**
+   * Constructs a MirrorTermProvider object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   * @param ForeignKeyFieldResolver $foreignKeyResolver
+   *   The foreign key field resolver.
+   * @param RelationFormHelper $formHelper
+   *   The form helper.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager, 
     FieldNameResolver $fieldNameResolver, 
@@ -38,8 +56,22 @@ class MirrorTermProvider{
     $this->formHelper = $formHelper; 
   }
   
+
+  /**
+   * Checks if an element supports mirroring.
+   *
+   * @param FieldItemListInterface $items
+   *   The field items.
+   * @param array $form
+   *   The form array.
+   * @param FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return bool
+   *   TRUE if mirroring is supported, FALSE otherwise.
+   */
   public function elementSupportsMirroring(FieldItemListInterface $items, array $form, FormStateInterface $form_state): bool {   
-    if(
+    if (
       !$this->formHelper->isParentFormWithIefSubforms($form, $form_state) ||
       !$this->settingsManager->isRelationNodeType($items->getEntity()->getType()) ||
       !$items->getFieldDefinition() instanceof FieldConfig
@@ -49,26 +81,26 @@ class MirrorTermProvider{
 
     $field = $items->getFieldDefinition();
 
-    if(empty($field->getSettings())){
+    if (empty($field->getSettings())) {
       return false;
     }
 
     $field_settings = $field->getSettings();
-    if(
+    if (
       !isset($field_settings['target_type']) || 
       $field_settings['target_type'] != 'taxonomy_term' || 
       empty($field_settings['handler_settings']['target_bundles'])
-    ){
+    ) {
       return false;
     }
 
     $target_bundles = $field_settings['handler_settings']['target_bundles'];
-    if(empty($target_bundles)){
+    if (empty($target_bundles)) {
       return false;
     }
     
     $target_vocab = $this->settingsManager->ensureVocab(reset($target_bundles));
-    if(
+    if (
       !$target_vocab || 
       !$this->settingsManager->isRelationVocab($target_vocab) ||
       !$this->settingsManager->isMirroringVocab($target_vocab)
@@ -80,14 +112,27 @@ class MirrorTermProvider{
   }
 
 
+  /**
+   * Checks if mirroring is required for this field.
+   *
+   * @param FieldItemListInterface $items
+   *   The field items.
+   * @param array $form
+   *   The form array.
+   * @param FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return bool
+   *   TRUE if mirroring is required, FALSE otherwise.
+   */
   public function mirroringRequired(FieldItemListInterface $items, array $form, FormStateInterface $form_state): bool {
-    if(!$this->elementSupportsMirroring($items, $form, $form_state)){
+    if (!$this->elementSupportsMirroring($items, $form, $form_state)) {
       return false;
     }
     
     $foreign_key_field = $this->foreignKeyResolver->getEntityFormForeignKeyField($form, $form_state);
     
-    if(!is_string($foreign_key_field) || $foreign_key_field !== $this->fieldNameResolver->getRelatedEntityFields(2)){
+    if (!is_string($foreign_key_field) || $foreign_key_field !== $this->fieldNameResolver->getRelatedEntityFields(2)) {
       return false;
     }
 
@@ -95,17 +140,24 @@ class MirrorTermProvider{
   }
 
 
-
+  /**
+   * Gets mirror options for select widget.
+   *
+   * @param array $options
+   *   The original options array.
+   *
+   * @return array
+   *   The mirrored options array.
+   */
   public function getMirrorOptions(array $options): array {
-    if(empty($options)) {
+    if (empty($options)) {
       return [];
     }
 
     $mirror_options = [];
     
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    foreach($options as $term_id => $label){
-
+    foreach ($options as $term_id => $label) {
 
       if (!ctype_digit((string) $term_id)) {
         $mirror_options[$term_id] = $label;
@@ -114,56 +166,74 @@ class MirrorTermProvider{
 
       $mirror_label = reset($this->getMirrorArray($term_storage, $term_id, $label));
 
-
-
       $mirror_options[$term_id] = $mirror_label;
         
     }
     return $mirror_options;
   }
 
-public function getMirrorArray(TermStorageInterface $term_storage, string $term_id, string $default_label=null):array{
-  $term = $term_storage->load((int) $term_id);
 
-  if(!$term instanceof Term){
-    return [$term_id => $default_label ?? ''];
-  }
-  
-  if($default_label === null){
-    $default_label = $term->getName() ?? '';
+  /**
+   * Gets mirror information as an array for a term.
+   *
+   * @param TermStorageInterface $term_storage
+   *   The term storage.
+   * @param string $term_id
+   *   The term ID.
+   * @param string|null $default_label
+   *   The default label.
+   *
+   * @return array
+   *   Array with term ID as key and label as value.
+   */
+  public function getMirrorArray(TermStorageInterface $term_storage, string $term_id, string $default_label = null): array {
+    $term = $term_storage->load((int) $term_id);
 
-  }
-  
-  $result = [$term_id => $default_label];
-  
-  
+    if (!$term instanceof Term) {
+      return [$term_id => $default_label ?? ''];
+    }
+    
+    if ($default_label === null) {
+      $default_label = $term->getName() ?? '';
 
-  
-  $vocab = $term->bundle();
-  $vocab_type = $this->settingsManager->getRelationVocabType($vocab);
+    }
+    
+    $result = [$term_id => $default_label];
+      
+    $vocab = $term->bundle();
+    $vocab_type = $this->settingsManager->getRelationVocabType($vocab);
 
-  switch ($vocab_type){
-    case 'string':
-      $mirror_lookup = $this->getStringMirror($term);
-      break;
-    case 'entity_reference':
-      $mirror_lookup = $this->getReferenceMirror($term, $vocab);
-      break;
-    default:
+    switch ($vocab_type) {
+      case 'string':
+        $mirror_lookup = $this->getStringMirror($term);
+        break;
+      case 'entity_reference':
+        $mirror_lookup = $this->getReferenceMirror($term, $vocab);
+        break;
+      default:
+        return $result;
+    }
+
+    if (!is_array($mirror_lookup)) {
       return $result;
+    }
+
+    return $mirror_lookup;
   }
 
-  if(!is_array($mirror_lookup)){
-    return $result;
-  }
 
-  return $mirror_lookup;
-
-}
-
+  /**
+   * Gets string mirror for a term.
+   *
+   * @param Term $term
+   *   The term.
+   *
+   * @return array|null
+   *   Array with term ID and mirror label, or NULL.
+   */
   public function getStringMirror(Term $term):?array{
     $values = $term->get($this->fieldNameResolver->getMirrorFields('string'))->getValue();
-    if(empty($values)) {
+    if (empty($values)) {
       return null;
     }
     $value = reset($values) ?? [];
@@ -171,15 +241,26 @@ public function getMirrorArray(TermStorageInterface $term_storage, string $term_
     return  $mirror_label !== null ? [$term->id() => $mirror_label] : null;
   }
 
-  public function getReferenceMirror(Term $term, string $vocab):?array{
 
+  /**
+   * Gets entity reference mirror for a term.
+   *
+   * @param Term $term
+   *   The term.
+   * @param string $vocab
+   *   The vocabulary ID.
+   *
+   * @return array|null
+   *   Array with mirror term ID and label, or NULL.
+   */
+  public function getReferenceMirror(Term $term, string $vocab): ?array {
     $values = $term->get($this->fieldNameResolver->getMirrorFields('entity_reference'))->getValue();   
-    if(empty($values)){
+    if (empty($values)) {
       return null;
     }  
     $value = reset($values) ?? [];
     $id_value = $value['target_id'];
-    if(empty($id_value)){
+    if (empty($id_value)) {
       return null;
     }
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
@@ -192,5 +273,4 @@ public function getMirrorArray(TermStorageInterface $term_storage, string $term_
     
     return $mirror_label !== null ? [$mirror_term->id() => $mirror_label] : null;
   }
-
 }

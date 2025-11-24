@@ -3,20 +3,26 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationBundle;
 
-use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\FieldConfigStorage;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 
-class RelationBundleInfoService
-{
+
+/**
+ * Service for retrieving relationship bundle information.
+ *
+ * Provides methods to analyze relationship configurations, target bundles,
+ * and connection information between relation and target entities.
+ */
+class RelationBundleInfoService {
 
   protected EntityTypeManagerInterface $entityTypeManager;
   protected EntityFieldManagerInterface $fieldManager;
@@ -26,6 +32,22 @@ class RelationBundleInfoService
   protected RelationFieldConfigurator $fieldConfigurator;
 
 
+  /**
+   * Constructs a RelationBundleInfoService object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param EntityFieldManagerInterface $fieldManager
+   *   The entity field manager.
+   * @param EntityTypeBundleInfoInterface $bundleInfo
+   *   The entity type bundle info service.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     EntityFieldManagerInterface $fieldManager,
@@ -43,6 +65,17 @@ class RelationBundleInfoService
   }
 
 
+  /**
+   * Gets relation bundle information for a bundle.
+   *
+   * @param string $bundle
+   *   The bundle ID.
+   * @param array $fields
+   *   Optional array of field definitions.
+   *
+   * @return array
+   *   Array containing relation bundle information.
+   */
   public function getRelationBundleInfo(string $bundle, array $fields = []): array {
     if (!$this->settingsManager->isRelationNodeType($bundle)) {
       return [];
@@ -102,6 +135,15 @@ class RelationBundleInfoService
   }
 
 
+  /**
+   * Gets relation information for a target bundle.
+   *
+   * @param string $target_bundle
+   *   The target bundle ID.
+   *
+   * @return array
+   *   Array of relation information keyed by relation bundle ID.
+   */
   public function getRelationInfoForTargetBundle(string $target_bundle): array {
     $all_bundles_info = $this->bundleInfo->getBundleInfo('node');
     $relation_info = [];
@@ -138,6 +180,17 @@ class RelationBundleInfoService
   }
 
 
+  /**
+   * Gets connection information between a relation and target bundle.
+   *
+   * @param string $relation_bundle
+   *   The relation bundle ID.
+   * @param string $target_bundle
+   *   The target bundle ID.
+   *
+   * @return array
+   *   Array containing join fields and relation info.
+   */
   public function getBundleConnectionInfo(string $relation_bundle, string $target_bundle): array {
     $relation_info = $this->getRelationBundleInfo($relation_bundle);
     if (empty($relation_info) || empty($relation_info['related_bundles_per_field'])) {
@@ -155,6 +208,15 @@ class RelationBundleInfoService
   }
 
 
+  /**
+   * Gets all relation bundles.
+   *
+   * @param string|null $entity_type_id
+   *   Optional entity type ID to filter by.
+   *
+   * @return array
+   *   Array of relation bundle entities keyed by bundle ID.
+   */
   public function getAllRelationBundles(?string $entity_type_id = null): array {
     $entity_types = ['node_type', 'taxonomy_vocabulary'];
     if ($entity_type_id !== null  && !in_array($entity_type_id, $entity_types)) {
@@ -181,7 +243,18 @@ class RelationBundleInfoService
   }
 
 
-  public function getAllCimRelationBundles(StorageInterface $config_storage, ?string $entity_type_id = null): array {
+  /**
+   * Gets all relation bundles from configuration import storage.
+   *
+   * @param StorageInterface $config_storage
+   *   The configuration storage.
+   * @param string|null $entity_type_id
+   *   Optional entity type ID to filter by.
+   *
+   * @return array
+   *   Array of configuration data keyed by config name.
+   */
+    public function getAllCimRelationBundles(StorageInterface $config_storage, ?string $entity_type_id = null): array {
     $entity_types = ['node_type', 'taxonomy_vocabulary'];
     if ($entity_type_id !== null  && !in_array($entity_type_id, $entity_types)) {
       return [];
@@ -204,7 +277,13 @@ class RelationBundleInfoService
   }
 
 
-  public function getAllTypedRelationNodeTypes(): array{
+  /**
+   * Gets all typed relation node types.
+   *
+   * @return array
+   *   Array of typed relation node type entities keyed by bundle ID.
+   */
+  public function getAllTypedRelationNodeTypes(): array {
     $result = [];
     $relation_node_types = $this->getAllRelationBundles('node_type');
     foreach ($relation_node_types as $bundle_id => $node_type) {
@@ -216,6 +295,15 @@ class RelationBundleInfoService
   }
 
 
+  /**
+   * Gets all typed relation node types from configuration import storage.
+   *
+   * @param StorageInterface $config_storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of configuration data keyed by config name.
+   */
   public function getAllCimTypedRelationNodeTypes(StorageInterface $config_storage): array {
     $result = [];
     $all_cim_bundles = $this->getAllCimRelationBundles($config_storage, 'node_type');
@@ -228,6 +316,15 @@ class RelationBundleInfoService
   }
 
 
+  /**
+   * Gets target bundles for a field configuration.
+   *
+   * @param FieldConfig $field_config
+   *   The field configuration.
+   *
+   * @return array
+   *   Array of target bundle IDs.
+   */
   private function getFieldTargetBundles(FieldConfig $field_config): array {
     if ($field_config === null || $field_config->getType() != 'entity_reference') {
       return [];
@@ -241,6 +338,15 @@ class RelationBundleInfoService
   }
 
 
+  /**
+   * Gets node types linked to a vocabulary.
+   *
+   * @param ConfigEntityBundleBase $vocab
+   *   The vocabulary entity.
+   *
+   * @return array
+   *   Array of node type entities keyed by node type ID.
+   */
   public function getNodeTypesLinkedToVocab(ConfigEntityBundleBase $vocab): array {
     if (!$this->settingsManager->isRelationVocab($vocab)) {
       return [];
@@ -275,6 +381,17 @@ class RelationBundleInfoService
   }
 
 
+  /**
+    * Gets all relation vocabularies from configuration import storage.
+    *
+    * @param StorageInterface $storage
+    *   The configuration storage.
+    * @param string|null $type
+    *   Optional vocabulary type to filter by.
+    *
+    * @return array
+    *   Array of configuration data keyed by config name.
+    */
   public function getAllCimRelationVocabs(StorageInterface $storage, string $type = null): array {
     $all_vocabs = $this->getAllCimRelationBundles($storage, 'taxonomy_vocabulary') ?? [];
     if ($type === null) {
@@ -290,7 +407,17 @@ class RelationBundleInfoService
   }
 
 
-
+  /**
+   * Gets node types linked to a vocabulary from configuration import storage.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array
+   *   Array of configuration data keyed by config name.
+   */
   public function getCimNodeTypesLinkedToVocab(string $config_name, StorageInterface $storage): array {
     $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
     if (empty($entity_classes['entity_type_id']) || $entity_classes['entity_type_id'] !== 'taxonomy_vocabulary') {

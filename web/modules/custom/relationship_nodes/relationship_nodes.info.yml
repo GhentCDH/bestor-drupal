@@ -1,5 +1,5 @@
 name: 'Relationship Nodes'
-description: 'This custom module interacts with entities based on their machine name in order to make it possible to create bidirectional relationships between entities (also of the same content type). The naming of entities (incl. taxonomies, bundles, views, [extra] fields...) have to be exact before this module will work. Check the readme!'
+description: 'Enables bidirectional relationships between nodes and other entities with configurable relationship types and automatic mirror field synchronization.'
 type: module
 core_version_requirement: ^10
 package: Custom

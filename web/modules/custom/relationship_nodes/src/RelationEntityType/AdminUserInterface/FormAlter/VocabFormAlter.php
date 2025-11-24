@@ -12,22 +12,47 @@ use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSe
 use Drupal\taxonomy\Entity\Vocabulary;
 
 
+/**
+ * Form alter service for vocabulary forms.
+ *
+ * Adds relationship nodes configuration to taxonomy vocabulary forms.
+ */
 class VocabFormAlter {
-    use StringTranslationTrait;
 
-    protected RelationBundleFormHandler $formHandler;
-    protected RelationBundleSettingsManager $settingsManager;
+  use StringTranslationTrait;
 
-    public function __construct(
-      RelationBundleFormHandler $formHandler,
-      RelationBundleSettingsManager $settingsManager
-    ) {
-        $this->formHandler = $formHandler;
-        $this->settingsManager = $settingsManager;
-    }
-    
-    
-    public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
+  protected RelationBundleFormHandler $formHandler;
+  protected RelationBundleSettingsManager $settingsManager;
+
+
+  /**
+   * Constructs a VocabFormAlter object.
+   *
+   * @param RelationBundleFormHandler $formHandler
+   *   The form handler.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   */
+  public function __construct(
+    RelationBundleFormHandler $formHandler,
+    RelationBundleSettingsManager $settingsManager
+  ) {
+      $this->formHandler = $formHandler;
+      $this->settingsManager = $settingsManager;
+  }
+  
+  
+  /**
+   * Alters vocabulary forms to add relationship nodes settings.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   * @param string $form_id
+   *   The form ID.
+   */
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {
     $vocab = $this->formHandler->getFormEntity($form_state);
     if (!$vocab instanceof Vocabulary) {
       return;
@@ -87,7 +112,6 @@ class VocabFormAlter {
       unset($form['actions']['submit']);
     }
 
-
     $form['actions']['confirm'] = [
       '#type' => 'button',
       '#value' => $this->t('Save'),
@@ -99,7 +123,6 @@ class VocabFormAlter {
         'disable-refocus' => TRUE,
       ],
     ];
-
 
     $form['actions']['hidden_submit'] = [
       '#type' => 'submit',
@@ -114,16 +137,44 @@ class VocabFormAlter {
     $form['#validate'][] = [static::class, 'validateConflicts'];
   }
 
+
+  /**
+   * Validates relationship configuration conflicts.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   */
   public static function validateConflicts(array &$form, FormStateInterface $form_state) {
     \Drupal::service('relationship_nodes.relation_validation_service')->displayFormStateValidationErrors($form, $form_state);
   }
 
-  
+
+  /**
+   * Handles form submission.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   */
  public static function handleSubmission(array &$form, FormStateInterface $form_state) {
     \Drupal::service('relationship_nodes.relation_form_handler')->handleSubmission($form, $form_state);
   }
 
 
+  /**
+   * Opens confirmation modal for mirror field changes.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return AjaxResponse
+   *   The AJAX response.
+   */
   public static function openConfirmationModal(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
 

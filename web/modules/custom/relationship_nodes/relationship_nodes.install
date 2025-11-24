@@ -44,7 +44,7 @@ function relationship_nodes_requirements($phase) {
         ];
       }
     } 
-    catch (\Exception $e) {
+    catch (\Throwable $e) {
       $requirements['relationship_nodes_config'] = [
         'title' => t('Relationship Nodes Configuration'),
         'value' => t('Validation failed'),
@@ -62,5 +62,7 @@ function relationship_nodes_requirements($phase) {
  */
 function relationship_nodes_uninstall($is_syncing) {
   $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
-  $cleanupService->removeModuleSettings(); // Potentially, a lot of entity types need to be saved, which can take a while.
+
+  // Potentially, a lot of entity types need to be saved, which can take a while.
+  $cleanupService->removeModuleSettings();
 }

@@ -14,6 +14,9 @@ use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConf
 use Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FieldConfigUiUpdater;
 
 
+/**
+ * Service for handling relationship bundle form submissions.
+ */
 class RelationBundleFormHandler {
 
   use StringTranslationTrait;
@@ -22,6 +25,17 @@ class RelationBundleFormHandler {
   protected RelationFieldConfigurator $fieldConfigurator;
   protected FieldConfigUiUpdater $fieldUiUpdater;
 
+
+  /**
+   * Constructs a RelationBundleFormHandler object.
+   *
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   * @param FieldConfigUiUpdater $fieldUiUpdater
+   *   The field UI updater.
+   */
   public function __construct(
     RelationBundleSettingsManager $settingsManager,
     RelationFieldConfigurator $fieldConfigurator,
@@ -33,6 +47,14 @@ class RelationBundleFormHandler {
   }
 
 
+  /**
+   * Handles form submission for relationship bundle forms.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   */
   public function handleSubmission(array &$form, FormStateInterface $form_state): void {
     $entity = $this->getFormEntity($form_state);
     if (!$entity) {
@@ -46,12 +68,22 @@ class RelationBundleFormHandler {
 
     $updates = $this->fieldConfigurator->implementFieldUpdates($entity);
 
-    if(isset($updates['created'])){
+    if (isset($updates['created'])) {
       $this->showFieldCreationMessage($entity, $updates['created']);
     }
   }
 
 
+
+  /**
+   * Gets the form entity from form state.
+   *
+   * @param FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return NodeType|Vocabulary|null
+   *   The form entity or NULL.
+   */
   public function getFormEntity(FormStateInterface $form_state): NodeType|Vocabulary|null {
     $entity = $form_state->getFormObject()->getEntity();
     return ($entity instanceof NodeType || $entity instanceof Vocabulary) ? $entity : null;
@@ -59,7 +91,7 @@ class RelationBundleFormHandler {
 
 
   protected function showFieldCreationMessage(ConfigEntityBundleBase $entity, array $missing_fields): void {
-    if(empty($missing_fields)){
+    if (empty($missing_fields)) {
       return;
     }
 
@@ -70,7 +102,7 @@ class RelationBundleFormHandler {
 
     $link = Link::fromTextAndUrl($this->t('Manage fields'), $url)->toString();
 
-    if($entity instanceof NodeType){
+    if ($entity instanceof NodeType) {
       $message = 'The following relationship fields were created but need to be configured: @fields. @link';
     } else {
       $message = 'The following relationship fields were created: @fields. You can review them here: @link';

@@ -16,7 +16,9 @@ use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
-
+/**
+ * Form for editing relationship node field configurations.
+ */
 class RelationFieldConfigForm extends FormBase {
 
   use StringTranslationTrait;
@@ -31,6 +33,18 @@ class RelationFieldConfigForm extends FormBase {
   protected ?string $bundle = null;
 
 
+  /**
+   * Constructs a RelationFieldConfigForm object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param FieldNameResolver $fieldResolver
+   *   The field name resolver.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   * @param FieldConfigUiUpdater $uiUpdater
+   *   The UI updater.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager, 
     FieldNameResolver $fieldResolver, 
@@ -43,6 +57,10 @@ class RelationFieldConfigForm extends FormBase {
     $this->uiUpdater = $uiUpdater;
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
@@ -52,11 +70,27 @@ class RelationFieldConfigForm extends FormBase {
     );
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId() {
     return 'relation_field_config_form';
   }
 
-  public function getTitle($bundle, $field_name) {
+
+  /**
+   * Gets the form title.
+   *
+   * @param string $bundle
+   *   The bundle name.
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return TranslatableMarkup
+   *   The form title.
+   */
+  public function getTitle(string $bundle, string $field_name): TranslatableMarkup {
     $bundle_entity = $this->entityTypeManager
       ->getStorage($this->entityType === 'node' ? 'node_type' : 'taxonomy_vocabulary')
       ->load($bundle);
@@ -69,8 +103,11 @@ class RelationFieldConfigForm extends FormBase {
     ]);
   }
 
-  public function buildForm(array $form, FormStateInterface $form_state, FieldConfig $field_config = NULL) {
 
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, FieldConfig $field_config = NULL) {
     $this->fieldConfig = $field_config;
     $this->entityType = $field_config->getTargetEntityTypeId();
     $this->fieldName = $field_config->getName();
@@ -97,7 +134,7 @@ class RelationFieldConfigForm extends FormBase {
       if ($this->fieldName == $this->fieldResolver->getRelationTypeField()) {
         $form['target_bundle']['#title'] = $this->t('Target relation type vocabulary');
         $form['target_bundle']['#options'] = $this->getAllRelationVocabs();
-      } elseif (in_array($this->fieldName,$this->fieldResolver->getRelatedEntityFields())) {
+      } elseif (in_array($this->fieldName, $this->fieldResolver->getRelatedEntityFields())) {
           $form['target_bundle']['#title'] = $this->t('Target node type');
           $form['target_bundle']['#options'] = $this->getAllNodeTypes();
       }
@@ -110,20 +147,24 @@ class RelationFieldConfigForm extends FormBase {
 
     if (!$this->settingsManager->isRelationEntity($this->bundle)) {
       $form['delete'] = [
-          '#type' => 'link',
-          '#title' => $this->t('Delete RN Field'),
-          '#url' => Url::fromRoute('relationship_nodes.rn_field_delete', [
-              'field_config' => $this->fieldConfig->id(),
-          ]),
-          '#attributes' => [
-              'class' => ['button', 'button--danger'],
-          ],
+        '#type' => 'link',
+        '#title' => $this->t('Delete RN Field'),
+        '#url' => Url::fromRoute('relationship_nodes.rn_field_delete', [
+            'field_config' => $this->fieldConfig->id(),
+        ]),
+        '#attributes' => [
+            'class' => ['button', 'button--danger'],
+        ],
       ];
-  }
+    }
 
     return $form;
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $field = FieldConfig::load("{$this->entityType}.{$this->bundle}.{$this->fieldName}");
     if (!$field) {
@@ -151,7 +192,12 @@ class RelationFieldConfigForm extends FormBase {
   }
 
 
-
+  /**
+   * Gets all available node types.
+   *
+   * @return array
+   *   Array of node type labels keyed by machine name.
+   */
   protected function getAllNodeTypes(): array {
     $options = [];
     foreach (NodeType::loadMultiple() as $type) {
@@ -161,10 +207,16 @@ class RelationFieldConfigForm extends FormBase {
   }
 
 
-    protected function getAllRelationVocabs(): array {
+  /**
+   * Gets all relation vocabularies.
+   *
+   * @return array
+   *   Array of vocabulary labels keyed by machine name.
+   */
+  protected function getAllRelationVocabs(): array {
     $options = [];
     foreach (Vocabulary::loadMultiple() as $type) {
-      if($this->settingsManager->isRelationVocab($type)){
+      if ($this->settingsManager->isRelationVocab($type)) {
         $options[$type->id()] = $type->label();
       } 
     }
@@ -172,7 +224,18 @@ class RelationFieldConfigForm extends FormBase {
   }
 
 
-  protected function getCurrentTargetBundle($bundle, $field_name): ?string {
+  /**
+   * Gets the current target bundle for a field.
+   *
+   * @param string $bundle
+   *   The bundle name.
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return string|null
+   *   The target bundle or NULL.
+   */
+  protected function getCurrentTargetBundle(string $bundle, string $field_name): ?string {
     $field = $this->entityTypeManager
       ->getStorage('field_config')
       ->load("{$this->entityType}.$bundle.$field_name");

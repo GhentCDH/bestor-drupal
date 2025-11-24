@@ -1,3 +1,4 @@
+# Default field names for relationship nodes.
 related_entity_fields:
   related_entity_1: 'rn_related_entity_1'
   related_entity_2: 'rn_related_entity_2'

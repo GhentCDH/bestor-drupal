@@ -7,9 +7,17 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 
 
+/**
+ * List builder for field configurations that keeps locked relation fields visible.
+ *
+ * Extends FieldConfigListBuilder to override operations for relationship node fields.
+ */
 class KeepLockedRelationFieldConfigListBuilder extends FieldConfigListBuilder {
 
- public function buildRow(EntityInterface $field_config) {
+  /**
+   * {@inheritdoc}
+   */
+  public function buildRow(EntityInterface $field_config) {
     $row = parent::buildRow($field_config);
     $original_operations = ConfigEntityListBuilder::buildRow($field_config) ?? [];
     $field_config_helper = \Drupal::service('relationship_nodes.field_config_ui_updater');

@@ -1,6 +1,9 @@
 /**
  * @file
- * Handles confirmation dialog for mirror field changes.
+ * Handles confirmation dialog for mirror field changes on vocabulary forms.
+ *
+ * Provides save and cancel button functionality for the mirror field
+ * change confirmation dialog.
  */
 
 

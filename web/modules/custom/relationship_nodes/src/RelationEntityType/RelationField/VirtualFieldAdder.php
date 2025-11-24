@@ -2,7 +2,6 @@
 
 namespace Drupal\relationship_nodes\RelationEntityType\RelationField;
 
-
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -10,16 +9,36 @@ use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItem
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 
 
+/**
+ * Service for adding virtual relationship fields to entity bundles.
+ *
+ * Creates computed fields for referencing relationships.
+ */
 class VirtualFieldAdder {
 
   protected RelationBundleInfoService $bundleInfoService;
 
-  
+  /**
+   * Constructs a VirtualFieldAdder object.
+   *
+   * @param RelationBundleInfoService $bundleInfoService
+   *   The bundle info service.
+   */
   public function __construct(RelationBundleInfoService $bundleInfoService) {
     $this->bundleInfoService = $bundleInfoService;
   }
 
 
+  /**
+   * Adds virtual relationship fields to a bundle.
+   *
+   * @param array $fields
+   *   The fields array (passed by reference).
+   * @param EntityTypeInterface $entity_type
+   *   The entity type.
+   * @param string $bundle
+   *   The bundle name.
+   */
   public function addFields(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
     if ($entity_type->id() !== 'node') {
       return;

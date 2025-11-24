@@ -6,8 +6,23 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\inline_entity_form\WidgetSubmit;
 
 
+/**
+ * Extended widget submit handler for relationship nodes.
+ *
+ * Extends Inline Entity Form's WidgetSubmit to handle relationship-specific
+ * submit logic.
+ */
 class RelationExtensionWidgetSubmit extends WidgetSubmit{
 
+
+  /**
+   * Updates the default IEF submit handler to use our extended version.
+   *
+   * @param array $form
+   *   The form array (passed by reference).
+   * @param FormStateInterface $form_state
+   *   The form state.
+   */
   public static function updateDefaultSubmit(array &$form, FormStateInterface $form_state): void {
     foreach ($form['#ief_element_submit'] as $i => $callback) {
       if (is_array($callback) && $callback[0] === WidgetSubmit::class && $callback[1] === 'doSubmit') {     
@@ -18,6 +33,14 @@ class RelationExtensionWidgetSubmit extends WidgetSubmit{
   }
 
 
+  /**
+   * Handles form submission for relationship widgets.
+   *
+   * @param array $form
+   *   The form array.
+   * @param FormStateInterface $form_state
+   *   The form state.
+   */
   public static function doSubmit(array $form, FormStateInterface $form_state): void {
     $relationFormHelper = \Drupal::service('relationship_nodes.relation_form_helper');
     $relation_widgets = $relationFormHelper->getRelationExtendedWidgetFields($form, $form_state);

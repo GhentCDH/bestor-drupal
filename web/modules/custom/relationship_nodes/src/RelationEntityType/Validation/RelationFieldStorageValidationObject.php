@@ -5,6 +5,11 @@ namespace Drupal\relationship_nodes\RelationEntityType\Validation;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 
 
+/**
+ * Validation object for relationship field storage configuration.
+ *
+ * Validates field storage settings for relationship node fields.
+ */
 class RelationFieldStorageValidationObject {
 
   protected string $fieldName;
@@ -15,6 +20,20 @@ class RelationFieldStorageValidationObject {
   protected array $errors = [];
 
 
+  /**
+   * Constructs a RelationFieldStorageValidationObject.
+   *
+   * @param string $fieldName
+   *   The field name.
+   * @param string $fieldType
+   *   The field type.
+   * @param int $cardinality
+   *   The field cardinality.
+   * @param string|null $targetType
+   *   The target entity type.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   */
   public function __construct(
     string $fieldName,
     string $fieldType,
@@ -30,15 +49,18 @@ class RelationFieldStorageValidationObject {
   }
 
 
-  /*
-  * Validate if all settings of a field storage match those defined in the field configurator.
-  */
-  public function validate():bool {
+  /**
+   * Validates the field storage configuration.
+   *
+   * @return bool
+   *   TRUE if valid, FALSE otherwise.
+   */
+  public function validate(): bool {
     $this->errors = [];
 
     $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($this->fieldName);
 
-    if(!$required_settings){
+    if (!$required_settings) {
       // Not a RN field, no validation required. 
       return true;
     }
@@ -53,11 +75,23 @@ class RelationFieldStorageValidationObject {
   }
 
 
+  /**
+   * Gets validation errors.
+   *
+   * @return array
+   *   Array of error codes.
+   */
   public function getErrors(): array {
     return $this->errors;
   }
 
 
+  /**
+   * Validates field type matches required configuration.
+   *
+   * @param array $required_settings
+   *   Required field settings.
+   */
   protected function validateFieldType(array $required_settings): void {
     if ($this->fieldType !== $required_settings['type']) {
       $this->errors[] = 'invalid_field_type';
@@ -65,6 +99,12 @@ class RelationFieldStorageValidationObject {
   }
 
 
+  /**
+   * Validates cardinality matches required configuration.
+   *
+   * @param array $required_settings
+   *   Required field settings.
+   */
   protected function validateCardinality(array $required_settings): void {
     if ($this->cardinality != $required_settings['cardinality']) {
       $this->errors[] = 'invalid_cardinality';
@@ -72,6 +112,12 @@ class RelationFieldStorageValidationObject {
   }
 
 
+  /**
+   * Validates target type matches required configuration.
+   *
+   * @param array $required_settings
+   *   Required field settings.
+   */
   protected function validateTargetType(array $required_settings): void {
     if (isset($required_settings['target_type']) && $this->targetType != $required_settings['target_type']) {
       $this->errors[] = 'invalid_target_type';

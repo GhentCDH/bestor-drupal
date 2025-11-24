@@ -6,14 +6,19 @@ use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Config\ConfigImporterEvent;
 use Drupal\Core\Config\StorageComparerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
-use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationService;
-use Drupal\relationship_nodes\RelationEntityType\RelationSettingsCleanUpService;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationSettingsCleanUpService;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
-
+/**
+ * Subscriber for configuration import events related to relationship nodes.
+ *
+ * Validates and processes relationship node configuration during config import,
+ * including cleanup when the module is disabled.
+ */
 class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
   protected EntityTypeManagerInterface $entityTypeManager;
@@ -23,6 +28,20 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   protected RelationFieldConfigurator $fieldConfigurator;
 
 
+  /**
+   * Constructs a RelationConfigImportSubscriber object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param RelationSettingsCleanUpService $cleanupService
+   *   The cleanup service.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   * @param RelationValidationService $validationService
+   *   The validation service.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,     
     RelationSettingsCleanUpService $cleanupService,
@@ -41,11 +60,18 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       ConfigEvents::IMPORT_VALIDATE => 'onConfigImportValidate',
-      ConfigEvents::IMPORT => 'onConfigImport', //This event allows modules to perform additional actions when configuration is imported. 
+      // Respond to configuration import.
+      ConfigEvents::IMPORT => 'onConfigImport',
     ];
   }
 
 
+  /**
+   * Validates configuration before import.
+   *
+   * @param ConfigImporterEvent $event
+   *   The config import event.
+   */
   public function onConfigImportValidate(ConfigImporterEvent $event): void {
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
 
@@ -55,16 +81,22 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     $source_storage = $storage_comparer->getSourceStorage();
     
     foreach ($this->getUpdatedBundleConfigsToValidate($storage_comparer) as $bundle_config_name) {   
-      //Validate all rn bundles and the fields linked to them
+      // Validate all relation node bundles and their linked fields.
       $this->validationService->displayBundleCimValidationErrors($bundle_config_name, $event, $source_storage);
     }
     foreach ($this->getDeletedFieldsToValidate($storage_comparer) as $field_config_name) {   
-      //Prevent the deletion of fields used by the module
+      // Prevent deletion of fields used by the module.
       $this->validationService->displayCimFieldDependenciesValidationErrors($field_config_name, $event, $source_storage);
     }
   }
 
 
+  /**
+   * Processes configuration after import.
+   *
+   * @param ConfigImporterEvent $event
+   *   The config import event.
+   */
   public function onConfigImport(ConfigImporterEvent $event): void {
     $storage_comparer = $event->getConfigImporter()->getStorageComparer();
 
@@ -79,6 +111,15 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   }
 
 
+  /**
+   * Determines if the module is being enabled or disabled.
+   *
+   * @param StorageComparerInterface $storage_comparer
+   *   The storage comparer.
+   *
+   * @return string|null
+   *   Returns 'enabling', 'disabling', or NULL.
+   */
   protected function getModuleStateChange(StorageComparerInterface $storage_comparer): ?string {
       $source_storage = $storage_comparer->getSourceStorage();
       $target_storage = $storage_comparer->getTargetStorage();
@@ -87,7 +128,7 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
 
 
       if (isset($source_extensions['module']['relationship_nodes']) && !isset($target_extensions['module']['relationship_nodes'])) {
-       return 'disabling';
+        return 'disabling';
       }
       if (!isset($source_extensions['module']['relationship_nodes']) && isset($target_extensions['module']['relationship_nodes'])) {
         return 'enabling';
@@ -96,6 +137,15 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
   }
 
 
+  /**
+   * Gets bundle configurations that need validation.
+   *
+   * @param StorageComparerInterface $storage_comparer
+   *   The storage comparer.
+   *
+   * @return array
+   *   Array of configuration names.
+   */
    protected function getUpdatedBundleConfigsToValidate(StorageComparerInterface $storage_comparer): array {
     $result = [];
     $operations = ['create', 'update'];
@@ -112,6 +162,16 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     return $result;
    }
 
+
+   /**
+   * Gets updated relation bundle configurations.
+   *
+   * @param StorageComparerInterface $storage_comparer
+   *   The storage comparer.
+   *
+   * @return array
+   *   Array of configuration data keyed by configuration name.
+   */
   protected function getUpdatedRelationBundleConfigs(StorageComparerInterface $storage_comparer): array {
     $result = [];
     $all_updated_bundles = $this->getUpdatedBundleConfigsToValidate($storage_comparer);
@@ -125,6 +185,16 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     return $result;
   }
 
+
+  /**
+   * Converts configuration data to loaded entities.
+   *
+   * @param array $config_list
+   *   Array of configuration data keyed by configuration name.
+   *
+   * @return array
+   *   Array of loaded entities.
+   */
   protected function fromConfigToEntities(array $config_list){
     $load = ['node_type' => [], 'taxonomy_vocabulary' => [],];
     $result = [];
@@ -145,6 +215,16 @@ class RelationConfigImportSubscriber implements EventSubscriberInterface {
     return $result;
   }
 
+
+  /**
+   * Gets field configurations that are being deleted and need validation.
+   *
+   * @param StorageComparerInterface $storage_comparer
+   *   The storage comparer.
+   *
+   * @return array
+   *   Array of field configuration names.
+   */
   protected function getDeletedFieldsToValidate(StorageComparerInterface $storage_comparer): array {
     $result = [];
     foreach ($storage_comparer->getAllCollectionNames() as $collection) {

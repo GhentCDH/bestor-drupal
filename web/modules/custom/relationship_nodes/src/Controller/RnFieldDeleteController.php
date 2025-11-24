@@ -10,6 +10,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
+/**
+ * Controller for deleting relationship node fields.
+ */
 class RnFieldDeleteController extends ControllerBase {
 
   protected RelationBundleSettingsManager $settingsManager;
@@ -50,12 +53,12 @@ class RnFieldDeleteController extends ControllerBase {
    * @return RedirectResponse
    *   Redirect response to the field list.
    */
-  public function delete(FieldConfig $field_config):RedirectResponse {
+  public function delete(FieldConfig $field_config): RedirectResponse {
     $rn_field = (bool) $field_config->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
     $relation_entity = $this->settingsManager->isRelationEntity($field_config->getTargetBundle());
 
     $redirect_url = $this->uiUpdater->getRedirectUrl($field_config);
-    if($relation_entity){
+    if ($relation_entity) {
       $this->messenger()->addError($this->t('This field cannot be deleted because it is managed by Relationship Nodes.'));
     } elseif ($rn_field) {
       $field_config->delete();

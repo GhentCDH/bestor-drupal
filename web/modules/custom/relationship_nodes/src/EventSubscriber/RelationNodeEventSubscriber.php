@@ -3,10 +3,10 @@
 namespace Drupal\relationship_nodes\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\entity_events\EntityEventType;
-use Drupal\entity_events\Event\EntityEvent;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\entity_events\EntityEventType;
+use Drupal\entity_events\Event\EntityEvent;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -64,16 +64,16 @@ class RelationNodeEventSubscriber implements EventSubscriberInterface {
   public function setRelationTitle(EntityEvent $event, string $event_name): void {
     $entity = $event->getEntity();
 
-    if(!$entity instanceof Node){
+    if (!$entity instanceof Node) {
       return;
     }
     
     $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity->bundle());
-    if(
+    if (
       !$node_type instanceof NodeType || 
       !$this->settingsManager->isRelationNodeType($node_type) ||
       !$this->settingsManager->autoCreateTitle($node_type)
-    ){
+    ) {
       return;
     }
 
@@ -91,13 +91,13 @@ class RelationNodeEventSubscriber implements EventSubscriberInterface {
    * @return string
    *   The generated label.
    */
-  private function generateRelationLabel(Node $relation_node): string{
+  private function generateRelationLabel(Node $relation_node): string {
     $related_entities = $this->nodeInfoService->getRelatedEntityValues($relation_node);
     $title_parts = [];
     $node_storage = $this->entityTypeManager->getStorage('node');
-    foreach($related_entities as $field_values){
+    foreach ($related_entities as $field_values) {
       $node_titles = [];
-      foreach($field_values as $nid){
+      foreach ($field_values as $nid) {
         $node = $node_storage->load($nid);
         if ($node instanceof Node) {
           $node_titles[] = $node->getTitle();

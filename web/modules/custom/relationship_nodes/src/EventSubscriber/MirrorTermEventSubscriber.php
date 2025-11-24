@@ -2,13 +2,19 @@
 
 namespace Drupal\relationship_nodes\EventSubscriber;
 
+use Drupal\taxonomy\TermInterface;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermAutoUpdater;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+
+/**
+ * Event subscriber for mirror term operations.
+ *
+ * Handles automatic synchronization of mirror taxonomy terms.
+ */
 class MirrorTermEventSubscriber implements EventSubscriberInterface {
 
   protected MirrorTermAutoUpdater $mirrorUpdater;
@@ -59,9 +65,9 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
     }
 
     $vocab = $term->bundle();
-    if(empty($vocab) || empty($this->settingsManager->isRelationVocab($vocab)) ||
+    if (empty($vocab) || empty($this->settingsManager->isRelationVocab($vocab)) ||
         $this->settingsManager->getRelationVocabType($vocab) !== 'entity_reference'
-    ){
+    ) {
         return;
     }
     $hook = $this->mapEventNameToHook($event_name);

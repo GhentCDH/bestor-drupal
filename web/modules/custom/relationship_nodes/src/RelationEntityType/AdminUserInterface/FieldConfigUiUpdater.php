@@ -13,6 +13,12 @@ use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSe
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
+
+/**
+ * Service for updating field configuration UI elements.
+ *
+ * Overrides edit operations and local tasks for relationship node fields.
+ */
 class FieldConfigUiUpdater {
 
   use StringTranslationTrait;
@@ -22,8 +28,22 @@ class FieldConfigUiUpdater {
   protected FieldNameResolver $fieldResolver;
   protected RelationBundleSettingsManager $settingsManager;
   protected RelationFieldConfigurator $fieldConfigurator;
-
   
+
+  /**
+   * Constructs a FieldConfigUiUpdater object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param RouteMatchInterface $routeMatch
+   *   The current route match.
+   * @param FieldNameResolver $fieldResolver
+   *   The field name resolver.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager, 
     RouteMatchInterface $routeMatch, 
@@ -39,10 +59,19 @@ class FieldConfigUiUpdater {
   }
   
 
-  public function getRelationFieldConfigUrl(FieldConfig $field_config):?Url{    
+  /**
+   * Gets the relation field configuration URL.
+   *
+   * @param FieldConfig $field_config
+   *   The field configuration.
+   *
+   * @return Url|null
+   *   The URL or NULL.
+   */
+  public function getRelationFieldConfigUrl(FieldConfig $field_config): ?Url {    
     $url_info = $this->getDefaultRoutingInfo($field_config->getTargetEntityTypeId());
 
-    if(empty($url_info)){
+    if (empty($url_info)) {
       return null;
     }
 
@@ -53,18 +82,37 @@ class FieldConfigUiUpdater {
   }
 
 
-  public function getRelationFieldDeleteUrl(FieldConfig $field_config): ?url{
+  /**
+   * Gets the relation field delete URL.
+   *
+   * @param FieldConfig $field_config
+   *   The field configuration.
+   *
+   * @return Url|null
+   *   The URL or NULL.
+   */
+  public function getRelationFieldDeleteUrl(FieldConfig $field_config): ?url {
     $url = Url::fromRoute('relationship_nodes.rn_field_delete',['field_config' => $field_config->id(),]);
     return $url ?? null;
   }
 
 
-  public function overrideOperationsEdit(array &$row, FieldConfig $field_config, array $original_operations) : void {   
-    if(!$this->fieldConfigurator->isRnCreatedField($field_config)){
+  /**
+   * Overrides edit operations for relation fields.
+   *
+   * @param array $row
+   *   The table row (passed by reference).
+   * @param FieldConfig $field_config
+   *   The field configuration.
+   * @param array $original_operations
+   *   The original operations array.
+   */
+  public function overrideOperationsEdit(array &$row, FieldConfig $field_config, array $original_operations): void {   
+    if (!$this->fieldConfigurator->isRnCreatedField($field_config)) {
       return;
     }
     
-    if(!in_array($row['data']['field_name'], $this->fieldResolver->getAllRelationFieldNames())){
+    if (!in_array($row['data']['field_name'], $this->fieldResolver->getAllRelationFieldNames())) {
       return;
     }
 
@@ -75,7 +123,7 @@ class FieldConfigUiUpdater {
     $url = $this->getRelationFieldConfigUrl($field_config);
     $row['data']['operations']['data']['#links']['edit']['url'] = $url;
 
-    if(!$this->currentRouteIsRelationEntity()){
+    if (!$this->currentRouteIsRelationEntity()) {
       $delete_url = $this->getRelationFieldDeleteUrl($field_config);
       $row['data']['operations']['data']['#links']['delete'] = [
         'title'=> t('Delete'),
@@ -86,7 +134,13 @@ class FieldConfigUiUpdater {
   }
 
 
-  public function overrideLocalTasksEdit(&$local_tasks): void{
+  /**
+   * Overrides local tasks edit for relation fields.
+   *
+   * @param array $local_tasks
+   *   The local tasks array (passed by reference).
+   */
+  public function overrideLocalTasksEdit(&$local_tasks): void {
     $field_config = $this->routeMatch->getParameter('field_config');
 
     if (!$field_config instanceof FieldConfig || !$this->fieldConfigurator->isRnCreatedField($field_config)) {
@@ -95,16 +149,16 @@ class FieldConfigUiUpdater {
 
     $routing_info = $this->getDefaultRoutingInfo($field_config->getTargetEntityTypeId());
 
-    if(empty($routing_info)){
+    if (empty($routing_info)) {
       return;
     }
 
     $route_name = $local_tasks[$routing_info['field_edit_local_task']]['route_name'];
-    if(empty($route_name) ||  $route_name !== $routing_info['field_edit_form_route']){
+    if (empty($route_name) ||  $route_name !== $routing_info['field_edit_form_route']) {
       return;
     }
 
-    if(!in_array($field_config->getName(), $this->fieldResolver->getAllRelationFieldNames())){
+    if (!in_array($field_config->getName(), $this->fieldResolver->getAllRelationFieldNames())) {
       return;
     }
 
@@ -112,9 +166,15 @@ class FieldConfigUiUpdater {
   }
 
   
-  public function getBundleFromCurrentRoute():NodeType|Vocabulary|null{
+  /**
+   * Gets the bundle from the current route.
+   *
+   * @return NodeType|Vocabulary|null
+   *   The bundle entity or NULL.
+   */
+  public function getBundleFromCurrentRoute(): NodeType|Vocabulary|null {
     $entity_type_id = $this->routeMatch->getParameter('entity_type_id');
-    switch($entity_type_id){
+    switch ($entity_type_id) {
       case 'node':
         $bundle = $this->routeMatch->getParameter('node_type');
         break;
@@ -125,19 +185,28 @@ class FieldConfigUiUpdater {
         $bundle = null;
         break;
     }
-    if(is_string($bundle)){
+    if (is_string($bundle)) {
       $entity_storage = $this->entityTypeManager->getStorage($entity_type_id);
       $bundle = $entity_storage->load($bundle);
     }
 
-    if(!($bundle instanceof NodeType || $bundle instanceof Vocabulary)){
+    if (!($bundle instanceof NodeType || $bundle instanceof Vocabulary)) {
       return null;
     }
     return $bundle;
   }
 
 
-  public function getRedirectUrl(FieldConfig $field_config):Url{
+  /**
+   * Gets the redirect URL for a field configuration.
+   *
+   * @param FieldConfig $field_config
+   *   The field configuration.
+   *
+   * @return Url
+   *   The redirect URL.
+   */
+  public function getRedirectUrl(FieldConfig $field_config): Url {
     $entity_type = $field_config->getTargetEntityTypeId();
     $bundle = $field_config->getTargetBundle();
 
@@ -156,7 +225,13 @@ class FieldConfigUiUpdater {
   }
 
 
-  public function currentRouteIsRelationEntity():bool{
+  /**
+   * Checks if the current route is for a relation entity.
+   *
+   * @return bool
+   *   TRUE if current route is for a relation entity, FALSE otherwise.
+   */
+  public function currentRouteIsRelationEntity(): bool {
     $bundle_entity = $this->getBundleFromCurrentRoute();
     if (!$bundle_entity) {
       return false;
@@ -165,7 +240,16 @@ class FieldConfigUiUpdater {
   }
 
 
-  public function getDefaultRoutingInfo(string $entity_type_id):array{
+  /**
+   * Gets default routing information for an entity type.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID.
+   *
+   * @return array
+   *   Array of routing information.
+   */
+  public function getDefaultRoutingInfo(string $entity_type_id): array {
     $mapping = [
       'node' => [
         'bundle_param_key' => 'node_type',
@@ -175,7 +259,7 @@ class FieldConfigUiUpdater {
       ]
     ];
 
-    if(!isset($mapping[$entity_type_id])){
+    if (!isset($mapping[$entity_type_id])) {
       return [];
     }
 

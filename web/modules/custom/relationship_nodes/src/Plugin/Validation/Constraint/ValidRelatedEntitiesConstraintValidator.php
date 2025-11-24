@@ -6,13 +6,17 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 
-
+/**
+ * Validates the ValidRelatedEntitiesConstraint constraint.
+ */
 class ValidRelatedEntitiesConstraintValidator extends ConstraintValidator {
 
+  /**
+   * {@inheritdoc}
+   */
   public function validate($entity, Constraint $constraint) {
-    dpm('validate');
     $error_type = \Drupal::service('relationship_nodes.relation_entity_validator')->checkRelationsValidity($entity);
-    if(!empty($error_type)){
+    if (!empty($error_type)) {
       $this->context->addViolation($constraint->$error_type);  
     }
   } 

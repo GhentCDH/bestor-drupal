@@ -3,9 +3,13 @@
 namespace Drupal\relationship_nodes\RelationEntityType\Validation;
 
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 
+/**
+ * Validation object for relationship bundle configuration.
+ *
+ * Validates node types and vocabularies configured as relationship entities.
+ */
 class RelationBundleValidationObject {
 
   protected ?string $entity_type_id;
@@ -15,6 +19,18 @@ class RelationBundleValidationObject {
   protected array $errors = [];
 
 
+  /**
+   * Constructs a RelationBundleValidationObject.
+   *
+   * @param string|null $entity_type_id
+   *   The entity type ID.
+   * @param array $rn_settings
+   *   The relationship nodes settings.
+   * @param array $dependent_relation_bundles
+   *   Array of dependent relation bundles.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver.
+   */
   public function __construct(
     ?string $entity_type_id,
     array $rn_settings,
@@ -28,16 +44,21 @@ class RelationBundleValidationObject {
   }
 
 
+  /**
+   * Validates the bundle configuration.
+   *
+   * @return bool
+   *   TRUE if valid, FALSE otherwise.
+   */
   public function validate(): bool {
-    if(!$this->isRelevantEntityType()){
+    if (!$this->isRelevantEntityType()) {
       // No RN Entity Type, so cannot be invalid
-      return true;
+      return TRUE;
     }
 
     $this->errors = [];
-
     
-    if(empty($this->rn_settings['enabled'])){
+    if (empty($this->rn_settings['enabled'])) {
       $this->validateDependencies();
     } else {
       $this->validateFieldNameConfig(); 
@@ -47,26 +68,36 @@ class RelationBundleValidationObject {
   }
 
 
+  /**
+   * Gets validation errors.
+   *
+   * @return array
+   *   Array of error codes.
+   */
   public function getErrors(): array {
     return $this->errors;
   }
 
-  /*
-  * Checks whether the entity type is a valid relation entity type (node_type or taxonomy_vocabulary)
-  */
+
+  /**
+   * Checks if the entity type is relevant for validation.
+   *
+   * @return bool
+   *   TRUE if relevant entity type, FALSE otherwise.
+   */
   protected function isRelevantEntityType(): bool {
-    if (!in_array($this->entity_type_id, ['node_type', 'taxonomy_vocabulary'], true)) {
-      return false;
+    if (!in_array($this->entity_type_id, ['node_type', 'taxonomy_vocabulary'], TRUE)) {
+      return FALSE;
     }
-    return true;
+    return TRUE;
   }
 
 
-  /*
-  * Checks whether the entity type is a valid relation entity type (node_type or taxonomy_vocabulary)
-  */
+  /**
+   * Validates mirror type setting for vocabularies.
+   */
   protected function validateMirrorType(): void {
-    if($this->entity_type_id !== 'taxonomy_vocabulary'){
+    if ($this->entity_type_id !== 'taxonomy_vocabulary') {
       return;
     }
 
@@ -80,21 +111,21 @@ class RelationBundleValidationObject {
   }
   
 
-  /*
-  * Checks whether the necessary field names are set in config/install/
-  */
-  protected function validateFieldNameConfig():void{
-    if($this->entity_type_id === 'node_type'){
+  /**
+   * Validates field name configuration.
+   */
+  protected function validateFieldNameConfig(): void {
+    if ($this->entity_type_id === 'node_type') {
       if (!$this->validBasicRelationConfig()) {
         $this->errors[] = 'missing_field_name_config';
         return;
       }
-      if (!empty($this->rn_settings['typed_relation']) && !$this->validTypedRelationConfig()){
+      if (!empty($this->rn_settings['typed_relation']) && !$this->validTypedRelationConfig()) {
         $this->errors[] = 'missing_field_name_config';
         return;
       }
-    } elseif($this->entity_type_id === 'taxonomy_vocabulary'){
-      if (!$this->validRelationVocabConfig()){
+    } elseif ($this->entity_type_id === 'taxonomy_vocabulary') {
+      if (!$this->validRelationVocabConfig()) {
         $this->errors[] = 'missing_field_name_config';
         return;
       }
@@ -103,14 +134,14 @@ class RelationBundleValidationObject {
 
 
   /**
-  * Validates whether a relation entity with dependencies gets un-relationed (which is invalid). 
-  */
-  protected function validateDependencies(): void{  
-    if(
+   * Validates dependencies when disabling relationship nodes.
+   */
+  protected function validateDependencies(): void {  
+    if (
       $this->entity_type_id === 'taxonomy_vocabulary' &&
       empty($this->rn_settings['enabled']) &&
       !empty($this->dependent_relation_bundles)
-    ){
+    ) {
       $this->errors[] = 'disabled_with_dependencies';
       return;
     }
@@ -118,55 +149,72 @@ class RelationBundleValidationObject {
 
 
   /**
-  * Validates whether the related entity field names have been filled in the module config (cf /config/install) 
-  */
-  protected function validBasicRelationConfig(): bool{  
-    if(!$this->validChildFieldConfig($this->fieldNameResolver->getRelatedEntityFields(), 'related_entity_fields')){
-      return false;
+   * Validates basic relation configuration for node types.
+   *
+   * @return bool
+   *   TRUE if valid, FALSE otherwise.
+   */
+  protected function validBasicRelationConfig(): bool {  
+    if (!$this->validChildFieldConfig($this->fieldNameResolver->getRelatedEntityFields(), 'related_entity_fields')) {
+      return FALSE;
     }
-    return true;
+    return TRUE;
   }
 
 
   /**
-  * Validates whether the related type field name has been filled in the module config (cf /config/install) 
-  */
-  protected function validTypedRelationConfig(): bool{
+   * Validates typed relation configuration.
+   *
+   * @return bool
+   *   TRUE if valid, FALSE otherwise.
+   */
+  protected function validTypedRelationConfig(): bool {
     if (empty($this->fieldNameResolver->getRelationTypeField()) || !$this->validRelationVocabConfig()) {
-      return false;
+      return FALSE;
     }  
-    return true;
+    return TRUE;
   }
 
 
   /**
-  * Validates whether the mirror field names have been filled in the module config (cf /config/install) 
-  */
-  protected function validRelationVocabConfig():bool{
-    if(!$this->validChildFieldConfig($this->fieldNameResolver->getMirrorFields(), 'mirror_fields')){
-      return false;
+   * Validates relation vocabulary configuration.
+   *
+   * @return bool
+   *   TRUE if valid, FALSE otherwise.
+   */
+  protected function validRelationVocabConfig(): bool {
+    if (!$this->validChildFieldConfig($this->fieldNameResolver->getMirrorFields(), 'mirror_fields')) {
+      return FALSE;
     }
-    return true;
+    return TRUE;
   }
 
 
   /**
-  * Helper function to check arrays of (sub)fields in the module config (cf /config/install) 
-  */
+   * Validates child field configuration.
+   *
+   * @param array $array
+   *   Array of field values.
+   * @param string $parent_key
+   *   The parent configuration key.
+   *
+   * @return bool
+   *   TRUE if valid, FALSE otherwise.
+   */
   protected function validChildFieldConfig(array $array, string $parent_key): bool {
     if (!is_array($array)) {
-      return false;
+      return FALSE;
     }
     $subfields = $this->fieldNameResolver->getConfig($parent_key);
     if (empty($subfields) || !is_array($subfields)) {
-      return false;
+      return FALSE;
     }
 
     foreach (array_keys($subfields) as $subfield) {
       if (!array_key_exists($subfield, $array) || empty($array[$subfield])) {
-        return false;
+        return FALSE;
       }
     }
-    return true;
+    return TRUE;
   }
 }

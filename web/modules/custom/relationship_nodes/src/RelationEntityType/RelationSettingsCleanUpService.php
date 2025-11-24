@@ -6,15 +6,30 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
-use Drupal\search_api\Entity\Index;
 
 
+/**
+ * Service for cleaning up relationship nodes settings.
+ *
+ * Removes module settings and cleans up form displays when module is uninstalled.
+ */
 class RelationSettingsCleanUpService {
       
   protected EntityTypeManagerInterface $entityTypeManager;
   protected RelationBundleInfoService $bundleInfoService;
   protected RelationFieldConfigurator $fieldConfigurator;
 
+
+  /**
+   * Constructs a RelationSettingsCleanUpService object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param RelationBundleInfoService $bundleInfoService
+   *   The bundle info service.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     RelationBundleInfoService $bundleInfoService, 
@@ -25,15 +40,22 @@ class RelationSettingsCleanUpService {
     $this->fieldConfigurator = $fieldConfigurator;
   }
 
+
+  /**
+   * Removes all module settings.
+   */
   public function removeModuleSettings(): void {
     $this->unsetRnEntitySettings();
     $this->cleanFormDisplays();
   }
 
 
+  /**
+   * Unsets relationship nodes settings from entities.
+   */
   protected function unsetRnEntitySettings(): void {
     try {
-      foreach ( $this->bundleInfoService->getAllRelationBundles() as $entity_type) {
+      foreach ($this->bundleInfoService->getAllRelationBundles() as $entity_type) {
         $updated = $this->unsetRnThirdPartySettings($entity_type) ?? [];
       }
       foreach ($this->fieldConfigurator->getAllRnCreatedFields() as $field) {
@@ -49,6 +71,9 @@ class RelationSettingsCleanUpService {
   }
 
 
+  /**
+   * Cleans form and view displays of relationship node widgets.
+   */
   protected function cleanFormDisplays(): void {
     $display_storages = [
       'form' => $this->entityTypeManager->getStorage('entity_form_display'), 
@@ -85,6 +110,12 @@ class RelationSettingsCleanUpService {
   }
 
 
+  /**
+   * Unsets third-party settings for a config entity.
+   *
+   * @param ConfigEntityBase $entity
+   *   The config entity.
+   */
   protected function unsetRnThirdPartySettings(ConfigEntityBase $entity): void {
     $rn_settings = $entity->getThirdPartySettings('relationship_nodes');
     foreach ($rn_settings as $key => $value) {

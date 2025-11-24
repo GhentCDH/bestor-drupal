@@ -27,6 +27,20 @@ class RelationNodeInfoService {
   protected RelationBundleSettingsManager $settingsManager;
 
 
+  /**
+   * Constructs a RelationNodeInfoService object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param RouteMatchInterface $routeMatch
+   *   The current route match.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver.
+   * @param RelationBundleInfoService $bundleInfoService
+   *   The bundle info service.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     RouteMatchInterface $routeMatch,
@@ -59,17 +73,17 @@ class RelationNodeInfoService {
     $result = [];
     $bundle_connections = $this->bundleInfoService->getBundleConnectionInfo($relation_node->getType(), $target_node->getType());
     
-    if(empty($bundle_connections['join_fields'])){
+    if( empty($bundle_connections['join_fields'])) {
       return $result;
     }
     
     $target_id = $target_node->id();
 
-    foreach($field_names as $field){
-      if(in_array($field, $bundle_connections['join_fields'])){
+    foreach ($field_names as $field) {
+      if (in_array($field, $bundle_connections['join_fields'])) {
         $references = $relation_node->get($field)->getValue();
-        foreach($references as $ref){
-          if(isset($ref['target_id']) && $ref['target_id'] == $target_id){
+        foreach ($references as $ref) {
+          if (isset($ref['target_id']) && $ref['target_id'] == $target_id) {
             $result[] = $field;
             break;
           }
@@ -95,24 +109,24 @@ class RelationNodeInfoService {
    *     - 'relation_info': optional additional relation metadata.
    */
   public function getEntityConnectionInfo(Node $relation_node, ?Node $target_node = NULL): array {
-    if(empty($target_node)){
+    if (empty($target_node)) {
       $target_node = $this->routeMatch->getParameter('node');
     }
 
-    if(!$target_node instanceof Node){
+    if (!$target_node instanceof Node) {
       return [];
     }
 
     $bundle_connections = $this->bundleInfoService->getBundleConnectionInfo($relation_node->getType(), $target_node->getType());
     $result = ['relation_state' => 'unrelated'];
 
-    if(empty($bundle_connections['join_fields'])){
+    if (empty($bundle_connections['join_fields'])) {
       return $result;
     }
 
     $connections = $this->getJoinFields($relation_node, $bundle_connections['join_fields'], $target_node) ?? [];
 
-    switch(count($connections)){
+    switch (count($connections)) {
       case 0:
         break;
       case 1:
@@ -146,7 +160,7 @@ class RelationNodeInfoService {
    */
   public function getReferencingRelations(Node $target_node, string $relation_bundle, array $join_fields = []): array {
     $target_bundle = $target_node->getType();
-    if(empty($join_fields)){
+    if (empty($join_fields)) {
       $connection_info = $this->bundleInfoService->getBundleConnectionInfo($relation_bundle, $target_bundle) ?? [];
       if (empty($connection_info['join_fields'])) {
         return [];
@@ -157,12 +171,12 @@ class RelationNodeInfoService {
     $target_id = $target_node->id();
     $node_storage = $this->entityTypeManager->getStorage('node');
     $result = [];
-    foreach($join_fields as $join_field){
+    foreach ($join_fields as $join_field) {
       $relations = $node_storage->loadByProperties([
         'type' => $relation_bundle,
         $join_field => $target_id,
       ]);
-      if(!empty($relations)){
+      if (!empty($relations)) {
         $result += $relations;
       }
     }
@@ -183,14 +197,14 @@ class RelationNodeInfoService {
     $result = [];
     $target_bundle_info = $this->bundleInfoService->getRelationInfoForTargetBundle($target_node->getType());    
     
-    if(empty($target_bundle_info)){
+    if (empty($target_bundle_info)) {
       return $result;
     }
 
-    foreach($target_bundle_info as $relation_bundle => $relation_info){
+    foreach ($target_bundle_info as $relation_bundle => $relation_info) {
       $join_fields = isset($relation_info['join_fields']) ? $relation_info['join_fields'] : [];
       $bundle_result = $this->getReferencingRelations($target_node, $relation_bundle, $join_fields);
-      if(!empty($bundle_result)){
+      if (!empty($bundle_result)) {
         $result[$relation_bundle] = $bundle_result;
       }
     }
@@ -209,18 +223,18 @@ class RelationNodeInfoService {
    *  E.g. ['related_entity_field_1' => 101, 'related_entity_field_2' => 202]
    */
   public function getRelatedEntityValues(Node $relation_node): ?array {      
-    if(!$this->settingsManager->isRelationNodeType($relation_node->getType())){
+    if (!$this->settingsManager->isRelationNodeType($relation_node->getType())) {
       return null;
     }
 
     $result = [];
-    foreach($this->fieldNameResolver->getRelatedEntityFields() as $related_entity_field){
+    foreach ($this->fieldNameResolver->getRelatedEntityFields() as $related_entity_field) {
       $related_field = $relation_node->get($related_entity_field);
-      if(!$related_field instanceof EntityReferenceFieldItemList){
+      if (!$related_field instanceof EntityReferenceFieldItemList) {
         return null;    
       }
       $relation_references = $this->getFieldListTargetIds($related_field);
-      if(empty($relation_references)){
+      if (empty($relation_references)) {
         continue;
       }
       $result[$related_entity_field] = $relation_references;
@@ -230,14 +244,14 @@ class RelationNodeInfoService {
 
   
   /**
- * Extracts target IDs from an entity reference field list.SS
+ * Extracts target IDs from an entity reference field list.
    *
    * @param EntityReferenceFieldItemList $list
    *
    * @return array
    *   Array of target entity IDs.
    */
-  public function getFieldListTargetIds(EntityReferenceFieldItemList $list): array{
+  public function getFieldListTargetIds(EntityReferenceFieldItemList $list): array {
     $result = []; 
     foreach ($list->getValue() as $item) {
       if (is_array($item) && isset($item['target_id'])) {

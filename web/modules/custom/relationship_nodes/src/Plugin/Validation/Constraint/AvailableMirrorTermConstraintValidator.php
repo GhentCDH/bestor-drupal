@@ -6,7 +6,14 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 
+/**
+ * Validates the AvailableMirrorTermConstraint constraint.
+ */
 class AvailableMirrorTermConstraintValidator extends ConstraintValidator {
+
+  /**
+   * {@inheritdoc}
+   */
   public function validate($value, Constraint $constraint) {
     if($value->target_id != null){    
       $updated_term_id = $value->getParent()->getEntity()->id();

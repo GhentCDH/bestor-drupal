@@ -2,7 +2,7 @@ relationship_nodes.relation_node_field_form:
   path: '/admin/structure/types/manage/{node_type}/fields/relationship-nodes-edit/{field_config}'
   defaults:
     _form: '\Drupal\relationship_nodes\Form\RelationFieldConfigForm'
-    _title: 'Edit relation field'
+    _title: 'Edit Relation Field'
   requirements:
     _permission: 'administer content types'
   options:
@@ -16,9 +16,9 @@ relationship_nodes.relation_taxonomy_term_field_form:
   path: '/admin/structure/taxonomy/manage/{taxonomy_vocabulary}/overview/fields/relationship-nodes-edit/{field_config}'
   defaults:
     _form: '\Drupal\relationship_nodes\Form\RelationFieldConfigForm'
-    _title: 'Edit relation field'
+    _title: 'Edit Rrelation Field'
   requirements:
-    _permission: 'administer content types'
+    _permission: 'administer taxonomy'
   options:
     _admin_route: TRUE
   parameters:

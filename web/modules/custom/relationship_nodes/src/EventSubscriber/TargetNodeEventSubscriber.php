@@ -2,9 +2,9 @@
 
 namespace Drupal\relationship_nodes\EventSubscriber;
 
+use Drupal\node\Entity\Node;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
-use Drupal\node\Entity\Node;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
 use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationSyncService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -40,7 +40,7 @@ class TargetNodeEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      EntityEventType::DELETE => ['deleteOrphanedRelations'],
+      EntityEventType::DELETE => ['deleteOrphanedRelations']
     ];
   }
 
@@ -59,11 +59,11 @@ class TargetNodeEventSubscriber implements EventSubscriberInterface {
       return;
     }
     $relations_per_type = $this->nodeInfoService->getAllReferencingRelations($entity) ?? [];
-    if(!is_array($relations_per_type) || empty($relations_per_type)) {
+    if (!is_array($relations_per_type) || empty($relations_per_type)) {
       return;
     }
     $relation_ids = [];
-    foreach($relations_per_type as $relations){
+    foreach ($relations_per_type as $relations) {
       $relation_ids = array_merge($relation_ids, array_keys($relations));
     }
     $this->syncService->deleteNodes($relation_ids);

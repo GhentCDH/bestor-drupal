@@ -8,6 +8,11 @@ use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConf
 use Drupal\Core\Config\StorageInterface;
 
 
+/**
+ * Validation object for relationship field configuration.
+ *
+ * Validates field configurations for relationship node fields.
+ */
 class RelationFieldConfigValidationObject {
 
   protected string $fieldName;
@@ -19,10 +24,31 @@ class RelationFieldConfigValidationObject {
   protected FieldNameResolver $fieldNameResolver;
   protected RelationFieldConfigurator $fieldConfigurator;
   protected RelationBundleSettingsManager $settingsManager;
-  
   protected array $errors = [];
 
 
+  /**
+   * Constructs a RelationFieldConfigValidationObject.
+   *
+   * @param string $fieldName
+   *   The field name.
+   * @param string $bundle
+   *   The bundle name.
+   * @param bool $required
+   *   Whether the field is required.
+   * @param string $fieldType
+   *   The field type.
+   * @param array|null $targetBundles
+   *   Target bundles for entity reference fields.
+   * @param StorageInterface|null $storage
+   *   The configuration storage.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver.
+   * @param RelationFieldConfigurator $fieldConfigurator
+   *   The field configurator.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   */
   public function __construct(
     string $fieldName,
     string $bundle,
@@ -46,53 +72,65 @@ class RelationFieldConfigValidationObject {
   }
 
 
-  public function validate(): bool {      
-
+  /**
+   * Validates the field configuration.
+   *
+   * @return bool
+   *   TRUE if valid, FALSE otherwise.
+   */
+  public function validate(): bool {
     $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($this->fieldName);
 
-    if(!$required_settings){
+    if (!$required_settings) {
       // Not a RN field, no validation required. 
-      return true;
+      return TRUE;
     }
 
     $this->validateTargetBundles();
     $this->validateFieldRequired();
     $this->validateFieldType($required_settings);
     $this->validateSelfReferencingMirrorField();
-    if($required_settings['type'] === 'entity_reference'){
+    if ($required_settings['type'] === 'entity_reference') {
       $this->validateRelationVocabTarget();
     }
     return empty($this->errors);
   }
 
 
+  /**
+   * Gets validation errors.
+   *
+   * @return array
+   *   Array of error codes.
+   */
   public function getErrors(): array {
     return $this->errors;
   }
 
-  /*
-  * All of the module defined fields can only have 0 or 1 target bundles
-  */
+  /**
+   * Validates target bundles configuration.
+   */
   protected function validateTargetBundles(): void {
     if (!empty($this->targetBundles) && count($this->targetBundles) !== 1) {
       $this->errors[] = 'multiple_target_bundles';
     }
   }
 
-  /*
-  * None of the module defined fieds can be required, as this conflicts with the IEF widget
-  */
+
+  /**
+   * Validates that field is not required.
+   */
   protected function validateFieldRequired(): void {
     if ($this->required) {
       $this->errors[] = 'field_cannot_be_required';
     }
   }
   
-  /*
-  * Mirror fields (cf relation vocabs) of the type entity reference, always have the same vocab as target bundle.
-  * (A relation type and its mirror type, are always terms of the same vocab) 
-  */
-  protected function validateSelfReferencingMirrorField():void {
+
+  /**
+   * Validates self-referencing mirror field configuration.
+   */
+  protected function validateSelfReferencingMirrorField(): void {
     if ($this->fieldName === $this->fieldNameResolver->getMirrorFields('entity_reference')) {
       if (!empty($this->targetBundles) && key($this->targetBundles) !== $this->bundle) {
         $this->errors[] = 'mirror_field_bundle_mismatch';
@@ -101,11 +139,10 @@ class RelationFieldConfigValidationObject {
   }        
   
 
-  /*
-  * Relation type fields (cf typed relation NodeTypes) must reference a vocab that is marked as a relation vocab. 
-  */
+  /**
+   * Validates relation vocabulary target for relation type fields.
+   */
   protected function validateRelationVocabTarget(): void {
-
     if ($this->fieldName === $this->fieldNameResolver->getRelationTypeField()) {
       if (empty($this->targetBundles)) {
         $this->errors[] = 'relation_type_field_no_targets';
@@ -113,23 +150,28 @@ class RelationFieldConfigValidationObject {
       }
       // werkt niet bij configimport...
       foreach ($this->targetBundles as $vocab_name => $vocab_label) {
-        if(empty($this->storage) && $this->settingsManager->isRelationVocab($vocab_name)){
+        if (empty($this->storage) && $this->settingsManager->isRelationVocab($vocab_name)) {
           continue;
         } elseif (!empty($this->storage)) {
           $config_data = $this->storage->read('taxonomy.vocabulary.' . $vocab_name);
 
-          if(!empty($config_data) && $this->settingsManager->isCimRelationEntity($config_data)){
+          if (!empty($config_data) && $this->settingsManager->isCimRelationEntity($config_data)) {
             continue;
           }
         }
         $this->errors[] = 'invalid_relation_vocabulary';
         break;
-        
       }
     }
   }
 
   
+  /**
+   * Validates field type matches required configuration.
+   *
+   * @param array $required_settings
+   *   Required field settings.
+   */
   protected function validateFieldType(array $required_settings): void {
     if ($this->fieldType !== $required_settings['type']) {
       $this->errors[] = 'invalid_field_type';

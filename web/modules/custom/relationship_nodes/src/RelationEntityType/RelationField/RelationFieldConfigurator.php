@@ -17,6 +17,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 
+/**
+ * Service for configuring relationship node fields.
+ *
+ * Handles creation, validation, and management of relationship node fields.
+ */
 class RelationFieldConfigurator {
 
   protected EntityTypeManagerInterface $entityTypeManager;
@@ -24,6 +29,16 @@ class RelationFieldConfigurator {
   protected RelationBundleSettingsManager $settingsManager;
 
   
+  /**
+   * Constructs a RelationFieldConfigurator object.
+   *
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager.
+   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     FieldNameResolver $fieldNameResolver, 
@@ -35,6 +50,15 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Gets required field configuration for a field name.
+   *
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return array|null
+   *   Array of field configuration or NULL.
+   */
   public function getRequiredFieldConfiguration(string $field_name): ?array {
     if (in_array($field_name, $this->fieldNameResolver->getRelatedEntityFields())) {
       return [
@@ -64,6 +88,15 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Implements field updates for a bundle entity.
+   *
+   * @param ConfigEntityBundleBase $entity
+   *   The bundle entity.
+   *
+   * @return array
+   *   Array with keys 'checked', 'created', 'removed' containing field names.
+   */
   public function implementFieldUpdates(ConfigEntityBundleBase $entity): array {
     $result = [];
     $fields_status = $this->getBundleFieldsStatus($entity); 
@@ -89,6 +122,17 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Gets bundle field status.
+   *
+   * @param ConfigEntityBundleBase $entity
+   *   The bundle entity.
+   * @param array|null $rn_settings
+   *   Optional relationship nodes settings.
+   *
+   * @return array|null
+   *   Array with keys 'existing', 'missing', 'remove', or NULL.
+   */
   public function getBundleFieldsStatus(ConfigEntityBundleBase $entity, ?array $rn_settings = null): ?array {
     $rn_settings = !empty($rn_settings) ? $rn_settings : $this->settingsManager->getProperties($entity);
     return $this->getFieldsStatus(
@@ -100,6 +144,17 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Gets field status from configuration import.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   *
+   * @return array|null
+   *   Array with keys 'existing', 'missing', 'remove', or NULL.
+   */
   public function getCimFieldsStatus(string $config_name, StorageInterface $storage): ?array {
     $config_data = $storage->read($config_name);
     $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
@@ -122,6 +177,21 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Gets field status for an entity type and bundle.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID.
+   * @param string $bundle_name
+   *   The bundle name.
+   * @param array $rn_settings
+   *   Relationship nodes settings.
+   * @param FieldConfigStorage|StorageInterface $storage
+   *   The field storage.
+   *
+   * @return array|null
+   *   Array with keys 'existing', 'missing', 'remove', or NULL.
+   */
   public function getFieldsStatus(string $entity_type_id, string $bundle_name, array $rn_settings, FieldConfigStorage|StorageInterface $storage): ?array {
     $config_import = !($storage instanceof FieldConfigStorage);
     $config_prefix = $this->getFieldConfigNamePrefix($entity_type_id, $bundle_name, $config_import);
@@ -159,8 +229,17 @@ class RelationFieldConfigurator {
   }
 
 
-
-
+  /**
+   * Gets required fields for an entity type.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID.
+   * @param array $rn_settings
+   *   Relationship nodes settings.
+   *
+   * @return array
+   *   Array of required field configurations keyed by field name.
+   */
   public function getRequiredFields(string $entity_type_id, array $rn_settings): array {
     $fields = [];
 
@@ -169,7 +248,7 @@ class RelationFieldConfigurator {
     }
 
     if ($entity_type_id === 'node_type') {
-      foreach($this->fieldNameResolver->getRelatedEntityFields() as $field_name){
+      foreach ($this->fieldNameResolver->getRelatedEntityFields() as $field_name) {
         $config = $this->getRequiredFieldConfiguration($field_name);
         if ($config) {
           $fields[$field_name] = $config;
@@ -200,17 +279,44 @@ class RelationFieldConfigurator {
   }
 
 
-  public function isRnCreatedField(FieldConfig|FieldStorageConfig $field): bool{
+  /**
+   * Checks if a field was created by relationship nodes module.
+   *
+   * @param FieldConfig|FieldStorageConfig $field
+   *   The field entity.
+   *
+   * @return bool
+   *   TRUE if created by module, FALSE otherwise.
+   */
+  public function isRnCreatedField(FieldConfig|FieldStorageConfig $field): bool {
     return (bool) $field->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
   }
 
 
+  /**
+   * Checks if configuration data represents a module-created field.
+   *
+   * @param array $config_data
+   *   The configuration data array.
+   *
+   * @return bool
+   *   TRUE if created by module, FALSE otherwise.
+   */
   public function isCimRnCreatedField(array $config_data): bool {
     $rn_created = $this->settingsManager->getCimProperty($config_data, 'rn_created');
     return !empty($rn_created);
   }
 
 
+  /**
+   * Gets all fields created by relationship nodes module.
+   *
+   * @param string|null $entity_type_id
+   *   Optional entity type ID to filter by ('storage' or 'field').
+   *
+   * @return array
+   *   Array of field entities keyed by field ID.
+   */
   public function getAllRnCreatedFields(?string $entity_type_id = null): array {
     $entity_types = ['storage' => 'field_storage_config', 'field' => 'field_config'];
     if ($entity_type_id !== null && !in_array($entity_type_id, array_keys($entity_types))) {
@@ -238,20 +344,31 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Gets all module-created fields from configuration import.
+   *
+   * @param StorageInterface $storage
+   *   The configuration storage.
+   * @param string|null $entity_type_id
+   *   Optional entity type ID to filter by.
+   *
+   * @return array
+   *   Array of configuration data keyed by config name.
+   */
   public function getAllCimRnCreatedFields(StorageInterface $storage, ?string $entity_type_id = null): array {
     $entity_types = ['storage', 'field'];
-    if($entity_type_id !== null && !in_array($entity_type_id, $entity_types)){
+    if ($entity_type_id !== null && !in_array($entity_type_id, $entity_types)) {
       return [];
     }
 
     $input = $entity_type_id !== null ? [$entity_type_id] : $entity_types;
 
     $result = []; 
-    foreach($input as $entity_type){
+    foreach ($input as $entity_type) {
       $all_fields = $storage->listAll('field.' . $entity_type_id . '.');
-      foreach($all_fields as $field_name){
+      foreach ($all_fields as $field_name) {
         $config_data = $storage->read($field_name);
-        if($config_data && $this->settingsManager->isCimRnCreatedField($config_data)){
+        if ($config_data && $this->settingsManager->isCimRnCreatedField($config_data)) {
           $result[$field_name] = $config_data;
         }
       }
@@ -260,6 +377,14 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Creates fields for a bundle entity.
+   *
+   * @param ConfigEntityBundleBase $entity
+   *   The bundle entity.
+   * @param array $missing_fields
+   *   Array of missing field configurations.
+   */
   protected function createFields(ConfigEntityBundleBase $entity, array $missing_fields): void {
     $field_storage_config_storage = $this->entityTypeManager->getStorage('field_storage_config');
     $field_config_storage = $this->entityTypeManager->getStorage('field_config');
@@ -286,7 +411,7 @@ class RelationFieldConfigurator {
       if (!$field_config) {
           
         $self_target_settings = [];
-        if($field_name == $this->fieldNameResolver->getMirrorFields('entity_reference')){
+        if ($field_name == $this->fieldNameResolver->getMirrorFields('entity_reference')) {
           $self_target_settings = [
             'handler' => 'default:taxonomy_term',
             'handler_settings' => [
@@ -310,6 +435,14 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Removes fields from a bundle entity.
+   *
+   * @param ConfigEntityBundleBase $entity
+   *   The bundle entity.
+   * @param array $fields_to_remove
+   *   Array of field names to remove.
+   */
   protected function removeFields(ConfigEntityBundleBase $entity, array $fields_to_remove): void {
     $storage = $this->entityTypeManager->getStorage('field_config');
     $entity_type_id = $this->settingsManager->getEntityTypeObjectClass($entity);
@@ -321,6 +454,14 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Ensures field configuration is properly set.
+   *
+   * @param ConfigEntityBundleBase $entity
+   *   The bundle entity.
+   * @param array $existing_fields
+   *   Array of existing field data.
+   */
   protected function ensureFieldConfig(ConfigEntityBundleBase $entity, array $existing_fields): void {
     foreach ($existing_fields as $field_arr) {
       $field_config = $field_arr['field_config'];
@@ -338,6 +479,19 @@ class RelationFieldConfigurator {
   }
 
 
+  /**
+   * Gets the field configuration name prefix.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID.
+   * @param string $bundle_name
+   *   The bundle name.
+   * @param bool $config_import
+   *   Whether this is for config import.
+   *
+   * @return string|null
+   *   The prefix string or NULL.
+   */
   public function getFieldConfigNamePrefix(string $entity_type_id, string $bundle_name, bool $config_import=false): ?string {
     $object_type = $this->settingsManager->getEntityTypeObjectClass($entity_type_id);
     if (!$object_type) {
@@ -351,6 +505,15 @@ class RelationFieldConfigurator {
   }
 
   
+  /**
+   * Gets entity classes from a field configuration name.
+   *
+   * @param string $config_name
+   *   The configuration name.
+   *
+   * @return array|null
+   *   Array containing field_entity_class, entity_type_id, bundle, field_name, or NULL.
+   */
   public function getConfigFileFieldClasses(string $config_name): ?array {
     $parts = explode('.', $config_name);
     if ($parts[0] !== 'field' || !in_array($parts[1], ['field', 'storage']) || !in_array($parts[2], ['node', 'taxonomy_term'])) {
@@ -363,7 +526,7 @@ class RelationFieldConfigurator {
         'bundle' => $parts[3],
         'field_name' => $parts[4],
       ];
-    } elseif($parts[1] === 'storage') {
+    } elseif ($parts[1] === 'storage') {
       return [
         'field_entity_class' => 'storage',
         'entity_type_id' => $this->settingsManager->getEntityTypeClass($parts[2]),

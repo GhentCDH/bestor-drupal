@@ -4,6 +4,12 @@ namespace Drupal\relationship_nodes\RelationEntityType\Validation;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
+
+/**
+ * Service for formatting validation error messages.
+ *
+ * Converts error codes to human-readable messages with context.
+ */
 class ValidationErrorFormatter {
 
   use StringTranslationTrait;
@@ -31,6 +37,17 @@ class ValidationErrorFormatter {
   ];
 
 
+  /**
+   * Formats validation errors into a readable message.
+   *
+   * @param string $name
+   *   The entity or configuration name.
+   * @param array $errors
+   *   Array of errors with error_code and context keys.
+   *
+   * @return string
+   *   Formatted error message.
+   */
   public function formatValidationErrors(string $name, array $errors): string {
     $message = "Validation errors for {$name}:\n";
     $error_strings = [];
@@ -48,6 +65,17 @@ class ValidationErrorFormatter {
   }
   
   
+  /**
+   * Converts error code to translated message.
+   *
+   * @param string $error_code
+   *   The error code.
+   * @param array $context
+   *   Context variables for message replacement.
+   *
+   * @return string
+   *   The translated error message.
+   */
   protected function errorCodeToMessage(string $error_code, array $context): string {
     $error_message = self::ERROR_MESSAGES[$error_code] ?? $error_code;
     return $this->t($error_message, $context);
