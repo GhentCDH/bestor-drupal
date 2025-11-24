@@ -17,7 +17,7 @@
 
 {% block component_content %}
   <div class="{{ component_name }}__inner container">
-    <div class="{{ component_name }}__wrapper">
+    <div class="{{ component_name }}__wrapper {%- if attr_variant is same as ('primary') %} h-bg-color-primary{% endif %}">
       {% if tag %}
         <div class="{{ component_name }}__tag">
           <div class="{{ component_name }}__tag__corner"></div>
