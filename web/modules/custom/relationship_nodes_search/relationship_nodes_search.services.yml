@@ -44,14 +44,14 @@ services:
     class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFacetParamBuilder
     decorates: elasticsearch_connector.facet_builder
     arguments:
-      - '@logger.factory'
+      - '@logger.channel.elasticsearch_connector'
       - '@relationship_nodes_search.nested_query_structure_builder'
       - '@relationship_nodes_search.nested_field_helper'
   relationship_nodes_search.nested_query_filter_builder:
     class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFilterBuilder
     decorates: elasticsearch_connector.query_filter_builder
     arguments:
-      - '@logger.factory'
+      - '@logger.channel.elasticsearch_connector'
       - '@relationship_nodes_search.nested_query_structure_builder'
   relationship_nodes_search.nested_field_views_field_configurator:
     class: Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFieldConfigurator

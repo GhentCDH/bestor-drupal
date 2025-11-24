@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\elasticsearch_connector\SearchAPI\Query\FilterBuilder;
 use Drupal\search_api\Query\ConditionGroupInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 
 
@@ -21,13 +21,13 @@ class NestedFilterBuilder extends FilterBuilder {
   /**
    * Constructs a NestedFilterBuilder object.
    *
-   * @param LoggerChannelFactoryInterface $logger
+   * @param LoggerInterface $logger
    *   The logger service.
    * @param NestedQueryStructureBuilder $queryBuilder
    *   The query structure builder service.
    */
   public function __construct(
-    LoggerChannelFactoryInterface $logger,
+    LoggerInterface $logger,
     NestedQueryStructureBuilder $queryBuilder
   ) {
     parent::__construct($logger);

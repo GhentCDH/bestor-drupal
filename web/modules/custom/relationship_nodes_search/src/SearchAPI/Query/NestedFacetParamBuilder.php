@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\elasticsearch_connector\SearchAPI\Query\FacetParamBuilder;
 use Drupal\search_api\Query\QueryInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
@@ -25,7 +25,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
   /**
    * Constructs a NestedFacetParamBuilder object.
    *
-   * @param LoggerChannelFactoryInterface $logger
+   * @param LoggerInterface $logger
    *   The logger service.
    * @param NestedQueryStructureBuilder $queryBuilder
    *   The query structure builder service.
@@ -33,7 +33,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
    *   The nested field helper service.
    */
   public function __construct(
-    LoggerChannelFactoryInterface $logger, 
+    LoggerInterface $logger, 
     NestedQueryStructureBuilder $queryBuilder,
     NestedFieldHelper $nestedFieldHelper
   ) {
