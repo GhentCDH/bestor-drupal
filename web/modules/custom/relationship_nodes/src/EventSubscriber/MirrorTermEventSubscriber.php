@@ -15,6 +15,14 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
   protected RelationBundleSettingsManager $settingsManager;
 
 
+  /**
+   * Constructs a MirrorTermEventSubscriber object.
+   *
+   * @param MirrorTermAutoUpdater $mirrorUpdater
+   *   The mirror updater service.
+   * @param RelationBundleSettingsManager $settingsManager
+   *   The settings manager service.
+   */
   public function __construct(
     MirrorTermAutoUpdater $mirrorUpdater,
     RelationBundleSettingsManager $settingsManager
@@ -23,6 +31,10 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
     $this->settingsManager = $settingsManager;
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getSubscribedEvents(): array {
     return [
       EntityEventType::INSERT => ['addMirrorLogic'],
@@ -32,6 +44,14 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
   }
 
 
+  /**
+   * Adds mirror logic when terms are created, updated, or deleted.
+   *
+   * @param EntityEvent $event
+   *   The entity event.
+   * @param string $event_name
+   *   The event name.
+   */
   public function addMirrorLogic(EntityEvent $event, string $event_name): void {
     $term = $event->getEntity();
     if (!$term instanceof TermInterface) {
@@ -51,6 +71,16 @@ class MirrorTermEventSubscriber implements EventSubscriberInterface {
     $this->mirrorUpdater->setMirrorTermLink($term, $hook);
   }
 
+
+  /**
+   * Maps event name to hook name.
+   *
+   * @param string $event_name
+   *   The event name.
+   *
+   * @return string|null
+   *   The hook name or NULL.
+   */
   private function mapEventNameToHook(string $event_name): ?string {
     return match ($event_name) {
       EntityEventType::INSERT => 'insert',

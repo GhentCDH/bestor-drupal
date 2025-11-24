@@ -1,0 +1,216 @@
+<?php
+
+namespace Drupal\relationship_nodes_search\Views\Config;
+
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\search_api\Entity\Index;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Base helper for building nested field configuration forms.
+ * 
+ * Provides shared form elements and validation helpers for Views plugins
+ * (both filter and field handlers).
+ */
+abstract class NestedFieldViewsConfiguratorBase {
+
+  use StringTranslationTrait;
+
+  protected CalculatedFieldHelper $calculatedFieldHelper;
+  protected NestedFieldHelper $nestedFieldHelper;
+
+
+  /**
+   * Constructs a NestedFieldViewsConfiguratorBase object.
+   *
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
+   * @param NestedFieldHelper $nestedFieldHelper
+   *   The nested field helper service.
+   */
+  public function __construct(
+    CalculatedFieldHelper $calculatedFieldHelper,
+    NestedFieldHelper $nestedFieldHelper
+  ) {
+    $this->calculatedFieldHelper = $calculatedFieldHelper;
+    $this->nestedFieldHelper = $nestedFieldHelper;
+  }
+
+
+  /**
+   * Validate and prepare configuration for Views plugin options form.
+   * 
+   * Common validation pattern used by both filter and field handlers.
+   * Performs field structure validation and adds error message to form if validation fails.
+   *
+   * @param mixed $index
+   *   The index from $this->getIndex().
+   * @param array $definition
+   *   The plugin definition.
+   * @param array &$form
+   *   The form array to add error message to if validation fails.
+   *
+   * @return array|null
+   *   Configuration array with 'index', 'field_name', 'available_fields', or NULL if invalid.
+   */
+  public function validateAndPreparePluginForm($index, array $definition, array &$form): ?array {
+    // Extract field name from plugin definition
+    $field_name = $this->nestedFieldHelper->getPluginParentFieldName($definition);
+    
+    // Validate field structure (delegated to field helper)
+    $config = $this->nestedFieldHelper->validatePluginFieldConfiguration($index, $field_name);
+    
+    if (!$config) {
+      // Add form error (Views-specific concern)
+      $form['error'] = [
+        '#markup' => $this->t('Cannot load index or field configuration, or no nested fields available.'),
+      ];
+      return NULL;
+    }
+    
+    return $config;
+  }
+
+
+  /**
+   * Adds field enable checkbox.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param array $child_fld_settings
+   *   Current field settings.
+   */
+  protected function addFieldEnableCheckbox(array &$form, string $child_fld_nm, array $child_fld_settings): void {
+    $form['filter_field_settings'][$child_fld_nm]['enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable this field'),
+      '#default_value' => !empty($child_fld_settings[$child_fld_nm]['enabled']),
+    ];
+  }
+
+
+  /**
+   * Adds field label configuration.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param array $child_fld_settings
+   *   Current field settings.
+   * @param array $disabled_state
+   *   Form API states configuration.
+   */
+  protected function addFieldLabel(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+    $form['filter_field_settings'][$child_fld_nm]['label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label'),
+      '#default_value' => $child_fld_settings[$child_fld_nm]['label']
+        ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
+      '#description' => $this->t('Label shown to users.'),
+      '#size' => 30,
+      '#states' => $disabled_state,
+    ];
+  }
+
+
+  /**
+   * Adds weight configuration.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param array $child_fld_settings
+   *   Current field settings.
+   * @param array $disabled_state
+   *   Form API states configuration.
+   */
+  protected function addFieldWeight(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
+    $form['filter_field_settings'][$child_fld_nm]['weight'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Weight'),
+      '#default_value' => $child_fld_settings[$child_fld_nm]['weight'] ?? 0,
+      '#description' => $this->t('Fields with lower weights appear first.'),
+      '#size' => 5,
+      '#states' => $disabled_state,
+    ];
+  }
+
+
+  /**
+   * Gets form state for disabling fields when checkbox unchecked.
+   *
+   * @param string $child_fld_nm
+   *   The child field name.
+   * @param string|null $context_prefix
+   *   Optional prefix for the form element path.
+   *
+   * @return array
+   *   Form API states configuration.
+   */
+  protected function getFieldDisabledState(string $child_fld_nm, ?string $context_prefix = NULL): array {
+    $base_path = $context_prefix
+      ? $context_prefix . '[filter_field_settings][' . $child_fld_nm . '][enabled]'
+      : 'options[filter_field_settings][' . $child_fld_nm . '][enabled]';
+
+    return [
+      'disabled' => [
+        ':input[name="' . $base_path . '"]' => ['checked' => FALSE],
+      ],
+    ];
+  }
+
+
+  /**
+   * Save plugin options from form state.
+   * 
+   * Generic helper for saving options with optional nesting support.
+   *
+   * @param FormStateInterface $form_state
+   *   The form state.
+   * @param array $default_options
+   *   Array of option keys with default values.
+   * @param array &$options
+   *   Reference to the options array to update.
+   * @param string|null $wrapper_key
+   *   Optional wrapper key (e.g., 'relation_display_settings').
+   */
+  public function savePluginOptions($form_state, array $default_options, array &$options, ?string $wrapper_key = NULL): void {
+    foreach ($default_options as $option => $default) {
+      if ($wrapper_key) {
+        $value = $form_state->getValue(['options', $wrapper_key, $option]);
+      } else {
+        $value = $form_state->getValue(['options', $option]);
+      }
+      
+      if (isset($value)) {
+        $options[$option] = $value;
+      }
+    }
+  }
+
+
+  /**
+   * Sort field configurations by weight.
+   * 
+   * Helper for Views plugins to sort field settings for display.
+   *
+   * @param array $fields
+   *   Array of field configurations with 'weight' keys.
+   *
+   * @return array
+   *   Sorted array (maintains keys).
+   */
+  public function sortFieldsByWeight(array $fields): array {
+    uasort($fields, function($a, $b) {
+      return ($a['weight'] ?? 0) <=> ($b['weight'] ?? 0);
+    });
+    
+    return $fields;
+  }
+}

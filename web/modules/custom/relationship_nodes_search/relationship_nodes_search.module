@@ -1,12 +1,18 @@
 <?php
 
-use Drupal\Core\Entity\EntityTypeInterface;
+/**
+ * @file
+ * Primary module hooks for Relationship Nodes Search module.
+ */
+
 use Drupal\relationship_nodes_search\Form\ExtendedIndexAddFieldsForm;
-use Drupal\search_api\Query\QueryInterface;
-use Drupal\relationship_nodes_search\Processor\RelationProcessorProperty;
-use Drupal\relationship_nodes_search\SearchAPI\Query\NestedFacetParamBuilder; 
 
 
+/**
+ * Implements hook_module_implements_alter().
+ *
+ * Ensures the search_api_query_alter runs last to properly handle nested queries.
+ */
 function relationship_nodes_search_module_implements_alter(&$implementations, $hook) {
   if ($hook === 'search_api_query_alter') {
     if (isset($implementations['relationship_nodes_search'])) {
@@ -18,22 +24,22 @@ function relationship_nodes_search_module_implements_alter(&$implementations, $h
 }
 
 
+/**
+ * Implements hook_theme().
+ */
 function relationship_nodes_search_theme() {
   return [
     'relationship_field' => [
-      'variables' => [
-        'relationships' => [],
-        'grouped' => [],
-        'summary' => [],
-        'fields' => [],
-        'row' => NULL,
-      ],
+      'variables' => ['relationships' => [], 'grouped' => [], 'summary' => [], 'fields' => [], 'row' => NULL],
       'template' => 'relationship-field',
     ],
   ];
 }
 
 
+/**
+ * Implements hook_entity_type_alter().
+ */
 function relationship_nodes_search_entity_type_alter(array &$entity_types) {
   if (isset($entity_types['search_api_index'])) {
     $entity_types['search_api_index']->setFormClass('add_fields', ExtendedIndexAddFieldsForm::class);
@@ -41,11 +47,17 @@ function relationship_nodes_search_entity_type_alter(array &$entity_types) {
 }
 
 
+/**
+ * Implements hook_search_api_field_type_mapping_alter().
+ */
 function relationship_nodes_search_search_api_field_type_mapping_alter(array &$mapping) {
  $mapping['relation_info'] = 'relationship_nodes_search_nested_relationship';
 }
-  
 
-function relationship_nodes_search_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types){
+
+/**
+ * Implements hook_facets_search_api_query_type_mapping_alter().
+ */
+function relationship_nodes_search_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
   $query_types['relationship_nodes_search_nested_relationship'] = 'search_api_nested';
 }

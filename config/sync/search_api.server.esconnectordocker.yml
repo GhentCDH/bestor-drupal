@@ -1,11 +1,11 @@
-uuid: 37ffaa3f-fa69-46bb-802f-3d239b204df4
+uuid: 514c924e-113f-493b-b5e4-3b1fc962d482
 langcode: en
 status: true
 dependencies:
   module:
     - elasticsearch_connector
-id: elasticsearchconnectordocker
-name: ElasticSearchConnectorDocker
+id: esconnectordocker
+name: ESConnectorDocker
 description: ''
 backend: elasticsearch
 backend_config:

@@ -94,10 +94,10 @@ class RelationFieldConfigForm extends FormBase {
         '#required' => TRUE,
         '#multiple' => FALSE,
       ];
-      if($this->fieldName == $this->fieldResolver->getRelationTypeField()){
+      if ($this->fieldName == $this->fieldResolver->getRelationTypeField()) {
         $form['target_bundle']['#title'] = $this->t('Target relation type vocabulary');
         $form['target_bundle']['#options'] = $this->getAllRelationVocabs();
-      } elseif(in_array($this->fieldName,$this->fieldResolver->getRelatedEntityFields())){
+      } elseif (in_array($this->fieldName,$this->fieldResolver->getRelatedEntityFields())) {
           $form['target_bundle']['#title'] = $this->t('Target node type');
           $form['target_bundle']['#options'] = $this->getAllNodeTypes();
       }
@@ -151,7 +151,8 @@ class RelationFieldConfigForm extends FormBase {
   }
 
 
-  protected function getAllNodeTypes() {
+
+  protected function getAllNodeTypes(): array {
     $options = [];
     foreach (NodeType::loadMultiple() as $type) {
       $options[$type->id()] = $type->label();
@@ -160,7 +161,7 @@ class RelationFieldConfigForm extends FormBase {
   }
 
 
-    protected function getAllRelationVocabs() {
+    protected function getAllRelationVocabs(): array {
     $options = [];
     foreach (Vocabulary::loadMultiple() as $type) {
       if($this->settingsManager->isRelationVocab($type)){
@@ -171,7 +172,7 @@ class RelationFieldConfigForm extends FormBase {
   }
 
 
-  protected function getCurrentTargetBundle($bundle, $field_name):?string {
+  protected function getCurrentTargetBundle($bundle, $field_name): ?string {
     $field = $this->entityTypeManager
       ->getStorage('field_config')
       ->load("{$this->entityType}.$bundle.$field_name");

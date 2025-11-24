@@ -28,7 +28,6 @@ settings:
       - code
       - '|'
       - sourceEditing
-      - footnotes
   plugins:
     ckeditor5_heading:
       enabled_headings:
