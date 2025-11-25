@@ -71,6 +71,10 @@ services:
       - '@relationship_nodes.relation_bundle_settings_manager'
       - '@relationship_nodes.foreign_key_field_resolver'
       - '@relationship_nodes.relation_form_helper'
+  relationship_nodes.nested_field_configurator:
+    class: Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldConfiguratorBase
+    arguments:
+      - '@relationship_nodes.field_name_resolver'
   relationship_nodes.relation_entity_form_handler:
     class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationEntityFormHandler
     arguments:

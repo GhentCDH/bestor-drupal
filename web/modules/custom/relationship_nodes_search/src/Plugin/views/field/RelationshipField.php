@@ -95,8 +95,6 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
     
-    $index = $this->getIndex();
-    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition); 
     $config = $this->fieldConfigurator->validateAndPreparePluginForm(
       $this->getIndex(),
       $this->definition,
@@ -104,58 +102,18 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     );
     if (!$config) {
       return;
-    } 
-
-    $available_fields = $config['available_fields'];
-
-    $form['relation_display_settings'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Relation display settings'),
-      '#open' => TRUE,
-    ];
-
-    $form['relation_display_settings']['field_settings'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Field configuration'),
-      '#description' => $this->t('Select fields to display and configure their appearance.'),
-      '#tree' => TRUE
-    ];
-
-    $field_settings = $this->options['field_settings'] ?? [];
-
-    foreach ($available_fields as $child_fld_nm) {
-      $this->fieldConfigurator->buildFieldConfigForm(
-        $form,
-        $config['index'],
-        $config['field_name'],
-        $child_fld_nm,
-        $field_settings
-      );
     }
 
-    $form['relation_display_settings']['sort_by_field'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Sort by field'),
-      '#options' => ['' => $this->t('- None -')] + array_combine($available_fields, $available_fields),
-      '#default_value' => $this->options['sort_by_field'],
-      '#description' => $this->t('Sort relationships by this field value.'),
-    ];
-
-    $form['relation_display_settings']['group_by_field'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Group by field'),
-      '#options' => ['' => $this->t('- None -')] + array_combine($available_fields, $available_fields),
-      '#default_value' => $this->options['group_by_field'],
-      '#description' => $this->t('Group relationships by this field value.'),
-    ];
-
-    $form['relation_display_settings']['template'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Template name'),
-      '#default_value' => $this->options['template'],
-      '#description' => $this->t('Template file name without .html.twig extension. Will look for templates/[name].html.twig'),
-    ];
+    // Use new high-level method to build the form
+    $this->fieldConfigurator->buildFieldDisplayForm(
+      $form,
+      $config['index'],
+      $config['field_name'],
+      $config['available_fields'],
+      $this->options
+    );
   }
+
 
 
   /**
@@ -290,7 +248,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     return [
       'relationships' => $relationships,
       'grouped' => $grouped,
-      'summary' => $this->buildSummary($relationships, $fields, $grouped),
+      'summary' => $this->buildSummary($relationships, $child_field_metadata, $grouped),
       'fields' => $child_field_metadata,
     ];
   }

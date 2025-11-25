@@ -136,12 +136,12 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     ];
 
     $child_fld_settings = $this->getFieldSettings();
-    $this->filterConfigurator->buildConfigForm(
+    $this->filterConfigurator->buildFilterConfigForm(
       $form, 
       $config['index'], 
       $config['field_name'], 
       $config['available_fields'], 
-      $child_fld_settings
+      $this->options
     );
   }
 

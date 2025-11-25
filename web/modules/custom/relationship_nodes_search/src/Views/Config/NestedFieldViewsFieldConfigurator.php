@@ -3,10 +3,10 @@
 namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\search_api\Entity\Index;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsConfiguratorBase;
 
 /**
  * Configuration form builder for Views field display.
@@ -15,59 +15,32 @@ class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase
 
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
 
-
   /**
    * Constructs a NestedFieldViewsFieldConfigurator object.
    *
-   * @param CalculatedFieldHelper $calculatedFieldHelper
-   *   The calculated field helper service.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver service.
    * @param NestedFieldHelper $nestedFieldHelper
    *   The nested field helper service.
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
    * @param ChildFieldEntityReferenceHelper $childReferenceHelper
    *   The child reference helper service.
    */
   public function __construct(
-    CalculatedFieldHelper $calculatedFieldHelper,
+    FieldNameResolver $fieldNameResolver,
     NestedFieldHelper $nestedFieldHelper,
+    CalculatedFieldHelper $calculatedFieldHelper,
     ChildFieldEntityReferenceHelper $childReferenceHelper
   ) {
-    parent::__construct($calculatedFieldHelper, $nestedFieldHelper);
+    parent::__construct($fieldNameResolver, $nestedFieldHelper, $calculatedFieldHelper);
     $this->childReferenceHelper = $childReferenceHelper;
   }
-/*
 
-  public function buildChildFieldDisplaySettings(string $child_fld_nm, array $form_input){
-    
-      return [
-        'enabled' => !empty($field_settings[$child_fld_nm]['enabled']),
-        'linkable' => $this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm),
-        'display_mode' => $field_settings[$child_fld_nm]['display_mode'] ?? 'raw',
-        'hide_label' => $field_settings[$child_fld_nm]['hide_label'] ?? FALSE,
-        'label' => $field_settings[$child_fld_nm]['label'] ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
-        'weight' => $field_settings[$child_fld_nm]['weight'] ?? 0,
-        'multiple_separator' => $field_settings[$child_fld_nm]['multiple_separator'] ?? ', ',
-        'disabled_state_html' => $this->buildFieldDisabledState($child_fld_nm)
-      ];
-
-    }
-
-  public function buildNestedFieldDisplaySettings(){
-    $child_fld_settings = [];
-    foreach($child_fld_nms as $child_fld_nm){
-      $child_fld_settings[$child_fld_nm] = $this->buildChildFieldDisplaySettings();
-    }
-    $settings = [
-      '#parent_form_element' => $form,
-      '#parent_field_name' => $parent_fld_nm,
-      '#child_fields' => $child_fld_settings
-    ];
-  }
-
-  */
   /**
-   * Build configuration form for a single field.
+   * Build configuration form for field display in Views.
    * 
-   * Creates the admin UI for configuring how a nested field should be displayed.
+   * High-level method that orchestrates the entire form building process.
    *
    * @param array &$form
    *   The form array.
@@ -75,142 +48,71 @@ class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase
    *   The Search API index.
    * @param string $sapi_fld_nm
    *   Parent field name.
-   * @param string $child_fld_nm
-   *   Child field name.
-   * @param array $field_settings
-   *   Current field settings.
+   * @param array $child_field_names
+   *   Available child field names.
+   * @param array $saved_settings
+   *   Current saved settings.
    */
-  public function buildFieldConfigForm(
-    array &$form, 
-    Index $index, 
-    string $sapi_fld_nm, 
-    string $child_fld_nm, 
-    array $field_settings
+  public function buildFieldDisplayForm(
+    array &$form,
+    Index $index,
+    string $sapi_fld_nm,
+    array $child_field_names,
+    array $saved_settings
   ): void {
-    $is_enabled = !empty($field_settings[$child_fld_nm]['enabled']);
-    $disabled_state = $this->buildFieldDisabledState($child_fld_nm);
-    $can_link = $this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm);
+    // PREPARE: Build field configurations with context
+    $field_configs = $this->prepareViewsFieldConfigurations(
+      $index,
+      $sapi_fld_nm,
+      $child_field_names,
+      $saved_settings
+    );
+
+    // Extract global settings
+    $global_settings = [
+      'sort_by_field' => $saved_settings['sort_by_field'] ?? '',
+      'group_by_field' => $saved_settings['group_by_field'] ?? '',
+      'template' => $saved_settings['template'] ?? 'relationship-field',
+    ];
+
+    // RENDER: Build form from configurations
+    $this->buildConfigurationForm(
+      $form,
+      $field_configs,
+      $global_settings,
+      [
+        'wrapper_key' => 'relation_display_settings',
+        'field_settings_key' => 'field_settings',
+        'context_prefix' => $this->getViewsContextPrefix(),
+        'show_template' => TRUE,
+        'show_grouping' => TRUE,
+        'show_sorting' => TRUE,
+      ]
+    );
+  }
+
+  /**
+   * Gets linkable fields for Views field display context.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent field name.
+   * @param array $child_field_names
+   *   Available field names.
+   *
+   * @return array
+   *   Array of linkable field names.
+   */
+  protected function getLinkableFields(Index $index, string $sapi_fld_nm, array $child_field_names): array {
+    $linkable = [];
     
-    $form['relation_display_settings']['field_settings'][$child_fld_nm] = [
-      '#type' => 'details',
-      '#title' => $child_fld_nm,
-      '#open' => $is_enabled,
-    ];
-
-    $this->addFieldEnableCheckbox($form, $child_fld_nm, $field_settings);
-
-    if ($can_link) {
-      $this->addDisplayModeSelector($form, $child_fld_nm, $field_settings, $disabled_state);
+    foreach ($child_field_names as $field_name) {
+      if ($this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $field_name)) {
+        $linkable[] = $field_name;
+      }
     }
-
-    $this->addFieldLabel($form, $child_fld_nm, $field_settings, $disabled_state);
-    $this->addFieldWeight($form, $child_fld_nm, $field_settings, $disabled_state);
-    $this->addHideLabelCheckbox($form, $child_fld_nm, $field_settings, $disabled_state);
-
-    if (!$this->calculatedFieldHelper->isCalculatedChildField($child_fld_nm)) {
-      $this->addMultipleSeparator($form, $child_fld_nm, $field_settings, $disabled_state);
-    }
-  }
-
-
-  /**
-   * Add enable checkbox for field display settings.
-   */
-  protected function addFieldEnableCheckbox(array &$form, string $child_fld_nm, array $field_settings): void {
-    $form['relation_display_settings']['field_settings'][$child_fld_nm]['enabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Display this field'),
-      '#default_value' => !empty($field_settings[$child_fld_nm]['enabled']),
-    ];
-  }
-
-
-  /**
-   * Add field label for field display (overrides base class for different container).
-   */
-  protected function addFieldLabel(array &$form, string $child_fld_nm, array $field_settings, array $disabled_state): void {
-    $form['relation_display_settings']['field_settings'][$child_fld_nm]['label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Custom label'),
-      '#default_value' => $field_settings[$child_fld_nm]['label'] 
-        ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
-      '#description' => $this->t('Custom label for this field.'),
-      '#size' => 30,
-      '#states' => $disabled_state,
-    ];
-  }
-
-
-  /**
-   * Add weight configuration for field display (overrides base class for different container).
-   */
-  protected function addFieldWeight(array &$form, string $child_fld_nm, array $field_settings, array $disabled_state): void {
-    $form['relation_display_settings']['field_settings'][$child_fld_nm]['weight'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Weight'),
-      '#default_value' => $field_settings[$child_fld_nm]['weight'] ?? 0,
-      '#description' => $this->t('Fields with lower weights appear first.'),
-      '#size' => 5,
-      '#states' => $disabled_state,
-    ];
-  }
-
-
-  /**
-   * Add display mode selector for entity reference fields.
-   */
-  protected function addDisplayModeSelector(array &$form, string $child_fld_nm, array $field_settings, array $disabled_state): void {
-    $form['relation_display_settings']['field_settings'][$child_fld_nm]['display_mode'] = [
-      '#type' => 'radios',
-      '#title' => $this->t('Display mode'),
-      '#options' => [
-        'raw' => $this->t('Raw value (ID)'),
-        'label' => $this->t('Label'),
-        'link' => $this->t('Label as link'),
-      ],
-      '#default_value' => $field_settings[$child_fld_nm]['display_mode'] ?? 'raw',
-      '#description' => $this->t('How to display this field value.'),
-      '#states' => $disabled_state,
-    ];
-  }
-
-
-  /**
-   * Add hide label checkbox.
-   */
-  protected function addHideLabelCheckbox(array &$form, string $child_fld_nm, array $field_settings, array $disabled_state): void {
-    $form['relation_display_settings']['field_settings'][$child_fld_nm]['hide_label'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Hide label in output'),
-      '#default_value' => $field_settings[$child_fld_nm]['hide_label'] ?? FALSE,
-      '#states' => $disabled_state,
-    ];
-  }
-
-
-  /**
-   * Add multiple value separator configuration.
-   */
-  protected function addMultipleSeparator(array &$form, string $child_fld_nm, array $field_settings, array $disabled_state): void {
-    $form['relation_display_settings']['field_settings'][$child_fld_nm]['multiple_separator'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Multiple Values Separator'),
-      '#default_value' => $field_settings[$child_fld_nm]['multiple_separator'] ?? ', ',
-      '#description' => $this->t('Configure how to separate multiple values.'),
-      '#size' => 10,
-      '#states' => $disabled_state,
-    ];
-  }
-
-
-  /**
-   * Build disabled state for field display settings.
-   */
-  protected function buildFieldDisabledState(string $child_fld_nm): array {
-    return [
-      'disabled' => [
-        ':input[name="options[relation_display_settings][field_settings][' . $child_fld_nm . '][enabled]"]' => ['checked' => FALSE],
-      ],
-    ];
+    
+    return $linkable;
   }
 }

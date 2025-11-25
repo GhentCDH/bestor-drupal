@@ -2,45 +2,51 @@
 
 namespace Drupal\relationship_nodes_search\Views\Config;
 
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\search_api\Entity\Index;
+use Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldConfiguratorBase;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 
 /**
- * Base helper for building nested field configuration forms.
+ * Base configurator for Views plugins handling nested fields.
  * 
- * Provides shared form elements and validation helpers for Views plugins
- * (both filter and field handlers).
+ * Extends the generic configurator with Views/Search API-specific logic:
+ * - Validates Search API index structure
+ * - Parses Views plugin definitions
+ * - Determines field capabilities from index metadata
+ * - Prepares field configurations with Search API context
+ * 
+ * Used by both field and filter Views handlers.
  */
-abstract class NestedFieldViewsConfiguratorBase {
+abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorBase {
 
-  use StringTranslationTrait;
-
-  protected CalculatedFieldHelper $calculatedFieldHelper;
   protected NestedFieldHelper $nestedFieldHelper;
-
+  protected CalculatedFieldHelper $calculatedFieldHelper;
 
   /**
    * Constructs a NestedFieldViewsConfiguratorBase object.
    *
-   * @param CalculatedFieldHelper $calculatedFieldHelper
-   *   The calculated field helper service.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver service.
    * @param NestedFieldHelper $nestedFieldHelper
    *   The nested field helper service.
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
    */
   public function __construct(
-    CalculatedFieldHelper $calculatedFieldHelper,
-    NestedFieldHelper $nestedFieldHelper
+    FieldNameResolver $fieldNameResolver,
+    NestedFieldHelper $nestedFieldHelper,
+    CalculatedFieldHelper $calculatedFieldHelper
   ) {
-    $this->calculatedFieldHelper = $calculatedFieldHelper;
+    parent::__construct($fieldNameResolver);
     $this->nestedFieldHelper = $nestedFieldHelper;
+    $this->calculatedFieldHelper = $calculatedFieldHelper;
   }
 
-
   /**
-   * Validate and prepare configuration for Views plugin options form.
+   * Validates and prepares configuration for Views plugin options form.
    * 
    * Common validation pattern used by both filter and field handlers.
    * Performs field structure validation and adds error message to form if validation fails.
@@ -63,140 +69,136 @@ abstract class NestedFieldViewsConfiguratorBase {
     $config = $this->nestedFieldHelper->validatePluginFieldConfiguration($index, $field_name);
     
     if (!$config) {
-      // Add form error (Views-specific concern)
-      $form['error'] = [
-        '#markup' => $this->t('Cannot load index or field configuration, or no nested fields available.'),
-      ];
+      // Add form error using parent method
+      $this->addErrorMessage($form, $this->t('Cannot load index or field configuration, or no nested fields available.'));
       return NULL;
     }
     
     return $config;
   }
 
-
   /**
-   * Adds field enable checkbox.
+   * Prepares field configurations for Views context.
+   * 
+   * Wraps parent prepareFieldConfigurations() with Views/Search API-specific
+   * context building (linkable fields, calculated fields).
    *
-   * @param array &$form
-   *   The form array.
-   * @param string $child_fld_nm
-   *   The child field name.
-   * @param array $child_fld_settings
-   *   Current field settings.
-   */
-  protected function addFieldEnableCheckbox(array &$form, string $child_fld_nm, array $child_fld_settings): void {
-    $form['filter_field_settings'][$child_fld_nm]['enabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enable this field'),
-      '#default_value' => !empty($child_fld_settings[$child_fld_nm]['enabled']),
-    ];
-  }
-
-
-  /**
-   * Adds field label configuration.
-   *
-   * @param array &$form
-   *   The form array.
-   * @param string $child_fld_nm
-   *   The child field name.
-   * @param array $child_fld_settings
-   *   Current field settings.
-   * @param array $disabled_state
-   *   Form API states configuration.
-   */
-  protected function addFieldLabel(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$child_fld_nm]['label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Label'),
-      '#default_value' => $child_fld_settings[$child_fld_nm]['label']
-        ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
-      '#description' => $this->t('Label shown to users.'),
-      '#size' => 30,
-      '#states' => $disabled_state,
-    ];
-  }
-
-
-  /**
-   * Adds weight configuration.
-   *
-   * @param array &$form
-   *   The form array.
-   * @param string $child_fld_nm
-   *   The child field name.
-   * @param array $child_fld_settings
-   *   Current field settings.
-   * @param array $disabled_state
-   *   Form API states configuration.
-   */
-  protected function addFieldWeight(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$child_fld_nm]['weight'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Weight'),
-      '#default_value' => $child_fld_settings[$child_fld_nm]['weight'] ?? 0,
-      '#description' => $this->t('Fields with lower weights appear first.'),
-      '#size' => 5,
-      '#states' => $disabled_state,
-    ];
-  }
-
-
-  /**
-   * Gets form state for disabling fields when checkbox unchecked.
-   *
-   * @param string $child_fld_nm
-   *   The child field name.
-   * @param string|null $context_prefix
-   *   Optional prefix for the form element path.
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent Search API field name.
+   * @param array $field_names
+   *   Array of available field names.
+   * @param array $current_settings
+   *   Current field settings from saved configuration.
    *
    * @return array
-   *   Form API states configuration.
+   *   Field configurations with Views context applied.
    */
-  protected function getFieldDisabledState(string $child_fld_nm, ?string $context_prefix = NULL): array {
-    $base_path = $context_prefix
-      ? $context_prefix . '[filter_field_settings][' . $child_fld_nm . '][enabled]'
-      : 'options[filter_field_settings][' . $child_fld_nm . '][enabled]';
+  public function prepareViewsFieldConfigurations(
+    Index $index,
+    string $sapi_fld_nm,
+    array $field_names,
+    array $current_settings
+  ): array {
+    // Build Views-specific context
+    $context = $this->buildViewsContext($index, $sapi_fld_nm, $field_names);
+    
+    // Use parent's prepare method with context
+    return $this->prepareFieldConfigurations($field_names, $current_settings, $context);
+  }
 
+  /**
+   * Builds Views/Search API-specific context for field preparation.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent Search API field name.
+   * @param array $field_names
+   *   Available field names.
+   *
+   * @return array
+   *   Context array with:
+   *   - 'linkable_fields': Array of fields that support linking
+   *   - 'calculated_fields': Array of calculated field names
+   */
+  protected function buildViewsContext(Index $index, string $sapi_fld_nm, array $field_names): array {
     return [
-      'disabled' => [
-        ':input[name="' . $base_path . '"]' => ['checked' => FALSE],
-      ],
+      'linkable_fields' => $this->getLinkableFields($index, $sapi_fld_nm, $field_names),
+      'calculated_fields' => $this->getCalculatedFields($field_names),
     ];
   }
 
+  /**
+   * Gets fields that support entity reference linking.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent field name.
+   * @param array $field_names
+   *   Available field names.
+   *
+   * @return array
+   *   Array of linkable field names.
+   */
+  protected function getLinkableFields(Index $index, string $sapi_fld_nm, array $field_names): array {
+    // This should be implemented by concrete classes or injected as a service
+    // For now, return empty to avoid undefined method errors
+    return [];
+  }
 
   /**
-   * Save plugin options from form state.
+   * Gets calculated field names from available fields.
+   *
+   * @param array $field_names
+   *   Available field names.
+   *
+   * @return array
+   *   Array of calculated field names.
+   */
+  protected function getCalculatedFields(array $field_names): array {
+    return array_filter($field_names, function($field_name) {
+      return $this->calculatedFieldHelper->isCalculatedChildField($field_name);
+    });
+  }
+
+  /**
+   * Saves plugin options from form state.
    * 
-   * Generic helper for saving options with optional nesting support.
+   * Views-specific wrapper around parent's extractSettingsFromFormState().
    *
    * @param FormStateInterface $form_state
    *   The form state.
-   * @param array $default_options
-   *   Array of option keys with default values.
+   * @param array $default_settings
+   *   Default settings structure.
    * @param array &$options
    *   Reference to the options array to update.
    * @param string|null $wrapper_key
-   *   Optional wrapper key (e.g., 'relation_display_settings').
+   *   Optional wrapper key for nested settings.
    */
-  public function savePluginOptions($form_state, array $default_options, array &$options, ?string $wrapper_key = NULL): void {
-    foreach ($default_options as $option => $default) {
-      if ($wrapper_key) {
-        $value = $form_state->getValue(['options', $wrapper_key, $option]);
-      } else {
-        $value = $form_state->getValue(['options', $option]);
-      }
+  public function savePluginOptions(
+    FormStateInterface $form_state,
+    array $default_settings,
+    array &$options,
+    ?string $wrapper_key = NULL
+  ): void {
+    // Extract from form state
+    $path_prefix = $wrapper_key ? [$wrapper_key] : [];
+    
+    foreach ($default_settings as $key => $default_value) {
+      $path = array_merge(['options'], $path_prefix, [$key]);
+      $value = $form_state->getValue($path);
       
       if (isset($value)) {
-        $options[$option] = $value;
+        $options[$key] = $value;
       }
     }
   }
 
-
   /**
-   * Sort field configurations by weight.
+   * Sorts field configurations by weight.
    * 
    * Helper for Views plugins to sort field settings for display.
    *
@@ -212,5 +214,15 @@ abstract class NestedFieldViewsConfiguratorBase {
     });
     
     return $fields;
+  }
+
+  /**
+   * Gets form state path prefix for Views context.
+   *
+   * @return string
+   *   The context prefix for Views forms ('options').
+   */
+  protected function getViewsContextPrefix(): string {
+    return 'options';
   }
 }

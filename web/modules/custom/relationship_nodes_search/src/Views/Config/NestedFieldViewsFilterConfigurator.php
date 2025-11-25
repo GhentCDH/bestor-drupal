@@ -3,185 +3,257 @@
 namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\search_api\Entity\Index;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
 use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
-use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsConfiguratorBase;
 
 /**
  * Configuration form builder for Views filter fields.
+ * 
+ * Extends the Views configurator base with filter-specific functionality:
+ * - Widget type selection (textfield, select)
+ * - Operator configuration
+ * - Filter exposure settings
+ * - Required/placeholder configuration
  */
 class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBase {
 
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
   protected FilterOperatorHelper $operatorHelper;
 
-
   /**
    * Constructs a NestedFieldViewsFilterConfigurator object.
    *
-   * @param CalculatedFieldHelper $calculatedFieldHelper
-   *   The calculated field helper service.
+   * @param FieldNameResolver $fieldNameResolver
+   *   The field name resolver service.
    * @param NestedFieldHelper $nestedFieldHelper
    *   The nested field helper service.
+   * @param CalculatedFieldHelper $calculatedFieldHelper
+   *   The calculated field helper service.
    * @param ChildFieldEntityReferenceHelper $childReferenceHelper
    *   The child reference helper service.
    * @param FilterOperatorHelper $operatorHelper
    *   The operator helper service.
    */
   public function __construct(
-    CalculatedFieldHelper $calculatedFieldHelper,
+    FieldNameResolver $fieldNameResolver,
     NestedFieldHelper $nestedFieldHelper,
+    CalculatedFieldHelper $calculatedFieldHelper,
     ChildFieldEntityReferenceHelper $childReferenceHelper,
     FilterOperatorHelper $operatorHelper
   ) {
-    parent::__construct($calculatedFieldHelper, $nestedFieldHelper);
+    parent::__construct($fieldNameResolver, $nestedFieldHelper, $calculatedFieldHelper);
     $this->childReferenceHelper = $childReferenceHelper;
     $this->operatorHelper = $operatorHelper;
   }
 
-
   /**
-   * Build nested widget configuration form.
+   * Build filter configuration form.
+   * 
+   * High-level method that orchestrates filter form building.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   Parent field name.
+   * @param array $child_fld_nms
+   *   Available child field names.
+   * @param array $saved_settings
+   *   Current saved settings.
    */
-  public function buildConfigForm(
+  public function buildFilterConfigForm(
     array &$form,
     Index $index,
     string $sapi_fld_nm,
     array $child_fld_nms,
-    array $child_fld_settings
+    array $saved_settings
   ): void {
-    $form['filter_field_settings'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Filter fields'),
-      '#description' => $this->t('Select which fields should be available for filtering.'),
-      '#tree' => TRUE,
-    ];
+    // PREPARE: Build field configurations with filter-specific context
+    $field_configs = $this->prepareFilterFieldConfigurations(
+      $index,
+      $sapi_fld_nm,
+      $child_fld_nms,
+      $saved_settings
+    );
 
-    foreach ($child_fld_nms as $child_fld_nm) {
-      $is_enabled = !empty($child_fld_settings[$child_fld_nm]['enabled']);
-      $disabled_state = $this->getFieldDisabledState($child_fld_nm);
-
-      $form['filter_field_settings'][$child_fld_nm] = [
-        '#type' => 'details',
-        '#title' => $child_fld_nm,
-        '#open' => $is_enabled,
-      ];
-
-      $this->addFieldEnableCheckbox($form, $child_fld_nm, $child_fld_settings);
-      $this->addFieldLabel($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-      $this->addFieldWidget($form, $index, $sapi_fld_nm, $child_fld_nm, $child_fld_settings, $disabled_state);
-      $this->addFieldWeight($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-      $this->addFieldRequired($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-      $this->addFieldPlaceholder($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-      $this->addFieldOperator($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-      $this->addExposeFieldOperator($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-      $this->addFieldValueField($form, $child_fld_nm, $child_fld_settings, $disabled_state);
-    }
+    // RENDER: Build form using custom callback for filter-specific elements
+    $this->buildConfigurationForm(
+      $form,
+      $field_configs,
+      [], // No global settings for filters
+      [
+        'wrapper_key' => 'filter_settings',
+        'field_settings_key' => 'filter_field_settings',
+        'context_prefix' => $this->getViewsContextPrefix(),
+        'show_template' => FALSE,
+        'show_grouping' => FALSE,
+        'show_sorting' => FALSE,
+        'field_callback' => [$this, 'buildFilterFieldForm'],
+      ]
+    );
   }
 
-
   /**
-   * Add widget type selector.
+   * Prepares field configurations for filter context.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent Search API field name.
+   * @param array $child_fld_nms
+   *   Available child field names.
+   * @param array $saved_settings
+   *   Current saved settings.
+   *
+   * @return array
+   *   Field configurations with filter-specific context.
    */
-  protected function addFieldWidget(
-    array &$form,
+  protected function prepareFilterFieldConfigurations(
     Index $index,
     string $sapi_fld_nm,
-    string $child_fld_nm,
-    array $child_fld_settings,
-    array $disabled_state
-  ): void {
-    $form['filter_field_settings'][$child_fld_nm]['widget'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Widget type'),
-      '#options' => [
-        'textfield' => $this->t('Text field'),
-        'select' => $this->t('Dropdown (from indexed values)'),
-      ],
-      '#default_value' => $child_fld_settings[$child_fld_nm]['widget'] ?? 'textfield',
-      '#states' => $disabled_state,
-      '#description' => $this->t('Dropdown automatically loads all unique values from the search index.'),
-    ];
-
-    // Display mode for dropdown options
-    if ($this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm)) {
-      $input_el_name = 'options[filter_field_settings][' . $child_fld_nm . '][widget]';
-
-      $form['filter_field_settings'][$child_fld_nm]['select_display_mode'] = [
-        '#type' => 'radios',
-        '#title' => $this->t('Display mode for dropdown options'),
-        '#options' => [
-          'raw' => $this->t('Raw value (ID)'),
-          'label' => $this->t('Label (entity name)'),
-        ],
-        '#default_value' => $child_fld_settings[$child_fld_nm]['select_display_mode'] ?? 'raw',
-        '#description' => $this->t('How to display options in the dropdown. Only applies to entity reference fields.'),
-        '#states' => array_merge(
-          $disabled_state,
-          [
-            'visible' => [
-              ':input[name="' . $input_el_name . '"]' => ['value' => 'select'],
-            ],
-          ]
-        ),
-      ];
-    }
+    array $child_fld_nms,
+    array $saved_settings
+  ): array {
+    // Build filter-specific context
+    $context = $this->buildFilterContext($index, $sapi_fld_nm, $child_fld_nms);
+    
+    // Use parent's prepare method with context
+    return $this->prepareFieldConfigurations($child_fld_nms, $saved_settings, $context);
   }
 
+  /**
+   * Builds filter-specific context for field preparation.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent Search API field name.
+   * @param array $child_fld_nms
+   *   Available child field names.
+   *
+   * @return array
+   *   Context array with filter-specific metadata.
+   */
+  protected function buildFilterContext(Index $index, string $sapi_fld_nm, array $child_fld_nms): array {
+    $linkable = $this->getLinkableFields($index, $sapi_fld_nm, $child_fld_nms);
+    $calculated = $this->getCalculatedFields($child_fld_nms);
+    
+    // Build filter-specific extras
+    $field_extras = [];
+    foreach ($child_fld_nms as $field_name) {
+      $field_extras[$field_name] = [
+        'supports_dropdown' => in_array($field_name, $linkable), // Can show entity labels
+      ];
+    }
+    
+    return [
+      'linkable_fields' => $linkable,
+      'calculated_fields' => $calculated,
+      'field_extras' => $field_extras,
+    ];
+  }
 
   /**
-   * Add required checkbox.
+   * Builds form elements for a single filter field.
+   * 
+   * Custom callback used by buildConfigurationForm().
+   *
+   * @param array &$form
+   *   The form array.
+   * @param array $config
+   *   Field configuration array.
+   * @param array $options
+   *   Form structure options.
    */
-  protected function addFieldRequired(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$child_fld_nm]['required'] = [
+  public function buildFilterFieldForm(array &$form, array $config, array $options): void {
+    $field_name = $config['field_name'];
+    $wrapper_key = $options['wrapper_key'];
+    $field_settings_key = $options['field_settings_key'];
+    $context_prefix = $options['context_prefix'];
+    $is_enabled = $config['enabled'];
+
+    // Build disabled state
+    $disabled_state = $this->buildFieldDisabledState(
+      $wrapper_key,
+      $field_settings_key,
+      $field_name,
+      $context_prefix
+    );
+
+    // Field container
+    $form[$wrapper_key][$field_settings_key][$field_name] = [
+      '#type' => 'details',
+      '#title' => $config['label'],
+      '#open' => $is_enabled,
+    ];
+
+    // Enable checkbox
+    $form[$wrapper_key][$field_settings_key][$field_name]['enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable this filter'),
+      '#default_value' => $config['enabled'],
+    ];
+
+    // Widget type
+    $this->addWidgetSelector($form, $config, $wrapper_key, $field_settings_key, $disabled_state, $context_prefix);
+
+    // Label
+    $form[$wrapper_key][$field_settings_key][$field_name]['label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label'),
+      '#default_value' => $config['label'],
+      '#description' => $this->t('Label shown to users.'),
+      '#size' => 30,
+      '#states' => $disabled_state,
+    ];
+
+    // Weight
+    $form[$wrapper_key][$field_settings_key][$field_name]['weight'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Weight'),
+      '#default_value' => $config['weight'],
+      '#description' => $this->t('Fields with lower weights appear first.'),
+      '#size' => 5,
+      '#states' => $disabled_state,
+    ];
+
+    // Required
+    $form[$wrapper_key][$field_settings_key][$field_name]['required'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Required'),
-      '#default_value' => $child_fld_settings[$child_fld_nm]['required'] ?? FALSE,
+      '#default_value' => $config['required'] ?? FALSE,
       '#description' => $this->t('Make this field required when exposed.'),
       '#states' => $disabled_state,
     ];
-  }
 
-
-  /**
-   * Add placeholder configuration.
-   */
-  protected function addFieldPlaceholder(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$child_fld_nm]['placeholder'] = [
+    // Placeholder
+    $form[$wrapper_key][$field_settings_key][$field_name]['placeholder'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Placeholder'),
-      '#default_value' => $child_fld_settings[$child_fld_nm]['placeholder'] ?? '',
+      '#default_value' => $config['placeholder'] ?? '',
       '#description' => $this->t('Placeholder text for the filter field.'),
       '#states' => $disabled_state,
     ];
-  }
 
-
-  /**
-   * Add operator selector.
-   */
-  protected function addFieldOperator(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$child_fld_nm]['field_operator'] = [
+    // Operator
+    $form[$wrapper_key][$field_settings_key][$field_name]['field_operator'] = [
       '#type' => 'select',
       '#title' => $this->t('Operator'),
       '#options' => $this->operatorHelper->getOperatorOptions(),
-      '#default_value' => $child_fld_settings[$child_fld_nm]['field_operator'] ?? $this->operatorHelper->getDefaultOperator(),
+      '#default_value' => $config['field_operator'] ?? $this->operatorHelper->getDefaultOperator(),
       '#description' => $this->t('Comparison operator for this field.'),
       '#states' => $disabled_state,
     ];
-  }
 
-
-  /**
-   * Add expose operator checkbox.
-   */
-  protected function addExposeFieldOperator(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$child_fld_nm]['expose_field_operator'] = [
+    // Expose operator
+    $form[$wrapper_key][$field_settings_key][$field_name]['expose_field_operator'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Let user choose operator'),
-      '#default_value' => $child_fld_settings[$child_fld_nm]['expose_field_operator'] ?? FALSE,
+      '#default_value' => $config['expose_field_operator'] ?? FALSE,
       '#description' => $this->t('Override global setting for this specific field.'),
       '#states' => array_merge(
         $disabled_state,
@@ -192,17 +264,12 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
         ]
       ),
     ];
-  }
 
-
-  /**
-   * Add default value field.
-   */
-  protected function addFieldValueField(array &$form, string $child_fld_nm, array $child_fld_settings, array $disabled_state): void {
-    $form['filter_field_settings'][$child_fld_nm]['value'] = [
+    // Default value
+    $form[$wrapper_key][$field_settings_key][$field_name]['value'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Value'),
-      '#default_value' => $child_fld_settings[$child_fld_nm]['value'] ?? '',
+      '#default_value' => $config['value'] ?? '',
       '#description' => $this->t('Filter value (only used when filter is not exposed).'),
       '#states' => array_merge(
         $disabled_state,
@@ -213,5 +280,100 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
         ]
       ),
     ];
+  }
+
+  /**
+   * Adds widget type selector with display mode for dropdowns.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param array $config
+   *   Field configuration.
+   * @param string $wrapper_key
+   *   Wrapper element key.
+   * @param string $field_settings_key
+   *   Field settings container key.
+   * @param array $disabled_state
+   *   Disabled state configuration.
+   * @param string|null $context_prefix
+   *   Form state path prefix.
+   */
+  protected function addWidgetSelector(
+    array &$form,
+    array $config,
+    string $wrapper_key,
+    string $field_settings_key,
+    array $disabled_state,
+    ?string $context_prefix
+  ): void {
+    $field_name = $config['field_name'];
+    
+    $form[$wrapper_key][$field_settings_key][$field_name]['widget'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Widget type'),
+      '#options' => [
+        'textfield' => $this->t('Text field'),
+        'select' => $this->t('Dropdown (from indexed values)'),
+      ],
+      '#default_value' => $config['widget'] ?? 'textfield',
+      '#states' => $disabled_state,
+      '#description' => $this->t('Dropdown automatically loads all unique values from the search index.'),
+    ];
+
+    // Display mode for dropdown options (only for linkable fields)
+    if ($config['supports_dropdown'] ?? FALSE) {
+      $path_parts = array_filter([
+        $context_prefix,
+        $wrapper_key,
+        $field_settings_key,
+        $field_name,
+        'widget'
+      ]);
+      $input_name = implode('][', $path_parts);
+
+      $form[$wrapper_key][$field_settings_key][$field_name]['select_display_mode'] = [
+        '#type' => 'radios',
+        '#title' => $this->t('Display mode for dropdown options'),
+        '#options' => [
+          'raw' => $this->t('Raw value (ID)'),
+          'label' => $this->t('Label (entity name)'),
+        ],
+        '#default_value' => $config['select_display_mode'] ?? 'raw',
+        '#description' => $this->t('How to display options in the dropdown. Only applies to entity reference fields.'),
+        '#states' => array_merge(
+          $disabled_state,
+          [
+            'visible' => [
+              ':input[name="' . $input_name . '"]' => ['value' => 'select'],
+            ],
+          ]
+        ),
+      ];
+    }
+  }
+
+  /**
+   * Gets linkable fields for filter context.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent field name.
+   * @param array $child_fld_nms
+   *   Available field names.
+   *
+   * @return array
+   *   Array of linkable field names.
+   */
+  protected function getLinkableFields(Index $index, string $sapi_fld_nm, array $child_fld_nms): array {
+    $linkable = [];
+    
+    foreach ($child_fld_nms as $field_name) {
+      if ($this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $field_name)) {
+        $linkable[] = $field_name;
+      }
+    }
+    
+    return $linkable;
   }
 }

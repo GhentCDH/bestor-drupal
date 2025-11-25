@@ -56,14 +56,16 @@ services:
   relationship_nodes_search.nested_field_views_field_configurator:
     class: Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFieldConfigurator
     arguments:
-      - '@relationship_nodes_search.calculated_field_helper'
+      - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes_search.nested_field_helper'
+      - '@relationship_nodes_search.calculated_field_helper'
       - '@relationship_nodes_search.child_field_entity_reference_helper'
   relationship_nodes_search.nested_field_views_filter_configurator:
     class: Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFilterConfigurator
     arguments:
-      - '@relationship_nodes_search.calculated_field_helper'
+      - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes_search.nested_field_helper'
+      - '@relationship_nodes_search.calculated_field_helper'
       - '@relationship_nodes_search.child_field_entity_reference_helper'
       - '@relationship_nodes_search.filter_operator_helper'
   relationship_nodes_search.nested_exposed_form_builder:
