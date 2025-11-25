@@ -4,15 +4,15 @@ namespace Drupal\relationship_nodes\RelationEntityType\Validation;
 
 use Drupal\Core\Config\ConfigImporterEvent;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\relationship_nodes\Field\FieldConfigurator;
-use Drupal\relationship_nodes\Field\FieldNameResolver;
-use Drupal\relationship_nodes\Bundle\BundleInfoService;
-use Drupal\relationship_nodes\Bundle\BundleSettingsManager;
-use Drupal\relationship_nodes\Validation\ValidationObjectFactory;
-use Drupal\relationship_nodes\Validation\ValidationErrorFormatter;
-use Drupal\relationship_nodes\Validation\ValidationObject\BundleValidation;
-use Drupal\relationship_nodes\Validation\ValidationObject\FieldConfigValidation;
-use Drupal\relationship_nodes\Validation\ValidationObject\FieldStorageValidation;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\RelationFieldConfigurator;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationValidationObjectFactory;
+use Drupal\relationship_nodes\RelationEntityType\Validation\ValidationErrorFormatter;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationBundleValidationObject;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationFieldConfigValidationObject;
+use Drupal\relationship_nodes\RelationEntityType\Validation\RelationFieldStorageValidationObject;
 
 /**
  * Service for validating relationship nodes during configuration import.
@@ -20,10 +20,10 @@ use Drupal\relationship_nodes\Validation\ValidationObject\FieldStorageValidation
 class ConfigImportValidationService {
 
   protected FieldNameResolver $fieldNameResolver;
-  protected FieldConfigurator $fieldConfigurator;
-  protected BundleInfoService $bundleInfoService;
-  protected BundleSettingsManager $settingsManager;
-  protected ValidationObjectFactory $validationFactory;
+  protected RelationFieldConfigurator $fieldConfigurator;
+  protected RelationBundleInfoService $bundleInfoService;
+  protected RelationBundleSettingsManager $settingsManager;
+  protected RelationValidationObjectFactory $validationFactory;
   protected ValidationErrorFormatter $errorFormatter;
 
 
@@ -32,23 +32,23 @@ class ConfigImportValidationService {
    *
    * @param FieldNameResolver $fieldNameResolver
    *   The field name resolver.
-   * @param FieldConfigurator $fieldConfigurator
+   * @param RelationFieldConfigurator $fieldConfigurator
    *   The field configurator.
-   * @param BundleInfoService $bundleInfoService
+   * @param RelationBundleInfoService $bundleInfoService
    *   The bundle info service.
-   * @param BundleSettingsManager $settingsManager
+   * @param RelationBundleSettingsManager $settingsManager
    *   The settings manager.
-   * @param ValidationObjectFactory $validationFactory
+   * @param RelationValidationObjectFactory $validationFactory
    *   The validation object factory.
    * @param ValidationErrorFormatter $errorFormatter
    *   The error formatter.
    */
   public function __construct(
     FieldNameResolver $fieldNameResolver,
-    FieldConfigurator $fieldConfigurator,
-    BundleInfoService $bundleInfoService,
-    BundleSettingsManager $settingsManager,
-    ValidationObjectFactory $validationFactory,
+    RelationFieldConfigurator $fieldConfigurator,
+    RelationBundleInfoService $bundleInfoService,
+    RelationBundleSettingsManager $settingsManager,
+    RelationValidationObjectFactory $validationFactory,
     ValidationErrorFormatter $errorFormatter
   ) {
     $this->fieldNameResolver = $fieldNameResolver;
@@ -74,7 +74,7 @@ class ConfigImportValidationService {
   protected function getBundleCimValidationErrors(string $config_name, StorageInterface $storage): array {
     $errors = [];
     $validator = $this->validationFactory->fromBundleConfigFile($config_name, $storage);
-    if (!$validator instanceof BundleValidation) {
+    if (!$validator instanceof RelationBundleValidationObject) {
       return [];
     }
     if (!$validator->validate()) {
@@ -124,7 +124,7 @@ class ConfigImportValidationService {
   protected function getFieldStorageCimValidationErrors(array $config_data): array {
     $errors = [];
     $validator = $this->validationFactory->fromFieldStorageConfigFile($config_data);
-    if (!$validator instanceof FieldStorageValidation) {
+    if (!$validator instanceof RelationFieldStorageValidationObject) {
       return [];
     }
     if (!$validator->validate()) {
@@ -155,7 +155,7 @@ class ConfigImportValidationService {
   protected function getFieldConfigCimValidationErrors(array $config_data, StorageInterface $storage): array {
     $errors = [];
     $validator = $this->validationFactory->fromFieldConfigConfigFile($config_data, $storage);
-    if (!$validator instanceof FieldConfigValidation) {
+    if (!$validator instanceof RelationFieldConfigValidationObject) {
       return [];
     }
     if (!$validator->validate()) {
