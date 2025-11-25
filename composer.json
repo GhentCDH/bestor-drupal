@@ -10,9 +10,13 @@
     },
     "repositories": [
         {
+            "type":"vcs",
+            "url":"https://git.drupalcode.org/issue/elasticsearch_connector-3550775.git"
+        },
+        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        }
+        }    
     ],
     "require": {
         "composer/installers": "^2.0",
@@ -28,7 +32,7 @@
         "drupal/core-project-message": "^10.3",
         "drupal/core-recommended": "^10.3",
         "drupal/ds": "^3.24",
-        "drupal/elasticsearch_connector": "^8.0@alpha",
+        "drupal/elasticsearch_connector": "dev-3550775-close-and-reopen-index",
         "drupal/entity_events": "^2.0",
         "drupal/entity_reference_modal": "^1.0",
         "drupal/field_group": "^4.0",
@@ -81,7 +85,7 @@
             },
             "drupal/search_api_glossary":{
                 "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch"
-            }            	                                                           
+            }       	                                                           
     	},
         "drupal-scaffold": {
             "locations": {
