@@ -40,6 +40,11 @@ class RelationshipDataDisplayBuilder {
     $this->entityTypeManager = $entityTypeManager;
   }
 
+
+  public function buildNestedFieldDisplayConfiguration(&$parent_form_element, $child_field_names){
+
+  }
+
   /**
    * Builds relationship data from relation nodes.
    *

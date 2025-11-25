@@ -285,13 +285,13 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     $relationships = $this->buildRelationshipsArray($nested_data, $field_settings, $index, $sapi_fld_nm);
     $relationships = $this->sortRelationships($relationships);
     $grouped = $this->groupRelationships($relationships);
-    $fields = $this->buildFieldsMetadata($field_settings);
+    $child_field_metadata = $this->buildFieldsMetadata($field_settings);
     
     return [
       'relationships' => $relationships,
       'grouped' => $grouped,
       'summary' => $this->buildSummary($relationships, $fields, $grouped),
-      'fields' => $fields,
+      'fields' => $child_field_metadata,
     ];
   }
 

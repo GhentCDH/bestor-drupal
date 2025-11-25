@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: web-manager-admin
+label: 'Web Manager Admin Menu' 
+description: 'Admin menu for Webmanagers'
+locked: true

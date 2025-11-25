@@ -34,8 +34,36 @@ class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase
     parent::__construct($calculatedFieldHelper, $nestedFieldHelper);
     $this->childReferenceHelper = $childReferenceHelper;
   }
+/*
 
+  public function buildChildFieldDisplaySettings(string $child_fld_nm, array $form_input){
+    
+      return [
+        'enabled' => !empty($field_settings[$child_fld_nm]['enabled']),
+        'linkable' => $this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $child_fld_nm),
+        'display_mode' => $field_settings[$child_fld_nm]['display_mode'] ?? 'raw',
+        'hide_label' => $field_settings[$child_fld_nm]['hide_label'] ?? FALSE,
+        'label' => $field_settings[$child_fld_nm]['label'] ?? $this->calculatedFieldHelper->formatCalculatedFieldLabel($child_fld_nm),
+        'weight' => $field_settings[$child_fld_nm]['weight'] ?? 0,
+        'multiple_separator' => $field_settings[$child_fld_nm]['multiple_separator'] ?? ', ',
+        'disabled_state_html' => $this->buildFieldDisabledState($child_fld_nm)
+      ];
 
+    }
+
+  public function buildNestedFieldDisplaySettings(){
+    $child_fld_settings = [];
+    foreach($child_fld_nms as $child_fld_nm){
+      $child_fld_settings[$child_fld_nm] = $this->buildChildFieldDisplaySettings();
+    }
+    $settings = [
+      '#parent_form_element' => $form,
+      '#parent_field_name' => $parent_fld_nm,
+      '#child_fields' => $child_fld_settings
+    ];
+  }
+
+  */
   /**
    * Build configuration form for a single field.
    * 

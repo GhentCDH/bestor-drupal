@@ -1,6 +1,5 @@
 <?php
 
-
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
@@ -16,4 +15,3 @@ function customize_admin_menu_per_role_page_attachments(&$page) {
 	return;
   } 
 }
-

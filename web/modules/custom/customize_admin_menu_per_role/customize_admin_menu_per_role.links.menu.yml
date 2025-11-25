@@ -1,0 +1,206 @@
+###################################
+# WEBMANAGER ADMIN MENU
+###################################
+
+# 1. Dashboard
+customize_admin_menu_per_role.webmanager_dashboard_link:
+  title: 'Webmanager Dashboard'
+  description: 'Dashboard for Webmanagers'
+  route_name: customize_admin_menu_per_role.webmanager_dashboard
+  menu_name: web-manager-admin
+  weight: -100
+
+# 2. All content overview
+webmanager_dashboard.content_overview:
+  title: 'Content overview'
+  route_name: view.content.page_2
+  menu_name: web-manager-admin
+  weight: -90
+
+# 2a. Actua (child item)
+webmanager_dashboard.view_content:
+  title: 'All content overview'
+  route_name: view.content.page_2
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.content_overview
+  weight: -89
+
+# 2b. Administer choicelists (child item)
+webmanager_dashboard.administer_choicelists:
+  title: 'Administer choicelists'
+  route_name: view.choice_lists.page_1
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.content_overview
+  weight: -88
+
+# 2c. Banners and blocks (child item)
+webmanager_dashboard.update_banners:
+  title: 'Update banners and block content'
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.content_overview
+  weight: -87
+
+# 2d. Media (child item)
+webmanager_dashboard.all_media:
+  title: 'All media'
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.content_overview
+  weight: -86
+
+# 2e. Relationships overview (child item)
+webmanager_dashboard.overview_relationships:
+  title: 'Overview relationships'
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.content_overview
+  weight: -85
+
+# 3. Add content (parent item)
+webmanager_dashboard.add_content:
+  title: 'Add content'
+  route_name: view.add_content.page_2
+  menu_name: web-manager-admin
+  weight: -80
+
+# 3a. Actua (child item)
+webmanager_dashboard.add_content.actua:
+  title: 'Actua (news, publications, events)'
+  route_name: view.add_content.page_4
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.add_content
+  weight: -79
+
+# 3b. Database lemma (child item)
+webmanager_dashboard.add_content.db_lemma:
+  title: 'Database lemma'
+  route_name: view.add_content.page_3
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.add_content
+  weight: -78
+
+# 4. User management block
+webmanager_dashboard.users:
+  title: 'Users'
+  route_name: entity.user.collection
+  menu_name: web-manager-admin
+  weight: -70
+
+# 5. Site configuration
+webmanager_dashboard.config:
+  title: 'Site configuration'
+  route_name: system.admin_config
+  menu_name: web-manager-admin
+  weight: -60
+
+# 5a. Site cache
+webmanager_dashboard.site_cache:
+  title: 'Site cache and performance'
+  route_name: system.performance_settings
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.config
+  weight: -59
+
+# 5b. Maintenance mode
+webmanager_dashboard.maintenance_mode:
+  title: 'Maintenance mode'
+  route_name: system.site_maintenance_mode
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.config
+  weight: -58
+
+# 5c. Regional settings
+webmanager_dashboard.regional_settings:
+  title: 'Regional settings'
+  route_name: system.regional_settings
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.config
+  weight: -57
+
+# 5d. UI Translations
+webmanager_dashboard.ui_translation:
+  title: 'User interface translation'
+  route_name: locale.translate_page
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.config
+  weight: -56
+
+# 5e. Config Translations
+webmanager_dashboard.config_translation:
+  title: 'Configuration translation'
+  route_name: config_translation.mapper_list
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.config
+  weight: -55
+
+# 5f. Url Aliases
+webmanager_dashboard.url_aliases:
+  title: 'URL aliases'
+  route_name: entity.path_alias.collection
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.config
+  weight: -54
+
+
+
+###################################
+# REDACTOR / USER MENU
+###################################
+
+# 1. Dashboard
+redactor_dashboard.dashboard:
+  title: 'Dashboard'
+  route_name: customize_admin_menu_per_role.redactor_dashboard
+  menu_name: user-menu
+  weight: -100
+
+# 2. All content overview
+redactor_dashboard.content_overview:
+  title: 'All content overview'
+  route_name: view.content.page_2
+  menu_name: user-menu
+  weight: -90
+
+# 2a. Actua (child item)
+redactor_dashboard.view_content:
+  title: 'All content overview'
+  route_name: view.content.page_2
+  menu_name: user-menu
+  parent: redactor_dashboard.content_overview
+  weight: -89
+
+# 2b. Administer choicelists (child item)
+redactor_dashboard.administer_choicelists:
+  title: 'Administer choicelists'
+  route_name: view.choice_lists.page_1
+  menu_name: user-menu
+  parent: redactor_dashboard.content_overview
+  weight: -88
+
+# 3. Add content (parent item)
+redactor_dashboard.add_content:
+  title: 'Add content'
+  route_name: view.add_content.page_2
+  menu_name: user-menu
+  weight: -80
+
+# 3a. Actua (child item)
+redactor_dashboard.add_content.actua:
+  title: 'Actua (news, publications, events)'
+  route_name: view.add_content.page_4
+  menu_name: user-menu
+  parent: redactor_dashboard.add_content
+  weight: -79
+
+# 3b. Database lemma (child item)
+redactor_dashboard.add_content.db_lemma:
+  title: 'Database lemma'
+  route_name: view.add_content.page_3
+  menu_name: user-menu
+  parent: redactor_dashboard.add_content
+  weight: -78
+
+# 4. User management
+redactor_dashboard.user_mgmt:
+  title: 'User management'
+  route_name: entity.user.collection
+  menu_name: user-menu
+  weight: -70

@@ -1,8 +1,10 @@
-uuid: 140eaa73-c0dc-4b80-9422-c6c0a1c294ac
+uuid: bcdd569e-1e35-4358-a450-781f39dfa208
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: ls3A81GfwERCV_96e5frKE4iWUT0Yw9JqtjuR17e8Zc
 id: web-manager-admin
-label: 'Web manager admin'
-description: ''
-locked: false
+label: 'Web Manager Admin Menu'
+description: 'Admin menu for Webmanagers'
+locked: true
