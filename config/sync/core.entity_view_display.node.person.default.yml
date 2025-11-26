@@ -42,11 +42,33 @@ content:
     type: relationship_formatter
     label: above
     settings:
-      show_relation_type: true
-      show_field_labels: true
-      link_entities: true
-      group_by_type: false
-      separator: ', '
+      field_settings:
+        calculated_related_id:
+          enabled: '1'
+          display_mode: label
+          label: 'Related id'
+          weight: '0'
+          hide_label: 0
+        calculated_relation_type_name:
+          enabled: '1'
+          label: 'Relation type name'
+          weight: '0'
+          hide_label: 0
+        field_location_text:
+          label: 'Location Text'
+          weight: '0'
+          multiple_separator: ', '
+          enabled: 0
+          hide_label: 0
+        field_municipality:
+          enabled: '1'
+          display_mode: label
+          label: Municipality
+          weight: '0'
+          multiple_separator: ', '
+          hide_label: 0
+      sort_by_field: ''
+      group_by_field: ''
     third_party_settings: {  }
     weight: 15
     region: content

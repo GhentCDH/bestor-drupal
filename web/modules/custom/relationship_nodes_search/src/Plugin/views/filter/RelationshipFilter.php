@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\relationship_nodes_search\SearchAPI\Query\NestedParentFieldConditionGroup;
 use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 use Drupal\relationship_nodes_search\Views\Widget\NestedExposedFormBuilder;
 use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFilterConfigurator;
 use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
@@ -24,7 +23,6 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
 
   use SearchApiFilterTrait;
 
-  protected NestedFieldHelper $nestedFieldHelper;
   protected NestedExposedFormBuilder $exposedFormBuilder;
   protected NestedFieldViewsFilterConfigurator $filterConfigurator;
   protected NestedQueryStructureBuilder $queryBuilder;
@@ -40,8 +38,6 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
    *    The plugin ID.
    * @param mixed $plugin_definition
    *    The plugin definition.
-   * @param NestedFieldHelper $nestedFieldHelper
-   *    The nested field helper service.
    * @param NestedExposedFormBuilder $exposedFormBuilder
    *    The exposed form builder service.
    * @param NestedFieldViewsFilterConfigurator $filterConfigurator
@@ -55,14 +51,12 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    NestedFieldHelper $nestedFieldHelper,
     NestedExposedFormBuilder $exposedFormBuilder,
     NestedFieldViewsFilterConfigurator $filterConfigurator,
     NestedQueryStructureBuilder $queryBuilder,
     FilterOperatorHelper $operatorHelper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->nestedFieldHelper = $nestedFieldHelper;
     $this->exposedFormBuilder = $exposedFormBuilder;
     $this->filterConfigurator = $filterConfigurator;
     $this->queryBuilder = $queryBuilder;
@@ -78,7 +72,6 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('relationship_nodes_search.nested_field_helper'),
       $container->get('relationship_nodes_search.nested_exposed_form_builder'),
       $container->get('relationship_nodes_search.nested_field_views_filter_configurator'),
       $container->get('relationship_nodes_search.nested_query_structure_builder'),
@@ -187,7 +180,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
    */
   protected function valueForm(&$form, FormStateInterface $form_state):void {
     $index = $this->getIndex();
-    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);
+    $sapi_fld_nm = $this->filterConfigurator->getPluginParentFieldName($this->definition);
     if (!$index instanceof Index || empty($sapi_fld_nm)) {
       return;
     }
@@ -280,7 +273,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
    */
   protected function applyNestedConditions(array $conditions): void {
     $operator = $this->options['operator'] ?? 'and';
-    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);
+    $sapi_fld_nm = $this->filterConfigurator->getPluginParentFieldName($this->definition);
     $index = $this->getIndex();
 
     if (empty($sapi_fld_nm) || !$index instanceof Index) {

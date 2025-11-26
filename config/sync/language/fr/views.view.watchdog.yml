@@ -1,29 +1,18 @@
-label: Watchdog
-description: 'Recent log messages'
 display:
   default:
     display_title: 'Par défaut'
     display_options:
-      title: 'Recent log messages'
       fields:
         nothing:
           admin_label: Icône
-        wid:
-          label: WID
-        severity:
-          label: Severity
         type:
           label: Type
         timestamp:
           label: Date
         message:
           label: Message
-          alter:
-            path: 'admin/reports/dblog/event/{{ wid }}'
-            alt: '{{ message }}'
         name:
           label: Utilisateur
-          separator: ', '
         link:
           label: Actions
       pager:
@@ -42,16 +31,9 @@ display:
           exposed_sorts_label: 'Trier par'
           sort_asc_label: Asc
           sort_desc_label: Desc
-      empty:
-        area:
-          admin_label: 'No log messages available.'
-          content: 'No log messages available.'
       filters:
         type:
           expose:
             label: Type
-        severity:
-          expose:
-            label: Severity
   page:
     display_title: Page

@@ -1,13 +1,7 @@
-label: 'Media library'
-description: 'Find and manage media.'
 display:
   default:
     display_title: 'Par défaut'
     display_options:
-      title: Media
-      fields:
-        media_bulk_form:
-          action_title: Action
       pager:
         options:
           tags:
@@ -19,28 +13,12 @@ display:
             offset_label: Décalage
       exposed_form:
         options:
-          submit_button: 'Apply filters'
           reset_button_label: Réinitialiser
           exposed_sorts_label: 'Trier par'
           sort_asc_label: Asc
           sort_desc_label: Desc
-      empty:
-        area_text_custom:
-          content: 'No media available.'
-      sorts:
-        created:
-          expose:
-            label: 'Newest first'
-        name:
-          expose:
-            label: 'Name (A-Z)'
-        name_1:
-          expose:
-            label: 'Name (Z-A)'
       filters:
         status:
-          expose:
-            label: 'Publishing status'
           group_info:
             label: Publié
             group_items:
@@ -63,19 +41,9 @@ display:
     display_title: Page
     display_options:
       fields:
-        media_bulk_form:
-          action_title: Action
-        name:
-          separator: ', '
         edit_media:
-          alter:
-            text: 'Edit {{ name }}'
-            alt: 'Edit {{ name }}'
           text: Modifier
         delete_media:
-          alter:
-            text: 'Delete {{ name }}'
-            alt: 'Delete {{ name }}'
           text: Supprimer
   widget:
     display_title: Widget
@@ -88,23 +56,11 @@ display:
         name:
           expose:
             label: Nom
-      header:
-        display_link_grid:
-          label: Grid
-        display_link_table:
-          label: Table
   widget_table:
-    display_title: 'Widget (table)'
     display_options:
       fields:
-        thumbnail__target_id:
-          label: Thumbnail
         name:
           label: Nom
-        uid:
-          label: Author
-        changed:
-          label: Updated
       arguments:
         bundle:
           exception:
@@ -113,8 +69,3 @@ display:
         name:
           expose:
             label: Nom
-      header:
-        display_link_grid:
-          label: Grid
-        display_link_table:
-          label: Table

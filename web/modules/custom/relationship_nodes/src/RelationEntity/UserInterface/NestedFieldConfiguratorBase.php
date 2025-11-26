@@ -13,12 +13,6 @@ use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver
  * 1. Prepare phase: Build field configuration arrays (context-aware)
  * 2. Render phase: Build forms from configurations (context-agnostic)
  *
- * This separation allows for:
- * - Single source of truth for field metadata
- * - Efficient preparation (no repeated checks)
- * - Clean, testable configuration arrays
- * - Context-agnostic form rendering
- *
  * Can be used directly for field formatters or extended for Views/other contexts.
  */
 class NestedFieldConfiguratorBase {
@@ -122,7 +116,7 @@ class NestedFieldConfiguratorBase {
    *   Global settings like sort_by_field, group_by_field, template.
    * @param array $options
    *   Form structure options:
-   *   - 'wrapper_key': Form wrapper element key (default: 'display_settings')
+   *   - 'wrapper_key': Form wrapper element key (default: NULL)
    *   - 'field_settings_key': Field container key (default: 'field_settings')
    *   - 'context_prefix': Form state path prefix (default: NULL)
    *   - 'show_template': Include template selector (default: FALSE)
@@ -138,7 +132,7 @@ class NestedFieldConfiguratorBase {
   ): void {
     // Merge with defaults
     $options += [
-      'wrapper_key' => 'display_settings',
+      'wrapper_key' => NULL,
       'field_settings_key' => 'field_settings',
       'context_prefix' => NULL,
       'show_template' => FALSE,
@@ -150,15 +144,20 @@ class NestedFieldConfiguratorBase {
     $wrapper_key = $options['wrapper_key'];
     $field_settings_key = $options['field_settings_key'];
 
-    // Main wrapper
-    $form[$wrapper_key] = [
-      '#type' => 'details',
-      '#title' => $this->t('Field configuration'),
-      '#open' => TRUE,
-    ];
+    // If no wrapper key, add fields directly to form root
+    $target = &$form;
+    if ($wrapper_key !== NULL) {
+      // Main wrapper
+      $form[$wrapper_key] = [
+        '#type' => 'details',
+        '#title' => $this->t('Field configuration'),
+        '#open' => TRUE,
+      ];
+      $target = &$form[$wrapper_key];
+    }
 
     // Field configuration container
-    $form[$wrapper_key][$field_settings_key] = [
+    $target[$field_settings_key] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Available fields'),
       '#description' => $this->t('Select and configure fields to display.'),
@@ -189,8 +188,7 @@ class NestedFieldConfiguratorBase {
 
     // Global options (sorting, grouping, template)
     $this->addGlobalOptions(
-      $form,
-      $wrapper_key,
+      $target,
       array_keys($field_configurations),
       $global_settings,
       $options
@@ -207,8 +205,8 @@ class NestedFieldConfiguratorBase {
    *   The form array.
    * @param array $config
    *   Field configuration array.
-   * @param string $wrapper_key
-   *   The wrapper element key.
+   * @param string|null $wrapper_key
+   *   The wrapper element key (can be NULL).
    * @param string $field_settings_key
    *   The field settings container key.
    * @param string|null $context_prefix
@@ -217,7 +215,7 @@ class NestedFieldConfiguratorBase {
   protected function buildFieldFormFromConfig(
     array &$form,
     array $config,
-    string $wrapper_key,
+    ?string $wrapper_key,
     string $field_settings_key,
     ?string $context_prefix
   ): void {
@@ -232,15 +230,22 @@ class NestedFieldConfiguratorBase {
       $context_prefix
     );
 
+    // Determine target path
+    if ($wrapper_key !== NULL) {
+      $target = &$form[$wrapper_key][$field_settings_key];
+    } else {
+      $target = &$form[$field_settings_key];
+    }
+
     // Field container
-    $form[$wrapper_key][$field_settings_key][$field_name] = [
+    $target[$field_name] = [
       '#type' => 'details',
       '#title' => $config['label'],
       '#open' => $is_enabled,
     ];
 
     // Enable checkbox
-    $form[$wrapper_key][$field_settings_key][$field_name]['enabled'] = [
+    $target[$field_name]['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display this field'),
       '#default_value' => $config['enabled'],
@@ -248,7 +253,7 @@ class NestedFieldConfiguratorBase {
 
     // Display mode (only for linkable fields)
     if ($config['linkable']) {
-      $form[$wrapper_key][$field_settings_key][$field_name]['display_mode'] = [
+      $target[$field_name]['display_mode'] = [
         '#type' => 'radios',
         '#title' => $this->t('Display mode'),
         '#options' => [
@@ -263,7 +268,7 @@ class NestedFieldConfiguratorBase {
     }
 
     // Label
-    $form[$wrapper_key][$field_settings_key][$field_name]['label'] = [
+    $target[$field_name]['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Custom label'),
       '#default_value' => $config['label'],
@@ -273,7 +278,7 @@ class NestedFieldConfiguratorBase {
     ];
 
     // Weight
-    $form[$wrapper_key][$field_settings_key][$field_name]['weight'] = [
+    $target[$field_name]['weight'] = [
       '#type' => 'number',
       '#title' => $this->t('Weight'),
       '#default_value' => $config['weight'],
@@ -283,7 +288,7 @@ class NestedFieldConfiguratorBase {
     ];
 
     // Hide label
-    $form[$wrapper_key][$field_settings_key][$field_name]['hide_label'] = [
+    $target[$field_name]['hide_label'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Hide label in output'),
       '#default_value' => $config['hide_label'],
@@ -292,7 +297,7 @@ class NestedFieldConfiguratorBase {
 
     // Multiple separator (not for calculated fields)
     if (!$config['is_calculated']) {
-      $form[$wrapper_key][$field_settings_key][$field_name]['multiple_separator'] = [
+      $target[$field_name]['multiple_separator'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Multiple values separator'),
         '#default_value' => $config['multiple_separator'],
@@ -307,9 +312,7 @@ class NestedFieldConfiguratorBase {
    * Adds global options (sorting, grouping, template).
    *
    * @param array &$form
-   *   The form array.
-   * @param string $wrapper_key
-   *   The wrapper element key.
+   *   The form array (target container).
    * @param array $field_names
    *   Available field names for options.
    * @param array $settings
@@ -319,14 +322,13 @@ class NestedFieldConfiguratorBase {
    */
   protected function addGlobalOptions(
     array &$form,
-    string $wrapper_key,
     array $field_names,
     array $settings,
     array $options
   ): void {
     // Sorting
     if ($options['show_sorting']) {
-      $form[$wrapper_key]['sort_by_field'] = [
+      $form['sort_by_field'] = [
         '#type' => 'select',
         '#title' => $this->t('Sort by field'),
         '#options' => ['' => $this->t('- None -')] + array_combine($field_names, $field_names),
@@ -337,7 +339,7 @@ class NestedFieldConfiguratorBase {
 
     // Grouping
     if ($options['show_grouping']) {
-      $form[$wrapper_key]['group_by_field'] = [
+      $form['group_by_field'] = [
         '#type' => 'select',
         '#title' => $this->t('Group by field'),
         '#options' => ['' => $this->t('- None -')] + array_combine($field_names, $field_names),
@@ -348,7 +350,7 @@ class NestedFieldConfiguratorBase {
 
     // Template (Views-specific)
     if ($options['show_template']) {
-      $form[$wrapper_key]['template'] = [
+      $form['template'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Template name'),
         '#default_value' => $settings['template'] ?? 'relationship-field',
@@ -360,8 +362,8 @@ class NestedFieldConfiguratorBase {
   /**
    * Builds Form API states for disabling field elements.
    *
-   * @param string $wrapper_key
-   *   The wrapper element key.
+   * @param string|null $wrapper_key
+   *   The wrapper element key (can be NULL).
    * @param string $field_settings_key
    *   The field settings container key.
    * @param string $field_name
@@ -373,7 +375,7 @@ class NestedFieldConfiguratorBase {
    *   Form API states configuration.
    */
   public function buildFieldDisabledState(
-    string $wrapper_key,
+    ?string $wrapper_key,
     string $field_settings_key,
     string $field_name,
     ?string $context_prefix

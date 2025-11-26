@@ -18,7 +18,7 @@ use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver
 use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider;
 use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\search_api\IndexInterface;
@@ -127,7 +127,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $container->get('relationship_nodes.relation_bundle_settings_manager'),
       $container->get('relationship_nodes.mirror_term_provider'),
       $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
-      $container->get('relationship_nodes_search.calculated_field_helper')
+      $container->get('relationship_nodes.calculated_field_helper')
     );
   }
 

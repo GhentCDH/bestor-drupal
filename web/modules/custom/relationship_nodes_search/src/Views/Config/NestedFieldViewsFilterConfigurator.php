@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
 use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;

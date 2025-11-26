@@ -1,19 +1,26 @@
 <?php
 
-namespace Drupal\relationship_nodes_search\FieldHelper;
+namespace Drupal\relationship_nodes\RelationEntityType\RelationField;
 
 /**
- * Service for managing calculated fields in relationship searches.
- *
- * Provides a central registry of calculated field names and their properties,
- * including entity types and formatting rules.
+ * Helper for calculated relationship field names and metadata.
+ * 
+ * Provides unified calculated field naming for both:
+ * - Search API indexing (relationship_nodes_search module)
+ * - Field formatters (relationship_nodes module)
+ * 
+ * The field NAMES are shared, but resolution differs:
+ * - In Search API: Fields are indexed in Elasticsearch nested structure
+ * - In Formatters: Fields are resolved at render time from entities
  */
 class CalculatedFieldHelper {
 
   /**
-   * Field name definitions for calculated fields.
+   * Calculated field definitions.
    * 
-   * @internal Configuration constant for module-generated fields.
+   * Structure:
+   * - Key: Logical field group (this_entity, related_entity, relation_type)
+   * - Value: Array of field variants (id, name, etc.)
    */
   private const CALCULATED_FIELDS = [
     'this_entity' => [
@@ -96,7 +103,7 @@ class CalculatedFieldHelper {
    */
   public function getCalculatedFieldTargetType(string $child_fld_nm): ?string {
     $calc_fld_ids = $this->getCalculatedFieldNames(NULL, 'id');
-    if (!in_array($child_fld_nm, $calc_fld_ids)) {
+    if (!in_array($child_fld_nm, $calc_fld_ids, TRUE)) {
       return NULL;
     }
     foreach ($calc_fld_ids as $calc_entity_key => $calc_fld_id) {

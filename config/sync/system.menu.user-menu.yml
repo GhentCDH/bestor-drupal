@@ -1,10 +1,8 @@
-uuid: a5758a8a-d9c2-4fe8-b5e2-89dc3106fd57
+uuid: 4bf90566-375a-44f5-8d8b-e1fe383542e0
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: agYv8YN_x6srQeNTPbaizuUAOUfMjBBp83DNkcHBTOU
 id: user-menu
-label: 'User Menu'
-description: 'Menu for Redactors / Users'
-locked: true
+label: 'Redactor menu'
+description: ''
+locked: false

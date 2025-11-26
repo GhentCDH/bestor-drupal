@@ -6,8 +6,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldConfiguratorBase;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
 
 /**
  * Base configurator for Views plugins handling nested fields.
@@ -22,7 +22,6 @@ use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
  */
 abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorBase {
 
-  protected NestedFieldHelper $nestedFieldHelper;
   protected CalculatedFieldHelper $calculatedFieldHelper;
 
   /**
@@ -45,6 +44,7 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
     $this->calculatedFieldHelper = $calculatedFieldHelper;
   }
 
+
   /**
    * Validates and prepares configuration for Views plugin options form.
    * 
@@ -63,10 +63,10 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
    */
   public function validateAndPreparePluginForm($index, array $definition, array &$form): ?array {
     // Extract field name from plugin definition
-    $field_name = $this->nestedFieldHelper->getPluginParentFieldName($definition);
+    $field_name = $this->getPluginParentFieldName($definition);
     
     // Validate field structure (delegated to field helper)
-    $config = $this->nestedFieldHelper->validatePluginFieldConfiguration($index, $field_name);
+    $config = $this->validatePluginFieldConfiguration($index, $field_name);
     
     if (!$config) {
       // Add form error using parent method
@@ -76,6 +76,7 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
     
     return $config;
   }
+
 
   /**
    * Prepares field configurations for Views context.
@@ -107,6 +108,7 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
     // Use parent's prepare method with context
     return $this->prepareFieldConfigurations($field_names, $current_settings, $context);
   }
+
 
   /**
    * Builds Views/Search API-specific context for field preparation.
@@ -164,6 +166,7 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
     });
   }
 
+
   /**
    * Saves plugin options from form state.
    * 
@@ -197,6 +200,7 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
     }
   }
 
+
   /**
    * Sorts field configurations by weight.
    * 
@@ -215,6 +219,112 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
     
     return $fields;
   }
+
+
+  /**
+   * Extracts parent field name from Views plugin definition.
+   * 
+   * Helper method for Views plugins to get their configured field name.
+   *
+   * @param array $definition
+   *   The plugin definition array.
+   *
+   * @return string|null
+   *   The field name, or NULL if not found.
+   */
+  public function getPluginParentFieldName(array $definition): ?string {
+    // Field handlers use 'search_api field' (with space)
+    if (isset($definition['search_api field'])) {
+      return $definition['search_api field'];
+    }
+    
+    // Filter handlers use 'real field'.
+    if (isset($definition['real field'])) {
+      return $definition['real field'];
+    }
+    
+    return NULL;
+  }
+
+
+  /**
+   * Validate index and field configuration for a Views plugin.
+   * 
+   * Common validation helper for plugin configuration forms.
+   *
+   * @param Index|null $index
+   *   The Search API index.
+   * @param string|null $field_name
+   *   The parent field name.
+   *
+   * @return array{index: Index, field_name: string, available_fields: array}|null
+   *   Validation result with index, field name, and available child fields.
+   *   Returns NULL if validation fails.
+   */
+  protected function validatePluginFieldConfiguration (?Index $index, ?string $field_name): ?array {
+    if (!$index instanceof Index || empty($field_name)) {
+      return NULL;
+    }
+    
+    $available_fields = $this->getAvailableFieldNames($index, $field_name);
+    
+    if (empty($available_fields)) {
+      return NULL;
+    }
+    
+    return [
+      'index' => $index,
+      'field_name' => $field_name,
+      'available_fields' => $available_fields,
+    ];
+  }
+
+
+  /**
+   * Gets processed nested child field names with unnecessary fields removed.
+   *
+   * Filters out internal relationship fields that shouldn't be exposed to users,
+   * returning only the relevant child fields for a parent field.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent field name.
+   *
+   * @return array
+   *   Array of processed child field names.
+   */
+  protected function getAvailableFieldNames(Index $index, string $sapi_fld_nm): array {
+    $child_fld_nms = $this->nestedFieldHelper->getAllNestedChildFieldNames($index, $sapi_fld_nm);
+    if (empty($child_fld_nms)) {
+      return [];
+    }
+
+    // Validate relationship structure - all required entity fields must exist
+    $related_entity_flds = $this->fieldNameResolver->getRelatedEntityFields();
+    foreach ($related_entity_flds as $related_entity_fld) {
+      if (!in_array($related_entity_fld, $child_fld_nms)) {
+        // Misconfigured relationship object
+        return [];
+      }
+    }
+
+    // Build removal list
+    $remove = $related_entity_flds;
+
+    // Handle relation type field
+    $relation_type_fld = $this->fieldNameResolver->getRelationTypeField();
+    if (in_array($relation_type_fld, $child_fld_nms)) {
+      $remove[] = $relation_type_fld;
+    } else {
+      // Add calculated relation type fields to removal list
+      $remove = array_merge($remove, $this->calculatedFieldHelper->getCalculatedFieldNames('relation_type', NULL, TRUE));
+    }
+
+    // Filter and return (array_values to reindex)
+    return array_values(array_diff($child_fld_nms, $remove));
+  }
+
 
   /**
    * Gets form state path prefix for Views context.

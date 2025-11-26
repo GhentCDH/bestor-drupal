@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
 use Drupal\search_api\Entity\Index;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;

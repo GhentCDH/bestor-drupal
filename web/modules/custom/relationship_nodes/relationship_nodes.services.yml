@@ -71,10 +71,12 @@ services:
       - '@relationship_nodes.relation_bundle_settings_manager'
       - '@relationship_nodes.foreign_key_field_resolver'
       - '@relationship_nodes.relation_form_helper'
-  relationship_nodes.nested_field_configurator:
-    class: Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldConfiguratorBase
+  relationship_nodes.nested_field_formatter_configurator:
+    class: Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldFormatterConfigurator
     arguments:
       - '@relationship_nodes.field_name_resolver'
+      - '@entity_field.manager'
+      - '@relationship_nodes.calculated_field_helper'
   relationship_nodes.relation_entity_form_handler:
     class: Drupal\relationship_nodes\RelationEntity\UserInterface\RelationEntityFormHandler
     arguments:
@@ -97,6 +99,7 @@ services:
       - '@relationship_nodes.relation_node_info_service'
       - '@relationship_nodes.field_name_resolver'
       - '@entity_type.manager'
+      - '@relationship_nodes.calculated_field_helper'
   relationship_nodes.node_type_form_alter:
     class: Drupal\relationship_nodes\RelationEntityType\AdminUserInterface\FormAlter\NodeTypeFormAlter
     arguments:
@@ -143,6 +146,8 @@ services:
     class: Drupal\relationship_nodes\RelationEntityType\RelationField\VirtualFieldAdder
     arguments:
       - '@relationship_nodes.relation_bundle_info_service'
+  relationship_nodes.calculated_field_helper:
+    class: Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper
   relationship_nodes.relation_settings_cleanup_service:
     class: Drupal\relationship_nodes\RelationEntityType\RelationSettingsCleanUpService
     arguments:

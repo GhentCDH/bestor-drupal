@@ -171,7 +171,8 @@ class MirrorTermProvider{
         continue;
       }
 
-      $mirror_label = reset($this->getMirrorArray($term_storage, $term_id, $label));
+      $mirror_array = $this->getMirrorArray($term_storage, $term_id, $label);
+      $mirror_label = reset($mirror_array);
 
       $mirror_options[$term_id] = $mirror_label;
         

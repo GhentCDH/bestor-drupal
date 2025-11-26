@@ -8,9 +8,8 @@ use Drupal\views\ResultRow;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFieldConfigurator;
 
 
@@ -21,7 +20,6 @@ use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFieldConfigura
  */
 class RelationshipField extends SearchApiStandard implements ContainerFactoryPluginInterface {
     
-  protected NestedFieldHelper $nestedFieldHelper;
   protected NestedFieldViewsFieldConfigurator $fieldConfigurator;
   protected ChildFieldEntityReferenceHelper $childReferenceHelper;
   protected CalculatedFieldHelper $calculatedFieldHelper;
@@ -35,8 +33,6 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
    *    The plugin ID.
    * @param mixed $plugin_definition
    *    The plugin definition.
-   * @param NestedFieldHelper $nestedFieldHelper
-   *    The nested field helper service.
    * @param NestedFieldViewsFieldConfigurator $fieldConfigurator
    *    The field configurator service.
    * @param ChildFieldEntityReferenceHelper $childReferenceHelper
@@ -48,13 +44,11 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    NestedFieldHelper $nestedFieldHelper,
     NestedFieldViewsFieldConfigurator $fieldConfigurator,
     ChildFieldEntityReferenceHelper $childReferenceHelper,
     CalculatedFieldHelper $calculatedFieldHelper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->nestedFieldHelper = $nestedFieldHelper;
     $this->fieldConfigurator = $fieldConfigurator;
     $this->childReferenceHelper = $childReferenceHelper;
     $this->calculatedFieldHelper = $calculatedFieldHelper;
@@ -69,10 +63,9 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('relationship_nodes_search.nested_field_helper'),
       $container->get('relationship_nodes_search.nested_field_views_field_configurator'),
       $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
-      $container->get('relationship_nodes_search.calculated_field_helper')
+      $container->get('relationship_nodes.calculated_field_helper')
     );
   }
 
@@ -100,11 +93,11 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
       $this->definition,
       $form
     );
+
     if (!$config) {
       return;
     }
 
-    // Use new high-level method to build the form
     $this->fieldConfigurator->buildFieldDisplayForm(
       $form,
       $config['index'],
@@ -135,7 +128,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
    */
   public function getValue(ResultRow $values, $field = NULL) {
     $index = $this->getIndex();
-    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);      
+    $sapi_fld_nm = $this->fieldConfigurator->getPluginParentFieldName($this->definition);      
     if (!$index instanceof Index || empty($sapi_fld_nm)) {
       return parent::getValue($values, $field);
     }
@@ -233,7 +226,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
    */
   protected function prepareTemplateData(array $nested_data): array {
     $index = $this->getIndex();
-    $sapi_fld_nm = $this->nestedFieldHelper->getPluginParentFieldName($this->definition);
+    $sapi_fld_nm = $this->fieldConfigurator->getPluginParentFieldName($this->definition);
     
     if (!$index instanceof Index || empty($sapi_fld_nm)) {
       return $this->getEmptyTemplateData();

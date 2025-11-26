@@ -5,7 +5,7 @@ namespace Drupal\relationship_nodes_search\Views\Widget;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\search_api\Entity\Index;
 use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\Views\Widget\NestedFilterDropdownOptionsProvider;
 
 

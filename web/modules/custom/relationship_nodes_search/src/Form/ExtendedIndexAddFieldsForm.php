@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Utility\Utility;
 use Drupal\search_api\Item\Field;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\relationship_nodes_search\FieldHelper\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
 
 /**
@@ -31,7 +31,7 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->fieldNameResolver = $container->get('relationship_nodes.field_name_resolver');
-    $instance->calculatedFieldHelper = $container->get('relationship_nodes_search.calculated_field_helper');
+    $instance->calculatedFieldHelper = $container->get('relationship_nodes.calculated_field_helper');
     return $instance;
   }
 

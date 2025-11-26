@@ -43,19 +43,20 @@ class MirrorSelectWidget extends OptionsSelectWidget {
    *   The widget settings.
    * @param array $third_party_settings
    *   Third party settings.
-   * @param ElementInfoManagerInterface|null $elementInfoManager
-   *   The element info manager.
    * @param MirrorTermProvider $mirrorProvider
    *   The mirror term provider.
+   * @param ElementInfoManagerInterface|null $elementInfoManager
+   *   The element info manager.
    */
   public function __construct(
-    $plugin_id, $plugin_definition, 
+    $plugin_id,
+    $plugin_definition, 
     FieldDefinitionInterface $field_definition, 
     array $settings, 
-    array $third_party_settings, 
-    ?ElementInfoManagerInterface $elementInfoManager = NULL,
-    MirrorTermProvider $mirrorProvider
-    ) {
+    array $third_party_settings,
+    MirrorTermProvider $mirrorProvider,
+    ?ElementInfoManagerInterface $elementInfoManager = NULL
+  ) {
     parent::__construct(
       $plugin_id, 
       $plugin_definition, 
@@ -78,8 +79,8 @@ class MirrorSelectWidget extends OptionsSelectWidget {
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
-      $container->get('plugin.manager.element_info'),
-      $container->get('relationship_nodes.mirror_term_provider')
+      $container->get('relationship_nodes.mirror_term_provider'),
+      $container->get('plugin.manager.element_info')
     );
   }
     

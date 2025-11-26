@@ -2,16 +2,28 @@
 
 namespace Drupal\relationship_nodes\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationshipDataDisplayBuilder;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldFormatterConfigurator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'relationship_formatter' formatter.
+ *
+ * Displays relationship nodes with their connected entities and metadata.
+ * 
+ * Supports:
+ * - Calculated fields (resolved at render time based on viewing context)
+ * - Real fields (direct values from relation nodes)
+ * - Sorting and grouping of relationships
+ * - Configurable display modes (raw ID, label, link)
+ * 
+ * The formatter uses NestedFieldFormatterConfigurator to build configuration
+ * forms and RelationshipDataDisplayBuilder to process and render the data.
  *
  * @FieldFormatter(
  *   id = "relationship_formatter",
@@ -25,44 +37,44 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RelationshipFormatter extends EntityReferenceFormatterBase implements ContainerFactoryPluginInterface {
 
   protected RelationshipDataDisplayBuilder $displayBuilder;
-  protected FieldNameResolver $fieldNameResolver;
+  protected NestedFieldFormatterConfigurator $configurator;
 
   /**
    * Constructs a RelationshipFormatter object.
    *
    * @param string $plugin_id
-   *   The plugin ID.
+   *   The plugin_id for the formatter.
    * @param mixed $plugin_definition
-   *   The plugin definition.
-   * @param FieldDefinitionInterface $field_definition
-   *   The field definition.
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   *   The definition of the field to which the formatter is associated.
    * @param array $settings
    *   The formatter settings.
    * @param string $label
-   *   The label display setting.
+   *   The formatter label display setting.
    * @param string $view_mode
    *   The view mode.
    * @param array $third_party_settings
-   *   Third party settings.
-   * @param RelationshipDataDisplayBuilder $displayBuilder
-   *   The relationship data display builder.
-   * @param FieldNameResolver $field_name_resolver
-   *   The field name resolver.
+   *   Any third party settings.
+   * @param \Drupal\relationship_nodes\RelationEntity\UserInterface\RelationshipDataDisplayBuilder $displayBuilder
+   *   The relationship data display builder service.
+   * @param \Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldFormatterConfigurator $configurator
+   *   The nested field formatter configurator service.
    */
   public function __construct(
     $plugin_id,
     $plugin_definition,
-    $field_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
     $label,
     $view_mode,
     array $third_party_settings,
     RelationshipDataDisplayBuilder $displayBuilder,
-    FieldNameResolver $field_name_resolver
+    NestedFieldFormatterConfigurator $configurator
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->displayBuilder = $displayBuilder;
-    $this->fieldNameResolver = $field_name_resolver;
+    $this->configurator = $configurator;
   }
 
   /**
@@ -78,73 +90,123 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
       $configuration['view_mode'],
       $configuration['third_party_settings'],
       $container->get('relationship_nodes.relationship_data_display_builder'),
-      $container->get('relationship_nodes.field_name_resolver')
+      $container->get('relationship_nodes.nested_field_formatter_configurator')
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function defaultSettings() {
     return [
-      'show_relation_type' => TRUE,
-      'show_field_labels' => TRUE,
-      'link_entities' => TRUE,
-      'group_by_type' => FALSE,
-      'separator' => ', ',
+      'field_settings' => [],
+      'sort_by_field' => '',
+      'group_by_field' => '',
     ] + parent::defaultSettings();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $elements = parent::settingsForm($form, $form_state);
 
-    $elements['show_relation_type'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Show relation type'),
-      '#default_value' => $this->getSetting('show_relation_type'),
+    // Get relation bundle
+    $relation_bundle = $this->getRelationBundle();
+    if (empty($relation_bundle)) {
+      $this->configurator->addErrorMessage($elements, $this->t('Cannot determine relation bundle for this field.'));
+      return $elements;
+    }
+
+    // Get available field names using configurator
+    $field_names = $this->configurator->getAvailableFieldNames($relation_bundle);
+    if (empty($field_names)) {
+      $this->configurator->addErrorMessage($elements, $this->t('No relationship fields available.'));
+      return $elements;
+    }
+
+    // Ensure settings structure exists
+    $settings = $this->getSettings();
+    if (!isset($settings['field_settings'])) {
+      $settings['field_settings'] = [];
+    }
+
+    // PREPARE: Get field configurations with formatter context
+    $field_configs = $this->configurator->prepareFormatterFieldConfigurations(
+      $relation_bundle,
+      $field_names,
+      $settings
+    );
+
+    // Extract global settings
+    $global_settings = [
+      'sort_by_field' => $this->getSetting('sort_by_field'),
+      'group_by_field' => $this->getSetting('group_by_field'),
     ];
 
-    $elements['show_field_labels'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Show field labels'),
-      '#default_value' => $this->getSetting('show_field_labels'),
-    ];
-
-    $elements['link_entities'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Link to entities'),
-      '#default_value' => $this->getSetting('link_entities'),
-    ];
-
-    $elements['group_by_type'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Group by relation type'),
-      '#default_value' => $this->getSetting('group_by_type'),
-    ];
-
-    $elements['separator'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Separator'),
-      '#default_value' => $this->getSetting('separator'),
-      '#size' => 10,
-    ];
+    // RENDER: Build the configuration form
+    $this->configurator->buildConfigurationForm(
+      $elements,
+      $field_configs,
+      $global_settings,
+      [
+        'wrapper_key' => NULL,
+        'field_settings_key' => 'field_settings',
+        'show_template' => FALSE,
+        'show_grouping' => TRUE,
+        'show_sorting' => TRUE,
+      ]
+    );
 
     return $elements;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function settingsSummary() {
-    $summary = [];
+    $summary = parent::settingsSummary();
 
-    if ($this->getSetting('show_relation_type')) {
-      $summary[] = $this->t('Show relation type');
-    }
-    if ($this->getSetting('link_entities')) {
-      $summary[] = $this->t('Link to entities');
-    }
-    if ($this->getSetting('group_by_type')) {
-      $summary[] = $this->t('Group by type');
+    $relation_bundle = $this->getRelationBundle();
+    if (empty($relation_bundle)) {
+      $summary[] = $this->t('Configuration error');
+      return $summary;
     }
 
-    return $summary;
+    // Get available field names using configurator
+    $field_names = $this->configurator->getAvailableFieldNames($relation_bundle);
+    if (empty($field_names)) {
+      $summary[] = $this->t('No fields configured');
+      return $summary;
+    }
+
+    // Ensure settings structure exists
+    $settings = $this->getSettings();
+    if (!isset($settings['field_settings'])) {
+      $settings['field_settings'] = [];
+    }
+
+    // Prepare field configurations
+    $field_configs = $this->configurator->prepareFormatterFieldConfigurations(
+      $relation_bundle,
+      $field_names,
+      $settings
+    );
+
+    // Build summary using configurator
+    $global_settings = [
+      'sort_by_field' => $this->getSetting('sort_by_field'),
+      'group_by_field' => $this->getSetting('group_by_field'),
+    ];
+
+    $formatter_summary = $this->configurator->buildSettingsSummary($field_configs, $global_settings);
+
+    return array_merge($summary, $formatter_summary);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = [];
 
@@ -164,24 +226,62 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
       return $elements;
     }
 
-    // Build data using shared service
-    $relationships = $this->displayBuilder->buildRelationshipData($relation_nodes, [
-      'show_relation_type' => $this->getSetting('show_relation_type'),
-      'link_entities' => $this->getSetting('link_entities'),
-      'separator' => $this->getSetting('separator'),
-    ]);
-
-    // Group if configured
-    $grouped = [];
-    if ($this->getSetting('group_by_type')) {
-      $grouped = $this->displayBuilder->groupByRelationType($relationships);
+    // Get relation bundle
+    $relation_bundle = $this->getRelationBundle();
+    if (empty($relation_bundle)) {
+      return $elements;
     }
+
+    // Get available field names using configurator
+    $field_names = $this->configurator->getAvailableFieldNames($relation_bundle);
+    if (empty($field_names)) {
+      return $elements;
+    }
+
+    // Ensure settings structure exists
+    $settings = $this->getSettings();
+    if (!isset($settings['field_settings'])) {
+      $settings['field_settings'] = [];
+    }
+
+    // Prepare field configurations
+    $field_configs = $this->configurator->prepareFormatterFieldConfigurations(
+      $relation_bundle,
+      $field_names,
+      $settings
+    );
+
+    // Get viewing context (the entity that owns this field)
+    $viewing_node = $items->getEntity();
+
+    // Build relationship data with viewing context for calculated fields
+    $relationships = $this->displayBuilder->buildRelationshipData(
+      $relation_nodes,
+      [
+        'field_configs' => $field_configs,
+        'viewing_node' => $viewing_node,
+      ]
+    );
+
+    // Apply sorting if configured
+    if ($sort_field = $this->getSetting('sort_by_field')) {
+      $relationships = $this->displayBuilder->sortByField($relationships, $sort_field);
+    }
+
+    // Apply grouping if configured
+    $grouped = [];
+    if ($group_field = $this->getSetting('group_by_field')) {
+      $grouped = $this->displayBuilder->groupByField($relationships, $group_field);
+    }
+
+    // Build field metadata for template
+    $fields_metadata = $this->configurator->buildFieldsMetadata($field_configs);
 
     $elements[0] = [
       '#theme' => 'relationship_field',
       '#relationships' => $grouped ? [] : $relationships,
       '#grouped' => $grouped,
-      '#fields' => $this->buildFieldsMetadata(),
+      '#fields' => $fields_metadata,
       '#summary' => [
         'total' => count($relation_nodes),
         'has_groups' => !empty($grouped),
@@ -195,35 +295,23 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
     return $elements;
   }
 
-  protected function buildFieldsMetadata(): array {
-    $fields = [];
-    $related_entity_fields = $this->fieldNameResolver->getRelatedEntityFields();
-    $show_labels = $this->getSetting('show_field_labels');
-
-    $weight = 0;
-    foreach ($related_entity_fields as $field_name) {
-      $fields[$field_name] = [
-        'name' => $field_name,
-        'label' => $this->formatFieldLabel($field_name),
-        'hide_label' => !$show_labels,
-        'weight' => $weight++,
-      ];
+  /**
+   * Gets the relation bundle from the field definition.
+   * 
+   * Extracts the target bundle configuration from the entity reference field.
+   * For relationship formatters, this should be a relation node bundle.
+   *
+   * @return string|null
+   *   The relation bundle machine name, or NULL if not properly configured.
+   */
+  protected function getRelationBundle(): ?string {
+    $target_bundles = $this->fieldDefinition->getSetting('handler_settings')['target_bundles'] ?? [];
+    
+    if (empty($target_bundles)) {
+      return NULL;
     }
 
-    if ($this->getSetting('show_relation_type')) {
-      $fields['relation_type'] = [
-        'name' => 'relation_type',
-        'label' => $this->t('Type'),
-        'hide_label' => !$show_labels,
-        'weight' => -1,
-      ];
-    }
-
-    return $fields;
-  }
-
-  protected function formatFieldLabel(string $field_name): string {
-    $label = str_replace(['rn_', '_'], ['', ' '], $field_name);
-    return ucwords($label);
+    // Get first target bundle (relation bundle)
+    return reset($target_bundles);
   }
 }
