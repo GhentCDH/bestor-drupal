@@ -10,8 +10,8 @@ _core:
   default_config_hash: bkXrlEqyl1SXlHWCtpnGKex7fy_CbrZUV9yrnpZhe3s
 id: jakarta_breadcrumbs
 theme: jakarta
-region: content
-weight: -5
+region: precontent
+weight: -7
 provider: null
 plugin: system_breadcrumb_block
 settings:
@@ -19,4 +19,8 @@ settings:
   label: Breadcrumbs
   label_display: '0'
   provider: system
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/*'

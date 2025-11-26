@@ -48,25 +48,28 @@
 <div class="page">
     {% if page.precontent %}
         <div class="page-precontent">
-            <div class="container">
-                {{ page.precontent }}
-            </div>
+          {{ page.precontent }}
         </div>
     {% endif %}
     <main class="content" role="main">
         <div class="main">
-            <div class="visually-hidden"><a id="main-content" tabindex="-1"></a></div>
-            {% if page.help %}
-                <div class="help">
-                    {{ page.help }}
-                </div>
-            {% endif %}
-          {% if page.sidebar %}
-            <div class="page-sidebar">
-              {{ page.sidebar }}
-            </div>
+          <div class="visually-hidden"><a id="main-content" tabindex="-1"></a></div>
+          {% if page.help %}
+              <div class="help">
+                  {{ page.help }}
+              </div>
           {% endif %}
-            {{ page.content }}
+          <div class="page-content-wrapper {%- if page.sidebar %} container {%- endif %}">
+            {% if page.sidebar %}
+              <div class="page-sidebar">
+                {{ page.sidebar }}
+              </div>
+            {% endif %}
+
+            <div class="page-content">
+              {{ page.content }}
+            </div>
+          </div>
         </div>
     </main>
     {% if page.subcontent %}

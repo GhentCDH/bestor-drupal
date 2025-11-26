@@ -8,7 +8,7 @@ _core:
   default_config_hash: 0wp40IlneQ7aL73yYH8uecnISk55xnGbzU3xxLdjPV8
 id: jakarta_page_title
 theme: jakarta
-region: content
+region: precontent
 weight: -6
 provider: null
 plugin: page_title_block

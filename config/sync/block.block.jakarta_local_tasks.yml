@@ -9,7 +9,7 @@ _core:
 id: jakarta_local_tasks
 theme: jakarta
 region: content
-weight: -9
+weight: -8
 provider: null
 plugin: local_tasks_block
 settings:

@@ -1,0 +1,33 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Grid'
+status: stable
+group: Organisms
+description: "A component that displays content in a grid."
+props:
+  type: object
+  properties:
+    columns:
+      title: 'Columns'
+      description: "Choose the columns of the grid."
+      type: string
+      examples:
+        - 1
+      enum:
+        - 2
+        - 3
+        - 4
+      'meta:enum':
+        2: '2'
+        3: '3'
+        4: '4'
+      default: 3
+    c_grid_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  grid_items:
+    title: 'Grid Items'
+    description: 'The grid items to display.'

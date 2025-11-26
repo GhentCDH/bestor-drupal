@@ -21,36 +21,38 @@
 #}
 
 <div data-drupal-messages>
-  {% for type, messages in message_list %}
-    {% embed  'jakarta:c-messages' with {
-      layout: type,
-    } %}
-      {% block content %}
-        <div{{ attributes
-          .setAttribute('data-drupal-selector', 'messages')
-          .setAttribute('role', 'contentinfo')
-          .setAttribute('aria-label', status_headings[type])
-        }}>
-          <div class="c-messages__container" data-drupal-selector="messages-container"{% if type == 'error' %} role="alert"{% endif %}>
-            {% if status_headings[type] %}
-              <h2 class="c-messages__header visually-hidden">{{ status_headings[type] }}</h2>
-            {% endif %}
-            <div class="c-messages__content h-text-wysiwyg">
-              {% if messages|length > 1 %}
-                <ul class="c-messages__list">
-                  {% for message in messages %}
-                    <li class="c-messages__item">{{ message }}</li>
-                  {% endfor %}
-                </ul>
-              {% else %}
-                {{ messages|first }}
+  <div class="container">
+    {% for type, messages in message_list %}
+      {% embed  'jakarta:c-messages' with {
+        layout: type,
+      } %}
+        {% block content %}
+          <div{{ attributes
+            .setAttribute('data-drupal-selector', 'messages')
+            .setAttribute('role', 'contentinfo')
+            .setAttribute('aria-label', status_headings[type])
+          }}>
+            <div class="c-messages__container" data-drupal-selector="messages-container"{% if type == 'error' %} role="alert"{% endif %}>
+              {% if status_headings[type] %}
+                <h2 class="c-messages__header visually-hidden">{{ status_headings[type] }}</h2>
               {% endif %}
+              <div class="c-messages__content h-text-wysiwyg">
+                {% if messages|length > 1 %}
+                  <ul class="c-messages__list">
+                    {% for message in messages %}
+                      <li class="c-messages__item">{{ message }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  {{ messages|first }}
+                {% endif %}
+              </div>
             </div>
           </div>
-        </div>
-        {# Remove type specific classes. #}
-        {% set attributes = attributes.removeClass(classes) %}
-      {% endblock %}
-    {% endembed %}
-  {% endfor %}
+          {# Remove type specific classes. #}
+          {% set attributes = attributes.removeClass(classes) %}
+        {% endblock %}
+      {% endembed %}
+    {% endfor %}
+  </div>
 </div>
