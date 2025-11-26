@@ -1,0 +1,133 @@
+{# c-structured-layout.story.twig #}
+{% set top %}
+  {% set media %}
+    <img loading="lazy" src="https://picsum.photos/id/24/450/354" width="450" height="354" alt="Test image">
+  {% endset %}
+  {% set identity_kit_list %}
+    {% set values %}
+      <a href="#">{Naam}</a>
+    {% endset %}
+    {{ include('jakarta:c-identity-kit-item', {
+      title: '/Discipline',
+      values,
+    }, with_context = false) }}
+    {% set values_2 %}
+      {waarde}, {waarde}, {waarde}, {waarde}, {waarde}
+    {% endset %}
+    {{ include('jakarta:c-identity-kit-item', {
+      title: '/Specialisatie',
+      values: values_2,
+    }, with_context = false) }}
+  {% endset %}
+  {{ include('jakarta:c-identity-kit', {
+    tag: 'Concept',
+    media,
+    identity_kit_list,
+    attr_variant: 'default',
+  }, with_context = false) }}
+{% endset %}
+{% set content %}
+  {{ include('jakarta:c-meta', {
+    date: '09/11/2025',
+    read_time: '5 min.',
+  }, with_context = false) }}
+  {% set title %}
+    Introduction
+  {% endset %}
+  {% set text %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+  {% endset %}
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'intro',
+    columns: '1',
+  }) }}
+  {% set title %}
+    Default - 2 columns
+  {% endset %}
+  {% set text %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+  {% endset %}
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'default',
+    columns: '2',
+  }) }}
+  {% set media %}
+    <img loading="lazy" src="https://picsum.photos/id/24/400/510" width="510" height="400" alt="Test image">
+  {% endset %}
+  {% set text %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id viverra nibh. Phasellus non dapibus tellus, sit amet maximus urna. Nunc eu augue tincidunt, pulvinar lacus ac, ullamcorper augue. Aliquam suscipit sem elit, ut fermentum tellus malesuada nec. Curabitur maximus placerat orci id bibendum. Aliquam ullamcorper lectus eu leo consectetur hendrerit. Fusce gravida elementum tortor, aliquet fermentum dui porttitor sit amet. Maecenas consequat laoreet metus a mattis. Cras ut magna et quam congue volutpat eget eu neque. Curabitur ut enim sollicitudin, eleifend nibh ut.</p>
+  {% endset %}
+  {{ include('jakarta:c-text-media', {
+    media,
+    text,
+    media_position: 'left',
+    media_layout: '50_50',
+  }) }}
+{% endset %}
+{% set sidebar %}
+  {% set buttons %}
+    {{ include('jakarta:c-button', {
+      html_tag: 'a',
+      attr_variant: 'default',
+      color: 'primary',
+      title: 'Suggestion',
+    }, with_context = false) }}
+    {{ include('jakarta:c-button', {
+      html_tag: 'a',
+      attr_variant: 'default',
+      color: 'primary',
+      title: 'Quote',
+    }, with_context = false) }}
+  {% endset %}
+  {% set table_of_contents %}
+    {% set dropdown_items %}
+      <ul class="links">
+        <li><a href="#">Titel 1</a></li>
+        <li><a href="#">Titel 2</a></li>
+        <li><a href="#">Titel 3</a></li>
+      </ul>
+    {% endset %}
+    {{ include('jakarta:c-dropdown', {
+      toggle: 'Inhoudstafel',
+      dropdown_items,
+    }, with_context = false) }}
+  {% endset %}
+  {% set related_items %}
+    {% set items %}
+      <ul class="links">
+        <li><a href="#">Naam concept</a> (type relatie)</li>
+        <li><a href="#">Naam concept</a> (type relatie)</li>
+        <li><a href="#">Naam concept</a> (type relatie)</li>
+      </ul>
+    {% endset %}
+    {{ include('jakarta:c-related-items', {
+      title: 'Related items',
+      items,
+    }, with_context = false) }}
+    {% set items_2 %}
+      <ul class="links">
+        <li><a href="#">Naam document</a> (type relatie)</li>
+        <li><a href="#">Naam document</a> (type relatie)</li>
+        <li><a href="#">Naam document</a> (type relatie)</li>
+      </ul>
+    {% endset %}
+    {{ include('jakarta:c-related-items', {
+      title: 'Related items',
+      items: items_2,
+    }, with_context = false) }}
+  {% endset %}
+  {{ include('jakarta:c-lemma-sidebar', {
+    buttons,
+    table_of_contents,
+    related_items,
+  }, with_context = false) }}
+{% endset %}
+{{ include('jakarta:c-structured-layout', {
+  top,
+  content,
+  sidebar
+}, with_context = false) }}

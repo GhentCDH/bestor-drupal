@@ -14,9 +14,13 @@
     color: var(--color-text);
   }
 
+  #{$self}__media-wrapper {
+    position: relative;
+    flex-shrink: 0;
+  }
+
   #{$self}__media {
     overflow: hidden;
-    flex-shrink: 0;
 
     img {
       transition: var(--transition-eased);
@@ -71,8 +75,6 @@
 
   // HORIZONTAL.
   &--horizontal {
-    position: relative;
-
     #{$self}__link {
       @media screen and (min-width: variables.$breakpoints-mobile-large) {
         flex-direction: row;
@@ -95,9 +97,11 @@
 
   // VERTICAL.
   &--vertical {
-    position: relative;
+    height: 100%;
 
     #{$self}__link {
+      height: 100%;
+
       @media screen and (min-width: variables.$breakpoints-mobile-large) {
         gap: functions.rem(28px);
       }
@@ -110,10 +114,14 @@
       z-index: 5;
     }
 
-    #{$self}__media {
+    #{$self}__media-wrapper {
       @media screen and (min-width: variables.$breakpoints-mobile-large) {
         margin-bottom: functions.rem(12px);
       }
+    }
+
+    #{$self}__meta {
+      margin-top: auto;
     }
 
     #{$self}__authors {
@@ -123,7 +131,6 @@
 
   // VERTICAL OUTLINE.
   &--vertical-outline {
-    position: relative;
     height: 100%;
 
     #{$self}__link {
@@ -171,5 +178,10 @@
     #{$self}__authors {
       margin-bottom: functions.rem(7px);
     }
+  }
+
+  // NO MEDIA.
+  &.no-media {
+    position: relative;
   }
 }

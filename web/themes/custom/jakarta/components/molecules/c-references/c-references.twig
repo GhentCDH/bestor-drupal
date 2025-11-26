@@ -14,7 +14,7 @@
 ]|merge(c_references_utility_classes ?: []) %}
 
 {% block component_content %}
-  <div class="{{ component_name }}__inner container">
+  <div class="{{ component_name }}__wrapper container">
     {% if title %}
       <div class="{{ component_name }}__title">
         {{ include('jakarta:c-heading', {

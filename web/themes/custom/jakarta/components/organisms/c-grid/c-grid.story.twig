@@ -1,0 +1,76 @@
+{# c-grid.story.twig #}
+{% set tag %}
+  {{ include('jakarta:c-tag', {
+    attr_variant: 'corner_down',
+    color: 'primary',
+    content: 'News about Bestor',
+  }, with_context = false) }}
+{% endset %}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/320/211" width="320" height="211" alt="Test image">
+{% endset %}
+{% set authors %}
+  <ul>
+    <li>Naam naam</li>
+  </ul>
+{% endset %}
+{% set text %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+{% endset %}
+{% set tag_2 %}
+  {{ include('jakarta:c-tag', {
+    attr_variant: 'corner_up',
+    color: 'beige',
+    content: 'Concept',
+  }, with_context = false) }}
+{% endset %}
+{% set media_3 %}
+  <img loading="lazy" src="https://picsum.photos/id/24/402/456" width="402" height="456" alt="Test image">
+{% endset %}
+{% set authors_2 %}
+  <ul>
+    <li>Naam naam</li>
+    <li>Naam naam</li>
+  </ul>
+{% endset %}
+
+{% set card_first %}
+  {{ include('jakarta:c-card', {
+    tag: tag_2,
+    media: media_3,
+    title: 'Name publications',
+    authors: authors_2,
+    read_time: '5 min.',
+    text,
+    url: '#',
+    attr_variant: 'vertical',
+  }, with_context = false) }}
+{% endset %}
+{% set card_second %}
+  {{ include('jakarta:c-card', {
+    tag,
+    media,
+    date: '22.05.25',
+    title: 'Titel van nieuwsbericht. Deze zijn soms lang en kunnen over 2 lijnen worden weergegeven',
+    text,
+    url: '#',
+    attr_variant: 'horizontal',
+  }, with_context = false) }}
+{% endset %}
+
+{# no background #}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-grid', {
+    grid_items: [card_second, card_second, card_second, card_second, card_second, card_second],
+    columns: 2,
+  }, with_context = false) }}
+</div>
+{# with background #}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-grid', {
+    title: 'In de kijker',
+    grid_items: [card_first, card_first, card_first, card_first, card_first, card_first],
+    columns: 3,
+    background_color: 'tertiary',
+  }, with_context = false) }}
+</div>

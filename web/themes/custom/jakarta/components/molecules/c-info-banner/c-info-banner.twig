@@ -8,7 +8,10 @@
 {% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
 
 {% set component_name = 'c-info-banner' %}
-{% set custom_component_classes = c_info_banner_utility_classes %}
+
+{% set custom_component_classes = [
+  'h-bg-color-grey-light',
+]|merge(c_info_banner_utility_classes ?: []) %}
 
 {% block component_content %}
   <div class="{{ component_name }}__wrapper container">

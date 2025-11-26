@@ -5,9 +5,11 @@
 .c-text {
   $self: &;
 
+  padding-block: functions.rem(60px);
+
   &--intro {
     #{$self}__text {
-      font-size: functions.rem(18px);
+      font-size: clamp(var(--font-size-base), 1.04vw, 18px);
     }
   }
 
@@ -22,5 +24,15 @@
         column-gap: var(--grid-gutter);
       }
     }
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    padding-block: functions.rem(95px);
+  }
+
+  + .c-text,
+  + .c-text-media,
+  + .c-media-1-item {
+    padding-block-start: 0;
   }
 }

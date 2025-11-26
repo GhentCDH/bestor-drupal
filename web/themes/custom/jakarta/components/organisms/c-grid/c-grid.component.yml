@@ -21,6 +21,17 @@ props:
         3: '3'
         4: '4'
       default: 3
+    background_color:
+      title: 'Background Color'
+      description: "Choose the background color of the grid."
+      type: string
+      enum:
+        - none
+        - tertiary
+      'meta:enum':
+        none: 'None'
+        tertiary: 'Tertiary'
+      default: none
     c_grid_utility_classes:
       type: array
       items:
@@ -28,6 +39,9 @@ props:
       title: Utility classes
       description: 'Additional utility classes.'
 slots:
+  title:
+    title: 'Title'
+    description: 'The title to display.'
   grid_items:
     title: 'Grid Items'
     description: 'The grid items to display.'

@@ -13,7 +13,7 @@
     }
 
     @media screen and (min-width: variables.$breakpoints-desktop) {
-      gap: functions.rem(80px);
+      gap: var(--grid-gutter);
     }
   }
 

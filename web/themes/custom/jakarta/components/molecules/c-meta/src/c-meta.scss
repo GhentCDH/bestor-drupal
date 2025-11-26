@@ -12,6 +12,7 @@
   align-items: center;
   justify-content: space-between;
   gap: functions.rem(20px);
+  margin-block-end: functions.rem(40px);
 
   #{$self}__read-time {
     display: flex;
@@ -23,5 +24,15 @@
       font-size: functions.rem(24px);
       line-height: 1;
     }
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    margin-block-end: functions.rem(65px);
+  }
+
+  + .c-text,
+  + .c-text-media,
+  + .c-media-1-item {
+    padding-block-start: 0;
   }
 }
