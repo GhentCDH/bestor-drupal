@@ -1,0 +1,53 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-announcements {
+  $self: &;
+
+  padding-block: functions.rem(60px);
+
+  #{$self}__wrapper {
+    @include mixins.grid-wrapper(0);
+  }
+
+  #{$self}__title,
+  #{$self}__tabs,
+  #{$self}__sidebar {
+    @include mixins.grid-item(4);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-item(6);
+    }
+
+  }
+
+  #{$self}__title {
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(24);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(22);
+      @include mixins.grid-item-start(2);
+    }
+  }
+
+  #{$self}__tabs {
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(13);
+      @include mixins.grid-item-start(2);
+    }
+  }
+
+  #{$self}__sidebar {
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(7);
+      @include mixins.grid-item-start(17);
+    }
+  }
+
+  @media screen and (min-width: variables.$breakpoints-tablet) {
+    padding-block: functions.rem(95px);
+  }
+}

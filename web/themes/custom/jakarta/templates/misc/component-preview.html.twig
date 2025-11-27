@@ -79,3 +79,99 @@
 
   </div>
 </div>
+
+{# c-announcements.story.twig #}
+{% set tabs %}
+  {% set content %}
+    {% set tag %}
+      {{ include('jakarta:c-tag', {
+        attr_variant: 'corner_down',
+        color: 'primary',
+        content: 'News about Bestor',
+      }, with_context = false) }}
+    {% endset %}
+    {% set media %}
+      <img loading="lazy" src="https://picsum.photos/id/24/320/211" width="320" height="211" alt="Test image">
+    {% endset %}
+    {% set authors %}
+      <ul>
+        <li>Naam naam</li>
+      </ul>
+    {% endset %}
+    {% set text %}
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+    {% endset %}
+    {{ include('jakarta:c-card', {
+      tag,
+      media,
+      date: '22.05.25',
+      title: 'Titel van nieuwsbericht. Deze zijn soms lang en kunnen over 2 lijnen worden weergegeven',
+      text,
+      url: '#',
+      attr_variant: 'horizontal',
+    }, with_context = false) }}
+    {{ include('jakarta:c-card', {
+      tag,
+      media,
+      date: '22.05.25',
+      title: 'Titel van nieuwsbericht. Deze zijn soms lang en kunnen over 2 lijnen worden weergegeven',
+      text,
+      url: '#',
+      attr_variant: 'horizontal',
+    }, with_context = false) }}
+  {% endset %}
+  {% set cta %}
+    {{ include('jakarta:c-button', {
+      html_tag: 'a',
+      attr_variant: 'default',
+      color: 'primary',
+      title: 'Read more',
+    }, with_context = false) }}
+  {% endset %}
+  {% set tab_items = {
+    'tab': {
+      'title': 'News',
+      'id': 'news',
+      content,
+      cta,
+    },
+    'tab_2': {
+      'title': 'Events',
+      'id': 'events',
+      'content': content,
+      cta,
+    }
+  } %}
+  {{ include('jakarta:c-tabs', {
+    tab_items,
+  }, with_context = false) }}
+{% endset %}
+{% set sidebar %}
+  {% set title %}
+    About Bestor
+  {% endset %}
+  {% set media %}
+    <img loading="lazy" src="https://picsum.photos/id/24/466/300" width="466" height="300" alt="Test image">
+  {% endset %}
+  {% set text %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+  {% endset %}
+  {% set link %}
+    {{ include('jakarta:c-button', {
+      html_tag: 'a',
+      attr_variant: 'default',
+      color: 'primary',
+      title: 'More about us',
+    }, with_context = false) }}
+  {% endset %}
+  {{ include('jakarta:c-info-box', {
+    title,
+    media,
+    text,
+  }) }}
+{% endset %}
+{{ include('jakarta:c-announcements', {
+  title: 'Announcements',
+  tabs,
+  sidebar,
+}, with_context = false) }}

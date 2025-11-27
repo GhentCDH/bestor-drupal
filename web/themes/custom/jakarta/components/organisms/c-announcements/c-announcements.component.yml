@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Announcements'
+status: stable
+group: Organisms
+description: "A component that displays an announcements."
+props:
+  type: object
+  properties:
+    c_announcements_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  title:
+    title: Title
+    description: 'The title to display.'
+  tabs:
+    title: Tabs
+    description: 'The tabs to display.'
+  sidebar:
+    title: Sidebar
+    description: 'The sidebar to display.'

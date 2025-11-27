@@ -1,0 +1,18 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Tabs'
+status: stable
+group: Organisms
+description: "A component that displays a tabs."
+props:
+  type: object
+  properties:
+    c_tabs_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  tab_items:
+    title: Tab Items
+    description: 'The tab items to display.'

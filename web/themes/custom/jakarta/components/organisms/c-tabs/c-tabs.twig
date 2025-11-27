@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Template for the component c-tabs.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-tabs' %}
+{% set custom_component_classes = c_tabs_utility_classes %}
+
+{% do attributes.setAttribute('data-tabs', '') %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__wrapper">
+    <div class="{{ component_name }}__tabs-list">
+      {% for tab in tab_items  %}
+        {{ include('jakarta:c-tab', {
+          title: tab['title'],
+          id: tab['id'],
+          is_active: loop.first,
+        }, with_context = false) }}
+      {% endfor %}
+    </div>
+    {% for tab in tab_items %}
+      <div class="{{ component_name }}__panel {%- if loop.first %} is-active {%- endif %}" id="{{ tab['id'] }}" data-tabs-panel="{{ tab['id'] }}">
+        <div class="{{ component_name }}__tab__content">
+          {{ tab['content'] }}
+        </div>
+        <div class="{{ component_name }}__tab__cta">
+          {{ tab['cta'] }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

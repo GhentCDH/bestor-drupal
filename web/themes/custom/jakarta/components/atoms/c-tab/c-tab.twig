@@ -15,6 +15,7 @@
 
 {% if id %}
   {% do attributes.setAttribute('id', id) %}
+  {% do attributes.setAttribute('data-tabs-toggle', id) %}
 {% endif %}
 
 {% block component_content %}
