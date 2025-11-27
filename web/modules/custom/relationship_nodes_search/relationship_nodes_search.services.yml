@@ -9,25 +9,22 @@ services:
       - '@entity_type.manager'
       - '@cache_tags.invalidator'
       - '@logger.factory'
-      - '@relationship_nodes.relation_bundle_settings_manager'
-      - '@relationship_nodes.relation_node_info_service'
+      - '@relationship_nodes.bundle_settings_manager'
+      - '@relationship_nodes.relation_info'
     tags:
       - {name: event_subscriber}
-  relationship_nodes_search.child_field_entity_reference_helper:
-    class: Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper
+  relationship_nodes_search.nested_field_result_views_parser:
+    class: Drupal\relationship_nodes_search\Views\Parser\NestedFieldResultViewsParser
     arguments:
       - '@entity_type.manager'
       - '@language_manager'
       - '@logger.factory'
-      - '@relationship_nodes_search.nested_field_helper'
-      - '@relationship_nodes.calculated_field_helper'
-  relationship_nodes_search.nested_field_helper:
-    class: Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper
+  relationship_nodes_search.nested_index_field_helper:
+    class: Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper
     arguments:
-      - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.calculated_field_helper'
   relationship_nodes_search.nested_facet_result_parser:
-    class: Drupal\relationship_nodes_search\Parser\NestedFacetResultParser
+    class: Drupal\relationship_nodes_search\QueryHelper\NestedFacetResultParser
   relationship_nodes_search.elastic_mapping_inspector:
     class: Drupal\relationship_nodes_search\QueryHelper\ElasticMappingInspector
     arguments:
@@ -44,7 +41,7 @@ services:
     arguments:
       - '@logger.channel.elasticsearch_connector'
       - '@relationship_nodes_search.nested_query_structure_builder'
-      - '@relationship_nodes_search.nested_field_helper'
+      - '@relationship_nodes_search.nested_index_field_helper'
   relationship_nodes_search.nested_query_filter_builder:
     class: Drupal\relationship_nodes_search\SearchAPI\Query\NestedFilterBuilder
     decorates: elasticsearch_connector.query_filter_builder
@@ -55,16 +52,14 @@ services:
     class: Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFieldConfigurator
     arguments:
       - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes_search.nested_field_helper'
+      - '@relationship_nodes_search.nested_index_field_helper'
       - '@relationship_nodes.calculated_field_helper'
-      - '@relationship_nodes_search.child_field_entity_reference_helper'
   relationship_nodes_search.nested_field_views_filter_configurator:
     class: Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFilterConfigurator
     arguments:
       - '@relationship_nodes.field_name_resolver'
-      - '@relationship_nodes_search.nested_field_helper'
+      - '@relationship_nodes_search.nested_index_field_helper'
       - '@relationship_nodes.calculated_field_helper'
-      - '@relationship_nodes_search.child_field_entity_reference_helper'
       - '@relationship_nodes_search.filter_operator_helper'
   relationship_nodes_search.nested_exposed_form_builder:
     class: Drupal\relationship_nodes_search\Views\Widget\NestedExposedFormBuilder
@@ -80,7 +75,7 @@ services:
       - '@logger.factory'
       - '@current_user'
       - '@language_manager'
-      - '@relationship_nodes_search.nested_field_helper'
+      - '@relationship_nodes_search.nested_index_field_helper'
       - '@relationship_nodes.calculated_field_helper'
-      - '@relationship_nodes_search.child_field_entity_reference_helper'
+      - '@relationship_nodes_search.nested_field_result_views_parser'
       - '@relationship_nodes_search.nested_facet_result_parser'

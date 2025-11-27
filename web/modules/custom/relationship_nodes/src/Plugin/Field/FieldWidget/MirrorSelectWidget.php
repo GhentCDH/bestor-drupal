@@ -7,7 +7,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\ElementInfoManagerInterface;
-use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider;
+use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class MirrorSelectWidget extends OptionsSelectWidget {
   
-  protected MirrorTermProvider $mirrorProvider;
+  protected MirrorProvider $mirrorProvider;
 
 
   /**
@@ -43,7 +43,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
    *   The widget settings.
    * @param array $third_party_settings
    *   Third party settings.
-   * @param MirrorTermProvider $mirrorProvider
+   * @param MirrorProvider $mirrorProvider
    *   The mirror term provider.
    * @param ElementInfoManagerInterface|null $elementInfoManager
    *   The element info manager.
@@ -54,7 +54,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
     FieldDefinitionInterface $field_definition, 
     array $settings, 
     array $third_party_settings,
-    MirrorTermProvider $mirrorProvider,
+    MirrorProvider $mirrorProvider,
     ?ElementInfoManagerInterface $elementInfoManager = NULL
   ) {
     parent::__construct(
@@ -79,7 +79,7 @@ class MirrorSelectWidget extends OptionsSelectWidget {
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
-      $container->get('relationship_nodes.mirror_term_provider'),
+      $container->get('relationship_nodes.mirror_provider'),
       $container->get('plugin.manager.element_info')
     );
   }

@@ -7,8 +7,8 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\relationship_nodes\RelationEntity\UserInterface\RelationshipDataDisplayBuilder;
-use Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldFormatterConfigurator;
+use Drupal\relationship_nodes\Display\RelationshipDataBuilder;
+use Drupal\relationship_nodes\Display\Configurator\FormatterConfigurator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,8 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * - Sorting and grouping of relationships
  * - Configurable display modes (raw ID, label, link)
  * 
- * The formatter uses NestedFieldFormatterConfigurator to build configuration
- * forms and RelationshipDataDisplayBuilder to process and render the data.
+ * The formatter uses FormatterConfigurator to build configuration
+ * forms and RelationshipDataBuilder to process and render the data.
  *
  * @FieldFormatter(
  *   id = "relationship_formatter",
@@ -36,8 +36,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class RelationshipFormatter extends EntityReferenceFormatterBase implements ContainerFactoryPluginInterface {
 
-  protected RelationshipDataDisplayBuilder $displayBuilder;
-  protected NestedFieldFormatterConfigurator $configurator;
+  protected RelationshipDataBuilder $displayBuilder;
+  protected FormatterConfigurator $configurator;
 
   /**
    * Constructs a RelationshipFormatter object.
@@ -56,9 +56,9 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings.
-   * @param \Drupal\relationship_nodes\RelationEntity\UserInterface\RelationshipDataDisplayBuilder $displayBuilder
+   * @param \Drupal\relationship_nodes\Display\RelationshipDataBuilder $displayBuilder
    *   The relationship data display builder service.
-   * @param \Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldFormatterConfigurator $configurator
+   * @param \Drupal\relationship_nodes\Display\Configurator\FormatterConfigurator $configurator
    *   The nested field formatter configurator service.
    */
   public function __construct(
@@ -69,8 +69,8 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
     $label,
     $view_mode,
     array $third_party_settings,
-    RelationshipDataDisplayBuilder $displayBuilder,
-    NestedFieldFormatterConfigurator $configurator
+    RelationshipDataBuilder $displayBuilder,
+    FormatterConfigurator $configurator
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->displayBuilder = $displayBuilder;
@@ -89,8 +89,8 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('relationship_nodes.relationship_data_display_builder'),
-      $container->get('relationship_nodes.nested_field_formatter_configurator')
+      $container->get('relationship_nodes.relationship_data_builder'),
+      $container->get('relationship_nodes.formatter_configurator')
     );
   }
 

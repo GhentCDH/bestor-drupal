@@ -3,10 +3,9 @@
 namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
 
 /**
  * Configuration form builder for Views field display.
@@ -18,30 +17,6 @@ use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper
  * - Multiple value separator configuration
  */
 class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase {
-
-  protected ChildFieldEntityReferenceHelper $childReferenceHelper;
-
-  /**
-   * Constructs a NestedFieldViewsFieldConfigurator object.
-   *
-   * @param FieldNameResolver $fieldNameResolver
-   *   The field name resolver service.
-   * @param NestedFieldHelper $nestedFieldHelper
-   *   The nested field helper service.
-   * @param CalculatedFieldHelper $calculatedFieldHelper
-   *   The calculated field helper service.
-   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
-   *   The child reference helper service.
-   */
-  public function __construct(
-    FieldNameResolver $fieldNameResolver,
-    NestedFieldHelper $nestedFieldHelper,
-    CalculatedFieldHelper $calculatedFieldHelper,
-    ChildFieldEntityReferenceHelper $childReferenceHelper
-  ) {
-    parent::__construct($fieldNameResolver, $nestedFieldHelper, $calculatedFieldHelper);
-    $this->childReferenceHelper = $childReferenceHelper;
-  }
 
   /**
    * Builds field display configuration form for Views.
@@ -126,7 +101,7 @@ class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase
     $linkable = [];
     
     foreach ($child_field_names as $field_name) {
-      if ($this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $field_name)) {
+      if ($this->nestedFieldHelper->childFieldCanLink($index, $sapi_fld_nm, $field_name)) {
         $linkable[] = $field_name;
       }
     }

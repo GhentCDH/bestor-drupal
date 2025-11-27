@@ -12,11 +12,11 @@ function relationship_nodes_requirements($phase) {
   $requirements = [];
   if ($phase == 'install' || $phase == 'runtime') {
     try {
-      if (\Drupal::hasService('relationship_nodes.relation_validation_service')) {
-        $bundleValidator = \Drupal::service('relationship_nodes.relation_validation_service');
+      if (\Drupal::hasService('relationship_nodes.validation_service')) {
+        $bundleValidator = \Drupal::service('relationship_nodes.validation_service');
         $validation_errors = $bundleValidator->validateAllRelationConfig();
         if (!empty($validation_errors)) {
-          $errorFormatter = \Drupal::service('relationship_nodes.validation_error_formatter');
+          $errorFormatter = \Drupal::service('relationship_nodes.validation_result_formatter');
           $error_string = $errorFormatter->formatValidationErrors('relationship_nodes', $validation_errors);
           $requirements['relationship_nodes_config'] = [
             'title' => t('Relationship Nodes Configuration'),
@@ -61,7 +61,7 @@ function relationship_nodes_requirements($phase) {
  * Implements hook_uninstall().
  */
 function relationship_nodes_uninstall($is_syncing) {
-  $cleanupService = \Drupal::service('relationship_nodes.relation_settings_cleanup_service');
+  $cleanupService = \Drupal::service('relationship_nodes.settings_cleanup_service');
 
   // Potentially, a lot of entity types need to be saved, which can take a while.
   $cleanupService->removeModuleSettings();

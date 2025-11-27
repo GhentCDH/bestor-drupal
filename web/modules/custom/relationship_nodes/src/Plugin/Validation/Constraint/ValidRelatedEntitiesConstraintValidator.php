@@ -14,10 +14,10 @@ class ValidRelatedEntitiesConstraintValidator extends ConstraintValidator {
   /**
    * {@inheritdoc}
    */
-  public function validate($entity, Constraint $constraint) {
+  public function validate($entity, Constraint $constraint) {/*
     $error_type = \Drupal::service('relationship_nodes.relation_entity_validator')->checkRelationsValidity($entity);
     if (!empty($error_type)) {
       $this->context->addViolation($constraint->$error_type);  
-    }
+    }*/
   } 
 }

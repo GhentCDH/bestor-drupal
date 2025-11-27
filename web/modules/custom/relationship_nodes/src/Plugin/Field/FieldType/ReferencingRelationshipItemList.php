@@ -53,7 +53,7 @@ class ReferencingRelationshipItemList extends EntityReferenceFieldItemList {
     if(empty($join_fields)){
       return [];
     }
-    $nodeInfoService = \Drupal::service('relationship_nodes.relation_node_info_service');
+    $nodeInfoService = \Drupal::service('relationship_nodes.relation_info');
     return $nodeInfoService->getReferencingRelations($current_node, $relation_bundle, $join_fields) ?? [];
   }
 }

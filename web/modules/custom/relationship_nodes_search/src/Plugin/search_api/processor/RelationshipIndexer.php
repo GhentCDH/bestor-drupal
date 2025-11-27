@@ -4,21 +4,21 @@ namespace Drupal\relationship_nodes_search\Plugin\search_api\processor;
 
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\relationship_nodes_search\Processor\RelationProcessorProperty;
+use Drupal\relationship_nodes_search\SearchAPI\Processor\RelationProcessorProperty;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleInfoService;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
+use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\SearchApiException;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\search_api\Processor\ProcessorProperty;
-use Drupal\relationship_nodes\RelationEntity\RelationTermMirroring\MirrorTermProvider;
-use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
+use Drupal\relationship_nodes_search\Views\Parser\NestedFieldResultViewsParser;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\search_api\IndexInterface;
@@ -44,11 +44,11 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
   protected EntityTypeManagerInterface $entityTypeManager;
   protected EntityFieldManagerInterface $entityFieldManager;
   protected LoggerChannelFactoryInterface $loggerFactory;
-  protected RelationBundleInfoService $bundleInfoService;
+  protected BundleInfoService $bundleInfoService;
   protected FieldNameResolver $fieldResolver;
-  protected RelationBundleSettingsManager $settingsManager;
-  protected MirrorTermProvider $mirrorProvider;
-  protected ChildFieldEntityReferenceHelper $childReferenceHelper;
+  protected BundleSettingsManager $settingsManager;
+  protected MirrorProvider $mirrorProvider;
+  protected NestedFieldResultViewsParser $resultParser;
   protected CalculatedFieldHelper $calculatedFieldHelper; 
 
 
@@ -67,15 +67,15 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    *   The entity field manager service.
    * @param LoggerChannelFactoryInterface $loggerFactory
    *   The logger factory service.
-   * @param RelationBundleInfoService $bundleInfoService
+   * @param BundleInfoService $bundleInfoService
    *   The relation bundle info service.
    * @param FieldNameResolver $fieldResolver
    *   The field name resolver service.
-   * @param RelationBundleSettingsManager $settingsManager
+   * @param BundleSettingsManager $settingsManager
    *   The relation bundle settings manager service.
-   * @param MirrorTermProvider $mirrorProvider
+   * @param MirrorProvider $mirrorProvider
    *   The mirror term provider service.
-   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+   * @param NestedFieldResultViewsParser $resultParser
    *   The child field entity reference helper service.
    * @param CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper service.
@@ -87,11 +87,11 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     EntityTypeManagerInterface $entity_type_manager,
     EntityFieldManagerInterface $entityFieldManager,
     LoggerChannelFactoryInterface $loggerFactory, 
-    RelationBundleInfoService $bundleInfoService,
+    BundleInfoService $bundleInfoService,
     FieldNameResolver $fieldResolver, 
-    RelationBundleSettingsManager $settingsManager, 
-    MirrorTermProvider $mirrorProvider,
-    ChildFieldEntityReferenceHelper $childReferenceHelper,
+    BundleSettingsManager $settingsManager, 
+    MirrorProvider $mirrorProvider,
+    NestedFieldResultViewsParser $resultParser,
     CalculatedFieldHelper $calculatedFieldHelper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -102,7 +102,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $this->fieldResolver = $fieldResolver;
     $this->settingsManager = $settingsManager;
     $this->mirrorProvider = $mirrorProvider;
-    $this->childReferenceHelper = $childReferenceHelper;
+    $this->resultParser = $resultParser;
     $this->calculatedFieldHelper = $calculatedFieldHelper;
   }
 
@@ -122,11 +122,11 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
       $container->get('entity_type.manager'),
       $container->get('entity_field.manager'),
       $container->get('logger.factory'),
-      $container->get('relationship_nodes.relation_bundle_info_service'),
+      $container->get('relationship_nodes.bundle_info_service'),
       $container->get('relationship_nodes.field_name_resolver'),
-      $container->get('relationship_nodes.relation_bundle_settings_manager'),
-      $container->get('relationship_nodes.mirror_term_provider'),
-      $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
+      $container->get('relationship_nodes.bundle_settings_manager'),
+      $container->get('relationship_nodes.mirror_provider'),
+      $container->get('relationship_nodes_search.nested_field_result_views_parser'),
       $container->get('relationship_nodes.calculated_field_helper')
     );
   }
@@ -379,7 +379,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
 
     $node_storage = $this->entityTypeManager->getStorage('node');
     $other_field = $this->fieldResolver->getOppositeRelatedEntityField($join_field);
-    $other_parsed = $this->childReferenceHelper->parseEntityReferenceValue($nested_values[$other_field] ?? NULL);
+    $other_parsed = $this->resultParser->parseEntityReferenceString($nested_values[$other_field] ?? NULL);
     $related_entity = !empty($other_parsed['id']) ? $node_storage->load($other_parsed['id']) : NULL;
     $nested_values[$calc_fld_nms['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
     $nested_values[$calc_fld_nms['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
@@ -387,7 +387,7 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $relation_field = $this->fieldResolver->getRelationTypeField();
     if ($this->settingsManager->isTypedRelationNodeType($relationship_entity->getType()) && !empty($nested_values[$relation_field])) {
       $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');    
-      $relation_parsed = $this->childReferenceHelper->parseEntityReferenceValue($nested_values[$relation_field]);
+      $relation_parsed = $this->resultParser->parseEntityReferenceString($nested_values[$relation_field]);
       $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : NULL;
       $default_label = $relation_term ? $relation_term->getName() : '';
 

@@ -8,8 +8,8 @@ use Drupal\views\ResultRow;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\Views\Parser\NestedFieldResultViewsParser;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFieldConfigurator;
 
 
@@ -21,7 +21,7 @@ use Drupal\relationship_nodes_search\Views\Config\NestedFieldViewsFieldConfigura
 class RelationshipField extends SearchApiStandard implements ContainerFactoryPluginInterface {
     
   protected NestedFieldViewsFieldConfigurator $fieldConfigurator;
-  protected ChildFieldEntityReferenceHelper $childReferenceHelper;
+  protected NestedFieldResultViewsParser $resultParser;
   protected CalculatedFieldHelper $calculatedFieldHelper;
 
   /**
@@ -35,7 +35,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
    *    The plugin definition.
    * @param NestedFieldViewsFieldConfigurator $fieldConfigurator
    *    The field configurator service.
-   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+   * @param NestedFieldResultViewsParser $resultParser
    *    The child reference helper service.
    * @param CalculatedFieldHelper $calculatedFieldHelper
    *    The calculated field helper service.
@@ -45,12 +45,12 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     string $plugin_id,
     mixed $plugin_definition,
     NestedFieldViewsFieldConfigurator $fieldConfigurator,
-    ChildFieldEntityReferenceHelper $childReferenceHelper,
+    NestedFieldResultViewsParser $resultParser,
     CalculatedFieldHelper $calculatedFieldHelper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->fieldConfigurator = $fieldConfigurator;
-    $this->childReferenceHelper = $childReferenceHelper;
+    $this->resultParser = $resultParser;
     $this->calculatedFieldHelper = $calculatedFieldHelper;
   }
   
@@ -64,7 +64,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get('relationship_nodes_search.nested_field_views_field_configurator'),
-      $container->get('relationship_nodes_search.child_field_entity_reference_helper'),
+      $container->get('relationship_nodes_search.nested_field_result_views_parser'),
       $container->get('relationship_nodes.calculated_field_helper')
     );
   }
@@ -271,7 +271,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     }
 
     // Step 1: Batch load all needed entities via helper service
-    $preloaded_entities = $this->childReferenceHelper->batchLoadEntities(
+    $preloaded_entities = $this->resultParser->batchLoadFromIndexedData(
       $nested_data, 
       $field_settings, 
       $index, 
@@ -289,7 +289,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
         }
 
         // Use helper's cache-aware processing
-        $field_value = $this->childReferenceHelper->batchProcessFieldValues(
+        $field_value = $this->resultParser->processFieldValuesWithCache(
           $item[$child_fld_nm], 
           $settings, 
           $preloaded_entities

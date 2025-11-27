@@ -4,10 +4,10 @@ namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes\RelationEntity\UserInterface\NestedFieldConfiguratorBase;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes\Display\Configurator\FieldConfiguratorBase;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
 
 /**
  * Base configurator for Views plugins handling nested fields.
@@ -20,7 +20,7 @@ use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
  * 
  * Used by both field and filter Views handlers.
  */
-abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorBase {
+abstract class NestedFieldViewsConfiguratorBase extends FieldConfiguratorBase {
 
   protected CalculatedFieldHelper $calculatedFieldHelper;
 
@@ -29,14 +29,14 @@ abstract class NestedFieldViewsConfiguratorBase extends NestedFieldConfiguratorB
    *
    * @param FieldNameResolver $fieldNameResolver
    *   The field name resolver service.
-   * @param NestedFieldHelper $nestedFieldHelper
+   * @param NestedIndexFieldHelper $nestedFieldHelper
    *   The nested field helper service.
    * @param CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper service.
    */
   public function __construct(
     FieldNameResolver $fieldNameResolver,
-    NestedFieldHelper $nestedFieldHelper,
+    NestedIndexFieldHelper $nestedFieldHelper,
     CalculatedFieldHelper $calculatedFieldHelper
   ) {
     parent::__construct($fieldNameResolver);

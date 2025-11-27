@@ -8,8 +8,8 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\RelationEntity\RelationNode\RelationNodeInfoService;
-use Drupal\relationship_nodes\RelationEntityType\RelationBundle\RelationBundleSettingsManager;
+use Drupal\relationship_nodes\RelationData\NodeHelper\RelationInfo;
+use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
@@ -25,8 +25,8 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
   protected EntityTypeManagerInterface $entityTypeManager;
   protected CacheTagsInvalidatorInterface $cacheTagsInvalidator;
   protected LoggerChannelFactoryInterface $loggerFactory;
-  protected RelationBundleSettingsManager $settingsManager;
-  protected RelationNodeInfoService $nodeInfoService;
+  protected BundleSettingsManager $settingsManager;
+  protected RelationInfo $nodeInfoService;
 
 
   /**
@@ -38,17 +38,17 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
    *   The cache tags invalidator.
    * @param LoggerChannelFactoryInterface $loggerFactory
    *   The logger factory.
-   * @param RelationBundleSettingsManager $settingsManager
+   * @param BundleSettingsManager $settingsManager
    *   The relation bundle settings manager.
-   * @param RelationNodeInfoService $nodeInfoService
+   * @param RelationInfo $nodeInfoService
    *   The relation node info service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     CacheTagsInvalidatorInterface $cacheTagsInvalidator,
     LoggerChannelFactoryInterface $loggerFactory,
-    RelationBundleSettingsManager $settingsManager,
-    RelationNodeInfoService $nodeInfoService
+    BundleSettingsManager $settingsManager,
+    RelationInfo $nodeInfoService
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->cacheTagsInvalidator = $cacheTagsInvalidator;

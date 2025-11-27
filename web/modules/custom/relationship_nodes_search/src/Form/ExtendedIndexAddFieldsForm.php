@@ -8,8 +8,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Utility\Utility;
 use Drupal\search_api\Item\Field;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 
 /**
  * Extended form for adding fields to Search API index.

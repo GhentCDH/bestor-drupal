@@ -7,7 +7,7 @@ use Drupal\search_api\Query\QueryInterface;
 use Psr\Log\LoggerInterface;
 use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
 
 
 /**
@@ -19,7 +19,7 @@ use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
 class NestedFacetParamBuilder extends FacetParamBuilder {
 
   protected NestedQueryStructureBuilder $queryBuilder;
-  protected NestedFieldHelper $nestedFieldHelper;
+  protected NestedIndexFieldHelper $nestedFieldHelper;
 
 
   /**
@@ -29,13 +29,13 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
    *   The logger service.
    * @param NestedQueryStructureBuilder $queryBuilder
    *   The query structure builder service.
-   * @param NestedFieldHelper $nestedFieldHelper
+   * @param NestedIndexFieldHelper $nestedFieldHelper
    *   The nested field helper service.
    */
   public function __construct(
     LoggerInterface $logger, 
     NestedQueryStructureBuilder $queryBuilder,
-    NestedFieldHelper $nestedFieldHelper
+    NestedIndexFieldHelper $nestedFieldHelper
   ) {
     parent::__construct($logger);
     $this->queryBuilder = $queryBuilder;

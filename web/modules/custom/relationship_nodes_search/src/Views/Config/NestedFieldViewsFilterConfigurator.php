@@ -3,11 +3,10 @@
 namespace Drupal\relationship_nodes_search\Views\Config;
 
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\QueryHelper\FilterOperatorHelper;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
+use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
 
 /**
  * Configuration form builder for Views filter fields.
@@ -20,7 +19,6 @@ use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
  */
 class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBase {
 
-  protected ChildFieldEntityReferenceHelper $childReferenceHelper;
   protected FilterOperatorHelper $operatorHelper;
 
   /**
@@ -28,24 +26,20 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
    *
    * @param FieldNameResolver $fieldNameResolver
    *   The field name resolver service.
-   * @param NestedFieldHelper $nestedFieldHelper
+   * @param NestedIndexFieldHelper $nestedFieldHelper
    *   The nested field helper service.
    * @param CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper service.
-   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
-   *   The child reference helper service.
    * @param FilterOperatorHelper $operatorHelper
    *   The operator helper service.
    */
   public function __construct(
     FieldNameResolver $fieldNameResolver,
-    NestedFieldHelper $nestedFieldHelper,
+    NestedIndexFieldHelper $nestedFieldHelper,
     CalculatedFieldHelper $calculatedFieldHelper,
-    ChildFieldEntityReferenceHelper $childReferenceHelper,
     FilterOperatorHelper $operatorHelper
   ) {
     parent::__construct($fieldNameResolver, $nestedFieldHelper, $calculatedFieldHelper);
-    $this->childReferenceHelper = $childReferenceHelper;
     $this->operatorHelper = $operatorHelper;
   }
 
@@ -369,7 +363,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     $linkable = [];
     
     foreach ($child_fld_nms as $field_name) {
-      if ($this->childReferenceHelper->nestedFieldCanLink($index, $sapi_fld_nm, $field_name)) {
+      if ($this->nestedFieldHelper->childFieldCanLink($index, $sapi_fld_nm, $field_name)) {
         $linkable[] = $field_name;
       }
     }

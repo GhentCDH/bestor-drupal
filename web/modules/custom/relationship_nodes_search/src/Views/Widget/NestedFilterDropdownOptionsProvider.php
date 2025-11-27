@@ -8,10 +8,10 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\search_api\Entity\Index;
-use Drupal\relationship_nodes_search\FieldHelper\NestedFieldHelper;
-use Drupal\relationship_nodes\RelationEntityType\RelationField\CalculatedFieldHelper;
-use Drupal\relationship_nodes_search\FieldHelper\ChildFieldEntityReferenceHelper;
-use Drupal\relationship_nodes_search\Parser\NestedFacetResultParser;
+use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
+use Drupal\relationship_nodes_search\Views\Parser\NestedFieldResultViewsParser;
+use Drupal\relationship_nodes_search\QueryHelper\NestedFacetResultParser;
 use Drupal\Core\Language\LanguageManagerInterface; 
 
 /**
@@ -27,9 +27,9 @@ class NestedFilterDropdownOptionsProvider {
   protected LoggerChannelFactoryInterface $loggerFactory;
   protected AccountProxyInterface $currentUser;
   protected LanguageManagerInterface $languageManager;
-  protected NestedFieldHelper $nestedFieldHelper;
+  protected NestedIndexFieldHelper $nestedFieldHelper;
   protected CalculatedFieldHelper $calculatedFieldHelper;
-  protected ChildFieldEntityReferenceHelper $childReferenceHelper;
+  protected NestedFieldResultViewsParser $resultParser;
   protected NestedFacetResultParser $facetResultParser;
 
 
@@ -46,11 +46,11 @@ class NestedFilterDropdownOptionsProvider {
    *   The current user service.
    * @param LanguageManagerInterface $languageManager
    *   The language manager service.
-   * @param NestedFieldHelper $nestedFieldHelper
+   * @param NestedIndexFieldHelper $nestedFieldHelper
    *   The nested field helper service.
    * @param CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper service.
-   * @param ChildFieldEntityReferenceHelper $childReferenceHelper
+   * @param NestedFieldResultViewsParser $resultParser
    *   The child field entity reference helper service.
    * @param NestedFacetResultParser $facetResultParser
    *   The facet result parser service.
@@ -61,9 +61,9 @@ class NestedFilterDropdownOptionsProvider {
     LoggerChannelFactoryInterface $loggerFactory,
     AccountProxyInterface $currentUser,
     LanguageManagerInterface $languageManager,
-    NestedFieldHelper $nestedFieldHelper,
+    NestedIndexFieldHelper $nestedFieldHelper,
     CalculatedFieldHelper $calculatedFieldHelper,
-    ChildFieldEntityReferenceHelper $childReferenceHelper,
+    NestedFieldResultViewsParser $resultParser,
     NestedFacetResultParser $facetResultParser
   ) {
     $this->entityTypeManager = $entityTypeManager;
@@ -73,7 +73,7 @@ class NestedFilterDropdownOptionsProvider {
     $this->languageManager = $languageManager;
     $this->nestedFieldHelper = $nestedFieldHelper;
     $this->calculatedFieldHelper = $calculatedFieldHelper;
-    $this->childReferenceHelper = $childReferenceHelper;
+    $this->resultParser = $resultParser;
     $this->facetResultParser = $facetResultParser;
   }
 
@@ -209,7 +209,7 @@ class NestedFilterDropdownOptionsProvider {
     // Determine target entity type
     $target_type = $this->calculatedFieldHelper->isCalculatedChildField($child_fld_nm)
       ? $this->calculatedFieldHelper->getCalculatedFieldTargetType($child_fld_nm)
-      : $this->childReferenceHelper->getNestedFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
+      : $this->nestedFieldHelper->getChildFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
 
     // Validate entity type
     if (!$target_type || !in_array($target_type, ['node', 'taxonomy_term'])) {
@@ -235,7 +235,7 @@ class NestedFilterDropdownOptionsProvider {
   protected function buildEntityOptions(array $entity_ids, string $target_type): array {
     try {
       // Extract numeric IDs
-      $numeric_ids = $this->childReferenceHelper->extractIntIdsFromStringIds($entity_ids, $target_type);
+      $numeric_ids = $this->resultParser->extractIntIdsFromStrings($entity_ids, $target_type);
       
       if (empty($numeric_ids)) {
         $this->loggerFactory->get('relationship_nodes_search')->warning(
