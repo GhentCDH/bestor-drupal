@@ -85,7 +85,7 @@ function relationship_nodes_field_config_update(FieldConfig $field) {
  */
 function relationship_nodes_entity_type_alter(array &$entity_types) {
   if (isset($entity_types['node'])) {
-    $entity_types['node']->addConstraint(valid_related_entities_constraint::class);
+    $entity_types['node']->addConstraint(valid_relation_reference_constraint::class);
   }
   if (isset($entity_types['field_config'])) {
     $entity_types['field_config']->setListBuilderClass(LockedFieldListBuilder::class);

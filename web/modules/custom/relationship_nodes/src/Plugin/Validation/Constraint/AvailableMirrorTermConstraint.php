@@ -5,12 +5,9 @@ namespace Drupal\relationship_nodes\Plugin\Validation\Constraint;
 use Symfony\Component\Validator\Constraint;
 
 
+
 /**
- * Validates that mirror terms are available and properly configured.
- *
- * Ensures that:
- * - Mirror terms are not already linked to other relationship types.
- * - Terms do not mirror themselves.
+ * Provides a Custom Desk Constraint.
  *
  * @Constraint(
  *   id = "available_mirror_term_constraint",
@@ -18,17 +15,6 @@ use Symfony\Component\Validator\Constraint;
  * )
  */
 class AvailableMirrorTermConstraint extends Constraint {
-  /**
-   * The message for when a term is already mirrored.
-   *
-   * @var string
-   */
   public $termAlreadyMirrored = 'The selected mirror term is already linked to another relationship type. Please choose a different mirror term or remove the existing link before proceeding.';
-
-  /**
-   * The message for when a term tries to mirror itself.
-   *
-   * @var string
-   */
   public $noSelfMirroring = 'A relationship type cannot mirror itself. For one-way (unidirectional) relationships, leave the mirror field blank. For directional relationships, select a different term for the reverse relationship or remove the existing link first.';
 }
