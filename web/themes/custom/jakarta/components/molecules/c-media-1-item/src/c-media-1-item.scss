@@ -5,9 +5,21 @@
 .c-media-1-item {
   $self: &;
 
+  padding-block: functions.rem(60px);
+
   #{$self}__meta-data {
     font-size: functions.rem(15px);
     font-style: italic;
     margin-block-start: functions.rem(18px);
+  }
+
+  @media screen and (min-width: variables.$breakpoints-desktop) {
+    padding-block: functions.rem(95px);
+  }
+
+  + .c-text,
+  + .c-text-media,
+  + .c-media-1-item {
+    padding-block-start: 0;
   }
 }

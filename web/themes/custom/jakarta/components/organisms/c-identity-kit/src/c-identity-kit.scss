@@ -1,0 +1,98 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-identity-kit {
+  $self: &;
+
+  position: relative;
+
+  #{$self}__wrapper {
+    border: 1px solid var(--color-dark);
+    padding: functions.rem(30px);
+    position: relative;
+  }
+
+  #{$self}__tag {
+    position: absolute;
+    top: functions.rem(-56px);
+    right: functions.rem(-1px);
+    z-index: 5;
+    display: inline-flex;
+    font-family: var(--font-family-title);
+
+    &__corner {
+      mask-size: contain;
+      mask-image: url("./c-identity-kit-tag-corner.svg");
+      mask-repeat: no-repeat;
+      mask-position: center center;
+      height: functions.rem(56px);
+      width: functions.rem(46px);
+      transform: translateX(#{functions.rem(1px)});
+      background: var(--color-primary);
+    }
+
+    &__content {
+      border-top-right-radius: functions.rem(10px);
+      z-index: 1;
+      padding: functions.rem(15px) functions.rem(32px) functions.rem(7px) functions.rem(10px);
+      background: var(--color-primary);
+      font-size: clamp(var(--font-h4-size), 3vw, var(--font-h3-size));
+      font-weight: var(--font-weight-medium);
+      line-height: 1.25;
+    }
+  }
+
+  #{$self}__content {
+    display: flex;
+    flex-direction: column;
+    gap: functions.rem(30px);
+
+    @media screen and (min-width: variables.$breakpoints-mobile-large) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      gap: functions.rem(80px);
+    }
+  }
+
+  #{$self}__media {
+    flex-shrink: 0;
+  }
+
+  #{$self}__list {
+    display: grid;
+    gap: functions.rem(30px);
+    grid-template-columns: 1fr;
+
+    > * {
+      width: 100%;
+    }
+
+    @media screen and (min-width: variables.$breakpoints-mobile-large) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop-small) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: functions.rem(50px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop-large) {
+      gap: functions.rem(80px);
+    }
+  }
+
+  // PRIMARY.
+  &--primary {
+    #{$self}__wrapper {
+      border-color: var(--color-primary);
+    }
+  }
+}

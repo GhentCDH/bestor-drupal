@@ -8,6 +8,7 @@
   @include mixins.grid-flex-wrapper;
   flex-direction: column;
   gap: calc(var(--grid-gutter) / 2);
+  padding-block: functions.rem(60px);
 
   // LAYOUT 50/50.
   &--media-layout-50-50 {
@@ -59,5 +60,12 @@
 
   @media screen and (min-width: variables.$breakpoints-desktop) {
     gap: var(--grid-gutter);
+    padding-block: functions.rem(95px);
+  }
+
+  + .c-text,
+  + .c-text-media,
+  + .c-media-1-item {
+    padding-block-start: 0;
   }
 }

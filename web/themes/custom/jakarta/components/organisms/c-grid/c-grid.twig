@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Template for the component c-grid.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-grid' %}
+
+{% set custom_component_classes = [
+  background_color ? 'h-bg-color-' ~ background_color|clean_class,
+  columns ? component_name ~ '--columns-' ~ columns|clean_id,
+]|merge(c_grid_utility_classes ?: []) %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__inner container">
+    {% if title %}
+      <div class="{{ component_name }}__title">
+        {{ include('jakarta:c-heading', {
+          content: title,
+        }, with_context = false) }}
+      </div>
+    {% endif %}
+    {% if grid_items %}
+      <div class="{{ component_name }}__grid-items">
+        {% for key, item in grid_items %}
+          <div class="{{ component_name }}__grid-items__item">
+            {{ item }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

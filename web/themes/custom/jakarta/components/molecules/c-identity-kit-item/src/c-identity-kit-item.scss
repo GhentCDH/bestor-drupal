@@ -1,0 +1,17 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-identity-kit-item {
+  $self: &;
+
+  #{$self}__title {
+    margin-bottom: functions.rem(15px);
+  }
+
+  #{$self}__values {
+    a:not(.c-button) {
+      text-decoration: underline;
+    }
+  }
+}

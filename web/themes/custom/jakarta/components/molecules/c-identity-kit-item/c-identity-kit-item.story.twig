@@ -1,0 +1,8 @@
+{# c-identity-kit-item.story.twig #}
+{% set values %}
+  <a href="#">{Naam}</a>
+{% endset %}
+{{ include('jakarta:c-identity-kit-item', {
+  title: '/Discipline',
+  values,
+}, with_context = false) }}

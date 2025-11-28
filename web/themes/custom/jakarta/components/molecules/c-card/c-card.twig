@@ -19,14 +19,22 @@
   {% if url %}
     <a href="{{ url }}" class="{{ component_name }}__link">
   {% endif %}
-  {% if tag %}
+  {% if tag and not media %}
     <div class="{{ component_name }}__tag">
       {{ tag }}
     </div>
   {% endif %}
   {% if media %}
-    <div class="{{ component_name }}__media">
-      {{ media }}
+    <div class="{{ component_name }}__media-wrapper">
+      <div class="{{ component_name }}__media h-image-children-display-block h-image-full-width">
+        {{ media }}
+      </div>
+
+      {% if tag %}
+      <div class="{{ component_name }}__tag">
+        {{ tag }}
+      </div>
+      {% endif %}
     </div>
   {% endif %}
   <div class="{{ component_name }}__content">

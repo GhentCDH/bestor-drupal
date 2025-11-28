@@ -1,0 +1,54 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-structured-layout {
+  $self: &;
+
+  #{$self}__top {
+    margin-block-end: calc(var(--grid-gutter) / 2);
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      margin-block-end: var(--grid-gutter);
+    }
+  }
+
+  #{$self}__content-wrapper {
+    row-gap: calc(var(--grid-gutter) / 2);
+    @include mixins.grid-wrapper(0);
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      row-gap: var(--grid-gutter);
+    }
+  }
+
+  #{$self}__content,
+  #{$self}__sidebar {
+    @include mixins.grid-item(4);
+  }
+
+  #{$self}__content {
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-item(8);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(13);
+      @include mixins.grid-item-start(2);
+    }
+  }
+
+  #{$self}__sidebar {
+    padding-block-end: functions.rem(60px);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      @include mixins.grid-item(4);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      @include mixins.grid-item(6);
+      @include mixins.grid-item-start(18);
+      padding-block-end: functions.rem(95px);
+    }
+  }
+}

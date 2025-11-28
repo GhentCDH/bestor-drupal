@@ -1,0 +1,36 @@
+@use "./../../variables";
+@use "./../../mixins";
+@use "./../../functions";
+
+.main {
+  .page-content-wrapper {
+    padding-block: functions.rem(50px);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      display: grid;
+      grid-template-columns: [sidebar] #{functions.rem(400px)} [content] 1fr;
+      gap: functions.rem(40px);
+    }
+
+    @media screen and (min-width: variables.$breakpoints-desktop) {
+      gap: var(--grid-gutter);
+    }
+  }
+
+  .page-sidebar {
+    margin-block-end: functions.rem(40px);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      grid-area: sidebar;
+      margin-block-end: 0;
+      grid-row: span 1;
+    }
+  }
+
+  .page-content {
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      grid-area: content;
+      grid-row: span 1;
+    }
+  }
+}

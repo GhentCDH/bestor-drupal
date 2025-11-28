@@ -1,0 +1,60 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-grid {
+  $self: &;
+
+  padding-block: functions.rem(60px);
+
+  #{$self}__grid-items {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: calc(var(--grid-gutter) / 2);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      gap: var(--grid-gutter);
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  #{$self}__title {
+    margin-block-end: functions.rem(40px);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) {
+      margin-block-end: functions.rem(70px);
+    }
+  }
+
+  // 3 COLUMNS.
+  &--columns-3 {
+    #{$self}__grid-items {
+      @media screen and (min-width: variables.$breakpoints-desktop) {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+  }
+
+  // 4 COLUMNS.
+  &--columns-4 {
+    #{$self}__grid-items {
+      @media screen and (min-width: variables.$breakpoints-desktop) {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
+    }
+  }
+
+  @media screen and (min-width: variables.$breakpoints-tablet) {
+    padding-block: functions.rem(135px);
+  }
+
+  // WITH BACKGROUND COLOR.
+  &.h-bg-color-tertiary {
+    #{$self}__grid-items__item {
+      border: 1px solid var(--color-dark);
+      padding: functions.rem(40px);
+
+       // CHECK WHEN CONTENT IS HIGHER OR SMALLER
+    }
+  }
+}

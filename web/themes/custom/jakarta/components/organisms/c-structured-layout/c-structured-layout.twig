@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Template for the component c-structured-layout.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-structured-layout' %}
+
+{% set custom_component_classes = c_structured-layout_utility_classes %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__wrapper">
+    {% if top %}
+      <div class="{{ component_name }}__top">
+        {{ top }}
+      </div>
+    {% endif %}
+    <div class="{{ component_name }}__content-wrapper container">
+      {% if content %}
+        <div class="{{ component_name }}__content">
+          {{ content }}
+        </div>
+      {% endif %}
+      {% if sidebar %}
+        <div class="{{ component_name }}__sidebar">
+          {{ sidebar }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

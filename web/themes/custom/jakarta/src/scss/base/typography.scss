@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  font-size: clamp(var(--font-size-base), 1.04vw, 20px);
+  font-size: clamp(calc(var(--font-size-base) * 0.75), 1.04vw, 16px);
   line-height: var(--font-size-base-line-height);
   font-weight: var(--font-weight-base);
 }

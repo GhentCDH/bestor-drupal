@@ -1,0 +1,39 @@
+@use "./../../../../src/scss/variables/breakpoints" as variables;
+@use "./../../../../src/scss/functions";
+@use "./../../../../src/scss/mixins";
+
+.c-tabs {
+  $self: &;
+
+  #{$self}__tabs-list {
+    display: flex;
+    flex-direction: column;
+    gap: functions.rem(10px);
+    margin-block-end: functions.rem(40px);
+
+    @media screen and (min-width: variables.$breakpoints-mobile-large) {
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-items: center;
+      gap: functions.rem(20px) functions.rem(50px);
+      margin-block-end: functions.rem(60px);
+    }
+  }
+
+  #{$self}__panel {
+    display: none;
+    gap: functions.rem(50px);
+    flex-direction: column;
+
+    &.is-active {
+      display: flex;
+    }
+  }
+
+  #{$self}__tab__content {
+    padding-block-start: functions.rem(34px);
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+  }
+}

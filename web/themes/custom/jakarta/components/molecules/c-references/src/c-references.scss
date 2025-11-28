@@ -7,7 +7,7 @@
 
   padding-block: functions.rem(60px);
 
-  #{$self}__inner {
+  #{$self}__wrapper {
     @include mixins.grid-wrapper(0);
   }
 
@@ -18,12 +18,11 @@
 
   #{$self}__title {
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-item(4);
-      @include mixins.grid-item-start(2);
+      @include mixins.grid-item(6);
     }
 
     @media screen and (min-width: variables.$breakpoints-desktop) {
-      @include mixins.grid-item(11);
+      @include mixins.grid-item(12);
       @include mixins.grid-item-start(3);
     }
   }
@@ -36,8 +35,7 @@
     }
 
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      @include mixins.grid-item(5);
-      @include mixins.grid-item-start(7);
+      @include mixins.grid-item(6);
     }
 
     @media screen and (min-width: variables.$breakpoints-desktop) {

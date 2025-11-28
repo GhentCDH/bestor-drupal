@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Template for the component c-announcements.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-announcements' %}
+{% set custom_component_classes = c_announcements_utility_classes %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__wrapper container">
+    {% if title %}
+      <div class="{{ component_name }}__title">
+        {{ include('jakarta:c-heading', {
+          content: title,
+        }, with_context = false) }}
+      </div>
+    {% endif %}
+    {% if tabs %}
+      <div class="{{ component_name }}__tabs">
+        {{ tabs }}
+      </div>
+    {% endif %}
+    {% if sidebar %}
+      <div class="{{ component_name }}__sidebar">
+        {{ sidebar }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

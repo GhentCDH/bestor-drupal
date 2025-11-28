@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Template for the component c-identity-kit.
+ */
+#}
+
+{% extends '@jakarta/components/_skeleton/component-base.html.twig' %}
+
+{% set component_name = 'c-identity-kit' %}
+
+{% set attr_variant = attr_variant ?: attr['attributes']['variant'] %}
+
+{% set custom_component_classes = [
+  attr_variant ? component_name ~ '--' ~ attr_variant|clean_class,
+]|merge(c_identity_kit_utility_classes ?: []) %}
+
+{% block component_content %}
+  <div class="{{ component_name }}__inner container">
+    <div class="{{ component_name }}__wrapper {%- if attr_variant is same as ('primary') %} h-bg-color-primary{% endif %}">
+      {% if tag %}
+        <div class="{{ component_name }}__tag">
+          <div class="{{ component_name }}__tag__corner"></div>
+          <div class="{{ component_name }}__tag__content">
+            {{ tag }}
+          </div>
+        </div>
+      {% endif %}
+      <div class="{{ component_name }}__content">
+        {% if media %}
+          <div class="{{ component_name }}__media h-image-children-display-block h-image-full-width">
+            {{ media }}
+          </div>
+        {% endif %}
+        {% if identity_kit_list %}
+          <div class="{{ component_name }}__list">
+            {{ identity_kit_list }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

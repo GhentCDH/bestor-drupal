@@ -1,0 +1,39 @@
+{# c-identity-kit.story.twig #}
+{% set media %}
+  <img loading="lazy" src="https://picsum.photos/id/24/450/354" width="450" height="354" alt="Test image">
+{% endset %}
+{% set identity_kit_list %}
+  {% set values %}
+    <a href="#">{Naam}</a>
+  {% endset %}
+  {{ include('jakarta:c-identity-kit-item', {
+    title: '/Discipline',
+    values,
+  }, with_context = false) }}
+  {% set values_2 %}
+    {waarde}, {waarde}, {waarde}, {waarde}, {waarde}
+  {% endset %}
+  {{ include('jakarta:c-identity-kit-item', {
+    title: '/Specialisatie',
+    values: values_2,
+  }, with_context = false) }}
+{% endset %}
+{# default #}
+<div>
+{{ include('jakarta:c-identity-kit', {
+  tag: 'Concept',
+  media,
+  identity_kit_list,
+  attr_variant: 'default',
+}, with_context = false) }}
+</div>
+
+{# primary #}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-identity-kit', {
+    tag: 'Concept',
+    media,
+    identity_kit_list,
+    attr_variant: 'primary',
+  }, with_context = false) }}
+</div>

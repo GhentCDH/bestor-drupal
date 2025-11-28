@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Structured Layout'
+status: stable
+group: Organisms
+description: "A component that displays the structured layout."
+props:
+  type: object
+  properties:
+    c_structured_layout_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility classes
+      description: 'Additional utility classes.'
+slots:
+  top:
+    title: Top
+    description: 'The top to display.'
+  content:
+    title: Content
+    description: 'The content to display.'
+  sidebar:
+    title: Sidebar
+    description: 'The sidebar to display.'
