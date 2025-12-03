@@ -1,7 +1,9 @@
 uuid: d93935c2-4f05-4e18-a540-ae72868da954
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - footnotes
 _core:
   default_config_hash: QiKqQS_YGAT3Qr4vaAgZICJknm-MGCzt_xBAMqg-tRM
 name: 'Restricted HTML'
@@ -14,6 +16,16 @@ filters:
     status: true
     weight: 0
     settings: {  }
+  filter_footnotes:
+    id: filter_footnotes
+    provider: footnotes
+    status: true
+    weight: 0
+    settings:
+      footnotes_collapse: false
+      footnotes_css: true
+      footnotes_dialog: true
+      footnotes_footer_disable: false
   filter_html:
     id: filter_html
     provider: filter

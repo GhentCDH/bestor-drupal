@@ -22,8 +22,7 @@
     {{ include('jakarta:c-line', {
         title: row.content['#node'].label,
         url: path('entity.node.canonical', {'node': row.content['#node'].id})
-        author: '',
-        date: '',
+
       })
     }}
   {% endfor %}

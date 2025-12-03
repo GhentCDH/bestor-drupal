@@ -70,7 +70,7 @@ filters:
   filter_htmlcorrector:
     id: filter_htmlcorrector
     provider: filter
-    status: false
+    status: true
     weight: -41
     settings: {  }
   filter_image_lazy_load:
@@ -82,7 +82,7 @@ filters:
   filter_url:
     id: filter_url
     provider: filter
-    status: false
+    status: true
     weight: -45
     settings:
       filter_url_length: 72

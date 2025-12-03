@@ -8,7 +8,7 @@ dependencies:
 _core:
   default_config_hash: cFrlqjtkTfvY3RGccjJkPf1SGIfJ942IrxTLWAO4mgA
 id: authenticated
-label: 'User without permissions'
+label: 'Utilisateur authentifié'
 weight: -9
 is_admin: false
 permissions:
