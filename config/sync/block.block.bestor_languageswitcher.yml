@@ -1,0 +1,20 @@
+uuid: ef690624-8ed8-473a-9546-b3d2e908d7c2
+langcode: en
+status: true
+dependencies:
+  module:
+    - language
+  theme:
+    - bestor
+id: bestor_languageswitcher
+theme: bestor
+region: nav_right
+weight: -9
+provider: null
+plugin: 'language_block:language_interface'
+settings:
+  id: 'language_block:language_interface'
+  label: 'Language switcher'
+  label_display: '0'
+  provider: language
+visibility: {  }

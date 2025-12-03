@@ -108,7 +108,7 @@ class FieldUiManager {
    *   The original operations array.
    */
   public function overrideOperationsEdit(array &$row, FieldConfig $field_config, array $original_operations): void {   
-    if (!$this->fieldConfigurator->isRnCreatedField($field_config)) {
+    if (!$this->relationFieldManager->isRnCreatedField($field_config)) {
       return;
     }
     
@@ -143,7 +143,7 @@ class FieldUiManager {
   public function overrideLocalTasksEdit(&$local_tasks): void {
     $field_config = $this->routeMatch->getParameter('field_config');
 
-    if (!$field_config instanceof FieldConfig || !$this->fieldConfigurator->isRnCreatedField($field_config)) {
+    if (!$field_config instanceof FieldConfig || !$this->relationFieldManager->isRnCreatedField($field_config)) {
       return;
     }
 

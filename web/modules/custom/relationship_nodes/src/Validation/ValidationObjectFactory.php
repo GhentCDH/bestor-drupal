@@ -11,6 +11,9 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\relationship_nodes\RelationField\RelationshipFieldManager;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\relationship_nodes\Validation\Bundle\BundleValidator;
+use Drupal\relationship_nodes\Validation\Field\FieldConfigValidator;
+use Drupal\relationship_nodes\Validation\Field\FieldStorageValidator;
 
 
 /**
@@ -24,6 +27,7 @@ class ValidationObjectFactory {
   protected FieldNameResolver $fieldNameResolver;
   protected RelationshipFieldManager $relationFieldManager;
   protected BundleSettingsManager $settingsManager;
+  protected BundleInfoService $bundleInfoService;
 
 
   /**
@@ -143,7 +147,7 @@ class ValidationObjectFactory {
       $field_config->getSetting('handler_settings')['target_bundles'] ?? null,
       null,
       $this->fieldNameResolver,
-      $this->fieldConfigurator, 
+      $this->relationFieldManager, 
       $this->settingsManager
     );
   }
@@ -173,7 +177,7 @@ class ValidationObjectFactory {
       $target_bundles,
       $storage,
       $this->fieldNameResolver,
-      $this->fieldConfigurator, 
+      $this->relationFieldManager, 
       $this->settingsManager
     );
   }
@@ -194,7 +198,7 @@ class ValidationObjectFactory {
       $storage->getType(),
       $storage->getCardinality(),
       $storage->getSetting('target_type') ?? null, 
-      $this->fieldConfigurator 
+      $this->relationFieldManager 
     );
   }
 
@@ -219,7 +223,7 @@ class ValidationObjectFactory {
       $config_data['type'],
       $config_data['cardinality'],
       $target_type,
-      $this->fieldConfigurator 
+      $this->relationFieldManager 
     );
   }  
 }

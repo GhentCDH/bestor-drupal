@@ -1,0 +1,44 @@
+{% include '@bestor/template-parts/header.html.twig' %}
+{% if page.highlighted %}
+  {% include '@thex/template-parts/highlighted.html.twig' %}
+{% endif %}
+<div class="main-wrapper">
+  {% if page.content_home_top %}
+    {% include '@thex/template-parts/content-parts/content_home_top.html.twig' %}
+  {% endif %}
+  <div class="container">
+    <div class="main-container">
+      {% if front_sidebar %}
+        <main id="main" class="frontpage-main main-content">
+      {% else %}
+        <main id="front-main" class="frontpage-main main-content">
+      {% endif %}
+        <a id="main-content" tabindex="-1"></a>
+        {% if page.content_top %}
+          {% include '@thex/template-parts/content-parts/content_top.html.twig' %}
+        {% endif %}
+        <div class="node-content frontpage-content">
+          <div class="frontpage-blocks">
+            {{drupal_block('views_block:frontpage-block_1')}}
+            {{drupal_block('views_block:frontpage-block_2')}}
+            {{drupal_block('views_block:frontpage-block_3')}}
+            {{drupal_block('views_block:frontpage-block_4')}}
+          </div>
+        </div>
+        {% if page.content_bottom %}
+          {% include '@thex/template-parts/content-parts/content_bottom.html.twig' %}
+        {% endif %}
+      </main>
+    {% if front_sidebar and page.sidebar_first %}
+      {% include '@thex/template-parts/sidebar/sidebar_left.html.twig' %}
+    {% endif %}
+    {% if front_sidebar and page.sidebar_second %}
+      {% include '@thex/template-parts/sidebar/sidebar_right.html.twig' %}
+    {% endif %}
+    </div><!--/main-container -->
+	</div><!--/container -->
+  {% if page.content_home_bottom %}
+    {% include '@thex/template-parts/content-parts/content_home_bottom.html.twig' %}
+  {% endif %}
+</div><!--/main-wrapper -->
+{% include '@ruhi/template-parts/footer.html.twig' %}

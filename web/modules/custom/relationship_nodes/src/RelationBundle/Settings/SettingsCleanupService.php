@@ -58,7 +58,7 @@ class SettingsCleanupService {
       foreach ($this->bundleInfoService->getAllRelationBundles() as $entity_type) {
         $updated = $this->unsetRnThirdPartySettings($entity_type) ?? [];
       }
-      foreach ($this->fieldConfigurator->getAllRnCreatedFields() as $field) {
+      foreach ($this->relationFieldManager->getAllRnCreatedFields() as $field) {
         $updated = $this->unsetRnThirdPartySettings($field) ?? [];
       }
       \Drupal::cache()->deleteAll();

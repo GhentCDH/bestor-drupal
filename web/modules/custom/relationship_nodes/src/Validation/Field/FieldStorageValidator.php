@@ -58,7 +58,7 @@ class FieldStorageValidator {
   public function validate(): bool {
     $this->errors = [];
 
-    $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($this->fieldName);
+    $required_settings = $this->relationFieldManager->getRequiredFieldConfiguration($this->fieldName);
 
     if (!$required_settings) {
       // Not a RN field, no validation required. 

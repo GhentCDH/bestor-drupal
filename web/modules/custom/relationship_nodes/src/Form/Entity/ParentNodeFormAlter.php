@@ -64,6 +64,6 @@ class ParentNodeFormAlter {
    */
   public function bindNewRelationsToParent(array &$form, FormStateInterface $form_state) {
     $syncService = \Drupal::service('relationship_nodes.relation_sync');
-    $this->syncService->bindNewRelationsToParent($form_state);
+    $syncService->bindNewRelationsToParent($form_state);
   }
 }

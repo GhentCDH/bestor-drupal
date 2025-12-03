@@ -107,7 +107,7 @@ class FieldConfigForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, FieldConfig $field_config = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?FieldConfig $field_config = NULL) {
     $this->fieldConfig = $field_config;
     $this->entityType = $field_config->getTargetEntityTypeId();
     $this->fieldName = $field_config->getName();

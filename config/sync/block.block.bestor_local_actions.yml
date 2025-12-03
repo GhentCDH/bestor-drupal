@@ -1,0 +1,20 @@
+uuid: aba55054-31ba-4c2f-a448-cb41e1a63d69
+langcode: en
+status: true
+dependencies:
+  theme:
+    - bestor
+_core:
+  default_config_hash: Qcu3915PqsvF5a5wJOjSj4ywxWXHhBv2Vaske1S6OWM
+id: bestor_local_actions
+theme: bestor
+region: content
+weight: -6
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

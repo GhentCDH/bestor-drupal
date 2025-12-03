@@ -1,0 +1,22 @@
+uuid: db45ad64-3a13-4ee0-929d-cc576e8452eb
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bestor
+_core:
+  default_config_hash: '-XVizLHAsOW5B_cHrBPWjug4zSFAVPbqe1qD7rvtvj0'
+id: bestor_messages
+theme: bestor
+region: precontent
+weight: -8
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

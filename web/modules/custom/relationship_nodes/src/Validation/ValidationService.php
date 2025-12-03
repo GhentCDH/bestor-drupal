@@ -2,8 +2,6 @@
 
 namespace Drupal\relationship_nodes\Validation;
 
-use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Config\ConfigImporterEvent;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -249,7 +247,7 @@ class ValidationService {
    */
   protected function validateEntityExistingFields(ConfigEntityBundleBase $entity, ?array $rn_settings = null): array {
     $errors = [];
-    $existing_fields = $this->fieldConfigurator->getBundleFieldsStatus($entity, $rn_settings)['existing'];
+    $existing_fields = $this->relationFieldManager->getBundleFieldsStatus($entity, $rn_settings)['existing'];
     foreach ($existing_fields as $field => $field_info) {
       if (!isset($field_info['field_config'])) {
         $errors[] = [
@@ -297,7 +295,7 @@ class ValidationService {
    */
   protected function validateAllRelationFields(): array {
     $all_errors = [];
-    $rn_fields = $this->fieldConfigurator->getAllRnCreatedFields();
+    $rn_fields = $this->relationFieldManager->getAllRnCreatedFields();
     $relation_field_names = $this->fieldNameResolver->getAllRelationFieldNames();
     foreach ($rn_fields as $field_id => $field) {
       $field_config = false;

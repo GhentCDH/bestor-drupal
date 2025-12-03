@@ -1,0 +1,22 @@
+uuid: ed74bde1-5291-4f0e-a70b-b8e1782a871d
+langcode: en
+status: true
+dependencies:
+  theme:
+    - bestor
+_core:
+  default_config_hash: ZykEloyzMZEEYtEdhiRaOlIe554pLM_miW1kIFQqTuA
+id: bestor_local_tasks
+theme: bestor
+region: content
+weight: -8
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility: {  }

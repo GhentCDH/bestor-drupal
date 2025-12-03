@@ -145,6 +145,7 @@ function relationship_nodes_entity_type_build(array &$entity_types) {
 function relationship_nodes_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   $alter_form_service = NULL;
   switch ($form_id) {
+    //case 'node_type_add_form': // not yet operational
     case 'node_type_edit_form':
       $alter_form_service = \Drupal::service('relationship_nodes.node_type_form_alter');
       break;

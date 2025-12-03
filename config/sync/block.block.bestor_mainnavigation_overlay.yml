@@ -1,0 +1,25 @@
+uuid: 355f5383-c045-42f7-a801-33398e79eeb9
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - bestor
+id: bestor_mainnavigation_overlay
+theme: bestor
+region: overlay
+weight: -8
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

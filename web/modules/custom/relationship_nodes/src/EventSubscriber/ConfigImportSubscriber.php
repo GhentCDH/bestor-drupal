@@ -106,7 +106,7 @@ class ConfigImportSubscriber implements EventSubscriberInterface {
     }
 
     foreach ($this->fromConfigToEntities($this->getUpdatedRelationBundleConfigs($storage_comparer)) as $entity) {
-      $this->fieldConfigurator->implementFieldUpdates($entity);
+      $this->relationFieldManager->implementFieldUpdates($entity);
     }
   }
 

@@ -1,0 +1,22 @@
+uuid: c9c7fc1a-c505-4b41-a028-4739df3ad2c5
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bestor
+_core:
+  default_config_hash: UwY0mRxOiK3osgwS7m6BBZywbn-Cw7xZ969ygYGKhWA
+id: bestor_content
+theme: bestor
+region: content
+weight: -5
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

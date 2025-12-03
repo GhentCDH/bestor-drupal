@@ -3,7 +3,6 @@
 namespace Drupal\relationship_nodes\Display\Configurator;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
@@ -37,7 +36,7 @@ class FormatterConfigurator extends FieldConfiguratorBase {
    *   The field name resolver service.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
    *   The entity field manager service.
-   * @param \Drupal\relationship_nodes\FieldHelper\CalculatedFieldHelper $calculatedFieldHelper
+   * @param \Drupal\relationship_nodes\RelationField\CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper service.
    */
   public function __construct(
@@ -210,8 +209,8 @@ class FormatterConfigurator extends FieldConfiguratorBase {
    * Configurable fields are fields added via Field UI or configuration,
    * typically prefixed with field_* or rn_*.
    *
-   * @param \Drupal\Core\Field\FieldDefinitionInterface[] $field_definitions
-   *   Field definitions from EntityFieldManager::getFieldDefinitions().
+   * @param array $field_definitions
+   *   Array with field definitions from EntityFieldManager::getFieldDefinitions().
    *
    * @return array
    *   Array of configurable field machine names.

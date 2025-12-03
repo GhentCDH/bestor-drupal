@@ -32,8 +32,7 @@ class ValidationResultFormatter {
     'disabled_with_dependencies' => 'The vocabulary "@bundle" is used as a relation type in a relationship node. Remove this dependency before disabling Relationship Nodes.',
     'orphaned_rn_field_settings' => 'The field "@field" has relation settings, but is not defined in the module configuration.',
     'invalid_relation_vocabulary' => 'The field "@field" in bundle "@bundle" targets an invalid relation vocabulary.',
-    'mirror_field_bundle_mismatch' => 'The mirror field "@field" in bundle "@bundle" must reference the same vocabulary as the original.',
-    'relation_type_field_no_targets' => 'The relation type field "@field" in bundle "@bundle" must define one or more target bundles.'
+    'mirror_field_bundle_mismatch' => 'The mirror field "@field" in bundle "@bundle" must reference the same vocabulary as the original.'
   ];
 
 

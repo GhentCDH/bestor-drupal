@@ -1,0 +1,22 @@
+uuid: 41efdf3a-0522-4362-b69e-483103f758d8
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - bestor
+_core:
+  default_config_hash: shyFiIz1w4vot2_W7PjcxaT2JSAxboxfNBrHfLKtPfE
+id: bestor_help
+theme: bestor
+region: content
+weight: -7
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

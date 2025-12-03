@@ -4,7 +4,6 @@ namespace Drupal\relationship_nodes\RelationField;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Config\ConfigException;
 use Drupal\field\FieldConfigStorage;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -365,10 +364,10 @@ class RelationshipFieldManager {
 
     $result = []; 
     foreach ($input as $entity_type) {
-      $all_fields = $storage->listAll('field.' . $entity_type_id . '.');
+      $all_fields = $storage->listAll('field.' . $entity_type . '.');
       foreach ($all_fields as $field_name) {
         $config_data = $storage->read($field_name);
-        if ($config_data && $this->settingsManager->isCimRnCreatedField($config_data)) {
+        if ($config_data && $this->isCimRnCreatedField($config_data)) {
           $result[$field_name] = $config_data;
         }
       }

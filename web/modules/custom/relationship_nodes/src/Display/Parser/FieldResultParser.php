@@ -6,7 +6,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 
 /**
  * Parser for field formatter context.

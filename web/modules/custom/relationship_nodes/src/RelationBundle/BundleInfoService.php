@@ -397,7 +397,7 @@ class BundleInfoService {
    *   Keys are like 'taxonomy.vocabulary.relation_types'.
    *   Each value is the full config data array with 'third_party_settings', etc.
    */
-  public function getAllCimRelationVocabs(StorageInterface $storage, string $type = null): array {
+  public function getAllCimRelationVocabs(StorageInterface $storage, ?string $type = null): array {
     $all_vocabs = $this->getAllCimRelationBundles($storage, 'taxonomy_vocabulary') ?? [];
     if ($type === null) {
       return $all_vocabs;
@@ -443,7 +443,7 @@ class BundleInfoService {
 
     foreach ($node_types as $node_config_name => $node_config_data) {
       $node_classes = $this->settingsManager->getConfigFileEntityClasses($node_config_name);
-      $field_prefix = $this->fieldConfigurator->getFieldConfigNamePrefix(
+      $field_prefix = $this->relationFieldManager->getFieldConfigNamePrefix(
         'node',
         $node_classes['bundle'],
         true
@@ -456,7 +456,7 @@ class BundleInfoService {
       }
       $target_bundles = $field_config['settings']['handler_settings']['target_bundles'];
       $target_bundle = reset($target_bundles);
-      if ($target_bundle === $vocab->id()) {
+      if ($target_bundle === $entity_classes['bundle']) {
         $result[$node_config_name] = $node_config_data;
       }
     }

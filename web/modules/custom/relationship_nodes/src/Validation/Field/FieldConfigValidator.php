@@ -79,7 +79,7 @@ class FieldConfigValidator {
    *   TRUE if valid, FALSE otherwise.
    */
   public function validate(): bool {
-    $required_settings = $this->fieldConfigurator->getRequiredFieldConfiguration($this->fieldName);
+    $required_settings = $this->relationFieldManager->getRequiredFieldConfiguration($this->fieldName);
 
     if (!$required_settings) {
       // Not a RN field, no validation required. 
@@ -145,7 +145,6 @@ class FieldConfigValidator {
   protected function validateRelationVocabTarget(): void {
     if ($this->fieldName === $this->fieldNameResolver->getRelationTypeField()) {
       if (empty($this->targetBundles)) {
-        $this->errors[] = 'relation_type_field_no_targets';
         return;
       }
       // werkt niet bij configimport...

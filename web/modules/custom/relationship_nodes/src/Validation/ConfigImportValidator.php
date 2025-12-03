@@ -186,7 +186,7 @@ class ConfigImportValidator {
    */
   protected function validateCimExistingFields(string $config_name, StorageInterface $storage): array {
     $errors = [];
-    $existing_fields = $this->fieldConfigurator->getCimFieldsStatus($config_name, $storage)['existing'] ?? [];
+    $existing_fields = $this->relationFieldManager->getCimFieldsStatus($config_name, $storage)['existing'] ?? [];
     foreach ($existing_fields as $field => $field_info) {
       $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
       $error_context = [
@@ -239,7 +239,7 @@ class ConfigImportValidator {
       return [];
     }
 
-    $field_info = $this->fieldConfigurator->getConfigFileFieldClasses($config_name);
+    $field_info = $this->relationFieldManager->getConfigFileFieldClasses($config_name);
 
     if (!$field_info) {
       return [[
@@ -349,10 +349,10 @@ class ConfigImportValidator {
    */
   protected function validateAllCimRelationFields(StorageInterface $storage): array {
     $all_errors = [];
-    $rn_fields = $this->fieldConfigurator->getAllCimRnCreatedFields($storage);
+    $rn_fields = $this->relationFieldManager->getAllCimRnCreatedFields($storage);
     $relation_field_names = $this->fieldNameResolver->getAllRelationFieldNames();
     foreach ($rn_fields as $config_name => $config_data) {
-      $field_info = $this->fieldConfigurator->getConfigFileFieldClasses($config_name);
+      $field_info = $this->relationFieldManager->getConfigFileFieldClasses($config_name);
       $field_config = false;
       if (empty($field_info) || empty($field_info['field_entity_class'])) {
         return [[
