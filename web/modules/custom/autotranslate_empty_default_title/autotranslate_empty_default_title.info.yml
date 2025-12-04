@@ -1,0 +1,8 @@
+name: "autotranslate_empty_default_title"
+description: "Custom module that fills the title of the default language, if a translation exists, but the default is empty."
+package: Custom
+type: module
+version: 1.0
+core_version_requirement: ^10
+dependencies:
+  - drupal:content_translation

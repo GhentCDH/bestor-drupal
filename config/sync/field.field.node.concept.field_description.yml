@@ -7,6 +7,7 @@ dependencies:
     - node.type.concept
     - paragraphs.paragraphs_type.formatted_text
     - paragraphs.paragraphs_type.media
+    - paragraphs.paragraphs_type.table
     - paragraphs.paragraphs_type.text_media
   module:
     - entity_reference_revisions
@@ -27,6 +28,7 @@ settings:
       formatted_text: formatted_text
       media: media
       text_media: text_media
+      table: table
     negate: 0
     target_bundles_drag_drop:
       formatted_text:
@@ -34,6 +36,9 @@ settings:
         enabled: true
       media:
         weight: 4
+        enabled: true
+      table:
+        weight: 7
         enabled: true
       text_media:
         weight: 6

@@ -21,9 +21,11 @@ dependencies:
     - node.type.person
   module:
     - datetime_range
+    - entity_reference_modal
     - field_group
     - link
     - media_library
+    - multiselect_dropdown
     - paragraphs
     - path
     - relationship_nodes
@@ -76,6 +78,7 @@ third_party_settings:
     group_content:
       children:
         - field_description
+        - field_publications
         - field_references
       label: Content
       region: content
@@ -259,15 +262,14 @@ third_party_settings:
         required_fields: true
     group_m:
       children:
-        - langcode
-        - translation
         - status
         - promote
         - sticky
-        - created
-        - uid
-        - path
         - field_author
+        - path
+        - created
+        - translation
+        - langcode
       label: Metadata
       region: content
       parent_name: group_base_foprm
@@ -395,7 +397,7 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 7
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -408,10 +410,19 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_author:
-    type: entity_reference_autocomplete
-    weight: 10
+    type: entity_reference_modal
+    weight: 7
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -419,7 +430,7 @@ content:
     third_party_settings: {  }
   field_description:
     type: paragraphs
-    weight: 10
+    weight: 9
     region: content
     settings:
       title: Paragraph
@@ -436,34 +447,46 @@ content:
         duplicate: duplicate
     third_party_settings: {  }
   field_discipline:
-    type: entity_reference_autocomplete
+    type: multiselect_dropdown
     weight: 17
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      label_aria: 'Toggle the list of items'
+      label_none: 'No Items Selected'
+      label_all: 'All Items Selected'
+      label_single: '%d Item Selected'
+      label_plural: '%d Items Selected'
+      label_select_all: ''
+      label_select_none: ''
+      search_title: ''
+      search_title_display: ''
+      search_placeholder: ''
+      search_character_threshold: null
     third_party_settings: {  }
   field_end_municipality:
-    type: entity_reference_autocomplete
+    type: entity_reference_modal
     weight: 6
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
   field_gender:
-    type: entity_reference_autocomplete
+    type: options_select
     weight: 3
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_image:
     type: media_library_widget
@@ -473,10 +496,19 @@ content:
       media_types: {  }
     third_party_settings: {  }
   field_municipality:
-    type: entity_reference_autocomplete
+    type: entity_reference_modal
     weight: 5
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Nieuwe toevoegen'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -490,7 +522,7 @@ content:
     third_party_settings: {  }
   field_publications:
     type: string_textfield
-    weight: 29
+    weight: 10
     region: content
     settings:
       size: 60
@@ -505,10 +537,19 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_specialisation:
-    type: entity_reference_autocomplete
+    type: entity_reference_modal
     weight: 18
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -523,14 +564,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_typology:
-    type: entity_reference_autocomplete
+    type: options_select
     weight: 16
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_wikidata_entry:
     type: link_default
@@ -542,14 +579,14 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 2
+    weight: 11
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 9
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -583,18 +620,9 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 3
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 8
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  uid: true

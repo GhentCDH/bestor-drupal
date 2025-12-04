@@ -6,6 +6,8 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.article.body
     - field.field.node.article.field_image
+    - field.field.node.article.field_issued_by_bestor
+    - field.field.node.article.field_summary
     - node.type.article
   module:
     - user
@@ -33,6 +35,7 @@ content:
 hidden:
   body: true
   field_issued_by_bestor: true
+  field_summary: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

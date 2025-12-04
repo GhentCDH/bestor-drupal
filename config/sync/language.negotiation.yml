@@ -6,10 +6,10 @@ url:
   source: path_prefix
   prefixes:
     en: ''
-    nl: nl
     fr: fr
+    nl: nl
   domains:
     en: ''
-    nl: ''
     fr: ''
+    nl: ''
 selected_langcode: site_default

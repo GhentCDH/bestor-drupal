@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.field.node.article.body
     - field.field.node.article.field_image
+    - field.field.node.article.field_issued_by_bestor
+    - field.field.node.article.field_summary
     - node.type.article
   module:
     - text
@@ -31,6 +33,13 @@ content:
       link: false
     third_party_settings: {  }
     weight: 6
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
     region: content
   links:
     settings: {  }

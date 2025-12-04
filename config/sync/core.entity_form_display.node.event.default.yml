@@ -8,14 +8,95 @@ dependencies:
     - field.field.node.event.field_image
     - field.field.node.event.field_issued_by_bestor
     - field.field.node.event.field_location_text
+    - field.field.node.event.field_summary
     - field.field.node.event.field_time_period
     - node.type.event
   module:
     - datetime_range
-    - geofield
+    - field_group
+    - leaflet
     - media_library
     - path
     - text
+third_party_settings:
+  field_group:
+    group_base_form:
+      children:
+        - group_key_data
+        - group_content
+        - group_metadata
+      label: 'Base form'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: horizontal
+        width_breakpoint: null
+    group_key_data:
+      children:
+        - title
+        - field_issued_by_bestor
+        - field_time_period
+        - field_location_text
+        - field_geolocation
+        - field_image
+        - field_summary
+      label: 'Key data'
+      region: content
+      parent_name: group_base_form
+      weight: 20
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_content:
+      children:
+        - body
+      label: Content
+      region: content
+      parent_name: group_base_form
+      weight: 21
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_metadata:
+      children:
+        - status
+        - promote
+        - sticky
+        - path
+        - created
+        - translation
+        - langcode
+      label: Metadata
+      region: content
+      parent_name: group_base_form
+      weight: 22
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
 id: node.event.default
 targetEntityType: node
 bundle: event
@@ -23,7 +104,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 9
+    weight: 10
     region: content
     settings:
       rows: 9
@@ -33,61 +114,133 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 3
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   field_geolocation:
-    type: geofield_latlon
-    weight: 13
+    type: leaflet_widget_default
+    weight: 5
     region: content
     settings:
-      html5_geolocation: false
+      geometry_validation: false
+      map:
+        leaflet_map: 'OSM Mapnik'
+        height: 400
+        auto_center: 1
+        map_position:
+          force: false
+          center:
+            lat: 50.8
+            lon: 4.4
+          zoomControlPosition: topleft
+          zoom: 8
+          minZoom: 3
+          maxZoom: 19
+          zoomFiner: 0
+        scroll_zoom_enabled: 1
+      input:
+        show: false
+        readonly: false
+      toolbar:
+        position: topright
+        marker: defaultMarker
+        drawPolyline: false
+        drawRectangle: false
+        drawPolygon: false
+        drawCircle: false
+        drawText: false
+        editMode: false
+        dragMode: true
+        cutPolygon: false
+        removalMode: true
+        rotateMode: false
+      reset_map:
+        control: false
+        options: '{"position":"topleft","title":"Reset View"}'
+      map_scale:
+        control: false
+        options: '{"position":"bottomright","maxWidth":100,"metric":true,"imperial":false,"updateWhenIdle":false}'
+      fullscreen:
+        control: false
+        options: '{"position":"topleft","pseudoFullscreen":false}'
+      path: '{"color":"#3388ff","opacity":"1.0","stroke":true,"weight":3,"fill":"depends","fillColor":"*","fillOpacity":"0.2","radius":"6"}'
+      feature_properties:
+        values: ''
+      locate:
+        control: false
+        options: '{"position":"topright","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"Locate my position"}}'
+        automatic: false
+      geocoder:
+        control: false
+        settings:
+          popup: false
+          position: topright
+          input_size: 20
+          providers: {  }
+          min_terms: 4
+          delay: 800
+          zoom: 16
+          options: ''
+      geojson_overlays:
+        sources:
+          fields: {  }
+        zoom_to_geojson: true
+        path: '{"color":"#f71ed3","opacity":"0.7","stroke":true,"weight":2,"fillColor":"#ffddfe","fillOpacity":"0.1","radius":3,"dashArray":"5, 5"}'
+        snapping: true
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 10
+    weight: 6
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_issued_by_bestor:
     type: boolean_checkbox
-    weight: 14
+    weight: 2
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_location_text:
     type: string_textfield
-    weight: 12
+    weight: 4
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_summary:
+    type: string_textarea
+    weight: 7
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_time_period:
     type: daterange_default
-    weight: 11
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 1
+    weight: 14
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 7
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 5
+    weight: 9
     region: content
     settings:
       display_label: true
@@ -101,32 +254,23 @@ content:
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 6
+    weight: 10
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 4
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 2
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  uid: true

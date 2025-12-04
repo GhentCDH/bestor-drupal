@@ -1,0 +1,60 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+
+
+/**
+ * Implements hook_entity_presave().
+ */
+function autotranslate_empty_default_title_entity_presave(EntityInterface $entity) {
+
+// wat ik moet checken > kan ik de default language aanpassen? ipv titels aanvullen...
+//https://www.drupal.org/project/drupal/issues/2906739
+// ook eens aan miel vragen?
+// wat is wenselijk?
+
+
+
+
+  // Alleen voor nodes.
+ /* if ($entity->getEntityTypeId() !== 'node') {
+    return;
+  }
+  dpm($entity->getTranslationLanguages(), 14);
+
+  //dpm($entity->getLangcode(),15);
+  $languageManager = \Drupal::languageManager();
+  dpm($entity);
+  $dft_lang = $languageManager->getDefaultLanguage()->getId();
+  dpm($dft_lang);
+  $cur_lang = $languageManager->getCurrentLanguage()->getId();
+  dpm($cur_lang);
+  if($dft_lang === $cur_lang){
+    return;
+  }
+  $entity->getTranslationStatus($dft_lang); // cf https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21ContentEntityBase.php/11.x
+  $translation = $entity->getTranslation($cur_langcode);
+*/
+/*  
+  // Check of de default language versie leeg is.
+  $default_lang = $entity->language()->getId();
+  if ($entity->get('langcode')->value === $default_lang) {
+    if (empty($entity->getTitle())) {
+      // Probeer titel van andere taal te gebruiken.
+      $translations = $entity->getTranslationLanguages(FALSE);
+      foreach ($translations as $translation) {
+        $translated = $entity->getTranslation($translation->getId());
+        if (!empty($translated->getTitle())) {
+          $entity->setTitle($translated->getTitle());
+          break;
+        }
+      }
+      
+      // Als nog steeds leeg, gebruik placeholder.
+      if (empty($entity->getTitle())) {
+        $entity->setTitle('[Placeholder - ' . $entity->bundle() . ' ' . $entity->id() . ']');
+      }
+    }
+  }*/
+  //  throw new \Exception('Debug: save gestopt. Data: ' . print_r($data, TRUE));
+}

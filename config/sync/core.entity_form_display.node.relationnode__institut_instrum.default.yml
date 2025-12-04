@@ -14,28 +14,21 @@ targetEntityType: node
 bundle: relationnode__institut_instrum
 mode: default
 content:
-  langcode:
-    type: language_select
-    weight: 0
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
   rn_related_entity_1:
     type: options_select
-    weight: 1
+    weight: 0
     region: content
     settings: {  }
     third_party_settings: {  }
   rn_related_entity_2:
     type: options_select
-    weight: 2
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   rn_relation_type:
     type: mirror_select_widget
-    weight: 3
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -46,6 +39,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  langcode: true
   path: true
   promote: true
   status: true

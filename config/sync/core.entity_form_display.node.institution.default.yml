@@ -19,9 +19,11 @@ dependencies:
     - node.type.institution
   module:
     - datetime_range
+    - entity_reference_modal
     - field_group
-    - geofield
+    - leaflet
     - media_library
+    - multiselect_dropdown
     - paragraphs
     - path
     - relationship_nodes
@@ -240,15 +242,14 @@ third_party_settings:
         required_fields: true
     group_metadata:
       children:
-        - field_author
-        - langcode
-        - translation
         - status
         - promote
         - sticky
-        - created
-        - uid
+        - field_author
         - path
+        - created
+        - translation
+        - langcode
       label: Metadata
       region: content
       parent_name: group_base_form
@@ -389,20 +390,38 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_author:
-    type: entity_reference_autocomplete
-    weight: 27
+    type: entity_reference_modal
+    weight: 31
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
   field_country:
-    type: entity_reference_autocomplete
+    type: entity_reference_modal
     weight: 5
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -427,21 +446,92 @@ content:
         duplicate: duplicate
     third_party_settings: {  }
   field_discipline:
-    type: entity_reference_autocomplete
+    type: multiselect_dropdown
     weight: 24
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      label_aria: 'Toggle the list of items'
+      label_none: 'No Items Selected'
+      label_all: 'All Items Selected'
+      label_single: '%d Item Selected'
+      label_plural: '%d Items Selected'
+      label_select_all: ''
+      label_select_none: ''
+      search_title: ''
+      search_title_display: ''
+      search_placeholder: ''
+      search_character_threshold: null
     third_party_settings: {  }
   field_geolocation:
-    type: geofield_latlon
+    type: leaflet_widget_default
     weight: 6
     region: content
     settings:
-      html5_geolocation: false
+      geometry_validation: false
+      map:
+        leaflet_map: 'OSM Mapnik'
+        height: 400
+        auto_center: 1
+        map_position:
+          force: false
+          center:
+            lat: 50.8
+            lon: 4.4
+          zoomControlPosition: topleft
+          zoom: 8
+          minZoom: 3
+          maxZoom: 19
+          zoomFiner: 0
+        scroll_zoom_enabled: 1
+      input:
+        show: false
+        readonly: false
+      toolbar:
+        position: topright
+        marker: defaultMarker
+        drawPolyline: false
+        drawRectangle: false
+        drawPolygon: false
+        drawCircle: false
+        drawText: false
+        editMode: false
+        dragMode: true
+        cutPolygon: false
+        removalMode: true
+        rotateMode: false
+      reset_map:
+        control: false
+        options: '{"position":"topleft","title":"Reset View"}'
+      map_scale:
+        control: false
+        options: '{"position":"bottomright","maxWidth":100,"metric":true,"imperial":false,"updateWhenIdle":false}'
+      fullscreen:
+        control: false
+        options: '{"position":"topleft","pseudoFullscreen":false}'
+      path: '{"color":"#3388ff","opacity":"1.0","stroke":true,"weight":3,"fill":"depends","fillColor":"*","fillOpacity":"0.2","radius":"6"}'
+      feature_properties:
+        values: ''
+      locate:
+        control: false
+        options: '{"position":"topright","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"Locate my position"}}'
+        automatic: false
+      geocoder:
+        control: false
+        settings:
+          popup: false
+          position: topright
+          input_size: 20
+          providers: {  }
+          min_terms: 4
+          delay: 800
+          zoom: 16
+          options: ''
+      geojson_overlays:
+        sources:
+          fields: {  }
+        zoom_to_geojson: true
+        path: '{"color":"#f71ed3","opacity":"0.7","stroke":true,"weight":2,"fillColor":"#ffddfe","fillOpacity":"0.1","radius":3,"dashArray":"5, 5"}'
+        snapping: true
     third_party_settings: {  }
   field_image:
     type: media_library_widget
@@ -451,10 +541,19 @@ content:
       media_types: {  }
     third_party_settings: {  }
   field_municipality:
-    type: entity_reference_autocomplete
+    type: entity_reference_modal
     weight: 4
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -475,10 +574,19 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_specialisation:
-    type: entity_reference_autocomplete
+    type: entity_reference_modal
     weight: 25
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -493,45 +601,41 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_typology:
-    type: entity_reference_autocomplete
+    type: options_select
     weight: 23
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 28
+    weight: 35
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 35
+    weight: 32
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 31
+    weight: 29
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 30
+    weight: 28
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 32
+    weight: 30
     region: content
     settings:
       display_label: true
@@ -545,18 +649,9 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 29
+    weight: 34
     region: content
     settings: {  }
     third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 34
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  uid: true

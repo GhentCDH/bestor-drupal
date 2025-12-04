@@ -15,8 +15,10 @@ dependencies:
     - node.type.document
   module:
     - datetime_range
+    - entity_reference_modal
     - field_group
     - media_library
+    - multiselect_dropdown
     - paragraphs
     - path
     - relationship_nodes
@@ -114,15 +116,14 @@ third_party_settings:
         required_fields: true
     group_metadata:
       children:
-        - field_author
-        - langcode
-        - translation
         - status
         - promote
         - sticky
-        - created
-        - uid
+        - field_author
         - path
+        - created
+        - translation
+        - langcode
       label: Metadata
       region: content
       parent_name: group_base_form
@@ -380,10 +381,19 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_author:
-    type: entity_reference_autocomplete
-    weight: 10
+    type: entity_reference_modal
+    weight: 14
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -408,14 +418,21 @@ content:
         duplicate: duplicate
     third_party_settings: {  }
   field_discipline:
-    type: entity_reference_autocomplete
+    type: multiselect_dropdown
     weight: 19
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      label_aria: 'Toggle the list of items'
+      label_none: 'No Items Selected'
+      label_all: 'All Items Selected'
+      label_single: '%d Item Selected'
+      label_plural: '%d Items Selected'
+      label_select_all: ''
+      label_select_none: ''
+      search_title: ''
+      search_title_display: ''
+      search_placeholder: ''
+      search_character_threshold: null
     third_party_settings: {  }
   field_image:
     type: media_library_widget
@@ -439,10 +456,19 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_specialisation:
-    type: entity_reference_autocomplete
+    type: entity_reference_modal
     weight: 20
     region: content
     settings:
+      view_and_display: ''
+      add_new_button_title: +
+      modal_form_mode: default
+      modal_width: 80%
+      modal_title: 'Add new'
+      duplicate: false
+      search: true
+      bootstrap: false
+      tagify: false
       match_operator: CONTAINS
       match_limit: 10
       size: 60
@@ -458,34 +484,34 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 11
+    weight: 18
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 18
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 14
+    weight: 12
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 13
+    weight: 11
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 15
+    weight: 13
     region: content
     settings:
       display_label: true
@@ -499,18 +525,9 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 12
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 17
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  uid: true

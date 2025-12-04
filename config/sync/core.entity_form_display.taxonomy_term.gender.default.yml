@@ -1,0 +1,38 @@
+uuid: cc87561d-65d1-44be-bd8e-5a1b89fe8268
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.gender
+  module:
+    - path
+id: taxonomy_term.gender.default
+targetEntityType: taxonomy_term
+bundle: gender
+mode: default
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  translation: true

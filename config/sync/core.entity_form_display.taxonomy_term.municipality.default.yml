@@ -1,0 +1,38 @@
+uuid: 9033abd1-aa9c-4d9e-ba68-0d56d4272ea4
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.municipality
+  module:
+    - path
+id: taxonomy_term.municipality.default
+targetEntityType: taxonomy_term
+bundle: municipality
+mode: default
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  translation: true

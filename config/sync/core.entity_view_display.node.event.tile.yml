@@ -7,7 +7,9 @@ dependencies:
     - field.field.node.event.body
     - field.field.node.event.field_geolocation
     - field.field.node.event.field_image
+    - field.field.node.event.field_issued_by_bestor
     - field.field.node.event.field_location_text
+    - field.field.node.event.field_summary
     - field.field.node.event.field_time_period
     - node.type.event
   module:
@@ -45,6 +47,7 @@ hidden:
   body: true
   field_issued_by_bestor: true
   field_location_text: true
+  field_summary: true
   field_time_period: true
   footnotes_group: true
   langcode: true

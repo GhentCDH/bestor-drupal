@@ -1,4 +1,5 @@
 label: Contenu
+description: 'Find and manage content.'
 display:
   default:
     display_title: 'Par défaut'
@@ -9,15 +10,28 @@ display:
           label: Titre
         type:
           label: 'Type de contenu'
+          separator: ', '
+        name:
+          label: Author
         status:
           label: État
           settings:
             format_custom_false: 'Non publié'
             format_custom_true: Publié
+        changed:
+          label: Updated
         langcode:
           label: Langue
+          separator: ', '
         operations:
           label: Actions
+      pager:
+        options:
+          tags:
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
       exposed_form:
         options:
           submit_button: Filtrer
@@ -25,6 +39,9 @@ display:
           exposed_sorts_label: 'Trier par'
           sort_asc_label: Asc
           sort_desc_label: Desc
+      empty:
+        area_text_custom:
+          content: 'No content available.'
       filters:
         title:
           expose:
@@ -36,6 +53,7 @@ display:
           expose:
             label: État
           group_info:
+            label: 'Published status'
             group_items:
               1:
                 title: Publié
@@ -51,3 +69,4 @@ display:
         title: Contenu
       tab_options:
         title: Contenu
+        description: 'Find and manage content'

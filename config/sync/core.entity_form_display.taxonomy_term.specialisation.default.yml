@@ -1,0 +1,38 @@
+uuid: 48589124-304a-4440-a28c-4ece998bc770
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.specialisation
+  module:
+    - path
+id: taxonomy_term.specialisation.default
+targetEntityType: taxonomy_term
+bundle: specialisation
+mode: default
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  translation: true

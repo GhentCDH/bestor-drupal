@@ -1,3 +1,5 @@
+label: Frontpage
+description: 'All content promoted to the front page.'
 display:
   default:
     display_title: 'Par défaut'
@@ -9,3 +11,10 @@ display:
           exposed_sorts_label: 'Trier par'
           sort_asc_label: Asc
           sort_desc_label: Desc
+      empty:
+        area_text_custom:
+          content: 'No front page content has been created yet.<br/>Follow the <a target="_blank" href="https://www.drupal.org/docs/user_guide/en/index.html">User Guide</a> to start building your site.'
+        title:
+          title: Welcome!
+  page_1:
+    display_title: Page

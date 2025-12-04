@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad8668d8bd00c1ffa6b40108616b334e",
+    "content-hash": "0cf88f9a5c1711178a0dc91d96f4ad8e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2697,6 +2697,78 @@
             }
         },
         {
+            "name": "drupal/leaflet",
+            "version": "10.3.11",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/leaflet.git",
+                "reference": "10.3.11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/leaflet-10.3.11.zip",
+                "reference": "10.3.11",
+                "shasum": "64a83207cd1bfc599d32ad5f338a3d6ee24a2bad"
+            },
+            "require": {
+                "drupal/core": "^9.3 || ^10 || ^11",
+                "drupal/geofield": "^1.31"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "10.3.11",
+                    "datestamp": "1761727339",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Italo Mairo",
+                    "homepage": "https://www.drupal.org/u/itamair",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Peter Vanhee (pvhee)",
+                    "homepage": "https://www.drupal.org/u/pvhee",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Rik de Boer (RdeBoer)",
+                    "homepage": "https://www.drupal.org/u/rdeboer",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Gabriel Carleton-Barnes (gcb)",
+                    "homepage": "https://www.drupal.org/u/gcb",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Lev Tsypin (levelos)",
+                    "homepage": "https://www.drupal.org/u/levelos",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Sean Larkin (seanberto)",
+                    "homepage": "https://www.drupal.org/u/seanberto",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Integration with the Leaflet map scripting library.",
+            "homepage": "https://www.drupal.org/project/leaflet",
+            "support": {
+                "source": "https://git.drupalcode.org/project/leaflet",
+                "issues": "https://www.drupal.org/project/issues/leaflet"
+            }
+        },
+        {
             "name": "drupal/media_entity_slideshow",
             "version": "2.6.0",
             "source": {
@@ -3021,6 +3093,58 @@
                 "source": "https://git.drupalcode.org/project/migrate_plus",
                 "issues": "https://www.drupal.org/project/issues/migrate_plus",
                 "slack": "#migrate"
+            }
+        },
+        {
+            "name": "drupal/multiselect_dropdown",
+            "version": "1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/multiselect_dropdown.git",
+                "reference": "1.2.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/multiselect_dropdown-1.2.4.zip",
+                "reference": "1.2.4",
+                "shasum": "20213c0a6f79a1bf688d9b62876455869ea0d8cf"
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "drupal/better_exposed_filters": "^6 || ^7"
+            },
+            "suggest": {
+                "drupal/better_exposed_filters": "^6 || ^7"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.2.4",
+                    "datestamp": "1750456711",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Baird",
+                    "homepage": "https://www.drupal.org/u/benabaird"
+                }
+            ],
+            "description": "Provides a form render element which displays checkboxes in a dropdown select-like element.",
+            "homepage": "https://www.drupal.org/project/multiselect_dropdown",
+            "support": {
+                "source": "https://git.drupalcode.org/project/multiselect_dropdown",
+                "issues": "https://www.drupal.org/project/issues/multiselect_dropdown"
             }
         },
         {
@@ -3599,6 +3723,62 @@
             "homepage": "https://www.drupal.org/project/single_user_role",
             "support": {
                 "source": "https://git.drupalcode.org/project/single_user_role"
+            }
+        },
+        {
+            "name": "drupal/straw",
+            "version": "2.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/straw.git",
+                "reference": "2.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/straw-2.0.0-beta1.zip",
+                "reference": "2.0.0-beta1",
+                "shasum": "c52f76962eb236057ed2505b2016d71984797f26"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-beta1",
+                    "datestamp": "1717271050",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "brian.seek",
+                    "homepage": "https://www.drupal.org/user/2625761"
+                },
+                {
+                    "name": "camprandall",
+                    "homepage": "https://www.drupal.org/user/1837862"
+                },
+                {
+                    "name": "jcnventura",
+                    "homepage": "https://www.drupal.org/user/122464"
+                },
+                {
+                    "name": "mikeegoulding",
+                    "homepage": "https://www.drupal.org/user/2867877"
+                }
+            ],
+            "description": "Adds a form widget for seeing and editing the whole term hierarchy in an autocomplete.",
+            "homepage": "https://drupal.org/project/straw",
+            "support": {
+                "source": "https://git.drupalcode.org/project/straw"
             }
         },
         {
@@ -9233,7 +9413,8 @@
         "drupal/elasticsearch_connector": 20,
         "drupal/footnotes": 10,
         "drupal/inline_entity_form": 5,
-        "drupal/single_user_role": 10
+        "drupal/single_user_role": 10,
+        "drupal/straw": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,

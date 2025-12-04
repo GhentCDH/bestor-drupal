@@ -3,53 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.place_type.field_coordinates
-    - field.field.taxonomy_term.place_type.field_country
     - taxonomy.vocabulary.place_type
   module:
-    - geofield
     - path
-    - text
 id: taxonomy_term.place_type.default
 targetEntityType: taxonomy_term
 bundle: place_type
 mode: default
 content:
-  description:
-    type: text_textarea
-    weight: 0
-    region: content
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
-  field_coordinates:
-    type: geofield_latlon
-    weight: 102
-    region: content
-    settings:
-      html5_geolocation: false
-    third_party_settings: {  }
-  field_country:
-    type: entity_reference_autocomplete
-    weight: 101
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  langcode:
-    type: language_select
-    weight: 2
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
   name:
     type: string_textfield
-    weight: -5
+    weight: 0
     region: content
     settings:
       size: 60
@@ -57,20 +21,18 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 100
+    weight: 2
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
-  translation:
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  description: true
+  langcode: true
+  translation: true

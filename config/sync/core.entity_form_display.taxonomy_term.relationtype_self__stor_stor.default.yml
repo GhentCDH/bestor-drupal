@@ -12,13 +12,6 @@ targetEntityType: taxonomy_term
 bundle: relationtype_self__stor_stor
 mode: default
 content:
-  langcode:
-    type: language_select
-    weight: 3
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 0
@@ -29,22 +22,24 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 4
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  rn_mirror_reference:
+    type: options_select
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 5
+    weight: 3
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
-  translation:
-    weight: 2
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   description: true
-  rn_mirror_reference: true
+  langcode: true
+  translation: true

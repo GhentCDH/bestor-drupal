@@ -1,0 +1,38 @@
+uuid: 36cab058-9f33-4f5c-b6af-fb1dd98715c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.discipline
+  module:
+    - path
+id: taxonomy_term.discipline.default
+targetEntityType: taxonomy_term
+bundle: discipline
+mode: default
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  translation: true

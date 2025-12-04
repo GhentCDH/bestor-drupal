@@ -16,3 +16,5 @@ display:
           content: 'Er is nog geen inhoud gemaakt voor de voorpagina.<br />Volg de <a target="_blank" href="https://www.drupal.org/docs/user_guide/en/index.html">Gebruikershandleiding</a> om uw site te bouwen.'
         title:
           title: Welkom!
+  page_1:
+    display_title: Homepage

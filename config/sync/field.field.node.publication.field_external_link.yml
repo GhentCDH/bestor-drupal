@@ -11,7 +11,7 @@ id: node.publication.field_external_link
 field_name: field_external_link
 entity_type: node
 bundle: publication
-label: external_link
+label: Url
 description: ''
 required: false
 translatable: false

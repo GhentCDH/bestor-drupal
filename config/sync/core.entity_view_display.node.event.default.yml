@@ -6,7 +6,9 @@ dependencies:
     - field.field.node.event.body
     - field.field.node.event.field_geolocation
     - field.field.node.event.field_image
+    - field.field.node.event.field_issued_by_bestor
     - field.field.node.event.field_location_text
+    - field.field.node.event.field_summary
     - field.field.node.event.field_time_period
     - node.type.event
   module:
@@ -51,6 +53,13 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 103
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
     region: content
   field_time_period:
     type: daterange_default
