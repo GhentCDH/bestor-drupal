@@ -1,0 +1,10 @@
+display:
+  default:
+    display_options:
+      exposed_form:
+        options:
+          bef:
+            filter:
+              search_api_fulltext:
+                advanced:
+                  placeholder_text: 'Explorez Bestor'

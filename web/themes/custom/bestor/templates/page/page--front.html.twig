@@ -45,9 +45,8 @@
   c_page_header_utility_classes: ['header'],
 }) }}
 
-test {{ bestor('author_label', 'en') }}
 {{ include('jakarta:c-search', {
-  title: 'Zoek in onze database',
+  title: bestor('homepage_banner_title'),
   form: drupal_entity('block', 'bestor_exposedformsearchpage_1'), 
 })}}
 <div class="page">

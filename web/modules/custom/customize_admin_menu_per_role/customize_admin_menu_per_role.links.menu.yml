@@ -116,28 +116,36 @@ webmanager_dashboard.regional_settings:
   weight: -57
 
 # 5d. UI Translations
+webmanager_dashboard.bestor_custom_translations:
+  title: 'Bestor custom translations'
+  route_name: bestor_nodes_helper.bestor_translation_helper_form
+  menu_name: web-manager-admin
+  parent: webmanager_dashboard.config
+  weight: -56
+
+# 5e. UI Translations
 webmanager_dashboard.ui_translation:
   title: 'User interface translation'
   route_name: locale.translate_page
   menu_name: web-manager-admin
   parent: webmanager_dashboard.config
-  weight: -56
+  weight: -55
 
-# 5e. Config Translations
+# 5f. Config Translations
 webmanager_dashboard.config_translation:
   title: 'Configuration translation'
   route_name: config_translation.mapper_list
   menu_name: web-manager-admin
   parent: webmanager_dashboard.config
-  weight: -55
+  weight: -54
 
-# 5f. Url Aliases
+# 5g. Url Aliases
 webmanager_dashboard.url_aliases:
   title: 'URL aliases'
   route_name: entity.path_alias.collection
   menu_name: web-manager-admin
   parent: webmanager_dashboard.config
-  weight: -54
+  weight: -53
 
 
 

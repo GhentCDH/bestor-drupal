@@ -3,6 +3,7 @@
 namespace Drupal\bestor_nodes_helper\TwigExtension;
 
 use Drupal\bestor_nodes_helper\Service\CustomTranslations;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -11,16 +12,15 @@ use Twig\TwigFunction;
  */
 class CustomTranslationExtension extends AbstractExtension {
 
-  /**
-   * The custom translations service.
-   */
+  protected LanguageManagerInterface $languageManager;
   protected CustomTranslations $customTranslations;
 
   /**
    * Constructor.
    */
-  public function __construct(CustomTranslations $custom_translations) {
-    $this->customTranslations = $custom_translations;
+  public function __construct(LanguageManagerInterface $languageManager, CustomTranslations $customTranslations) {
+    $this->languageManager = $languageManager;
+    $this->customTranslations = $customTranslations;
   }
 
   /**
@@ -36,7 +36,9 @@ class CustomTranslationExtension extends AbstractExtension {
    * Get custom translation.
    */
   public function translate(string $key, ?string $langcode = NULL): string {
+    if($langcode == NULL){
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
     return $this->customTranslations->get($key, $langcode);
   }
-
 }

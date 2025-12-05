@@ -59,15 +59,14 @@ class BestorTranslationHelperForm extends ConfigFormBase {
     $form['description'] = [
       '#markup' => '<p>' . $this->t('Manage custom translations for interface labels.') . '</p>',
       '#prefix' => '<div class="messages messages--info">',
-      '#suffix' => '<p><strong>' . $this->t('To add new translation keys, edit: <code>src/Service/CustomTranslations.php</code> → getDefinitions()') . '</strong></p></div>',
+      '#suffix' => '<p><strong>' . $this->t('To add new translation keys, edit: <code>bestor_nodes_helper/src/Service/CustomTranslations.php</code> → getDefinitions()') . '</strong></p></div>',
     ];
 
     // Build header dynamically
-    $header = [$this->t('Key')];
+    $header = [$this->t('Description')];
     foreach ($languages as $langcode) {
       $header[] = $this->t(ucfirst($langcode));
     }
-    $header[] = $this->t('Description');
 
     $form['translations'] = [
       '#type' => 'table',
@@ -77,22 +76,18 @@ class BestorTranslationHelperForm extends ConfigFormBase {
     foreach ($definitions as $key => $definition) {
       $current = $custom_translations[$key] ?? [];
       
-      $form['translations'][$key]['key'] = [
-        '#markup' => '<code>' . $key . '</code>',
+      $form['translations'][$key]['label'] = [
+        '#markup' => '<strong>' . $definition['description'] . '</strong><br><small>(' . $key . ')</small>',
       ];
 
       foreach ($languages as $langcode) {
         $form['translations'][$key][$langcode] = [
           '#type' => 'textfield',
           '#default_value' => $current[$langcode] ?? $definition[$langcode],
-          '#size' => 30,
+          '#size' => 100,
           '#required' => TRUE,
         ];
       }
-
-      $form['translations'][$key]['description'] = [
-        '#markup' => '<small>' . $definition['description'] . '</small>',
-      ];
     }
 
     return parent::buildForm($form, $form_state);

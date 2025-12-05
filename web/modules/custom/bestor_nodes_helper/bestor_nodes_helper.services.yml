@@ -13,6 +13,7 @@ services:
   bestor_nodes_helper.twig_extension:
     class: Drupal\bestor_nodes_helper\TwigExtension\CustomTranslationExtension
     arguments:
+      - '@language_manager'
       - '@bestor_nodes_helper.custom_translations'
     tags:
       - { name: twig.extension }
