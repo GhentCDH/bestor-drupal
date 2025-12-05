@@ -216,4 +216,16 @@ class CustomTranslations {
   public function clearCache(): void {
     $this->translations = NULL;
   }
+
+
+  public function generateBannerSubtitleHtml(string $langcode = null): string{
+    $url_lang_prefix = '';
+    if(!empty($langcode) && $langcode !== $this->languageManager->getDefaultLanguage()->getId()){
+      $url_lang_prefix = '/' . $langcode;
+    }
+    $prefix = $this->get('homepage_banner_sub_title_prefix', $langcode);
+    $linktext = $this->get('homepage_banner_sub_title_linktext', $langcode);
+    $suffix = $this->get('homepage_banner_sub_title_suffix', $langcode);
+    return $prefix . ' <a href="' . $url_lang_prefix . '/database">' . $linktext . '</a> ' . $suffix;
+  }
 }

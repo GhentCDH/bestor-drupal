@@ -6,6 +6,7 @@ use Drupal\bestor_nodes_helper\Service\CustomTranslations;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use Drupal\Core\Render\Markup;
 
 /**
  * Twig extension for custom translations.
@@ -28,17 +29,23 @@ class CustomTranslationExtension extends AbstractExtension {
    */
   public function getFunctions(): array {
     return [
-      new TwigFunction('bestor', [$this, 'translate']),
+      new TwigFunction('bestor', [$this, 'translate'], [
+        'is_safe' => ['html'],
+      ]),
     ];
   }
+
 
   /**
    * Get custom translation.
    */
-  public function translate(string $key, ?string $langcode = NULL): string {
+  public function translate(string $key, ?string $langcode = NULL): Markup {
     if($langcode == NULL){
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
-    return $this->customTranslations->get($key, $langcode);
+    if($key === 'banner_subtitle'){
+        return Markup::create($this->customTranslations->generateBannerSubtitleHtml($langcode));
+    }
+    return Markup::create($this->customTranslations->get($key, $langcode));
   }
 }
