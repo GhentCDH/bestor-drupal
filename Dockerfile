@@ -2,7 +2,7 @@ ARG PHP_VERSION
 # =============================================================================
 # Base Stage - Common dependencies and setup
 # =============================================================================
-FROM webdevops/php-apache:${PHP_VERSION} AS base
+FROM webdevops/php-apache:8.3 AS base
 
 # Set apache document root and index file
 ENV WEB_DOCUMENT_ROOT="/app/web"
@@ -19,11 +19,19 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     nano \
+    gnupg2 \
     libmemcached-dev \
     iputils-ping \
     memcached \
     libmemcached-tools \
     && rm -rf /var/lib/apt/lists/*
+
+# Install node 20.x and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g npm@11.6.4
 
 # Set working directory
 WORKDIR /app
@@ -51,7 +59,7 @@ CMD ["/startup.sh"]
 # Production Stage
 # =============================================================================
 
-FROM base as production
+FROM base AS production
 
 # Copy application files
 COPY --chown=application:application composer.json composer.lock /app/
@@ -63,6 +71,13 @@ RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
 COPY scripts/startup-prod.sh /startup.sh
 RUN chmod +x /startup.sh
+
+#set working directory for theme build
+WORKDIR /app/web/themes/custom/jakarta
+RUN npm install --no-audit
+RUN npm run build
+
+WORKDIR /app/
 
 ENV php.opcache.enable=1
 ENV php.opcache.memory_consumption=256

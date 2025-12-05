@@ -1,0 +1,31 @@
+services:
+  drupal:
+    container_name: bestor-drupal
+    platform: linux/amd64 
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - 8080:80
+    volumes:
+      - ./config:/app/config
+      - ./initial-content:/app/initial-content:ro
+      - ./scripts:/app/scripts:ro
+      - ./composer.json:/app/composer.json
+      - ./composer.lock:/app/composer.lock
+      - ./web/modules/custom:/app/web/modules/custom
+      - ./web/themes/custom:/app/web/themes/custom
+      - ./web/sites/default:/app/web/sites/default
+      - drupal_vendor:/app/vendor
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      memcache:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+
+  

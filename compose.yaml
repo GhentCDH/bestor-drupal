@@ -8,8 +8,6 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
-      args:
-        PHP_VERSION: 8.3
     ports:
       - 8080:80
     volumes:
