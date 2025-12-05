@@ -1,0 +1,28 @@
+uuid: 7ee193f6-f3bd-42d2-bbbf-04a2db2ee5c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.database
+  module:
+    - system
+    - views
+  theme:
+    - bestor
+id: bestor_exposedformdatabasepage_1
+theme: bestor
+region: sidebar
+weight: -7
+provider: null
+plugin: 'views_exposed_filter_block:database-page_1'
+settings:
+  id: 'views_exposed_filter_block:database-page_1'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /database

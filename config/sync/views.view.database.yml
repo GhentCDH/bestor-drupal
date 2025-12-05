@@ -7,6 +7,8 @@ dependencies:
     - search_api.index.bestor_main_search_index
     - system.menu.main
   module:
+    - better_exposed_filters
+    - facets_exposed_filters
     - search_api
 id: database
 label: Database
@@ -118,15 +120,96 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Apply
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: false
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+              reset_button_always_show: false
+            filter:
+              facets_glossaryaz_title__str:
+                plugin_id: bef_links
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+                select_all_none: false
+                soft_limit: 0
+                soft_limit_label_less: 'Show less'
+                soft_limit_label_more: 'Show more'
+              facets_content_type__str:
+                plugin_id: bef_links
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+                select_all_none: false
+                soft_limit: 0
+                soft_limit_label_less: 'Show less'
+                soft_limit_label_more: 'Show more'
+              facets_tax_specialisation__int:
+                plugin_id: bef_links
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+                select_all_none: false
+                soft_limit: 0
+                soft_limit_label_less: 'Show less'
+                soft_limit_label_more: 'Show more'
+              facets_tax_author__int:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
       access:
         type: none
         options: {  }
@@ -137,23 +220,187 @@ display:
       sorts: {  }
       arguments: {  }
       filters:
-        content_type_str:
-          id: content_type_str
+        facets_glossaryaz_title__str:
+          id: facets_glossaryaz_title__str
           table: search_api_index_bestor_main_search_index
-          field: content_type_str
+          field: facets_glossaryaz_title__str
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_options
-          operator: or
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Glossary AZ - Content » Title [str]'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: glossaryaz_title__str
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              0: '0'
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs:
+              glossaryaz_widget_order:
+                processor_id: glossaryaz_widget_order
+                weights:
+                  sort: 100
+                settings:
+                  sort:
+                    glossaryaz_sort_all:
+                      weight: '-1'
+                    glossaryaz_sort_az:
+                      weight: '1'
+                    glossaryaz_sort_09:
+                      weight: '2'
+                    glossaryaz_sort_other:
+                      weight: '3'
+        facets_content_type__str:
+          id: facets_content_type__str
+          table: search_api_index_bestor_main_search_index
+          field: facets_content_type__str
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Content type [string]'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: content_type__str
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs: {  }
+        facets_tax_specialisation__int:
+          id: facets_tax_specialisation__int
+          table: search_api_index_bestor_main_search_index
+          field: facets_tax_specialisation__int
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Specialisation tax [int]'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: tax_specialisation__int
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+        search_api_language:
+          id: search_api_language
+          table: search_api_index_bestor_main_search_index
+          field: search_api_language
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_language
+          operator: in
           value:
-            concept: concept
-            document: document
-            institution: institution
-            instrument: instrument
-            person: person
-            place: place
-            story: story
+            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
           group: 1
           exposed: false
           expose:
@@ -183,7 +430,65 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          reduce_duplicates: false
+        facets_tax_author__int:
+          id: facets_tax_author__int
+          table: search_api_index_bestor_main_search_index
+          field: facets_tax_author__int
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Author tax [int]'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: tax_author__int
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
         type: default
         options:
@@ -195,45 +500,13 @@ display:
         options:
           view_modes:
             'entity:node':
-              ':default': database_preview
-              article: ':default'
+              ':default': teaser
               concept: ':default'
               document: ':default'
-              event: ':default'
               institution: ':default'
               instrument: ':default'
-              page: ':default'
               person: ':default'
               place: ':default'
-              publication: ':default'
-              relationnode__concept_concept: ':default'
-              relationnode__concept_document: ':default'
-              relationnode__concept_instrument: ':default'
-              relationnode__concept_place: ':default'
-              relationnode__concept_story: ':default'
-              relationnode__document_document: ':default'
-              relationnode__document_place: ':default'
-              relationnode__document_strory: ':default'
-              relationnode__institut_concept: ':default'
-              relationnode__institut_document: ':default'
-              relationnode__institut_institut: ':default'
-              relationnode__institut_instrum: ':default'
-              relationnode__institut_place: ':default'
-              relationnode__institut_story: ':default'
-              relationnode__instrum_document: ':default'
-              relationnode__instrum_instrum: ':default'
-              relationnode__instrum_place: ':default'
-              relationnode__instrum_story: ':default'
-              relationnode__person_concept: ':default'
-              relationnode__person_document: ':default'
-              relationnode__person_institut: ':default'
-              relationnode__person_instrum: ':default'
-              relationnode__person_person: ':default'
-              relationnode__person_place: ':default'
-              relationnode__person_story: ':default'
-              relationnode__place_place: ':default'
-              relationnode__place_story: ':default'
-              relationnode__story_story: ':default'
               story: ':default'
       query:
         type: search_api_query
@@ -252,6 +525,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - 'user.node_grants:view'
       tags:
@@ -286,6 +560,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - 'user.node_grants:view'
       tags:
