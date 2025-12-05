@@ -118,7 +118,7 @@ webmanager_dashboard.regional_settings:
 # 5d. UI Translations
 webmanager_dashboard.bestor_custom_translations:
   title: 'Bestor custom translations'
-  route_name: bestor_nodes_helper.bestor_translation_helper_form
+  route_name: bestor_content_helper.bestor_translation_helper_form
   menu_name: web-manager-admin
   parent: webmanager_dashboard.config
   weight: -56

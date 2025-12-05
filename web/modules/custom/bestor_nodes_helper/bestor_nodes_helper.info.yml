@@ -1,8 +1,0 @@
-name: "bestor_language_helper"
-description: "Custom module that helps to handle nodes, e.g. multilinguality, reading time calc..."
-package: Custom
-type: module
-version: 1.0
-core_version_requirement: ^10
-dependencies:
-  - drupal:content_translation
