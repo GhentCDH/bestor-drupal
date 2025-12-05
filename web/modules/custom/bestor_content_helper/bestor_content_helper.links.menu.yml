@@ -1,0 +1,6 @@
+bestor_content_helper.bestor_translation_helper_menu:
+  title: 'Custom Bestor Translations'
+  description: 'Manage custom translation strings.'
+  route_name: bestor_content_helper.bestor_translation_helper_form
+  parent: system.admin_config_regional
+  weight: 10
