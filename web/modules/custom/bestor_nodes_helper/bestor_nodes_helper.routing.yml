@@ -1,0 +1,7 @@
+bestor_nodes_helper.bestor_translation_helper_form:
+  path: '/admin/config/regional/bestor-translation-helper'
+  defaults:
+    _form: '\Drupal\bestor_nodes_helper\Form\BestorTranslationHelperForm'
+    _title: 'Custom Translations'
+  requirements:
+    _permission: 'translate interface'

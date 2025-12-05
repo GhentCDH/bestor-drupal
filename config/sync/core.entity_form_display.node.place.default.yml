@@ -23,10 +23,10 @@ dependencies:
     - field_group
     - leaflet
     - media_library
-    - multiselect_dropdown
     - paragraphs
     - path
     - relationship_nodes
+    - selectify
     - text
 third_party_settings:
   field_group:
@@ -409,23 +409,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_country:
-    type: entity_reference_modal
+    type: selectify_dropdown_searchable
     weight: 4
     region: content
-    settings:
-      view_and_display: ''
-      add_new_button_title: +
-      modal_form_mode: default
-      modal_width: 80%
-      modal_title: 'Add new'
-      duplicate: false
-      search: true
-      bootstrap: false
-      tagify: false
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_description:
     type: paragraphs
@@ -446,21 +433,10 @@ content:
         duplicate: duplicate
     third_party_settings: {  }
   field_discipline:
-    type: multiselect_dropdown
+    type: selectify_dropdown_searchable
     weight: 24
     region: content
-    settings:
-      label_aria: 'Toggle the list of items'
-      label_none: 'No Items Selected'
-      label_all: 'All Items Selected'
-      label_single: '%d Item Selected'
-      label_plural: '%d Items Selected'
-      label_select_all: ''
-      label_select_none: ''
-      search_title: ''
-      search_title_display: ''
-      search_placeholder: ''
-      search_character_threshold: null
+    settings: {  }
     third_party_settings: {  }
   field_geolocation:
     type: leaflet_widget_default
@@ -541,23 +517,10 @@ content:
       media_types: {  }
     third_party_settings: {  }
   field_municipality:
-    type: entity_reference_modal
+    type: selectify_dropdown_searchable
     weight: 5
     region: content
-    settings:
-      view_and_display: ''
-      add_new_button_title: +
-      modal_form_mode: default
-      modal_width: 80%
-      modal_title: 'Add new'
-      duplicate: false
-      search: true
-      bootstrap: false
-      tagify: false
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_period:
     type: daterange_default
@@ -601,7 +564,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_typology:
-    type: options_select
+    type: selectify_dropdown_searchable
     weight: 23
     region: content
     settings: {  }

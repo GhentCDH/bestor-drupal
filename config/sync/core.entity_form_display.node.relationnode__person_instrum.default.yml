@@ -9,19 +9,20 @@ dependencies:
     - node.type.relationnode__person_instrum
   module:
     - relationship_nodes
+    - selectify
 id: node.relationnode__person_instrum.default
 targetEntityType: node
 bundle: relationnode__person_instrum
 mode: default
 content:
   rn_related_entity_1:
-    type: options_select
+    type: selectify_dropdown_searchable
     weight: 0
     region: content
     settings: {  }
     third_party_settings: {  }
   rn_related_entity_2:
-    type: options_select
+    type: selectify_dropdown_searchable
     weight: 1
     region: content
     settings: {  }

@@ -1,0 +1,18 @@
+services:
+  bestor_nodes_helper.node_content_analyzer:
+    class: Drupal\bestor_nodes_helper\Service\NodeContentAnalyzer
+  bestor_nodes_helper.node_language_analyzer:
+    class: Drupal\bestor_nodes_helper\Service\NodeLanguageAnalyzer
+    arguments:
+      - '@bestor_nodes_helper.node_content_analyzer'
+  bestor_nodes_helper.custom_translations:
+    class: Drupal\bestor_nodes_helper\Service\CustomTranslations
+    arguments:
+      - '@config.factory'
+      - '@language_manager'
+  bestor_nodes_helper.twig_extension:
+    class: Drupal\bestor_nodes_helper\TwigExtension\CustomTranslationExtension
+    arguments:
+      - '@bestor_nodes_helper.custom_translations'
+    tags:
+      - { name: twig.extension }

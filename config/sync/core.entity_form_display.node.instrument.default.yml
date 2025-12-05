@@ -18,10 +18,10 @@ dependencies:
     - entity_reference_modal
     - field_group
     - media_library
-    - multiselect_dropdown
     - paragraphs
     - path
     - relationship_nodes
+    - selectify
     - text
 third_party_settings:
   field_group:
@@ -418,21 +418,10 @@ content:
         duplicate: duplicate
     third_party_settings: {  }
   field_discipline:
-    type: multiselect_dropdown
+    type: selectify_dropdown_searchable
     weight: 21
     region: content
-    settings:
-      label_aria: 'Toggle the list of items'
-      label_none: 'No Items Selected'
-      label_all: 'All Items Selected'
-      label_single: '%d Item Selected'
-      label_plural: '%d Items Selected'
-      label_select_all: ''
-      label_select_none: ''
-      search_title: ''
-      search_title_display: ''
-      search_placeholder: ''
-      search_character_threshold: null
+    settings: {  }
     third_party_settings: {  }
   field_image:
     type: media_library_widget
