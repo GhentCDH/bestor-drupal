@@ -10,10 +10,15 @@ services:
     arguments:
       - '@config.factory'
       - '@language_manager'
+  bestor_content_helper.facet_results_provider:
+    class: Drupal\bestor_content_helper\Service\FacetResultsProvider
+    arguments:
+      - '@language_manager'
   bestor_content_helper.twig_extension:
     class: Drupal\bestor_content_helper\TwigExtension\CustomTranslationExtension
     arguments:
       - '@language_manager'
       - '@bestor_content_helper.custom_translations'
+      - '@bestor_content_helper.facet_results_provider'      
     tags:
       - { name: twig.extension }

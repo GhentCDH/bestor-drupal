@@ -1,0 +1,29 @@
+uuid: ae834125-cbfc-404f-88a4-b1a7f2a1c0de
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.discipline_tax_int
+  module:
+    - facets
+    - system
+  theme:
+    - bestor
+id: bestor_disciplinetaxint
+theme: bestor
+region: sidebar
+weight: -8
+provider: null
+plugin: 'facet_block:discipline_tax_int'
+settings:
+  id: 'facet_block:discipline_tax_int'
+  label: 'Discipline tax [int]'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: bestor_disciplinetaxint
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'
