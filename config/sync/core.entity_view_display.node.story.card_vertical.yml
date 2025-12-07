@@ -1,0 +1,103 @@
+uuid: 12fa20a4-6c74-4c52-8722-4d2c62878cbd
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_vertical
+    - field.field.node.story.field_alternative_name
+    - field.field.node.story.field_author
+    - field.field.node.story.field_description
+    - field.field.node.story.field_discipline
+    - field.field.node.story.field_image
+    - field.field.node.story.field_period
+    - field.field.node.story.field_references
+    - field.field.node.story.field_specialisation
+    - field.field.node.story.field_summary
+    - node.type.story
+  module:
+    - datetime_range
+    - entity_reference_revisions
+    - user
+id: node.story.card_vertical
+targetEntityType: node
+bundle: story
+mode: card_vertical
+content:
+  field_alternative_name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_description:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_discipline:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 115
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 117
+    region: content
+  field_specialisation:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 110
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  computed_relationshipfield__story__concept: true
+  computed_relationshipfield__story__document: true
+  computed_relationshipfield__story__institution: true
+  computed_relationshipfield__story__instrument: true
+  computed_relationshipfield__story__person: true
+  computed_relationshipfield__story__place: true
+  computed_relationshipfield__story__story: true
+  field_author: true
+  field_references: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

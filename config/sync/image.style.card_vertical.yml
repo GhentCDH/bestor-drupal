@@ -1,0 +1,15 @@
+uuid: 1735e22d-3cb6-41e2-8f37-e595cac1f9d2
+langcode: en
+status: true
+dependencies: {  }
+name: card_vertical
+label: Card-vertical
+effects:
+  24a7736e-6aa0-4a9f-bfd4-3902e1b33f63:
+    uuid: 24a7736e-6aa0-4a9f-bfd4-3902e1b33f63
+    id: image_scale_and_crop
+    weight: 2
+    data:
+      width: 402
+      height: 456
+      anchor: center-center

@@ -17,19 +17,16 @@
  * @ingroup themeable
  */
 #}
-{% set lines_html %}
-  {% for row in rows %}
-    {{ include('jakarta:c-line', {
-        title: row.content['#node'].label,
-        url: path('entity.node.canonical', {'node': row.content['#node'].id})
 
-      })
-    }}
-  {% endfor %}
-{% endset %}
+{% set grid_items = [] %}
+{% for row in rows %}
+  {% set grid_items = grid_items|merge([row.content]) %}
+{% endfor %}
 
-
-{{ include('jakarta:c-lines-box', {
-    lines: lines_html
-  })
-}}
+{# Render de grid #}
+{{ include('jakarta:c-grid', {
+  title: bestor('in_the_spotlight'),
+  grid_items: grid_items,
+  columns: 3,
+  background_color: 'tertiary',
+}) }}

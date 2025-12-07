@@ -1,0 +1,11 @@
+uuid: 4be7fe0b-af39-438a-8a68-a012e9b73d3e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.card_vertical
+label: card-vertical
+description: 'E.g. in the picture - for lemmas'
+targetEntityType: node
+cache: true

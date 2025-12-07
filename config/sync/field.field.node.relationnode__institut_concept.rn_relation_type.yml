@@ -18,7 +18,7 @@ bundle: relationnode__institut_concept
 label: 'Rn relation type'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

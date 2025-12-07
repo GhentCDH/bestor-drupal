@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.node.field_alternative_name
     - search_api.index.bestor_main_search_index
-    - system.menu.main
   module:
     - better_exposed_filters
     - facets_exposed_filters
@@ -616,7 +615,7 @@ display:
       display_extenders: {  }
       path: database
       menu:
-        type: normal
+        type: none
         title: Database
         description: ''
         weight: -49

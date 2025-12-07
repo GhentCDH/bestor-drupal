@@ -7,65 +7,47 @@
 
 use Drupal\node\NodeInterface;
 
+
 /**
  * Implements hook_node_presave().
  */
 function bestor_content_helper_node_presave(NodeInterface $node) {
-  // Zorg dat default translation altijd een titel heeft
   \Drupal::service('bestor_content_helper.node_language_analyzer')
     ->ensureDefaultTranslationTitle($node);
 }
 
-/**
- * Implements hook_node_view().
- */
 
-function bestor_content_helper_node_view(array &$build, NodeInterface $node, $view_mode, $langcode) {
-  // Alleen voor full view mode
-
-  /*if ($view_mode !== 'full') {
+function bestor_content_helper_preprocess_menu(&$variables) {
+  if ($variables['menu_name'] !== 'main') {
     return;
-  }*/
-
-
-
-
-  /*$analyzer = \Drupal::service('bestor_content_helper.node_language_analyzer');
-  $current_lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  
-  // Check of er betere vertalingen zijn
-  $suggestions = $analyzer->getTranslationSuggestions($node, $current_lang);
-  
-  if (!$suggestions) {
-    return; // Vertaling is OK
   }
 
-  // Bouw waarschuwing
-  $links = [];
-  foreach ($suggestions['alternatives'] as $langcode => $alt) {
-    $links[] = sprintf(
-      '<a href="%s">%s</a> (%d woorden)',
-      $alt['url'],
-      $alt['language_name'],
-      $alt['word_count']
-    );
+  $disciplines_key = NULL;
+  foreach ($variables['items'] as $key => $item) {
+    if (isset($item['title']) && in_array($item['title'], ['Disciplines'])) {
+      $disciplines_key = $key;
+      break;
+    }
   }
-  
-  $message = sprintf(
-    '<strong>Deze vertaling is beperkt (%d woorden).</strong><br>Voor meer volledige informatie, zie:<ul><li>%s</li></ul>',
-    $suggestions['current_words'],
-    implode('</li><li>', $links)
+
+  if (!$disciplines_key) {
+    return;
+  }
+
+  $facet_provider = \Drupal::service('bestor_content_helper.facet_results_provider');
+  $discipline_items = $facet_provider->getFacetResultMenuItems(
+    'database', 
+    'facets_tax_discipline__int', 
+    'discipline', 
+    'page_1'
   );
 
-  $build['translation_alert'] = [
-    '#type' => 'container',
-    '#weight' => -100,
-    '#attributes' => ['class' => ['translation-alert', 'translation-alert--incomplete']],
-    'message' => [
-      '#markup' => $message,
-    ],
-    '#attached' => [
-      'library' => ['bestor_content_helper/translation_alert'],
-    ],
-  ];*/
+  $variables['items'][$disciplines_key]['below'] = $discipline_items;
+  $variables['items'][$disciplines_key]['is_expanded'] = TRUE;
+}
+
+
+function bestor_content_helper_node_view(array &$build, NodeInterface $node, $view_mode, $langcode) {
+  $service =  \Drupal::service('bestor_content_helper.node_content_analyzer');
+  $service->entityRefFieldToResultArray($node, 'field_author', 'taxonomy_term');
 }

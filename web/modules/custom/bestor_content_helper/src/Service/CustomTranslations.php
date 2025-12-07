@@ -66,6 +66,12 @@ class CustomTranslations {
         'fr' => 'pour trouver un mot-clé spécifique.',
         'nl' => 'om een specfiek trefwoord te vinden.',
       ],
+      'in_the_spotlight' => [
+        'description' => 'Title of the section with lemmas in the spotlight on the homepage',
+        'en' => 'In the spotlight',
+        'fr' => 'À la une',
+        'nl' => 'In de kijker',
+      ],
       'published_label' => [
         'description' => 'Label used to display the publication date.',
         'en' => 'published at',

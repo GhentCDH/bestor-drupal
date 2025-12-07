@@ -2,9 +2,20 @@
 
 namespace Drupal\bestor_content_helper\Service;
 
+
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 
+
 class NodeContentAnalyzer {
+
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+  ) {
+    $this->entityTypeManager = $entity_type_manager;
+  }
 
   public function countContentWords(NodeInterface $node): int {
     // $node = The translation of a node instance.
@@ -33,10 +44,49 @@ class NodeContentAnalyzer {
     return ceil($this->countContentWords($node) / 250);
   }
 
+  public function getFormattedReadingTime(NodeInterface $node){
+    $int = $this->getReadingTime($node);
+    if(empty($int)){
+      $int = '< 1';
+    }
+    return $int . ' min.'; 
+
+  }
+
 
   public function isLemma(string $bundleName): bool {
     $lemmas = ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'];
     return in_array($bundleName, $lemmas);
   }
 
+
+  public function entityRefFieldToResultArray(NodeInterface $node, string $field_name, string $target_entity_type): ?array{
+    if(!in_array($target_entity_type, ['taxonomy_term', 'node'])){
+      return NULL;
+    }
+    if (!$node->hasField($field_name) || empty($node->get($field_name)->getValue())) {
+      return NULL;
+    }
+    $result = [];
+    $storage = $this->entityTypeManager->getStorage($target_entity_type);
+    $values = $node->get($field_name)->getValue();
+    foreach($values as $value){
+      if(empty($value['target_id'])){
+        continue;
+      }
+      $target = $storage->load($value['target_id']);
+      if(empty($target)){
+        continue;
+      }
+      if($target_entity_type === 'taxonomy_term') {
+        $result[] = $target->getName();
+      } else {
+        $result[] = $target->getTitle();
+      }
+      
+    }
+    
+
+    return $result;
+  }
 }

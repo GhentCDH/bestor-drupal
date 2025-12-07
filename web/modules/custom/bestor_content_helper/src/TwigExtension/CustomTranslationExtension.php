@@ -8,6 +8,8 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Drupal\Core\Render\Markup;
 use Drupal\bestor_content_helper\Service\FacetResultsProvider;
+use Drupal\bestor_content_helper\Service\NodeContentAnalyzer;
+use Drupal\bestor_content_helper\Service\MediaProcessor;
 
 /**
  * Twig extension for custom translations.
@@ -17,6 +19,8 @@ class CustomTranslationExtension extends AbstractExtension {
   protected LanguageManagerInterface $languageManager;
   protected CustomTranslations $customTranslations;
   protected FacetResultsProvider $facetResultsProvider;
+  protected NodeContentAnalyzer $nodeContentAnalyzer;
+  protected MediaProcessor $mediaProcessor;
 
   /**
    * Constructor.
@@ -24,11 +28,15 @@ class CustomTranslationExtension extends AbstractExtension {
   public function __construct(
     LanguageManagerInterface $languageManager, 
     CustomTranslations $customTranslations,
-    FacetResultsProvider $facetResultsProvider
+    FacetResultsProvider $facetResultsProvider,
+    NodeContentAnalyzer $nodeContentAnalyzer,
+    MediaProcessor $mediaProcessor
   ) {
     $this->languageManager = $languageManager;
     $this->customTranslations = $customTranslations;
     $this->facetResultsProvider = $facetResultsProvider;
+    $this->nodeContentAnalyzer = $nodeContentAnalyzer;
+    $this->mediaProcessor = $mediaProcessor;
   }
 
     /**
@@ -45,12 +53,16 @@ class CustomTranslationExtension extends AbstractExtension {
   /**
    * Main bestor function - routes to different functionality.
    */
-  public function bestor(string $type, ...$args): Markup|array {
+  public function bestor(string $type, ...$args): Markup|array|string|null {
     return match($type) {
-      'facet_links' => $this->getFacetLinks(...$args),
+      'facet_links' => $this->facetResultsProvider->getFacetResultLinks(...$args),
+      'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
+      'image_info' => $this->mediaProcessor->getNodeImageInfo(...$args),
+      'get_list' => $this->nodeContentAnalyzer->entityRefFieldToResultArray(...$args),
       default => $this->translate($type, ...$args),
     };
   }
+
 
   /**
    * Get custom translation.
@@ -69,7 +81,6 @@ class CustomTranslationExtension extends AbstractExtension {
    * Get facet results as links render array.
    */
   protected function getFacetLinks(string $view_name, string $filter_id, string $facet_url_id, string $display_id = 'default'): array {
-   dpm($this->facetResultsProvider->getFacetResultLinks($view_name, $filter_id, $facet_url_id, $display_id));
     return $this->facetResultsProvider->getFacetResultLinks($view_name, $filter_id, $facet_url_id, $display_id);
   }
 }

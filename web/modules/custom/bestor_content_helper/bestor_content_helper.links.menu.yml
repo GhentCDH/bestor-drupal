@@ -4,3 +4,9 @@ bestor_content_helper.bestor_translation_helper_menu:
   route_name: bestor_content_helper.bestor_translation_helper_form
   parent: system.admin_config_regional
   weight: 10
+bestor_content_helper.disciplines:
+  title: 'Disciplines'
+  route_name: '<nolink>'
+  menu_name: main
+  weight: -100
+  expanded: true

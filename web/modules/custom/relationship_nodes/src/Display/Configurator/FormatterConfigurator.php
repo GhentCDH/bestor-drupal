@@ -135,10 +135,6 @@ class FormatterConfigurator extends FieldConfiguratorBase {
       $field_names, 
       [$this->calculatedFieldHelper, 'isCalculatedChildField']
     );
-
-    dpm($relation_bundle);
-    dpm($field_names);
-    dpm($saved_settings);
     
     $context = [
       'linkable_fields' => $this->getLinkableFields($relation_bundle, $field_names),
