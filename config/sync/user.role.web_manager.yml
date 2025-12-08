@@ -126,6 +126,7 @@ permissions:
   - 'access toolbar'
   - 'access user profiles'
   - 'access webmanager dashboard'
+  - 'administer nodes'
   - 'administer url aliases'
   - 'administer users'
   - 'change own username'
