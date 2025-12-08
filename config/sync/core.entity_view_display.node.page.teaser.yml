@@ -5,6 +5,10 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.field_image
+    - field.field.node.page.field_info_box_title
+    - field.field.node.page.field_read_more_label
+    - field.field.node.page.field_summary
     - node.type.page
   module:
     - text
@@ -24,10 +28,22 @@ content:
     third_party_settings: {  }
     weight: 100
     region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
   links:
     weight: 101
     region: content
 hidden:
+  field_info_box_title: true
+  field_read_more_label: true
+  field_summary: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

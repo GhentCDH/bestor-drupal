@@ -1,12 +1,12 @@
-uuid: 28845dbb-e0b1-47a5-aee8-f62cb300a67d
+uuid: c6a6c179-9083-4118-b81a-df798f141f78
 langcode: en
 status: true
 dependencies:
   module:
-    - block_content
-id: block_content.field_search_box_text
-field_name: field_search_box_text
-entity_type: block_content
+    - node
+id: node.field_read_more_label
+field_name: field_read_more_label
+entity_type: node
 type: string
 settings:
   max_length: 255

@@ -1,29 +1,31 @@
-uuid: 52a93866-8355-42a1-9f9d-e587a41e3c55
+uuid: 49546294-6de5-4630-a3b6-7fc0a8ebff0d
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.database_preview
+    - core.entity_view_mode.node.line
     - field.field.node.concept.field_alternative_name
     - field.field.node.concept.field_author
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
     - field.field.node.concept.field_image
     - field.field.node.concept.field_period
+    - field.field.node.concept.field_references
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
     - node.type.concept
   module:
+    - datetime_range
     - entity_reference_revisions
     - user
-id: node.concept.database_preview
+id: node.concept.line
 targetEntityType: node
 bundle: concept
-mode: database_preview
+mode: line
 content:
   field_alternative_name:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -31,7 +33,7 @@ content:
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
@@ -40,19 +42,46 @@ content:
     region: content
   field_discipline:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
     weight: 115
     region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_period:
+    type: daterange_custom
+    label: hidden
+    settings:
+      timezone_override: ''
+      date_format: j-n-Y
+      from_to: both
+      separator: '<i class="fa-solid fa-arrow-right"></i>'
+    third_party_settings: {  }
+    weight: 117
+    region: content
   field_specialisation:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
     weight: 110
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
     region: content
   links:
     settings: {  }
@@ -68,10 +97,7 @@ hidden:
   computed_relationshipfield__concept__place: true
   computed_relationshipfield__concept__story: true
   field_author: true
-  field_image: true
-  field_period: true
   field_references: true
-  field_summary: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

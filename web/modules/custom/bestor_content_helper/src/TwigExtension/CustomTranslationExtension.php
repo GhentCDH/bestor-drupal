@@ -58,7 +58,8 @@ class CustomTranslationExtension extends AbstractExtension {
       'facet_links' => $this->facetResultsProvider->getFacetResultLinks(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
       'image_info' => $this->mediaProcessor->getNodeImageInfo(...$args),
-      'get_list' => $this->nodeContentAnalyzer->entityRefFieldToResultArray(...$args),
+      'entref_to_list' => $this->nodeContentAnalyzer->entityRefFieldToResultArray(...$args),
+      'entref_to_str' => $this->nodeContentAnalyzer->entityRefFieldToResultString(...$args),
       default => $this->translate($type, ...$args),
     };
   }

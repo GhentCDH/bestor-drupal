@@ -41,23 +41,64 @@
  */
 #}
 
+{% set cta_news %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: bestor('more_news_label'),
+    url: path('view.announcements.page_2')
+  }, with_context = false) }}
+{% endset %}
+{% set cta_events %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: bestor('more_events_label'),
+    url: path('view.announcements.page_3')
+  }, with_context = false) }}
+{% endset %}
+{% set cta_publications %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
+    attr_variant: 'default',
+    color: 'primary',
+    title: bestor('more_publications_label'),
+    url: path('view.announcements.page_4')
+  }, with_context = false) }}
+{% endset %}
+{% set tabs %}
+  {% set tab_items = {
+    'tab': {
+      'title': bestor('news_title'),
+      'id': 'news',
+      'content': drupal_view('frontpage', 'block_1'),
+      'cta': cta_news
+    },
+    'tab_2': {
+      'title': bestor('events_title'),
+      'id': 'events',
+      'content': drupal_view('frontpage', 'block_2'),
+      'cta': cta_events      
+    },
+    'tab_3': {
+      'title': bestor('publications_title'),
+      'id': 'publications',
+      'content': drupal_view('frontpage', 'block_3'),
+      'cta': cta_publications
+    }
+  } %}
+    {{ include('jakarta:c-tabs', {
+      tab_items,
+    }, with_context = false) }}
+{% endset %}
+
 {{ include('jakarta:c-page-header', {
   c_page_header_utility_classes: ['header'],
 }) }}
 
-{{ include('jakarta:c-search', {
-  title: bestor('homepage_banner_title'),
-  form: drupal_entity('block', 'bestor_exposedformsearchpage_1'), 
-  links: bestor('facet_links', 'database', 'facets_tax_discipline__int', 'discipline', 'page_1'),
-  footnote: bestor('banner_subtitle')
-})}}
-
 <div class="page">
-  {% if page.precontent %}
-    <div class="page-precontent">
-      {{ page.precontent }}
-    </div>
-  {% endif %}
   <main class="content" role="main">
     <div class="main">
       <div class="visually-hidden"><a id="main-content" tabindex="-1"></a></div>
@@ -73,6 +114,17 @@
           </div>
       {% endif %}
       <div class="page-content">
+        {{ include('jakarta:c-search', {
+          title: bestor('homepage_banner_title'),
+          form: drupal_entity('block', 'bestor_exposedformsearchpage_1'), 
+          links: bestor('facet_links', 'database', 'facets_tax_discipline__int', 'discipline', 'page_1'),
+          footnote: bestor('banner_subtitle')
+        })}}
+        {{ include('jakarta:c-announcements', {
+          title: bestor('announcements_title'),
+          tabs: tabs,
+          sidebar: drupal_view('frontpage', 'block_5'),
+        }, with_context = false) }}
         {{ page.content }}
         {{ drupal_view('frontpage', 'block_4') }}
       </div>

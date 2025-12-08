@@ -1,0 +1,19 @@
+uuid: 6911c367-0ad1-4643-9ee9-fbb8929141bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_info_box_title
+    - node.type.page
+id: node.page.field_info_box_title
+field_name: field_info_box_title
+entity_type: node
+bundle: page
+label: 'Info box title'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

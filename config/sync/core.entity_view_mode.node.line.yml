@@ -1,11 +1,11 @@
-uuid: f05fabb0-3982-48a3-9ba9-3371359638d1
+uuid: 69340447-637d-438f-8465-9b70a39d6f35
 langcode: en
 status: true
 dependencies:
   module:
     - node
-id: node.tile
-label: Tile
+id: node.line
+label: line
 description: ''
 targetEntityType: node
 cache: true

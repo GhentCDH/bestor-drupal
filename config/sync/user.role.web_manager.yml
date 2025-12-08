@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - block_content.type.basic
-    - block_content.type.frontpage_search
-    - block_content.type.image_button
     - filter.format.basic_html
     - media.type.audio
     - media.type.document
@@ -360,10 +358,8 @@ permissions:
   - 'edit any document content'
   - 'edit any document media'
   - 'edit any event content'
-  - 'edit any frontpage_search block content'
   - 'edit any iframe media'
   - 'edit any image media'
-  - 'edit any image_button block content'
   - 'edit any institution content'
   - 'edit any instrument content'
   - 'edit any page content'

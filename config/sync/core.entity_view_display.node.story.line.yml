@@ -1,29 +1,31 @@
-uuid: ae8022f8-695f-4740-98de-6cd03c6d4dd0
+uuid: b43e11f7-160e-4711-91df-64cff1f59560
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.tile
+    - core.entity_view_mode.node.line
     - field.field.node.story.field_alternative_name
     - field.field.node.story.field_author
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_image
     - field.field.node.story.field_period
+    - field.field.node.story.field_references
     - field.field.node.story.field_specialisation
     - field.field.node.story.field_summary
     - node.type.story
   module:
+    - datetime_range
     - entity_reference_revisions
     - user
-id: node.story.tile
+id: node.story.line
 targetEntityType: node
 bundle: story
-mode: tile
+mode: line
 content:
   field_alternative_name:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -31,7 +33,7 @@ content:
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
@@ -40,7 +42,7 @@ content:
     region: content
   field_discipline:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -55,13 +57,31 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
+  field_period:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 117
+    region: content
   field_specialisation:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
     weight: 110
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
     region: content
   links:
     settings: {  }
@@ -77,9 +97,7 @@ hidden:
   computed_relationshipfield__story__place: true
   computed_relationshipfield__story__story: true
   field_author: true
-  field_period: true
   field_references: true
-  field_summary: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true

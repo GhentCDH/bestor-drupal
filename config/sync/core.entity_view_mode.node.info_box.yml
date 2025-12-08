@@ -1,11 +1,11 @@
-uuid: 8c8b44bc-b7a2-49cc-8a1f-3000fcc2eeec
+uuid: cae810f5-376c-404c-806a-0f86bee97aa8
 langcode: en
 status: true
 dependencies:
   module:
     - node
-id: node.bibliography
-label: Bibliography
+id: node.info_box
+label: info-box
 description: ''
 targetEntityType: node
 cache: true

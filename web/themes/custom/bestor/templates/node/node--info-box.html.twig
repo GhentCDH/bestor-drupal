@@ -71,16 +71,21 @@
  */
 #}
 
-{% set authors = bestor('author_label') ~ ': ' ~ (bestor('entref_to_str', node, 'field_author', 'taxonomy_term')|default(bestor('default_author'))) %}
-{% set updated = bestor('updated_label') ~ ': ' ~ node.changed.value|date('d/m/Y') %}
 
-<div>
-  {{ include('jakarta:c-line', {
-    title: label,
-    url: path('entity.node.canonical', {'node': node.id}),
-    author: authors,
-    date: updated,
+{% set image_info = bestor('image_info', node, 'field_image', 'info_box') %}
+{% set media %}
+  <img loading="lazy" src="{{ image_info.url }}" width="466" height="300" alt="{{ image_info.alt }}">
+{% endset %}
+{% set link %}
+  {{ include('jakarta:c-button', {
+    html_tag: 'a',
     attr_variant: 'default',
-    }, with_context = false)
-  }}
-</div>
+    color: 'primary',
+    title: content.field_read_more_label,
+  }, with_context = false) }}
+{% endset %}
+{{ include('jakarta:c-info-box', {
+  title: content.field_info_box_title,
+  media,
+  text: content.field_summary,
+}) }}

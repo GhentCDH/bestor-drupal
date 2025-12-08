@@ -17,19 +17,14 @@
  * @ingroup themeable
  */
 #}
-{% set lines_html %}
-  {% for row in rows %}
-    {{ include('jakarta:c-line', {
-        title: row.content['#node'].label,
-        url: path('entity.node.canonical', {'node': row.content['#node'].id})
 
-      })
-    }}
-  {% endfor %}
-{% endset %}
+{% set lines = [] %}
+{% for row in rows %}
+  {% set lines = lines|merge([row.content]) %}
+{% endfor %}
 
 
 {{ include('jakarta:c-lines-box', {
-    lines: lines_html
-  })
-}}
+  title: bestor('recently_updated_title'),
+  lines: lines,
+}, with_context = false) }}

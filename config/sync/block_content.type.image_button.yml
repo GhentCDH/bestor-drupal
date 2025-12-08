@@ -1,8 +1,0 @@
-uuid: 517624ce-f2f4-4124-8d11-c93c160e1e3e
-langcode: en
-status: true
-dependencies: {  }
-id: image_button
-label: 'Image button'
-revision: false
-description: null

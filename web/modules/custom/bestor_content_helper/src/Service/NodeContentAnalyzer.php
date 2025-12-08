@@ -86,7 +86,14 @@ class NodeContentAnalyzer {
       
     }
     
-
     return $result;
+  }
+
+   public function entityRefFieldToResultString(NodeInterface $node, string $field_name, string $target_entity_type): ?string{
+    $array = $this->entityRefFieldToResultArray($node, $field_name, $target_entity_type);
+    if(empty($array)){
+      return null;
+    }
+    return implode(', ', $array);
   }
 }

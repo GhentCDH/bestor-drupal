@@ -4,9 +4,14 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_image
+    - field.field.node.page.field_info_box_title
+    - field.field.node.page.field_read_more_label
+    - field.field.node.page.field_summary
     - node.type.page
   module:
     - field_group
+    - media_library
     - path
     - text
 third_party_settings:
@@ -14,6 +19,7 @@ third_party_settings:
     group_base_form:
       children:
         - group_content
+        - group_info_block_homepage
         - group_metadata
       label: base_form
       region: content
@@ -56,7 +62,7 @@ third_party_settings:
       label: Metadata
       region: content
       parent_name: group_base_form
-      weight: 21
+      weight: 22
       format_type: tab
       format_settings:
         classes: ''
@@ -65,6 +71,25 @@ third_party_settings:
         label_as_html: false
         formatter: closed
         description: ''
+        required_fields: true
+    group_info_block_homepage:
+      children:
+        - field_info_box_title
+        - field_image
+        - field_summary
+        - field_read_more_label
+      label: 'Info block homepage'
+      region: content
+      parent_name: group_base_form
+      weight: 21
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: "Only fill this section if you want to show a preview of this page in the section \"about Bestor\" on the homepage.\r\nDon't forget to mark this page as 'promoted to front page'."
         required_fields: true
 _core:
   default_config_hash: SfpLhPExzvR0MgFp0Wp7CrmgEnhcqQ-fXIWFhbf4ue0
@@ -88,6 +113,37 @@ content:
     weight: 11
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_image:
+    type: media_library_widget
+    weight: 11
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  field_info_box_title:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_read_more_label:
+    type: string_textfield
+    weight: 13
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_summary:
+    type: string_textarea
+    weight: 12
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select

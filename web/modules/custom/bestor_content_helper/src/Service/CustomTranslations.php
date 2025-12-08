@@ -66,35 +66,65 @@ class CustomTranslations {
         'fr' => 'pour trouver un mot-clé spécifique.',
         'nl' => 'om een specfiek trefwoord te vinden.',
       ],
-      'in_the_spotlight' => [
+      'announcements_title' => [
+        'description' => 'Title for the announcements section on the homepag',
+        'en' => 'Announcements',
+        'fr' => 'Annonces',
+        'nl' => 'Aankondigingen',
+      ],
+      'news_title' => [
+        'description' => 'Title for the news articles section on the homepage',
+        'en' => 'News',
+        'fr' => 'Événements',
+        'nl' => 'Nieuws',
+      ],
+      'events_title' => [
+        'description' => 'Title for the events section on the homepage',
+        'en' => 'Events',
+        'fr' => 'Récemment mis à jour',
+        'nl' => 'Evenementen',
+      ],
+      'publications_title' => [
+        'description' => 'Title for the publications section on the homepage',
+        'en' => 'Publications',
+        'fr' => 'Publications',
+        'nl' => 'Publicaties',
+      ],
+      'in_the_spotlight_title' => [
         'description' => 'Title of the section with lemmas in the spotlight on the homepage',
         'en' => 'In the spotlight',
         'fr' => 'À la une',
         'nl' => 'In de kijker',
       ],
-      'published_label' => [
-        'description' => 'Label used to display the publication date.',
-        'en' => 'published at',
-        'fr' => 'publié à',
-        'nl' => 'gepubliceerd op',
+      'recently_updated_title' => [
+        'description' => 'Title of the section with lemmas that are recently updated on the homepage',
+        'en' => 'Recently updated',
+        'fr' => 'Récemment mis à jour',
+        'nl' => 'Recent bijgewerkt',
       ],
-      'readmore_label' => [
-        'description' => 'Label for the “read more” link on content previews.',
-        'en' => 'read more',
-        'fr' => 'voir plus',
-        'nl' => 'lees meer',
+      'more_news_label' => [
+        'description' => 'Label for the “more info” link used  for news.',
+        'en' => 'More news',
+        'fr' => "Plus d'actualités",
+        'nl' => 'Meer nieuws',
       ],
-      'moreinfo_label' => [
-        'description' => 'Label for the “more info” link used throughout the site.',
-        'en' => 'more info',
-        'fr' => 'plus d\'infos',
-        'nl' => 'meer info',
+      'more_events_label' => [
+        'description' => 'Label for the “more info” link used for events.',
+        'en' => 'More events',
+        'fr' => "Plus d'événements",
+        'nl' => 'Meer evenementen',
+      ],
+      'more_publications_label' => [
+        'description' => 'Label for the “more info” link used for publications.',
+        'en' => 'More publications',
+        'fr' => "Plus de publications",
+        'nl' => 'Meer publicaties',
       ],
       'author_label' => [
         'description' => 'Label used to identify the author of the content.',
-        'en' => 'author',
-        'fr' => 'auteur',
-        'nl' => 'auteur',
+        'en' => 'Author',
+        'fr' => 'Auteur',
+        'nl' => 'Auteur',
       ],
       'reading_time_label' => [
         'description' => 'Label indicating the estimated reading time.',
@@ -114,11 +144,17 @@ class CustomTranslations {
         'fr' => 'Lieu',
         'nl' => 'Plaats',
       ],
-      'date_label' => [
-        'description' => 'Label for the date field.',
-        'en' => 'Date',
-        'fr' => 'Date',
-        'nl' => 'Datum',
+      'updated_label' => [
+        'description' => 'Short label for an update date.',
+        'en' => 'Updated',
+        'fr' => 'Modifié',
+        'nl' => 'Gewijzigd',
+      ],
+      'date_last_update_label' => [
+        'description' => 'Long label for the last update date.',
+        'en' => 'Last modified date:',
+        'fr' => 'Date de dernière modification:',
+        'nl' => 'Datum laatste wijziging:',
       ],
       'source_label' => [
         'description' => 'Label for the source attribution field.',
@@ -131,6 +167,12 @@ class CustomTranslations {
         'en' => 'Related',
         'fr' => 'Articles liés',
         'nl' => 'Gerelateerd',
+      ],
+       'default_author' => [
+        'description' => 'Which author should be displayed if none is entered',
+        'en' => 'Bestor editors',
+        'fr' => 'Rédaction Bestor',
+        'nl' => 'Bestor redactie',
       ],
     ];
   }

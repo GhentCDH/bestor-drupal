@@ -34,7 +34,8 @@
 
 /* FEAT: placeholder when image unavailable */
 
-.c-card__media-wrapper img {
+.c-card__media img,
+.c-info-box__media img {
   text-align: center;
   line-height: 10rem;
   background-color: #f8f8f8;

@@ -1,0 +1,15 @@
+uuid: f4d0f101-062b-4a6f-9612-e16c56ce433d
+langcode: en
+status: true
+dependencies: {  }
+name: info_box
+label: 'Info box'
+effects:
+  45236cab-c60d-4582-a9ea-64e517a71df0:
+    uuid: 45236cab-c60d-4582-a9ea-64e517a71df0
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 466
+      height: 300
+      anchor: center-center
