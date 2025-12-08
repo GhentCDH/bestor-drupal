@@ -1,0 +1,25 @@
+label: Aankondigingen
+display:
+  default:
+    display_options:
+      title: Aankondigingen
+  page_1:
+    display_options:
+      menu:
+        title: Aankondigingen
+  page_2:
+    display_title: Nieuws
+    display_options:
+      title: Nieuws
+  page_3:
+    display_title: Evenementen
+    display_options:
+      title: Evenementen
+      menu:
+        title: Evenementen
+  page_4:
+    display_title: Publicaties
+    display_options:
+      title: Publicaties
+      menu:
+        title: Publicaties

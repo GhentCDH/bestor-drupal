@@ -1,0 +1,21 @@
+label: Annonces
+display:
+  default:
+    display_options:
+      title: Annonces
+  page_1:
+    display_options:
+      menu:
+        title: Annonces
+  page_2:
+    display_title: Actualités
+    display_options:
+      title: Actualités
+      menu:
+        title: Actualités
+  page_3:
+    display_title: Événements
+    display_options:
+      title: Événements
+      menu:
+        title: Événements
