@@ -120,6 +120,12 @@ class CustomTranslations {
         'fr' => "Plus de publications",
         'nl' => 'Meer publicaties',
       ],
+      'from_label' => [
+        'description' => 'Preposition used in labels like "News from Bestor" or "Event from Bestor"',
+        'en' => 'from',
+        'fr' => 'de',
+        'nl' => 'van',
+      ],
       'author_label' => [
         'description' => 'Label used to identify the author of the content.',
         'en' => 'Author',

@@ -5,21 +5,39 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.publication.field_external_link
+    - field.field.node.publication.field_image
     - node.type.publication
   module:
+    - link
     - user
 id: node.publication.teaser
 targetEntityType: node
 bundle: publication
 mode: teaser
 content:
-  links:
-    settings: {  }
+  field_external_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
     third_party_settings: {  }
-    weight: 100
+    weight: 0
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
-  field_external_link: true
   footnotes_group: true
   langcode: true
+  links: true
   search_api_excerpt: true

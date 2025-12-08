@@ -72,7 +72,7 @@
 #}
 
 {% set authors = bestor('author_label') ~ ': ' ~ (bestor('entref_to_str', node, 'field_author', 'taxonomy_term')|default(bestor('default_author'))) %}
-{% set updated = bestor('updated_label') ~ ': ' ~ node.changed.value|date('d/m/Y') %}
+{% set updated = bestor('updated_label') ~ ': ' ~ node.changed.value|date('d.m.Y') %}
 
 <div>
   {{ include('jakarta:c-line', {

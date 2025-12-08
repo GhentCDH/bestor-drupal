@@ -97,7 +97,7 @@
     authors: authors,
     read_time: bestor('reading_time', node),
     text: content.field_summary,
-    url: '#',
+    url: path('entity.node.canonical', {'node': node.id}),
     attr_variant: 'vertical',
   }, with_context = false) }}
 </div>

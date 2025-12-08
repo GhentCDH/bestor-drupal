@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.publication.field_external_link
+    - field.field.node.publication.field_image
     - node.type.publication
   module:
     - link
@@ -24,6 +25,15 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 101
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
     region: content
   links:
     settings: {  }

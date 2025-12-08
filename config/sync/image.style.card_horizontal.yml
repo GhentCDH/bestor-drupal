@@ -1,0 +1,15 @@
+uuid: a38f842b-c690-4532-a669-7e963fe14e43
+langcode: en
+status: true
+dependencies: {  }
+name: card_horizontal
+label: Card-horizontal
+effects:
+  53291520-29ed-4851-be8f-338bc0263494:
+    uuid: 53291520-29ed-4851-be8f-338bc0263494
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 320
+      height: 211
+      anchor: center-center

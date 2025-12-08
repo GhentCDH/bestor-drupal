@@ -4,10 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.publication.field_external_link
+    - field.field.node.publication.field_image
     - node.type.publication
   module:
     - field_group
     - link
+    - media_library
     - path
 third_party_settings:
   field_group:
@@ -31,6 +33,7 @@ third_party_settings:
       children:
         - title
         - field_external_link
+        - field_image
       label: 'Key data'
       region: content
       parent_name: group_base_form
@@ -82,6 +85,13 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
+    third_party_settings: {  }
+  field_image:
+    type: media_library_widget
+    weight: 3
+    region: content
+    settings:
+      media_types: {  }
     third_party_settings: {  }
   path:
     type: path

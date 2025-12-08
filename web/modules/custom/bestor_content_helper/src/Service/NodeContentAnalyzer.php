@@ -60,16 +60,24 @@ class NodeContentAnalyzer {
   }
 
 
+  protected function getNodeValue(NodeInterface $node, string $field_name){
+    if (!$node->hasField($field_name) || empty($node->get($field_name)->getValue())) {
+      return NULL;
+    }
+    return $node->get($field_name)->getValue();
+  }
+
   public function entityRefFieldToResultArray(NodeInterface $node, string $field_name, string $target_entity_type): ?array{
     if(!in_array($target_entity_type, ['taxonomy_term', 'node'])){
       return NULL;
     }
-    if (!$node->hasField($field_name) || empty($node->get($field_name)->getValue())) {
+    $values = $this->getNodeValue($node, $field_name);
+    if(empty($values)){
       return NULL;
     }
+
     $result = [];
     $storage = $this->entityTypeManager->getStorage($target_entity_type);
-    $values = $node->get($field_name)->getValue();
     foreach($values as $value){
       if(empty($value['target_id'])){
         continue;
@@ -92,8 +100,16 @@ class NodeContentAnalyzer {
    public function entityRefFieldToResultString(NodeInterface $node, string $field_name, string $target_entity_type): ?string{
     $array = $this->entityRefFieldToResultArray($node, $field_name, $target_entity_type);
     if(empty($array)){
-      return null;
+      return NULL;
     }
     return implode(', ', $array);
+  }
+
+  public function getBoolValue(NodeInterface $node, string $field_name):bool {
+    $value = $this->getNodeValue($node, $field_name);
+    if(empty($value[0]['value']) ){
+      return FALSE;
+    }
+    return TRUE;
   }
 }

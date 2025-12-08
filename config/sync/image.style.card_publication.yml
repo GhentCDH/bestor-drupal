@@ -1,0 +1,15 @@
+uuid: 17a3071c-b13b-444e-9f88-33b597180ec0
+langcode: en
+status: true
+dependencies: {  }
+name: card_publication
+label: Card-publication
+effects:
+  59955c7a-8f0d-4268-acb5-8180c0857fcb:
+    uuid: 59955c7a-8f0d-4268-acb5-8180c0857fcb
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 199
+      height: 302
+      anchor: center-center

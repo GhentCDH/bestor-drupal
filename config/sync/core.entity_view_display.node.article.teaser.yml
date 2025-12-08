@@ -25,17 +25,28 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_issued_by_bestor:
+    type: boolean
+    label: hidden
+    settings:
+      format: boolean
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
     weight: 0
     region: content
-  links:
+  field_summary:
+    type: basic_string
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
 hidden:
   body: true
-  field_issued_by_bestor: true
-  field_summary: true
   footnotes_group: true
   langcode: true
+  links: true
   search_api_excerpt: true
