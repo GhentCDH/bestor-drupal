@@ -20,7 +20,6 @@ class WebmanagerDashboardController extends ControllerBase {
         'content' => $this->buildLinks([
           'Content overview' => 'view.content.page_2',
           'Administer choicelists' => 'view.choice_lists.page_1',
-          'Update banners and block content' => 'view.contentblocks.page_1',
           'All media' => 'entity.media.collection',
           'Overview relationships' => 'view.content.page_3',
         ]),

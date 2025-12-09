@@ -37,6 +37,7 @@ content:
     weight: 1
     region: content
 hidden:
+  field_publication_author: true
   footnotes_group: true
   langcode: true
   links: true

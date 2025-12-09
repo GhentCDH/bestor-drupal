@@ -84,6 +84,7 @@ dependencies:
     - taxonomy.vocabulary.relationtype_self__stor_stor
     - taxonomy.vocabulary.specialisation
   module:
+    - content_moderation
     - contextual
     - customize_admin_menu_per_role
     - filter
@@ -392,6 +393,8 @@ permissions:
   - 'update any media'
   - 'update media'
   - 'use text format basic_html'
+  - 'view any unpublished content'
+  - 'view latest version'
   - 'view media'
   - 'view own unpublished content'
   - 'view own unpublished media'

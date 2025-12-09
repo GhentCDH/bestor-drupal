@@ -14,8 +14,8 @@ definitions:
     expanded: false
     enabled: true
   bestor_content_helper__disciplines:
-    weight: -50
     menu_name: main
     parent: ''
-    enabled: true
+    weight: -50
     expanded: true
+    enabled: true

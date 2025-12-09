@@ -94,6 +94,7 @@ dependencies:
     - block_content
     - config_perms
     - config_translation
+    - content_moderation
     - content_translation
     - contextual
     - customize_admin_menu_per_role
@@ -571,7 +572,6 @@ permissions:
   - 'revert term revisions in specialisation'
   - 'translate any entity'
   - 'translate article node'
-  - 'translate block_content'
   - 'translate concept node'
   - 'translate configuration'
   - 'translate country taxonomy_term'
@@ -635,6 +635,7 @@ permissions:
   - 'view any remote_video media revisions'
   - 'view any slideshow media revisions'
   - 'view any soundcloud media revisions'
+  - 'view any unpublished content'
   - 'view any video media revisions'
   - 'view article revisions'
   - 'view concept revisions'
@@ -642,6 +643,7 @@ permissions:
   - 'view event revisions'
   - 'view institution revisions'
   - 'view instrument revisions'
+  - 'view latest version'
   - 'view own unpublished content'
   - 'view own unpublished media'
   - 'view page revisions'

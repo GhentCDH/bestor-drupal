@@ -129,5 +129,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
+  field_publication_author: true
   langcode: true
   uid: true

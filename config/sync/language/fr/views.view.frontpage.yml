@@ -1,5 +1,3 @@
-label: Frontpage
-description: 'All content promoted to the front page.'
 display:
   default:
     display_title: 'Par défaut'
@@ -9,12 +7,54 @@ display:
           submit_button: Appliquer
           reset_button_label: Réinitialiser
           exposed_sorts_label: 'Trier par'
-          sort_asc_label: Asc
-          sort_desc_label: Desc
       empty:
         area_text_custom:
-          content: 'No front page content has been created yet.<br/>Follow the <a target="_blank" href="https://www.drupal.org/docs/user_guide/en/index.html">User Guide</a> to start building your site.'
-        title:
-          title: Welcome!
+          content: ''
   page_1:
-    display_title: Page
+    display_title: 'Homepage: En vedette'
+    display_options:
+      display_description: 'En vedette'
+      empty:
+        area_text_custom:
+          content: "Nous n'avons aucun lemme en vedette pour le moment."
+  block_1:
+    display_title: Actualités
+    display_options:
+      title: Actualités
+      empty:
+        area_text_custom:
+          content: "Actuellement, nous n'avons pas d'actualités."
+      display_description: Actualités
+      block_description: Actualités
+  block_2:
+    display_title: Événements
+    display_options:
+      title: Événements
+      empty:
+        area_text_custom:
+          content: "Actuellement, nous n'avons pas d'événements prévus."
+      display_description: Événements
+      block_description: Événements
+  block_3:
+    display_options:
+      empty:
+        area_text_custom:
+          content: "Nous n'avons pas de nouvelles publications pour le moment."
+      display_description: Publications
+  block_4:
+    display_title: 'Récemment mis à jour'
+    display_options:
+      title: 'Récemment mis à jour'
+      empty:
+        area_text_custom:
+          content: "Aucun contenu n'a été récemment mis à jour."
+      display_description: 'Récemment mis à jour'
+      block_description: 'Récemment mis à jour'
+  block_5:
+    display_title: 'À propos de Bestor'
+    display_options:
+      empty:
+        area_text_custom:
+          content: "Nous travaillons encore sur un bloc d'information concernant notre fonctionnement."
+      display_description: 'À propos de Bestor'
+      block_description: 'À propos de Bestor'
