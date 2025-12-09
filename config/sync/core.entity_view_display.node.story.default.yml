@@ -5,14 +5,18 @@ dependencies:
   config:
     - field.field.node.story.field_alternative_name
     - field.field.node.story.field_author
+    - field.field.node.story.field_date_end
+    - field.field.node.story.field_date_start
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_image
     - field.field.node.story.field_period
+    - field.field.node.story.field_references
     - field.field.node.story.field_specialisation
     - field.field.node.story.field_summary
     - node.type.story
   module:
+    - datetime
     - datetime_range
     - entity_reference_revisions
     - user
@@ -28,6 +32,24 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 102
+    region: content
+  field_date_end:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  field_date_start:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 17
     region: content
   field_description:
     type: entity_reference_revisions_entity_view

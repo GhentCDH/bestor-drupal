@@ -1,0 +1,21 @@
+uuid: 42672804-93da-4730-b8c8-5910a4c23d31
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end
+    - node.type.institution
+  module:
+    - datetime
+id: node.institution.field_date_end
+field_name: field_date_end
+entity_type: node
+bundle: institution
+label: 'date end'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

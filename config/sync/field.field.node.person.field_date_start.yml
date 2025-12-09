@@ -1,0 +1,21 @@
+uuid: 4ce01504-205a-4416-97cf-77ba82f20f45
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_start
+    - node.type.person
+  module:
+    - datetime
+id: node.person.field_date_start
+field_name: field_date_start
+entity_type: node
+bundle: person
+label: 'date start'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

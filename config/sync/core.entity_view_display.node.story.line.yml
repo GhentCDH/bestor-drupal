@@ -6,6 +6,8 @@ dependencies:
     - core.entity_view_mode.node.line
     - field.field.node.story.field_alternative_name
     - field.field.node.story.field_author
+    - field.field.node.story.field_date_end
+    - field.field.node.story.field_date_start
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_image
@@ -97,6 +99,8 @@ hidden:
   computed_relationshipfield__story__place: true
   computed_relationshipfield__story__story: true
   field_author: true
+  field_date_end: true
+  field_date_start: true
   field_references: true
   footnotes_group: true
   langcode: true

@@ -1,9 +1,9 @@
-uuid: d1cdf758-3d76-4574-ab81-f473c946d7cc
+uuid: c00f599a-3b35-4646-a2e5-0db9a3007e5f
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.card_vertical_slim
     - field.field.node.publication.field_bibliographical_reference
     - field.field.node.publication.field_external_link
     - field.field.node.publication.field_image
@@ -12,10 +12,10 @@ dependencies:
   module:
     - link
     - user
-id: node.publication.teaser
+id: node.publication.card_vertical_slim
 targetEntityType: node
 bundle: publication
-mode: teaser
+mode: card_vertical_slim
 content:
   field_bibliographical_reference:
     type: string
@@ -27,7 +27,7 @@ content:
     region: content
   field_external_link:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false

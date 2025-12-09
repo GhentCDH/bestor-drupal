@@ -70,29 +70,42 @@
  *   in different view modes.
  */
 #}
-
-{% set internal = bestor('bool_value', node, 'field_issued_by_bestor') %}
 {% set tag %}
   {{ include('jakarta:c-tag', {
     attr_variant: 'corner_down',
-    color: internal ? 'primary' : 'grey',
-    content: (node.type.entity.label|lower|capitalize) ~ (internal ? ' ' ~ bestor('from_label') ~ ' Bestor' : ''),
+    color: 'primary',
+    content: node.type.entity.label,
   }, with_context = false) }}
 {% endset %}
-
-{% set image_info = bestor('image_info', node, 'field_image', 'card_horizontal') %}
-
-{% set media %}
-  <img loading="lazy" src="{{ image_info.url }}" width="320" height="211" alt="{{ image_info.alt }}">
+{% set authors %}
+  <ul>
+    {% for author in bestor('entref_to_list', node, 'field_author', 'taxonomy_term') %}
+      <li>{{ author }}</li>
+    {% endfor %}
+  </ul>
 {% endset %}
-<div style="max-width: 780px;">
+{% set extras %}
+  <ul>
+    {% for extra in bestor('get_extras', node) %}
+      <li>
+        {{ include('jakarta:c-icon', {
+          icon: extra.icon,
+        }, with_context = false) }}
+        {{extra.value}}
+      </li>
+    {% endfor %}
+  </ul>
+{% endset %}
+
+<div style="max-width: 400px;">
   {{ include('jakarta:c-card', {
     tag,
-    media,
-    date: node.created.value|date('d.m.Y'),
     title: label,
+    authors,
+    read_time: bestor('reading_time', node),
     text: content.field_summary,
+    extras,
     url: path('entity.node.canonical', {'node': node.id}),
-    attr_variant: 'horizontal',
+    attr_variant: 'vertical_outline',
   }, with_context = false) }}
 </div>

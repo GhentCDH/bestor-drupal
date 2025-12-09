@@ -54,6 +54,7 @@
         "drupal/search_api_glossary": "^4.2",
         "drupal/selectify": "^2.0",
         "drupal/single_user_role": "^1.0@beta",
+        "drupal/smart_date": "^4.2",
         "drupal/straw": "^2.0@beta",
         "drupal/thex": "^10.0",
         "drupal/twig_tweak": "^3.4",
@@ -81,11 +82,12 @@
     	"enable-patching": true,
   	   	"patches": {
   	    	"drupal/core":{
-                "Sort out and fix language fallback inconsistencies":"https://www.drupal.org/files/issues/2023-01-30/drupal-fix_fallback-2951294-58.patch"
+                "Sort out and fix language fallback inconsistencies":"https://www.drupal.org/files/issues/2023-01-30/drupal-fix_fallback-2951294-58.patch",
+                "Allow end date to be optional https://www.drupal.org/node/2794481":"hhttps://www.drupal.org/files/issues/2022-07-07/2794481-142.patch"
             },
             "drupal/search_api_glossary":{
                 "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch"
-            }       	                                                           
+            }    	                                                           
     	},
         "drupal-scaffold": {
             "locations": {

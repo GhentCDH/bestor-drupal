@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.field.node.concept.field_alternative_name
     - field.field.node.concept.field_author
+    - field.field.node.concept.field_date_end
+    - field.field.node.concept.field_date_start
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
     - field.field.node.concept.field_image
@@ -14,6 +16,7 @@ dependencies:
     - field.field.node.concept.field_summary
     - node.type.concept
   module:
+    - datetime
     - datetime_range
     - entity_reference_modal
     - field_group
@@ -48,6 +51,8 @@ third_party_settings:
       children:
         - title
         - field_alternative_name
+        - field_date_start
+        - field_date_end
         - field_period
         - field_image
         - field_summary
@@ -399,6 +404,24 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_date_end:
+    type: datetime_datelist
+    weight: 35
+    region: content
+    settings:
+      increment: 15
+      date_order: DMY
+      time_type: '24'
+    third_party_settings: {  }
+  field_date_start:
+    type: datetime_datelist
+    weight: 34
+    region: content
+    settings:
+      increment: 15
+      date_order: DMY
+      time_type: none
+    third_party_settings: {  }
   field_description:
     type: paragraphs
     weight: 17
@@ -425,14 +448,14 @@ content:
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 35
+    weight: 37
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_period:
     type: daterange_default
-    weight: 34
+    weight: 36
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -465,7 +488,7 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 36
+    weight: 38
     region: content
     settings:
       rows: 5

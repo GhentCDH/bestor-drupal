@@ -1,0 +1,21 @@
+uuid: 40cf8eb6-bf1e-4951-b7e1-13d71620b230
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end
+    - node.type.person
+  module:
+    - datetime
+id: node.person.field_date_end
+field_name: field_date_end
+entity_type: node
+bundle: person
+label: 'date end'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

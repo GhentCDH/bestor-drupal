@@ -14,5 +14,5 @@ third_party_settings:
 id: node.publication
 target_entity_type_id: node
 target_bundle: publication
-default_langcode: zxx
+default_langcode: und
 language_alterable: false

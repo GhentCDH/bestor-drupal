@@ -5,14 +5,18 @@ dependencies:
   config:
     - field.field.node.instrument.field_alternative_name
     - field.field.node.instrument.field_author
+    - field.field.node.instrument.field_date_end
+    - field.field.node.instrument.field_date_start
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
     - field.field.node.instrument.field_image
     - field.field.node.instrument.field_period
+    - field.field.node.instrument.field_references
     - field.field.node.instrument.field_specialisation
     - field.field.node.instrument.field_summary
     - node.type.instrument
   module:
+    - datetime
     - datetime_range
     - entity_reference_revisions
     - user
@@ -36,6 +40,24 @@ content:
       link: true
     third_party_settings: {  }
     weight: 8
+    region: content
+  field_date_end:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  field_date_start:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 17
     region: content
   field_description:
     type: entity_reference_revisions_entity_view

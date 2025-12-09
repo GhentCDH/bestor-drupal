@@ -174,7 +174,13 @@ class CustomTranslations {
         'fr' => 'Articles liés',
         'nl' => 'Gerelateerd',
       ],
-       'default_author' => [
+      'search_page_title' => [
+        'description' => 'The title that is displayed above the main database search page',
+        'en' => 'Search the scientific memory',
+        'fr' => 'Recherchez dans la mémoire scientifique',
+        'nl' => 'Doorzoek het wetenschappelijk geheugenen',
+      ],
+      'default_author' => [
         'description' => 'Which author should be displayed if none is entered',
         'en' => 'Bestor editors',
         'fr' => 'Rédaction Bestor',

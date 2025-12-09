@@ -122,7 +122,7 @@
         })}}
         {{ include('jakarta:c-announcements', {
           title: bestor('announcements_title'),
-          tabs: tabs,
+          tabs,
           sidebar: drupal_view('frontpage', 'block_5'),
         }, with_context = false) }}
         {{ page.content }}

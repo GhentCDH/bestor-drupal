@@ -7,6 +7,8 @@ dependencies:
     - field.field.node.institution.field_alternative_name
     - field.field.node.institution.field_author
     - field.field.node.institution.field_country
+    - field.field.node.institution.field_date_end
+    - field.field.node.institution.field_date_start
     - field.field.node.institution.field_description
     - field.field.node.institution.field_discipline
     - field.field.node.institution.field_geolocation
@@ -19,6 +21,7 @@ dependencies:
     - field.field.node.institution.field_typology
     - node.type.institution
   module:
+    - datetime
     - datetime_range
     - entity_reference_revisions
     - geofield
@@ -51,6 +54,24 @@ content:
       link: true
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_date_end:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 17
+    region: content
+  field_date_start:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 18
     region: content
   field_description:
     type: entity_reference_revisions_entity_view

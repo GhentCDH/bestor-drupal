@@ -1,0 +1,231 @@
+uuid: 2ad96a4d-edac-4bc4-a04c-ecc255ddb6f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.person.field_alternative_name
+    - field.field.node.person.field_author
+    - field.field.node.person.field_date_end
+    - field.field.node.person.field_date_start
+    - field.field.node.person.field_description
+    - field.field.node.person.field_discipline
+    - field.field.node.person.field_end_municipality
+    - field.field.node.person.field_gender
+    - field.field.node.person.field_image
+    - field.field.node.person.field_municipality
+    - field.field.node.person.field_period
+    - field.field.node.person.field_publications
+    - field.field.node.person.field_references
+    - field.field.node.person.field_specialisation
+    - field.field.node.person.field_summary
+    - field.field.node.person.field_typology
+    - field.field.node.person.field_wikidata_entry
+    - node.type.person
+  module:
+    - datetime
+    - datetime_range
+    - entity_reference_revisions
+    - link
+    - relationship_nodes
+    - user
+id: node.person.teaser
+targetEntityType: node
+bundle: person
+mode: teaser
+content:
+  computed_relationshipfield__person__concept:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 16
+    region: content
+  computed_relationshipfield__person__person:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings:
+        calculated_related_id:
+          enabled: '1'
+          display_mode: label
+          label: 'Related id'
+          weight: '0'
+          hide_label: 0
+        calculated_relation_type_name:
+          enabled: '1'
+          label: 'Relation type name'
+          weight: '0'
+          hide_label: 0
+        field_location_text:
+          label: 'Location Text'
+          weight: '0'
+          multiple_separator: ', '
+          enabled: 0
+          hide_label: 0
+        field_municipality:
+          enabled: '1'
+          display_mode: label
+          label: Municipality
+          weight: '0'
+          multiple_separator: ', '
+          hide_label: 0
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 17
+    region: content
+  field_alternative_name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_author:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_date_end:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 14
+    region: content
+  field_date_start:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 15
+    region: content
+  field_description:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_discipline:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_end_municipality:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_gender:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_municipality:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_period:
+    type: daterange_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: default_date_only
+      from_to: both
+      separator: '<i class="fa-solid fa-arrow-right"></i>'
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  field_publications:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  field_specialisation:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_typology:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_wikidata_entry:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  computed_relationshipfield__person__document: true
+  computed_relationshipfield__person__institution: true
+  computed_relationshipfield__person__instrument: true
+  computed_relationshipfield__person__place: true
+  computed_relationshipfield__person__story: true
+  field_references: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

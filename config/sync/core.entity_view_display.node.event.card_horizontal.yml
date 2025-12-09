@@ -1,22 +1,23 @@
-uuid: 7cf5699a-70de-4b14-80aa-e3e2b6f77900
+uuid: b6ea305d-643d-4b8d-8459-50557035e361
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
-    - field.field.node.article.body
-    - field.field.node.article.field_image
-    - field.field.node.article.field_issued_by_bestor
-    - field.field.node.article.field_summary
-    - node.type.article
+    - core.entity_view_mode.node.card_horizontal
+    - field.field.node.event.body
+    - field.field.node.event.field_geolocation
+    - field.field.node.event.field_image
+    - field.field.node.event.field_issued_by_bestor
+    - field.field.node.event.field_location_text
+    - field.field.node.event.field_summary
+    - field.field.node.event.field_time_period
+    - node.type.event
   module:
     - user
-_core:
-  default_config_hash: O8PxzfG8DOHHRu6M23kwR6TDPq_MNfYQ10Mp367ICUQ
-id: node.article.teaser
+id: node.event.card_horizontal
 targetEntityType: node
-bundle: article
-mode: teaser
+bundle: event
+mode: card_horizontal
 content:
   field_image:
     type: entity_reference_entity_view
@@ -31,7 +32,7 @@ content:
     type: boolean
     label: hidden
     settings:
-      format: boolean
+      format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
@@ -46,6 +47,9 @@ content:
     region: content
 hidden:
   body: true
+  field_geolocation: true
+  field_location_text: true
+  field_time_period: true
   footnotes_group: true
   langcode: true
   links: true

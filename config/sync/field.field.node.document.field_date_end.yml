@@ -1,0 +1,21 @@
+uuid: fda44d5f-c7f7-4271-9462-ab8e113a9928
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end
+    - node.type.document
+  module:
+    - datetime
+id: node.document.field_date_end
+field_name: field_date_end
+entity_type: node
+bundle: document
+label: 'date end'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

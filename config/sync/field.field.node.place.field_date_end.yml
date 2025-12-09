@@ -1,0 +1,21 @@
+uuid: 7d122455-dd71-4498-b41b-e0004b0deec9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end
+    - node.type.place
+  module:
+    - datetime
+id: node.place.field_date_end
+field_name: field_date_end
+entity_type: node
+bundle: place
+label: 'date end'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

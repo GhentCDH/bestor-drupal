@@ -5,14 +5,19 @@ dependencies:
   config:
     - field.field.node.document.field_alternative_name
     - field.field.node.document.field_author
+    - field.field.node.document.field_creator
+    - field.field.node.document.field_date_end
+    - field.field.node.document.field_date_start
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
     - field.field.node.document.field_image
     - field.field.node.document.field_period
+    - field.field.node.document.field_references
     - field.field.node.document.field_specialisation
     - field.field.node.document.field_summary
     - node.type.document
   module:
+    - datetime
     - datetime_range
     - entity_reference_revisions
     - user
@@ -36,6 +41,32 @@ content:
       link: true
     third_party_settings: {  }
     weight: 7
+    region: content
+  field_creator:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 118
+    region: content
+  field_date_end:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  field_date_start:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 17
     region: content
   field_description:
     type: entity_reference_revisions_entity_view

@@ -60,7 +60,9 @@ class CustomTranslationExtension extends AbstractExtension {
       'image_info' => $this->mediaProcessor->getNodeImageInfo(...$args),
       'entref_to_list' => $this->nodeContentAnalyzer->entityRefFieldToResultArray(...$args),
       'entref_to_str' => $this->nodeContentAnalyzer->entityRefFieldToResultString(...$args),
+      'str_to_list' => $this->nodeContentAnalyzer->stringFieldToResultArray(...$args),
       'bool_value' => $this->nodeContentAnalyzer->getBoolValue(...$args),
+      'get_extras' => $this->nodeContentAnalyzer->getLemmaExtraData(...$args),
       default => $this->translate($type, ...$args),
     };
   }

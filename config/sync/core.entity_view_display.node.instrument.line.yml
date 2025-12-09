@@ -6,6 +6,8 @@ dependencies:
     - core.entity_view_mode.node.line
     - field.field.node.instrument.field_alternative_name
     - field.field.node.instrument.field_author
+    - field.field.node.instrument.field_date_end
+    - field.field.node.instrument.field_date_start
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
     - field.field.node.instrument.field_image
@@ -104,6 +106,8 @@ hidden:
   computed_relationshipfield__instrument__person: true
   computed_relationshipfield__instrument__place: true
   computed_relationshipfield__instrument__story: true
+  field_date_end: true
+  field_date_start: true
   field_references: true
   footnotes_group: true
   langcode: true

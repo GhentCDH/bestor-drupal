@@ -7,6 +7,8 @@ dependencies:
     - field.field.node.place.field_alternative_name
     - field.field.node.place.field_author
     - field.field.node.place.field_country
+    - field.field.node.place.field_date_end
+    - field.field.node.place.field_date_start
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
     - field.field.node.place.field_geolocation
@@ -142,6 +144,8 @@ hidden:
   computed_relationshipfield__place__person: true
   computed_relationshipfield__place__place: true
   computed_relationshipfield__place__story: true
+  field_date_end: true
+  field_date_start: true
   field_references: true
   footnotes_group: true
   langcode: true

@@ -1,0 +1,140 @@
+uuid: 893bd5e7-bb79-4544-9c35-ba3d7ec3d9ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.document.field_alternative_name
+    - field.field.node.document.field_author
+    - field.field.node.document.field_creator
+    - field.field.node.document.field_date_end
+    - field.field.node.document.field_date_start
+    - field.field.node.document.field_description
+    - field.field.node.document.field_discipline
+    - field.field.node.document.field_image
+    - field.field.node.document.field_period
+    - field.field.node.document.field_references
+    - field.field.node.document.field_specialisation
+    - field.field.node.document.field_summary
+    - node.type.document
+  module:
+    - datetime
+    - datetime_range
+    - entity_reference_revisions
+    - user
+id: node.document.teaser
+targetEntityType: node
+bundle: document
+mode: teaser
+content:
+  field_alternative_name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_author:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_creator:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_date_end:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 14
+    region: content
+  field_date_start:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 15
+    region: content
+  field_description:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_discipline:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_period:
+    type: daterange_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_specialisation:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  computed_relationshipfield__document__concept: true
+  computed_relationshipfield__document__document: true
+  computed_relationshipfield__document__institution: true
+  computed_relationshipfield__document__instrument: true
+  computed_relationshipfield__document__person: true
+  computed_relationshipfield__document__place: true
+  computed_relationshipfield__document__story: true
+  field_references: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true

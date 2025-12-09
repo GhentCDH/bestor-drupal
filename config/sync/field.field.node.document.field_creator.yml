@@ -1,0 +1,19 @@
+uuid: 5f8f630f-1382-4527-a95d-797d2d83c0f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_creator
+    - node.type.document
+id: node.document.field_creator
+field_name: field_creator
+entity_type: node
+bundle: document
+label: Creator
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

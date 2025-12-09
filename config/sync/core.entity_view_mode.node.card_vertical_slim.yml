@@ -1,0 +1,11 @@
+uuid: 7f298496-08ba-4a1f-a485-d8c60f298a70
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.card_vertical_slim
+label: card-vertical-slim
+description: ''
+targetEntityType: node
+cache: true

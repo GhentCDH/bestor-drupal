@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.field.node.story.field_alternative_name
     - field.field.node.story.field_author
+    - field.field.node.story.field_date_end
+    - field.field.node.story.field_date_start
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_image
@@ -14,6 +16,7 @@ dependencies:
     - field.field.node.story.field_summary
     - node.type.story
   module:
+    - datetime
     - datetime_range
     - entity_reference_modal
     - field_group
@@ -48,6 +51,8 @@ third_party_settings:
       children:
         - title
         - field_alternative_name
+        - field_date_start
+        - field_date_end
         - field_period
         - field_image
         - field_summary
@@ -399,6 +404,24 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_date_end:
+    type: datetime_datelist
+    weight: 4
+    region: content
+    settings:
+      increment: 15
+      date_order: DMY
+      time_type: '24'
+    third_party_settings: {  }
+  field_date_start:
+    type: datetime_datelist
+    weight: 3
+    region: content
+    settings:
+      increment: 15
+      date_order: DMY
+      time_type: none
+    third_party_settings: {  }
   field_description:
     type: paragraphs
     weight: 6
@@ -438,14 +461,14 @@ content:
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 4
+    weight: 6
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_period:
     type: daterange_default
-    weight: 3
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -465,7 +488,7 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 5
+    weight: 7
     region: content
     settings:
       rows: 5

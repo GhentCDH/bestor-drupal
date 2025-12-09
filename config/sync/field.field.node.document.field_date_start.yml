@@ -1,0 +1,21 @@
+uuid: 17e9968b-d925-4709-a577-85aab2d7bc9f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_start
+    - node.type.document
+  module:
+    - datetime
+id: node.document.field_date_start
+field_name: field_date_start
+entity_type: node
+bundle: document
+label: 'date start'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

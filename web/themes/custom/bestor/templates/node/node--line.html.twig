@@ -71,15 +71,15 @@
  */
 #}
 
-{% set authors = bestor('author_label') ~ ': ' ~ (bestor('entref_to_str', node, 'field_author', 'taxonomy_term')|default(bestor('default_author'))) %}
-{% set updated = bestor('updated_label') ~ ': ' ~ node.changed.value|date('d.m.Y') %}
+{% set author = bestor('author_label') ~ ': ' ~ (bestor('entref_to_str', node, 'field_author', 'taxonomy_term')|default(bestor('default_author'))) %}
+{% set date = bestor('updated_label') ~ ': ' ~ node.changed.value|date('d.m.Y') %}
 
 <div>
   {{ include('jakarta:c-line', {
     title: label,
     url: path('entity.node.canonical', {'node': node.id}),
-    author: authors,
-    date: updated,
+    author,
+    date,
     attr_variant: 'default',
     }, with_context = false)
   }}

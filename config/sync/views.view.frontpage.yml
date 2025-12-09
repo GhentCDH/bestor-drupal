@@ -3,10 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.card_horizontal
     - core.entity_view_mode.node.card_vertical
+    - core.entity_view_mode.node.card_vertical_slim
     - core.entity_view_mode.node.info_box
     - core.entity_view_mode.node.line
-    - core.entity_view_mode.node.teaser
     - node.type.article
     - node.type.concept
     - node.type.document
@@ -557,7 +558,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: teaser
+          view_mode: card_horizontal
       defaults:
         empty: false
         title: false
@@ -757,7 +758,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: teaser
+          view_mode: card_horizontal
       defaults:
         empty: false
         title: false
@@ -811,48 +812,6 @@ display:
             operator: ''
             operator_limit_selection: false
             operator_list: {  }
-        langcode:
-          id: langcode
-          table: node_field_data
-          field: langcode
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: langcode
-          plugin_id: language
-          operator: in
-          value:
-            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         type:
           id: type
           table: node_field_data
@@ -950,7 +909,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: teaser
+          view_mode: card_vertical_slim
       defaults:
         empty: false
         title: false

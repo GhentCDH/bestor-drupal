@@ -1,0 +1,21 @@
+uuid: da13cac4-cf70-4af9-be8c-29ca4aa20ac2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end
+    - node.type.instrument
+  module:
+    - datetime
+id: node.instrument.field_date_end
+field_name: field_date_end
+entity_type: node
+bundle: instrument
+label: 'date end'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime
