@@ -1,0 +1,14 @@
+uuid: d11b9d10-77ac-47c6-8356-e6b9171ecf95
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__pers_docu
+id: taxonomy_vocabulary_relationtype_cross__pers_docu
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_cross__pers_docu
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

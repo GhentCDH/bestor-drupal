@@ -160,7 +160,7 @@ class VocabFormAlter {
    *   The form state.
    */
  public static function handleSubmission(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('relationship_nodes.relation_form_handler')->handleSubmission($form, $form_state);
+    \Drupal::service('relationship_nodes.bundle_form_handler')->handleSubmission($form, $form_state);
   }
 
 

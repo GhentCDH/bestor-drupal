@@ -26,4 +26,4 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
   page_1:
-    display_title: Page
+    display_title: 'Homepage: En vedette'

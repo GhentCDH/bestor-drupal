@@ -1,0 +1,14 @@
+uuid: 38fffe03-b64c-4a0a-89e2-84ed0bc4c807
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__orga_plac
+id: taxonomy_vocabulary_relationtype_cross__orga_plac
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_cross__orga_plac
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

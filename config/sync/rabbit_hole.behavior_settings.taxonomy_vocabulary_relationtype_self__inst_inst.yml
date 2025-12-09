@@ -1,0 +1,14 @@
+uuid: d1fb28d0-b2be-4d88-b3eb-1576961a397a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__inst_inst
+id: taxonomy_vocabulary_relationtype_self__inst_inst
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_self__inst_inst
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

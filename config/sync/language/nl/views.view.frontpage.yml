@@ -1,26 +1,11 @@
-label: Homepage
-description: 'Alle inhoud die wordt aangeraden op de voorpagina.'
 display:
-  default:
-    display_title: Standaard
-    display_options:
-      exposed_form:
-        options:
-          submit_button: Toepassen
-          reset_button_label: 'Opnieuw instellen'
-          exposed_sorts_label: 'Sorteren op'
-          sort_asc_label: Oplopend
-          sort_desc_label: Aflopend
-      empty:
-        area_text_custom:
-          content: 'Er is nog geen inhoud gemaakt voor de voorpagina.<br />Volg de <a target="_blank" href="https://www.drupal.org/docs/user_guide/en/index.html">Gebruikershandleiding</a> om uw site te bouwen.'
   page_1:
-    display_title: 'Homepage: In de kijker'
     display_options:
       empty:
         area_text_custom:
           content: "Op dit moment staan er geen lemma's in de kijker."
       display_description: 'In de kijker'
+    display_title: 'Homepage: In de kijker'
   block_1:
     display_title: Niews
     display_options:
@@ -64,3 +49,18 @@ display:
           content: 'We bouwen nog aan een infoblok over onze werking.'
       display_description: 'Over Bestor'
       block_description: 'Over Bestor'
+  default:
+    display_title: Standaard
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Toepassen
+          reset_button_label: 'Opnieuw instellen'
+          exposed_sorts_label: 'Sorteren op'
+          sort_asc_label: Oplopend
+          sort_desc_label: Aflopend
+      empty:
+        area_text_custom:
+          content: 'Er is nog geen inhoud gemaakt voor de voorpagina.<br />Volg de <a target="_blank" href="https://www.drupal.org/docs/user_guide/en/index.html">Gebruikershandleiding</a> om uw site te bouwen.'
+label: Homepage
+description: 'Alle inhoud die wordt aangeraden op de voorpagina.'

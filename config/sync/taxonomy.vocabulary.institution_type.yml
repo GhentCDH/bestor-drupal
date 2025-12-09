@@ -1,7 +1,13 @@
 uuid: 4ba6fa96-78bc-4b17-9271-2ae06e501cda
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 0
+    referencing_type: none
 name: 'Institution type'
 vid: institution_type
 description: null

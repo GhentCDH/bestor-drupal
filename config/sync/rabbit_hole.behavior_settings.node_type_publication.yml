@@ -1,0 +1,14 @@
+uuid: 4298b4ff-f2d0-44c7-95c8-1aa521992cdc
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.publication
+id: node_type_publication
+entity_type_id: node_type
+entity_id: publication
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

@@ -1,0 +1,14 @@
+uuid: 4a3b6161-2101-4a7b-b969-fb89247a3957
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__orga_docu
+id: taxonomy_vocabulary_relationtype_cross__orga_docu
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_cross__orga_docu
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

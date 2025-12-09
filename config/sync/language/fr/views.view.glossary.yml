@@ -30,7 +30,7 @@ display:
   attachment_1:
     display_title: Attachment
   page_1:
-    display_title: Page
+    display_title: 'Homepage: En vedette'
     display_options:
       menu:
         title: Glossary

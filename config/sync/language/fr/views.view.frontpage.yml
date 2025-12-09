@@ -1,22 +1,11 @@
 display:
-  default:
-    display_title: 'Par défaut'
-    display_options:
-      exposed_form:
-        options:
-          submit_button: Appliquer
-          reset_button_label: Réinitialiser
-          exposed_sorts_label: 'Trier par'
-      empty:
-        area_text_custom:
-          content: ''
   page_1:
-    display_title: 'Homepage: En vedette'
     display_options:
       display_description: 'En vedette'
       empty:
         area_text_custom:
           content: "Nous n'avons aucun lemme en vedette pour le moment."
+    display_title: 'Homepage: En vedette'
   block_1:
     display_title: Actualités
     display_options:
@@ -58,3 +47,15 @@ display:
           content: "Nous travaillons encore sur un bloc d'information concernant notre fonctionnement."
       display_description: 'À propos de Bestor'
       block_description: 'À propos de Bestor'
+  default:
+    display_title: 'Par défaut'
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Appliquer
+          reset_button_label: Réinitialiser
+          exposed_sorts_label: 'Trier par'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+label: Frontpage
+description: 'All content promoted to the front page.'

@@ -1,0 +1,14 @@
+uuid: e043d188-9b51-4e7c-95ec-5875fd4e5242
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__conc_inst
+id: taxonomy_vocabulary_relationtype_cross__conc_inst
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_cross__conc_inst
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

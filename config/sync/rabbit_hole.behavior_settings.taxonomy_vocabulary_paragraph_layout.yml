@@ -1,0 +1,14 @@
+uuid: c1e898e1-ce47-4551-98e2-b2e2d629a44f
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.paragraph_layout
+id: taxonomy_vocabulary_paragraph_layout
+entity_type_id: taxonomy_vocabulary
+entity_id: paragraph_layout
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

@@ -1,0 +1,14 @@
+uuid: 066fe417-8ae0-4be6-8ee8-e5d08ca5d8c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_document
+id: node_type_relationnode__person_document
+entity_type_id: node_type
+entity_id: relationnode__person_document
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

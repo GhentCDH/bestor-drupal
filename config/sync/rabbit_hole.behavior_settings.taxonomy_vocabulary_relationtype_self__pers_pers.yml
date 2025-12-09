@@ -1,0 +1,14 @@
+uuid: 29ba3c2c-390d-4e78-b00b-6b1515748752
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__pers_pers
+id: taxonomy_vocabulary_relationtype_self__pers_pers
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_self__pers_pers
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

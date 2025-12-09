@@ -1,0 +1,14 @@
+uuid: 04e65e44-d715-4e82-8603-087e4e5fbc06
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_place
+id: node_type_relationnode__institut_place
+entity_type_id: node_type
+entity_id: relationnode__institut_place
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

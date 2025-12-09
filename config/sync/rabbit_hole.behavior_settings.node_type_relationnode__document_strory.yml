@@ -1,0 +1,14 @@
+uuid: ea4e33f7-0cc1-4c93-8c39-8af4868bc393
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__document_strory
+id: node_type_relationnode__document_strory
+entity_type_id: node_type
+entity_id: relationnode__document_strory
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

@@ -1,0 +1,14 @@
+uuid: ec647ca4-2e1a-4a5a-ab4a-b2e98cfce868
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__orga_orga
+id: taxonomy_vocabulary_relationtype_self__orga_orga
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_self__orga_orga
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

@@ -1,7 +1,13 @@
 uuid: c47711ac-0f3a-490f-b229-8bdcaaec5079
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 0
+    referencing_type: none
 name: Municipality
 vid: municipality
 description: null

@@ -1,0 +1,14 @@
+uuid: 9cd12a7f-32e2-40fb-8a96-638074351f8f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_concept
+id: node_type_relationnode__person_concept
+entity_type_id: node_type
+entity_id: relationnode__person_concept
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

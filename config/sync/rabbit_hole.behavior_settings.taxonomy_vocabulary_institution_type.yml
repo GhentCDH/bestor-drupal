@@ -1,0 +1,14 @@
+uuid: 8df8571e-8974-4351-91fa-b2317762d8f1
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.institution_type
+id: taxonomy_vocabulary_institution_type
+entity_type_id: taxonomy_vocabulary
+entity_id: institution_type
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

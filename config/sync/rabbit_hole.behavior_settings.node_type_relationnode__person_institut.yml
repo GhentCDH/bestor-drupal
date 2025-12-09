@@ -1,0 +1,14 @@
+uuid: 0d544d8f-0a14-4b34-bc96-5a8749d35dc6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_institut
+id: node_type_relationnode__person_institut
+entity_type_id: node_type
+entity_id: relationnode__person_institut
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

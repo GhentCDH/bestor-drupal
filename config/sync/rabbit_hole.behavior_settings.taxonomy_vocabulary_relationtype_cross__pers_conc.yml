@@ -1,0 +1,14 @@
+uuid: 2623aca1-2859-4bad-901e-1a97e369cacd
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__pers_conc
+id: taxonomy_vocabulary_relationtype_cross__pers_conc
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_cross__pers_conc
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

@@ -1,0 +1,14 @@
+uuid: 4fb236bc-db6f-4751-b080-a8e12ec1a291
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.municipality
+id: taxonomy_vocabulary_municipality
+entity_type_id: taxonomy_vocabulary
+entity_id: municipality
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

@@ -1,0 +1,14 @@
+uuid: c5126843-a5e9-44b2-8a6b-238fe98086cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__plac_plac
+id: taxonomy_vocabulary_relationtype_self__plac_plac
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_self__plac_plac
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

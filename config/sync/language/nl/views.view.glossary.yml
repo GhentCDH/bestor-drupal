@@ -30,7 +30,7 @@ display:
   attachment_1:
     display_title: Bijlage
   page_1:
-    display_title: Homepage
+    display_title: 'Homepage: In de kijker'
     display_options:
       menu:
         title: Woordenlijst

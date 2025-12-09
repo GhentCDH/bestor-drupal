@@ -1,0 +1,14 @@
+uuid: edfbb4e2-2f0d-47bb-bc4b-285d545bd7e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.gender
+id: taxonomy_vocabulary_gender
+entity_type_id: taxonomy_vocabulary
+entity_id: gender
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

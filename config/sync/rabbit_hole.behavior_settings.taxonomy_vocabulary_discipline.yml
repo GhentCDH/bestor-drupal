@@ -1,0 +1,14 @@
+uuid: d75a7c60-3c93-4fc3-b240-4cc0dc533269
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.discipline
+id: taxonomy_vocabulary_discipline
+entity_type_id: taxonomy_vocabulary
+entity_id: discipline
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

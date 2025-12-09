@@ -63,7 +63,7 @@ display:
           expose:
             label: Taal
   page_1:
-    display_title: Homepage
+    display_title: 'Homepage: In de kijker'
     display_options:
       menu:
         title: Inhoud

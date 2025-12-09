@@ -1,0 +1,14 @@
+uuid: 0a86ad7e-051a-4112-951a-cedca7085a60
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.specialisation
+id: taxonomy_vocabulary_specialisation
+entity_type_id: taxonomy_vocabulary
+entity_id: specialisation
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

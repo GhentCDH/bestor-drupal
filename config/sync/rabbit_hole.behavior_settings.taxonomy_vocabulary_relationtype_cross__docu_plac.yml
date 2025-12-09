@@ -1,0 +1,14 @@
+uuid: dcbf3a9b-484d-4164-a513-b5e22b6efed0
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__docu_plac
+id: taxonomy_vocabulary_relationtype_cross__docu_plac
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_cross__docu_plac
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

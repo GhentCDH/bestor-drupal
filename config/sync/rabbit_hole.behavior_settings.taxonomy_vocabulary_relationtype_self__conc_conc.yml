@@ -1,0 +1,14 @@
+uuid: 4dfdebb4-2149-4d47-820c-99e547278f28
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__conc_conc
+id: taxonomy_vocabulary_relationtype_self__conc_conc
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_self__conc_conc
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

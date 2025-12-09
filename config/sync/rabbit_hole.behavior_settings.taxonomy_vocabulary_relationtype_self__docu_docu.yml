@@ -1,0 +1,14 @@
+uuid: 6ec9a5f1-03f7-4ad1-bc2b-ac3722e9c9d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__docu_docu
+id: taxonomy_vocabulary_relationtype_self__docu_docu
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_self__docu_docu
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

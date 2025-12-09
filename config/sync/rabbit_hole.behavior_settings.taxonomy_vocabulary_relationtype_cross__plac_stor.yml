@@ -1,0 +1,14 @@
+uuid: d6ddbc63-bc92-470d-8aee-4706739da354
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_cross__plac_stor
+id: taxonomy_vocabulary_relationtype_cross__plac_stor
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_cross__plac_stor
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

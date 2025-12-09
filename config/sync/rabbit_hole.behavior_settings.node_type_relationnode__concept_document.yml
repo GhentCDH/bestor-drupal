@@ -1,0 +1,14 @@
+uuid: e3f76ef5-4ca7-4a9e-995b-2bf9b3fd18e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_document
+id: node_type_relationnode__concept_document
+entity_type_id: node_type
+entity_id: relationnode__concept_document
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

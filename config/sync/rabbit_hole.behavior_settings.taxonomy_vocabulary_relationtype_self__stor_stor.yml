@@ -1,0 +1,14 @@
+uuid: dcd6d3a5-d608-474c-a5b9-e6055685455c
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.relationtype_self__stor_stor
+id: taxonomy_vocabulary_relationtype_self__stor_stor
+entity_type_id: taxonomy_vocabulary
+entity_id: relationtype_self__stor_stor
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

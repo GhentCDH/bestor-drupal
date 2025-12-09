@@ -31,4 +31,4 @@ display:
         created_year_month:
           title: '{{ arguments.created_year_month }}'
   page_1:
-    display_title: Homepage
+    display_title: 'Homepage: In de kijker'

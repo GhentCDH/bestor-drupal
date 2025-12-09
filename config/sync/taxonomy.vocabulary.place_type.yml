@@ -1,7 +1,13 @@
 uuid: f585a0c7-3b65-4da8-b3b9-0b71d73d8e08
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 0
+    referencing_type: none
 name: 'Place type'
 vid: place_type
 description: null

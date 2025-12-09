@@ -1,7 +1,13 @@
 uuid: b2685f09-d878-4b8b-92bb-8fbecfd168d9
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - relationship_nodes
+third_party_settings:
+  relationship_nodes:
+    enabled: 0
+    referencing_type: none
 name: Specialisation
 vid: specialisation
 description: null

@@ -1,0 +1,14 @@
+uuid: 588226a5-eb9a-4d0c-bb62-a7d934a13e56
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_concept
+id: node_type_relationnode__institut_concept
+entity_type_id: node_type
+entity_id: relationnode__institut_concept
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

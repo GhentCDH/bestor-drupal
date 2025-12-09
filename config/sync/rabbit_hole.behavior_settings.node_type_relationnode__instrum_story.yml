@@ -1,0 +1,14 @@
+uuid: b9b842c2-3cee-4934-b603-670eea5c0dc9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__instrum_story
+id: node_type_relationnode__instrum_story
+entity_type_id: node_type
+entity_id: relationnode__instrum_story
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

@@ -1,0 +1,14 @@
+uuid: 8b14d849-7a4b-4324-af6b-e5a1ad27416e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__place_story
+id: node_type_relationnode__place_story
+entity_type_id: node_type
+entity_id: relationnode__place_story
+action: page_not_found
+allow_override: 0
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied
