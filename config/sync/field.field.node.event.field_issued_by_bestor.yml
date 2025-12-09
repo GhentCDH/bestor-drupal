@@ -9,7 +9,7 @@ id: node.event.field_issued_by_bestor
 field_name: field_issued_by_bestor
 entity_type: node
 bundle: event
-label: 'Issued by Bestor'
+label: 'Event by Bestor'
 description: ''
 required: false
 translatable: false
@@ -18,6 +18,6 @@ default_value:
     value: 1
 default_value_callback: ''
 settings:
-  on_label: 'Issued by Bestor'
-  off_label: 'Issued by external partner'
+  on_label: Bestor-related
+  off_label: General
 field_type: boolean

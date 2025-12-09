@@ -9,7 +9,7 @@ id: node.publication.field_publication_author
 field_name: field_publication_author
 entity_type: node
 bundle: publication
-label: 'Author(s) of the publication'
+label: Author
 description: ''
 required: true
 translatable: false

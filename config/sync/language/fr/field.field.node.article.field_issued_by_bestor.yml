@@ -1,0 +1,4 @@
+label: 'Actualités de Bestor'
+settings:
+  on_label: 'Liées à Bestor'
+  off_label: Général

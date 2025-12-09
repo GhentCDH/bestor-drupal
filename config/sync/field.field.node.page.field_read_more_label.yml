@@ -9,7 +9,7 @@ id: node.page.field_read_more_label
 field_name: field_read_more_label
 entity_type: node
 bundle: page
-label: 'Read more label'
+label: "'Read more' label"
 description: ''
 required: false
 translatable: true

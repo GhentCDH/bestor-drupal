@@ -11,7 +11,7 @@ id: node.event.field_time_period
 field_name: field_time_period
 entity_type: node
 bundle: event
-label: time_period
+label: 'Date and time'
 description: ''
 required: false
 translatable: false

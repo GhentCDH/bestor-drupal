@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_references
-    - filter.format.footnote
+    - filter.format.basic_html
     - node.type.story
   module:
     - text
@@ -12,7 +12,7 @@ id: node.story.field_references
 field_name: field_references
 entity_type: node
 bundle: story
-label: References
+label: 'Sources used'
 description: ''
 required: false
 translatable: true
@@ -20,5 +20,5 @@ default_value: {  }
 default_value_callback: ''
 settings:
   allowed_formats:
-    - footnote
+    - basic_html
 field_type: text_long

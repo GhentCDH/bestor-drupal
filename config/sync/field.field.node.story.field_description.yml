@@ -15,7 +15,7 @@ id: node.story.field_description
 field_name: field_description
 entity_type: node
 bundle: story
-label: Description
+label: Content
 description: ''
 required: false
 translatable: true

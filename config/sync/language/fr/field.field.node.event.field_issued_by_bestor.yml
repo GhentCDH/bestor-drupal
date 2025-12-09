@@ -1,0 +1,4 @@
+label: 'Événement de Bestor'
+settings:
+  on_label: 'Lié à Bestor'
+  off_label: Général

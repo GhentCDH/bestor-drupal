@@ -1,0 +1,4 @@
+label: 'Nieuws van Bestor'
+settings:
+  on_label: 'Bestor gerelateerd'
+  off_label: Algemeen

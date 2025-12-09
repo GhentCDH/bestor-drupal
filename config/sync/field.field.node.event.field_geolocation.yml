@@ -11,7 +11,7 @@ id: node.event.field_geolocation
 field_name: field_geolocation
 entity_type: node
 bundle: event
-label: Geolocation
+label: Location
 description: ''
 required: false
 translatable: false

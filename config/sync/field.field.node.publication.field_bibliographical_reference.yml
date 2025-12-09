@@ -9,7 +9,7 @@ id: node.publication.field_bibliographical_reference
 field_name: field_bibliographical_reference
 entity_type: node
 bundle: publication
-label: 'Additional bibliographical information'
+label: 'Additional publication details'
 description: ''
 required: false
 translatable: false
