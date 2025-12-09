@@ -1,0 +1,14 @@
+uuid: 29f4b20c-c25f-4710-8d8e-4d14157d3327
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.concept
+id: node_type_concept
+entity_type_id: node_type
+entity_id: concept
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

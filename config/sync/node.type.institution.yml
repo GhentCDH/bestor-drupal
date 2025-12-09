@@ -4,13 +4,18 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - relationship_nodes
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  relationship_nodes:
+    enabled: 0
+    typed_relation: 0
+    auto_title: 0
 name: Institution
 type: institution
-description: 'Database: institution entry'
+description: 'Database lemma: organizational entity such as universities, research institutes...'
 help: null
 new_revision: true
 preview_mode: 1

@@ -11,7 +11,7 @@ id: node.document.field_period
 field_name: field_period
 entity_type: node
 bundle: document
-label: OUTDATED period
+label: 'OUTDATED period'
 description: ''
 required: false
 translatable: false

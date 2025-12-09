@@ -1,0 +1,18 @@
+uuid: 2a6075ac-7d9a-4b1e-86ec-0601a37ba8b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_instrument
+id: node.relationnode__concept_instrument.rh_redirect
+field_name: rh_redirect
+entity_type: node
+bundle: relationnode__concept_instrument
+label: 'Rabbit Hole redirect path.'
+description: 'The path to where the user should get redirected to.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

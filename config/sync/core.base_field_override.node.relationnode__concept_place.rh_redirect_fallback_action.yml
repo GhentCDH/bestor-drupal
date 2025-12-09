@@ -1,0 +1,18 @@
+uuid: 6c36003d-f03d-4454-9a7e-122772c29f35
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_place
+id: node.relationnode__concept_place.rh_redirect_fallback_action
+field_name: rh_redirect_fallback_action
+entity_type: node
+bundle: relationnode__concept_place
+label: 'Rabbit Hole redirect fallback action'
+description: 'Specifies the action that should be used when the redirect path is invalid or empty.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

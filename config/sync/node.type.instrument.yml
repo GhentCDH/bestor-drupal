@@ -4,13 +4,18 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - relationship_nodes
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  relationship_nodes:
+    enabled: 0
+    typed_relation: 0
+    auto_title: 0
 name: Instrument
 type: instrument
-description: 'Database: scientific object used for research, measurement, or experimentation'
+description: 'Database lemma: scientific equipment, apparatus, device, or tool'
 help: null
 new_revision: true
 preview_mode: 1

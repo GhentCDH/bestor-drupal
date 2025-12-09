@@ -1,0 +1,14 @@
+uuid: 0e48366a-3262-4e67-a530-476af923e0af
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.institution
+id: node_type_institution
+entity_type_id: node_type
+entity_id: institution
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

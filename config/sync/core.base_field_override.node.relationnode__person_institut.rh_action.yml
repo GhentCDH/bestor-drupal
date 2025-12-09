@@ -1,0 +1,18 @@
+uuid: a8173821-b2ea-40af-b4ae-e732af2a4d17
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__person_institut
+id: node.relationnode__person_institut.rh_action
+field_name: rh_action
+entity_type: node
+bundle: relationnode__person_institut
+label: 'Rabbit Hole action'
+description: 'Specifies which action that Rabbit Hole should take.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

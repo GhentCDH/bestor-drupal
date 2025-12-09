@@ -17,7 +17,7 @@ bundle: relationtype_self__conc_conc
 label: 'Rn mirror reference'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

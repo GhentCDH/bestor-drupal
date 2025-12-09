@@ -1,0 +1,18 @@
+uuid: fba1ce49-1385-400e-ba49-867d40ae63a1
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_institut
+id: node.relationnode__institut_institut.rh_action
+field_name: rh_action
+entity_type: node
+bundle: relationnode__institut_institut
+label: 'Rabbit Hole action'
+description: 'Specifies which action that Rabbit Hole should take.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

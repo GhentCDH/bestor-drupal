@@ -1,0 +1,14 @@
+uuid: 7277c69d-01f5-460d-8717-63bdc1c99328
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.instrument
+id: node_type_instrument
+entity_type_id: node_type
+entity_id: instrument
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

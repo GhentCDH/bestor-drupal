@@ -78,11 +78,11 @@ class NodeContentAnalyzer {
         'icon' => 'marker'
       ],
       'birth' => [
-        'fields' => ['field_period', 'field_municipality'],
+        'fields' => ['field_date_start', 'field_municipality'],
         'icon' => 'birthdate'
       ],
       'death' => [
-        'fields' => ['field_period', 'field_end_municipality'],
+        'fields' => ['field_date_end', 'field_end_municipality'],
         'icon' => 'death'
       ]
     ];

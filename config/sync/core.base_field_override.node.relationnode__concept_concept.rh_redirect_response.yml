@@ -1,0 +1,22 @@
+uuid: 8b962896-caee-45e1-9dff-fcde351a5eba
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_concept
+id: node.relationnode__concept_concept.rh_redirect_response
+field_name: rh_redirect_response
+entity_type: node
+bundle: relationnode__concept_concept
+label: 'Rabbit Hole redirect response code'
+description: 'Specifies the HTTP response code that should be used when perform a redirect.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

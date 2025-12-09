@@ -229,7 +229,33 @@ display:
         type: search_api_none
         options: {  }
       empty: {  }
-      sorts: {  }
+      sorts:
+        search_api_relevance:
+          id: search_api_relevance
+          table: search_api_index_bestor_main_search_index
+          field: search_api_relevance
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        title_str:
+          id: title_str
+          table: search_api_index_bestor_main_search_index
+          field: title_str
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters:
         facets_glossaryaz_title__str:
