@@ -1,0 +1,208 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: Themed creation date field.
+ * - author_name: Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @todo Remove the id attribute (or make it a class), because if that gets
+ *   rendered twice on a page this is invalid CSS for example: two lists
+ *   in different view modes.
+ */
+#}
+
+{# c-structured-layout.story.twig #}
+{% set top %}
+  {% set image_info = bestor('image_info', node, 'field_image', 'card_vertical') %}
+  {% set media %}
+    <img loading="lazy" src="{{ image_info.url }}" width="450" height="354" alt="{{ image_info.alt }}">
+  {% endset %}
+  {% set identity_kit_list %}
+    {{devel_dump(bestor('lemma_key_data', node))}}
+    {% set values %}
+      <a href="#">{Naam}</a>
+    {% endset %}
+    {{ include('jakarta:c-identity-kit-item', {
+      title: '/Discipline',
+      values,
+    }, with_context = false) }}
+    {% set values_2 %}
+      {waarde}, {waarde}, {waarde}, {waarde}, {waarde}
+    {% endset %}
+    {{ include('jakarta:c-identity-kit-item', {
+      title: '/Specialisatie',
+      values: values_2,
+    }, with_context = false) }}
+  {% endset %}
+  {{ include('jakarta:c-identity-kit', {
+    tag: node.type.entity.label,
+    media,
+    identity_kit_list,
+    attr_variant: 'default',
+  }, with_context = false) }}
+{% endset %}
+{% set content %}
+  {{ include('jakarta:c-meta', {
+    date: '09/11/2025',
+    read_time: '5 min.',
+  }, with_context = false) }}
+  {% set title %}
+    Introduction
+  {% endset %}
+  {% set text %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+  {% endset %}
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'intro',
+    columns: '1',
+  }) }}
+  {% set title %}
+    Default - 2 columns
+  {% endset %}
+  {% set text %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
+  {% endset %}
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'default',
+    columns: '2',
+  }) }}
+  {% set media %}
+    <img loading="lazy" src="https://picsum.photos/id/24/400/510" width="510" height="400" alt="Test image">
+  {% endset %}
+  {% set text %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id viverra nibh. Phasellus non dapibus tellus, sit amet maximus urna. Nunc eu augue tincidunt, pulvinar lacus ac, ullamcorper augue. Aliquam suscipit sem elit, ut fermentum tellus malesuada nec. Curabitur maximus placerat orci id bibendum. Aliquam ullamcorper lectus eu leo consectetur hendrerit. Fusce gravida elementum tortor, aliquet fermentum dui porttitor sit amet. Maecenas consequat laoreet metus a mattis. Cras ut magna et quam congue volutpat eget eu neque. Curabitur ut enim sollicitudin, eleifend nibh ut.</p>
+  {% endset %}
+  {{ include('jakarta:c-text-media', {
+    media,
+    text,
+    media_position: 'left',
+    media_layout: '50_50',
+  }) }}
+{% endset %}
+{% set sidebar %}
+  {% set buttons %}
+    {{ include('jakarta:c-button', {
+      html_tag: 'a',
+      attr_variant: 'default',
+      color: 'primary',
+      title: 'Suggestion',
+    }, with_context = false) }}
+    {{ include('jakarta:c-button', {
+      html_tag: 'a',
+      attr_variant: 'default',
+      color: 'primary',
+      title: 'Quote',
+    }, with_context = false) }}
+  {% endset %}
+  {% set table_of_contents %}
+    {% set dropdown_items %}
+      <ul class="links">
+        <li><a href="#">Titel 1</a></li>
+        <li><a href="#">Titel 2</a></li>
+        <li><a href="#">Titel 3</a></li>
+      </ul>
+    {% endset %}
+    {{ include('jakarta:c-dropdown', {
+      toggle: 'Inhoudstafel',
+      dropdown_items,
+    }, with_context = false) }}
+  {% endset %}
+  {% set related_items %}
+    {% set items %}
+      <ul class="links">
+        <li><a href="#">Naam concept</a> (type relatie)</li>
+        <li><a href="#">Naam concept</a> (type relatie)</li>
+        <li><a href="#">Naam concept</a> (type relatie)</li>
+      </ul>
+    {% endset %}
+    {{ include('jakarta:c-related-items', {
+      title: 'Related items',
+      items,
+    }, with_context = false) }}
+    {% set items_2 %}
+      <ul class="links">
+        <li><a href="#">Naam document</a> (type relatie)</li>
+        <li><a href="#">Naam document</a> (type relatie)</li>
+        <li><a href="#">Naam document</a> (type relatie)</li>
+      </ul>
+    {% endset %}
+    {{ include('jakarta:c-related-items', {
+      title: 'Related items',
+      items: items_2,
+    }, with_context = false) }}
+  {% endset %}
+  {{ include('jakarta:c-lemma-sidebar', {
+    buttons,
+    table_of_contents,
+    related_items,
+  }, with_context = false) }}
+{% endset %}
+{{ include('jakarta:c-structured-layout', {
+  top,
+  content,
+  sidebar
+}, with_context = false) }}

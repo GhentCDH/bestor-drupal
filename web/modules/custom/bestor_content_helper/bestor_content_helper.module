@@ -49,5 +49,5 @@ function bestor_content_helper_preprocess_menu(&$variables) {
 
 function bestor_content_helper_node_view(array &$build, NodeInterface $node, $view_mode, $langcode) {
   $service =  \Drupal::service('bestor_content_helper.node_content_analyzer');
-  $service->getLemmaExtraData($node);
+  $service->getLemmaKeyData($node);
 }

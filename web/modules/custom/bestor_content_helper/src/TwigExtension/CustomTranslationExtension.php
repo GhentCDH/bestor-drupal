@@ -62,7 +62,7 @@ class CustomTranslationExtension extends AbstractExtension {
       'entref_to_str' => $this->nodeContentAnalyzer->entityRefFieldToResultString(...$args),
       'str_to_list' => $this->nodeContentAnalyzer->stringFieldToResultArray(...$args),
       'bool_value' => $this->nodeContentAnalyzer->getBoolValue(...$args),
-      'get_extras' => $this->nodeContentAnalyzer->getLemmaExtraData(...$args),
+      'lemma_key_data' => $this->nodeContentAnalyzer->getLemmaKeyData(...$args),
       default => $this->translate($type, ...$args),
     };
   }

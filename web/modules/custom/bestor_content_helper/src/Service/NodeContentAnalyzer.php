@@ -63,50 +63,11 @@ class NodeContentAnalyzer {
   }
 
 
-  protected function getExtraElementFieldMapping(string $element) : ?array {
-    $mapping = [
-      'inventor' => [
-        'fields' => ['field_inventor'],
-        'icon' => 'light'
-      ],
-      'creator' => [
-        'fields' => ['field_creator'],
-        'icon' => 'pen'
-      ],
-      'location' => [
-        'fields' => ['field_municipality', 'field_country'],
-        'icon' => 'marker'
-      ],
-      'birth' => [
-        'fields' => ['field_date_start', 'field_municipality'],
-        'icon' => 'birthdate'
-      ],
-      'death' => [
-        'fields' => ['field_date_end', 'field_end_municipality'],
-        'icon' => 'death'
-      ],
-    ];
-    return empty($mapping[$element]) ? NULL : $mapping[$element];
-  }
 
 
-  protected function getLemmaExtraElementMapping(string $node_type){
-    $mapping = [
-      'concept' => ['inventor'],
-      'document' => ['creator'],
-      'institution' => ['location'],
-      'instrument' => ['inventor'],
-      'person' => ['birth', 'death'],
-      'place' => ['location'],
-      'story' => [],
-    ];
-    return empty($mapping[$node_type]) ? NULL : $mapping[$node_type];
-  }
-
-
-  public function getLemmaExtraData(NodeInterface $node): ? array {
+  public function getLemmaKeyData(NodeInterface $node, string $display_type = 'full'): ? array {
     $node_type = $node->getType();
-    $extra_elements = $this->getLemmaExtraElementMapping($node_type);
+    $extra_elements = $this->getLemmaTypeToElementMapping($node_type, $display_type);
 
     if (!$extra_elements) {
       return NULL;
@@ -114,7 +75,7 @@ class NodeContentAnalyzer {
 
     $return_values = [];
     foreach ($extra_elements as $el_key){
-      $el_def = $this->getExtraElementFieldMapping($el_key);
+      $el_def = $this->getElementToFieldMapping($el_key);
 
       if(empty($el_def)){
         continue;
@@ -134,11 +95,6 @@ class NodeContentAnalyzer {
             $target_type = $fld_def->getSettings()['target_type'];
             $str_val = $this->entityRefFieldToResultString($node, $fld_nm, $target_type);
             break;
-          case 'daterange':
-            if ($el_key === 'death') {
-              $str_val = $node_val[0]['end_value'];
-              break;
-            }
           default:
             $str_val = $node_val[0]['value'];
             break;
@@ -149,7 +105,7 @@ class NodeContentAnalyzer {
       } 
       if ($fld_vals){
         $return_values[] = [
-          'value' => $this->formatLemmaExtraData($fld_vals),
+          'value' => $this->formatLemmaKeyData($fld_vals),
           'icon' => $el_def['icon']
         ];
       }
@@ -158,7 +114,7 @@ class NodeContentAnalyzer {
   }
 
 
-  protected function formatLemmaExtraData(array $values): string {
+  protected function formatLemmaKeyData(array $values): string {
     if (empty($values)) {
       return '';
     } 
@@ -243,5 +199,114 @@ class NodeContentAnalyzer {
       $result[] = $value['value'];
     }
     return $result;
+  }
+
+
+  public function getElementToFieldMapping(string $element){
+    $mapping = [
+      'discipline' => [
+        'fields' => ['field_discipline'],
+        'label_key' => 'lemma_key_discipline',
+        'icon' => ''
+      ],
+      'specialisation' => [
+        'fields' => ['field_specialisation'],
+        'label_key' => 'lemma_key_specialisation',
+        'icon' => ''
+      ],
+      'typology' => [
+        'fields' => ['field_typology'],
+        'label_key' => 'lemma_key_typology',
+        'icon' => ''
+      ],
+      'period' => [
+        'fields' => ['field_date_start', 'field_date_end'],
+        'label_key' => 'lemma_key_period',
+        'icon' => ''
+      ],
+      'location' => [
+        'fields' => ['field_country', 'field_municipality'],
+        'label_key' => 'lemma_key_location',
+        'icon' => 'marker'
+      ],
+      'birth_death' => [
+        'fields' => ['field_date_start', 'field_date_end'],
+        'label_key' => 'lemma_key_birth_death',
+        'icon' => ''
+      ],
+      'birth' => [
+        'fields' => ['field_date_start', 'field_municipality'],
+        'icon' => 'birthdate'
+      ],
+      'death' => [
+        'fields' => ['field_date_end', 'field_end_municipality'],
+        'icon' => 'death'
+      ],
+      'inventor' => [
+        'fields' => ['field_inventor'],
+        'label_key' => 'lemma_key_inventor',
+        'icon' => 'light'
+      ],
+      'creator' => [
+        'fields' => ['field_creator'],
+        'label_key' => 'lemma_key_creator',
+        'icon' => 'pen'
+      ],
+      'gender' => [
+        'fields' => ['field_gender'],
+        'label_key' => 'lemma_key_gender',
+        'icon' => ''
+      ],
+      'alt_names' => [
+        'fields' => ['field_alternative_name'],
+        'label_key' => 'lemma_key_alt_names',
+        'icon' => ''
+      ],
+    ];
+    return empty($mapping[$element]) ? NULL : $mapping[$element];
+  }
+
+
+
+  public function getLemmaTypeToElementMapping(string $node_type, string $display_type){
+    $mapping = [
+      '_all' => [
+        'full' => ['discipline', 'specialisation', 'typology', 'alt_names'],
+        'teaser' => [],
+      ],
+      'concept' => [
+        'full' => ['inventor', 'period'],
+        'teaser' => ['inventor'],
+      ],
+      'document' => [
+        'full' => ['creator', 'period'],
+        'teaser' => ['creator'],
+      ],
+      'institution' => [
+        'full' => ['location', 'period'],
+        'teaser' => ['location'],
+      ],
+      'instrument' => [
+        'full' => ['inventor', 'period'],
+        'teaser' => ['inventor'],
+      ],
+      'person' => [
+        'full' => ['gender', 'birth_death'],
+        'teaser' => ['birth', 'death'],
+      ],
+      'place' => [
+        'full' => ['location', 'period'],
+        'teaser' => ['location'],
+      ],
+      'story' => [
+        'full' => ['period'],
+        'teaser' => [],
+      ],
+    ];
+
+    return array_merge(
+      empty($mapping['_all'][$display_type]) ? [] : $mapping['_all'][$display_type],
+      empty($mapping[$node_type][$display_type]) ? [] : $mapping[$node_type][$display_type]
+    );
   }
 }

@@ -84,7 +84,7 @@
 ]
 %}
 <div{{ attributes.addClass(classes) }}>
-
+{{ drupal_block('local_tasks_block') }}
     {{ title_prefix }}
     {% if not page %}
         <strong{{ title_attributes.addClass('node-title') }}>

@@ -373,61 +373,6 @@ display:
             min_count: 1
             show_numbers: false
             processor_configs: {  }
-        facets_tax_specialisation__int:
-          id: facets_tax_specialisation__int
-          table: search_api_index_bestor_main_search_index
-          field: facets_tax_specialisation__int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: facets_filter
-          operator: '='
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: 'Specialisation tax [int]'
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: tax_specialisation__int
-            required: false
-            remember: false
-            multiple: true
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              redactor: '0'
-              web_manager: '0'
-              administrator: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          hierarchy: false
-          label_display: visible
-          facet:
-            query_operator: or
-            hard_limit: 0
-            min_count: 1
-            show_numbers: false
-            processor_configs:
-              translate_entity:
-                processor_id: translate_entity
-                weights:
-                  build: 5
-                settings: {  }
         search_api_language:
           id: search_api_language
           table: search_api_index_bestor_main_search_index
@@ -544,6 +489,62 @@ display:
             operator_limit_selection: false
             operator_list: {  }
             identifier: discipline
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              0: '0'
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+        facets_tax_specialisation__int:
+          id: facets_tax_specialisation__int
+          table: search_api_index_bestor_main_search_index
+          field: facets_tax_specialisation__int
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Specialisation tax [int]'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: specialisation
             required: false
             remember: false
             multiple: true

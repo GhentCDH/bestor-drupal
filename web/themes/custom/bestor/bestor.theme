@@ -1,0 +1,9 @@
+<?php
+
+
+function bestor_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+    $nodeContentHelper =  \Drupal::service('bestor_content_helper.node_content_analyzer');
+    if ($variables['elements']['#view_mode'] === 'full' && $nodeContentHelper->isLemma($variables['elements']['#node']->getType())) { 
+      $suggestions[] = 'node__lemma__full';
+    }
+}

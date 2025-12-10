@@ -86,7 +86,7 @@
 {% endset %}
 {% set extras %}
   <ul>
-    {% for extra in bestor('get_extras', node) %}
+    {% for extra in bestor('lemma_key_data', node, 'teaser') %}
       <li>
         {{ include('jakarta:c-icon', {
           icon: extra.icon,

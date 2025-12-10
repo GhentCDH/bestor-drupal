@@ -1,6 +1,6 @@
-name: 'Bestor Advanced Search'
+name: 'Bestor Custom Search'
 type: module
-description: 'Custom advanced search form met dynamische filters per content type.'
+description: 'Custom custom search form met dynamische filters per content type.'
 core_version_requirement:  ^10
 package: Custom
 dependencies:

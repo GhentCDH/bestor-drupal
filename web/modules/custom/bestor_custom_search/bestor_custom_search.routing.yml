@@ -1,4 +1,4 @@
-bestor_advanced_search.form:
+bestor_custom_search.form:
   path: '/advanced-search'
   defaults:
     _title: 'Advanced Search'

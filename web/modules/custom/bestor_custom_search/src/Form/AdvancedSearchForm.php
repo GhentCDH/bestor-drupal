@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\bestor_advanced_search\Form;
+namespace Drupal\bestor_custom_search\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
