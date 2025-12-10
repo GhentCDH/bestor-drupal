@@ -8,7 +8,9 @@ dependencies:
     - field.field.node.document.field_author
     - field.field.node.document.field_creator
     - field.field.node.document.field_date_end
+    - field.field.node.document.field_date_end_year_only
     - field.field.node.document.field_date_start
+    - field.field.node.document.field_date_start_year_only
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
     - field.field.node.document.field_image
@@ -51,6 +53,16 @@ content:
       format_type: medium
     third_party_settings: {  }
     weight: 17
+    region: content
+  field_date_end_year_only:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 10
     region: content
   field_date_start:
     type: datetime_default
@@ -127,6 +139,7 @@ hidden:
   computed_relationshipfield__document__place: true
   computed_relationshipfield__document__story: true
   field_creator: true
+  field_date_start_year_only: true
   field_references: true
   footnotes_group: true
   langcode: true

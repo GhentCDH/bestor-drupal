@@ -1,0 +1,37 @@
+uuid: 2749b986-1c48-4106-85df-6f2f3b83c455
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.line
+    - field.field.node.relationnode__person_institut.field_date_end
+    - field.field.node.relationnode__person_institut.field_date_end_year_only
+    - field.field.node.relationnode__person_institut.field_date_start
+    - field.field.node.relationnode__person_institut.field_date_start_year_only
+    - field.field.node.relationnode__person_institut.rn_related_entity_1
+    - field.field.node.relationnode__person_institut.rn_related_entity_2
+    - field.field.node.relationnode__person_institut.rn_relation_type
+    - node.type.relationnode__person_institut
+  module:
+    - user
+id: node.relationnode__person_institut.line
+targetEntityType: node
+bundle: relationnode__person_institut
+mode: line
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_date_end: true
+  field_date_end_year_only: true
+  field_date_start: true
+  field_date_start_year_only: true
+  footnotes_group: true
+  langcode: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  search_api_excerpt: true

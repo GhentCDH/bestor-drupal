@@ -7,10 +7,13 @@ dependencies:
     - field.field.node.concept.field_alternative_name
     - field.field.node.concept.field_author
     - field.field.node.concept.field_date_end
+    - field.field.node.concept.field_date_end_year_only
     - field.field.node.concept.field_date_start
+    - field.field.node.concept.field_date_start_year_only
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
     - field.field.node.concept.field_image
+    - field.field.node.concept.field_inventor
     - field.field.node.concept.field_period
     - field.field.node.concept.field_references
     - field.field.node.concept.field_specialisation
@@ -100,7 +103,10 @@ hidden:
   computed_relationshipfield__concept__story: true
   field_author: true
   field_date_end: true
+  field_date_end_year_only: true
   field_date_start: true
+  field_date_start_year_only: true
+  field_inventor: true
   field_references: true
   footnotes_group: true
   langcode: true

@@ -7,7 +7,9 @@ dependencies:
     - field.field.node.place.field_author
     - field.field.node.place.field_country
     - field.field.node.place.field_date_end
+    - field.field.node.place.field_date_end_year_only
     - field.field.node.place.field_date_start
+    - field.field.node.place.field_date_start_year_only
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
     - field.field.node.place.field_geolocation
@@ -71,6 +73,16 @@ content:
       format_type: medium
     third_party_settings: {  }
     weight: 17
+    region: content
+  field_date_start_year_only:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 118
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
@@ -162,6 +174,7 @@ hidden:
   computed_relationshipfield__place__person: true
   computed_relationshipfield__place__place: true
   computed_relationshipfield__place__story: true
+  field_date_end_year_only: true
   field_references: true
   footnotes_group: true
   langcode: true

@@ -1,0 +1,4 @@
+label: 'Enkel startjaar gekend'
+settings:
+  on_label: 'Enkel jaar'
+  off_label: 'Volledige datum'

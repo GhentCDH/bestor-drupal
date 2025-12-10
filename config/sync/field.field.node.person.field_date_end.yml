@@ -11,7 +11,7 @@ id: node.person.field_date_end
 field_name: field_date_end
 entity_type: node
 bundle: person
-label: 'date end'
+label: 'Date of death'
 description: ''
 required: false
 translatable: false

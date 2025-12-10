@@ -1,0 +1,4 @@
+label: 'Date complète connue'
+settings:
+  on_label: 'Année seulement connue'
+  off_label: 'Date complète connue'

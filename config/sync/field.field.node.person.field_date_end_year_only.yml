@@ -1,0 +1,21 @@
+uuid: a4f877cb-7eb7-47e4-81b0-e7611b86daa9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end_year_only
+    - node.type.person
+id: node.person.field_date_end_year_only
+field_name: field_date_end_year_only
+entity_type: node
+bundle: person
+label: 'Death year only known'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Year only'
+  off_label: 'Full date'
+field_type: boolean

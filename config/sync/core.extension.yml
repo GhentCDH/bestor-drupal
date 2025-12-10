@@ -23,6 +23,7 @@ module:
   customize_admin_menu_per_role: 0
   customviewfilters: 0
   datetime: 0
+  datetime_more: 0
   datetime_range: 0
   dblog: 0
   ds: 0
@@ -32,6 +33,7 @@ module:
   entity_events: 0
   entity_reference_modal: 0
   entity_reference_revisions: 0
+  entity_reference_unpublished: 0
   facets: 0
   facets_exposed_filters: 0
   facets_summary: 0
@@ -83,6 +85,8 @@ module:
   straw: 0
   system: 0
   taxonomy: 0
+  term_merge: 0
+  term_reference_change: 0
   text: 0
   toolbar: 0
   twig_tweak: 0

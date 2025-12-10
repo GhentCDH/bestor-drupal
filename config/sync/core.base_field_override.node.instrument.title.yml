@@ -8,7 +8,7 @@ id: node.instrument.title
 field_name: title
 entity_type: node
 bundle: instrument
-label: Name
+label: Title
 description: ''
 required: true
 translatable: true

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c13cc8c5595cd4d11999b548f7cea8ac",
+    "content-hash": "0468f2f0a23455b44387f4586d9b8348",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2065,6 +2065,50 @@
             "time": "2025-12-04T08:22:44+00:00"
         },
         {
+            "name": "drupal/datetime_more",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/datetime_more.git",
+                "reference": "1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/datetime_more-1.0.2.zip",
+                "reference": "1.0.2",
+                "shasum": "4977ea0cf106347c9c6ac66e41518cc5c75be879"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.2",
+                    "datestamp": "1710270267",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Dimm",
+                    "homepage": "https://www.drupal.org/user/11973"
+                }
+            ],
+            "description": "Defines \"Datelist more\" widget for storing dates 1-9999 years and times with seconds.",
+            "homepage": "https://www.drupal.org/project/datetime_more",
+            "support": {
+                "source": "https://git.drupalcode.org/project/datetime_more"
+            }
+        },
+        {
             "name": "drupal/ds",
             "version": "3.32.0",
             "source": {
@@ -2333,6 +2377,54 @@
             "homepage": "https://www.drupal.org/project/entity_reference_revisions",
             "support": {
                 "source": "https://git.drupalcode.org/project/entity_reference_revisions"
+            }
+        },
+        {
+            "name": "drupal/entity_reference_unpublished",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_reference_unpublished.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_reference_unpublished-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "ed129fdb018ca1a2e29076f10fc5994ccef6d82e"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1732287378",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "dieterholvoet",
+                    "homepage": "https://www.drupal.org/user/3567222"
+                },
+                {
+                    "name": "lahoosascoots",
+                    "homepage": "https://www.drupal.org/user/1933614"
+                }
+            ],
+            "description": "Allows unpublished content to be referenced in an entity reference.",
+            "homepage": "https://www.drupal.org/project/entity_reference_unpublished",
+            "support": {
+                "source": "https://git.drupalcode.org/project/entity_reference_unpublished"
             }
         },
         {
@@ -3182,6 +3274,58 @@
             }
         },
         {
+            "name": "drupal/node_view_permissions",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/node_view_permissions.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/node_view_permissions-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "ce083999566e31ecc4e22ea09b7a15ce51920ae6"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1754514736",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "adcillc",
+                    "homepage": "https://www.drupal.org/user/366450"
+                },
+                {
+                    "name": "adci_contributor",
+                    "homepage": "https://www.drupal.org/user/1830536"
+                },
+                {
+                    "name": "nagy.balint",
+                    "homepage": "https://www.drupal.org/user/1763952"
+                }
+            ],
+            "description": "enables permissions 'View own content' and 'View any content' for each content type on permissions page",
+            "homepage": "http://drupal.org/project/node_view_permissions",
+            "support": {
+                "source": "https://git.drupalcode.org/project/node_view_permissions"
+            }
+        },
+        {
             "name": "drupal/nouislider_js",
             "version": "15.8.1",
             "source": {
@@ -3934,6 +4078,128 @@
             "homepage": "https://drupal.org/project/straw",
             "support": {
                 "source": "https://git.drupalcode.org/project/straw"
+            }
+        },
+        {
+            "name": "drupal/term_merge",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/term_merge.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/term_merge-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "44bb8665801826934ade2fca2e191fd5d581b2d1"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/term_reference_change": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1752105248",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "legolasbo",
+                    "homepage": "https://www.drupal.org/u/legolasbo"
+                },
+                {
+                    "name": "daniel_j",
+                    "homepage": "https://www.drupal.org/u/daniel_j"
+                },
+                {
+                    "name": "daniel_j",
+                    "homepage": "https://www.drupal.org/user/970952"
+                },
+                {
+                    "name": "eli",
+                    "homepage": "https://www.drupal.org/user/49774"
+                },
+                {
+                    "name": "g.i.joe",
+                    "homepage": "https://www.drupal.org/user/111415"
+                },
+                {
+                    "name": "legolasbo",
+                    "homepage": "https://www.drupal.org/user/2480548"
+                },
+                {
+                    "name": "nylin",
+                    "homepage": "https://www.drupal.org/user/816040"
+                }
+            ],
+            "description": "Allows users to merge taxonomy terms in the same vocabulary together.",
+            "homepage": "https://www.drupal.org/project/term_merge",
+            "support": {
+                "source": "https://git.drupal.org/project/term_merge.git",
+                "issues": "https://www.drupal.org/project/issues/term_merge"
+            }
+        },
+        {
+            "name": "drupal/term_reference_change",
+            "version": "2.0.0-beta5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/term_reference_change.git",
+                "reference": "2.0.0-beta5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/term_reference_change-2.0.0-beta5.zip",
+                "reference": "2.0.0-beta5",
+                "shasum": "2c61b5e26b2f8c4e9adc3d9b2dc381d0972ee8b3"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-beta5",
+                    "datestamp": "1724849808",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
+                    "name": "grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
+                },
+                {
+                    "name": "legolasbo",
+                    "homepage": "https://www.drupal.org/user/2480548"
+                }
+            ],
+            "description": "Allows term references to be changed in bulk.",
+            "homepage": "https://www.drupal.org/project/term_reference_change",
+            "support": {
+                "source": "https://git.drupalcode.org/project/term_reference_change"
             }
         },
         {
@@ -9671,7 +9937,8 @@
         "drupal/footnotes": 10,
         "drupal/inline_entity_form": 5,
         "drupal/single_user_role": 10,
-        "drupal/straw": 10
+        "drupal/straw": 10,
+        "drupal/term_reference_change": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,

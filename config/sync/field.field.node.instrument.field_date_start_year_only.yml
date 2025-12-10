@@ -1,0 +1,21 @@
+uuid: 2a4db96a-b5f5-4cfa-91e6-e1ad16d1e9ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_start_year_only
+    - node.type.instrument
+id: node.instrument.field_date_start_year_only
+field_name: field_date_start_year_only
+entity_type: node
+bundle: instrument
+label: 'Start year only known'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Year only'
+  off_label: 'Full date'
+field_type: boolean

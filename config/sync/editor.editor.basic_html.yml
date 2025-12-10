@@ -23,6 +23,7 @@ settings:
       - '|'
       - blockQuote
       - drupalInsertImage
+      - insertTable
       - footnotes
       - '|'
       - heading

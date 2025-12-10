@@ -21,7 +21,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: 'unpublished_taxonomy_term'
   handler_settings:
     target_bundles:
       relationtype_self__conc_conc: relationtype_self__conc_conc

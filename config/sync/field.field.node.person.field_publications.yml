@@ -9,7 +9,7 @@ id: node.person.field_publications
 field_name: field_publications
 entity_type: node
 bundle: person
-label: publications
+label: Publications
 description: ''
 required: false
 translatable: false

@@ -12,7 +12,7 @@ id: node.document.field_references
 field_name: field_references
 entity_type: node
 bundle: document
-label: References
+label: 'Sources used'
 description: ''
 required: false
 translatable: true

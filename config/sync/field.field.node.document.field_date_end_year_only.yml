@@ -1,0 +1,21 @@
+uuid: b274f0c6-cc36-4aa9-803b-1411848266fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end_year_only
+    - node.type.document
+id: node.document.field_date_end_year_only
+field_name: field_date_end_year_only
+entity_type: node
+bundle: document
+label: 'End year only known'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Year only'
+  off_label: 'Full date'
+field_type: boolean

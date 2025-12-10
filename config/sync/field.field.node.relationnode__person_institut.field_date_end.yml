@@ -1,0 +1,21 @@
+uuid: edcadd12-a8cd-43ba-bf2e-a89fce4c2d05
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end
+    - node.type.relationnode__person_institut
+  module:
+    - datetime
+id: node.relationnode__person_institut.field_date_end
+field_name: field_date_end
+entity_type: node
+bundle: relationnode__person_institut
+label: Until
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

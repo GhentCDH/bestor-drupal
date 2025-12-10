@@ -1,0 +1,63 @@
+uuid: 35f4a7af-281b-46ed-9f8d-169bf9e6a0dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_vertical
+    - field.field.node.relationnode__person_institut.field_date_end
+    - field.field.node.relationnode__person_institut.field_date_end_year_only
+    - field.field.node.relationnode__person_institut.field_date_start
+    - field.field.node.relationnode__person_institut.field_date_start_year_only
+    - field.field.node.relationnode__person_institut.rn_related_entity_1
+    - field.field.node.relationnode__person_institut.rn_related_entity_2
+    - field.field.node.relationnode__person_institut.rn_relation_type
+    - node.type.relationnode__person_institut
+  module:
+    - datetime
+    - user
+id: node.relationnode__person_institut.card_vertical
+targetEntityType: node
+bundle: relationnode__person_institut
+mode: card_vertical
+content:
+  field_date_end:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_date_end_year_only:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_date_start:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_date_start_year_only: true
+  footnotes_group: true
+  langcode: true
+  rn_related_entity_1: true
+  rn_related_entity_2: true
+  rn_relation_type: true
+  search_api_excerpt: true

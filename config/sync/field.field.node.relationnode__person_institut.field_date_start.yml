@@ -1,0 +1,21 @@
+uuid: abd83c84-45a6-4725-9290-b13cffff760b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_start
+    - node.type.relationnode__person_institut
+  module:
+    - datetime
+id: node.relationnode__person_institut.field_date_start
+field_name: field_date_start
+entity_type: node
+bundle: relationnode__person_institut
+label: From
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

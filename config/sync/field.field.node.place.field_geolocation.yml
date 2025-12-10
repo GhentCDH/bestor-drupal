@@ -11,7 +11,7 @@ id: node.place.field_geolocation
 field_name: field_geolocation
 entity_type: node
 bundle: place
-label: Geolocation
+label: Location
 description: ''
 required: false
 translatable: false

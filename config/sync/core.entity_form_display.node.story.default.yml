@@ -6,7 +6,9 @@ dependencies:
     - field.field.node.story.field_alternative_name
     - field.field.node.story.field_author
     - field.field.node.story.field_date_end
+    - field.field.node.story.field_date_end_year_only
     - field.field.node.story.field_date_start
+    - field.field.node.story.field_date_start_year_only
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_image
@@ -16,7 +18,7 @@ dependencies:
     - field.field.node.story.field_summary
     - node.type.story
   module:
-    - datetime
+    - datetime_more
     - datetime_range
     - entity_reference_modal
     - field_group
@@ -52,7 +54,9 @@ third_party_settings:
         - title
         - field_alternative_name
         - field_date_start
+        - field_date_start_year_only
         - field_date_end
+        - field_date_end_year_only
         - field_period
         - field_image
         - field_summary
@@ -405,22 +409,52 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_date_end:
-    type: datetime_datelist
-    weight: 4
+    type: datetime_more_datelist
+    weight: 5
     region: content
     settings:
       increment: 15
       date_order: DMY
       time_type: '24'
+      year_min: '1'
+      year_max: '2999'
+      input_year: number
+      input_month: select
+      input_day: select
+      input_hour: select
+      input_minute: select
+      input_second: select
+    third_party_settings: {  }
+  field_date_end_year_only:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_date_start:
-    type: datetime_datelist
+    type: datetime_more_datelist
     weight: 3
     region: content
     settings:
       increment: 15
       date_order: DMY
       time_type: none
+      year_min: '1'
+      year_max: '2999'
+      input_year: number
+      input_month: select
+      input_day: select
+      input_hour: select
+      input_minute: select
+      input_second: select
+    third_party_settings: {  }
+  field_date_start_year_only:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_description:
     type: paragraphs
@@ -461,14 +495,14 @@ content:
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 6
+    weight: 8
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_period:
     type: daterange_default
-    weight: 5
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -488,7 +522,7 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 7
+    weight: 9
     region: content
     settings:
       rows: 5

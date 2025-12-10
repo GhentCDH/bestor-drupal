@@ -58,7 +58,6 @@ dependencies:
     - taxonomy.vocabulary.gender
     - taxonomy.vocabulary.institution_type
     - taxonomy.vocabulary.municipality
-    - taxonomy.vocabulary.paragraph_layout
     - taxonomy.vocabulary.place_type
     - taxonomy.vocabulary.profile
     - taxonomy.vocabulary.relationtype_cross__conc_docu
@@ -103,6 +102,7 @@ dependencies:
     - locale
     - media
     - node
+    - paragraphs
     - path
     - system
     - taxonomy
@@ -586,7 +586,6 @@ permissions:
   - 'translate interface'
   - 'translate municipality taxonomy_term'
   - 'translate page node'
-  - 'translate paragraph_layout taxonomy_term'
   - 'translate person node'
   - 'translate place node'
   - 'translate place_type taxonomy_term'
@@ -717,5 +716,6 @@ permissions:
   - 'view term revisions in relationtype_self__stor_stor'
   - 'view term revisions in specialisation'
   - 'view the administration theme'
+  - 'view unpublished paragraphs'
   - 'view user email addresses'
   - 'view vocabulary labels'

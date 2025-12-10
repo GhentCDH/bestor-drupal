@@ -11,7 +11,7 @@ id: node.institution.field_date_start
 field_name: field_date_start
 entity_type: node
 bundle: institution
-label: 'date start'
+label: 'Situated from'
 description: ''
 required: false
 translatable: false

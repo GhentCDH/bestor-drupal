@@ -1,0 +1,4 @@
+label: 'Enkel eindjaar gekend'
+settings:
+  on_label: 'Enkel jaar'
+  off_label: 'Volledige datum'

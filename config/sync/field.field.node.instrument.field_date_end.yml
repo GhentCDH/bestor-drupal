@@ -11,7 +11,7 @@ id: node.instrument.field_date_end
 field_name: field_date_end
 entity_type: node
 bundle: instrument
-label: 'date end'
+label: 'Situated until'
 description: ''
 required: false
 translatable: false

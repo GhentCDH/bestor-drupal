@@ -1,0 +1,19 @@
+uuid: cad382a8-a1e4-464a-8d1f-04f44816ee15
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_inventor
+    - node.type.instrument
+id: node.instrument.field_inventor
+field_name: field_inventor
+entity_type: node
+bundle: instrument
+label: Inventor
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

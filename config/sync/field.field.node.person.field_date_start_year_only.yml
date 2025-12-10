@@ -1,0 +1,21 @@
+uuid: 86e6d0eb-aaf0-42cb-b000-1ee2a53c517e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_start_year_only
+    - node.type.person
+id: node.person.field_date_start_year_only
+field_name: field_date_start_year_only
+entity_type: node
+bundle: person
+label: 'Birth year only known'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Year only'
+  off_label: 'Full date'
+field_type: boolean

@@ -8,7 +8,9 @@ dependencies:
     - field.field.node.document.field_author
     - field.field.node.document.field_creator
     - field.field.node.document.field_date_end
+    - field.field.node.document.field_date_end_year_only
     - field.field.node.document.field_date_start
+    - field.field.node.document.field_date_start_year_only
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
     - field.field.node.document.field_image
@@ -109,7 +111,9 @@ hidden:
   computed_relationshipfield__document__story: true
   field_creator: true
   field_date_end: true
+  field_date_end_year_only: true
   field_date_start: true
+  field_date_start_year_only: true
   field_references: true
   footnotes_group: true
   langcode: true

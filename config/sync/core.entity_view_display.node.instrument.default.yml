@@ -6,10 +6,13 @@ dependencies:
     - field.field.node.instrument.field_alternative_name
     - field.field.node.instrument.field_author
     - field.field.node.instrument.field_date_end
+    - field.field.node.instrument.field_date_end_year_only
     - field.field.node.instrument.field_date_start
+    - field.field.node.instrument.field_date_start_year_only
     - field.field.node.instrument.field_description
     - field.field.node.instrument.field_discipline
     - field.field.node.instrument.field_image
+    - field.field.node.instrument.field_inventor
     - field.field.node.instrument.field_period
     - field.field.node.instrument.field_references
     - field.field.node.instrument.field_specialisation
@@ -59,6 +62,16 @@ content:
     third_party_settings: {  }
     weight: 17
     region: content
+  field_date_start_year_only:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 118
+    region: content
   field_description:
     type: entity_reference_revisions_entity_view
     label: hidden
@@ -84,6 +97,14 @@ content:
       link: false
     third_party_settings: {  }
     weight: 6
+    region: content
+  field_inventor:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 119
     region: content
   field_period:
     type: daterange_default
@@ -124,6 +145,7 @@ hidden:
   computed_relationshipfield__instrument__person: true
   computed_relationshipfield__instrument__place: true
   computed_relationshipfield__instrument__story: true
+  field_date_end_year_only: true
   field_references: true
   footnotes_group: true
   langcode: true

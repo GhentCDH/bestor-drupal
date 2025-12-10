@@ -1,0 +1,21 @@
+uuid: 145d902c-1b1b-4714-9fb5-d8466c5c5dcf
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_inventor
+field_name: field_inventor
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

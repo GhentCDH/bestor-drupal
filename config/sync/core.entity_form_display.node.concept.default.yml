@@ -6,17 +6,20 @@ dependencies:
     - field.field.node.concept.field_alternative_name
     - field.field.node.concept.field_author
     - field.field.node.concept.field_date_end
+    - field.field.node.concept.field_date_end_year_only
     - field.field.node.concept.field_date_start
+    - field.field.node.concept.field_date_start_year_only
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
     - field.field.node.concept.field_image
+    - field.field.node.concept.field_inventor
     - field.field.node.concept.field_period
     - field.field.node.concept.field_references
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
     - node.type.concept
   module:
-    - datetime
+    - datetime_more
     - datetime_range
     - entity_reference_modal
     - field_group
@@ -51,8 +54,11 @@ third_party_settings:
       children:
         - title
         - field_alternative_name
+        - field_inventor
         - field_date_start
+        - field_date_start_year_only
         - field_date_end
+        - field_date_end_year_only
         - field_period
         - field_image
         - field_summary
@@ -405,22 +411,52 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_date_end:
-    type: datetime_datelist
+    type: datetime_more_datelist
+    weight: 37
+    region: content
+    settings:
+      date_order: DMY
+      time_type: none
+      increment: '1'
+      year_min: '1'
+      year_max: '2999'
+      input_year: number
+      input_month: select
+      input_day: select
+      input_hour: select
+      input_minute: select
+      input_second: select
+    third_party_settings: {  }
+  field_date_end_year_only:
+    type: boolean_checkbox
+    weight: 38
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_date_start:
+    type: datetime_more_datelist
     weight: 35
     region: content
     settings:
-      increment: 15
-      date_order: DMY
-      time_type: '24'
-    third_party_settings: {  }
-  field_date_start:
-    type: datetime_datelist
-    weight: 34
-    region: content
-    settings:
-      increment: 15
       date_order: DMY
       time_type: none
+      increment: '1'
+      year_min: '1'
+      year_max: '2999'
+      input_year: number
+      input_month: select
+      input_day: select
+      input_hour: select
+      input_minute: select
+      input_second: select
+    third_party_settings: {  }
+  field_date_start_year_only:
+    type: boolean_checkbox
+    weight: 36
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_description:
     type: paragraphs
@@ -448,14 +484,22 @@ content:
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 37
+    weight: 40
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
+  field_inventor:
+    type: string_textfield
+    weight: 34
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_period:
     type: daterange_default
-    weight: 36
+    weight: 39
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -488,7 +532,7 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 38
+    weight: 41
     region: content
     settings:
       rows: 5
