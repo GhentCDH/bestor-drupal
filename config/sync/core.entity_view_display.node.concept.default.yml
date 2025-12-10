@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.concept.field_discipline
     - field.field.node.concept.field_image
     - field.field.node.concept.field_inventor
-    - field.field.node.concept.field_period
     - field.field.node.concept.field_references
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
@@ -118,7 +117,6 @@ hidden:
   field_author: true
   field_date_end_year_only: true
   field_date_start_year_only: true
-  field_period: true
   field_references: true
   footnotes_group: true
   langcode: true

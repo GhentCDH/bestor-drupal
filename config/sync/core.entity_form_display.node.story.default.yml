@@ -12,14 +12,12 @@ dependencies:
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_image
-    - field.field.node.story.field_period
     - field.field.node.story.field_references
     - field.field.node.story.field_specialisation
     - field.field.node.story.field_summary
     - node.type.story
   module:
     - datetime
-    - datetime_range
     - entity_reference_modal
     - field_group
     - media_library
@@ -53,13 +51,13 @@ third_party_settings:
       children:
         - title
         - field_alternative_name
-        - field_date_start
         - field_date_start_year_only
-        - field_date_end
         - field_date_end_year_only
         - field_period
         - field_image
         - field_summary
+        - field_date_end
+        - field_date_start
       label: 'Key data'
       region: content
       parent_name: group_base_form
@@ -477,12 +475,6 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
-  field_period:
-    type: daterange_default
-    weight: 7
-    region: content
-    settings: {  }
     third_party_settings: {  }
   field_references:
     type: text_textarea

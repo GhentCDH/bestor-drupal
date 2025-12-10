@@ -13,13 +13,11 @@ dependencies:
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
     - field.field.node.story.field_image
-    - field.field.node.story.field_period
     - field.field.node.story.field_references
     - field.field.node.story.field_specialisation
     - field.field.node.story.field_summary
     - node.type.story
   module:
-    - datetime_range
     - entity_reference_revisions
     - user
 id: node.story.line
@@ -60,17 +58,6 @@ content:
       link: false
     third_party_settings: {  }
     weight: 6
-    region: content
-  field_period:
-    type: daterange_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 117
     region: content
   field_specialisation:
     type: entity_reference_label

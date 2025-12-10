@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_image
     - field.field.node.place.field_municipality
-    - field.field.node.place.field_period
     - field.field.node.place.field_references
     - field.field.node.place.field_specialisation
     - field.field.node.place.field_summary
@@ -24,7 +23,6 @@ dependencies:
     - node.type.place
   module:
     - datetime
-    - datetime_range
     - entity_reference_revisions
     - geofield
     - user
@@ -117,17 +115,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 4
-    region: content
-  field_period:
-    type: daterange_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 117
     region: content
   field_specialisation:
     type: entity_reference_label

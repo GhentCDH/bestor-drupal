@@ -1,0 +1,80 @@
+uuid: 10500528-41f8-4da6-bcaa-5c54453d4d15
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.relationnode__person_institut.field_date_end
+    - field.field.node.relationnode__person_institut.field_date_end_year_only
+    - field.field.node.relationnode__person_institut.field_date_start
+    - field.field.node.relationnode__person_institut.field_date_start_year_only
+    - field.field.node.relationnode__person_institut.rn_related_entity_1
+    - field.field.node.relationnode__person_institut.rn_related_entity_2
+    - field.field.node.relationnode__person_institut.rn_relation_type
+    - node.type.relationnode__person_institut
+  module:
+    - datetime
+    - relationship_nodes
+    - selectify
+id: node.relationnode__person_institut.default
+targetEntityType: node
+bundle: relationnode__person_institut
+mode: default
+content:
+  field_date_end:
+    type: datetime_default
+    weight: 37
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_date_end_year_only:
+    type: boolean_checkbox
+    weight: 38
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_date_start:
+    type: datetime_default
+    weight: 35
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_date_start_year_only:
+    type: boolean_checkbox
+    weight: 36
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  rn_related_entity_1:
+    type: selectify_dropdown_searchable
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  rn_related_entity_2:
+    type: selectify_dropdown_searchable
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  rn_relation_type:
+    type: mirror_select_widget
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  title: true
+  uid: true

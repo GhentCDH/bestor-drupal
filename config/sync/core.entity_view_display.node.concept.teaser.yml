@@ -14,14 +14,12 @@ dependencies:
     - field.field.node.concept.field_discipline
     - field.field.node.concept.field_image
     - field.field.node.concept.field_inventor
-    - field.field.node.concept.field_period
     - field.field.node.concept.field_references
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
     - node.type.concept
   module:
     - datetime
-    - datetime_range
     - entity_reference_revisions
     - user
 id: node.concept.teaser
@@ -88,17 +86,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 9
-    region: content
-  field_period:
-    type: daterange_custom
-    label: hidden
-    settings:
-      timezone_override: ''
-      date_format: j-n-Y
-      from_to: both
-      separator: '<i class="fa-solid fa-arrow-right"></i>'
-    third_party_settings: {  }
-    weight: 10
     region: content
   field_specialisation:
     type: entity_reference_label

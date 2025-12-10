@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
-    - field.field.node.person.field_period
     - field.field.node.person.field_publications
     - field.field.node.person.field_references
     - field.field.node.person.field_specialisation
@@ -26,7 +25,6 @@ dependencies:
     - node.type.person
   module:
     - datetime
-    - datetime_range
     - entity_reference_revisions
     - link
     - relationship_nodes
@@ -171,17 +169,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 1
-    region: content
-  field_period:
-    type: daterange_default
-    label: hidden
-    settings:
-      timezone_override: ''
-      format_type: default_date_only
-      from_to: both
-      separator: '<i class="fa-solid fa-arrow-right"></i>'
-    third_party_settings: {  }
-    weight: 13
     region: content
   field_publications:
     type: string

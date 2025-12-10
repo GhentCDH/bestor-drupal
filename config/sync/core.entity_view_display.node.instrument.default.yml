@@ -13,14 +13,12 @@ dependencies:
     - field.field.node.instrument.field_discipline
     - field.field.node.instrument.field_image
     - field.field.node.instrument.field_inventor
-    - field.field.node.instrument.field_period
     - field.field.node.instrument.field_references
     - field.field.node.instrument.field_specialisation
     - field.field.node.instrument.field_summary
     - node.type.instrument
   module:
     - datetime
-    - datetime_range
     - entity_reference_revisions
     - user
 id: node.instrument.default
@@ -105,17 +103,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 119
-    region: content
-  field_period:
-    type: daterange_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-      from_to: both
-      separator: '-'
-    third_party_settings: {  }
-    weight: 117
     region: content
   field_specialisation:
     type: entity_reference_label
