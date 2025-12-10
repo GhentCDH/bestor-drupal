@@ -65,8 +65,8 @@ class NodeContentAnalyzer {
 
   protected function getExtraElementFieldMapping(string $element) : ?array {
     $mapping = [
-      'name' => [
-        'fields' => ['field_alternative_name'],
+      'inventor' => [
+        'fields' => ['field_inventor'],
         'icon' => 'light'
       ],
       'creator' => [
@@ -84,7 +84,7 @@ class NodeContentAnalyzer {
       'death' => [
         'fields' => ['field_date_end', 'field_end_municipality'],
         'icon' => 'death'
-      ]
+      ],
     ];
     return empty($mapping[$element]) ? NULL : $mapping[$element];
   }
@@ -92,13 +92,13 @@ class NodeContentAnalyzer {
 
   protected function getLemmaExtraElementMapping(string $node_type){
     $mapping = [
-      'concept' => ['name'],
+      'concept' => ['inventor'],
       'document' => ['creator'],
       'institution' => ['location'],
-      'instrument' => ['name'],
+      'instrument' => ['inventor'],
       'person' => ['birth', 'death'],
       'place' => ['location'],
-      'story' => ['name'],
+      'story' => [],
     ];
     return empty($mapping[$node_type]) ? NULL : $mapping[$node_type];
   }
