@@ -64,6 +64,7 @@ class WebmanagerDashboardController extends ControllerBase {
           'User interface translation' => 'locale.translate_page',
           'Configuration translation' => 'config_translation.mapper_list',
           'URL aliases' => 'entity.path_alias.collection',
+          'Administer main menu' => ['entity.menu.edit_form', ['menu' => 'main']]
         ]),
       ],
     ];
@@ -79,7 +80,14 @@ class WebmanagerDashboardController extends ControllerBase {
     $rendered = [];
 
     foreach ($links as $title => $route) {
-      $link = Link::fromTextAndUrl($this->t($title), Url::fromRoute($route))->toRenderable();
+      if (is_array($route)) {
+        [$route_name, $route_params] = $route;
+        $url = Url::fromRoute($route_name, $route_params);
+      } else {
+        $url = Url::fromRoute($route);
+      }
+      dpm($url);
+      $link = Link::fromTextAndUrl($this->t($title), $url)->toRenderable();
       $link['#attributes']['class'][] = 'admin-item__link';
 
       $rendered[] = [

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0468f2f0a23455b44387f4586d9b8348",
+    "content-hash": "58b1da2c7bfbcbfea3ea0b9f91409ba7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2065,50 +2065,6 @@
             "time": "2025-12-04T08:22:44+00:00"
         },
         {
-            "name": "drupal/datetime_more",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/datetime_more.git",
-                "reference": "1.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/datetime_more-1.0.2.zip",
-                "reference": "1.0.2",
-                "shasum": "4977ea0cf106347c9c6ac66e41518cc5c75be879"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9 || ^10"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.2",
-                    "datestamp": "1710270267",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Dimm",
-                    "homepage": "https://www.drupal.org/user/11973"
-                }
-            ],
-            "description": "Defines \"Datelist more\" widget for storing dates 1-9999 years and times with seconds.",
-            "homepage": "https://www.drupal.org/project/datetime_more",
-            "support": {
-                "source": "https://git.drupalcode.org/project/datetime_more"
-            }
-        },
-        {
             "name": "drupal/ds",
             "version": "3.32.0",
             "source": {
@@ -3205,6 +3161,127 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/memcache",
                 "issues": "https://www.drupal.org/project/issues/memcache"
+            }
+        },
+        {
+            "name": "drupal/menu_admin_per_menu",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/menu_admin_per_menu.git",
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/menu_admin_per_menu-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "ce9faed09c95de7c7a57653aab66c5afc3e946a2"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11.0 || ^12"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.7",
+                    "datestamp": "1750246188",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "anrikun",
+                    "homepage": "https://www.drupal.org/user/410199"
+                },
+                {
+                    "name": "jeroent",
+                    "homepage": "https://www.drupal.org/user/2228934"
+                },
+                {
+                    "name": "jonas139",
+                    "homepage": "https://www.drupal.org/user/2873401"
+                },
+                {
+                    "name": "mkdok",
+                    "homepage": "https://www.drupal.org/user/3308753"
+                }
+            ],
+            "description": "Allows to give roles per menu admin permissions without giving them full administer menu permission.",
+            "homepage": "https://www.drupal.org/project/menu_admin_per_menu",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/menu_admin_per_menu",
+                "issues": "https://drupal.org/project/issues/menu_admin_per_menu"
+            }
+        },
+        {
+            "name": "drupal/menu_perms_per_menu",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/menu_perms_per_menu.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/menu_perms_per_menu-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "b3b040b052b8ba723e082a003131c9e5a1b87bd8"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/menu_admin_per_menu": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1761596055",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "fengtan",
+                    "homepage": "https://www.drupal.org/user/847318"
+                },
+                {
+                    "name": "iwayman",
+                    "homepage": "https://www.drupal.org/user/719438"
+                },
+                {
+                    "name": "jinah2020",
+                    "homepage": "https://www.drupal.org/user/3670193"
+                },
+                {
+                    "name": "karolinam",
+                    "homepage": "https://www.drupal.org/user/3434943"
+                },
+                {
+                    "name": "mvc",
+                    "homepage": "https://www.drupal.org/user/15016"
+                }
+            ],
+            "description": "Extends Menu Admin per Menu with fine-grained permissions",
+            "homepage": "https://www.drupal.org/project/menu_perms_per_menu",
+            "support": {
+                "source": "https://git.drupalcode.org/project/menu_perms_per_menu"
             }
         },
         {

@@ -22,7 +22,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'unpublished_taxonomy_term'
+  handler: unpublished_taxonomy_term
   handler_settings:
     target_bundles:
       relationtype_cross__inst_stor: relationtype_cross__inst_stor

@@ -19,7 +19,7 @@ dependencies:
     - field.field.node.concept.field_summary
     - node.type.concept
   module:
-    - datetime_more
+    - datetime
     - datetime_range
     - entity_reference_modal
     - field_group
@@ -411,21 +411,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_date_end:
-    type: datetime_more_datelist
+    type: datetime_default
     weight: 37
     region: content
-    settings:
-      date_order: DMY
-      time_type: none
-      increment: '1'
-      year_min: '1'
-      year_max: '2999'
-      input_year: number
-      input_month: select
-      input_day: select
-      input_hour: select
-      input_minute: select
-      input_second: select
+    settings: {  }
     third_party_settings: {  }
   field_date_end_year_only:
     type: boolean_checkbox
@@ -435,21 +424,10 @@ content:
       display_label: true
     third_party_settings: {  }
   field_date_start:
-    type: datetime_more_datelist
+    type: datetime_default
     weight: 35
     region: content
-    settings:
-      date_order: DMY
-      time_type: none
-      increment: '1'
-      year_min: '1'
-      year_max: '2999'
-      input_year: number
-      input_month: select
-      input_day: select
-      input_hour: select
-      input_minute: select
-      input_second: select
+    settings: {  }
     third_party_settings: {  }
   field_date_start_year_only:
     type: boolean_checkbox

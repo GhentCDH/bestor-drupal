@@ -23,7 +23,6 @@ module:
   customize_admin_menu_per_role: 0
   customviewfilters: 0
   datetime: 0
-  datetime_more: 0
   datetime_range: 0
   dblog: 0
   ds: 0
@@ -93,6 +92,8 @@ module:
   user: 0
   views_ui: 0
   workflows: 0
+  menu_admin_per_menu: 1
+  menu_perms_per_menu: 2
   content_translation: 10
   views: 10
   paragraphs: 11

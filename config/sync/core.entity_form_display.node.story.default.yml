@@ -18,7 +18,7 @@ dependencies:
     - field.field.node.story.field_summary
     - node.type.story
   module:
-    - datetime_more
+    - datetime
     - datetime_range
     - entity_reference_modal
     - field_group
@@ -409,21 +409,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_date_end:
-    type: datetime_more_datelist
-    weight: 5
+    type: datetime_default
+    weight: 29
     region: content
-    settings:
-      increment: 15
-      date_order: DMY
-      time_type: '24'
-      year_min: '1'
-      year_max: '2999'
-      input_year: number
-      input_month: select
-      input_day: select
-      input_hour: select
-      input_minute: select
-      input_second: select
+    settings: {  }
     third_party_settings: {  }
   field_date_end_year_only:
     type: boolean_checkbox
@@ -433,21 +422,10 @@ content:
       display_label: true
     third_party_settings: {  }
   field_date_start:
-    type: datetime_more_datelist
-    weight: 3
+    type: datetime_default
+    weight: 30
     region: content
-    settings:
-      increment: 15
-      date_order: DMY
-      time_type: none
-      year_min: '1'
-      year_max: '2999'
-      input_year: number
-      input_month: select
-      input_day: select
-      input_hour: select
-      input_minute: select
-      input_second: select
+    settings: {  }
     third_party_settings: {  }
   field_date_start_year_only:
     type: boolean_checkbox

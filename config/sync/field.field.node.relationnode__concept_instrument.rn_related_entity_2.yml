@@ -22,7 +22,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'unpublished'
+  handler: unpublished
   handler_settings:
     target_bundles:
       instrument: instrument

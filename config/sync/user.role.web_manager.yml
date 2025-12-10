@@ -101,6 +101,9 @@ dependencies:
     - filter
     - locale
     - media
+    - menu_admin_per_menu
+    - menu_link_content
+    - menu_perms_per_menu
     - node
     - paragraphs
     - path
@@ -125,6 +128,7 @@ permissions:
   - 'access toolbar'
   - 'access user profiles'
   - 'access webmanager dashboard'
+  - 'administer main menu items'
   - 'administer nodes'
   - 'administer url aliases'
   - 'administer users'
@@ -400,6 +404,7 @@ permissions:
   - 'edit any soundcloud media'
   - 'edit any story content'
   - 'edit any video media'
+  - 'edit link of menu links in main menu'
   - 'edit own article content'
   - 'edit own audio media'
   - 'edit own concept content'
@@ -484,6 +489,7 @@ permissions:
   - 'edit terms in relationtype_self__plac_plac'
   - 'edit terms in relationtype_self__stor_stor'
   - 'edit terms in specialisation'
+  - 'enable/disable links in main menu'
   - 'revert all revisions'
   - 'revert all taxonomy revisions'
   - 'revert any audio media revisions'
@@ -584,6 +590,8 @@ permissions:
   - 'translate institution_type taxonomy_term'
   - 'translate instrument node'
   - 'translate interface'
+  - 'translate links in main menu from menu interface'
+  - 'translate menu_link_content'
   - 'translate municipality taxonomy_term'
   - 'translate page node'
   - 'translate person node'

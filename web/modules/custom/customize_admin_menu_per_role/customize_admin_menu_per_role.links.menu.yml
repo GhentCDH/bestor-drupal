@@ -146,8 +146,7 @@ webmanager_dashboard.url_aliases:
   menu_name: web-manager-admin
   parent: webmanager_dashboard.config
   weight: -53
-
-
+  
 
 ###################################
 # REDACTOR / USER MENU
