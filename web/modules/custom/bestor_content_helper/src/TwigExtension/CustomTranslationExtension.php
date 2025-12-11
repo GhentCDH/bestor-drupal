@@ -9,6 +9,7 @@ use Twig\TwigFunction;
 use Drupal\Core\Render\Markup;
 use Drupal\bestor_content_helper\Service\FacetResultsProvider;
 use Drupal\bestor_content_helper\Service\NodeContentAnalyzer;
+use Drupal\bestor_content_helper\Service\StandardNodeFieldProcessor;
 use Drupal\bestor_content_helper\Service\MediaProcessor;
 
 /**
@@ -20,6 +21,7 @@ class CustomTranslationExtension extends AbstractExtension {
   protected CustomTranslations $customTranslations;
   protected FacetResultsProvider $facetResultsProvider;
   protected NodeContentAnalyzer $nodeContentAnalyzer;
+  protected StandardNodeFieldProcessor $standardFieldProcessor;
   protected MediaProcessor $mediaProcessor;
 
   /**
@@ -30,12 +32,14 @@ class CustomTranslationExtension extends AbstractExtension {
     CustomTranslations $customTranslations,
     FacetResultsProvider $facetResultsProvider,
     NodeContentAnalyzer $nodeContentAnalyzer,
+    StandardNodeFieldProcessor $standardFieldProcessor,
     MediaProcessor $mediaProcessor
   ) {
     $this->languageManager = $languageManager;
     $this->customTranslations = $customTranslations;
     $this->facetResultsProvider = $facetResultsProvider;
     $this->nodeContentAnalyzer = $nodeContentAnalyzer;
+    $this->standardFieldProcessor = $standardFieldProcessor;
     $this->mediaProcessor = $mediaProcessor;
   }
 
@@ -58,9 +62,8 @@ class CustomTranslationExtension extends AbstractExtension {
       'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
       'image_info' => $this->mediaProcessor->getNodeImageInfo(...$args),
-      'field_values' => $this->nodeContentAnalyzer->getFieldValues(...$args),
-      'entref_to_str' => $this->nodeContentAnalyzer->entityRefFieldToResultString(...$args),
-      'lemma_key_data' => $this->nodeContentAnalyzer->getLemmaKeyData(...$args),
+      'field_values' => $this->standardFieldProcessor->getFieldValues(...$args),
+      'lemma_key_data' => $this->standardFieldProcessor->getLemmaKeyData(...$args),
       default => $this->translate($type, ...$args),
     };
   }

@@ -71,7 +71,7 @@
  */
 #}
 
-{% set author = bestor('author_label') ~ ': ' ~ (bestor('entref_to_str', node, 'field_author', 'taxonomy_term')|default(bestor('default_author'))) %}
+{% set author = bestor('author_label') ~ ': ' ~ (bestor('field_values', node, 'field_author', {'format': 'string'})|default(bestor('default_author'))) %}
 {% set date = bestor('updated_label') ~ ': ' ~ node.changed.value|date('d.m.Y') %}
 
 <div>
