@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 name: info_box
-label: 'Info box'
+label: 'Info box (466×300)'
 effects:
   45236cab-c60d-4582-a9ea-64e517a71df0:
     uuid: 45236cab-c60d-4582-a9ea-64e517a71df0

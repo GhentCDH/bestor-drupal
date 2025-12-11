@@ -1,0 +1,23 @@
+uuid: 5ca4343b-80e3-4b7a-a703-bc9792cd59d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_paragr_layout__text
+    - paragraphs.paragraphs_type.formatted_text
+  module:
+    - options
+id: paragraph.formatted_text.field_paragr_layout__text
+field_name: field_paragr_layout__text
+entity_type: paragraph
+bundle: formatted_text
+label: Layout
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1_col
+default_value_callback: ''
+settings: {  }
+field_type: list_string

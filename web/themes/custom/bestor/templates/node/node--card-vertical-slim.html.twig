@@ -71,7 +71,7 @@
  */
 #}
 
-{% set image_info = bestor('image_info', node, 'field_image', 'card_publication') %}
+{% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'card_publication'}) %}
 {% set media %}
   <img loading="lazy" src="{{ image_info.url }}" width="199" height="302" alt="{{ image_info.alt }}">
 {% endset %}

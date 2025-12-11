@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 name: card_publication
-label: Card-publication
+label: 'Card-publication (199×302)'
 effects:
   59955c7a-8f0d-4268-acb5-8180c0857fcb:
     uuid: 59955c7a-8f0d-4268-acb5-8180c0857fcb

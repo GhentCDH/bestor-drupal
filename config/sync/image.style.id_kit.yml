@@ -1,0 +1,15 @@
+uuid: 2cc1c48d-7885-43db-99c4-238366e38ee1
+langcode: en
+status: true
+dependencies: {  }
+name: id_kit
+label: 'id-kit (450×354)'
+effects:
+  053bdd6a-d1b5-4714-bacd-617b237f9e78:
+    uuid: 053bdd6a-d1b5-4714-bacd-617b237f9e78
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 450
+      height: 354
+      anchor: center-center

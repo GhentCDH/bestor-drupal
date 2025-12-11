@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 name: card_horizontal
-label: Card-horizontal
+label: 'Card-horizontal (320×211)'
 effects:
   53291520-29ed-4851-be8f-338bc0263494:
     uuid: 53291520-29ed-4851-be8f-338bc0263494

@@ -5,7 +5,8 @@ dependencies:
   config:
     - field.field.paragraph.text_media.field_formatted_text
     - field.field.paragraph.text_media.field_media
-    - field.field.paragraph.text_media.field_paragraph_layout
+    - field.field.paragraph.text_media.field_paragr_layout__text_media
+    - field.field.paragraph.text_media.field_title
     - paragraphs.paragraphs_type.text_media
   module:
     - media_library
@@ -30,15 +31,11 @@ content:
     settings:
       media_types: {  }
     third_party_settings: {  }
-  field_paragraph_layout:
-    type: entity_reference_autocomplete
+  field_paragr_layout__text_media:
+    type: options_select
     weight: 1
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

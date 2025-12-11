@@ -66,7 +66,7 @@ class CustomTranslationExtension extends AbstractExtension {
       'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
       'page_variant' => $this->pageAnalyzer->getPageVariant(...$args),
-      'image_info' => $this->mediaProcessor->getNodeImageInfo(...$args),
+      'media_info' => $this->mediaProcessor->getEntityMediaInfo(...$args),
       'field_values' => $this->standardFieldProcessor->getFieldValues(...$args),
       'lemma_key_data' => $this->standardFieldProcessor->getLemmaKeyData(...$args),
       default => $this->translate($type, ...$args),

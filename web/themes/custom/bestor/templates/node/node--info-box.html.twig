@@ -72,7 +72,7 @@
 #}
 
 
-{% set image_info = bestor('image_info', node, 'field_image', 'info_box') %}
+{% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'info_box'}) %}
 {% set media %}
   <img loading="lazy" src="{{ image_info.url }}" width="466" height="300" alt="{{ image_info.alt }}">
 {% endset %}

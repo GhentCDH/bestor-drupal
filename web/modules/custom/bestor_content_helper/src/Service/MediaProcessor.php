@@ -8,6 +8,7 @@ use Drupal\node\NodeInterface;
 use Drupal\media\MediaInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Service for handling media images.
@@ -47,30 +48,35 @@ class MediaProcessor {
   /**
    * Gets image URL from a node's media field.
    *
-   * @param \Drupal\node\NodeInterface $node
+   * @param NodeInterface|ParagraphInterface $entity
    *   The node entity.
    * @param string $field_name
    *   The field name.
-   * @param string|null $style_name
-   *   The image style name, or NULL for original.
+   * @param array|null $options
+   *   Mediatype specific options.
    *
    * @return string|null
    *   The image URL, or NULL if not available.
    */
-  public function getNodeImageInfo(NodeInterface $node, string $field_name, string $style_name = NULL): ?array {
-    if (!$node->hasField($field_name) || $node->get($field_name)->isEmpty()) {
+  public function getEntityMediaInfo(NodeInterface|ParagraphInterface $entity, string $field_name, array $options = NULL): ?array {
+
+    if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
       return NULL;
     }
 
-    $media = $node->get($field_name)->entity;
+    $media = $entity->get($field_name)->entity;
     if (!$media instanceof MediaInterface) {
       return NULL;
     }
-    
-    return [
-      'url' => $this->getStyledImageUrl($media, $style_name),
-      'alt' => $this->getImageAlt($media) ?? '',
-    ];
+    // needs to be extended with other media bundles
+    if($media->bundle() === 'image'){
+      $img_style = $options['image_style'] ?? NULL;
+      return [
+        'url' => $this->getStyledImageUrl($media, $img_style),
+        'alt' => $this->getImageAlt($media) ?? '',
+      ];
+    }
+    return NULL;
   }
 
   /**

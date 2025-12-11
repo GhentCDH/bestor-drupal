@@ -9,7 +9,7 @@ _core:
 id: bestor_local_tasks
 theme: bestor
 region: content
-weight: -8
+weight: -7
 provider: null
 plugin: local_tasks_block
 settings:

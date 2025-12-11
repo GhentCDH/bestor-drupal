@@ -80,7 +80,7 @@
   }, with_context = false) }}
 {% endset %}
 
-{% set image_info = bestor('image_info', node, 'field_image', 'card_horizontal') %}
+{% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'card_horizontal'}) %}
 
 {% set media %}
   <img loading="lazy" src="{{ image_info.url }}" width="320" height="211" alt="{{ image_info.alt }}">

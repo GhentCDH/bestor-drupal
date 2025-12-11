@@ -1,0 +1,15 @@
+uuid: 1ee3295b-7b77-4788-807a-e48fe7cb5586
+langcode: en
+status: true
+dependencies: {  }
+name: paragraph_text_media
+label: 'paragraph_text_media (510×400)'
+effects:
+  f5ba4556-e447-47c7-a34e-ac023a4c1d5f:
+    uuid: f5ba4556-e447-47c7-a34e-ac023a4c1d5f
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 510
+      height: 400
+      anchor: center-center

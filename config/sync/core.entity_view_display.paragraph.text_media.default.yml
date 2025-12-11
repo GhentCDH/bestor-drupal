@@ -5,9 +5,11 @@ dependencies:
   config:
     - field.field.paragraph.text_media.field_formatted_text
     - field.field.paragraph.text_media.field_media
-    - field.field.paragraph.text_media.field_paragraph_layout
+    - field.field.paragraph.text_media.field_paragr_layout__text_media
+    - field.field.paragraph.text_media.field_title
     - paragraphs.paragraphs_type.text_media
   module:
+    - options
     - text
 id: paragraph.text_media.default
 targetEntityType: paragraph
@@ -30,11 +32,10 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_paragraph_layout:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: true
+  field_paragr_layout__text_media:
+    type: list_default
+    label: above
+    settings: {  }
     third_party_settings: {  }
     weight: 1
     region: content

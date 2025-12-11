@@ -1,0 +1,33 @@
+uuid: aa407d3f-78e8-4e09-a363-06fd41f059b1
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_paragr_layout__text_media
+field_name: field_paragr_layout__text_media
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: img_50_r
+      label: 'Text (L 50%) - Image (R 50%)'
+    -
+      value: img_50_l
+      label: 'Image (L 50%) - Text (R 50%)'
+    -
+      value: img_33_r
+      label: 'Text (L 67%) - Image (R 33%)'
+    -
+      value: img_33_l
+      label: 'Image (L 33%) - Text (R 67%)'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

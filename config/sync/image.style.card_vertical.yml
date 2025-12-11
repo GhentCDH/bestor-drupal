@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 name: card_vertical
-label: Card-vertical
+label: 'Card-vertical (402×456)'
 effects:
   24a7736e-6aa0-4a9f-bfd4-3902e1b33f63:
     uuid: 24a7736e-6aa0-4a9f-bfd4-3902e1b33f63

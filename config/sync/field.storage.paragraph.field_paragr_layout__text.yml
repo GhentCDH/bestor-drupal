@@ -1,0 +1,30 @@
+uuid: 94f78475-4adb-4736-89c0-d2ec5719a686
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_paragr_layout__text
+field_name: field_paragr_layout__text
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 1_col
+      label: 'One column'
+    -
+      value: 2_col
+      label: 'Two columns'
+    -
+      value: intro
+      label: 'Intro text'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

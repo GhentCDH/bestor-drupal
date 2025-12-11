@@ -73,7 +73,7 @@
 
 {# c-structured-layout.story.twig #}
 {% set top %}
-  {% set image_info = bestor('image_info', node, 'field_image', 'card_vertical') %}
+  {% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'id_kit'}) %}
   {% set media %}
     <img loading="lazy" src="{{ image_info.url }}" width="450" height="354" alt="{{ image_info.alt }}">
   {% endset %}
@@ -115,6 +115,7 @@
   {% if content.field_geolocation %}
     {{content.field_geolocation}}
   {% endif %}
+  
 {% endset %}
 {% set sidebar %}
   {% set buttons %}

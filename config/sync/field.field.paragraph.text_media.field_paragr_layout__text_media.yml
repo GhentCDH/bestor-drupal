@@ -1,0 +1,23 @@
+uuid: cd67f919-78a6-4189-a2f2-41daa649e235
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_paragr_layout__text_media
+    - paragraphs.paragraphs_type.text_media
+  module:
+    - options
+id: paragraph.text_media.field_paragr_layout__text_media
+field_name: field_paragr_layout__text_media
+entity_type: paragraph
+bundle: text_media
+label: Layout
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: img_50_r
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,16 +1,15 @@
-uuid: 342e2581-1c58-4103-a05d-eb6c35fb9529
-langcode: en
+uuid: bb596499-60c7-40ee-b88d-c272628864bb
+langcode: nl
 status: true
 dependencies:
   module:
     - footnotes
-    - node
   theme:
     - bestor
 id: bestor_footnotesgroup
 theme: bestor
-region: content
-weight: -4
+region: subcontent
+weight: 0
 provider: null
 plugin: footnotes_group
 settings:
@@ -20,17 +19,4 @@ settings:
   provider: footnotes
   context_mapping: {  }
   group_via_js: false
-visibility:
-  'entity_bundle:node':
-    id: 'entity_bundle:node'
-    negate: false
-    context_mapping:
-      node: '@node.node_route_context:node'
-    bundles:
-      concept: concept
-      document: document
-      institution: institution
-      instrument: instrument
-      person: person
-      place: place
-      story: story
+visibility: {  }
