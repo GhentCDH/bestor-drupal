@@ -38,19 +38,19 @@
  * @ingroup themeable
  */
 #}
-{%
-  set classes = [
-    'paragraph',
-    'paragraph--type--' ~ paragraph.bundle|clean_class,
-    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-    not paragraph.isPublished() ? 'paragraph--unpublished'
-  ]
-%}
 
-{% block paragraph %}
-  <div{{ attributes.addClass(classes) }}>
-    {% block content %}
-      {{ content }}
-    {% endblock %}
-  </div>
-{% endblock paragraph %}
+{% set text %}
+  {{ content.field_table }}
+  {% if paragraph.field_caption.value %}
+    <div class="bestor-table-caption">{{paragraph.field_title.value}}</div>
+  {% endif %}
+{% endset %}
+
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-text', {
+    title,
+    text,
+    attr_variant: 'default',
+    columns: 1,
+  }) }}
+</div>

@@ -9,7 +9,7 @@ id: paragraph.table.field_title
 field_name: field_title
 entity_type: paragraph
 bundle: table
-label: title
+label: Caption
 description: ''
 required: false
 translatable: false

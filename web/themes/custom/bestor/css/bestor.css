@@ -40,3 +40,11 @@
   line-height: 10rem;
   background-color: #f8f8f8;
 }
+
+/* FEAT: caption for table paragraphs */
+
+.bestor-table-caption {
+    font-size: 15px;
+    font-style: italic;
+    margin-block-start: 18px;
+}

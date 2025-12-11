@@ -409,7 +409,6 @@ class StandardNodeFieldProcessor {
 
       if ($url instanceof Url) {
         $render_array = $this->facetResultsProvider->getEnableFacetLinkRenderArray($url, $title);
-        dpm($render_array);
         $result[] =  Markup::create((string) $this->renderer->renderPlain($render_array));;
       }
       else {

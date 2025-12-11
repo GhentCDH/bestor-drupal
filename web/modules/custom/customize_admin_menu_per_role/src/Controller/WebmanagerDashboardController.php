@@ -86,7 +86,6 @@ class WebmanagerDashboardController extends ControllerBase {
       } else {
         $url = Url::fromRoute($route);
       }
-      dpm($url);
       $link = Link::fromTextAndUrl($this->t($title), $url)->toRenderable();
       $link['#attributes']['class'][] = 'admin-item__link';
 

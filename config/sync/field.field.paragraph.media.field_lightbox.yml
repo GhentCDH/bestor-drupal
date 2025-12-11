@@ -1,0 +1,23 @@
+uuid: 736b4466-de01-494a-8dbb-4bc9aca0e664
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_lightbox
+    - paragraphs.paragraphs_type.media
+id: paragraph.media.field_lightbox
+field_name: field_lightbox
+entity_type: paragraph
+bundle: media
+label: 'Showable in popup'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

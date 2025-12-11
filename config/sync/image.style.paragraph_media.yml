@@ -1,0 +1,15 @@
+uuid: 5cdf040f-a851-42f4-b142-6a667d9583d0
+langcode: en
+status: true
+dependencies: {  }
+name: paragraph_media
+label: 'Paragraph Media (960×500)'
+effects:
+  c9dc76e7-07b0-4229-87fe-725eb0831972:
+    uuid: c9dc76e7-07b0-4229-87fe-725eb0831972
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 960
+      height: 500
+      anchor: center-center

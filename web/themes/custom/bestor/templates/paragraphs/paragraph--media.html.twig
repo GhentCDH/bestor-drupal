@@ -38,19 +38,35 @@
  * @ingroup themeable
  */
 #}
-{%
-  set classes = [
-    'paragraph',
-    'paragraph--type--' ~ paragraph.bundle|clean_class,
-    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-    not paragraph.isPublished() ? 'paragraph--unpublished'
-  ]
-%}
 
-{% block paragraph %}
-  <div{{ attributes.addClass(classes) }}>
-    {% block content %}
-      {{ content }}
-    {% endblock %}
-  </div>
-{% endblock paragraph %}
+
+{% set image_info = bestor('media_info', paragraph, 'field_media', {'image_style': 'paragraph_media'}) %} 
+{% set media %}
+  <img loading="lazy" src="{{ image_info.url }}" width="960" height="500" alt="T{{ image_info.alt }}">
+{% endset %}
+
+{% set attr_variant = 'media_only'%}
+{% set add_lightbox = paragraph.field_lightbox.value %}
+
+
+
+{% if paragraph.field_caption.value %}
+    {% set attr_variant = 'media_w_caption'%}
+    {% set caption = paragraph.field_title.value %}
+    {{devel_dump(attr_variant)}}
+{% endif %}
+
+{% if add_lightbox %}
+    {% set media_uri = bestor('media_info', paragraph, 'field_media').url %}
+{% endif %}
+
+
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-media-1-item', {
+    media,
+    media_uri,
+    caption,
+    add_lightbox,
+    attr_variant,
+  }) }}
+</div>

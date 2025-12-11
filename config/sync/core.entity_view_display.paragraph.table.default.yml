@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.table.field_caption
     - field.field.paragraph.table.field_table
     - field.field.paragraph.table.field_title
     - paragraphs.paragraphs_type.table
@@ -13,6 +14,16 @@ targetEntityType: paragraph
 bundle: table
 mode: default
 content:
+  field_caption:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
   field_table:
     type: text_default
     label: hidden
