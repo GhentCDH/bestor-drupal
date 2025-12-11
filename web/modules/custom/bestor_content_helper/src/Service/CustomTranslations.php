@@ -180,6 +180,24 @@ class CustomTranslations {
         'fr' => 'Recherchez dans la mémoire scientifique',
         'nl' => 'Doorzoek het wetenschappelijk geheugenen',
       ],
+      'lemma_key_period' => [
+        'description' => 'Which author should be displayed if none is entered',
+        'en' => 'Period',
+        'fr' => 'Période',
+        'nl' => 'Periode',
+      ],
+      'lemma_key_location' => [
+        'description' => 'Which author should be displayed if none is entered',
+        'en' => 'Location',
+        'fr' => 'Location',
+        'nl' => 'Locatie',
+      ],
+      'lemma_key_birth_death' => [
+        'description' => 'Which author should be displayed if none is entered',
+        'en' => 'Life',
+        'fr' => 'Vie',
+        'nl' => 'Leven',
+      ],
       'default_author' => [
         'description' => 'Which author should be displayed if none is entered',
         'en' => 'Bestor editors',

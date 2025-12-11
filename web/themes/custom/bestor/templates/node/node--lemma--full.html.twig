@@ -78,22 +78,14 @@
     <img loading="lazy" src="{{ image_info.url }}" width="450" height="354" alt="{{ image_info.alt }}">
   {% endset %}
   {% set identity_kit_list %}
-    {{devel_dump(bestor('lemma_key_data', node, 'full', 'database', 'page_1'))}}
-    {% set values %}
-      <a href="#">{Naam}</a>
-    {% endset %}
-    {{ include('jakarta:c-identity-kit-item', {
-      title: '/Discipline',
-      values,
-    }, with_context = false) }}
-    {% set values_2 %}
-      {waarde}, {waarde}, {waarde}, {waarde}, {waarde}
-    {% endset %}
-    {{ include('jakarta:c-identity-kit-item', {
-      title: '/Specialisatie',
-      values: values_2,
-    }, with_context = false) }}
+    {% for key_element in bestor('lemma_key_data', node, 'full', 'database', 'page_1') %}
+      {{ include('jakarta:c-identity-kit-item', {
+        title: '/' ~ key_element.label ,
+        values: key_element.value,
+      }, with_context = false) }}
+    {% endfor %}
   {% endset %}
+
   {{ include('jakarta:c-identity-kit', {
     tag: node.type.entity.label,
     media,
@@ -101,47 +93,28 @@
     attr_variant: 'default',
   }, with_context = false) }}
 {% endset %}
+
 {% set content %}
   {{ include('jakarta:c-meta', {
-    date: '09/11/2025',
-    read_time: '5 min.',
+    date: node.changed.value|date('d/m/Y'),
+    read_time: bestor('reading_time', node),
   }, with_context = false) }}
-  {% set title %}
-    Introduction
-  {% endset %}
-  {% set text %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
-  {% endset %}
-  {{ include('jakarta:c-text', {
-    title,
-    text,
-    attr_variant: 'intro',
-    columns: '1',
-  }) }}
-  {% set title %}
-    Default - 2 columns
-  {% endset %}
-  {% set text %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu nulla ornare, maximus leo vel, rhoncus massa.</p>
-  {% endset %}
-  {{ include('jakarta:c-text', {
-    title,
-    text,
-    attr_variant: 'default',
-    columns: '2',
-  }) }}
-  {% set media %}
-    <img loading="lazy" src="https://picsum.photos/id/24/400/510" width="510" height="400" alt="Test image">
-  {% endset %}
-  {% set text %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id viverra nibh. Phasellus non dapibus tellus, sit amet maximus urna. Nunc eu augue tincidunt, pulvinar lacus ac, ullamcorper augue. Aliquam suscipit sem elit, ut fermentum tellus malesuada nec. Curabitur maximus placerat orci id bibendum. Aliquam ullamcorper lectus eu leo consectetur hendrerit. Fusce gravida elementum tortor, aliquet fermentum dui porttitor sit amet. Maecenas consequat laoreet metus a mattis. Cras ut magna et quam congue volutpat eget eu neque. Curabitur ut enim sollicitudin, eleifend nibh ut.</p>
-  {% endset %}
-  {{ include('jakarta:c-text-media', {
-    media,
-    text,
-    media_position: 'left',
-    media_layout: '50_50',
-  }) }}
+
+  {% if content.field_description %}
+    {{content.field_description}}
+  {% endif %}
+
+  {% if content.body %}
+    {{content.body}}
+  {% endif %}
+
+  {% if content.field_publication %}
+    {{content.field_publication}}
+  {% endif %}
+
+  {% if content.field_geolocation %}
+    {{content.field_geolocation}}
+  {% endif %}
 {% endset %}
 {% set sidebar %}
   {% set buttons %}

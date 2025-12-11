@@ -9,6 +9,7 @@ use Twig\TwigFunction;
 use Drupal\Core\Render\Markup;
 use Drupal\bestor_content_helper\Service\FacetResultsProvider;
 use Drupal\bestor_content_helper\Service\NodeContentAnalyzer;
+use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\bestor_content_helper\Service\StandardNodeFieldProcessor;
 use Drupal\bestor_content_helper\Service\MediaProcessor;
 
@@ -20,6 +21,7 @@ class CustomTranslationExtension extends AbstractExtension {
   protected LanguageManagerInterface $languageManager;
   protected CustomTranslations $customTranslations;
   protected FacetResultsProvider $facetResultsProvider;
+  protected CurrentPageAnalyzer $pageAnalyzer;
   protected NodeContentAnalyzer $nodeContentAnalyzer;
   protected StandardNodeFieldProcessor $standardFieldProcessor;
   protected MediaProcessor $mediaProcessor;
@@ -31,6 +33,7 @@ class CustomTranslationExtension extends AbstractExtension {
     LanguageManagerInterface $languageManager, 
     CustomTranslations $customTranslations,
     FacetResultsProvider $facetResultsProvider,
+    CurrentPageAnalyzer $pageAnalyzer,
     NodeContentAnalyzer $nodeContentAnalyzer,
     StandardNodeFieldProcessor $standardFieldProcessor,
     MediaProcessor $mediaProcessor
@@ -38,6 +41,7 @@ class CustomTranslationExtension extends AbstractExtension {
     $this->languageManager = $languageManager;
     $this->customTranslations = $customTranslations;
     $this->facetResultsProvider = $facetResultsProvider;
+    $this->pageAnalyzer = $pageAnalyzer;
     $this->nodeContentAnalyzer = $nodeContentAnalyzer;
     $this->standardFieldProcessor = $standardFieldProcessor;
     $this->mediaProcessor = $mediaProcessor;
@@ -61,6 +65,7 @@ class CustomTranslationExtension extends AbstractExtension {
     return match($type) {
       'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
+      'page_variant' => $this->pageAnalyzer->getPageVariant(...$args),
       'image_info' => $this->mediaProcessor->getNodeImageInfo(...$args),
       'field_values' => $this->standardFieldProcessor->getFieldValues(...$args),
       'lemma_key_data' => $this->standardFieldProcessor->getLemmaKeyData(...$args),

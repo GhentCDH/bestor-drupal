@@ -5,7 +5,6 @@ namespace Drupal\bestor_content_helper\Service;
 
 use Drupal\node\NodeInterface;
 
-
 /**
  * Service for analyzing and formatting node content.
  * 
@@ -13,7 +12,6 @@ use Drupal\node\NodeInterface;
  * calculating reading times, and formatting field values.
  */
 class NodeContentAnalyzer {
-
 
   /**
    * Count words in node body or description field.

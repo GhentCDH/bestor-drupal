@@ -7,3 +7,18 @@ function bestor_theme_suggestions_node_alter(array &$suggestions, array $variabl
       $suggestions[] = 'node__lemma__full';
     }
 }
+
+function bestor_content_helper_preprocess_block(&$variables) {
+  if ($variables['plugin_id'] !== 'footnotes_group') {
+    return;
+  }
+  $footnotes_group = \Drupal::service('footnotes.group');
+  $variables['footnote_count'] = $footnotes_group->count();
+}
+
+
+function bestor_content_helper_preprocess_region(&$variables) {
+  if ($variables['region'] == 'subcontent' && \Drupal::hasService('footnotes.group')) {
+    $variables['footnote_count'] = \Drupal::service('footnotes.group')->count();
+  }
+}

@@ -1,6 +1,11 @@
 services:
   bestor_content_helper.node_content_analyzer:
     class: Drupal\bestor_content_helper\Service\NodeContentAnalyzer
+  bestor_content_helper.current_page_analyzer:
+    class: Drupal\bestor_content_helper\Service\CurrentPageAnalyzer
+    arguments:
+      - '@current_route_match'
+      - '@bestor_content_helper.node_content_analyzer'
   bestor_content_helper.standard_node_field_processor:
     class: Drupal\bestor_content_helper\Service\StandardNodeFieldProcessor
     arguments:
@@ -8,6 +13,7 @@ services:
       - '@renderer'
       - '@bestor_content_helper.facet_results_provider'
       - '@bestor_content_helper.custom_translations'
+      - '@bestor_content_helper.current_page_analyzer'
   bestor_content_helper.node_language_analyzer:
     class: Drupal\bestor_content_helper\Service\NodeLanguageAnalyzer
     arguments:
@@ -26,7 +32,8 @@ services:
     arguments:
       - '@language_manager'
       - '@bestor_content_helper.custom_translations'
-      - '@bestor_content_helper.facet_results_provider'    
+      - '@bestor_content_helper.facet_results_provider' 
+      - '@bestor_content_helper.current_page_analyzer'   
       - '@bestor_content_helper.node_content_analyzer'
       - '@bestor_content_helper.standard_node_field_processor'  
       - '@bestor_content_helper.media_processor'    

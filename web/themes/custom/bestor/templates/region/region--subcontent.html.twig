@@ -1,0 +1,45 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a region.
+ *
+ * Available variables:
+ * - content: The content for this region, typically blocks.
+ * - attributes: HTML attributes for the region <div>.
+ * - region: The name of the region variable as defined in the theme's
+ *   .info.yml file.
+ *
+ * @see template_preprocess_region()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% if bestor('page_variant') == 'lemma' %}
+  
+  {% if footnote_count %}
+    {% set fns = drupal_block('footnotes_group') %}
+      
+    {% if fns %}
+      {{ include('jakarta:c-references', {
+        title: 'Footnotes',
+        references: fns,
+      }, with_context = false) }}
+    {% endif %}
+  {% endif %}
+ 
+  {% set refs = bestor('field_values', node, 'field_references') %}
+
+  {% if refs %}
+    {{ include('jakarta:c-references', {
+      title: 'references',
+      references: refs,
+    }, with_context = false) }}
+  {% endif %}
+{% else %}
+
+  {% if content %}
+    {{ content }}
+  {% endif %}
+
+{% endif %}
