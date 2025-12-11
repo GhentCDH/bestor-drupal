@@ -55,13 +55,11 @@ class CustomTranslationExtension extends AbstractExtension {
    */
   public function bestor(string $type, ...$args): Markup|array|string|null {
     return match($type) {
-      'facet_links' => $this->facetResultsProvider->getFacetResultLinks(...$args),
+      'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
       'image_info' => $this->mediaProcessor->getNodeImageInfo(...$args),
-      'entref_to_list' => $this->nodeContentAnalyzer->entityRefFieldToResultArray(...$args),
+      'field_values' => $this->nodeContentAnalyzer->getFieldValues(...$args),
       'entref_to_str' => $this->nodeContentAnalyzer->entityRefFieldToResultString(...$args),
-      'str_to_list' => $this->nodeContentAnalyzer->stringFieldToResultArray(...$args),
-      'bool_value' => $this->nodeContentAnalyzer->getBoolValue(...$args),
       'lemma_key_data' => $this->nodeContentAnalyzer->getLemmaKeyData(...$args),
       default => $this->translate($type, ...$args),
     };

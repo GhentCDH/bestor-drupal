@@ -43,7 +43,7 @@ class FacetResultsProvider {
   }
 
 
-  protected function processFacetResults(string $view_name, string $filter_id, string $facet_url_id, string $display_id, bool $sort_alphabetically = FALSE): array {
+  protected function processFacetResults(string $view_name, string $filter_id, string $facet_query_id, string $display_id, bool $sort_alphabetically = FALSE): array {
     $results = $this->getFacetResults($view_name, $filter_id, $display_id);
     
     if (empty($results)) {
@@ -55,9 +55,6 @@ class FacetResultsProvider {
         return strcmp($a->getDisplayValue(), $b->getDisplayValue());
       });
     }
-
-    $view_route = 'view.' . $view_name . '.' . $display_id;
-    $language = $this->languageManager->getCurrentLanguage();
     
     $processed = [];
     
@@ -71,20 +68,11 @@ class FacetResultsProvider {
       $label = $result->getDisplayValue();
       $label_with_count = $label . ' (' . $count . ')';
       
-      $url = Url::fromRoute(
-        $view_route,
-        [],
-        [
-          'query' => [$facet_url_id => $tid],
-          'language' => $language,
-        ]
-      );
-      
       $processed[] = [
         'tid' => $tid,
         'label' => $label,
         'label_with_count' => $label_with_count,
-        'url' => $url,
+        'url' => $this->getEnableFacetUrl($view_name, $display_id, $facet_query_id, $tid),
       ];
     }
     
@@ -93,27 +81,20 @@ class FacetResultsProvider {
 
 
 
-  public function getFacetResultLinks(string $view_name, string $filter_id, string $facet_url_id, string $display_id = 'default'): array {
-    $processed = $this->processFacetResults($view_name, $filter_id, $facet_url_id, $display_id);
+  public function getSearchBannerFacetButtons(string $view_name, string $filter_id, string $facet_query_id, string $display_id = 'default'): array {
+    $processed = $this->processFacetResults($view_name, $filter_id, $facet_query_id, $display_id);
       
     $links = [];
     foreach ($processed as $item) {
-      $links[] = [
-        '#type' => 'link',
-        '#title' => $item['label_with_count'],
-        '#url' => $item['url'],
-        '#attributes' => [
-          'class' => ['facet-item', 'c-button', 'no-media', 'c-button--outline'],
-        ],
-      ];
+      $links[] = $this->getEnableFacetLinkRenderArray($item['url'], $item['label_with_count'], ['facet-item', 'c-button', 'no-media', 'c-button--outline']);
     }
     
     return $links;
   }
 
 
-  public function getFacetResultMenuItems(string $view_name, string $filter_id, string $facet_url_id, string $display_id = 'default'): array {
-    $processed = $this->processFacetResults($view_name, $filter_id, $facet_url_id, $display_id, TRUE);
+  public function getFacetResultMenuItems(string $view_name, string $filter_id, string $facet_query_id, string $display_id = 'default'): array {
+    $processed = $this->processFacetResults($view_name, $filter_id, $facet_query_id, $display_id, TRUE);
     
     $items = [];
     $weight = 0;
@@ -134,5 +115,29 @@ class FacetResultsProvider {
     }
     
     return $items;
+  }
+
+  public function getEnableFacetUrl(string $view_id, string $view_display, string $facet_query_id, string|int $facet_value): ?Url{
+    $view_route = 'view.' . $view_id . '.' . $view_display;
+    $language = $this->languageManager->getCurrentLanguage();
+    return Url::fromRoute(
+        $view_route,
+        [],
+        [
+          'query' => [$facet_query_id => $facet_value],
+          'language' => $language,
+        ]
+      ) ?? NULL;
+  }
+
+  public function getEnableFacetLinkRenderArray(Url $url, string $link_text, array $classes = []): array {
+    return [
+      '#type' => 'link',
+      '#title' => $link_text,
+      '#url' => $url,
+      '#attributes' => [
+        'class' => $classes,
+      ],
+    ];
   }
 }

@@ -77,7 +77,7 @@
 {% endset %}
 {% set authors %}
   <ul>
-    {% for author in bestor('str_to_list', node, 'field_publication_author') %}
+    {% for author in bestor('field_values', node, 'field_publication_author') %}
       <li>{{ author }}</li>
     {% endfor %}
   </ul>

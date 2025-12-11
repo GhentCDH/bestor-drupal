@@ -71,7 +71,7 @@
  */
 #}
 
-{% set internal = bestor('bool_value', node, 'field_issued_by_bestor') %}
+{% set internal = bestor('field_values', node, 'field_issued_by_bestor') %}
 {% set tag %}
   {{ include('jakarta:c-tag', {
     attr_variant: 'corner_down',

@@ -79,7 +79,7 @@
 {% endset %}
 {% set authors %}
   <ul>
-    {% for author in bestor('entref_to_list', node, 'field_author', 'taxonomy_term') %}
+    {% for author in bestor('field_values', node, 'field_author') %}
       <li>{{ author }}</li>
     {% endfor %}
   </ul>

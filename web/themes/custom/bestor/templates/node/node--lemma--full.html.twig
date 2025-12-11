@@ -78,7 +78,7 @@
     <img loading="lazy" src="{{ image_info.url }}" width="450" height="354" alt="{{ image_info.alt }}">
   {% endset %}
   {% set identity_kit_list %}
-    {{devel_dump(bestor('lemma_key_data', node))}}
+    {{devel_dump(bestor('lemma_key_data', node, 'full', 'database', 'page_1'))}}
     {% set values %}
       <a href="#">{Naam}</a>
     {% endset %}
