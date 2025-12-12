@@ -222,13 +222,56 @@ class CustomTranslations {
       'fr' => 'Table des matières',
       'nl' => 'Inhoudstafel',
     ],
-      'default_author' => [
+    'default_author' => [
         'description' => 'Which author should be displayed if none is entered',
         'en' => 'Bestor editors',
         'fr' => 'Rédaction Bestor',
         'nl' => 'Bestor redactie',
-      ],
+    ],
+    'title_related_story' => [
+      'description' => 'Title for related story items',
+      'en' => 'Related stories',
+      'fr' => 'Histoires liées',
+      'nl' => 'Gerelateerde verhalen',
+    ],
+    'title_related_person' => [
+      'description' => 'Title for related person items',
+      'en' => 'Related persons',
+      'fr' => 'Personnes liées',
+      'nl' => 'Gerelateerde personen',
+    ],
+    'title_related_institution' => [
+      'description' => 'Title for related institution items',
+      'en' => 'Related institutions',
+      'fr' => 'Institutions liées',
+      'nl' => 'Gerelateerde instellingen',
+    ],
+    'title_related_place' => [
+      'description' => 'Title for related place items',
+      'en' => 'Related places',
+      'fr' => 'Lieux liés',
+      'nl' => 'Gerelateerde plaatsen',
+    ],
+    'title_related_concept' => [
+      'description' => 'Title for related concept items',
+      'en' => 'Related concepts',
+      'fr' => 'Concepts liés',
+      'nl' => 'Gerelateerde concepten',
+    ],
+    'title_related_document' => [
+      'description' => 'Title for related document items',
+      'en' => 'Related documents',
+      'fr' => 'Documents liés',
+      'nl' => 'Gerelateerde documenten',
+    ],
+    'title_related_instrument' => [
+      'description' => 'Title for related instrument items',
+      'en' => 'Related instruments',
+      'fr' => 'Instruments liés',
+      'nl' => 'Gerelateerde instrumenten',
+    ],
     ];
+    
   }
 
 

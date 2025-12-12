@@ -59,15 +59,15 @@ class RelationshipTwigFormatter {
     if (empty($bundle_order)) {
       // Alphabetical by related bundle name
       usort($fields, function($a, $b) use ($node) {
-        $bundle_a = $this->extractRelatedBundle($a, $node->bundle());
-        $bundle_b = $this->extractRelatedBundle($b, $node->bundle());
+        $bundle_a = $this->extractRelatedBundle($a,);
+        $bundle_b = $this->extractRelatedBundle($b);
         return strcasecmp($bundle_a, $bundle_b);
       });
     } else {
       // Custom order
       usort($fields, function($a, $b) use ($bundle_order, $node) {
-        $bundle_a = $this->extractRelatedBundle($a, $node->bundle());
-        $bundle_b = $this->extractRelatedBundle($b, $node->bundle());
+        $bundle_a = $this->extractRelatedBundle($a);
+        $bundle_b = $this->extractRelatedBundle($b);
         
         $pos_a = array_search($bundle_a, $bundle_order);
         $pos_b = array_search($bundle_b, $bundle_order);
@@ -165,7 +165,7 @@ class RelationshipTwigFormatter {
     );
 
     // Generate title from bundle name
-    $title = explode('__', $relation_field_name)[2] ?? '';
+    $title = $this->extractRelatedBundle($relation_field_name);
 
     return [
       'title' => $title,
@@ -220,7 +220,7 @@ class RelationshipTwigFormatter {
     $field_configs = [];
     foreach ($field_names as $field_name) {
       if (in_array($field_name, $fields_to_enable)) {
-        $field_configs[$field_name] = [
+         $defaults = [
           'field_name' => $field_name,
           'enabled' => TRUE,
           'display_mode' => 'link',
@@ -316,5 +316,16 @@ class RelationshipTwigFormatter {
       ],
     ];
     return Markup::create($this->renderer->renderPlain($link_array));
+  }
+
+  /**
+   * Extract related bundle from field name.
+   * 
+   * Format: computed_relationshipfield__bundle1__bundle2
+   * Returns bundle2 (always the related/target bundle).
+   */
+  protected function extractRelatedBundle(string $field_name): string {
+    $parts = explode('__', $field_name);
+    return $parts[2] ?? '';
   }
 }

@@ -167,7 +167,7 @@
           </ul>
         {% endset %}
         {{ include('jakarta:c-related-items', {
-          title: rel_data.title,
+          title: bestor('title_related_' ~ rel_data.title),
           items,
         }, with_context = false) }}
       {% endif %}
