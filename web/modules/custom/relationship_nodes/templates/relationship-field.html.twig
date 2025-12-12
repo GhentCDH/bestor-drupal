@@ -4,9 +4,9 @@
  * Template for the relationship view field.
  *
  * Available variables:
- * - relationships: Array of relationship items, each containing:
+ * - items: Array of relationship items, each containing:
  *   - field_name: Array with 'field_value' and 'link_url' keys
- * - grouped: Array of relationships grouped by field value
+ * - groups: Array of relationships grouped by field value
  * - summary: Array with 'total', 'fields', 'has_groups', 'group_count'
  * - fields: Array of field metadata with 'name', 'label', 'weight', 'hide_label', 'is_link'
  * - row: The full result row object
@@ -14,10 +14,10 @@
 #}
 
 <div class="relationship-field">
-  {% if relationships %}
-    {% if grouped %}
+  {% if items %}
+    {% if groups %}
       <div class="grouped-relationships">
-        {% for group_name, items in grouped %}
+        {% for group_name, items in groups %}
           <div class="relationship-group">
             <h4 class="group-title">{{ group_name|capitalize }}</h4>
             <ul class="group-items">
@@ -56,7 +56,7 @@
     
     {% else %}
       <ul class="relationships-list">
-        {% for item in relationships %}
+        {% for item in items %}
           <li class="relationship-item">
             {% for field_name, field_config in fields %}
               {% if item[field_name] is defined %}

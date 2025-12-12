@@ -16,23 +16,39 @@
 #}
 
 {% if bestor('page_variant') == 'lemma' %}
+ {% set publs = bestor('field_values', null, 'field_publications') %}
+  {% if publs %}
+    {% set lines %}
+      {% for publ in publs %}
+        {{ include('jakarta:c-line', {
+          url: NULL,
+          title: publ,
+          attr_variant: 'default',
+        }, with_context = false) }}
+      {% endfor %}
+    {% endset %}
+    {{ include('jakarta:c-lines-box', {
+      title: bestor('publications_title'),
+      lines,
+    }, with_context = false) }}
+  {% endif %}
+   
   
   {% if footnote_count %}
     {% set fns = drupal_block('footnotes_group') %}
       
     {% if fns %}
       {{ include('jakarta:c-references', {
-        title: 'Footnotes',
+        title: bestor('label_footnotes'),
         references: fns,
       }, with_context = false) }}
     {% endif %}
   {% endif %}
  
-  {% set refs = bestor('field_values', node, 'field_references') %}
-
+  {% set refs = bestor('field_values', null, 'field_references') %}
   {% if refs %}
     {{ include('jakarta:c-references', {
-      title: 'references',
+      title: bestor('label_references'),
       references: refs,
     }, with_context = false) }}
   {% endif %}
@@ -41,5 +57,4 @@
   {% if content %}
     {{ content }}
   {% endif %}
-
 {% endif %}

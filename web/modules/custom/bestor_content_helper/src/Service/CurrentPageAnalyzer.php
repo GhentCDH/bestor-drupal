@@ -53,7 +53,6 @@ class CurrentPageAnalyzer {
     if (!$node) {
       return FALSE;
     }
-
     return $this->nodeAnalyzer->isLemma($node->bundle());
   }
 
@@ -72,7 +71,7 @@ class CurrentPageAnalyzer {
   }
 
   public function getPageVariant(): string {
-    if ($this->getCurrentNode()) {
+    if ($this->currentPageIsLemma()) {
       return 'lemma';
     } elseif ($this->isMainSearchView()) {
       return 'search';

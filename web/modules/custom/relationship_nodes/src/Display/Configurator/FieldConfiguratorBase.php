@@ -75,21 +75,21 @@ class FieldConfiguratorBase {
 
     foreach ($field_names as $field_name) {
       $saved_config = $field_settings[$field_name] ?? [];
-      
+      $is_linkable = in_array($field_name, $linkable_fields);
       $configurations[$field_name] = [
         // Identity
         'field_name' => $field_name,
         
         // Capabilities (determined at prepare time)
-        'linkable' => in_array($field_name, $linkable_fields),
+        'linkable' => $is_linkable,
         'is_calculated' => in_array($field_name, $calculated_fields),
         
         // User configuration (from saved settings)
-        'enabled' => !empty($saved_config['enabled']),
+        'enabled' => $saved_config['enabled'] ?? TRUE,
         'label' => $saved_config['label'] ?? $this->formatFieldLabel($field_name),
         'weight' => $saved_config['weight'] ?? 0,
-        'display_mode' => $saved_config['display_mode'] ?? 'label',
-        'hide_label' => $saved_config['hide_label'] ?? FALSE,
+        'display_mode' => $saved_config['display_mode'] ?? ($is_linkable ? 'link' : 'label'),
+        'hide_label' => $saved_config['hide_label'] ?? TRUE,
         'multiple_separator' => $saved_config['multiple_separator'] ?? ', ',
       ];
       
@@ -258,8 +258,8 @@ class FieldConfiguratorBase {
         '#title' => $this->t('Display mode'),
         '#options' => [
           'raw' => $this->t('Raw value (ID)'),
-          'label' => $this->t('Label'),
-          'link' => $this->t('Label as link'),
+          'label' => $this->t('Label of referenced item'),
+          'link' => $this->t('Label of referenced item as link'),
         ],
         '#default_value' => $config['display_mode'],
         '#description' => $this->t('How to display this field value.'),

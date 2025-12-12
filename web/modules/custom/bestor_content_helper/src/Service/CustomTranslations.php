@@ -75,13 +75,13 @@ class CustomTranslations {
       'news_title' => [
         'description' => 'Title for the news articles section on the homepage',
         'en' => 'News',
-        'fr' => 'Événements',
+        'fr' => 'Actualités',
         'nl' => 'Nieuws',
       ],
       'events_title' => [
         'description' => 'Title for the events section on the homepage',
         'en' => 'Events',
-        'fr' => 'Récemment mis à jour',
+        'fr' => 'Événements',
         'nl' => 'Evenementen',
       ],
       'publications_title' => [
@@ -198,6 +198,30 @@ class CustomTranslations {
         'fr' => 'Vie',
         'nl' => 'Leven',
       ],
+      'lemma_linked_data' => [
+        'description' => 'Title for the section of urls to external resources (e.g. wikidata)',
+        'en' => 'See also',
+        'fr' => 'Voir aussi',
+        'nl' => 'Zie ook',
+      ],
+    'label_references' => [
+      'description' => 'Title for the references/bibliography section',
+      'en' => 'References',
+      'fr' => 'Références',
+      'nl' => 'Referenties',
+    ],
+    'label_footnotes' => [
+      'description' => 'Title for the footnotes section',
+      'en' => 'Footnotes',
+      'fr' => 'Notes',
+      'nl' => 'Voetnoten',
+    ],
+    'label_toc' => [
+      'description' => 'Label for table of contents section',
+      'en' => 'Table of contents',
+      'fr' => 'Table des matières',
+      'nl' => 'Inhoudstafel',
+    ],
       'default_author' => [
         'description' => 'Which author should be displayed if none is entered',
         'en' => 'Bestor editors',

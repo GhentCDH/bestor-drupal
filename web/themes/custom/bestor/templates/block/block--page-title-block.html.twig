@@ -36,10 +36,13 @@
 
 {% set attr_variant = bestor('page_variant') %}
 {% if attr_variant == 'lemma' %}
-{% set link_settings = {'format': 'string', 'link_type': 'facet', 'view_id': 'database', 'view_display': 'page_1'} %}
-  {% set meta %}
-    <p>{{bestor('author_label')}} / {{bestor('field_values', node, 'field_author', link_settings)}}</p>
-  {% endset %}
+  {% set author_names = bestor('field_values', node, 'field_author') %}
+  {% if author_names %}
+    {% set link_settings = {'format': 'string', 'link_type': 'facet', 'view_id': 'database', 'view_display': 'page_1'} %}
+    {% set meta %}
+      <p>{{bestor('author_label')}} / {{bestor('field_values', node, 'field_author', link_settings)}}</p>
+    {% endset %}
+  {% endif %}
 {% endif %}
 
 <div{{ attributes.addClass(classes) }}>

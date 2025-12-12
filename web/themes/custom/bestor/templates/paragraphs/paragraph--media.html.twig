@@ -51,9 +51,8 @@
 
 
 {% if paragraph.field_caption.value %}
-    {% set attr_variant = 'media_w_caption'%}
-    {% set caption = paragraph.field_title.value %}
-    {{devel_dump(attr_variant)}}
+  {% set attr_variant = 'media_w_caption'%}
+  {% set caption = paragraph.field_title.value %}
 {% endif %}
 
 {% if add_lightbox %}

@@ -84,7 +84,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 119
+    weight: 9
     region: content
   field_specialisation:
     type: entity_reference_label
@@ -105,6 +105,11 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
+    region: content
+  toc_js:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   computed_relationshipfield__concept__concept: true

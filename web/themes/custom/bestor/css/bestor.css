@@ -48,3 +48,16 @@
     font-style: italic;
     margin-block-start: 18px;
 }
+
+
+/* FEAT: hide dropdown toc if no elements */
+
+@supports selector(:has(*)) {
+  .c-dropdown:has(.toc-js nav:empty) {
+    display: none;
+  }
+}
+
+.toc-js nav:empty {
+  display: none;
+}

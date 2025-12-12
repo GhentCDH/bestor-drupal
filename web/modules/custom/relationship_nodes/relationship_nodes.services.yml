@@ -107,6 +107,8 @@ services:
       - '@entity_type.manager'
       - '@relationship_nodes.calculated_field_helper'
       - '@relationship_nodes.field_result_parser'
+      - '@relationship_nodes.mirror_provider'
+      - '@relationship_nodes.foreign_key_field_resolver'
   relationship_nodes.node_type_form_alter:
     class: Drupal\relationship_nodes\Form\Admin\NodeTypeFormAlter
     arguments:
@@ -149,8 +151,8 @@ services:
       - '@entity_type.manager'
       - '@relationship_nodes.field_name_resolver'
       - '@relationship_nodes.bundle_settings_manager'
-  relationship_nodes.virtual_field_adder:
-    class: Drupal\relationship_nodes\RelationField\VirtualFieldAdder
+  relationship_nodes.virtual_field_manager:
+    class: Drupal\relationship_nodes\RelationField\VirtualFieldManager
     arguments:
       - '@relationship_nodes.bundle_info_service'
   relationship_nodes.calculated_field_helper:
@@ -189,3 +191,19 @@ services:
       - '@relationship_nodes.validation_result_formatter'
   relationship_nodes.validation_result_formatter:
     class: Drupal\relationship_nodes\Validation\ValidationResultFormatter
+  relationship_nodes.twig_formatter:
+    class: Drupal\relationship_nodes\Display\RelationshipTwigFormatter
+    arguments:
+      - '@renderer'
+      - '@relationship_nodes.virtual_field_manager'
+      - '@relationship_nodes.relationship_data_builder'
+      - '@relationship_nodes.formatter_configurator'
+  relationship_nodes.twig_extension:
+    class: Drupal\relationship_nodes\Twig\RelationshipNodesTwigExtension
+    arguments:
+      - '@relationship_nodes.twig_formatter'
+    tags:
+      - { name: twig.extension }
+  
+  
+  

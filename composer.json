@@ -62,6 +62,7 @@
         "drupal/term_merge": "^2.0",
         "drupal/term_reference_change": "^2.0@beta",
         "drupal/thex": "^10.0",
+        "drupal/toc_js": "^3.4@RC",
         "drupal/twig_tweak": "^3.4",
         "drush/drush": "^12.5",
         "elasticsearch/elasticsearch": "^8.11"

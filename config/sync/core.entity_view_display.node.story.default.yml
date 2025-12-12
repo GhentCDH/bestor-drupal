@@ -31,7 +31,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 102
+    weight: 5
     region: content
   field_date_end:
     type: datetime_default
@@ -40,7 +40,7 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 18
+    weight: 2
     region: content
   field_date_start:
     type: datetime_default
@@ -49,7 +49,7 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 17
+    weight: 1
     region: content
   field_date_start_year_only:
     type: boolean
@@ -59,7 +59,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 118
+    weight: 9
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
@@ -68,7 +68,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 101
+    weight: 4
     region: content
   field_discipline:
     type: entity_reference_label
@@ -76,7 +76,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 115
+    weight: 7
     region: content
   field_image:
     type: entity_reference_entity_view
@@ -85,7 +85,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 6
+    weight: 0
     region: content
   field_specialisation:
     type: entity_reference_label
@@ -93,19 +93,24 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 110
+    weight: 6
     region: content
   field_summary:
     type: basic_string
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 116
+    weight: 8
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 3
+    region: content
+  toc_js:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   computed_relationshipfield__story__concept: true

@@ -163,8 +163,8 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     
     return [
       '#theme' => $theme_hook,
-      '#relationships' => $template_data['relationships'],
-      '#grouped' => $template_data['grouped'],
+      '#items' => $template_data['items'],
+      '#groups' => $template_data['groups'],
       '#summary' => $template_data['summary'],
       '#fields' => $template_data['fields'],
       '#row' => $values,
@@ -239,8 +239,8 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     $child_field_metadata = $this->buildFieldsMetadata($field_settings);
     
     return [
-      'relationships' => $relationships,
-      'grouped' => $grouped,
+      'items' => $relationships,
+      'groups' => $grouped,
       'summary' => $this->buildSummary($relationships, $child_field_metadata, $grouped),
       'fields' => $child_field_metadata,
     ];

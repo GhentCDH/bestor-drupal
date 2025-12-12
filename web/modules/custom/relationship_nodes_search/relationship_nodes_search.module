@@ -25,19 +25,6 @@ function relationship_nodes_search_module_implements_alter(&$implementations, $h
 
 
 /**
- * Implements hook_theme().
- */
-function relationship_nodes_search_theme() {
-  return [
-    'relationship_field' => [
-      'variables' => ['relationships' => [], 'grouped' => [], 'summary' => [], 'fields' => [], 'row' => NULL],
-      'template' => 'relationship-field',
-    ],
-  ];
-}
-
-
-/**
  * Implements hook_entity_type_alter().
  */
 function relationship_nodes_search_entity_type_alter(array &$entity_types) {

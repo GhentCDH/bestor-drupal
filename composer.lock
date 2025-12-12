@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "58b1da2c7bfbcbfea3ea0b9f91409ba7",
+    "content-hash": "027711f4437b84bf81e37332a9cc8046",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4321,6 +4321,61 @@
             "homepage": "https://www.drupal.org/project/thex",
             "support": {
                 "source": "https://git.drupalcode.org/project/thex"
+            }
+        },
+        {
+            "name": "drupal/toc_js",
+            "version": "3.4.0-rc1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/toc_js.git",
+                "reference": "3.4.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/toc_js-3.4.0-rc1.zip",
+                "reference": "3.4.0-rc1",
+                "shasum": "52de8d627b34771c309ef648ce2ee47f29f209ab"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.4.0-rc1",
+                    "datestamp": "1763538096",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "flocondetoile",
+                    "homepage": "https://www.drupal.org/u/flocondetoile",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "mably",
+                    "homepage": "https://www.drupal.org/u/mably",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "vladimiraus",
+                    "homepage": "https://www.drupal.org/user/673120"
+                }
+            ],
+            "description": "The Toc.js module automatically generates tables of contents from headings on client side.",
+            "homepage": "https://www.drupal.org/project/toc_js",
+            "support": {
+                "source": "https://git.drupalcode.org/project/toc_js",
+                "issues": "https://www.drupal.org/project/issues/toc_js"
             }
         },
         {
@@ -10015,7 +10070,8 @@
         "drupal/inline_entity_form": 5,
         "drupal/single_user_role": 10,
         "drupal/straw": 10,
-        "drupal/term_reference_change": 10
+        "drupal/term_reference_change": 10,
+        "drupal/toc_js": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,

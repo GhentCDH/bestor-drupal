@@ -87,6 +87,7 @@ module:
   term_merge: 0
   term_reference_change: 0
   text: 0
+  toc_js: 0
   toolbar: 0
   twig_tweak: 0
   user: 0

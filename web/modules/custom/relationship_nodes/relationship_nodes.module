@@ -21,7 +21,7 @@ use Drupal\relationship_nodes\Form\Admin\LockedFieldListBuilder;
 function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_type, $bundle) {
   $type_id = $entity_type->id();
   if ($type_id === 'node') {
-    $fieldAdder = \Drupal::service('relationship_nodes.virtual_field_adder');
+    $fieldAdder = \Drupal::service('relationship_nodes.virtual_field_manager');
     $fieldAdder->addFields($fields, $entity_type, $bundle);
   } elseif ($type_id === 'taxonomy_term') {
     $settingsManager = \Drupal::service('relationship_nodes.bundle_settings_manager');
@@ -36,6 +36,19 @@ function relationship_nodes_entity_bundle_field_info_alter(&$fields, $entity_typ
     }
   }
 } 
+
+
+/**
+ * Implements hook_theme().
+ */
+function relationship_nodes_theme() {
+  return [
+    'relationship_field' => [
+      'variables' => ['items' => [], 'groups' => [], 'summary' => [], 'fields' => [], 'row' => NULL],
+      'template' => 'relationship-field',
+    ],
+  ];
+}
 
 
 /**

@@ -9,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\bestor_content_helper\Service\CustomTranslations;
 use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
+use Drupal\filter\Render\FilteredMarkup;
 
 /**
  * Service for analyzing and formatting node content.
@@ -124,6 +125,11 @@ class StandardNodeFieldProcessor {
         'label_key' => '',
         'icon' => '',
       ],
+      'linked_data' => [
+        'fields' => ['field_wikidata_entry'],
+        'label_key' => 'lemma_linked_data',
+        'icon' => '',
+      ],
     ];
 
     return $mapping[$element] ?? NULL;
@@ -144,7 +150,7 @@ class StandardNodeFieldProcessor {
   public function getLemmaTypeToElementMapping(string $node_type, string $display_type): array {
     $mapping = [
       '_all' => [
-        'full' => ['discipline', 'specialisation', 'typology', 'alt_names'],
+        'full' => ['discipline', 'specialisation', 'typology', 'alt_names', 'linked_data'],
         'teaser' => [],
       ],
       'concept' => [
@@ -277,14 +283,14 @@ class StandardNodeFieldProcessor {
    *   - 'view_id': View ID for facet links
    *   - 'view_display': View display for facet links
    *
-   * @return string|array|null
+   * @return string|array|FilteredMarkup|Markup|NULL
    *   Formatted values ready for display.
    */
   public function getFieldValues(
     ?NodeInterface $node,
     string|array $field_names,
     array $options = []
-  ): string|array|null {
+  ): string|array|FilteredMarkup|Markup|NULL {
     // Defaults.
     $options += [
       'format' => 'array',
@@ -310,8 +316,8 @@ class StandardNodeFieldProcessor {
       }
 
       $fld_def = $node->get($fld_nm)->getFieldDefinition();
-
-      $value = match ($fld_def->getType()) {
+      $fld_type = $fld_def->getType();
+      $value = match ($fld_type) {
         'entity_reference' => $this->getEntityReferenceValue(
           $node,
           $fld_def,
@@ -319,9 +325,11 @@ class StandardNodeFieldProcessor {
           $options
         ),
         'datetime' => $this->getDateFieldValue($node, $fld_nm),
+        'link' => $this->getLinkFieldValue($node, $fld_nm),
         'string', 'list_string' => $this->getStringFieldValue($node, $fld_nm),
         'boolean' => !empty($node->get($fld_nm)->value),
-        default => $node->get($fld_nm)->value ?? NULL,
+        'text_long', 'text_with_summary' => $this->getTextFieldValue($node, $fld_nm),
+        default => Markup::create($node->get($fld_nm)->value) ?? NULL,
       };
 
       if ($value !== NULL) {
@@ -342,8 +350,8 @@ class StandardNodeFieldProcessor {
     }
 
     // Format as string if requested.
-    if ($options['format'] === 'string') {
-      return is_array($result) ? implode(', ', array_map([$this, 'flattenValue'], $result)) : $result;
+    if ($options['format'] === 'string' && is_array($result)) {
+      return implode(', ', array_map([$this, 'flattenValue'], $result));
     }
 
     return $result;
@@ -409,7 +417,7 @@ class StandardNodeFieldProcessor {
 
       if ($url instanceof Url) {
         $render_array = $this->facetResultsProvider->getEnableFacetLinkRenderArray($url, $title);
-        $result[] =  Markup::create((string) $this->renderer->renderPlain($render_array));;
+        $result[] =  Markup::create((string) $this->renderer->renderPlain($render_array));
       }
       else {
         $result[] = $title;
@@ -440,13 +448,39 @@ class StandardNodeFieldProcessor {
 
       $date = new \DateTime($value['value']);
 
-      $year_only_field = str_replace(['date_start', 'date_end'], ['start_year_only', 'end_year_only'], $field_name);
+      $year_only_field = str_replace(['date_start', 'date_end'], ['date_start_year_only', 'date_end_year_only'], $field_name);
       $year_only = $node->hasField($year_only_field) && $node->get($year_only_field)->value;
 
       $dates[] = $year_only ? $date->format('Y') : $date->format('d/m/Y');
     }
 
     return $dates;
+  }
+
+
+  /**
+   * Get text field value (text_long, text_with_summary).
+   */
+  protected function getTextFieldValue(NodeInterface $node, string $field_name): FilteredMarkup|Markup|null {
+    if (!$node->hasField($field_name) || $node->get($field_name)->isEmpty()) {
+      return NULL;
+    }
+    
+    $item = $node->get($field_name)->first();
+    
+    // Check of processed property bestaat (text_with_summary heeft dit)
+    if (isset($item->processed)) {
+      return $item->processed;
+    }
+    
+    // Fallback: manual processing (voor text_long)
+    $value = $item->getValue();
+    if (empty($value['value'])) {
+      return NULL;
+    }
+    
+    $format = $value['format'] ?? 'basic_html';
+    return Markup::create(check_markup($value['value'], $format));
   }
 
 
@@ -471,6 +505,73 @@ class StandardNodeFieldProcessor {
     }
 
     return $values;
+  }
+
+
+  /**
+   * Get link field values as render arrays.
+   *
+   * @param NodeInterface $node
+   *   The node.
+   * @param string $field_name
+   *   Field machine name.
+   *
+   * @return array|null
+   *   Array of link render arrays, or NULL if empty.
+   */
+  protected function getLinkFieldValue(NodeInterface $node, string $field_name): ?array {
+    if (!$node->hasField($field_name) || $node->get($field_name)->isEmpty()) {
+      return NULL;
+    }
+
+    $values = [];
+    $field = $node->get($field_name);
+    
+    foreach ($field->getValue() as $value) {
+      if (empty($value['uri'])) {
+        continue;
+      }
+
+      try {
+        $url = Url::fromUri($value['uri']);
+        $is_external = $url->isExternal();
+        
+        $link_text = !empty($value['title']) 
+          ? $value['title']
+          : $field->getFieldDefinition()->getLabel();
+        
+        // Build render array
+        $link_array = [
+          '#type' => 'link',
+          '#title' => $link_text,
+          '#url' => $url,
+          '#attributes' => [
+            'class' => ['field-link'],
+          ],
+        ];
+        
+        if ($is_external) {
+          $link_array['#attributes']['target'] = '_blank';
+          $link_array['#attributes']['rel'] = 'noopener noreferrer';
+          $link_array['#suffix'] = Markup::create(
+            ' <i data-component-id="jakarta:c-icon" class="c-icon no-media c-icon--link c-icon--link--before"></i>'
+          );
+        }
+        
+        // Render to Markup
+        $rendered = $this->renderer->renderPlain($link_array);
+        $values[] = Markup::create($rendered);
+        
+      } catch (\Exception $e) {
+        \Drupal::logger('bestor_content_helper')->warning('Invalid URI in field @field: @uri', [
+          '@field' => $field_name,
+          '@uri' => $value['uri'],
+        ]);
+        continue;
+      }
+    }
+
+    return empty($values) ? NULL : $values;
   }
 
 

@@ -72,6 +72,9 @@
 #}
 
 {# c-structured-layout.story.twig #}
+
+
+{% set toc = content.toc_js %}
 {% set top %}
   {% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'id_kit'}) %}
   {% set media %}
@@ -108,14 +111,10 @@
     {{content.body}}
   {% endif %}
 
-  {% if content.field_publication %}
-    {{content.field_publication}}
-  {% endif %}
 
   {% if content.field_geolocation %}
     {{content.field_geolocation}}
   {% endif %}
-  
 {% endset %}
 {% set sidebar %}
   {% set buttons %}
@@ -134,40 +133,45 @@
   {% endset %}
   {% set table_of_contents %}
     {% set dropdown_items %}
-      <ul class="links">
-        <li><a href="#">Titel 1</a></li>
-        <li><a href="#">Titel 2</a></li>
-        <li><a href="#">Titel 3</a></li>
-      </ul>
+      {{toc}}
     {% endset %}
     {{ include('jakarta:c-dropdown', {
-      toggle: 'Inhoudstafel',
+      toggle: bestor('label_toc'),
       dropdown_items,
     }, with_context = false) }}
   {% endset %}
+
   {% set related_items %}
-    {% set items %}
-      <ul class="links">
-        <li><a href="#">Naam concept</a> (type relatie)</li>
-        <li><a href="#">Naam concept</a> (type relatie)</li>
-        <li><a href="#">Naam concept</a> (type relatie)</li>
-      </ul>
-    {% endset %}
-    {{ include('jakarta:c-related-items', {
-      title: 'Related items',
-      items,
-    }, with_context = false) }}
-    {% set items_2 %}
-      <ul class="links">
-        <li><a href="#">Naam document</a> (type relatie)</li>
-        <li><a href="#">Naam document</a> (type relatie)</li>
-        <li><a href="#">Naam document</a> (type relatie)</li>
-      </ul>
-    {% endset %}
-    {{ include('jakarta:c-related-items', {
-      title: 'Related items',
-      items: items_2,
-    }, with_context = false) }}
+    {% set bundle_order = ['story', 'person', 'institution', 'place', 'concept', 'document', 'instrument'] %}
+    {% for relfield in rn('relation_fields_list', node, bundle_order) %}
+      {% set extra_pers_inst_flds = [
+        'field_date_start', 
+        'field_date_start_year_only', 
+        'field_date_start_year_only', 
+        'field_date_end_year_only'
+      ] %}
+      {% set rel_data = rn('formatted_relations', node, relfield, {
+        'extra_fields': {
+          'computed_relationshipfield__person__institution': extra_pers_inst_flds,
+          'computed_relationshipfield__institution__person': extra_pers_inst_flds,
+        }
+      }) %}
+      {% if rel_data %}
+        {% set items %}
+          <ul class="links">
+            {% for rel in rel_data.items  %}
+              <li>
+                {{ rel.related_id }} {% if rel.relation_type_name %}({{ rel.relation_type_name }}){% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endset %}
+        {{ include('jakarta:c-related-items', {
+          title: rel_data.title,
+          items,
+        }, with_context = false) }}
+      {% endif %}
+    {% endfor %}
   {% endset %}
   {{ include('jakarta:c-lemma-sidebar', {
     buttons,

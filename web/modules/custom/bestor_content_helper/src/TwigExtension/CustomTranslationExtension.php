@@ -12,6 +12,7 @@ use Drupal\bestor_content_helper\Service\NodeContentAnalyzer;
 use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\bestor_content_helper\Service\StandardNodeFieldProcessor;
 use Drupal\bestor_content_helper\Service\MediaProcessor;
+use Drupal\filter\Render\FilteredMarkup;
 
 /**
  * Twig extension for custom translations.
@@ -36,7 +37,7 @@ class CustomTranslationExtension extends AbstractExtension {
     CurrentPageAnalyzer $pageAnalyzer,
     NodeContentAnalyzer $nodeContentAnalyzer,
     StandardNodeFieldProcessor $standardFieldProcessor,
-    MediaProcessor $mediaProcessor
+    MediaProcessor $mediaProcessor,
   ) {
     $this->languageManager = $languageManager;
     $this->customTranslations = $customTranslations;
@@ -61,7 +62,7 @@ class CustomTranslationExtension extends AbstractExtension {
   /**
    * Main bestor function - routes to different functionality.
    */
-  public function bestor(string $type, ...$args): Markup|array|string|null {
+  public function bestor(string $type, ...$args): Markup|FilteredMarkup|array|string|null {
     return match($type) {
       'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),

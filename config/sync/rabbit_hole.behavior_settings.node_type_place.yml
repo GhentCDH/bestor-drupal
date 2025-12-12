@@ -1,0 +1,14 @@
+uuid: 04872626-c0b6-49f9-837b-1299e9c7f61f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.place
+id: node_type_place
+entity_type_id: node_type
+entity_id: place
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

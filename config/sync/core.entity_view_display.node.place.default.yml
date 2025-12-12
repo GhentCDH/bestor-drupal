@@ -23,7 +23,7 @@ dependencies:
   module:
     - datetime
     - entity_reference_revisions
-    - geofield
+    - leaflet
     - user
 id: node.place.default
 targetEntityType: node
@@ -52,7 +52,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
   field_date_end:
     type: datetime_default
@@ -61,7 +61,7 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 18
+    weight: 13
     region: content
   field_date_start:
     type: datetime_default
@@ -70,7 +70,7 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 17
+    weight: 12
     region: content
   field_date_start_year_only:
     type: boolean
@@ -80,7 +80,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 118
+    weight: 14
     region: content
   field_description:
     type: entity_reference_revisions_entity_view
@@ -100,11 +100,98 @@ content:
     weight: 9
     region: content
   field_geolocation:
-    type: geofield_default
+    type: leaflet_formatter_default
     label: hidden
     settings:
-      output_format: wkt
-      output_escape: true
+      multiple_map: false
+      leaflet_map: 'OSM Mapnik'
+      height: 400
+      height_unit: px
+      hide_empty_map: false
+      disable_wheel: false
+      gesture_handling: false
+      fitbounds_options: '{"padding":[0,0]}'
+      reset_map:
+        control: false
+        options: '{"position":"topleft","title":"Reset View"}'
+      map_scale:
+        control: false
+        options: '{"position":"bottomright","maxWidth":100,"metric":true,"imperial":false,"updateWhenIdle":false}'
+      locate:
+        control: false
+        options: '{"position":"topright","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"Locate my position"}}'
+        automatic: false
+      leaflet_tooltip:
+        value: ''
+        options: '{"permanent":false,"direction":"center"}'
+      popup: false
+      popup_content: ''
+      leaflet_popup:
+        control: '0'
+        content: ''
+        options: '{"maxWidth":"300","minWidth":"50","autoPan":true}'
+      map_position:
+        force: false
+        center:
+          lat: 0.0
+          lon: 0.0
+        zoomControlPosition: topleft
+        zoom: 12
+        minZoom: 3
+        maxZoom: 18
+        zoomFiner: 0
+      weight: '0'
+      icon:
+        iconType: marker
+        iconUrl: ''
+        shadowUrl: ''
+        className: ''
+        iconSize:
+          x: ''
+          'y': ''
+        iconAnchor:
+          x: ''
+          'y': ''
+        shadowSize:
+          x: ''
+          'y': ''
+        shadowAnchor:
+          x: ''
+          'y': ''
+        popupAnchor:
+          x: ''
+          'y': ''
+        html: '<div></div>'
+        html_class: leaflet-map-divicon
+        circle_marker_options: '{"radius":100,"color":"red","fillColor":"#f03","fillOpacity":0.5}'
+      leaflet_markercluster:
+        control: false
+        options: '{"spiderfyOnMaxZoom":true,"showCoverageOnHover":true,"removeOutsideVisibleBounds": false}'
+        include_path: false
+        excluded: false
+      fullscreen:
+        control: false
+        options: '{"position":"topleft","pseudoFullscreen":false}'
+      path: '{"color":"#3388ff","opacity":"1.0","stroke":true,"weight":3,"fill":"depends","fillColor":"*","fillOpacity":"0.2","radius":"6"}'
+      feature_properties:
+        values: ''
+      geocoder:
+        control: false
+        settings:
+          popup: false
+          autocomplete:
+            placeholder: 'Search Address'
+            title: 'Search an Address on the Map'
+          position: topright
+          input_size: 20
+          providers: {  }
+          min_terms: 4
+          delay: 800
+          zoom: 16
+          options: ''
+          set_marker: false
+      map_lazy_load:
+        lazy_load: false
     third_party_settings: {  }
     weight: 7
     region: content
@@ -115,7 +202,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 6
+    weight: 5
     region: content
   field_municipality:
     type: entity_reference_label
@@ -123,7 +210,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
   field_specialisation:
     type: entity_reference_label
@@ -152,6 +239,11 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  toc_js:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 15
     region: content
 hidden:
   computed_relationshipfield__place__concept: true

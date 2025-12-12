@@ -9,6 +9,9 @@ use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\Display\Parser\FieldResultParser;
+use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
+use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Service for building relationship data structures.
@@ -32,6 +35,9 @@ class RelationshipDataBuilder {
   protected EntityTypeManagerInterface $entityTypeManager;
   protected CalculatedFieldHelper $calculatedFieldHelper;
   protected FieldResultParser $parser;
+  protected MirrorProvider $mirrorProvider;
+  protected ForeignKeyResolver $foreignKeyResolver;
+  
 
   /**
    * Constructs a RelationshipDataBuilder object.
@@ -46,19 +52,27 @@ class RelationshipDataBuilder {
    *   The calculated field helper.
    * @param \Drupal\relationship_nodes\Display\Parser\FieldResultParser $parser
    *   The formatter parser for entity loading.
+   * @param \Drupal\relationship_nodes\RelationData\TermHelperMirrorProvider $mirrorProvider
+   *   The mirror term helper service.
+   * @param \Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver $foreignKeyResolver
+   *   The mirror term helper service.
    */
   public function __construct(
     RelationInfo $nodeInfoService,
     FieldNameResolver $fieldNameResolver,
     EntityTypeManagerInterface $entityTypeManager,
     CalculatedFieldHelper $calculatedFieldHelper,
-    FieldResultParser $parser
+    FieldResultParser $parser,
+    MirrorProvider $mirrorProvider,
+    ForeignKeyResolver $foreignKeyResolver
   ) {
     $this->nodeInfoService = $nodeInfoService;
     $this->fieldNameResolver = $fieldNameResolver;
     $this->entityTypeManager = $entityTypeManager;
     $this->calculatedFieldHelper = $calculatedFieldHelper;
     $this->parser = $parser;
+    $this->mirrorProvider = $mirrorProvider;
+    $this->foreignKeyResolver = $foreignKeyResolver;
   }
 
   /**
@@ -111,11 +125,13 @@ class RelationshipDataBuilder {
       foreach ($enabled_configs as $field_name => $config) {
         // Check if this is a calculated field
         if ($this->calculatedFieldHelper->isCalculatedChildField($field_name)) {
-          $field_data = $this->buildCalculatedFieldData($relation_node, $field_name, $config, $viewing_node);
+          // Special case: relation type name is calculated (mirrored) text, not entity reference
+          $field_data = $field_name === 'calculated_relation_type_name'
+            ? $this->buildRelationTypeNameData($relation_node, $config, $viewing_node)
+            : $this->buildCalculatedFieldData($relation_node, $field_name, $config, $viewing_node);
         } else {
           $field_data = $this->buildRealFieldData($relation_node, $field_name, $config);
         }
-
         if (!empty($field_data)) {
           $item[$field_name] = $field_data;
         }
@@ -172,13 +188,13 @@ class RelationshipDataBuilder {
     $entity_ids = [];
     
     if ($viewing_node) {
-      // Show only "the other" entity (not the viewing entity)
-      $viewing_id = $viewing_node->id();
+      // Get FK field that contains the viewing node
+      $viewing_fk = $this->foreignKeyResolver->getEntityForeignKeyField($relation_node, $viewing_node);
+      
+      // Show entities from the "other" FK field only
       foreach ($related_entities as $field => $ids) {
-        foreach ($ids as $id) {
-          if ($id != $viewing_id) {
-            $entity_ids[] = $id;
-          }
+        if ($field !== $viewing_fk) {
+          $entity_ids = array_merge($entity_ids, $ids);
         }
       }
     } else {
@@ -283,6 +299,73 @@ class RelationshipDataBuilder {
       'separator' => $config['multiple_separator'] ?? ', ',
     ];
   }
+
+
+  /**
+   * Builds data for the calculated relation type name field.
+   * 
+   * Returns the relation type name with mirror support based on viewing context.
+   *
+   * @param \Drupal\node\NodeInterface $relation_node
+   *   The relation node.
+   * @param array $config
+   *   Field configuration.
+   * @param \Drupal\node\NodeInterface|null $viewing_node
+   *   Optional viewing context node.
+   *
+   * @return array|null
+   *   Field data array with 'field_values' and 'separator', or NULL if no data.
+   */
+  protected function buildRelationTypeNameData(
+    NodeInterface $relation_node,
+    array $config,
+    ?NodeInterface $viewing_node = NULL
+  ): ?array {
+    // Get relation type term
+    $relation_type_field = $this->fieldNameResolver->getRelationTypeField();
+    
+    if (!$relation_node->hasField($relation_type_field)) {
+      return NULL;
+    }
+    
+    $term_values = $relation_node->get($relation_type_field)->getValue();
+    if (empty($term_values)) {
+      return NULL;
+    }
+    
+    $term_id = $term_values[0]['target_id'] ?? NULL;
+    if (!$term_id) {
+      return NULL;
+    }
+    
+    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+
+    if(!$term instanceof TermInterface) {
+      return NULL;
+    }
+
+    // Check if we need mirror label
+    $use_mirror = FALSE;
+
+    if ($viewing_node) {
+      $fk_field = $this->foreignKeyResolver->getEntityForeignKeyField($relation_node, $viewing_node);
+      $fk2_field = $this->fieldNameResolver->getRelatedEntityFields(2);
+      $use_mirror = ($fk_field === $fk2_field);
+    }
+    // Get appropriate label
+    $label = $use_mirror 
+    ? $this->mirrorProvider->getTermMirrorLabel($term)
+    : $term->getName();
+
+    return [
+      'field_values' => [[
+        'value' => $label,
+        'link_url' => NULL,
+      ]],
+      'separator' => $config['multiple_separator'] ?? ', ',
+    ];
+  }
+
 
   /**
    * Groups relationships by a specific field value.

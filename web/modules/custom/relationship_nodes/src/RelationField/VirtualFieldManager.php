@@ -7,6 +7,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
+use Drupal\node\NodeInterface;
 
 
 /**
@@ -14,12 +15,12 @@ use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
  *
  * Creates computed fields for referencing relationships.
  */
-class VirtualFieldAdder {
+class VirtualFieldManager {
 
   protected BundleInfoService $bundleInfoService;
 
   /**
-   * Constructs a VirtualFieldAdder object.
+   * Constructs a VirtualFieldManager object.
    *
    * @param BundleInfoService $bundleInfoService
    *   The bundle info service.
@@ -89,5 +90,25 @@ class VirtualFieldAdder {
         ->setSetting('join_field', $relationship['join_fields'])
         ->setRevisionable(FALSE);
     }
+  }
+
+  /**
+   * Get all ReferencingRelationshipItemList fields from a node.
+   *
+   * @param NodeInterface $node
+   *   The node.
+   *
+   * @return array
+   *   Array of field names that are ReferencingRelationshipItemList.
+   */
+  public function getReferencingRelationshipFields(NodeInterface $node): array {
+    $relationship_fields = [];
+    
+    foreach ($node->getFields() as $field_name => $field) {
+      if ($field instanceof ReferencingRelationshipItemList) {
+        $relationship_fields[] = $field_name;
+      }
+    }
+    return $relationship_fields;
   }
 }

@@ -276,11 +276,10 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
 
     // Build field metadata for template
     $fields_metadata = $this->configurator->buildFieldsMetadata($field_configs);
-
     $elements[0] = [
       '#theme' => 'relationship_field',
-      '#relationships' => $grouped ? [] : $relationships,
-      '#grouped' => $grouped,
+      '#items' => $relationships,
+      '#groups' => $grouped,
       '#fields' => $fields_metadata,
       '#summary' => [
         'total' => count($relation_nodes),

@@ -6,12 +6,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermStorageInterface;
 use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
+use Drupal\taxonomy\TermInterface;
 
 
 /**
@@ -197,16 +197,40 @@ class MirrorProvider{
   public function getMirrorArray(TermStorageInterface $term_storage, string $term_id, string $default_label = null): array {
     $term = $term_storage->load((int) $term_id);
 
-    if (!$term instanceof Term) {
+    if (!$term instanceof TermInterface) {
       return [$term_id => $default_label ?? ''];
     }
-    
-    if ($default_label === null) {
-      $default_label = $term->getName() ?? '';
 
+    return $this->getTermMirrorArray($term, true, $default_label);
+  }
+
+
+  /**
+   * Gets mirror information as an array for a term.
+   *
+   * @param TermInterface $term
+   *   The term.
+   * 
+   * @param bool $fallback_to_default
+   *   Should the method return a default label if no label is found.
+   * 
+   * @param string|null $default_label
+   *   The default label.
+   *
+   * @return array
+   *   Array with term ID as key and label as value.
+   */
+  public function getTermMirrorArray(TermInterface $term, bool $fallback_to_default = false, string $default_label = null): array {
+
+    if ($fallback_to_default == TRUE) {
+      if($default_label === null) {
+        $default_label = $term->getName() ?? '';
+      }
+    } else {
+      $default_label = NULL;
     }
-    
-    $result = [$term_id => $default_label];
+
+    $result = [$term->id() => $default_label];
       
     $vocab = $term->bundle();
     $vocab_type = $this->settingsManager->getRelationVocabType($vocab);
@@ -231,15 +255,34 @@ class MirrorProvider{
 
 
   /**
+   * Gets mirror information as an array for a term.
+   *
+   * @param TermStorageInterface $term_storage
+   *   The term storage.
+   * @param string $term_id
+   *   The term ID.
+   * @param string|null $default_label
+   *   The default label.
+   *
+   * @return null|string
+   *   Array with term ID as key and label as value.
+   */
+  public function getTermMirrorLabel(TermInterface $term): ?string {
+     $mirror_array = $this->getTermMirrorArray($term);
+    return reset($mirror_array) ?: NULL;
+  }
+
+
+  /**
    * Gets string mirror for a term.
    *
-   * @param Term $term
+   * @param TermInterface $term
    *   The term.
    *
    * @return array|null
    *   Array with term ID and mirror label, or NULL.
    */
-  public function getStringMirror(Term $term):?array{
+  public function getStringMirror(TermInterface $term):?array{
     $values = $term->get($this->fieldNameResolver->getMirrorFields('string'))->getValue();
     if (empty($values)) {
       return null;
@@ -253,7 +296,7 @@ class MirrorProvider{
   /**
    * Gets entity reference mirror for a term.
    *
-   * @param Term $term
+   * @param TermInterface $term
    *   The term.
    * @param string $vocab
    *   The vocabulary ID.
@@ -261,7 +304,7 @@ class MirrorProvider{
    * @return array|null
    *   Array with mirror term ID and label, or NULL.
    */
-  public function getReferenceMirror(Term $term, string $vocab): ?array {
+  public function getReferenceMirror(TermInterface $term, string $vocab): ?array {
     $values = $term->get($this->fieldNameResolver->getMirrorFields('entity_reference'))->getValue();   
     if (empty($values)) {
       return null;
@@ -273,7 +316,7 @@ class MirrorProvider{
     }
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $mirror_term = $term_storage->load((int) $id_value);
-    if (!($mirror_term instanceof Term) || $mirror_term->bundle()!== $vocab) {
+    if (!($mirror_term instanceof TermInterface) || $mirror_term->bundle()!== $vocab) {
       return null;
     }
 
