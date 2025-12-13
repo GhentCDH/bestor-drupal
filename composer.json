@@ -64,6 +64,7 @@
         "drupal/thex": "^10.0",
         "drupal/toc_js": "^3.4@RC",
         "drupal/twig_tweak": "^3.4",
+        "drupal/views_autocomplete_filters": "^2.0",
         "drush/drush": "^12.5",
         "elasticsearch/elasticsearch": "^8.11"
     },

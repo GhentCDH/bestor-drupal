@@ -5,6 +5,26 @@
  */
 #}
 
+{# default components #}
+{% if header %}
+  <div class="view-header">
+    {{ header }}
+  </div>
+{% endif %}
+
+{% if exposed %}
+  <div class="view-filters">
+    {{ exposed }}
+  </div>
+{% endif %}
+
+{% if attachment_before %}
+  <div class="attachment attachment-before">
+    {{ attachment_before }}
+  </div>
+{% endif %}
+
+{# UPDATED: custom #}
 {% if rows %}
   {{ rows }}
 {% else %}
@@ -20,4 +40,33 @@
     title: bestor('recently_updated_title'),
     lines: empty_content,
   }, with_context = false) }}
+{% endif %}
+
+{# default components #}
+{% if pager %}
+  <div class="view-pager">
+    {{ pager }}
+  </div>
+{% endif %}
+
+{% if attachment_after %}
+  <div class="attachment attachment-after">
+    {{ attachment_after }}
+  </div>
+{% endif %}
+
+{% if footer %}
+  <div class="view-footer">
+    {{ footer }}
+  </div>
+{% endif %}
+
+{% if more %}
+  {{ more }}
+{% endif %}
+
+{% if feed_icons %}
+  <div class="feed-icons">
+    {{ feed_icons }}
+  </div>
 {% endif %}

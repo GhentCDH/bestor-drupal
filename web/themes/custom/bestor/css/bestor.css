@@ -78,6 +78,83 @@
   }
 }
 
+/* FEAT: full text search on search page */
+
+.c-page-intro__search .database-full-text-search-form {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
+.c-page-intro__search .database-full-text-search-form .form-wrapper{
+  margin-left:-50px;
+}
+
+.c-page-intro__search .database-full-text-search-form .c-button--default{
+  padding:12px
+}
+
+.c-page-intro__search .database-full-text-search-form  .c-input{
+  padding-right:65px;
+}
+
+/* FEAT: Glossary Widget Styling */
+
+.bef-links {
+  margin: 2rem 0;
+}
+
+.bef-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bef-links li {
+  margin: 0;
+}
+
+.bef-links .bef-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.bef-links .bef-link:hover {
+  background: #f5f5f5;
+  border-color: #999;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bef-links .bef-link:active,
+.bef-links .bef-link.active {
+  background: var(--color-primary, #007bff);
+  border-color: var(--color-primary, #007bff);
+  color: #fff;
+}
+
+/* Label verbergen of stylen */
+.form-item-startchar > label {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: block;
+}
+
 
 /* FEAT: sidebar with key info for events */
 

@@ -1,0 +1,20 @@
+uuid: 7f849652-01a6-4fc5-9206-171d2616fa46
+langcode: en
+status: true
+dependencies:
+  module:
+    - bestor_custom_search
+  theme:
+    - bestor
+id: bestor_databasesearch
+theme: bestor
+region: nav
+weight: 0
+provider: null
+plugin: database_full_text_search_block
+settings:
+  id: database_full_text_search_block
+  label: 'Database Search'
+  label_display: '0'
+  provider: bestor_custom_search
+visibility: {  }

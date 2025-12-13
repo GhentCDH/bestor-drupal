@@ -35,6 +35,7 @@
 ] %}
 
 {% set attr_variant = bestor('page_variant') %}
+
 {% if attr_variant == 'lemma' %}
   {% set author_names = bestor('field_values', node, 'field_author') %}
   {% if author_names %}
@@ -43,6 +44,10 @@
       <p>{{bestor('author_label')}} / {{bestor('field_values', node, 'field_author', link_settings)}}</p>
     {% endset %}
   {% endif %}
+{% else %}
+  {% set search %}
+    {{drupal_entity('block', 'bestor_databasesearch')}}
+  {% endset %}
 {% endif %}
 
 <div{{ attributes.addClass(classes) }}>
@@ -52,6 +57,7 @@
   {{ include('jakarta:c-page-intro', {
     breadcrumb: drupal_breadcrumb(),
     title: content,
+    search,
     attr_variant,
     meta
   }, with_context = false) }}

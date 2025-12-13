@@ -3,12 +3,25 @@
 use Drupal\Core\Form\FormStateInterface;
 
 function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Verberg specifiek facet
+  // Hide specific facets (only used in links, no widget needed)
   if($form_id === 'views_exposed_form' && $form['#id'] === 'views-exposed-form-database-page-1'){
-    if (isset($form['specialisation'])) {
-      $form['specialisation']['#access'] = FALSE;
-      $form['specialisation']['#type'] = 'hidden';
-    }
+    $facets_to_hide = ['specialisation', 'gender', 'type', 'country', 'place'];
+    foreach ($facets_to_hide as $facet_id) {
+      if (isset($form[$facet_id])) {
+        $form[$facet_id]['#access'] = FALSE;
+        $form[$facet_id]['#type'] = 'hidden';
+      }
+    }   
+  } 
+}
+
+
+/**
+ * Implements hook_preprocess_views_exposed_form().
+ */
+function bestor_custom_search_preprocess_views_exposed_form(&$variables) {
+  if ($variables['form']['#id'] === 'views-exposed-form-database-page-1') {
+    // Verberg fullsearch filter in sidebar
+    $variables['form']['fullsearch']['#access'] = FALSE;
   }
-  
 }

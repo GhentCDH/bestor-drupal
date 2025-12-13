@@ -6,6 +6,12 @@
  */
 
 use Drupal\node\NodeInterface;
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\node\Entity\NodeType;
+use Drupal\views\Views;
 
 
 /**
@@ -50,4 +56,50 @@ function bestor_content_helper_preprocess_menu(&$variables) {
 function bestor_content_helper_node_view(array &$build, NodeInterface $node, $view_mode, $langcode) {
   $service =  \Drupal::service('bestor_content_helper.standard_node_field_processor');
   $service->getLemmaKeyData($node);
+}
+
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function bestor_content_helper_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+    if ($node = $route_match->getParameter('node')) {
+    $bundle = $node->bundle();
+
+    $nodeContentAnalyzer =  \Drupal::service('bestor_content_helper.node_content_analyzer');
+    
+    $links = [];
+    if ($nodeContentAnalyzer->isLemma($bundle)) {   
+      $links[] = Link::createFromRoute(t('Home'), '<front>');
+      $links[] = _getViewLink('database', 'page_1');
+      $links[] = Link::fromTextAndUrl(
+        t(NodeType::load($node->bundle())->label()), 
+        Url::fromRoute('view.database.page_1', [], ['query' => ['category['. $bundle . ']' => $bundle]])
+      );
+
+    } elseif ($bundle === 'article') {
+      $links[] = Link::createFromRoute(t('Home'), '<front>');
+      $links[] = _getViewLink('announcements', 'page_2');
+      
+    } elseif ($bundle === 'event') {
+      $links[] = Link::createFromRoute(t('Home'), '<front>');
+      $links[] = _getViewLink('announcements', 'page_3');
+    }
+      
+    if($links){
+      $breadcrumb = new Breadcrumb();
+      $breadcrumb->setLinks($links);
+      $breadcrumb->addCacheContexts(['route']);
+      $breadcrumb->addCacheTags(['node:' . $node->id()]);
+    }
+  }
+}
+
+function _getViewLink($view_id, $display_id){
+  $view = Views::getView($view_id);
+  $view->setDisplay($display_id);
+  return Link::fromTextAndUrl(
+    $view->getTitle(), 
+    Url::fromRoute('view.' . $view_id . '.' . $display_id, [], [])
+  );
 }

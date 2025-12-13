@@ -115,3 +115,8 @@ function bestor_preprocess_page(&$variables) {
   $variables['footer_social_linkedin'] = theme_get_setting('social_linkedin');
   $variables['footer_social_bluesky'] = theme_get_setting('social_bluesky');
 }
+
+function bestor_form_database_full_text_search_form_alter(&$form, &$form_state, $form_id) {
+  unset($form['form_build_id']);
+  unset($form['form_id']);
+}
