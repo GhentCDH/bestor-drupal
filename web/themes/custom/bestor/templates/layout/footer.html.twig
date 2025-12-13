@@ -1,0 +1,70 @@
+{#
+/**
+ * @file
+ * Footer template.
+ *
+ * Available variables:
+ * - footer_1, footer_2, footer_3, footer_4: Footer region content
+ * - footer: Bottom footer region
+ */
+#}
+{#
+/**
+ * @file
+ * Footer template.
+ *
+ * Available variables:
+ * - footer_1, footer_2, footer_3, footer_4: Footer region content
+ * - footer: Bottom footer region
+ */
+#}
+<footer class="page-footer">
+  <div class="page-footer-main h-bg-color-primary">
+    <div class="container">
+      <div class="page-footer-grid">
+        {# Links boven: Logo + beschrijving (F1) #}
+        <div class="page-footer-col page-footer-col--brand">
+          <img src="/themes/custom/jakarta/logo-white.svg" alt="Bestor" class="page-footer-logo">
+          {{ footer_1 }}
+        </div>
+        
+        {# Rechts boven: Nieuwsbrief button (F2) #}
+        <div class="page-footer-col page-footer-col--newsletter">
+          {{ footer_2 }}
+        </div>
+        
+        {# Links onder: Menu + copyright + credits (F3) #}
+        <div class="page-footer-col page-footer-col--bottom">
+          <div class="page-footer-bottom-inner">
+            <div class="page-footer-copyright-text">
+              &copy; {{ 'now'|date('Y') }}&nbsp;<a href="{{ url('<front>') }}">{{ drupal_config('system.site', 'name') }}</a>
+            </div>
+            
+            <div class="page-footer-bottom-menu">
+              {{ footer_3 }}
+            </div>
+            
+            <div class="page-footer-credits">
+              Made by <a href="https://www.ghentcdh.ugent.be/" target="_blank">GhentCDH</a> / 
+              <a href="https://www.sitetrip.be/" target="_blank">Sitetrip</a> x 
+              <a href="https://www.wildbloei.be/" target="_blank">Wildbloei</a>
+            </div>
+          </div>
+        </div>
+        
+        {# Rechts onder: Social media (F4) #}
+        <div class="page-footer-col page-footer-col--social">
+          <div class="page-footer-heading">Volg ons via</div>
+          {{ footer_4 }}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {# Logo carousel bottom #}
+  <div class="page-footer-logos">
+    <div class="container">
+      {{ footer }}
+    </div>
+  </div>
+</footer>

@@ -12,8 +12,8 @@ _core:
   default_config_hash: QQM7Pywl0P7otwsKQhi-04x7tdOTXvvSn6TrO7v2Ayw
 id: bestor_footer
 theme: bestor
-region: footer_4
-weight: -7
+region: footer_3
+weight: -8
 provider: null
 plugin: 'system_menu_block:footer'
 settings:
