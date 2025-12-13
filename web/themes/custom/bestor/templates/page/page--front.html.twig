@@ -128,7 +128,7 @@
         {{ page.content }}
         {{ drupal_view('frontpage', 'block_4') }}
       </div>
-      {%- if page.sidebar %}</div>{% endif %}
+      {% if page.sidebar %}</div>{% endif %}
     </div>
   </main>
   {% if page.subcontent %}
@@ -138,12 +138,12 @@
   {% endif %}
 </div>
 
-{{ include('@bestor/layout/footer.html.twig', {
+{{ include('@bestor/layout/footer.html.twig', _context|merge({
   footer_1: page.footer_1,
   footer_2: page.footer_2,
   footer_3: page.footer_3,
   footer_4: page.footer_4,
   footer: page.footer,
-}, with_context = false) }}
+}), with_context = false) }}
 
 {{ include('jakarta:c-page-overlay') }}

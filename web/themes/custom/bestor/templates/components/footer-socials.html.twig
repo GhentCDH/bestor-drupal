@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Social media icons component for footer.
+ */
+#}
+{% set social_platforms = {
+  'facebook': footer_social_facebook,
+  'instagram': footer_social_instagram,
+  'x': footer_social_x,
+  'linkedin': footer_social_linkedin,
+  'bluesky': footer_social_bluesky,
+} %}
+
+{# Build social media links #}
+{% set social_links = [] %}
+{% for platform, url in social_platforms %}
+  {% if url %}
+    {% set social_links = social_links|merge([{
+      'url': url,
+      'icon': platform,
+    }]) %}
+  {% endif %}
+{% endfor %}
+
+{# Only render if we have at least one social link #}
+{% if social_links is not empty %}
+  {% set social_medias %}
+    {% for link in social_links %}
+      <a href="{{ link.url }}" target="_blank" rel="noopener">
+        {{ include('jakarta:c-icon', {
+          icon: link.icon,
+        }, with_context = false) }}
+      </a>
+    {% endfor %}
+  {% endset %}
+  
+  {% set title = footer_social_title %}
+  
+  {{ include('jakarta:c-socials', {
+    title: title,
+    social_medias: social_medias,
+  }, with_context = false) }}
+{% endif %}

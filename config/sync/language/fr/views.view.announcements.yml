@@ -13,9 +13,20 @@ display:
       title: Actualités
       menu:
         title: Actualités
+      empty:
+        area_text_custom:
+          content: "Actuellement, nous n'avons pas d'actualités."
   page_3:
     display_title: Événements
     display_options:
       title: Événements
       menu:
         title: Événements
+      empty:
+        area_text_custom:
+          content: "Actuellement, nous n'avons pas d'événements prévus.Actuellement, nous n'avons pas d'événements prévus."
+  page_4:
+    display_options:
+      empty:
+        area_text_custom:
+          content: "Nous n'avons pas de nouvelles publications pour le moment."

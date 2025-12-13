@@ -30,7 +30,8 @@
         
         {# Rechts boven: Nieuwsbrief button (F2) #}
         <div class="page-footer-col page-footer-col--newsletter">
-          {{ footer_2 }}
+          {{ include('@bestor/components/footer-newsletter.html.twig', {}, with_context = true) }}
+          {% if footer_2 %} {{ footer_2 }} {% endif %}
         </div>
         
         {# Links onder: Menu + copyright + credits (F3) #}
@@ -54,8 +55,8 @@
         
         {# Rechts onder: Social media (F4) #}
         <div class="page-footer-col page-footer-col--social">
-          <div class="page-footer-heading">Volg ons via</div>
-          {{ footer_4 }}
+          {{ include('@bestor/components/footer-socials.html.twig', {}, with_context = true) }}
+          {% if footer_4 %} {{ footer_4 }} {% endif %}
         </div>
       </div>
     </div>

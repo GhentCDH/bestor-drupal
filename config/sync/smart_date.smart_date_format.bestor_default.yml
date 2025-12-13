@@ -1,0 +1,15 @@
+uuid: 9398e6c8-3533-41c0-b3fb-e3af7572febd
+langcode: en
+status: true
+dependencies: {  }
+id: bestor_default
+label: bestor-default
+date_format: j.n.Y
+time_format: 'H:i'
+time_hour_format: ''
+allday_label: ''
+separator: ' - '
+join: ', '
+ampm_reduce: '1'
+date_first: '1'
+site_time_toggle: '1'

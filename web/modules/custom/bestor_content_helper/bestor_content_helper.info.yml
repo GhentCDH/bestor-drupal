@@ -1,4 +1,4 @@
-name: "bestor_language_helper"
+name: "bestor_content_helper"
 description: "Custom module that helps to handle nodes, e.g. multilinguality, reading time calc..."
 package: Custom
 type: module

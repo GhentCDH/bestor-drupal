@@ -12,11 +12,11 @@ dependencies:
     - field.field.node.event.field_time_period
     - node.type.event
   module:
-    - datetime_range
     - field_group
     - leaflet
     - media_library
     - path
+    - smart_date
     - text
 third_party_settings:
   field_group:
@@ -220,10 +220,18 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_time_period:
-    type: daterange_default
+    type: smartdate_default
     weight: 3
     region: content
-    settings: {  }
+    settings:
+      modal: false
+      default_duration: 60
+      default_duration_increments: "30\r\n60|1 hour\r\n90\r\n120|2 hours\r\ncustom"
+      show_extra: false
+      hide_date: false
+      allday: true
+      remove_seconds: true
+      duration_overlay: true
     third_party_settings: {  }
   langcode:
     type: language_select

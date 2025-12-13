@@ -22,3 +22,96 @@ function bestor_content_helper_preprocess_region(&$variables) {
     $variables['footnote_count'] = \Drupal::service('footnotes.group')->count();
   }
 }
+
+
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ */
+function bestor_form_system_theme_settings_alter(&$form, &$form_state) {
+  $form['footer_settings'] = [
+    '#type' => 'details',
+    '#title' => t('Footer Settings'),
+    '#open' => TRUE,
+  ];
+  
+  // Newsletter
+  $form['footer_settings']['newsletter'] = [
+    '#type' => 'details',
+    '#title' => t('Newsletter'),
+    '#open' => TRUE,
+  ];
+  
+  $form['footer_settings']['newsletter']['newsletter_url'] = [
+    '#type' => 'url',
+    '#title' => t('Newsletter Subscribe URL'),
+    '#default_value' => theme_get_setting('newsletter_url'),
+    '#description' => t('Leave empty to hide the newsletter button'),
+  ];
+  
+  $form['footer_settings']['newsletter']['newsletter_button_text'] = [
+    '#type' => 'textfield',
+    '#title' => t('Newsletter Button Text'),
+    '#default_value' => theme_get_setting('newsletter_button_text') ?: t('Subscribe to our newsletter'),
+    '#description' => t('Text for the newsletter subscription button'),
+  ];
+  
+  // Social media
+  $form['footer_settings']['social_media'] = [
+    '#type' => 'details',
+    '#title' => t('Social Media Links'),
+    '#open' => TRUE,
+  ];
+  
+  $form['footer_settings']['social_media']['social_title'] = [
+    '#type' => 'textfield',
+    '#title' => t('Social Media Title'),
+    '#default_value' => theme_get_setting('social_title') ?: t('Follow us'),
+    '#description' => t('Title above social media icons'),
+  ];
+  
+  $social_platforms = [
+    'facebook' => 'Facebook',
+    'instagram' => 'Instagram',
+    'x' => 'X (Twitter)',
+    'linkedin' => 'LinkedIn',
+    'bluesky' => 'Bluesky',
+  ];
+  
+  foreach ($social_platforms as $platform => $label) {
+    $form['footer_settings']['social_media']['social_' . $platform] = [
+      '#type' => 'url',
+      '#title' => $label . ' URL',
+      '#default_value' => theme_get_setting('social_' . $platform),
+      '#description' => t('Leave empty to hide this icon'),
+    ];
+  }
+}
+
+/**
+ * Implements template_preprocess_page().
+ */
+function bestor_preprocess_page(&$variables) {
+
+    // Debug: log wat we ophalen
+  \Drupal::logger('bestor')->notice('Newsletter URL: @url', [
+    '@url' => theme_get_setting('newsletter_url') ?? 'NULL'
+  ]);
+  \Drupal::logger('bestor')->notice('Facebook URL: @url', [
+    '@url' => theme_get_setting('social_facebook') ?? 'NULL'
+  ]);
+
+
+
+  // Maak alle footer settings beschikbaar
+  $variables['footer_newsletter_url'] = theme_get_setting('newsletter_url');
+  $variables['footer_newsletter_text'] = theme_get_setting('newsletter_button_text') ?: t('Subscribe to our newsletter');
+  $variables['footer_social_title'] = theme_get_setting('social_title') ?: t('Follow us');
+  
+  // Social media URLs
+  $variables['footer_social_facebook'] = theme_get_setting('social_facebook');
+  $variables['footer_social_instagram'] = theme_get_setting('social_instagram');
+  $variables['footer_social_x'] = theme_get_setting('social_x');
+  $variables['footer_social_linkedin'] = theme_get_setting('social_linkedin');
+  $variables['footer_social_bluesky'] = theme_get_setting('social_bluesky');
+}

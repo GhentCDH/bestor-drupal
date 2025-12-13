@@ -1,0 +1,33 @@
+uuid: debd55b9-b133-4472-9cc7-56898c509e93
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.announcements
+  module:
+    - node
+    - views
+  theme:
+    - bestor
+id: bestor_views_block__announcements_block_1
+theme: bestor
+region: subcontent
+weight: 0
+provider: null
+plugin: 'views_block:announcements-block_1'
+settings:
+  id: 'views_block:announcements-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      article: article

@@ -85,11 +85,13 @@
 {% set media %}
   <img loading="lazy" src="{{ image_info.url }}" width="320" height="211" alt="{{ image_info.alt }}">
 {% endset %}
+
+
 <div style="max-width: 780px;">
   {{ include('jakarta:c-card', {
     tag,
     media,
-    date: node.created.value|date('d.m.Y'),
+    date: node.type.entity.id == 'event' ? content.field_time_period : node.created.value|date('d.m.Y'),
     title: label,
     text: content.field_summary,
     url: path('entity.node.canonical', {'node': node.id}),

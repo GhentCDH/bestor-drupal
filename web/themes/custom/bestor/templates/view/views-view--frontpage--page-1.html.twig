@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Theme override for main view template.
+ */
+#}
+
+{% if rows %}
+  {{ rows }}
+{% else %}
+  {% set empty_content %}
+    <div class="view-empty" style="grid-column: 1 / -1;">
+      {{ empty }}
+    </div>
+  {% endset %}
+
+  {{ include('jakarta:c-grid', {
+    title: bestor('in_the_spotlight_title'),
+    grid_items: [empty_content],
+    columns: 1,
+    background_color: 'tertiary',
+  }) }}
+{% endif %}

@@ -1,0 +1,17 @@
+features:
+  node_user_picture: 0
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: 1
+logo:
+  use_default: 1
+favicon:
+  use_default: 1
+newsletter_url: 'http://eepurl.com/cOTXg5'
+newsletter_button_text: 'Subscribe to our newsletter'
+social_title: 'Follow us'
+social_facebook: 'https://www.facebook.com/Bestor.be'
+social_instagram: ''
+social_x: 'https://twitter.com/Bestor_be'
+social_linkedin: ''
+social_bluesky: ''

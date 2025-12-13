@@ -96,6 +96,56 @@
     {{ title_suffix }}
 
     <div{{ content_attributes.addClass('node-content clear') }}>
+
+        {% set sidebar %}
+            {% set table_of_contents %}
+                {% set internal = bestor('field_values', node, 'field_issued_by_bestor') %}
+                {{ include('jakarta:c-tag', {
+                    attr_variant: 'corner_down',
+                    color: internal ? 'primary' : 'grey',
+                    content: (node.type.entity.label|lower|capitalize) ~ (internal ? ' ' ~ bestor('from_label') ~ ' Bestor' : ''),
+                }, with_context = false) }}
+            {% endset %}
+
+            {% set related_items %}
+                
+                
+                {{ include('jakarta:c-related-items', {
+                    title: node.field_time_period.fieldDefinition.label,
+                    items: content.field_time_period,
+                }, with_context = false) }}
+                {{ include('jakarta:c-related-items', {
+                    title: node.field_location_text.fieldDefinition.label,
+                    items: content.field_location_text,
+                }, with_context = false) }}
+     
+            {% endset %}
+            {{ include('jakarta:c-lemma-sidebar', {
+                buttons,
+                table_of_contents,
+                related_items,
+            }, with_context = false) }}
+        {% endset %}
+        {% set content %}
+            {{ include('jakarta:c-meta', {
+                date: node.changed.value|date('d/m/Y'),
+                read_time: bestor('reading_time', node),
+            }, with_context = false) }}
+
+            {% if content.field_description %}
+                {{content.field_description}}
+            {% endif %}
+
+            {% if content.body %}
+                {{content.body}}
+            {% endif %}
+
+            
+            {% if node.field_geolocation.value %}
+                {{content.field_geolocation}}
+            {% endif %}
+        {% endset %}
+
         {% set layout_classes = [] %}
         {% if not top %}
             {% set layout_classes = layout_classes|merge(['c-structured-layout--no-top']) %}
@@ -106,14 +156,10 @@
 
         {{ include('jakarta:c-structured-layout', {
             top: top,
-            content: content,
+            content,
             sidebar: sidebar,
             attributes: create_attribute().addClass(layout_classes),
         }, with_context = false) }}
     </div>
 
 </div>
-
-
-
-

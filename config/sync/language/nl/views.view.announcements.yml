@@ -11,15 +11,24 @@ display:
     display_title: Nieuws
     display_options:
       title: Nieuws
+      empty:
+        area_text_custom:
+          content: 'Op dit moment hebben we geen nieuws.'
   page_3:
     display_title: Evenementen
     display_options:
       title: Evenementen
       menu:
         title: Evenementen
+      empty:
+        area_text_custom:
+          content: 'Op dit moment hebben we geen evenementen gepland.'
   page_4:
     display_title: Publicaties
     display_options:
       title: Publicaties
       menu:
         title: Publicaties
+      empty:
+        area_text_custom:
+          content: 'Op dit moment zijn er geen nieuwe publicaties.'

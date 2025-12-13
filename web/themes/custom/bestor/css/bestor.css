@@ -62,6 +62,36 @@
   display: none;
 }
 
+
+/* FEAT: provide fixes for non-lemma pages */
+
+@media screen and (min-width: 90em) {
+  .c-structured-layout--no-top .c-structured-layout__content {
+    grid-column-start: 1 !important;
+  }
+}
+
+
+@media screen and (min-width: 90em) {
+  .c-structured-layout--no-sidebar .c-structured-layout__content {
+    grid-column-end: span 18 !important; 
+  }
+}
+
+
+/* FEAT: sidebar with key info for events */
+
+.node-event-full  .c-lemma-sidebar__related-items {
+  border: solid black 1px;
+  padding: 30px;
+}
+
+.node-event-full .c-lemma-sidebar .c-lemma-sidebar__wrapper {
+    gap: 0px;
+}
+
+
+
 /* FOOTER */
 
 /* ============================================

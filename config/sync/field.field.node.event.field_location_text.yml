@@ -9,7 +9,7 @@ id: node.event.field_location_text
 field_name: field_location_text
 entity_type: node
 bundle: event
-label: 'Location description'
+label: Location
 description: ''
 required: false
 translatable: true

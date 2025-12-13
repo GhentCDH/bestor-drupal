@@ -1,5 +1,5 @@
-uuid: b6172f9d-9105-46d5-8c7e-d6d49939b38a
-langcode: nl
+uuid: ace89829-709b-4f14-bb5d-b6488213fe3a
+langcode: en
 status: true
 dependencies:
   module:
@@ -16,7 +16,7 @@ plugin: footnotes_group
 settings:
   id: footnotes_group
   label: 'Footnotes Group'
-  label_display: visible
+  label_display: '0'
   provider: footnotes
   context_mapping: {  }
   group_via_js: false
@@ -32,4 +32,5 @@ visibility:
       institution: institution
       instrument: instrument
       person: person
+      place: place
       story: story

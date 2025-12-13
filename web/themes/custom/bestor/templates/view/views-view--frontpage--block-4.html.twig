@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Theme override for main view template.
+ */
+#}
+
+{% if rows %}
+  {{ rows }}
+{% else %}
+    {% set empty_content %}
+      {{ include('jakarta:c-line', {
+      url: null,
+      title: empty,
+      attr_variant: 'default',
+    }, with_context = false) }}
+  {% endset %}
+  
+  {{ include('jakarta:c-lines-box', {
+    title: bestor('recently_updated_title'),
+    lines: empty_content,
+  }, with_context = false) }}
+{% endif %}
