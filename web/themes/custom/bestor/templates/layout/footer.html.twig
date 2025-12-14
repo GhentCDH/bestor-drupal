@@ -22,19 +22,19 @@
   <div class="page-footer-main h-bg-color-primary">
     <div class="container">
       <div class="page-footer-grid">
-        {# Links boven: Logo + beschrijving (F1) #}
+        {# LT Logo + tagline (F1) #}
         <div class="page-footer-col page-footer-col--brand">
           <img src="/themes/custom/jakarta/logo-white.svg" alt="Bestor" class="page-footer-logo">
           {{ footer_1 }}
         </div>
         
-        {# Rechts boven: Nieuwsbrief button (F2) #}
+        {# RT: Newsletter button (F2) #}
         <div class="page-footer-col page-footer-col--newsletter">
           {{ include('@bestor/components/footer-newsletter.html.twig', {}, with_context = true) }}
           {% if footer_2 %} {{ footer_2 }} {% endif %}
         </div>
         
-        {# Links onder: Menu + copyright + credits (F3) #}
+        {# LB: Menu + copyright + credits (F3) #}
         <div class="page-footer-col page-footer-col--bottom">
           <div class="page-footer-bottom-inner">
             <div class="page-footer-copyright-text">
@@ -53,7 +53,7 @@
           </div>
         </div>
         
-        {# Rechts onder: Social media (F4) #}
+        {# RB: Social media (F4) #}
         <div class="page-footer-col page-footer-col--social">
           {{ include('@bestor/components/footer-socials.html.twig', {}, with_context = true) }}
           {% if footer_4 %} {{ footer_4 }} {% endif %}
@@ -62,7 +62,7 @@
     </div>
   </div>
   
-  {# Logo carousel bottom #}
+  {# Logos #}
   <div class="page-footer-logos">
     <div class="container">
       {{ footer }}

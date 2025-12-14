@@ -252,7 +252,11 @@
 }
 
 
+/* FIX: make space between paragraphs smaller */
 
+.field--type-entity-reference-revisions .c-text {
+  padding-block: 1rem;
+}
 
 /* FEAT: sidebar with key info for events */
 
