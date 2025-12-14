@@ -1,0 +1,49 @@
+{#
+/**
+ * @file
+ * Author facet dropdown with dummy single-select UI.
+ */
+#}
+
+{% set select_classes = [
+  'c-select',
+  'js-author-dummy-select',
+]|merge(c_select_utility_classes ?: []) %}
+
+<div class="author-facet-dropdown">
+
+  {# REAL FACETS SELECT (hidden, AJAX-controlled) #}
+  <div class="author-facet-hidden">
+    <select {{ attributes }}>
+      {% for option in options %}
+        {% if option.type == 'optgroup' %}
+          <optgroup label="{{ option.label }}">
+            {% for sub_option in option.options %}
+              <option value="{{ sub_option.value }}" {{ sub_option.selected ? ' selected="selected"' }}>
+                {{ sub_option.label }}
+              </option>
+            {% endfor %}
+          </optgroup>
+        {% elseif option.type == 'option' %}
+          <option value="{{ option.value }}" {{ option.selected ? ' selected="selected"' }}>
+            {{ option.label }}
+          </option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+
+  {# DUMMY SINGLE DROPDOWN #}
+  <div class="author-facet-dummy">
+    <div class="author-facet-wrapper c-select-wrapper">
+      <select class="{{ select_classes|join(' ') }}">
+        {# Options are synchronised by JS #}
+      </select>
+       {{ include('jakarta:c-icon', {
+        icon: 'caret',
+        c_icon_utility_classes: ['c-select-caret'],
+      }, with_context = false) }}
+    </div>
+  </div>
+
+</div>

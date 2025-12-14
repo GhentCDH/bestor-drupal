@@ -12,6 +12,7 @@ module:
   block: 0
   block_content: 0
   breakpoint: 0
+  chosen_lib: 0
   ckeditor5: 0
   config: 0
   config_perms: 0
@@ -91,7 +92,11 @@ module:
   toolbar: 0
   twig_tweak: 0
   user: 0
+  views_ajax_history: 0
   views_autocomplete_filters: 0
+  views_filters_summary: 0
+  views_filters_summary_bef: 0
+  views_filters_summary_search_api: 0
   views_ui: 0
   workflows: 0
   menu_admin_per_menu: 1

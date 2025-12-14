@@ -98,7 +98,61 @@
   padding-right:65px;
 }
 
-/* FEAT: Glossary Widget Styling */
+
+/* FIX: improve facet subtitle styling */
+
+.views-exposed-form form > .form-item > label,
+.views-exposed-form form > .selectify-multi > label {
+  margin-bottom: 10px;
+  font-size: var(--font-h4-size);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-title);
+  line-height: 1.25;
+  display: block;
+}
+
+.views-exposed-form fieldset > legend .fieldset-legend {
+  margin-bottom: 10px;
+  font-size: var(--font-h4-size);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-title);
+  line-height: 1.25;
+}
+
+/* FIX: Improve Facet Checkbox Styling */
+
+.page-sidebar .js-form-type-checkbox {
+  margin-bottom:10px;
+}
+
+
+.page-sidebar .js-form-type-checkbox label{
+  display: inline-block;
+  padding: 5px 10px 5px 35px;
+}
+
+
+.page-sidebar .js-form-type-checkbox.highlight label{
+  background-color: var(--color-primary);
+  border-radius:10px;
+}
+
+.page-sidebar .js-form-type-checkbox label::before {
+  left: 10px;
+  top:12px;
+}
+
+.page-sidebar .c-input-checkbox ~ label::after {
+  left: 12.21875px;
+  top:15px;
+}
+
+.page-sidebar .js-form-type-checkbox.highlight label::before {
+ display:none;
+}
+
+
+/* FEAT: Facet Glossary Widget Styling */
 
 .bef-links {
   margin: 2rem 0;
@@ -148,12 +202,56 @@
   color: #fff;
 }
 
-/* Label verbergen of stylen */
 .form-item-startchar > label {
   font-weight: 600;
   margin-bottom: 1rem;
   display: block;
 }
+
+.form-item-startchar .bef-link:focus {
+  color: #000 !important;
+}
+
+.form-item-startchar .bef-link--selected {
+  background-color:  var(--color-primary);
+  color: #000;
+}
+
+/* FEAT: update multiselect to visually better single select dropdown */
+
+.c-select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.c-select-caret {
+  position: absolute;
+  right: 1.3125rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.3125rem;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.js-hide, .author-facet-hidden {
+  display:none;
+  visibility: hidden;
+}
+
+/* FEAT: style reset button */
+.views-exposed-form .form-submit{
+  padding: 3px 8px;
+  border: solid black 1px;
+  border-radius: 10px;
+}
+
+.views-exposed-form .form-submit:hover{
+  color:  var(--color-primary);
+}
+
+
 
 
 /* FEAT: sidebar with key info for events */
@@ -166,6 +264,7 @@
 .node-event-full .c-lemma-sidebar .c-lemma-sidebar__wrapper {
     gap: 0px;
 }
+
 
 
 

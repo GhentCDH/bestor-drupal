@@ -1,0 +1,28 @@
+uuid: 203cb64b-55cd-4c69-bbb4-250833929c04
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.database
+  module:
+    - system
+    - views
+  theme:
+    - bestor
+id: bestor_exposedformdatabasepage_2
+theme: bestor
+region: sidebar
+weight: 0
+provider: null
+plugin: 'views_exposed_filter_block:database-page_2'
+settings:
+  id: 'views_exposed_filter_block:database-page_2'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /advanced-search-concepts

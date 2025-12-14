@@ -11,7 +11,5 @@ checkbox_size: medium
 disable_on_admin_routes: false
 accent_color: neutral
 accent_color_mode: light
-apply_site_wide: true
-global_selectify_widget: selectify_searchable
-disable_views_widgets: false
+disable_views_widgets: true
 disabled_pages: admin/appearance/settings/gin
