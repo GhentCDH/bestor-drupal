@@ -124,7 +124,7 @@ class FacetResultsProvider {
         $view_route,
         [],
         [
-          'query' => [$facet_query_id => $facet_value],
+          'query' => [$facet_query_id . '[' . $facet_value . ']' => $facet_value],
           'language' => $language,
         ]
       ) ?? NULL;
