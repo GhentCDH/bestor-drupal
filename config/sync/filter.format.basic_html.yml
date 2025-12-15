@@ -44,7 +44,7 @@ filters:
     settings:
       footnotes_collapse: true
       footnotes_css: true
-      footnotes_dialog: true
+      footnotes_dialog: false
       footnotes_footer_disable: true
   filter_html:
     id: filter_html

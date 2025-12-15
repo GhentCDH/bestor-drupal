@@ -24,7 +24,6 @@ function bestor_content_helper_preprocess_region(&$variables) {
 }
 
 
-
 /**
  * Implements hook_form_system_theme_settings_alter().
  */
@@ -92,17 +91,6 @@ function bestor_form_system_theme_settings_alter(&$form, &$form_state) {
  * Implements template_preprocess_page().
  */
 function bestor_preprocess_page(&$variables) {
-
-    // Debug: log wat we ophalen
-  \Drupal::logger('bestor')->notice('Newsletter URL: @url', [
-    '@url' => theme_get_setting('newsletter_url') ?? 'NULL'
-  ]);
-  \Drupal::logger('bestor')->notice('Facebook URL: @url', [
-    '@url' => theme_get_setting('social_facebook') ?? 'NULL'
-  ]);
-
-
-
   // Maak alle footer settings beschikbaar
   $variables['footer_newsletter_url'] = theme_get_setting('newsletter_url');
   $variables['footer_newsletter_text'] = theme_get_setting('newsletter_button_text') ?: t('Subscribe to our newsletter');
@@ -136,4 +124,9 @@ function bestor_theme_suggestions_select_alter(array &$suggestions, array $varia
   ) {
     $suggestions[] = 'select__author_dropdown';
   }
+}
+
+
+function bestor_preprocess_views_view(&$variables) {
+ 
 }

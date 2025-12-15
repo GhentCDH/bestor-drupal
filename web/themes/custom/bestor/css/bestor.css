@@ -32,6 +32,14 @@
 }
 
 
+/* FIX: tab content is wrapped */
+.c-tabs__tab__content .view-content{
+  padding-block-start: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+}
+
 /* FEAT: placeholder when image unavailable */
 
 .c-card__media img,
@@ -254,9 +262,25 @@
 
 /* FIX: make space between paragraphs smaller */
 
-.field--type-entity-reference-revisions .c-text {
-  padding-block: 1rem;
+@media screen and (min-width: 90em) {
+
+  .field--type-entity-reference-revisions .c-text,
+  .field--type-entity-reference-revisions .c-media-1-item,
+  .field--type-entity-reference-revisions .c-text-media {
+    padding-block: 1.5rem;
+  }
+
+  .field--type-entity-reference-revisions .c-media-1-item {
+    padding-block: 2rem;
+  }
 }
+
+/* FIX: remove border of footnotes block */
+
+#footnotes_group {
+  border: unset;
+}
+
 
 /* FEAT: sidebar with key info for events */
 
