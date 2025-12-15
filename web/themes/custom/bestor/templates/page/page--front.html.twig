@@ -125,11 +125,11 @@
           sidebar: drupal_view('frontpage', 'block_5'),
         }, with_context = false) }}
         {{ page.content }}
+        {{ drupal_view('frontpage', 'block_4') }}
       </div>
       {% if page.sidebar %}</div>{% endif %}
     </div>
   </main>
-
   {% if page.subcontent %}
     <div class="page-subcontent">
       {{ page.subcontent }}
