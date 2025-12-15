@@ -25,29 +25,11 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_image:
-    type: entity_reference_entity_view
-    label: inline
-    settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
-    weight: 6
-    region: content
-  field_summary:
-    type: basic_string
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 116
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
 hidden:
+  field_image: true
   field_issued_by_bestor: true
+  field_summary: true
   footnotes_group: true
   langcode: true
+  links: true
   search_api_excerpt: true
