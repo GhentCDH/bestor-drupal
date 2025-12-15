@@ -10,6 +10,7 @@ use Drupal\node\NodeInterface;
 use Drupal\bestor_content_helper\Service\CustomTranslations;
 use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\filter\Render\FilteredMarkup;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Service for analyzing and formatting node content.
@@ -20,16 +21,20 @@ use Drupal\filter\Render\FilteredMarkup;
 class StandardNodeFieldProcessor {
 
   protected EntityTypeManagerInterface $entityTypeManager;
+  protected LanguageManagerInterface $languageManager;
   protected RendererInterface $renderer;
   protected FacetResultsProvider $facetResultsProvider;
   protected CustomTranslations $customTranslations;
   protected CurrentPageAnalyzer $pageAnalyzer;
+
 
   /**
    * Constructs a StandardNodeFieldProcessor object.
    *
    * @param EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param LanguageManagerInterface $languageManager;
+   *   The lanugage manager
    * @param RendererInterface $renderer
    *   The renderer service.
    * @param FacetResultsProvider $facetResultsProvider
@@ -41,12 +46,14 @@ class StandardNodeFieldProcessor {
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    LanguageManagerInterface $languageManager,
     RendererInterface $renderer,
     FacetResultsProvider $facetResultsProvider,
     CustomTranslations $customTranslations,
-    CurrentPageAnalyzer $pageAnalyzer
+    CurrentPageAnalyzer $pageAnalyzer,
   ) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->languageManager = $languageManager;
     $this->renderer = $renderer;
     $this->facetResultsProvider = $facetResultsProvider;
     $this->customTranslations = $customTranslations;
@@ -396,8 +403,11 @@ class StandardNodeFieldProcessor {
     $storage = $this->entityTypeManager->getStorage($target_type);
     $ents = $storage->loadMultiple($ids);
     $result = [];
-
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     foreach ($ents as $id => $ent) {
+      if ($ent->hasTranslation($langcode)) {
+        $ent = $ent->getTranslation($langcode);
+      }
       $title = $target_type === 'taxonomy_term'
         ? $ent->getName()
         : $ent->getTitle();

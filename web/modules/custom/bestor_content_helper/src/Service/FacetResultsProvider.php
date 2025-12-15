@@ -12,7 +12,7 @@ use Drupal\Core\Template\Attribute;
 
 class FacetResultsProvider {
 
-  protected $languageManager;
+  protected LanguageManagerInterface $languageManager;
 
   public function __construct(LanguageManagerInterface $languageManager) {
     $this->languageManager = $languageManager;
