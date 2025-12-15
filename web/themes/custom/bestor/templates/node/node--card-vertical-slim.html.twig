@@ -71,9 +71,12 @@
  */
 #}
 
-{% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'card_publication'}) %}
+
 {% set media %}
-  <img loading="lazy" src="{{ image_info.url }}" width="199" height="302" alt="{{ image_info.alt }}">
+  {% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'card_publication'}) %}
+  {% set img_url = image_info.url ? image_info.url : active_theme_path() ~ '/logo.svg' %}
+  {% set fallback_img = image_info.url ? '' : 'fallback-logo-bestor' %}
+  <img loading="lazy" src="{{ image_info.url }}" width="199" height="302" alt="{{ image_info.alt }}" class="{{fallback_img}}">
 {% endset %}
 {% set authors %}
   <ul>
@@ -91,5 +94,6 @@
   url: node.field_external_link.0.url,
   is_external_link: '1',
   attr_variant: 'horizontal',
+  c_card_utility_classes: ['bestor-img-wrapper', 'bestor-card-vertical-slim']
 }, with_context = false) }}
 </div>

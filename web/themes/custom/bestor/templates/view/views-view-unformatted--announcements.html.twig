@@ -23,8 +23,13 @@
   {% set grid_items = grid_items|merge([row.content]) %}
 {% endfor %}
 
+{% if view.display.pluginId == 'block' %}
+  {% set title = view.display.options.title %}
+{% endif %}
+
 {# Render de grid #}
 {{ include('jakarta:c-grid', {
+  title,
   grid_items,
   columns: 2,
   background_color: 'none',

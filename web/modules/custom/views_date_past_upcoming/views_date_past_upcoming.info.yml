@@ -1,0 +1,7 @@
+name: 'Views date: past/upcoming'
+type: module
+description: 'Provides a views field that calculates whether a date is in the future or the past..'
+package: 'Custom'
+core_version_requirement: ^10
+dependencies:
+  - drupal:views

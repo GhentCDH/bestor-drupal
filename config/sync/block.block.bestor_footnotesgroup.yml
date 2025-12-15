@@ -10,7 +10,7 @@ dependencies:
 id: bestor_footnotesgroup
 theme: bestor
 region: subcontent
-weight: 0
+weight: -7
 provider: null
 plugin: footnotes_group
 settings:

@@ -1,0 +1,19 @@
+<?php
+use Drupal\views\ViewExecutable;
+
+
+function views_date_past_upcoming_views_data() {
+  $data['views']['table']['group'] = t('Custom Global');
+  $data['views']['table']['join'] = [
+    '#global' => [],
+  ];
+
+  $data['views']['date_past_upcoming'] = [
+    'title' => t('Date Past/Upcoming'),
+    'help' => t('Calculates whether a date is upcoming or in the past.'),
+    'field' => [
+      'id' => 'date_past_upcoming',
+    ],
+  ];
+  return $data;
+}

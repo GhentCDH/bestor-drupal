@@ -30,3 +30,9 @@ display:
       empty:
         area_text_custom:
           content: "Nous n'avons pas de nouvelles publications pour le moment."
+  block_1:
+    display_options:
+      title: "Plus d'événements"
+  block_2:
+    display_options:
+      title: "Plus d'actualités"

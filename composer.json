@@ -67,6 +67,7 @@
         "drupal/views_ajax_history": "^1.8",
         "drupal/views_autocomplete_filters": "^2.0",
         "drupal/views_filters_summary": "^3.3",
+        "drupal/views_sort_expression": "^2.0",
         "drush/drush": "^12.5",
         "elasticsearch/elasticsearch": "^8.11"
     },

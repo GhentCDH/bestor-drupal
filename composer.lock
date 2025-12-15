@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5db875ce50504ce097ca43a6fadff78",
+    "content-hash": "31b55297c70b62ca5049f5f19ef0dc9a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4633,6 +4633,58 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/views_filters_summary",
                 "issues": "https://www.drupal.org/project/issues/views_filters_summary"
+            }
+        },
+        {
+            "name": "drupal/views_sort_expression",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/views_sort_expression.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_sort_expression-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "bfb2b25c6e4ffd127ebc13a88f78350c7dc653d5"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1715277488",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "charginghawk",
+                    "homepage": "https://www.drupal.org/user/2626341"
+                },
+                {
+                    "name": "hanoii",
+                    "homepage": "https://www.drupal.org/user/23157"
+                },
+                {
+                    "name": "jsheffers",
+                    "homepage": "https://www.drupal.org/user/674658"
+                }
+            ],
+            "description": "Allows you to define an expression of existing fields as a sorting element.",
+            "homepage": "https://www.drupal.org/project/views_sort_expression",
+            "support": {
+                "source": "https://git.drupalcode.org/project/views_sort_expression"
             }
         },
         {

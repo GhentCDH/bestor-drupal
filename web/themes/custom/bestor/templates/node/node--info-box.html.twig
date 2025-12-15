@@ -72,9 +72,12 @@
 #}
 
 
-{% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'info_box'}) %}
+
 {% set media %}
-  <img loading="lazy" src="{{ image_info.url }}" width="466" height="300" alt="{{ image_info.alt }}">
+  {% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'info_box'}) %}
+  {% set img_url = image_info.url ? image_info.url : active_theme_path() ~ '/logo.svg' %}
+  {% set fallback_img = image_info.url ? '' : 'fallback-logo-bestor' %}
+  <img loading="lazy" src="{{ img_url }}" width="466" height="300" alt="{{ image_info.alt }}" class="{{fallback_img}}">
 {% endset %}
 {% set link %}
   {{ include('jakarta:c-button', {

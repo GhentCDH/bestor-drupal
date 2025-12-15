@@ -94,9 +94,11 @@ module:
   user: 0
   views_ajax_history: 0
   views_autocomplete_filters: 0
+  views_date_past_upcoming: 0
   views_filters_summary: 0
   views_filters_summary_bef: 0
   views_filters_summary_search_api: 0
+  views_sort_expression: 0
   views_ui: 0
   workflows: 0
   menu_admin_per_menu: 1
