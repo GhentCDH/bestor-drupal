@@ -20,6 +20,7 @@ dependencies:
     - node.type.publication
     - node.type.story
   module:
+    - datetime
     - node
     - user
 _core:
@@ -186,7 +187,7 @@ display:
         type: some
         options:
           offset: 0
-          items_per_page: 6
+          items_per_page: 3
       exposed_form:
         type: basic
         options:
@@ -391,7 +392,7 @@ display:
         type: some
         options:
           offset: 0
-          items_per_page: 5
+          items_per_page: 3
       empty:
         area_text_custom:
           id: area_text_custom
@@ -568,7 +569,8 @@ display:
         filters: false
         filter_groups: false
       display_description: News
-      display_extenders: {  }
+      display_extenders:
+        ajax_history: {  }
       block_description: News
     cache_metadata:
       max-age: -1
@@ -589,7 +591,7 @@ display:
         type: some
         options:
           offset: 0
-          items_per_page: 5
+          items_per_page: 3
       empty:
         area_text_custom:
           id: area_text_custom
@@ -768,7 +770,8 @@ display:
         filters: false
         filter_groups: false
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        ajax_history: {  }
       block_description: Events
     cache_metadata:
       max-age: -1
@@ -894,6 +897,51 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_time_period_end_value:
+          id: field_time_period_end_value
+          table: node__field_time_period
+          field: field_time_period_end_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: '+1 day'
+            type: offset
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -918,7 +966,8 @@ display:
         filters: false
         filter_groups: false
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        ajax_history: {  }
       block_description: Publications
     cache_metadata:
       max-age: -1
@@ -1280,6 +1329,11 @@ display:
     display_plugin: page
     position: 5
     display_options:
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 6
       empty:
         area_text_custom:
           id: area_text_custom
@@ -1455,12 +1509,14 @@ display:
           view_mode: card_vertical
       defaults:
         empty: false
+        pager: false
         style: false
         row: false
         filters: false
         filter_groups: false
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        ajax_history: {  }
       path: home
     cache_metadata:
       max-age: -1

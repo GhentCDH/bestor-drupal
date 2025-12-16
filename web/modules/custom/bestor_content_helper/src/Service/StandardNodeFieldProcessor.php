@@ -11,6 +11,7 @@ use Drupal\bestor_content_helper\Service\CustomTranslations;
 use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\filter\Render\FilteredMarkup;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Service for analyzing and formatting node content.
@@ -19,6 +20,8 @@ use Drupal\Core\Language\LanguageManagerInterface;
  * calculating reading times, and formatting field values.
  */
 class StandardNodeFieldProcessor {
+
+   use StringTranslationTrait;
 
   protected EntityTypeManagerInterface $entityTypeManager;
   protected LanguageManagerInterface $languageManager;
@@ -68,73 +71,73 @@ class StandardNodeFieldProcessor {
    *   Element key.
    *
    * @return array|null
-   *   Configuration array with 'fields', 'label_key', 'icon', or NULL.
+   *   Configuration array with 'fields', 'label_override', 'icon', or NULL.
    */
   public function getElementToFieldMapping(string $element): ?array {
     $mapping = [
       'discipline' => [
         'fields' => ['field_discipline'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => '',
       ],
       'specialisation' => [
         'fields' => ['field_specialisation'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => '',
       ],
       'typology' => [
         'fields' => ['field_typology'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => '',
       ],
       'period' => [
         'fields' => ['field_date_start', 'field_date_end'],
-        'label_key' => 'lemma_key_period',
+        'label_override' => t('Period'),
         'icon' => '',
       ],
       'location' => [
         'fields' => ['field_municipality', 'field_country'],
-        'label_key' => 'lemma_key_location',
+        'label_override' => t('Location'),
         'icon' => 'marker',
       ],
       'birth_death' => [
         'fields' => ['field_date_start', 'field_municipality', 'field_date_end', 'field_end_municipality'],
-        'label_key' => 'lemma_key_birth_death',
+        'label_override' => t('Life'),
         'icon' => '',
       ],
       'birth' => [
         'fields' => ['field_date_start', 'field_municipality'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => 'birthdate',
       ],
       'death' => [
         'fields' => ['field_date_end', 'field_end_municipality'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => 'death',
       ],
       'inventor' => [
         'fields' => ['field_inventor'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => 'light',
       ],
       'creator' => [
         'fields' => ['field_creator'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => 'pen',
       ],
       'gender' => [
         'fields' => ['field_gender'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => '',
       ],
       'alt_names' => [
         'fields' => ['field_alternative_name'],
-        'label_key' => '',
+        'label_override' => '',
         'icon' => '',
       ],
       'linked_data' => [
         'fields' => ['field_wikidata_entry'],
-        'label_key' => 'lemma_linked_data',
+        'label_override' => t('See also'),
         'icon' => '',
       ],
     ];
@@ -682,19 +685,15 @@ class StandardNodeFieldProcessor {
    * @param NodeInterface $node
    *   The node (to get field definition).
    * @param array $element_definition
-   *   Element definition with 'label_key' and 'fields'.
+   *   Element definition with 'label_override' and 'fields'.
    *
    * @return string
    *   Translated label or field label as fallback.
    */
   protected function getElementLabel(NodeInterface $node, array $element_definition): string {
-    // 1. Try translation key if present.
-    if (!empty($element_definition['label_key'])) {
-      $translation = $this->customTranslations->get($element_definition['label_key']);
-
-      if ($translation !== $element_definition['label_key']) {
-        return $translation;
-      }
+    // 1. Try label override.
+    if (!empty($element_definition['label_override'])) {
+      return $element_definition['label_override'];
     }
 
     // 2. Fallback: use label of first field.
@@ -707,8 +706,8 @@ class StandardNodeFieldProcessor {
       }
     }
 
-    // 3. Last resort: return element key.
-    return $element_definition['label_key'] ?? '';
+    // 3. Last resort: return empty string.
+    return '';
   }
 
 
