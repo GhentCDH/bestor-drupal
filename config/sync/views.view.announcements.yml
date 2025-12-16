@@ -16,7 +16,6 @@ dependencies:
     - node
     - user
     - views_date_past_upcoming
-    - views_sort_expression
 id: announcements
 label: Announcements
 module: views
@@ -987,21 +986,16 @@ display:
           content: 'We currently have no scheduled events.'
           tokenize: false
       sorts:
-        views_sort_expression:
-          id: views_sort_expression
+        date_past_upcoming_sort:
+          id: date_past_upcoming_sort
           table: views
-          field: views_sort_expression
+          field: date_past_upcoming_sort
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: views_sort_expression
-          order: ASC
-          expose:
-            label: Expression
-            field_identifier: views_sort_expression
-          exposed: false
-          expression: "CASE\r\n  WHEN \"node__field_time_period\".\"field_time_period_end_value\" >= NOW() THEN\r\n    UNIX_TIMESTAMP(\"node__field_time_period\".\"field_time_period_end_value\")       -- Future items: ASC\r\n  ELSE\r\n    10000000000 - UNIX_TIMESTAMP(\"node__field_time_period\".\"field_time_period_end_value\")  -- Past items: DESC\r\nEND"
-          aggregate: 0
+          plugin_id: date_past_upcoming_sort
+          datetime_field_machinename: field_time_period
+          use_end_date: 1
         field_time_period_end_value:
           id: field_time_period_end_value
           table: node__field_time_period

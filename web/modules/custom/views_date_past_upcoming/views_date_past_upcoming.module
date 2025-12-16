@@ -15,5 +15,14 @@ function views_date_past_upcoming_views_data() {
       'id' => 'date_past_upcoming',
     ],
   ];
+
+  $data['views']['date_past_upcoming_sort'] = [
+    'title' => t('Date Past/Upcoming Sort'),
+    'help' => t('Sort by future dates first (ascending), then past dates (descending).'),
+    'sort' => [
+      'id' => 'date_past_upcoming_sort',
+    ],
+  ];
+
   return $data;
 }
