@@ -1,3 +1,3 @@
-administer bestor theme settings:
-  title: 'Administer Bestor theme settings'
-  description: 'Edit footer social media links and other theme settings.'
+administer bestor site settings:
+  title: 'Administer Bestor site settings'
+  description: 'Settings specific for the Bestor website.'

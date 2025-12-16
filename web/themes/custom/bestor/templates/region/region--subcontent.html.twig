@@ -28,7 +28,7 @@
       {% endfor %}
     {% endset %}
     {{ include('jakarta:c-lines-box', {
-      title: bestor('publications_title'),
+      title: 'Publications'|t,
       lines,
     }, with_context = false) }}
   {% endif %}
@@ -39,7 +39,7 @@
       
     {% if fns %}
       {{ include('jakarta:c-references', {
-        title: bestor('label_footnotes'),
+        title: 'Footnotes'|t,
         references: fns,
       }, with_context = false) }}
     {% endif %}
@@ -48,7 +48,7 @@
   {% set refs = bestor('field_values', null, 'field_references') %}
   {% if refs %}
     {{ include('jakarta:c-references', {
-      title: bestor('label_references'),
+      title: 'References'|t,
       references: refs,
     }, with_context = false) }}
   {% endif %}

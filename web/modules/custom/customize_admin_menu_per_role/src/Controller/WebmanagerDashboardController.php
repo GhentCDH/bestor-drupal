@@ -51,6 +51,19 @@ class WebmanagerDashboardController extends ControllerBase {
       ],
     ];
 
+    // Menus and footer block
+    $blocks['menu_footer'] = [
+      '#theme' => 'admin_block',
+      '#attributes' => ['class' => ['admin-block', 'admin-block--menu-and-footer']],
+      '#block' => [
+        'title' => $this->t('Menus and footer'),
+        'content' => $this->buildLinks([
+          'Administer main menu' => ['entity.menu.edit_form', ['menu' => 'main']],
+          "Manage partner logos in footer" => 'view.media.page_1'
+        ]),
+      ],
+    ];
+
     // Site config block
     $blocks['config'] = [
       '#theme' => 'admin_block',
@@ -64,7 +77,6 @@ class WebmanagerDashboardController extends ControllerBase {
           'User interface translation' => 'locale.translate_page',
           'Configuration translation' => 'config_translation.mapper_list',
           'URL aliases' => 'entity.path_alias.collection',
-          'Administer main menu' => ['entity.menu.edit_form', ['menu' => 'main']]
         ]),
       ],
     ];

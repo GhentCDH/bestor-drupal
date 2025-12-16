@@ -76,7 +76,7 @@
   {{ include('jakarta:c-tag', {
     attr_variant: 'corner_down',
     color: internal ? 'primary' : 'grey',
-    content: (node.type.entity.label|lower|capitalize) ~ (internal ? ' ' ~ bestor('from_label') ~ ' Bestor' : ''),
+    content: (node.type.entity.label|lower|capitalize) ~ (internal ? ' ' ~ 'from'|t ~ ' Bestor' : ''),
   }, with_context = false) }}
 {% endset %}
 

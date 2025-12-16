@@ -16,7 +16,7 @@ class ThemeSettingsAccess implements AccessInterface {
       return AccessResult::allowed()->cachePerPermissions();
     }
     
-    if ($theme === 'bestor' && $account->hasPermission('administer bestor theme settings')) {
+    if ($theme === 'bestor' && $account->hasPermission('administer bestor site settings')) {
       return AccessResult::allowed()->cachePerPermissions();
     }
     

@@ -14,7 +14,6 @@
 .c-page-header__inner .menu--main > .menu .menu__item--expanded > span::after {
   content: "\e902";
   font-family: icons, sans-serif !important;
-  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;

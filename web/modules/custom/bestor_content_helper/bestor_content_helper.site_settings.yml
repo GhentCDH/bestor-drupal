@@ -1,0 +1,59 @@
+newsletter_url:
+  label: 'Newsletter URL'
+  description: 'URL where users can subscribe to the newsletter. Leave empty to hide the newsletter button in the footer.'
+  default_value: ''
+
+facebook_url:
+  label: 'Facebook URL'
+  description: 'URL of the Facebook page. Leave empty to hide the Facebook icon in the footer.'
+  default_value: ''
+
+instagram_url:
+  label: 'Instagram URL'
+  description: 'URL of the Instagram page. Leave empty to hide the Instagram icon in the footer.'
+  default_value: ''
+
+x_url:
+  label: 'X (Twitter) URL'
+  description: 'URL of the X (formerly Twitter) page. Leave empty to hide the X icon in the footer.'
+  default_value: ''
+
+linkedin_url:
+  label: 'LinkedIn URL'
+  description: 'URL of the LinkedIn page. Leave empty to hide the LinkedIn icon in the footer.'
+  default_value: ''
+
+bluesky_url:
+  label: 'Bluesky URL'
+  description: 'URL of the Bluesky page. Leave empty to hide the Bluesky icon in the footer.'
+  default_value: ''
+
+footer_disclaimer:
+  label: 'Footer Disclaimer'
+  description: 'Legal or informational text displayed in the footer.'
+  default_value: ''
+
+searchbanner_title:
+  label: 'Search Banner Title'
+  description: 'Heading text displayed above the search box on the homepage.'
+  default_value: 'Search our content'
+
+searchbanner_subtitle_link:
+  label: 'Search Banner Link Text'
+  description: 'Clickable link text displayed below the search box on the homepage.'
+  default_value: 'advanced search'
+
+searchbanner_subtitle_prefix:
+  label: 'Search Banner Link Prefix'
+  description: 'Text displayed before the clickable link below the search box.'
+  default_value: 'Looking for something specific? Try our '
+
+searchbanner_subtitle_suffix:
+  label: 'Search Banner Link Suffix'
+  description: 'Text displayed after the clickable link below the search box.'
+  default_value: '.'
+
+default_author:
+  label: 'Default Author'
+  description: 'Author name displayed when no specific author is assigned to content.'
+  default_value: 'Editorial Team'

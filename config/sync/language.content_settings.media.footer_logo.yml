@@ -1,0 +1,11 @@
+uuid: e66a2f88-80d7-42b6-8bbc-a2e2ab7ec76a
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.footer_logo
+id: media.footer_logo
+target_entity_type_id: media
+target_bundle: footer_logo
+default_langcode: zxx
+language_alterable: false

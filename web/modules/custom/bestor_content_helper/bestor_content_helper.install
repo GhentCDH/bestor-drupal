@@ -1,0 +1,49 @@
+<?php
+
+use Symfony\Component\Yaml\Yaml;
+
+function bestor_content_helper_install() {
+  _bestor_site_settings_sync();
+}
+
+function bestor_content_helper_uninstall() {
+  $storage = \Drupal::entityTypeManager()->getStorage('bestor_site_setting');
+  $entities = $storage->loadMultiple();
+  if ($entities) {
+    $storage->delete($entities);
+  }
+}
+
+
+function _bestor_site_settings_sync() {
+  $path = \Drupal::service('extension.list.module')
+    ->getPath('bestor_content_helper') . '/bestor_content_helper.site_settings.yml';
+
+  if (!file_exists($path)) {
+    return;
+  }
+
+  $settings = Yaml::parse(file_get_contents($path));
+  if (empty($settings)) {
+    return;
+  }
+
+  $storage = \Drupal::entityTypeManager()->getStorage('bestor_site_setting');
+
+  foreach ($settings as $id => $definition) {
+    try {
+      $entity = $storage->load($id);
+      if (!$entity) {
+        $storage->create([
+          'id' => $id,
+          'label' => $definition['label'] ?? $id,
+          'description' => $definition['description'] ?? '',
+          'value' => $definition['default_value'] ?? '',
+        ])->save();
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('bestor_content_helper')->error('Error: @msg', ['@msg' => $e->getMessage()]);
+    }
+  }
+}

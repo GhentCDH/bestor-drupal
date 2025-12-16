@@ -136,7 +136,7 @@
       {{toc}}
     {% endset %}
     {{ include('jakarta:c-dropdown', {
-      toggle: bestor('label_toc'),
+      toggle: 'Table of contents'|t,
       dropdown_items,
     }, with_context = false) }}
   {% endset %}
@@ -166,8 +166,17 @@
             {% endfor %}
           </ul>
         {% endset %}
+        {% set related_titles = {
+          'story': 'Related stories'|t,
+          'person': 'Related persons'|t,
+          'institution': 'Related institutions'|t,
+          'place': 'Related places'|t,
+          'concept': 'Related concepts'|t,
+          'document': 'Related documents'|t,
+          'instrument': 'Related instruments'|t
+        } %}
         {{ include('jakarta:c-related-items', {
-          title: bestor('title_related_' ~ rel_data.title),
+          title: related_titles[rel_data.title] ,
           items,
         }, with_context = false) }}
       {% endif %}

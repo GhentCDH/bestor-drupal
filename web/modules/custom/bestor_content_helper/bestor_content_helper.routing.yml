@@ -5,3 +5,22 @@ bestor_content_helper.bestor_translation_helper_form:
     _title: 'Custom Translations'
   requirements:
     _permission: 'translate interface'
+entity.bestor_site_setting.collection:
+  path: '/admin/config/site/bestor-settings'
+  defaults:
+    _entity_list: 'bestor_site_setting'
+    _title: 'Site Settings'
+  requirements:
+    _permission: 'administer bestor site settings'
+
+entity.bestor_site_setting.edit_form:
+  path: '/admin/config/site/bestor-settings/{bestor_site_setting}/edit'
+  defaults:
+    _entity_form: 'bestor_site_setting.edit'
+    _title: 'Edit Setting'
+  requirements:
+    _permission: 'administer bestor site settings'
+  options:
+    parameters:
+      bestor_site_setting:
+        type: entity:bestor_site_setting

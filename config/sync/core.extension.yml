@@ -89,9 +89,11 @@ module:
   term_reference_change: 0
   text: 0
   toc_js: 0
+  token: 0
   toolbar: 0
   twig_tweak: 0
   user: 0
+  views_add_button: 0
   views_ajax_history: 0
   views_autocomplete_filters: 0
   views_date_past_upcoming: 0

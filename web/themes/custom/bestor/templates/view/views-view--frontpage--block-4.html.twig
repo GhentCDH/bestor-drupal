@@ -84,7 +84,7 @@
     {% endset %}
     
     {{ include('jakarta:c-lines-box', {
-      title: bestor('recently_updated_title'),
+      title: 'Recently updated'|t,
       lines: empty_content,
     }, with_context = false) }}
   {% endif %}

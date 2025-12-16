@@ -277,34 +277,16 @@
    ============================================ */
 .page-footer-logos {
   background: white;
-  padding: 2rem 0;
-}
-
-.page-footer-logos .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 3rem;
-  flex-wrap: wrap;
+  padding: 1rem 0;
 }
 
 .page-footer-logos img {
-  max-height: 60px;
+  height: 50px;
   width: auto;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.page-footer-logos img:hover {
-  opacity: 1;
 }
 
 @media (max-width: 640px) {
-  .page-footer-logos .container {
-    gap: 2rem;
-  }
-  
   .page-footer-logos img {
-    max-height: 50px;
+    max-height: 40px;
   }
 }

@@ -64,6 +64,7 @@
         "drupal/thex": "^10.0",
         "drupal/toc_js": "^3.4@RC",
         "drupal/twig_tweak": "^3.4",
+        "drupal/views_add_button": "^2.0",
         "drupal/views_ajax_history": "^1.8",
         "drupal/views_autocomplete_filters": "^2.0",
         "drupal/views_filters_summary": "^3.3",

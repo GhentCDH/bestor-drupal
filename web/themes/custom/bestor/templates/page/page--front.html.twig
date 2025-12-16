@@ -45,7 +45,7 @@
     html_tag: 'a',
     attr_variant: 'default',
     color: 'primary',
-    title: bestor('more_news_label'),
+    title: 'More news'|t,
     url: path('view.announcements.page_2')
   }, with_context = false) }}
 {% endset %}
@@ -54,7 +54,7 @@
     html_tag: 'a',
     attr_variant: 'default',
     color: 'primary',
-    title: bestor('more_events_label'),
+    title: 'More events'|t,
     url: path('view.announcements.page_3')
   }, with_context = false) }}
 {% endset %}
@@ -63,26 +63,26 @@
     html_tag: 'a',
     attr_variant: 'default',
     color: 'primary',
-    title: bestor('more_publications_label'),
+    title: 'More publications'|t,
     url: path('view.announcements.page_4')
   }, with_context = false) }}
 {% endset %}
 {% set tabs %}
   {% set tab_items = {
     'tab': {
-      'title': bestor('news_title'),
+      'title': 'News'|t,
       'id': 'news',
       'content': drupal_view('frontpage', 'block_1'),
       'cta': cta_news
     },
     'tab_2': {
-      'title': bestor('events_title'),
+      'title':'Events'|t,
       'id': 'events',
       'content': drupal_view('frontpage', 'block_2'),
       'cta': cta_events      
     },
     'tab_3': {
-      'title': bestor('publications_title'),
+      'title': 'Publications'|t,
       'id': 'publications',
       'content': drupal_view('frontpage', 'block_3'),
       'cta': cta_publications
@@ -120,7 +120,7 @@
           footnote: bestor('banner_subtitle')
         })}}
         {{ include('jakarta:c-announcements', {
-          title: bestor('announcements_title'),
+          title: 'Announcements'|t,
           tabs,
           sidebar: drupal_view('frontpage', 'block_5'),
         }, with_context = false) }}

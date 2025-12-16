@@ -41,7 +41,7 @@
   {% if author_names %}
     {% set link_settings = {'format': 'string', 'link_type': 'facet', 'view_id': 'database', 'view_display': 'page_1'} %}
     {% set meta %}
-      <p>{{bestor('author_label')}} / {{bestor('field_values', node, 'field_author', link_settings)}}</p>
+      <p>{{'Author'|t}} / {{bestor('field_values', node, 'field_author', link_settings)}}</p>
     {% endset %}
   {% endif %}
 {% else %}

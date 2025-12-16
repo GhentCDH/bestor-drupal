@@ -1,0 +1,13 @@
+uuid: 7e05e606-9c0a-4c4f-aeaf-e223207af2e3
+langcode: en
+status: true
+dependencies: {  }
+id: footer_logo
+label: 'Logo partners'
+description: ''
+source: image
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: field_media_image
+field_map: {  }

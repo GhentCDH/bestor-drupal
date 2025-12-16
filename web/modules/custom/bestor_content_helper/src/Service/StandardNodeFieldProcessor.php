@@ -312,7 +312,7 @@ class StandardNodeFieldProcessor {
         return NULL;
       }
     }
-
+    dpm('test');
     $is_single = is_string($field_names);
     $field_names = (array) $field_names;
 

@@ -71,8 +71,8 @@
  */
 #}
 
-{% set author = bestor('author_label') ~ ': ' ~ (bestor('field_values', node, 'field_author', {'format': 'string'})|default(bestor('default_author'))) %}
-{% set date = bestor('updated_label') ~ ': ' ~ node.changed.value|date('d.m.Y') %}
+{% set author = 'Author'|t ~ ': ' ~ (bestor('field_values', node, 'field_author', {'format': 'string'})|default(bestor('default_author'))) %}
+{% set date = 'Updated'|t ~ ': ' ~ node.changed.value|date('d.m.Y') %}
 
 <div>
   {{ include('jakarta:c-line', {
