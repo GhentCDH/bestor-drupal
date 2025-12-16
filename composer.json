@@ -157,6 +157,7 @@
         }
     },
     "require-dev": {
-        "drupal/devel": "^5.3"
+        "drupal/devel": "^5.3",
+        "drupal/devel_entity_updates": "^5.0"
     }
 }

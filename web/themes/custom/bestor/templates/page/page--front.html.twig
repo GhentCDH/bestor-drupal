@@ -40,6 +40,7 @@
  * @see html.html.twig
  */
 #}
+
 {% set cta_news %}
   {{ include('jakarta:c-button', {
     html_tag: 'a',
@@ -114,10 +115,10 @@
       {% endif %}
       <div class="page-content">
         {{ include('jakarta:c-search', {
-          title: bestor('homepage_banner_title'),
+          title: bestor('site_setting', 'searchbanner_title'),
           form: drupal_entity('block', 'bestor_databasesearch'), 
           links: bestor('facet_buttons', 'database', 'facets_tax_discipline__int', 'discipline', 'page_1'),
-          footnote: bestor('banner_subtitle')
+          footnote: bestor('search_tagline')
         })}}
         {{ include('jakarta:c-announcements', {
           title: 'Announcements'|t,

@@ -90,6 +90,7 @@ dependencies:
     - taxonomy.vocabulary.relationtype_self__stor_stor
     - taxonomy.vocabulary.specialisation
   module:
+    - bestor_content_helper
     - block_content
     - config_perms
     - config_translation
@@ -128,6 +129,7 @@ permissions:
   - 'access toolbar'
   - 'access user profiles'
   - 'access webmanager dashboard'
+  - 'administer bestor site settings'
   - 'administer main menu items'
   - 'administer nodes'
   - 'administer url aliases'

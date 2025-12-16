@@ -1,42 +1,66 @@
 newsletter_url:
   label: 'Newsletter URL'
   description: 'URL where users can subscribe to the newsletter. Leave empty to hide the newsletter button in the footer.'
+  setting_group: 'footer_newsletter'
 facebook_url:
   label: 'Facebook URL'
   description: 'URL of the Facebook page. Leave empty to hide the Facebook icon in the footer.'
+  setting_group: 'footer_socials'
 instagram_url:
   label: 'Instagram URL'
   description: 'URL of the Instagram page. Leave empty to hide the Instagram icon in the footer.'
+  setting_group: 'footer_socials'
 x_url:
   label: 'X (Twitter) URL'
   description: 'URL of the X (formerly Twitter) page. Leave empty to hide the X icon in the footer.'
+  setting_group: 'footer_socials'
 linkedin_url:
   label: 'LinkedIn URL'
   description: 'URL of the LinkedIn page. Leave empty to hide the LinkedIn icon in the footer.'
+  setting_group: 'footer_socials'
 bluesky_url:
   label: 'Bluesky URL'
   description: 'URL of the Bluesky page. Leave empty to hide the Bluesky icon in the footer.'
+  setting_group: 'footer_socials'
 footer_disclaimer:
   label: 'Footer Disclaimer'
   description: 'Legal or informational text displayed in the footer.'
   default_value: "Bestor is a project by RASAB, with the support of BELSPO and Comité National de Logique, d'Histoire et de Philosophie des Sciences - Nationaal Comité voor Logica, Geschiedenis en Filosofie van de Wetenschappen."
+  default_value_nl: "Bestor is een realisatie van RASAB, met de steun van Belspo en Nationaal Comité voor Logica, Geschiedenis en Filosofie van de Wetenschappen."
+  default_value_fr: "Bestor est une réalisation de RASAB, avec le soutien de Belspo et du Comité National de Logique, d'Histoire et de Philosophie des Sciences."
+  setting_group: 'footer_disclaimer'
 searchbanner_title:
   label: 'Search Banner Title'
   description: 'Heading text displayed above the search box on the homepage.'
-  default_value: 'Search our content'
+  default_value: 'Search in our database'
+  default_value_nl: "Zoek in onze database"
+  default_value_fr: "Recherchez dans notre base de données"
+  setting_group: 'search_banner'
 searchbanner_subtitle_prefix:
   label: 'Search Banner Link Prefix'
   description: 'Text displayed before the clickable link below the search box.'
-  default_value: 'Looking for something specific? Try our '
+  default_value: 'Use the'
+  default_value_nl: "Maak gebruik van de"
+  default_value_fr: "Utilisez la"
+  setting_group: 'search_banner'
 searchbanner_subtitle_link:
   label: 'Search Banner Link Text'
   description: 'Clickable link text displayed below the search box on the homepage.'
-  default_value: 'advanced search'
+  default_value: 'advanced search function with numerous parameters'
+  default_value_nl: "uitgebreide zoekfunctie met talloze parameters"
+  default_value_fr: "fonction de recherche avancée avec de nombreux paramètres"
+  setting_group: 'search_banner'
 searchbanner_subtitle_suffix:
   label: 'Search Banner Link Suffix'
   description: 'Text displayed after the clickable link below the search box.'
-  default_value: '.'
+  default_value: 'to find a specific keyword.'
+  default_value_nl: "pour trouver un mot-clé spécifique."
+  default_value_fr: "om een specfiek trefwoord te vinden."
+  setting_group: 'search_banner'
 default_author:
   label: 'Default Author'
-  description: 'Author name displayed when no specific author is assigned to content.'
+  description: 'Author name displayed when no specific author is assigned to content. Fill this name in English, and translate this string afterwards via Interface Translation!'
   default_value: 'Editorial Team'
+  default_value_nl: "Bestor redactie"
+  default_value_fr: "Rédaction Bestor"
+  setting_group: 'general_site_defaults'

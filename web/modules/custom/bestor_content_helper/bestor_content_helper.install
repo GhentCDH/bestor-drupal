@@ -39,6 +39,9 @@ function _bestor_site_settings_sync() {
           'label' => $definition['label'] ?? $id,
           'description' => $definition['description'] ?? '',
           'value' => $definition['default_value'] ?? '',
+          'value_nl' => $definition['default_value_nl'] ?? '',
+          'value_fr' => $definition['default_value_fr'] ?? '',
+          'setting_group' => $definition['setting_group'] ?? ''
         ])->save();
       }
     }

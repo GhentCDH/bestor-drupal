@@ -13,16 +13,15 @@ services:
       - '@language_manager'
       - '@renderer'
       - '@bestor_content_helper.facet_results_provider'
-      - '@bestor_content_helper.custom_translations'
       - '@bestor_content_helper.current_page_analyzer'    
   bestor_content_helper.node_language_analyzer:
     class: Drupal\bestor_content_helper\Service\NodeLanguageAnalyzer
     arguments:
       - '@bestor_content_helper.node_content_analyzer'
-  bestor_content_helper.custom_translations:
-    class: Drupal\bestor_content_helper\Service\CustomTranslations
+  bestor_content_helper.site_setting_manager:
+    class: Drupal\bestor_content_helper\Service\SiteSettingManager
     arguments:
-      - '@config.factory'
+      - '@entity_type.manager'
       - '@language_manager'
   bestor_content_helper.facet_results_provider:
     class: Drupal\bestor_content_helper\Service\FacetResultsProvider
@@ -32,7 +31,7 @@ services:
     class: Drupal\bestor_content_helper\TwigExtension\CustomTranslationExtension
     arguments:
       - '@language_manager'
-      - '@bestor_content_helper.custom_translations'
+      - '@bestor_content_helper.site_setting_manager'
       - '@bestor_content_helper.facet_results_provider' 
       - '@bestor_content_helper.current_page_analyzer'   
       - '@bestor_content_helper.node_content_analyzer'
@@ -45,7 +44,3 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@file_url_generator'
-  bestor_content_helper.route_subscriber:
-    class: Drupal\bestor_content_helper\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }

@@ -1,6 +1,5 @@
 <?php
 
-
 function bestor_theme_suggestions_node_alter(array &$suggestions, array $variables) {
     $nodeContentHelper =  \Drupal::service('bestor_content_helper.node_content_analyzer');
     if ($variables['elements']['#view_mode'] === 'full' && $nodeContentHelper->isLemma($variables['elements']['#node']->getType())) { 
@@ -8,95 +7,7 @@ function bestor_theme_suggestions_node_alter(array &$suggestions, array $variabl
     }
 }
 
-function bestor_content_helper_preprocess_block(&$variables) {
-  if ($variables['plugin_id'] !== 'footnotes_group') {
-    return;
-  }
-  $footnotes_group = \Drupal::service('footnotes.group');
-  $variables['footnote_count'] = $footnotes_group->count();
-}
 
-
-function bestor_content_helper_preprocess_region(&$variables) {
-  if ($variables['region'] == 'subcontent' && \Drupal::hasService('footnotes.group')) {
-    $variables['footnote_count'] = \Drupal::service('footnotes.group')->count();
-  }
-}
-
-
-/**
- * Implements hook_form_system_theme_settings_alter().
- */
-function bestor_form_system_theme_settings_alter(&$form, &$form_state) {
-  $form['footer_settings'] = [
-    '#type' => 'details',
-    '#title' => t('Footer Settings'),
-    '#open' => TRUE,
-  ];
-  
-  // Newsletter
-  $form['footer_settings']['newsletter'] = [
-    '#type' => 'details',
-    '#title' => t('Newsletter'),
-    '#open' => TRUE,
-  ];
-  
-  $form['footer_settings']['newsletter']['newsletter_url'] = [
-    '#type' => 'url',
-    '#title' => t('Newsletter Subscribe URL'),
-    '#default_value' => theme_get_setting('newsletter_url'),
-    '#description' => t('Leave empty to hide the newsletter button'),
-  ];
-  
-  // Social media
-  $form['footer_settings']['social_media'] = [
-    '#type' => 'details',
-    '#title' => t('Social Media Links'),
-    '#open' => TRUE,
-  ];
-  
-  $social_platforms = [
-    'facebook' => 'Facebook',
-    'instagram' => 'Instagram',
-    'x' => 'X (Twitter)',
-    'linkedin' => 'LinkedIn',
-    'bluesky' => 'Bluesky',
-  ];
-  
-  foreach ($social_platforms as $platform => $label) {
-    $form['footer_settings']['social_media']['social_' . $platform] = [
-      '#type' => 'url',
-      '#title' => $label . ' URL',
-      '#default_value' => theme_get_setting('social_' . $platform),
-      '#description' => t('Leave empty to hide this icon'),
-    ];
-  }
-}
-
-/**
- * Implements template_preprocess_page().
- */
-function bestor_preprocess_page(&$variables) {
-  // Maak alle footer settings beschikbaar
-  $variables['footer_newsletter_url'] = theme_get_setting('newsletter_url');
-  
-  // Social media URLs
-  $variables['footer_social_facebook'] = theme_get_setting('social_facebook');
-  $variables['footer_social_instagram'] = theme_get_setting('social_instagram');
-  $variables['footer_social_x'] = theme_get_setting('social_x');
-  $variables['footer_social_linkedin'] = theme_get_setting('social_linkedin');
-  $variables['footer_social_bluesky'] = theme_get_setting('social_bluesky');
-}
-
-
-function bestor_form_database_full_text_search_form_alter(&$form, &$form_state, $form_id) {
-  unset($form['form_build_id']);
-  unset($form['form_id']);
-}
-
-/**
- * Implements hook_theme_suggestions_form_element_alter().
- */
 function bestor_theme_suggestions_select_alter(array &$suggestions, array $variables) {
   // Target author exposed filter
   if (isset($variables['element']['#name']) && 
@@ -108,9 +19,4 @@ function bestor_theme_suggestions_select_alter(array &$suggestions, array $varia
   ) {
     $suggestions[] = 'select__author_dropdown';
   }
-}
-
-
-function bestor_preprocess_views_view(&$variables) {
- 
 }

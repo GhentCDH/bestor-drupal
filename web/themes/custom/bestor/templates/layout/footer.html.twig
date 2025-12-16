@@ -30,7 +30,7 @@
         
         {# RT: Newsletter button (F2) #}
         <div class="page-footer-col page-footer-col--newsletter">
-          {{ include('@bestor/components/footer-newsletter.html.twig', {}, with_context = true) }}
+          {{ include('@bestor/layout/footer-newsletter.html.twig', {}, with_context = true) }}
           {% if footer_2 %} {{ footer_2 }} {% endif %}
         </div>
         
@@ -55,7 +55,7 @@
         
         {# RB: Social media (F4) #}
         <div class="page-footer-col page-footer-col--social">
-          {{ include('@bestor/components/footer-socials.html.twig', {}, with_context = true) }}
+          {{ include('@bestor/layout/footer-socials.html.twig', {}, with_context = true) }}
           {% if footer_4 %} {{ footer_4 }} {% endif %}
         </div>
       </div>

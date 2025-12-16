@@ -2,7 +2,7 @@
 
 namespace Drupal\bestor_content_helper\TwigExtension;
 
-use Drupal\bestor_content_helper\Service\CustomTranslations;
+use Drupal\bestor_content_helper\Service\SiteSettingManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -20,7 +20,7 @@ use Drupal\filter\Render\FilteredMarkup;
 class CustomTranslationExtension extends AbstractExtension {
 
   protected LanguageManagerInterface $languageManager;
-  protected CustomTranslations $customTranslations;
+  protected SiteSettingManager $siteSettingManager;
   protected FacetResultsProvider $facetResultsProvider;
   protected CurrentPageAnalyzer $pageAnalyzer;
   protected NodeContentAnalyzer $nodeContentAnalyzer;
@@ -32,7 +32,7 @@ class CustomTranslationExtension extends AbstractExtension {
    */
   public function __construct(
     LanguageManagerInterface $languageManager, 
-    CustomTranslations $customTranslations,
+    SiteSettingManager $siteSettingManager,
     FacetResultsProvider $facetResultsProvider,
     CurrentPageAnalyzer $pageAnalyzer,
     NodeContentAnalyzer $nodeContentAnalyzer,
@@ -40,7 +40,7 @@ class CustomTranslationExtension extends AbstractExtension {
     MediaProcessor $mediaProcessor,
   ) {
     $this->languageManager = $languageManager;
-    $this->customTranslations = $customTranslations;
+    $this->siteSettingManager = $siteSettingManager;
     $this->facetResultsProvider = $facetResultsProvider;
     $this->pageAnalyzer = $pageAnalyzer;
     $this->nodeContentAnalyzer = $nodeContentAnalyzer;
@@ -48,7 +48,7 @@ class CustomTranslationExtension extends AbstractExtension {
     $this->mediaProcessor = $mediaProcessor;
   }
 
-    /**
+  /**
    * {@inheritdoc}
    */
   public function getFunctions(): array {
@@ -65,33 +65,14 @@ class CustomTranslationExtension extends AbstractExtension {
   public function bestor(string $type, ...$args): Markup|FilteredMarkup|array|string|null {
     return match($type) {
       'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
+      'media_info' => $this->mediaProcessor->getEntityMediaInfo(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
       'page_variant' => $this->pageAnalyzer->getPageVariant(...$args),
-      'media_info' => $this->mediaProcessor->getEntityMediaInfo(...$args),
       'field_values' => $this->standardFieldProcessor->getFieldValues(...$args),
       'lemma_key_data' => $this->standardFieldProcessor->getLemmaKeyData(...$args),
-      default => $this->translate($type, ...$args),
+      'search_tagline' =>  $this->siteSettingManager->getSearchTagline(...$args),
+      'site_setting' => $this->siteSettingManager->getBestorSiteSetting(...$args),
+      default => NULL,
     };
-  }
-
-
-  /**
-   * Get custom translation.
-   */
-  protected function translate(string $key, ?string $langcode = NULL): Markup {
-    if ($langcode == NULL) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    }
-    if ($key === 'banner_subtitle') {
-      return Markup::create($this->customTranslations->generateBannerSubtitleHtml($langcode));
-    }
-    return Markup::create($this->customTranslations->get($key, $langcode));
-  }
-
-  /**
-   * Get facet results as links render array.
-   */
-  protected function getFacetLinks(string $view_name, string $filter_id, string $facet_url_id, string $display_id = 'default'): array {
-    return $this->facetResultsProvider->getFacetResultLinks($view_name, $filter_id, $facet_url_id, $display_id);
   }
 }

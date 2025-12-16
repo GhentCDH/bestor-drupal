@@ -4,13 +4,16 @@
  * Newsletter button component for footer.
  */
 #}
-{% if footer_newsletter_url %}
+
+{% set url = bestor('site_setting', 'newsletter_url') %}
+
+{% if url %}
   {{ include('jakarta:c-button', {
     html_tag: 'a',
     attr_variant: 'default',
     color: 'white',
     title: 'Subscribe to our newsletter'|t ,
-    url: footer_newsletter_url,
+    url: bestor('site_setting', 'newsletter_url'),
     target: '_blank',
     attributes: create_attribute().setAttribute('target', '_blank').setAttribute('rel', 'noopener'),
   }, with_context = false) }}

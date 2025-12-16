@@ -97,55 +97,16 @@ webmanager_dashboard.site_cache:
   route_name: system.performance_settings
   menu_name: web-manager-admin
   parent: webmanager_dashboard.config
-  weight: -59
-
-# 5b. Maintenance mode
-webmanager_dashboard.maintenance_mode:
-  title: 'Maintenance mode'
-  route_name: system.site_maintenance_mode
-  menu_name: web-manager-admin
-  parent: webmanager_dashboard.config
   weight: -58
 
-# 5c. Regional settings
-webmanager_dashboard.regional_settings:
-  title: 'Regional settings'
-  route_name: system.regional_settings
-  menu_name: web-manager-admin
-  parent: webmanager_dashboard.config
-  weight: -57
 
-# 5d. UI Translations
-webmanager_dashboard.bestor_custom_translations:
-  title: 'Bestor custom translations'
-  route_name: bestor_content_helper.bestor_translation_helper_form
-  menu_name: web-manager-admin
-  parent: webmanager_dashboard.config
-  weight: -56
-
-# 5e. UI Translations
+# 5b. UI Translations
 webmanager_dashboard.ui_translation:
   title: 'User interface translation'
   route_name: locale.translate_page
   menu_name: web-manager-admin
   parent: webmanager_dashboard.config
-  weight: -55
-
-# 5f. Config Translations
-webmanager_dashboard.config_translation:
-  title: 'Configuration translation'
-  route_name: config_translation.mapper_list
-  menu_name: web-manager-admin
-  parent: webmanager_dashboard.config
-  weight: -54
-
-# 5g. Url Aliases
-webmanager_dashboard.url_aliases:
-  title: 'URL aliases'
-  route_name: entity.path_alias.collection
-  menu_name: web-manager-admin
-  parent: webmanager_dashboard.config
-  weight: -53
+  weight: -56
   
 
 ###################################

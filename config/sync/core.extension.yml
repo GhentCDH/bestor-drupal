@@ -25,6 +25,7 @@ module:
   datetime: 0
   datetime_range: 0
   dblog: 0
+  devel_entity_updates: 0
   ds: 0
   dynamic_page_cache: 0
   editor: 0

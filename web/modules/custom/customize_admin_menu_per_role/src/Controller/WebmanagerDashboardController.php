@@ -77,6 +77,7 @@ class WebmanagerDashboardController extends ControllerBase {
           'User interface translation' => 'locale.translate_page',
           'Configuration translation' => 'config_translation.mapper_list',
           'URL aliases' => 'entity.path_alias.collection',
+          'Bestor specific site settings' => 'entity.bestor_site_setting.collection',
         ]),
       ],
     ];

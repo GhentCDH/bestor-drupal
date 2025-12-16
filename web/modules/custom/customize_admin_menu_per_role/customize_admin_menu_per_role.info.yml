@@ -10,3 +10,4 @@ dependencies:
   - drupal:menu_link_content
   - drupal:user
   - config_views:config_views
+  - bestor_content_helper:bestor_content_helper

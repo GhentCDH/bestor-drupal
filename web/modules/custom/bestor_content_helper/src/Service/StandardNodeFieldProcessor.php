@@ -7,7 +7,6 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\bestor_content_helper\Service\CustomTranslations;
 use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\filter\Render\FilteredMarkup;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -27,7 +26,6 @@ class StandardNodeFieldProcessor {
   protected LanguageManagerInterface $languageManager;
   protected RendererInterface $renderer;
   protected FacetResultsProvider $facetResultsProvider;
-  protected CustomTranslations $customTranslations;
   protected CurrentPageAnalyzer $pageAnalyzer;
 
 
@@ -42,8 +40,6 @@ class StandardNodeFieldProcessor {
    *   The renderer service.
    * @param FacetResultsProvider $facetResultsProvider
    *   The facet results provider service.
-   * @param CustomTranslations $customTranslations
-   *   The custom translations service.
    * @param CurrentPageAnalyzer $pageAnalyzer
    *   The current page analyzer.
    */
@@ -52,14 +48,12 @@ class StandardNodeFieldProcessor {
     LanguageManagerInterface $languageManager,
     RendererInterface $renderer,
     FacetResultsProvider $facetResultsProvider,
-    CustomTranslations $customTranslations,
     CurrentPageAnalyzer $pageAnalyzer,
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $languageManager;
     $this->renderer = $renderer;
     $this->facetResultsProvider = $facetResultsProvider;
-    $this->customTranslations = $customTranslations;
     $this->pageAnalyzer = $pageAnalyzer;
   }
 

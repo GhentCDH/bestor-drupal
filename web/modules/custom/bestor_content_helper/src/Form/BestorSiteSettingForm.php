@@ -19,29 +19,44 @@ class BestorSiteSettingForm extends ContentEntityForm {
     
     $form['info']['setting_label'] = [
       '#type' => 'item',
-      '#title' => $this->t('Setting'),
-      '#markup' => '<strong>' . $entity->label() . '</strong>',
+      '#markup' => '<strong>' . $entity->label() . '</strong> (id: ' . $entity->id() . ')',
     ];
     
     $description = $entity->get('description')->value;
     if ($description) {
       $form['info']['setting_description'] = [
         '#type' => 'item',
-        '#title' => $this->t('Description'),
         '#markup' => $description,
       ];
     }
     
-    $form['info']['setting_id'] = [
-      '#type' => 'item',
-      '#title' => $this->t('ID'),
-      '#markup' => '<code>' . $entity->id() . '</code>',
-    ];
-    
     $form['info']['separator'] = [
       '#markup' => '<hr>',
     ];
+
+    $form['value'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default value (English)'),
+      '#default_value' => $entity->get('value')->value ?? '',
+    ];
+
     
+    $form['value_nl'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Dutch translation'),
+      '#default_value' => $entity->get('value_nl')->value ?? '',
+      '#description' => $this->t('Leave empty to use the default value.')
+    ];
+
+    
+    $form['value_fr'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('French translation'),
+      '#default_value' => $entity->get('value_fr')->value ?? '',
+      '#description' => $this->t('Leave empty to use the default value.')
+    ];
+    
+    // Hide non-editable fields
     if (isset($form['label'])) {
       $form['label']['#access'] = FALSE;
     }
@@ -51,11 +66,9 @@ class BestorSiteSettingForm extends ContentEntityForm {
     if (isset($form['id'])) {
       $form['id']['#access'] = FALSE;
     }
-    
-    if (isset($form['value'])) {
-      $form['value']['#weight'] = -50;
+    if (isset($form['setting_group'])) {
+      $form['setting_group']['#access'] = FALSE;
     }
-
     return $form;
   }
 
