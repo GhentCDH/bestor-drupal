@@ -17,6 +17,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   translatable = TRUE,
  *   admin_permission = "administer bestor site settings",
  *   handlers = {
+ *     "access" = "Drupal\bestor_content_helper\Access\BestorSiteSettingAccessControlHandler",
+ *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "list_builder" = "Drupal\bestor_content_helper\BestorSiteSettingListBuilder",
  *     "form" = {
  *       "default" = "Drupal\bestor_content_helper\Form\BestorSiteSettingForm",
@@ -35,6 +37,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  * )
  */
 class BestorSiteSetting extends ContentEntityBase {
+
 
   public function label() {
     return $this->get('label')->value;

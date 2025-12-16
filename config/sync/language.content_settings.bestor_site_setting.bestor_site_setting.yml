@@ -1,0 +1,11 @@
+uuid: 25df722c-7fbd-4957-9aa6-88389f87a91f
+langcode: nl
+status: true
+dependencies:
+  module:
+    - bestor_content_helper
+id: bestor_site_setting.bestor_site_setting
+target_entity_type_id: bestor_site_setting
+target_bundle: bestor_site_setting
+default_langcode: site_default
+language_alterable: false

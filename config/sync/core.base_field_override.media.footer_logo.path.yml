@@ -1,0 +1,20 @@
+uuid: 63da2731-d5bb-4355-97e2-86d83dadc6e1
+langcode: nl
+status: true
+dependencies:
+  config:
+    - media.type.footer_logo
+  module:
+    - path
+id: media.footer_logo.path
+field_name: path
+entity_type: media
+bundle: footer_logo
+label: URL-alias
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

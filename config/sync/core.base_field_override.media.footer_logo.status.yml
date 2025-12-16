@@ -1,0 +1,22 @@
+uuid: ffe8c5db-d1c3-4a0e-bdaf-7a63a866ec6e
+langcode: nl
+status: true
+dependencies:
+  config:
+    - media.type.footer_logo
+id: media.footer_logo.status
+field_name: status
+entity_type: media
+bundle: footer_logo
+label: Gepubliceerd
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: Aan
+  off_label: Uit
+field_type: boolean

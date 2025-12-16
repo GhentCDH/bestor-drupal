@@ -48,25 +48,11 @@ function bestor_form_system_theme_settings_alter(&$form, &$form_state) {
     '#description' => t('Leave empty to hide the newsletter button'),
   ];
   
-  $form['footer_settings']['newsletter']['newsletter_button_text'] = [
-    '#type' => 'textfield',
-    '#title' => t('Newsletter Button Text'),
-    '#default_value' => theme_get_setting('newsletter_button_text') ?: t('Subscribe to our newsletter'),
-    '#description' => t('Text for the newsletter subscription button'),
-  ];
-  
   // Social media
   $form['footer_settings']['social_media'] = [
     '#type' => 'details',
     '#title' => t('Social Media Links'),
     '#open' => TRUE,
-  ];
-  
-  $form['footer_settings']['social_media']['social_title'] = [
-    '#type' => 'textfield',
-    '#title' => t('Social Media Title'),
-    '#default_value' => theme_get_setting('social_title') ?: t('Follow us'),
-    '#description' => t('Title above social media icons'),
   ];
   
   $social_platforms = [
@@ -93,8 +79,6 @@ function bestor_form_system_theme_settings_alter(&$form, &$form_state) {
 function bestor_preprocess_page(&$variables) {
   // Maak alle footer settings beschikbaar
   $variables['footer_newsletter_url'] = theme_get_setting('newsletter_url');
-  $variables['footer_newsletter_text'] = theme_get_setting('newsletter_button_text') ?: t('Subscribe to our newsletter');
-  $variables['footer_social_title'] = theme_get_setting('social_title') ?: t('Follow us');
   
   // Social media URLs
   $variables['footer_social_facebook'] = theme_get_setting('social_facebook');

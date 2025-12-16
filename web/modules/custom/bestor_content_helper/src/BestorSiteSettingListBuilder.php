@@ -2,7 +2,7 @@
 
 namespace Drupal\bestor_content_helper;
 
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\bestor_content_helper\Entity\BestorSiteSetting;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -16,7 +16,6 @@ class BestorSiteSettingListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('ID');
     $header['label'] = $this->t('Setting');
     $header['description'] = $this->t('Description');
     $header['value'] = $this->t('Current Value');
@@ -26,21 +25,20 @@ class BestorSiteSettingListBuilder extends EntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function buildRow(EntityInterface $entity) {
-    /** @var \Drupal\bestor_content_helper\Entity\BestorSiteSetting $entity */
-    $row['id'] = $entity->id();
+  public function buildRow(BestorSiteSetting $entity) {
     $row['label'] = $entity->label();
     
-    // Description
     $description = $entity->get('description')->value;
     $row['description'] = $description ?: $this->t('No description');
     
-    // Value (truncated)
-    $value = $entity->get('value')->value;
-    if (!empty($value) && strlen($value) > 100) {
-      $value = substr($value, 0, 100) . '...';
-    }
-    $row['value'] = $value ?: $this->t('Not set');
+    $value = (string) $entity->get('value')->value;
+    $row['value'] = [
+      'data' => [
+        '#markup' => mb_strlen($value) > 300
+          ? mb_substr($value, 0, 300) . '…'
+          : $value,
+      ],
+    ];
     
     return $row + parent::buildRow($entity);
   }

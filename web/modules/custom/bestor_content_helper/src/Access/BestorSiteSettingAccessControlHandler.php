@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\bestor_content_helper\Entity;
+namespace Drupal\bestor_content_helper\Access;
 
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Access\AccessResult;

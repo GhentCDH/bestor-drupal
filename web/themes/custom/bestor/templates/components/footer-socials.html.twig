@@ -34,11 +34,10 @@
       </a>
     {% endfor %}
   {% endset %}
-  
-  {% set title = footer_social_title %}
+
   
   {{ include('jakarta:c-socials', {
-    title: title,
+    title: 'Follow us'|t,
     social_medias: social_medias,
   }, with_context = false) }}
 {% endif %}

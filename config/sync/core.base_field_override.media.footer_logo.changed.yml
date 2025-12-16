@@ -1,0 +1,18 @@
+uuid: fed037a1-ea3e-4439-9f97-352796a38431
+langcode: nl
+status: true
+dependencies:
+  config:
+    - media.type.footer_logo
+id: media.footer_logo.changed
+field_name: changed
+entity_type: media
+bundle: footer_logo
+label: Gewijzigd
+description: 'Tijdstip waarop het media-item het laatst bewerkt is.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

@@ -1,0 +1,18 @@
+uuid: ffaf4bee-863d-4fd0-a067-36981237f266
+langcode: nl
+status: true
+dependencies:
+  config:
+    - media.type.footer_logo
+id: media.footer_logo.created
+field_name: created
+entity_type: media
+bundle: footer_logo
+label: 'Aangemaakt op'
+description: 'Tijdstip waarop het media-item gemaakt is.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\media\Entity\Media::getRequestTime'
+settings: {  }
+field_type: created

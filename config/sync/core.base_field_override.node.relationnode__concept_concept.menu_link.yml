@@ -1,0 +1,20 @@
+uuid: 382a2378-f462-40ec-af55-ac423b652d9e
+langcode: nl
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__concept_concept
+id: node.relationnode__concept_concept.menu_link
+field_name: menu_link
+entity_type: node
+bundle: relationnode__concept_concept
+label: Menulink
+description: 'Computed menu link for the node (only available during node saving).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

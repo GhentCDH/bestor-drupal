@@ -1,0 +1,20 @@
+uuid: d59ea359-9590-45fb-92ab-fe183b5e944d
+langcode: nl
+status: true
+dependencies:
+  config:
+    - media.type.footer_logo
+id: media.footer_logo.uid
+field_name: uid
+entity_type: media
+bundle: footer_logo
+label: 'Geschreven door'
+description: 'Gebruikers-ID van de auteur.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\media\Entity\Media::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

@@ -1,0 +1,20 @@
+uuid: 76ed0f80-efff-49ea-9888-214cb3c8f60f
+langcode: nl
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__institut_document
+id: node.relationnode__institut_document.menu_link
+field_name: menu_link
+entity_type: node
+bundle: relationnode__institut_document
+label: Menulink
+description: 'Computed menu link for the node (only available during node saving).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

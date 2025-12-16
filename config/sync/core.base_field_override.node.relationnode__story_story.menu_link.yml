@@ -1,0 +1,20 @@
+uuid: 1103ffd7-249b-4a99-b741-5e86cc9f25a6
+langcode: nl
+status: true
+dependencies:
+  config:
+    - node.type.relationnode__story_story
+id: node.relationnode__story_story.menu_link
+field_name: menu_link
+entity_type: node
+bundle: relationnode__story_story
+label: Menulink
+description: 'Computed menu link for the node (only available during node saving).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

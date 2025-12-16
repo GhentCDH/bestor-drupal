@@ -1,0 +1,20 @@
+uuid: cecd790a-88c5-4899-9ef9-79c32fff295e
+langcode: nl
+status: true
+dependencies:
+  config:
+    - media.type.footer_logo
+id: media.footer_logo.name
+field_name: name
+entity_type: media
+bundle: footer_logo
+label: Naam
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: ''
+default_value_callback: ''
+settings: {  }
+field_type: string

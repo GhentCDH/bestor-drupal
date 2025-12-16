@@ -5,13 +5,11 @@
  */
 #}
 {% if footer_newsletter_url %}
-  {% set button_text = footer_newsletter_text ?: 'Subscribe to our newsletter'|t %}
-  
   {{ include('jakarta:c-button', {
     html_tag: 'a',
     attr_variant: 'default',
     color: 'white',
-    title: button_text,
+    title: 'Subscribe to our newsletter'|t ,
     url: footer_newsletter_url,
     target: '_blank',
     attributes: create_attribute().setAttribute('target', '_blank').setAttribute('rel', 'noopener'),
