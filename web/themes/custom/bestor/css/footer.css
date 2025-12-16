@@ -290,3 +290,13 @@
     max-height: 40px;
   }
 }
+
+.page-footer-logos .view-content{
+  display:flex;
+  flex-direction:row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: baseline;
+  align-content: center;
+  gap:50px;
+}
