@@ -12,6 +12,7 @@ use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\taxonomy\TermInterface;
+use Drupal\node\NodeInterface;
 
 
 /**
@@ -129,8 +130,13 @@ class MirrorProvider{
     if (!$this->elementSupportsMirroring($items, $form, $form_state)) {
       return false;
     }
+
+    $relation_entity = $items->getEntity();
+    if (!$relation_entity instanceof NodeInterface) {
+      return false;
+    }
     
-    $foreign_key_field = $this->foreignKeyResolver->getEntityFormForeignKeyField($form, $form_state);
+    $foreign_key_field = $this->foreignKeyResolver->getEntityFormForeignKeyField($relation_entity, $form_state);
     
     if (!is_string($foreign_key_field) || $foreign_key_field !== $this->fieldNameResolver->getRelatedEntityFields(2)) {
       return false;

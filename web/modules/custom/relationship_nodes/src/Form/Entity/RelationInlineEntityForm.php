@@ -5,7 +5,7 @@ namespace Drupal\relationship_nodes\Form\Entity;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\inline_entity_form\Form\NodeInlineForm;
 use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
@@ -46,13 +46,17 @@ class RelationInlineEntityForm extends NodeInlineForm {
     if (empty($entity_form['#relation_extended_widget']) || $entity_form['#relation_extended_widget'] !== true) {
       return  $entity_form;
     }
-
-    $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($entity_form, $form_state);
+    $relation_entity = $entity_form['#entity'];
+    if(!$relation_entity instanceof NodeInterface) {
+      return $entity_form;
+    }
+    $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($relation_entity, $form_state);
 
     if ($foreign_key) {
       $entity_form[$foreign_key]['#attributes']['hidden'] = 'hidden';
       $entity_form['#rn__foreign_key'] = $foreign_key;
     }
+    
     return $entity_form;
   }
 
@@ -72,7 +76,7 @@ class RelationInlineEntityForm extends NodeInlineForm {
     }
 
     $current_node = $this->routeMatch->getParameter('node');
-    if (!($current_node instanceof Node)) {
+    if (!($current_node instanceof NodeInterface)) {
       return; // If a new node is being created, a submit handler creates the relation later.
     }
 

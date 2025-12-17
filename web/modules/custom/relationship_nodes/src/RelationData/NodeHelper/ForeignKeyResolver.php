@@ -83,7 +83,7 @@ class ForeignKeyResolver {
   /**
    * Gets the foreign key field from an entity form.
    *
-   * @param array $entity_form
+   * @param NodeInterface $relation_node
    *   The entity form array.
    * @param FormStateInterface $form_state
    *   The form state.
@@ -91,13 +91,9 @@ class ForeignKeyResolver {
    * @return string|null
    *   The foreign key field name or NULL.
    */
-  public function getEntityFormForeignKeyField(array $entity_form, FormStateInterface $form_state): ?string {
-    if (!isset($entity_form['#entity']) || !($entity_form['#entity'] instanceof NodeInterface)) {
-      return null;
-    }   
-    $relation_entity = $entity_form['#entity'];
+  public function getEntityFormForeignKeyField(NodeInterface $relation_node, FormStateInterface $form_state): ?string {
     $form_entity = $form_state->getFormObject()->getEntity();
-    return $this->getEntityForeignKeyField($relation_entity,  $form_entity);   
+    return $this->getEntityForeignKeyField($relation_node,  $form_entity);   
   }
 
 

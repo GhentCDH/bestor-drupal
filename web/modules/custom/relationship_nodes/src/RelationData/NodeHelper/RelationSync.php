@@ -128,23 +128,30 @@ class RelationSync {
     if (empty($widget_state['entities']) || !is_array($widget_state['entities'])) {
       return;
     }
-    $new_parent = $parent_node->isNew();
 
+    $new_parent = $parent_node->isNew();
+  
     foreach ($widget_state['entities'] as $delta => &$entity_item) {
       if (!$this->relationNeedsSave($entity_item)) {
         continue;
       }
 
       $entity = $entity_item['entity'];
-      $entity_form = $this->getEntityFormByDelta($form[$field_name], $delta);
-      $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($entity_form, $form_state) ?? '';   
+      if (!$entity instanceof NodeInterface) {
+        continue;
+      }
+
+      $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($entity, $form_state);
 
       $this->entityTypeManager->getHandler('node', 'inline_form')->save($entity);
       $relation_id = $entity->id();
+
       $this->relationWeightManager->setWeight($relation_id, $foreign_key, $delta);
-      if ($new_parent && $entity_form && $foreign_key && isset($form[$field_name])) {
-        $form_state->set(['created_relation_ids', $relation_id], $foreign_key);
+
+      if ($new_parent) {
+        $form_state->set(['created_relation_ids', $entity->id()], $foreign_key);
       }
+
       $entity_item['needs_save'] = FALSE;
     }      
   }
@@ -202,22 +209,4 @@ class RelationSync {
   private function getEntityFormByDelta($form_field, $delta): ?array {
     return $form_field['widget'][$delta]['inline_entity_form'] ?? null;
   }
-
-
-  /**
-   * Registers a new relation for binding to parent node.
-   *
-   * @param NodeInterface $entity
-   *   The relation node entity.
-   * @param string $foreign_key
-   *   The foreign key field name.
-   * @param FormStateInterface $form_state
-   *   The form state.
-   */
-  private function registerNewRelationForBinding(NodeInterface $entity, ?string $foreign_key, FormStateInterface $form_state): void{        
-    if (!$foreign_key) {
-      return;
-    } 
-    $form_state->set(['created_relation_ids', $entity->id()], $foreign_key);
-  }  
 }

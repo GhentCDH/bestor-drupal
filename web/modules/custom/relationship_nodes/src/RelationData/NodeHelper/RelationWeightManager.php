@@ -12,7 +12,7 @@ use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
 class RelationWeightManager {
 
   protected KeyValueFactoryInterface $keyValueFactory;
-  private ?KeyValueStoreInterface $store = NULL;
+  protected ?KeyValueStoreInterface $store = NULL;
 
   public function __construct(KeyValueFactoryInterface $key_value_factory) {
     $this->keyValueFactory = $key_value_factory;
@@ -24,7 +24,7 @@ class RelationWeightManager {
    * 
    * Store structure: relation_weights.{relation_nid}.{reference_field_name}
    */
-  private function getStore(): KeyValueStoreInterface {
+  protected function getStore(): KeyValueStoreInterface {
     if ($this->store === NULL) {
       $this->store = $this->keyValueFactory->get('relationship_nodes_weights');
     }
@@ -35,7 +35,7 @@ class RelationWeightManager {
   /**
    * Generates a storage key.
    */
-  private function getKey(int $relation_nid, string $reference_field_name): string {
+  protected function getKey(int $relation_nid, string $reference_field_name): string {
     return "{$relation_nid}.{$reference_field_name}";
   }
 
@@ -127,6 +127,16 @@ class RelationWeightManager {
     return $weights;
   }
 
+  
+  /**
+   * Generates a storage key.
+   */
+  public function getAllWeights() {
+    if ($this->store === NULL) {
+      $this->store = $this->keyValueFactory->get('relationship_nodes_weights');
+    }
+    return $this->store->getAll();
+  }
 
   /**
    * Sorts node IDs by their weights for a specific reference field.
