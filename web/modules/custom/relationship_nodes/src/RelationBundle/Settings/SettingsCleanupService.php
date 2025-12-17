@@ -6,6 +6,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
 use Drupal\relationship_nodes\RelationField\RelationshipFieldManager;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 
 
 /**
@@ -18,6 +19,7 @@ class SettingsCleanupService {
   protected EntityTypeManagerInterface $entityTypeManager;
   protected BundleInfoService $bundleInfoService;
   protected RelationshipFieldManager $relationFieldManager;
+  protected KeyValueFactoryInterface $keyValueFactory;
 
 
   /**
@@ -29,15 +31,19 @@ class SettingsCleanupService {
    *   The bundle info service.
    * @param RelationshipFieldManager $relationFieldManager
    *   The field configurator.
+   * @param KeyValueFactoryInterface $keyValueFactory
+   *   The key-value factory.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     BundleInfoService $bundleInfoService, 
-    RelationshipFieldManager $relationFieldManager
+    RelationshipFieldManager $relationFieldManager,
+      KeyValueFactoryInterface $keyValueFactory
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->bundleInfoService = $bundleInfoService;
     $this->relationFieldManager = $relationFieldManager;
+    $this->keyValueFactory = $keyValueFactory;
   }
 
 
@@ -47,6 +53,7 @@ class SettingsCleanupService {
   public function removeModuleSettings(): void {
     $this->unsetRnEntitySettings();
     $this->cleanFormDisplays();
+    $this->cleanRelationWeights();
   }
 
 
@@ -126,4 +133,21 @@ class SettingsCleanupService {
     }
     $entity->save();
   }
-}
+
+
+  /**
+   * Cleans up all relation weight data.
+   */
+  protected function cleanRelationWeights(): void {
+    try {
+      $this->keyValueFactory->get('relationship_nodes_weights')->deleteAll();
+      \Drupal::logger('relationship_nodes')->info('Cleaned up all relation weights.');
+    } 
+    catch (\Exception $e) {
+      \Drupal::logger('relationship_nodes')->error('Error cleaning up relation weights: @error', [
+        '@error' => $e->getMessage(),
+      ]);
+    }
+  }
+}  
+

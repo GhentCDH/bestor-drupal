@@ -4,11 +4,12 @@ namespace Drupal\relationship_nodes\RelationData\NodeHelper;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\relationship_nodes\RelationData\NodeHelper\RelationInfo;
 use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
+use Drupal\relationship_nodes\RelationData\NodeHelper\RelationWeightManager;
 
 
 /**
@@ -23,6 +24,7 @@ class RelationSync {
   protected RelationInfo $nodeInfoService;
   protected ForeignKeyResolver $foreignKeyResolver;
   protected RelationFormHelper $formHelper;
+  protected RelationWeightManager $relationWeightManager;
 
 
   /**
@@ -36,17 +38,21 @@ class RelationSync {
    *   The foreign key field resolver.
    * @param RelationFormHelper $formHelper
    *   The form helper.
+   * @param RelationWeightManager $relationWeightManager
+   *   The relation subform weight manager.
    */
   public function __construct(
       EntityTypeManagerInterface $entityTypeManager,
       RelationInfo $nodeInfoService,
       ForeignKeyResolver $foreignKeyResolver,
-      RelationFormHelper $formHelper
+      RelationFormHelper $formHelper,
+      RelationWeightManager $relationWeightManager
   ) {
       $this->entityTypeManager = $entityTypeManager;
       $this->nodeInfoService = $nodeInfoService;
       $this->foreignKeyResolver = $foreignKeyResolver;
       $this->formHelper = $formHelper;
+      $this->relationWeightManager = $relationWeightManager;
   }
 
   
@@ -62,13 +68,13 @@ class RelationSync {
       return;
     }
     $target_node = $this->formHelper->getParentFormNode($form_state);
-    if (!($target_node instanceof Node)) {
+    if (!($target_node instanceof NodeInterface)) {
       return;   
     }
     $node_storage = $this->entityTypeManager->getStorage('node');
     foreach ($relations as $relation_id => $foreign_key) {
       $relation_node = $node_storage->load($relation_id);
-      if (!($relation_node instanceof Node)) {
+      if (!($relation_node instanceof NodeInterface)) {
         continue;
       }
       $relation_node->set($foreign_key, [['target_id' => $target_node->id()]]);
@@ -90,7 +96,8 @@ class RelationSync {
     $storage = $this->entityTypeManager->getStorage('node');
     foreach ($ids_to_remove as $id) {
       $node = $storage->load($id);
-      if ($node instanceof Node) {
+      $this->relationWeightManager->deleteAllWeights($id);
+      if ($node instanceof NodeInterface) {
         $node->delete();
       }
     }
@@ -100,7 +107,7 @@ class RelationSync {
   /**
    * Saves relation nodes from subforms.
    *
-   * @param Node $parent_node
+   * @param NodeInterface $parent_node
    *   The parent node.
    * @param string $field_name
    *   The field name.
@@ -112,7 +119,7 @@ class RelationSync {
    *   The form state.
    */
   public function saveSubformRelations(
-    Node $parent_node, 
+    NodeInterface $parent_node, 
     string $field_name, 
     array &$widget_state, 
     array &$form, 
@@ -127,13 +134,16 @@ class RelationSync {
       if (!$this->relationNeedsSave($entity_item)) {
         continue;
       }
+
       $entity = $entity_item['entity'];
+      $entity_form = $this->getEntityFormByDelta($form[$field_name], $delta);
+      $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($entity_form, $form_state) ?? '';   
+
       $this->entityTypeManager->getHandler('node', 'inline_form')->save($entity);
-      if ($new_parent && isset($form[$field_name])) {
-        $entity_form = $this->getEntityFormByDelta($form[$field_name], $delta);
-        if ($entity_form !== null) {
-          $this->registerNewRelationForBinding($entity, $entity_form, $form_state);
-        }
+      $relation_id = $entity->id();
+      $this->relationWeightManager->setWeight($relation_id, $foreign_key, $delta);
+      if ($new_parent && $entity_form && $foreign_key && isset($form[$field_name])) {
+        $form_state->set(['created_relation_ids', $relation_id], $foreign_key);
       }
       $entity_item['needs_save'] = FALSE;
     }      
@@ -143,7 +153,7 @@ class RelationSync {
   /**
    * Gets relation nodes that were removed from a parent node.
    *
-   * @param Node $parent_node
+   * @param NodeInterface $parent_node
    *   The parent node.
    * @param string $field_name
    *   The field name.
@@ -151,7 +161,7 @@ class RelationSync {
    * @return array
    *   Array of removed relation node IDs.
    */
-  public function getRemovedRelations(Node $parent_node, string $field_name): array {
+  public function getRemovedRelations(NodeInterface $parent_node, string $field_name): array {
     $item_list = $parent_node->get($field_name) ?? null;
     if(!($item_list instanceof ReferencingRelationshipItemList)){
       return [];
@@ -173,7 +183,7 @@ class RelationSync {
    */
   private function relationNeedsSave(array $entity_item): bool {
     return !empty($entity_item['entity'])
-      && $entity_item['entity'] instanceof Node
+      && $entity_item['entity'] instanceof NodeInterface
       && !empty($entity_item['needs_save']);
   }
 
@@ -197,15 +207,14 @@ class RelationSync {
   /**
    * Registers a new relation for binding to parent node.
    *
-   * @param Node $entity
+   * @param NodeInterface $entity
    *   The relation node entity.
-   * @param array $entity_form
-   *   The entity form array.
+   * @param string $foreign_key
+   *   The foreign key field name.
    * @param FormStateInterface $form_state
    *   The form state.
    */
-  private function registerNewRelationForBinding(Node $entity, array $entity_form, FormStateInterface $form_state): void{  
-    $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($entity_form, $form_state) ?? '';         
+  private function registerNewRelationForBinding(NodeInterface $entity, ?string $foreign_key, FormStateInterface $form_state): void{        
     if (!$foreign_key) {
       return;
     } 

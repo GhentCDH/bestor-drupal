@@ -4,7 +4,7 @@ namespace Drupal\relationship_nodes\RelationData\NodeHelper;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\relationship_nodes\RelationData\NodeHelper\RelationInfo;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
 
@@ -53,7 +53,7 @@ class ForeignKeyResolver {
   public function getDefaultBundleForeignKeyField(string $relation_bundle, string $target_bundle = null): ?string {       
     if (!$target_bundle) {
       $target_entity = $this->ensureTargetNode();
-      if (!($target_entity instanceof Node)) {
+      if (!($target_entity instanceof NodeInterface)) {
         return null;
       }
       $target_bundle = $target_entity->getType();
@@ -64,18 +64,7 @@ class ForeignKeyResolver {
   }
 
 
-  /**
-   * Gets the default foreign key field for a relation bundle.
-   *
-   * @param string $relation_bundle
-   *   The relation bundle ID.
-   * @param string|null $target_bundle
-   *   The target bundle ID.
-   *
-   * @return string|null
-   *   The foreign key field name or NULL.
-   */
-  public function getEntityForeignKeyField(Node $relation_entity, ?Node $target_entity = NULL): ?string {
+  public function getEntityForeignKeyField(NodeInterface $relation_entity, ?NodeInterface $target_entity = NULL): ?string {
     $target_entity = $this->ensureTargetNode($target_entity);
     if (!$target_entity) {
       return null;
@@ -103,7 +92,7 @@ class ForeignKeyResolver {
    *   The foreign key field name or NULL.
    */
   public function getEntityFormForeignKeyField(array $entity_form, FormStateInterface $form_state): ?string {
-    if (!isset($entity_form['#entity']) || !($entity_form['#entity'] instanceof Node)) {
+    if (!isset($entity_form['#entity']) || !($entity_form['#entity'] instanceof NodeInterface)) {
       return null;
     }   
     $relation_entity = $entity_form['#entity'];
@@ -115,18 +104,18 @@ class ForeignKeyResolver {
   /**
    * Ensures a target node is available.
    *
-   * @param Node|null $node
+   * @param NodeInterface|null $node
    *   The node or NULL.
    *
-   * @return Node|null
+   * @return NodeInterface|null
    *   The node or NULL.
    */
-  private function ensureTargetNode(?Node $node = null): ?Node {
-    if ($node instanceof Node) {
+  private function ensureTargetNode(?NodeInterface $node = null): ?NodeInterface {
+    if ($node instanceof NodeInterface) {
       return $node;
     }
     $current_node = $this->routeMatch->getParameter('node');
-    return $current_node instanceof Node ? $current_node : null;
+    return $current_node instanceof NodeInterface ? $current_node : null;
   }
 
 

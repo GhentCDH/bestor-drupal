@@ -177,11 +177,13 @@ class RelationInfo {
    * @param string $relation_bundle
    * @param array $join_fields
    *   Optional: list of 'related entity' fields through which the target node is referenced (in the relation bundle).
+   * @param bool $group_by_field
+   *   Optional: should the result be grouped by field (e.g. field_related_item => [], 'field related_item_2 = []) ->true, or flattened -> false.
    *
    * @return array
    *   Array of referencing relation node objects, keyed by their ID.
    */
-  public function getReferencingRelations(Node $target_node, string $relation_bundle, array $join_fields = []): array {
+  public function getReferencingRelations(Node $target_node, string $relation_bundle, array $join_fields = [], bool $group_by_field = false): array {
     $target_bundle = $target_node->getType();
     if (empty($join_fields)) {
       $connection_info = $this->bundleInfoService->getBundleConnectionInfo($relation_bundle, $target_bundle) ?? [];
@@ -190,7 +192,6 @@ class RelationInfo {
       }
       $join_fields = $connection_info['join_fields'];
     }
-    
     $target_id = $target_node->id();
     $node_storage = $this->entityTypeManager->getStorage('node');
     $result = [];
@@ -200,10 +201,17 @@ class RelationInfo {
         $join_field => $target_id,
       ]);
       if (!empty($relations)) {
-        $result += $relations;
+        $result[$join_field] = $relations;
       }
     }
-    return $result;
+    if($group_by_field){
+      return $result;
+    }
+    $flattened = [];
+    foreach($result as $field_result){
+      $flattened = array_merge($flattened, $field_result);
+    }
+    return $flattened;
   }
 
 

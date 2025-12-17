@@ -58,6 +58,7 @@ services:
       - '@relationship_nodes.relation_info'
       - '@relationship_nodes.foreign_key_field_resolver'
       - '@relationship_nodes.relation_form_helper'
+      - '@relationship_nodes.relation_weight_manager'
   relationship_nodes.mirror_sync:
     class: Drupal\relationship_nodes\RelationData\TermHelper\MirrorSync
     arguments:
@@ -163,6 +164,7 @@ services:
       - '@entity_type.manager'
       - '@relationship_nodes.bundle_info_service'
       - '@relationship_nodes.relationship_field_manager'
+      - '@keyvalue'
   relationship_nodes.config_import_validator:
     class: Drupal\relationship_nodes\Validation\ConfigImportValidator
     arguments:
@@ -204,6 +206,9 @@ services:
       - '@relationship_nodes.twig_formatter'
     tags:
       - { name: twig.extension }
+  relationship_nodes.relation_weight_manager:
+    class: Drupal\relationship_nodes\RelationData\NodeHelper\RelationWeightManager
+    arguments: ['@keyvalue']
   
   
   

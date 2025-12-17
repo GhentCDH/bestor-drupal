@@ -54,6 +54,13 @@ class ReferencingRelationshipItemList extends EntityReferenceFieldItemList {
       return [];
     }
     $nodeInfoService = \Drupal::service('relationship_nodes.relation_info');
-    return $nodeInfoService->getReferencingRelations($current_node, $relation_bundle, $join_fields) ?? [];
+    $relations_by_field = $nodeInfoService->getReferencingRelations($current_node, $relation_bundle, $join_fields, TRUE) ?? [];
+    if (empty($relations_by_field)) {
+      return [];
+    }
+    
+    // Sort each group by weight and flatten
+    $weightManager = \Drupal::service('relationship_nodes.relation_weight_manager');
+    return $weightManager->sortByWeight($relations_by_field);
   }
 }
