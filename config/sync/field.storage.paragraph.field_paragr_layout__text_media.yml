@@ -13,16 +13,16 @@ settings:
   allowed_values:
     -
       value: img_50_r
-      label: 'Text (L 50%) - Image (R 50%)'
+      label: 'Text (L 50%) - Media (R 50%)'
     -
       value: img_50_l
-      label: 'Image (L 50%) - Text (R 50%)'
+      label: 'Media (L 50%) - Text (R 50%)'
     -
       value: img_33_r
-      label: 'Text (L 67%) - Image (R 33%)'
+      label: 'Text (L 67%) - Media (R 33%)'
     -
       value: img_33_l
-      label: 'Image (L 33%) - Text (R 67%)'
+      label: 'Media (L 33%) - Text (R 67%)'
   allowed_values_function: ''
 module: options
 locked: false

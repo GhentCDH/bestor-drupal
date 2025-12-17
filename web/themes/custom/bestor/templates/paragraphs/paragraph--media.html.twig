@@ -40,10 +40,16 @@
 #}
 
 
-{% set image_info = bestor('media_info', paragraph, 'field_media', {'image_style': 'paragraph_media'}) %} 
-{% set media %}
-  <img loading="lazy" src="{{ image_info.url }}" width="960" height="500" alt="T{{ image_info.alt }}">
-{% endset %}
+{% set media_info = bestor('media_info', paragraph, 'field_media', {'image_style': 'paragraph_media'}) %} 
+{% if media_info.display == 'default' %}
+     {% set media = content.field_media %}
+{% else %}
+  {% if media_info.type == 'image' %}
+    {% set media %}
+      <img loading="lazy" src="{{ media_info.url }}" width="960" height="500" alt="{{ media_info.alt }}">
+    {% endset %}
+  {% endif %}
+{% endif %}
 
 {% set attr_variant = 'media_only'%}
 {% set add_lightbox = paragraph.field_lightbox.value %}
@@ -58,6 +64,7 @@
 {% if add_lightbox %}
     {% set media_uri = bestor('media_info', paragraph, 'field_media').url %}
 {% endif %}
+
 
 
 <div class="h-margin-top-40">

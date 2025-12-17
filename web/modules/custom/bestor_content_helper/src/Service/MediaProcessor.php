@@ -68,15 +68,25 @@ class MediaProcessor {
     if (!$media instanceof MediaInterface) {
       return NULL;
     }
-    // needs to be extended with other media bundles
-    if($media->bundle() === 'image'){
-      $img_style = $options['image_style'] ?? NULL;
-      return [
-        'url' => $this->getStyledImageUrl($media, $img_style),
-        'alt' => $this->getImageAlt($media) ?? '',
-      ];
+    
+    $type = $media->bundle();
+
+    $result = [
+      'type' => $type,
+      'display' => 'default'
+    ];
+
+    switch ($type) {
+      case 'image':
+        $img_style = $options['image_style'] ?? NULL;
+        return array_merge($result, [
+          'url' => $this->getStyledImageUrl($media, $img_style),
+          'alt' => $this->getImageAlt($media) ?? '',
+          'display' => 'custom'
+        ]);
+      default:
+        return $result;
     }
-    return NULL;
   }
 
   /**

@@ -18,3 +18,5 @@ source_configuration:
     - Vimeo
 field_map:
   title: name
+  thumbnail_uri: thumbnail
+  url: path

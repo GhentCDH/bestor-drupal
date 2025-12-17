@@ -44,6 +44,7 @@ module:
   filter: 0
   footnotes: 0
   geofield: 0
+  glightbox: 0
   help: 0
   history: 0
   iframe: 0

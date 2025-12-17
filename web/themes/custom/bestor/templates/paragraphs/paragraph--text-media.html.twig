@@ -39,29 +39,36 @@
  */
 #}
 
-  {% set image_info = bestor('media_info', paragraph, 'field_media', {'image_style': 'paragraph_text_media'}) %}
-  {% set media %}
-    <img loading="lazy" src="{{ image_info.url }}" width="510" height="400" alt="{{ image_info.alt }}">
-  {% endset %}
-
-  {% set media_position = 'right'%}
-  {% set media_layout = 'image_50' %}
-
-  {% set layout = paragraph.field_paragr_layout__text_media.value %}
-  {% if layout == 'img_50_l' %}
-    {% set media_position = 'left'%}
-  {% elseif layout == 'img_33_r' %}
-    {% set media_layout = 'image_33' %}
-  {% elseif layout == 'img_33_l' %}
-    {% set media_position = 'left' %}
-    {% set media_layout = 'image_33' %}
+{% set media_info = bestor('media_info', paragraph, 'field_media', {'image_style': 'paragraph_media'}) %} 
+{% if media_info.display == 'default' %}
+     {% set media = content.field_media %}
+{% else %}
+  {% if media_info.type == 'image' %}
+    {% set media %}
+      <img loading="lazy" src="{{ media_info.url }}" width="960" height="500" alt="{{ media_info.alt }}">
+    {% endset %}
   {% endif %}
+{% endif %}
 
-  <div class="h-margin-top-40">
-    {{ include('jakarta:c-text-media', {
-      media,
-      text: content.field_formatted_text,
-      media_position,
-      media_layout,
-    }) }}
-  </div>
+{% set media_position = 'right'%}
+{% set media_layout = '50_50' %}
+
+{% set layout = paragraph.field_paragr_layout__text_media.value %}
+{% if layout == 'img_50_l' %}
+  {% set media_position = 'left'%}
+{% elseif layout == 'img_33_r' %}
+  {% set media_layout = 'image_33' %}
+{% elseif layout == 'img_33_l' %}
+  {% set media_position = 'left' %}
+  {% set media_layout = 'image_33' %}
+{% endif %}
+
+{{devel_dump(content.field_media)}}
+<div class="h-margin-top-40">
+  {{ include('jakarta:c-text-media', {
+    media,
+    text: content.field_formatted_text,
+    media_position,
+    media_layout,
+  }) }}
+</div>
