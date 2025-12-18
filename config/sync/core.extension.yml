@@ -44,11 +44,11 @@ module:
   filter: 0
   footnotes: 0
   geofield: 0
-  glightbox: 0
   help: 0
   history: 0
   iframe: 0
   image: 0
+  imagefield_slideshow: 0
   inline_entity_form: 0
   language: 0
   layout_discovery: 0

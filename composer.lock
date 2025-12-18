@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12cec1f1aa5bf7114a714ec12e9431d0",
+    "content-hash": "892511003eb194d8889c88e15a010ae7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2735,6 +2735,60 @@
             "homepage": "https://drupal.org/project/iframe",
             "support": {
                 "source": "https://git.drupalcode.org/project/iframe"
+            }
+        },
+        {
+            "name": "drupal/imagefield_slideshow",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/imagefield_slideshow.git",
+                "reference": "2.0.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/imagefield_slideshow-2.0.6.zip",
+                "reference": "2.0.6",
+                "shasum": "3b6c5ca768c42a20a8de2f5786e6e84f18747d05"
+            },
+            "require": {
+                "drupal/core": ">=8.9 <11.0.0-stable || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.6",
+                    "datestamp": "1731570814",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Karthik Kumar D K (heykarthikwithu)",
+                    "homepage": "https://www.drupal.org/u/heykarthikwithu"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                }
+            ],
+            "description": "Creates a field formatter for image field, for which that particular field will be rendered as a basic slider.",
+            "homepage": "https://www.drupal.org/project/imagefield_slideshow",
+            "keywords": [
+                "image field",
+                "imagefield slideshow",
+                "slideshow"
+            ],
+            "support": {
+                "source": "https://cgit.drupalcode.org/imagefield_slideshow",
+                "issues": "https://www.drupal.org/project/issues/imagefield_slideshow"
             }
         },
         {
