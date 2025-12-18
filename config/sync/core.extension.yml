@@ -48,7 +48,6 @@ module:
   history: 0
   iframe: 0
   image: 0
-  imagefield_slideshow: 0
   inline_entity_form: 0
   language: 0
   layout_discovery: 0
@@ -56,7 +55,6 @@ module:
   link: 0
   locale: 0
   media: 0
-  media_entity_slideshow: 0
   media_entity_soundcloud: 0
   media_iframe: 0
   media_library: 0

@@ -9,7 +9,6 @@ dependencies:
     - media.type.iframe
     - media.type.image
     - media.type.remote_video
-    - media.type.slideshow
     - media.type.soundcloud
     - media.type.video
     - node.type.article
@@ -152,7 +151,6 @@ permissions:
   - 'create relationnode__place_story content'
   - 'create relationnode__story_story content'
   - 'create remote_video media'
-  - 'create slideshow media'
   - 'create soundcloud media'
   - 'create story content'
   - 'create terms in author'
@@ -261,7 +259,6 @@ permissions:
   - 'delete own relationnode__place_story content'
   - 'delete own relationnode__story_story content'
   - 'delete own remote_video media'
-  - 'delete own slideshow media'
   - 'delete own soundcloud media'
   - 'delete own story content'
   - 'delete own video media'
@@ -308,7 +305,6 @@ permissions:
   - 'edit any relationnode__place_story content'
   - 'edit any relationnode__story_story content'
   - 'edit any remote_video media'
-  - 'edit any slideshow media'
   - 'edit any soundcloud media'
   - 'edit any story content'
   - 'edit any video media'
@@ -355,7 +351,6 @@ permissions:
   - 'edit own relationnode__place_story content'
   - 'edit own relationnode__story_story content'
   - 'edit own remote_video media'
-  - 'edit own slideshow media'
   - 'edit own soundcloud media'
   - 'edit own story content'
   - 'edit own video media'
