@@ -3,8 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.text_media.field_cardinality_exception
     - field.field.paragraph.text_media.field_formatted_text
     - field.field.paragraph.text_media.field_media
+    - field.field.paragraph.text_media.field_media_multiple
     - field.field.paragraph.text_media.field_paragr_layout__text_media
     - field.field.paragraph.text_media.field_title
     - paragraphs.paragraphs_type.text_media
@@ -16,6 +18,16 @@ targetEntityType: paragraph
 bundle: text_media
 mode: default
 content:
+  field_cardinality_exception:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
   field_formatted_text:
     type: text_default
     label: hidden
@@ -31,6 +43,15 @@ content:
       link: false
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_media_multiple:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_paragr_layout__text_media:
     type: list_default

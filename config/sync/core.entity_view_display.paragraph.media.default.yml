@@ -4,8 +4,10 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.media.field_caption
+    - field.field.paragraph.media.field_cardinality_exception
     - field.field.paragraph.media.field_lightbox
     - field.field.paragraph.media.field_media
+    - field.field.paragraph.media.field_media_multiple
     - field.field.paragraph.media.field_title
     - paragraphs.paragraphs_type.media
 id: paragraph.media.default
@@ -22,6 +24,16 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_cardinality_exception:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 4
     region: content
   field_lightbox:
     type: boolean
@@ -41,6 +53,15 @@ content:
       link: false
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_media_multiple:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_title:
     type: string

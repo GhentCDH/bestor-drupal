@@ -1,16 +1,14 @@
-uuid: 3505db4a-f6dd-4dd9-bb58-5acbf76bce67
+uuid: 13553219-b417-49dc-9735-e8556ad01b44
 langcode: en
 status: true
 dependencies:
   module:
-    - media
     - paragraphs
-id: paragraph.field_media
-field_name: field_media
+id: paragraph.field_cardinality_exception
+field_name: field_cardinality_exception
 entity_type: paragraph
-type: entity_reference
-settings:
-  target_type: media
+type: boolean
+settings: {  }
 module: core
 locked: false
 cardinality: 1

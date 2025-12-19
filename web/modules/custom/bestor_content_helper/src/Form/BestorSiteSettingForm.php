@@ -40,15 +40,13 @@ class BestorSiteSettingForm extends ContentEntityForm {
       '#default_value' => $entity->get('value')->value ?? '',
     ];
 
-    
     $form['value_nl'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Dutch translation'),
       '#default_value' => $entity->get('value_nl')->value ?? '',
       '#description' => $this->t('Leave empty to use the default value.')
     ];
-
-    
+   
     $form['value_fr'] = [
       '#type' => 'textfield',
       '#title' => $this->t('French translation'),
@@ -72,6 +70,7 @@ class BestorSiteSettingForm extends ContentEntityForm {
     return $form;
   }
 
+  
   public function save(array $form, FormStateInterface $form_state) {
     $result = parent::save($form, $form_state);
     $entity = $this->getEntity();

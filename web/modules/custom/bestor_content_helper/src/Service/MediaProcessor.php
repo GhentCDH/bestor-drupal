@@ -59,12 +59,16 @@ class MediaProcessor {
    *   The image URL, or NULL if not available.
    */
   public function getEntityMediaInfo(NodeInterface|ParagraphInterface $entity, string $field_name, array $options = NULL): ?array {
-
+    dpm($field_name);
+    dpm($entity->get($field_name));
     if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
       return NULL;
     }
 
     $media = $entity->get($field_name)->entity;
+    dpm($field_name);
+    dpm($entity->get($field_name)->getFieldDefinition()->getFieldStorageDefinition()->getCardinality());
+    dpm($media);
     if (!$media instanceof MediaInterface) {
       return NULL;
     }

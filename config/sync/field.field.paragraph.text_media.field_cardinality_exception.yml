@@ -1,0 +1,23 @@
+uuid: 911d5a6a-17a8-42c5-9e80-efdedcf91dfa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_cardinality_exception
+    - paragraphs.paragraphs_type.text_media
+id: paragraph.text_media.field_cardinality_exception
+field_name: field_cardinality_exception
+entity_type: paragraph
+bundle: text_media
+label: 'Multiple media items (image slider)'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Multiple items (image slider)'
+  off_label: 'One media item (image, video, audio, document...)'
+field_type: boolean
