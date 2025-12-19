@@ -59,21 +59,23 @@ class MediaProcessor {
    *   The image URL, or NULL if not available.
    */
   public function getEntityMediaInfo(NodeInterface|ParagraphInterface $entity, string $field_name, array $options = NULL): ?array {
-    dpm($field_name);
-    dpm($entity->get($field_name));
     if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
       return NULL;
     }
 
-    $media = $entity->get($field_name)->entity;
-    dpm($field_name);
-    dpm($entity->get($field_name)->getFieldDefinition()->getFieldStorageDefinition()->getCardinality());
-    dpm($media);
-    if (!$media instanceof MediaInterface) {
+    $media = $entity->get($field_name)->referencedEntities();
+  
+    if(count($media) === 1){
+      $media_item = $media[0];
+    } else {
+      $media_item = $media[0];
+    }
+
+    if (!$media_item instanceof MediaInterface) {
       return NULL;
     }
     
-    $type = $media->bundle();
+    $type = $media_item->bundle();
 
     $result = [
       'type' => $type,
@@ -84,13 +86,20 @@ class MediaProcessor {
       case 'image':
         $img_style = $options['image_style'] ?? NULL;
         return array_merge($result, [
-          'url' => $this->getStyledImageUrl($media, $img_style),
-          'alt' => $this->getImageAlt($media) ?? '',
+          'url' => $this->getStyledImageUrl($media_item, $img_style),
+          'alt' => $this->getImageAlt($media_item) ?? '',
           'display' => 'custom'
         ]);
       default:
         return $result;
     }
+  }
+
+  public function getFieldMediaCount(NodeInterface|ParagraphInterface $entity, string $field_name): int {
+    if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+      return 0;
+    }
+    return count($entity->get($field_name)->referencedEntities());
   }
 
   /**

@@ -11,6 +11,7 @@ use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\filter\Render\FilteredMarkup;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Service for analyzing and formatting node content.
@@ -276,7 +277,7 @@ class StandardNodeFieldProcessor {
   /**
    * Get field values ready for display.
    *
-   * @param ?NodeInterface $node
+   * @param NodeInterface|ParagraphInterface|null $node
    *   The node.
    * @param string|array $field_names
    *   Single field name or array of field names.
@@ -291,7 +292,7 @@ class StandardNodeFieldProcessor {
    *   Formatted values ready for display.
    */
   public function getFieldValues(
-    ?NodeInterface $node,
+    NodeInterface|ParagraphInterface|NULL $node,
     string|array $field_names,
     array $options = []
   ): string|array|FilteredMarkup|Markup|NULL {

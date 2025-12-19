@@ -39,9 +39,15 @@
  */
 #}
 
+{{devel_dump(bestor('field_values', paragraph, 'field_cardinality_exception') is empty)}}
+{% if bestor('field_values', paragraph, 'field_cardinality_exception') is not empty %}
+  {# Multiple media field #}
+  
+{% endif %}
+  
 {% set media_info = bestor('media_info', paragraph, 'field_media', {'image_style': 'paragraph_media'}) %} 
 {% if media_info.display == 'default' %}
-     {% set media = content.field_media %}
+    {% set media = content.field_media %}
 {% else %}
   {% if media_info.type == 'image' %}
     {% set media %}
@@ -49,6 +55,7 @@
     {% endset %}
   {% endif %}
 {% endif %}
+
 
 {% set media_position = 'right'%}
 {% set media_layout = '50_50' %}
@@ -62,7 +69,7 @@
   {% set media_position = 'left' %}
   {% set media_layout = 'image_33' %}
 {% endif %}
-
+{{devel_dump(bestor('media_info', paragraph, 'field_media_multiple'))}}
 <div class="h-margin-top-40">
   {{ include('jakarta:c-text-media', {
     media,
