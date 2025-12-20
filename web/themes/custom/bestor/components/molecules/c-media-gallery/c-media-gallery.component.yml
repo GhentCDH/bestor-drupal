@@ -1,0 +1,27 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: 'Media Gallery'
+status: stable
+group: Molecules
+description: "Displays main image with thumbnail strip and lightbox"
+variants:
+  media_only:
+    title: Media Only
+  media_w_caption:
+    title: Media With Caption
+
+props:
+  type: object
+  properties:
+    gallery_id:
+      type: string
+      default: 'gallery'
+    items:
+      type: array
+      default: []
+
+libraryOverrides:
+  js:
+    src/c-media-gallery.js: {}
+  dependencies:
+    - core/drupal
+    - bestor/lightbox

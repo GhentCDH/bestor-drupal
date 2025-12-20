@@ -1,0 +1,126 @@
+.c-media-gallery {
+  margin: 2rem 0;
+}
+
+.c-media-gallery__main {
+  margin-bottom: 1rem;
+}
+
+.c-media-gallery__main-link {
+  display: block;
+  text-decoration: none;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.c-media-gallery__main-link:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.c-media-gallery__main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.c-media-gallery__thumbs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.c-media-gallery__thumbs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.c-media-gallery__thumbs::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.c-media-gallery__thumbs::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.c-media-gallery__thumbs::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.c-media-gallery__thumb {
+  flex: 0 0 80px;
+  height: 60px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: none;
+  padding: 0;
+}
+
+.c-media-gallery__thumb:hover {
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.c-media-gallery__thumb:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.c-media-gallery__thumb--active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.c-media-gallery__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.c-media-gallery__meta-data {
+  font-size: 15px;
+  font-style: italic;
+  margin-block-start: 18px;
+}
+
+.c-media-gallery__main-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.c-media-gallery__main-button:hover {
+  transform: scale(1.01);
+}
+
+.c-media-gallery__main-button:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .c-media-gallery__thumbs {
+    gap: 1rem;
+  }
+  
+  .c-media-gallery__thumb {
+    flex: 0 0 100px;
+    height: 75px;
+  }
+}

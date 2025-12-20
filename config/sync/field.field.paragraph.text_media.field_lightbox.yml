@@ -1,14 +1,14 @@
-uuid: 736b4466-de01-494a-8dbb-4bc9aca0e664
+uuid: 91153025-a042-4159-aa84-7b535a604324
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.paragraph.field_lightbox
-    - paragraphs.paragraphs_type.media
-id: paragraph.media.field_lightbox
+    - paragraphs.paragraphs_type.text_media
+id: paragraph.text_media.field_lightbox
 field_name: field_lightbox
 entity_type: paragraph
-bundle: media
+bundle: text_media
 label: 'Showable in popup'
 description: ''
 required: false

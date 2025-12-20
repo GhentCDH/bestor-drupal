@@ -111,7 +111,7 @@ function  bestor_content_helper_field_widget_single_element_form_alter(array &$e
   if (empty($element['#paragraph_type']) || 
       !in_array($element['#paragraph_type'], ['media', 'text_media']) ||
       empty($element['subform']['field_cardinality_exception']) ||
-      empty($element['#delta'])  
+      !isset($element['#delta'])  
   ) {
     return;
   }

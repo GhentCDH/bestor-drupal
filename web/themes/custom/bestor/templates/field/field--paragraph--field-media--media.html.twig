@@ -1,0 +1,27 @@
+{% set all_media = bestor('media_info', element['#object'], field_name, {'image_style': 'paragraph_media'}) %}
+
+{% set media_info = all_media|length > 0 ? all_media|first : null %}
+
+ {% if media_info %}
+  {% if media_info.type == 'image' %}
+    {% set media %}
+      <img src="{{ media_info.url }}" alt="{{ media_info.alt }}">
+    {% endset %}
+  {% else %}
+    {% set media = items|first.content %}
+  {% endif %}
+
+  {{ include('jakarta:c-media-1-item', {
+    media: media,
+    media_uri: element['#object'].field_lightbox.value and media_info.type == 'image'
+      ? media_info.original_url
+      : null,
+    caption: element['#object'].field_caption.value
+      ? element['#object'].field_title.value
+      : null,
+    add_lightbox: element['#object'].field_lightbox.value and media_info.type == 'image',
+    attr_variant: element['#object'].field_caption.value
+      ? 'media_w_caption'
+      : 'media_only',
+  }, with_context = false) }}
+{% endif %}

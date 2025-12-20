@@ -76,10 +76,18 @@
 
 {% set toc = content.toc_js %}
 {% set top %}
-  {% set image_info = bestor('media_info', node, 'field_image', {'image_style': 'id_kit'}) %}
-  {% set media %}
-    <img loading="lazy" src="{{ image_info.url }}" width="450" height="354" alt="{{ image_info.alt }}">
-  {% endset %}
+
+  {% set all_media = bestor('media_info', node, 'field_image', {'image_style': 'id_kit'}) %}
+
+  {% set image_info = all_media|length > 0 ? all_media|first : null %}
+  {% if image_info %}
+    {% set media %}
+      {% if image_info and image_info.type == 'image' %}
+        <img loading="lazy" src="{{ image_info.url }}" width="450" height="354" alt="{{ image_info.alt }}">
+      {% endif %}
+    {% endset %}
+  {% endif %}
+
   {% set identity_kit_list %}
     {% for key_element in bestor('lemma_key_data', node, 'full', 'database', 'page_1') %}
       {{ include('jakarta:c-identity-kit-item', {

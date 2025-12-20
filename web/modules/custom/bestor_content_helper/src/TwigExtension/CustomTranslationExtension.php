@@ -66,7 +66,7 @@ class CustomTranslationExtension extends AbstractExtension {
     return match($type) {
       'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
       'media_info' => $this->mediaProcessor->getEntityMediaInfo(...$args),
-      'media_count' => $this->mediaProcessor->getFieldMediaCount(...$args),
+      'media_count' => $this->mediaProcessor->getMediaItemCount(...$args),
       'reading_time' => $this->nodeContentAnalyzer->getFormattedReadingTime(...$args),
       'page_variant' => $this->pageAnalyzer->getPageVariant(...$args),
       'field_values' => $this->standardFieldProcessor->getFieldValues(...$args),

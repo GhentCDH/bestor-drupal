@@ -10,6 +10,7 @@ use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\paragraphs\ParagraphInterface;
 
+
 /**
  * Service for handling media images.
  */
@@ -46,56 +47,78 @@ class MediaProcessor {
   }
 
   /**
-   * Gets image URL from a node's media field.
+   * Gets media info from entity field.
    *
    * @param NodeInterface|ParagraphInterface $entity
-   *   The node entity.
+   *   The entity.
    * @param string $field_name
    *   The field name.
    * @param array|null $options
-   *   Mediatype specific options.
+   *   Options: 'image_style', 'cardinality' (single/multiple).
    *
-   * @return string|null
-   *   The image URL, or NULL if not available.
+   * @return array
+   *   Single item array or array of arrays depending on cardinality.
    */
-  public function getEntityMediaInfo(NodeInterface|ParagraphInterface $entity, string $field_name, array $options = NULL): ?array {
+  public function getEntityMediaInfo(NodeInterface|ParagraphInterface $entity, string $field_name, array $options = NULL): array {
     if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
-      return NULL;
+      return [];
     }
 
-    $media = $entity->get($field_name)->referencedEntities();
-  
-    if(count($media) === 1){
-      $media_item = $media[0];
-    } else {
-      $media_item = $media[0];
-    }
+    $media_items = $entity->get($field_name)->referencedEntities();
+    $results = [];
 
-    if (!$media_item instanceof MediaInterface) {
-      return NULL;
+    foreach ($media_items as $delta => $media_item) {
+      if (!$media_item instanceof MediaInterface) {
+        continue;
+      }
+
+      $info = $this->processMediaItem($media_item, $options);
+      if ($info) {
+        $info['delta'] = $delta;
+        $results[] = $info;
+      }
     }
-    
+    return $results;
+  }
+
+
+
+  /**
+   * Process a single media item.
+   *
+   * @param \Drupal\media\MediaInterface $media_item
+   *   The media entity.
+   * @param array|null $options
+   *   Options including 'image_style'.
+   *
+   * @return array|null
+   *   Processed media info.
+   */
+  protected function processMediaItem(MediaInterface $media_item, array $options = NULL): ?array {
     $type = $media_item->bundle();
+    $img_style = $options['image_style'] ?? NULL;
 
     $result = [
       'type' => $type,
-      'display' => 'default'
+      'display' => 'default',
+      'entity' => $media_item,
     ];
 
     switch ($type) {
       case 'image':
-        $img_style = $options['image_style'] ?? NULL;
         return array_merge($result, [
           'url' => $this->getStyledImageUrl($media_item, $img_style),
+          'original_url' => $this->getStyledImageUrl($media_item, NULL),
           'alt' => $this->getImageAlt($media_item) ?? '',
-          'display' => 'custom'
+          'display' => 'custom',
         ]);
+        
       default:
         return $result;
     }
   }
 
-  public function getFieldMediaCount(NodeInterface|ParagraphInterface $entity, string $field_name): int {
+  public function getMediaItemCount(NodeInterface|ParagraphInterface $entity, string $field_name): int {
     if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
       return 0;
     }
@@ -129,7 +152,7 @@ class MediaProcessor {
 
     // If no style requested, return original.
     if ($style_name === NULL) {
-      return $this->fileUrlGenerator->generateString($uri);
+      return $this->fileUrlGenerator->generateAbsoluteString($uri);
     }
 
     // Try to load the image style.
@@ -139,14 +162,12 @@ class MediaProcessor {
 
     // If style exists, return styled URL.
     if ($image_style instanceof ImageStyle) {
-      return $this->fileUrlGenerator->transformRelative(
-        $image_style->buildUrl($uri)
-      );
+      return $image_style->buildUrl($uri);
     }
 
     // Fallback to original if style doesn't exist and fallback is enabled.
     if ($fallback_to_original) {
-      return $this->fileUrlGenerator->generateString($uri);
+      return $this->fileUrlGenerator->generateAbsoluteString($uri); 
     }
 
     return NULL;

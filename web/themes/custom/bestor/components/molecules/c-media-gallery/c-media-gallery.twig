@@ -1,0 +1,59 @@
+{% set component_name = 'c-media-gallery' %}
+{% set gallery_id = gallery_id|default('gallery-' ~ random()) %}
+
+<div class="{{ component_name }}" data-gallery-id="{{ gallery_id }}">
+
+  {# Main image #}
+  <div class="{{ component_name }}__main">
+    {% set first_item = items|first %}
+    <button
+      class="{{ component_name }}__main-button"
+      type="button"
+      data-open-lightbox="0"
+      aria-label="Open image">
+      <img
+        src="{{ first_item.display_url }}"
+        alt="{{ first_item.alt|default('') }}"
+        class="{{ component_name }}__main-image">
+    </button>
+  </div>
+
+  {# Thumbnails #}
+  {% if items|length > 1 %}
+    <div class="{{ component_name }}__thumbs">
+      {% for item in items %}
+        <button
+          class="{{ component_name }}__thumb {{ loop.first ? component_name ~ '__thumb--active' }}"
+          data-thumb-index="{{ loop.index0 }}"
+          data-display-url="{{ item.display_url }}"
+          data-alt="{{ item.alt|default('') }}"
+          type="button">
+          <img src="{{ item.thumb_url }}" alt="{{ item.alt|default('') }}">
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if not attr_variant is same as ('media_only') %}
+    {% if caption %}
+      <div class="{{ component_name }}__meta-data">
+        {{ caption }}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {# Lightbox links (hidden) #}
+  <div hidden>
+    {% for item in items %}
+      <a
+        href="{{ item.lightbox_url }}"
+        data-lightbox-custom
+        data-gallery="{{ gallery_id }}"
+        {% if item.caption %}
+          data-glightbox="description: {{ item.caption|escape('html_attr') }}"
+        {% endif %}>
+      </a>
+    {% endfor %}
+  </div>
+
+</div>

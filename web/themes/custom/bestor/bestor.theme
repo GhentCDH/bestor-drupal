@@ -20,3 +20,20 @@ function bestor_theme_suggestions_select_alter(array &$suggestions, array $varia
     $suggestions[] = 'select__author_dropdown';
   }
 }
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function bestor_preprocess_field__field_media_multiple(&$variables) {
+  $items = $variables['element']['#items'];
+  
+  // Alleen checken en data voorbereiden
+  if (count($items) > 1) {
+    $variables['is_gallery'] = TRUE;
+    $variables['gallery_id'] = 'gallery-' . $variables['element']['#object']->id();
+    $variables['display_mode'] = $variables['element']['#cardinality_exception'] ?? FALSE ? 'slider' : 'grid';
+    
+    // Items beschikbaar maken
+    $variables['gallery_items'] = $items;
+  }
+}

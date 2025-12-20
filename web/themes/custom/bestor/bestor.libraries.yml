@@ -7,3 +7,12 @@ global:
     js/bestor.js: {}
   dependencies:
     - jakarta/global-styling
+lightbox:
+  css:
+    theme:
+      libraries/glightbox/glightbox.min.css: { minified: true }
+  js:
+    libraries/glightbox/glightbox.min.js: { minified: true }
+    js/lightbox-init.js: {}
+  dependencies:
+    - core/drupal
