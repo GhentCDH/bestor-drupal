@@ -31,20 +31,21 @@
         "drupal/core-composer-scaffold": "^10.3",
         "drupal/core-project-message": "^10.3",
         "drupal/core-recommended": "^10.3",
+        "drupal/crop": "^2.5",
         "drupal/ds": "^3.24",
         "drupal/elasticsearch_connector": "dev-3550775-close-and-reopen-index",
         "drupal/entity_events": "^2.0",
         "drupal/entity_reference_modal": "^1.0",
         "drupal/entity_reference_unpublished": "^2.0",
         "drupal/field_group": "^4.0",
+        "drupal/focal_point": "^2.1",
         "drupal/footnotes": "^4.0@beta",
         "drupal/geofield": "^1.61",
-        "drupal/imagefield_slideshow": "^2.0",
         "drupal/inline_entity_form": "^3.0@RC",
         "drupal/leaflet": "^10.3",
-        "drupal/media_entity_slideshow": "^2.5",
         "drupal/media_entity_soundcloud": "^3.2",
         "drupal/media_iframe": "^1.0",
+        "drupal/media_library_edit": "^3.0",
         "drupal/memcache": "^2.7",
         "drupal/menu_perms_per_menu": "^1.0",
         "drupal/migrate_plus": "^6.0",
@@ -91,16 +92,19 @@
         "sort-packages": true
     },
     "extra": {
-    	"enable-patching": true,
-  	   	"patches": {
-  	    	"drupal/core":{
+        "enable-patching": true,
+                "patches": {
+                "drupal/core":{
                 "Sort out and fix language fallback inconsistencies":"https://www.drupal.org/files/issues/2023-01-30/drupal-fix_fallback-2951294-58.patch",
                 "Exposed forms in a block are not updated by AJAX, issue 3032353":"https://www.drupal.org/files/issues/2025-12-08/3032353-96-MR12051.patch"
             },
             "drupal/search_api_glossary":{
                 "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch"
-            }  	                                                           
-    	},
+            },
+            "drupal/focal_point":{
+                "https://www.drupal.org/project/focal_point/issues/3467462":"https://www.drupal.org/files/issues/2024-05-16/3094478-64.patch"
+            }                                                              
+        },
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
