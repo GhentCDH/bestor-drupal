@@ -1,0 +1,23 @@
+uuid: cf9d4653-524c-48cc-8feb-622c9daec124
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: thumbnail_133x75
+label: 'Thumbnail gallery (133x75)'
+effects:
+  3a978a21-e88f-470d-aff5-3a764b6c6397:
+    uuid: 3a978a21-e88f-470d-aff5-3a764b6c6397
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  1379052c-5875-4a29-9923-4c4d73fa285e:
+    uuid: 1379052c-5875-4a29-9923-4c4d73fa285e
+    id: focal_point_crop
+    weight: -10
+    data:
+      width: 133
+      height: 75
+      crop_type: focal_point

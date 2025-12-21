@@ -12,6 +12,7 @@ dependencies:
     - paragraphs.paragraphs_type.media
   module:
     - media_library
+    - media_library_edit
 id: paragraph.media.default
 targetEntityType: paragraph
 bundle: media
@@ -43,15 +44,28 @@ content:
     weight: 2
     region: content
     settings:
-      media_types: {  }
-    third_party_settings: {  }
+      media_types:
+        - audio
+        - document
+        - image
+        - remote_video
+        - soundcloud
+        - video
+        - iframe
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
+        edit_form_mode: media_library
   field_media_multiple:
     type: media_library_widget
     weight: 1
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
+        edit_form_mode: media_library
   field_title:
     type: string_textfield
     weight: 3

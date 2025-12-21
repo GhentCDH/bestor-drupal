@@ -7,17 +7,17 @@ _core:
 name: thumbnail
 label: 'Thumbnail (100×100)'
 effects:
-  1cfec298-8620-4749-b100-ccb6c4500779:
-    uuid: 1cfec298-8620-4749-b100-ccb6c4500779
+  c4eb9942-2c9e-4a81-949f-6161a44b6559:
+    uuid: c4eb9942-2c9e-4a81-949f-6161a44b6559
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  43d250fb-e009-4665-9180-708bcaf593fd:
+    uuid: 43d250fb-e009-4665-9180-708bcaf593fd
     id: image_scale
-    weight: 0
+    weight: -10
     data:
       width: 100
       height: 100
       upscale: false
-  c4eb9942-2c9e-4a81-949f-6161a44b6559:
-    uuid: c4eb9942-2c9e-4a81-949f-6161a44b6559
-    id: image_convert
-    weight: 2
-    data:
-      extension: webp

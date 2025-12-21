@@ -18,6 +18,16 @@ props:
     items:
       type: array
       default: []
+    is_single:
+      type: boolean
+      default: false
+      title: Is Single Item
+      description: 'Whether this gallery contains only a single item'
+    enable_lightbox:
+      type: boolean
+      default: true
+      title: Enable Lightbox
+      description: 'Whether to enable lightbox functionality'
 
 libraryOverrides:
   js:

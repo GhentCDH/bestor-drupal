@@ -1,15 +1,23 @@
 uuid: a38f842b-c690-4532-a669-7e963fe14e43
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: card_horizontal
 label: 'Card-horizontal (320×211)'
 effects:
-  53291520-29ed-4851-be8f-338bc0263494:
-    uuid: 53291520-29ed-4851-be8f-338bc0263494
-    id: image_scale_and_crop
-    weight: 1
+  5cafd9f9-15bf-4847-b98f-54b2514ac286:
+    uuid: 5cafd9f9-15bf-4847-b98f-54b2514ac286
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  090caaed-d770-4456-8d13-01d951e7a27b:
+    uuid: 090caaed-d770-4456-8d13-01d951e7a27b
+    id: focal_point_scale_and_crop
+    weight: -10
     data:
       width: 320
       height: 211
-      anchor: center-center
+      crop_type: focal_point

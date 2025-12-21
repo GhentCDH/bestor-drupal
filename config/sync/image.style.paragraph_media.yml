@@ -1,15 +1,23 @@
 uuid: 5cdf040f-a851-42f4-b142-6a667d9583d0
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: paragraph_media
 label: 'Paragraph Media (960×500)'
 effects:
-  c9dc76e7-07b0-4229-87fe-725eb0831972:
-    uuid: c9dc76e7-07b0-4229-87fe-725eb0831972
-    id: image_scale_and_crop
-    weight: 1
+  b2fa4074-ee46-4f76-919f-31d73b902215:
+    uuid: b2fa4074-ee46-4f76-919f-31d73b902215
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  27dbdef9-313a-44ed-a293-e8a14f3b471b:
+    uuid: 27dbdef9-313a-44ed-a293-e8a14f3b471b
+    id: focal_point_scale_and_crop
+    weight: -10
     data:
       width: 960
       height: 500
-      anchor: center-center
+      crop_type: focal_point

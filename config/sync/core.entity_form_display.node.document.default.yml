@@ -1,32 +1,26 @@
-uuid: 224e1c29-99d6-4a9b-8ee2-97f9d60fab43
+uuid: b7072d96-e90d-4086-814b-678fca228b7a
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.person.field_alternative_name
-    - field.field.node.person.field_author
-    - field.field.node.person.field_date_end
-    - field.field.node.person.field_date_end_year_only
-    - field.field.node.person.field_date_start
-    - field.field.node.person.field_date_start_year_only
-    - field.field.node.person.field_description
-    - field.field.node.person.field_discipline
-    - field.field.node.person.field_end_municipality
-    - field.field.node.person.field_gender
-    - field.field.node.person.field_image
-    - field.field.node.person.field_municipality
-    - field.field.node.person.field_publications
-    - field.field.node.person.field_references
-    - field.field.node.person.field_specialisation
-    - field.field.node.person.field_summary
-    - field.field.node.person.field_typology
-    - field.field.node.person.field_wikidata_entry
-    - node.type.person
+    - field.field.node.document.field_alternative_name
+    - field.field.node.document.field_author
+    - field.field.node.document.field_creator
+    - field.field.node.document.field_date_end
+    - field.field.node.document.field_date_end_year_only
+    - field.field.node.document.field_date_start
+    - field.field.node.document.field_date_start_year_only
+    - field.field.node.document.field_description
+    - field.field.node.document.field_discipline
+    - field.field.node.document.field_image
+    - field.field.node.document.field_references
+    - field.field.node.document.field_specialisation
+    - field.field.node.document.field_summary
+    - node.type.document
   module:
     - datetime
     - entity_reference_modal
     - field_group
-    - link
     - media_library
     - media_library_edit
     - paragraphs
@@ -36,14 +30,13 @@ dependencies:
     - text
 third_party_settings:
   field_group:
-    group_base_foprm:
+    group_base_form:
       children:
         - group_key_data
         - group_content
         - group_tags
         - group_relations
-        - group_linked_data
-        - group_m
+        - group_metadata
       label: base_form
       region: content
       parent_name: ''
@@ -56,40 +49,13 @@ third_party_settings:
         label_as_html: false
         direction: horizontal
         width_breakpoint: null
-    group_key_data:
-      children:
-        - title
-        - field_alternative_name
-        - field_gender
-        - field_date_start
-        - field_date_start_year_only
-        - field_date_end
-        - field_date_end_year_only
-        - field_municipality
-        - field_end_municipality
-        - field_image
-        - field_summary
-      label: 'Key data'
-      region: content
-      parent_name: group_base_foprm
-      weight: 20
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
     group_content:
       children:
         - field_description
-        - field_publications
         - field_references
       label: Content
       region: content
-      parent_name: group_base_foprm
+      parent_name: group_base_form
       weight: 21
       format_type: tab
       format_settings:
@@ -102,12 +68,11 @@ third_party_settings:
         required_fields: true
     group_tags:
       children:
-        - field_typology
         - field_discipline
         - field_specialisation
       label: Tags
       region: content
-      parent_name: group_base_foprm
+      parent_name: group_base_form
       weight: 22
       format_type: tab
       format_settings:
@@ -123,8 +88,55 @@ third_party_settings:
         - group_relation_types
       label: Relations
       region: content
-      parent_name: group_base_foprm
+      parent_name: group_base_form
       weight: 23
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_key_data:
+      children:
+        - title
+        - field_alternative_name
+        - field_creator
+        - field_date_start
+        - field_date_start_year_only
+        - field_date_end
+        - field_date_end_year_only
+        - field_image
+        - field_summary
+      label: 'Key data'
+      region: content
+      parent_name: group_base_form
+      weight: 20
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_metadata:
+      children:
+        - status
+        - promote
+        - sticky
+        - field_author
+        - path
+        - created
+        - translation
+        - langcode
+      label: Metadata
+      region: content
+      parent_name: group_base_form
+      weight: 24
       format_type: tab
       format_settings:
         classes: ''
@@ -137,7 +149,7 @@ third_party_settings:
     group_relation_types:
       children:
         - group_concepts
-        - group_documents
+        - group_docuem
         - group_institutions
         - group_instruments
         - group_persons
@@ -154,91 +166,11 @@ third_party_settings:
         id: ''
         label_as_html: false
         direction: vertical
-        width_breakpoint: null
+        width_breakpoint: 640
     group_concepts:
       children:
-        - computed_relationshipfield__person__concept
+        - computed_relationshipfield__document__concept
       label: Concepts
-      region: content
-      parent_name: group_relation_types
-      weight: 20
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
-    group_documents:
-      children:
-        - computed_relationshipfield__person__document
-      label: Documents
-      region: content
-      parent_name: group_relation_types
-      weight: 21
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
-    group_institutions:
-      children:
-        - computed_relationshipfield__person__institution
-      label: Institutions
-      region: content
-      parent_name: group_relation_types
-      weight: 22
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
-    group_instruments:
-      children:
-        - computed_relationshipfield__person__instrument
-      label: Instruments
-      region: content
-      parent_name: group_relation_types
-      weight: 23
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
-    group_persons:
-      children:
-        - computed_relationshipfield__person__person
-      label: Persons
-      region: content
-      parent_name: group_relation_types
-      weight: 24
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
-    group_places:
-      children:
-        - computed_relationshipfield__person__place
-      label: Places
       region: content
       parent_name: group_relation_types
       weight: 25
@@ -251,10 +183,10 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
-    group_stories:
+    group_docuem:
       children:
-        - computed_relationshipfield__person__story
-      label: Stories
+        - computed_relationshipfield__document__document
+      label: Documents
       region: content
       parent_name: group_relation_types
       weight: 26
@@ -267,20 +199,13 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
-    group_m:
+    group_persons:
       children:
-        - status
-        - promote
-        - sticky
-        - field_author
-        - path
-        - created
-        - translation
-        - langcode
-      label: Metadata
+        - computed_relationshipfield__document__person
+      label: Persons
       region: content
-      parent_name: group_base_foprm
-      weight: 25
+      parent_name: group_relation_types
+      weight: 29
       format_type: tab
       format_settings:
         classes: ''
@@ -290,13 +215,13 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
-    group_linked_data:
+    group_institutions:
       children:
-        - field_wikidata_entry
-      label: 'Linked data'
+        - computed_relationshipfield__document__institution
+      label: Institutions
       region: content
-      parent_name: group_base_foprm
-      weight: 24
+      parent_name: group_relation_types
+      weight: 27
       format_type: tab
       format_settings:
         classes: ''
@@ -306,14 +231,62 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
-id: node.person.default
+    group_stories:
+      children:
+        - computed_relationshipfield__document__story
+      label: Stories
+      region: content
+      parent_name: group_relation_types
+      weight: 31
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_places:
+      children:
+        - computed_relationshipfield__document__place
+      label: Places
+      region: content
+      parent_name: group_relation_types
+      weight: 30
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_instruments:
+      children:
+        - computed_relationshipfield__document__instrument
+      label: Instruments
+      region: content
+      parent_name: group_relation_types
+      weight: 28
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+id: node.document.default
 targetEntityType: node
-bundle: person
+bundle: document
 mode: default
 content:
-  computed_relationshipfield__person__concept:
+  computed_relationshipfield__document__concept:
     type: relation_extended_ief_widget
-    weight: 23
+    weight: 21
     region: content
     settings:
       form_mode: default
@@ -324,7 +297,33 @@ content:
       collapsible: 0
       collapsed: 0
     third_party_settings: {  }
-  computed_relationshipfield__person__document:
+  computed_relationshipfield__document__document:
+    type: relation_extended_ief_widget
+    weight: 22
+    region: content
+    settings:
+      form_mode: default
+      revision: false
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+    third_party_settings: {  }
+  computed_relationshipfield__document__institution:
+    type: relation_extended_ief_widget
+    weight: 25
+    region: content
+    settings:
+      form_mode: default
+      revision: false
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+    third_party_settings: {  }
+  computed_relationshipfield__document__instrument:
     type: relation_extended_ief_widget
     weight: 24
     region: content
@@ -337,9 +336,9 @@ content:
       collapsible: false
       collapsed: false
     third_party_settings: {  }
-  computed_relationshipfield__person__institution:
+  computed_relationshipfield__document__person:
     type: relation_extended_ief_widget
-    weight: 0
+    weight: 25
     region: content
     settings:
       form_mode: default
@@ -350,9 +349,9 @@ content:
       collapsible: false
       collapsed: false
     third_party_settings: {  }
-  computed_relationshipfield__person__instrument:
+  computed_relationshipfield__document__place:
     type: relation_extended_ief_widget
-    weight: 26
+    weight: 23
     region: content
     settings:
       form_mode: default
@@ -363,35 +362,9 @@ content:
       collapsible: false
       collapsed: false
     third_party_settings: {  }
-  computed_relationshipfield__person__person:
+  computed_relationshipfield__document__story:
     type: relation_extended_ief_widget
     weight: 24
-    region: content
-    settings:
-      form_mode: default
-      revision: false
-      override_labels: false
-      label_singular: ''
-      label_plural: ''
-      collapsible: false
-      collapsed: false
-    third_party_settings: {  }
-  computed_relationshipfield__person__place:
-    type: relation_extended_ief_widget
-    weight: 27
-    region: content
-    settings:
-      form_mode: default
-      revision: false
-      override_labels: false
-      label_singular: ''
-      label_plural: ''
-      collapsible: false
-      collapsed: false
-    third_party_settings: {  }
-  computed_relationshipfield__person__story:
-    type: relation_extended_ief_widget
-    weight: 28
     region: content
     settings:
       form_mode: default
@@ -404,7 +377,7 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 9
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -418,7 +391,7 @@ content:
     third_party_settings: {  }
   field_author:
     type: entity_reference_modal
-    weight: 7
+    weight: 14
     region: content
     settings:
       view_and_display: ''
@@ -432,6 +405,14 @@ content:
       tagify: false
       match_operator: CONTAINS
       match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_creator:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
@@ -463,7 +444,7 @@ content:
     third_party_settings: {  }
   field_description:
     type: paragraphs
-    weight: 9
+    weight: 3
     region: content
     settings:
       title: Paragraph
@@ -481,25 +462,13 @@ content:
     third_party_settings: {  }
   field_discipline:
     type: selectify_dropdown_searchable
-    weight: 17
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_end_municipality:
-    type: selectify_dropdown_searchable
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_gender:
-    type: selectify_dropdown_searchable
-    weight: 3
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 11
+    weight: 8
     region: content
     settings:
       media_types: {  }
@@ -507,23 +476,9 @@ content:
       media_library_edit:
         show_edit: '1'
         edit_form_mode: media_library
-  field_municipality:
-    type: selectify_dropdown_searchable
-    weight: 9
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_publications:
-    type: string_textfield
-    weight: 11
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_references:
     type: text_textarea
-    weight: 12
+    weight: 4
     region: content
     settings:
       rows: 5
@@ -531,7 +486,7 @@ content:
     third_party_settings: {  }
   field_specialisation:
     type: entity_reference_modal
-    weight: 18
+    weight: 20
     region: content
     settings:
       view_and_display: ''
@@ -550,56 +505,42 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 12
+    weight: 9
     region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  field_typology:
-    type: selectify_dropdown_searchable
-    weight: 16
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_wikidata_entry:
-    type: link_default
-    weight: 2
-    region: content
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
-    third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 11
+    weight: 18
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 8
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 5
+    weight: 12
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 4
+    weight: 11
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 6
+    weight: 13
     region: content
     settings:
       display_label: true
@@ -613,7 +554,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 10
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }

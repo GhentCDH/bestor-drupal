@@ -1,15 +1,23 @@
 uuid: 2cc1c48d-7885-43db-99c4-238366e38ee1
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: id_kit
 label: 'id-kit (450×354)'
 effects:
-  053bdd6a-d1b5-4714-bacd-617b237f9e78:
-    uuid: 053bdd6a-d1b5-4714-bacd-617b237f9e78
-    id: image_scale_and_crop
-    weight: 1
+  b89d2ae8-fe9b-4264-8161-902683db8236:
+    uuid: b89d2ae8-fe9b-4264-8161-902683db8236
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  dce600c0-f7f5-4412-93ca-f5d669953977:
+    uuid: dce600c0-f7f5-4412-93ca-f5d669953977
+    id: focal_point_scale_and_crop
+    weight: -10
     data:
       width: 450
       height: 354
-      anchor: center-center
+      crop_type: focal_point

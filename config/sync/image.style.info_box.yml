@@ -1,15 +1,23 @@
 uuid: f4d0f101-062b-4a6f-9612-e16c56ce433d
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: info_box
 label: 'Info box (466×300)'
 effects:
-  45236cab-c60d-4582-a9ea-64e517a71df0:
-    uuid: 45236cab-c60d-4582-a9ea-64e517a71df0
-    id: image_scale_and_crop
-    weight: 1
+  821517e4-ce07-414c-af29-b36bd6949371:
+    uuid: 821517e4-ce07-414c-af29-b36bd6949371
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  ca7217a7-1e5d-4eb9-9613-8d437533368a:
+    uuid: ca7217a7-1e5d-4eb9-9613-8d437533368a
+    id: focal_point_scale_and_crop
+    weight: -10
     data:
       width: 466
       height: 300
-      anchor: center-center
+      crop_type: focal_point

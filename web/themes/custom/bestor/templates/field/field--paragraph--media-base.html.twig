@@ -4,7 +4,7 @@
   {# Altijd gallery component gebruiken, ook voor single items #}
   {% set gallery_items = [] %}
   {% set all_thumbs = bestor('media_info', element['#object'], field_name, {
-    'image_style': 'thumbnail',
+    'image_style': 'gallery_thumbnail',
   }) %}
 
   {% for media_info in all_media %}
@@ -22,6 +22,6 @@
     items: gallery_items,
     caption: element['#object'].field_caption.value ? element['#object'].field_title.value : null,
     is_single: all_media|length == 1,
+    enable_lightbox: element['#object'].field_lightbox.value,
   }, with_context = false) }}
-
 {% endif %}

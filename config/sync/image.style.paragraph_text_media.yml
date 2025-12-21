@@ -1,15 +1,23 @@
 uuid: 1ee3295b-7b77-4788-807a-e48fe7cb5586
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: paragraph_text_media
 label: 'paragraph_text_media (510×400)'
 effects:
-  f5ba4556-e447-47c7-a34e-ac023a4c1d5f:
-    uuid: f5ba4556-e447-47c7-a34e-ac023a4c1d5f
-    id: image_scale_and_crop
-    weight: 1
+  e386057f-ae25-4090-89b4-0e8df33c4e07:
+    uuid: e386057f-ae25-4090-89b4-0e8df33c4e07
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  14d9f4f3-5990-46b2-85d4-e88de18544e4:
+    uuid: 14d9f4f3-5990-46b2-85d4-e88de18544e4
+    id: focal_point_scale_and_crop
+    weight: -10
     data:
       width: 510
       height: 400
-      anchor: center-center
+      crop_type: focal_point

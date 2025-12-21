@@ -1,15 +1,23 @@
 uuid: 17a3071c-b13b-444e-9f88-33b597180ec0
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: card_publication
 label: 'Card-publication (199×302)'
 effects:
-  59955c7a-8f0d-4268-acb5-8180c0857fcb:
-    uuid: 59955c7a-8f0d-4268-acb5-8180c0857fcb
-    id: image_scale_and_crop
-    weight: 1
+  043b76da-aad5-4939-bba3-3a6cf009111e:
+    uuid: 043b76da-aad5-4939-bba3-3a6cf009111e
+    id: image_convert
+    weight: -9
+    data:
+      extension: webp
+  c50e4058-c2f2-450d-8044-f277fa6486cc:
+    uuid: c50e4058-c2f2-450d-8044-f277fa6486cc
+    id: focal_point_scale_and_crop
+    weight: -10
     data:
       width: 199
       height: 302
-      anchor: center-center
+      crop_type: focal_point
