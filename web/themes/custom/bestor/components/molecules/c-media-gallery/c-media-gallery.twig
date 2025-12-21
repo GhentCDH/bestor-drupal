@@ -1,7 +1,7 @@
 {% set component_name = 'c-media-gallery' %}
 {% set gallery_id = gallery_id|default('gallery-' ~ random()) %}
 
-<div class="{{ component_name }}" data-gallery-id="{{ gallery_id }}">
+<div class="{{ component_name }} {{ is_single ? component_name ~ '--single' }}" data-gallery-id="{{ gallery_id }}">
 
   {# Main image #}
   <div class="{{ component_name }}__main">
@@ -18,7 +18,7 @@
     </button>
   </div>
 
-  {# Thumbnails #}
+  {# Thumbnails - verberg voor single items #}
   {% if items|length > 1 %}
     <div class="{{ component_name }}__thumbs">
       {% for item in items %}
@@ -34,18 +34,17 @@
     </div>
   {% endif %}
 
-  {% if not attr_variant is same as ('media_only') %}
-    {% if caption %}
-      <div class="{{ component_name }}__meta-data">
-        {{ caption }}
-      </div>
-    {% endif %}
+  {# Caption #}
+  {% if caption %}
+    <div class="{{ component_name }}__meta-data">
+      {{ caption }}
+    </div>
   {% endif %}
 
   {# Lightbox links (hidden) #}
   <div hidden>
     {% for item in items %}
-      <a
+      <a  
         href="{{ item.lightbox_url }}"
         data-lightbox-custom
         data-gallery="{{ gallery_id }}"

@@ -1,0 +1,27 @@
+{% set all_media = bestor('media_info', element['#object'], field_name, {'image_style': 'paragraph_media'}) %}
+
+{% if all_media|length > 0 %}
+  {# Altijd gallery component gebruiken, ook voor single items #}
+  {% set gallery_items = [] %}
+  {% set all_thumbs = bestor('media_info', element['#object'], field_name, {
+    'image_style': 'thumbnail',
+  }) %}
+
+  {% for media_info in all_media %}
+    {% set gallery_items = gallery_items|merge([{
+      'display_url': media_info.url,
+      'lightbox_url': media_info.original_url,
+      'thumb_url': all_thumbs[loop.index0].url,
+      'alt': media_info.alt,
+      'caption': element['#object'].field_caption.value ? element['#object'].field_title.value : null,
+    }]) %}
+  {% endfor %}
+  
+  {{ include('bestor:c-media-gallery', {
+    gallery_id: 'gallery-' ~ element['#object'].id() ~ '-' ~ field_name,
+    items: gallery_items,
+    caption: element['#object'].field_caption.value ? element['#object'].field_title.value : null,
+    is_single: all_media|length == 1,
+  }, with_context = false) }}
+
+{% endif %}

@@ -114,6 +114,31 @@
   outline-offset: 2px;
 }
 
+
+.c-media-gallery {
+  margin: 2rem 0;
+}
+
+.c-media-gallery--single {
+  /* Dezelfde spacing als c-media-1-item */
+  padding-block: 3.75rem;
+  margin: 0;
+}
+
+@media screen and (min-width: 90em) {
+  .c-media-gallery--single {
+    padding-block: 5.9375rem;
+  }
+}
+
+/* Adjacent sibling spacing voor single items */
+.c-media-gallery--single + .c-text,
+.c-media-gallery--single + .c-text-media,
+.c-media-gallery--single + .c-media-1-item,
+.c-media-gallery--single + .c-media-gallery {
+  padding-block-start: 0;
+}
+
 @media (min-width: 768px) {
   .c-media-gallery__thumbs {
     gap: 1rem;
