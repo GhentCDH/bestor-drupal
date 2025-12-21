@@ -15,6 +15,26 @@ function bestor_content_helper_uninstall() {
 }
 
 
+function bestor_content_helper_update_9001() {
+  // Drop the existing table
+  $schema = \Drupal::database()->schema();
+  if ($schema->tableExists('bestor_site_setting')) {
+    $schema->dropTable('bestor_site_setting');
+  }
+  
+  // Clear entity definition cache to rebuild table
+  \Drupal::entityDefinitionUpdateManager()->applyUpdates();
+  
+  // Clear all caches
+  drupal_flush_all_caches();
+  
+  // Resync settings from YAML
+  _bestor_site_settings_sync();
+
+  return t('Rebuilt bestor_site_setting table and resynced from YAML.');
+}
+
+
 function _bestor_site_settings_sync() {
   $path = \Drupal::service('extension.list.module')
     ->getPath('bestor_content_helper') . '/bestor_content_helper.site_settings.yml';
