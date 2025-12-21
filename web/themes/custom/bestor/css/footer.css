@@ -300,3 +300,8 @@
   align-content: center;
   gap:50px;
 }
+
+.footer-dislaimer{
+  font-size:18px;
+  max-width:600px;
+}
