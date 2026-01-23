@@ -15,22 +15,27 @@ function bestor_content_helper_uninstall() {
 }
 
 
+/**
+ * Rebuild bestor_site_setting table and resync from YAML.
+ */
 function bestor_content_helper_update_9001() {
-  // Drop the existing table
-  $schema = \Drupal::database()->schema();
-  if ($schema->tableExists('bestor_site_setting')) {
-    $schema->dropTable('bestor_site_setting');
+  $database = \Drupal::database();
+  
+  // Drop the table if it exists
+  if ($database->schema()->tableExists('bestor_site_setting')) {
+    $database->schema()->dropTable('bestor_site_setting');
   }
   
-  // Clear entity definition cache to rebuild table
-  \Drupal::entityDefinitionUpdateManager()->applyUpdates();
+  // Uninstall and reinstall entity type to recreate table
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_type = \Drupal::entityTypeManager()->getDefinition('bestor_site_setting');
   
-  // Clear all caches
-  drupal_flush_all_caches();
+  // Force reinstall
+  $update_manager->installEntityType($entity_type);
   
   // Resync settings from YAML
   _bestor_site_settings_sync();
-
+  
   return t('Rebuilt bestor_site_setting table and resynced from YAML.');
 }
 

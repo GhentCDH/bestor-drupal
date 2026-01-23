@@ -258,6 +258,12 @@
   color:  var(--color-primary);
 }
 
+/* FEAT: full page form styling */
+
+.pagecontent-form .c-structured-layout__content {
+  grid-column-start: 1;
+}
+
 
 /* FIX: make space between paragraphs smaller */
 

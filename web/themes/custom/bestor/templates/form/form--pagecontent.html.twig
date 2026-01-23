@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ *
+ * @ingroup themeable
+ */
+#}
+
+ {{ include('jakarta:c-structured-layout', {
+  top: top,
+  content: children,
+  attributes: attributes.addClass('pagecontent-form'),
+}, with_context = false) }}
