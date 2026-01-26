@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Theme override for an 'input' #type form element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_input()
+ */
+#}
+
+{{ include('jakarta:c-button', {
+  html_tag: 'button',
+  attr_variant: 'default',
+  color: 'primary',
+  title: attributes.value,
+}) }}

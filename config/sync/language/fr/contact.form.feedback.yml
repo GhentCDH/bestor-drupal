@@ -1,2 +1,5 @@
-label: 'Retours utilisateurs sur le site web'
+label: 'Contactez Bestor'
 message: 'Votre message a été envoyé.'
+third_party_settings:
+  contact_storage:
+    submit_text: Envoyer

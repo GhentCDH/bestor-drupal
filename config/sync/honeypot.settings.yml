@@ -1,0 +1,57 @@
+_core:
+  default_config_hash: 9bVDfWSa_In6VzTXmy04jJ_3ZQobihKjO9isuuUCPaw
+protect_all_forms: false
+unprotected_forms:
+  - user_login_form
+  - search_form
+  - search_block_form
+  - views_exposed_form
+  - honeypot_settings_form
+log: false
+element_name: url
+time_limit: 3
+expire: 300
+form_settings:
+  user_register_form: false
+  user_pass: false
+  contact_message_feedback_form: true
+  contact_message_personal_form: true
+  node_article_form: false
+  node_concept_form: false
+  node_document_form: false
+  node_event_form: false
+  node_institution_form: false
+  node_instrument_form: false
+  node_page_form: false
+  node_person_form: false
+  node_place_form: false
+  node_publication_form: false
+  node_relationnode__concept_concept_form: false
+  node_relationnode__concept_document_form: false
+  node_relationnode__concept_instrument_form: false
+  node_relationnode__concept_place_form: false
+  node_relationnode__concept_story_form: false
+  node_relationnode__document_document_form: false
+  node_relationnode__document_place_form: false
+  node_relationnode__document_strory_form: false
+  node_relationnode__institut_concept_form: false
+  node_relationnode__institut_document_form: false
+  node_relationnode__institut_institut_form: false
+  node_relationnode__institut_instrum_form: false
+  node_relationnode__institut_place_form: false
+  node_relationnode__institut_story_form: false
+  node_relationnode__instrum_document_form: false
+  node_relationnode__instrum_instrum_form: false
+  node_relationnode__instrum_place_form: false
+  node_relationnode__instrum_story_form: false
+  node_relationnode__person_concept_form: false
+  node_relationnode__person_document_form: false
+  node_relationnode__person_institut_form: false
+  node_relationnode__person_instrum_form: false
+  node_relationnode__person_person_form: false
+  node_relationnode__person_place_form: false
+  node_relationnode__person_story_form: false
+  node_relationnode__place_place_form: false
+  node_relationnode__place_story_form: false
+  node_relationnode__story_story_form: false
+  node_story_form: false

@@ -258,9 +258,10 @@
   color:  var(--color-primary);
 }
 
-/* FEAT: full page form styling */
+/* FEAT: full page form and system block styling */
 
-.pagecontent-form .c-structured-layout__content {
+.pagecontent-form .c-structured-layout__content,
+.block-system-main-block .c-structured-layout__content {
   grid-column-start: 1;
 }
 
