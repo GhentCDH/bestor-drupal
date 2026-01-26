@@ -42,7 +42,8 @@
   {{ title_suffix }}
   {% block content %}
     {{ include('jakarta:c-structured-layout', {
-      content
+      content,
+      attributes: attributes.addClass('pagecontent-form'),
     }, with_context = false) }}
   {% endblock %}
 </div>

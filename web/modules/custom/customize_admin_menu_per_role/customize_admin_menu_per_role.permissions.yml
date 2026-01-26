@@ -2,3 +2,6 @@ access webmanager dashboard:
   title: 'Access webmanager dashboard'
 access redactor dashboard:
   title: 'Access redactor dashboard'
+edit bestor contact form:
+  title: 'Edit Bestor contact form'
+  description: 'Allows editing of the Bestor contact form configuration'

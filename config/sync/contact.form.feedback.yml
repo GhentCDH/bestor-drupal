@@ -7,7 +7,7 @@ dependencies:
 third_party_settings:
   contact_storage:
     submit_text: 'Send message'
-    show_preview: true
+    show_preview: false
     disabled_form_message: 'This contact form has been disabled.'
     maximum_submissions_user: 0
     page_autoreply_format: plain_text
@@ -16,7 +16,7 @@ _core:
 id: feedback
 label: 'Contact Bestor'
 recipients:
-  - admin@example.com
+  - maarten.langhendries@rasab.be
 reply: ''
 weight: 0
 message: 'Your message has been sent.'

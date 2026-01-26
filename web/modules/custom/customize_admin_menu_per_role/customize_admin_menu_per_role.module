@@ -5,6 +5,9 @@ use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 function customize_admin_menu_per_role_page_attachments(&$page) {
   $roles = \Drupal::currentUser()->getRoles();
@@ -14,4 +17,26 @@ function customize_admin_menu_per_role_page_attachments(&$page) {
 	$page['#attached']['library'][] = 'customize_admin_menu_per_role/loggedin-styles';
 	return;
   } 
+}
+
+
+function customize_admin_menu_per_role_contact_form_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($entity->id() == 'feedback' && $operation == 'update') {
+    return AccessResult::allowedIfHasPermission($account, 'edit bestor contact form');
+  }
+  return AccessResult::neutral();
+}
+
+
+function customize_admin_menu_per_role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'contact_form_edit_form') {
+    $current_user = \Drupal::currentUser();
+    if ($current_user->hasPermission('edit bestor contact form') && (!$current_user->hasPermission('administer contact forms'))) {
+       $form['weight']['#access'] = FALSE;
+       $form['selected']['#access'] = FALSE;
+       $form['contact_storage_preview']['#access'] = FALSE;
+       $form['contact_storage_maximum_submissions_user']['#access'] = FALSE;    
+    }
+  
+  }
 }
