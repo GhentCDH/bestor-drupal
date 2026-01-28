@@ -12,7 +12,9 @@ use Drupal\bestor_content_helper\Service\NodeContentAnalyzer;
 use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\bestor_content_helper\Service\StandardNodeFieldProcessor;
 use Drupal\bestor_content_helper\Service\MediaProcessor;
+use Drupal\bestor_content_helper\Service\UrlProvider;
 use Drupal\filter\Render\FilteredMarkup;
+use Drupal\Core\Url;
 
 /**
  * Twig extension for custom translations.
@@ -26,6 +28,7 @@ class CustomTranslationExtension extends AbstractExtension {
   protected NodeContentAnalyzer $nodeContentAnalyzer;
   protected StandardNodeFieldProcessor $standardFieldProcessor;
   protected MediaProcessor $mediaProcessor;
+  protected UrlProvider $urlProvider;
 
   /**
    * Constructor.
@@ -38,6 +41,7 @@ class CustomTranslationExtension extends AbstractExtension {
     NodeContentAnalyzer $nodeContentAnalyzer,
     StandardNodeFieldProcessor $standardFieldProcessor,
     MediaProcessor $mediaProcessor,
+    UrlProvider $urlProvider
   ) {
     $this->languageManager = $languageManager;
     $this->siteSettingManager = $siteSettingManager;
@@ -46,6 +50,7 @@ class CustomTranslationExtension extends AbstractExtension {
     $this->nodeContentAnalyzer = $nodeContentAnalyzer;
     $this->standardFieldProcessor = $standardFieldProcessor;
     $this->mediaProcessor = $mediaProcessor;
+    $this->urlProvider = $urlProvider;
   }
 
   /**
@@ -62,7 +67,7 @@ class CustomTranslationExtension extends AbstractExtension {
   /**
    * Main bestor function - routes to different functionality.
    */
-  public function bestor(string $type, ...$args): Markup|FilteredMarkup|array|string|null {
+  public function bestor(string $type, ...$args): Markup|FilteredMarkup|Url|array|string|null {
     return match($type) {
       'facet_buttons' => $this->facetResultsProvider->getSearchBannerFacetButtons(...$args),
       'media_info' => $this->mediaProcessor->getEntityMediaInfo(...$args),
@@ -73,6 +78,8 @@ class CustomTranslationExtension extends AbstractExtension {
       'lemma_key_data' => $this->standardFieldProcessor->getLemmaKeyData(...$args),
       'search_tagline' =>  $this->siteSettingManager->getSearchTagline(...$args),
       'site_setting' => $this->siteSettingManager->getBestorSiteSetting(...$args),
+      'translated_url' => $this->urlProvider->getTranslatedPageUrl(...$args),
+      'citation' => $this->standardFieldProcessor->getCitation(...$args),
       default => NULL,
     };
   }

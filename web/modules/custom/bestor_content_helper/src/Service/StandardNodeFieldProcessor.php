@@ -12,6 +12,7 @@ use Drupal\filter\Render\FilteredMarkup;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Service for analyzing and formatting node content.
@@ -21,14 +22,14 @@ use Drupal\paragraphs\ParagraphInterface;
  */
 class StandardNodeFieldProcessor {
 
-   use StringTranslationTrait;
+  use StringTranslationTrait;
 
   protected EntityTypeManagerInterface $entityTypeManager;
   protected LanguageManagerInterface $languageManager;
   protected RendererInterface $renderer;
+  protected DateFormatterInterface $dateFormatter;
   protected FacetResultsProvider $facetResultsProvider;
   protected CurrentPageAnalyzer $pageAnalyzer;
-
 
   /**
    * Constructs a StandardNodeFieldProcessor object.
@@ -48,12 +49,14 @@ class StandardNodeFieldProcessor {
     EntityTypeManagerInterface $entityTypeManager,
     LanguageManagerInterface $languageManager,
     RendererInterface $renderer,
+    DateFormatterInterface $dateFormatter,
     FacetResultsProvider $facetResultsProvider,
-    CurrentPageAnalyzer $pageAnalyzer,
+    CurrentPageAnalyzer $pageAnalyzer
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $languageManager;
     $this->renderer = $renderer;
+    $this->dateFormatter = $dateFormatter;
     $this->facetResultsProvider = $facetResultsProvider;
     $this->pageAnalyzer = $pageAnalyzer;
   }
@@ -753,4 +756,49 @@ class StandardNodeFieldProcessor {
     }
     return (string) $value;
   }
+
+
+  public function getCitation(?NodeInterface $node = NULL): Markup|null {  
+    if(empty($node)){
+      $node = $this->pageAnalyzer->getCurrentNode();
+      if(!$node instanceof NodeInterface){
+        return NULL;
+      }
+    }
+
+    if (!$this->pageAnalyzer->currentPageIsLemma()) {
+      return NULL;
+    }
+
+    $title = $node->label();
+    $changed_time = $this->dateFormatter->format($node->getChangedTime(), 'custom', 'd/m/Y');
+
+    if (empty($title) || empty($changed_time)) {
+      return NULL;
+    }
+
+    $citation = '';
+
+    $changed_label = t('last modified');
+    $and_label = t('and');
+    $in_label = t('in');
+    
+    $url = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
+    $authors = $this->getEntityReferenceValue($node, $node->get('field_author')->getFieldDefinition(), 'taxonomy_term', []);
+
+    if (!empty($authors)) {
+      if(count($authors) === 1) {
+        $citation = reset($authors) . ', ';
+      } elseif (count($authors) > 3) {
+        $citation = reset($authors) . ' et al., ';
+      } else {
+        $last_author = array_pop($authors);
+        $citation = implode(', ', $authors) . ' ' . $and_label . ' ' . $last_author . ', ';
+      }
+    }
+
+    $citation .= '"' . $title . '," ' . $in_label . ' <em>Bestor</em>, ' . $changed_label . ' ' . $changed_time . ', ' . $url . '.';
+    return Markup::create($citation);
+  }
+
 }

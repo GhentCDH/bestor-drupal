@@ -37,6 +37,5 @@ function customize_admin_menu_per_role_form_alter(&$form, FormStateInterface $fo
        $form['contact_storage_preview']['#access'] = FALSE;
        $form['contact_storage_maximum_submissions_user']['#access'] = FALSE;    
     }
-  
   }
 }

@@ -4,6 +4,7 @@ namespace Drupal\bestor_content_helper\Service;
 
 use Drupal\node\NodeInterface;
 use Drupal\bestor_content_helper\Service\NodeContentAnalyzer;
+use Drupal\Core\Language\LanguageInterface;
 
 class NodeLanguageAnalyzer {
 
@@ -38,7 +39,7 @@ class NodeLanguageAnalyzer {
     
     return null;
   }
-
+ 
 
   protected function listSuggestions(
     NodeInterface $node, 

@@ -9,13 +9,14 @@ use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\views\Views;
 use Drupal\Core\Template\Attribute;
+use Drupal\bestor_content_helper\Service\UrlProvider;
 
 class FacetResultsProvider {
 
-  protected LanguageManagerInterface $languageManager;
+  protected UrlProvider $urlProvider;
 
-  public function __construct(LanguageManagerInterface $languageManager) {
-    $this->languageManager = $languageManager;
+  public function __construct(UrlProvider $urlProvider) {
+    $this->urlProvider = $urlProvider;
   }
 
 
@@ -119,15 +120,11 @@ class FacetResultsProvider {
 
   public function getEnableFacetUrl(string $view_id, string $view_display, string $facet_query_id, string|int $facet_value): ?Url{
     $view_route = 'view.' . $view_id . '.' . $view_display;
-    $language = $this->languageManager->getCurrentLanguage();
-    return Url::fromRoute(
-        $view_route,
-        [],
-        [
-          'query' => [$facet_query_id . '[' . $facet_value . ']' => $facet_value],
-          'language' => $language,
-        ]
-      ) ?? NULL;
+    return $this->urlProvider->getTranslatedUrlFromRoute(
+      $view_route, 
+      [],
+      ['query' => [$facet_query_id . '[' . $facet_value . ']' => $facet_value]]
+    ) ?? NULL;
   }
 
   public function getEnableFacetLinkRenderArray(Url $url, string $link_text, array $classes = []): array {

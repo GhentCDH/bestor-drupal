@@ -154,4 +154,80 @@
     }
   };
 
+  // Popup for citing db lemmas
+  Drupal.behaviors.citationPopup = {
+    attach: function (context) {
+      once('citation-popup', '#citation-popup', context).forEach(function(popup) {
+        const toggleBtn = context.querySelector('.js-citation-toggle');
+        const closeBtn = popup.querySelector('.js-citation-close');
+        const copyBtn = popup.querySelector('.js-citation-copy');
+        let resetTimeout = null;
+
+        // SVG icons
+        const copyIconSVG = '<svg class="citation-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+        const checkIconSVG = '<svg class="citation-icon" width="20" height="20" viewBox="2 12 28 16" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 17l5 5 12-12M16 20l2 2 12-12"></path></svg>';
+
+        // reset
+        function resetCopyIcon() {
+          if (copyBtn) {
+            copyBtn.innerHTML = copyIconSVG;
+            copyBtn.classList.remove('is-copied');
+          }
+          // Clear timeout
+          if (resetTimeout) {
+            clearTimeout(resetTimeout);
+            resetTimeout = null;
+          }
+        }
+
+        // Toggle popup
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            popup.hidden = !popup.hidden;
+            
+            // Reset icon als popup gesloten wordt
+            if (popup.hidden) {
+              resetCopyIcon();
+            }
+          });
+        }
+
+        // Close popup
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function() {
+            popup.hidden = true;
+            resetCopyIcon();
+          });
+        }
+
+        // Copy to clipboard
+        if (copyBtn) {
+          copyBtn.addEventListener('click', function() {
+            const text = this.getAttribute('data-citation');
+            
+            navigator.clipboard.writeText(text).then(() => {
+              // Vervang icoon door dubbele vink
+              this.innerHTML = checkIconSVG;
+              this.classList.add('is-copied');
+              
+              // Reset na 1 minuut
+              resetTimeout = setTimeout(() => {
+                resetCopyIcon();
+              }, 60000);
+            });
+          });
+        }
+
+        // Close when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!popup.contains(e.target) && !e.target.closest('.js-citation-toggle')) {
+            popup.hidden = true;
+            resetCopyIcon();
+          }
+        });
+      });
+    }
+  };
+
 })(jQuery, Drupal, once);

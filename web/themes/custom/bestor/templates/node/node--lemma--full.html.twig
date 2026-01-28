@@ -119,26 +119,48 @@
     {{content.body}}
   {% endif %}
 
-
   {% if content.field_geolocation %}
     {{content.field_geolocation}}
   {% endif %}
 {% endset %}
+
 {% set sidebar %}
+  {% set contact_url = bestor('translated_url', 'contact') %}
+  {% set citation_text = bestor('citation') %}
+  
   {% set buttons %}
-    {{ include('jakarta:c-button', {
-      html_tag: 'a',
-      attr_variant: 'default',
-      color: 'primary',
-      title: 'Suggestion',
-    }, with_context = false) }}
-    {{ include('jakarta:c-button', {
-      html_tag: 'a',
-      attr_variant: 'default',
-      color: 'primary',
-      title: 'Quote',
-    }, with_context = false) }}
+    {% if contact_url %}
+      {{ include('jakarta:c-button', {
+        html_tag: 'a',
+        attr_variant: 'default',
+        color: 'primary',
+        title: 'Suggestion'|t,
+        url: contact_url
+      }, with_context = false) }}
+    {% endif %}
+    {% if citation_text %}
+      {{ include('jakarta:c-button', {
+        html_tag: 'a',
+        attr_variant: 'default',
+        color: 'primary',
+        title: 'Quote'|t,
+        url: '#citation',
+        c_button_utility_classes: ['js-citation-toggle']
+      }, with_context = false) }}
+      <div id="citation-popup" class="citation-popup" hidden>
+        <button class="citation-popup-close js-citation-close" aria-label="{{ 'Close'|t }}">&times;</button>
+        <h3 class="citation-popup-title">{{ 'How to cite'|t }}</h3>
+        <p class="citation-popup-text">{{ citation_text }}</p>
+        <button class="c-button c-button--primary js-citation-copy" data-citation="{{ citation_text|striptags }}" aria-label="{{ 'Copy citation'|t }}">
+          <svg class="citation-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div>
+    {% endif %}
   {% endset %}
+
   {% set table_of_contents %}
     {% set dropdown_items %}
       {{toc}}
@@ -195,6 +217,10 @@
     table_of_contents,
     related_items,
   }, with_context = false) }}
+
+  {% if citation_text %}
+
+  {% endif %}
 {% endset %}
 {{ include('jakarta:c-structured-layout', {
   top,

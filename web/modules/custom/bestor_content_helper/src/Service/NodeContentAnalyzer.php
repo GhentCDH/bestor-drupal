@@ -3,6 +3,7 @@
 namespace Drupal\bestor_content_helper\Service;
 
 
+use Drupal\Core\Render\Markup;
 use Drupal\node\NodeInterface;
 
 /**
@@ -91,5 +92,4 @@ class NodeContentAnalyzer {
     $lemmas = ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'];
     return in_array($bundleName, $lemmas);
   }
-
 }  
