@@ -214,6 +214,7 @@ class StandardNodeFieldProcessor {
       'field_typology' => 'type',
       'field_country' => 'country',
       'field_municipality' => 'place',
+      'field_end_municipality' => 'place',
       'field_gender' => 'gender',
       'field_author' => 'author',
       default => NULL,

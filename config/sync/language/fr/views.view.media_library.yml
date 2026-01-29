@@ -102,7 +102,7 @@ display:
         name:
           label: Nom
         uid:
-          label: Author
+          label: Auteur
         changed:
           label: Updated
       arguments:

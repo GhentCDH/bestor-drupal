@@ -1,4 +1,4 @@
-uuid: 97cb7b33-bb45-406e-816a-99810484a4d7
+uuid: 34535339-a549-4922-8dca-57d606c0cfd2
 langcode: en
 status: true
 dependencies:
@@ -9,8 +9,8 @@ dependencies:
     - better_exposed_filters
     - facets_exposed_filters
     - search_api
-id: database
-label: Database
+id: database_advanced_search
+label: 'Advanced search'
 module: views
 description: ''
 tag: ''
@@ -991,7 +991,7 @@ display:
         ajax_history:
           enable_history: true
           exclude_args: ''
-      path: database
+      path: database/advanced-search
       menu:
         type: none
         title: Database

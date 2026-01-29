@@ -109,6 +109,7 @@ module:
   views_ui: 0
   workflows: 0
   menu_admin_per_menu: 1
+  pathauto: 1
   menu_perms_per_menu: 2
   content_translation: 10
   views: 10

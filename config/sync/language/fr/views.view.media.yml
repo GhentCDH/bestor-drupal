@@ -18,7 +18,7 @@ display:
           label: Type
           separator: ', '
         uid:
-          label: Author
+          label: Auteur
           separator: ', '
         status:
           label: État

@@ -54,6 +54,7 @@
         "drupal/node_view_permissions": "^2.0",
         "drupal/paragraphs": "^1.18",
         "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
+        "drupal/pathauto": "^1.14",
         "drupal/rabbit_hole": "^1.0",
         "drupal/ruhi": "^10.2",
         "drupal/sdc_component_library": "^1.0",

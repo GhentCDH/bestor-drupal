@@ -13,7 +13,7 @@ display:
           label: 'Type de contenu'
           separator: ', '
         name:
-          label: Author
+          label: Auteur
           separator: ', '
         moderation_state:
           label: 'État de modération'

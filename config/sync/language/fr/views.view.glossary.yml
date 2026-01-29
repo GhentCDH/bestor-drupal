@@ -8,7 +8,7 @@ display:
         title:
           label: Titre
         name:
-          label: Author
+          label: Auteur
         changed:
           label: 'Last update'
       pager:
