@@ -16,35 +16,35 @@ class DatabaseFullTextSearchForm extends FormBase {
   }
 
   
-public function buildForm(array $form, FormStateInterface $form_state) {
-  $form['#attributes']['class'][] = 'bef-exposed-form';
-  $form['#attributes']['class'][] = 'views-exposed-form';
-  $form['#method'] = 'get';
-  $form['#action'] = '/database';
-  
-  $form['fullsearch'] = [
-    '#type' => 'textfield',
-    '#title' => $this->t('Fulltext search'),
-    '#title_display' => 'invisible',
-    '#placeholder' => $this->t('Search...'),
-    '#size' => 30,
-    '#maxlength' => 128,
-    '#required' => FALSE,
-  ];
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['#attributes']['class'][] = 'bef-exposed-form';
+    $form['#attributes']['class'][] = 'views-exposed-form';
+    $form['#method'] = 'get';
+    $form['#action'] = '/database';
+    
+    $form['fullsearch'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Fulltext search'),
+      '#title_display' => 'invisible',
+      '#placeholder' => $this->t('Search...'),
+      '#size' => 30,
+      '#maxlength' => 128,
+      '#required' => FALSE,
+    ];
 
-  $form['actions'] = [
-    '#type' => 'actions',
-  ];
+    $form['actions'] = [
+      '#type' => 'actions',
+    ];
 
-  $form['actions']['submit'] = [
-    '#type' => 'submit',
-    '#value' => $this->t('Search'),
-    '#id' => 'edit-submit-search',
-    '#name' => '',
-  ];
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Search'),
+      '#id' => 'edit-submit-search',
+      '#name' => '',
+    ];
 
-  return $form;
-}
+    return $form;
+  }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
   }

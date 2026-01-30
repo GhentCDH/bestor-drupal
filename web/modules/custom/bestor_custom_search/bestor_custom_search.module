@@ -3,6 +3,13 @@
 use Drupal\Core\Form\FormStateInterface;
 
 function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'database_full_text_search_form') {
+    // Remove form system elements die in URL komen
+    $form['form_build_id']['#access'] = FALSE;
+    $form['form_token']['#access'] = FALSE;
+    $form['form_id']['#access'] = FALSE;
+  }  
+
   // Hide specific facets (only used in links, no widget needed)
   if($form_id === 'views_exposed_form' && $form['#id'] === 'views-exposed-form-database-page-1'){
     $facets_to_hide = ['specialisation', 'gender', 'type', 'country', 'place'];

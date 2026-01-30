@@ -6,11 +6,13 @@ dependencies:
     - field.storage.node.field_alternative_name
     - field.storage.node.field_author
     - field.storage.node.field_country
+    - field.storage.node.field_creator
     - field.storage.node.field_description
     - field.storage.node.field_discipline
     - field.storage.node.field_end_municipality
     - field.storage.node.field_gender
     - field.storage.node.field_geolocation
+    - field.storage.node.field_inventor
     - field.storage.node.field_municipality
     - field.storage.node.field_specialisation
     - field.storage.node.field_typology
@@ -82,6 +84,22 @@ field_settings:
         - field.storage.node.field_country
       module:
         - taxonomy
+  creator__ft:
+    label: 'Creator [ft]'
+    datasource_id: 'entity:node'
+    property_path: field_creator
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_creator
+  creator__str:
+    label: 'Creator [str]'
+    datasource_id: 'entity:node'
+    property_path: field_creator
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_creator
   discipline_name__ft:
     label: 'Discipline name [ft]'
     datasource_id: 'entity:node'
@@ -117,6 +135,22 @@ field_settings:
     indexed_locked: true
     type_locked: true
     hidden: true
+  inventor__ft:
+    label: 'Inventor  [ft]'
+    datasource_id: 'entity:node'
+    property_path: field_inventor
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_inventor
+  inventor__str:
+    label: 'Inventor [str]'
+    datasource_id: 'entity:node'
+    property_path: field_inventor
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_inventor
   langcode__str:
     label: 'Language code [string]'
     datasource_id: 'entity:node'
@@ -182,6 +216,1247 @@ field_settings:
         - field.storage.node.field_end_municipality
       module:
         - taxonomy
+  relationship_info__relationnode__concept_concept__nested:
+    label: 'Relation concept - concept [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__concept_concept
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__concept_document__nested:
+    label: 'Relation concept - document [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__concept_document
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__concept_instrument__nested:
+    label: 'Relation concept - instrument [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__concept_instrument
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__concept_place__nested:
+    label: 'Relation concept - place [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__concept_place
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__concept_story__nested:
+    label: 'Relation concept - story [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__concept_story
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__document_document__nested:
+    label: 'Relation document - document [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__document_document
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__document_place__nested:
+    label: 'Relation document - place [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__document_place
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__document_strory__nested:
+    label: 'Relation document - strory [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__document_strory
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__institut_concept__nested:
+    label: 'Relation institut - concept [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_concept
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__institut_document__nested:
+    label: 'Relation institut - document [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_document
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__institut_institut__nested:
+    label: 'Relation institut - institut [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_institut
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__institut_instrum__nested:
+    label: 'Relation institut - instrum [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_instrum
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__institut_place__nested:
+    label: 'Relation  institut - place [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_place
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__institut_story__nested:
+    label: 'Relation institut - story [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__institut_story
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__instrum_document__nested:
+    label: 'Relation  instrum - document [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__instrum_document
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__instrum_instrum__nested:
+    label: 'Relation instrum - instrum [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__instrum_instrum
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__instrum_place__nested:
+    label: 'Relation instrum - place [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__instrum_place
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__instrum_story__nested:
+    label: 'Relation instrum - story [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__instrum_story
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__person_concept__nested:
+    label: 'Relation person - concept [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_concept
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__person_document__nested:
+    label: 'Relation person - document [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_document
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__person_institut__nested:
+    label: 'Relation person - institut [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_institut
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        field_date_end_year_only:
+          type: boolean
+          label: 'End year only known'
+          drupal_field:
+            machine_name: field_date_end_year_only
+            type: boolean
+        field_date_start:
+          type: date
+          label: From
+          drupal_field:
+            machine_name: field_date_start
+            type: datetime
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        field_date_start_year_only:
+          type: boolean
+          label: 'Start year only known'
+          drupal_field:
+            machine_name: field_date_start_year_only
+            type: boolean
+        field_date_end:
+          type: date
+          label: Until
+          drupal_field:
+            machine_name: field_date_end
+            type: datetime
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__person_instrum__nested:
+    label: 'Relation person - instrum [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_instrum
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__person_person__nested:
+    label: 'Relation person - person [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_person
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        field_location_text:
+          type: string
+          label: 'location text'
+          drupal_field:
+            machine_name: field_location_text
+            type: string
+        field_municipality:
+          type: string
+          label: Municipality
+          drupal_field:
+            machine_name: field_municipality
+            type: entity_reference
+            target_type: taxonomy_term
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__person_place__nested:
+    label: 'Relation person - place [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_place
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__person_story__nested:
+    label: 'Relation person - story [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__person_story
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__place_place__nested:
+    label: 'Relation place - place [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__place_place
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__place_story__nested:
+    label: 'Relation place - story [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__place_story
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
+  relationship_info__relationnode__story_story__nested:
+    label: 'Relation story - story [nest obj]'
+    datasource_id: 'entity:node'
+    property_path: relationship_info__relationnode__story_story
+    type: relationship_nodes_search_nested_relationship
+    configuration:
+      nested_fields:
+        rn_related_entity_1:
+          type: string
+          label: 'Rn related entity 1'
+          drupal_field:
+            machine_name: rn_related_entity_1
+            type: entity_reference
+            target_type: node
+        rn_related_entity_2:
+          type: string
+          label: 'Rn related entity 2'
+          drupal_field:
+            machine_name: rn_related_entity_2
+            type: entity_reference
+            target_type: node
+        rn_relation_type:
+          type: string
+          label: 'Rn relation type'
+          drupal_field:
+            machine_name: rn_relation_type
+            type: entity_reference
+            target_type: taxonomy_term
+        calculated_this_id:
+          type: string
+          label: calculated_this_id
+        calculated_this_name:
+          type: string
+          label: calculated_this_name
+        calculated_related_id:
+          type: string
+          label: calculated_related_id
+        calculated_related_name:
+          type: string
+          label: calculated_related_name
+        calculated_relation_type_name:
+          type: string
+          label: calculated_relation_type_name
   specialisation_name__ft:
     label: 'Specialisation  name [ft]'
     datasource_id: 'entity:node'
@@ -299,14 +1574,6 @@ field_settings:
     type: integer
     indexed_locked: true
     type_locked: true
-    dependencies:
-      module:
-        - node
-  uuid__str:
-    label: 'UUID [str]'
-    datasource_id: 'entity:node'
-    property_path: uuid
-    type: string
     dependencies:
       module:
         - node

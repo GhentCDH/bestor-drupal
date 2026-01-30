@@ -784,7 +784,7 @@ class StandardNodeFieldProcessor {
     $and_label = t('and');
     $in_label = t('in');
     
-    $url = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
+    $url = str_replace('prd.bestor.ugent', 'bestor', $node->toUrl('canonical', ['absolute' => TRUE])->toString());
     $authors = $this->getEntityReferenceValue($node, $node->get('field_author')->getFieldDefinition(), 'taxonomy_term', []);
 
     if (!empty($authors)) {

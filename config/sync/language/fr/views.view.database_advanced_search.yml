@@ -4,7 +4,3 @@ display:
       empty:
         area_text_custom:
           content: "Votre recherche n'a donné aucun résultat"
-      filters:
-        facets_tax_author__int:
-          expose:
-            label: Auteur
