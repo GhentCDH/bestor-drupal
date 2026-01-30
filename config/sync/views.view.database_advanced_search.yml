@@ -11,9 +11,12 @@ dependencies:
     - taxonomy.vocabulary.gender
     - taxonomy.vocabulary.institution_type
     - taxonomy.vocabulary.specialisation
+    - user.role.administrator
   module:
     - better_exposed_filters
+    - relationship_nodes_search
     - search_api
+    - user
 id: database_advanced_search
 label: 'Advanced search'
 module: views
@@ -298,8 +301,10 @@ display:
                   field_classes: ''
                   sort_options_unsupported: ''
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            administrator: administrator
       cache:
         type: search_api_none
         options: {  }
@@ -678,7 +683,8 @@ display:
             group_items: {  }
           parse_mode: terms
           min_length: null
-          fields: {  }
+          fields:
+            - inventor__ft
         tax_author_int:
           id: tax_author_int
           table: search_api_index_bestor_main_search_index
@@ -973,6 +979,1037 @@ display:
           hierarchy: false
           limit: true
           error_message: true
+        relationship_info_relationnode_institut_place_nested:
+          id: relationship_info_relationnode_institut_place_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_institut_place_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_instrum_document_nested:
+          id: relationship_info_relationnode_instrum_document_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_instrum_document_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_concept_concept_nested:
+          id: relationship_info_relationnode_concept_concept_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_concept_concept_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_concept_document_nested:
+          id: relationship_info_relationnode_concept_document_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_concept_document_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_concept_instrument_nested:
+          id: relationship_info_relationnode_concept_instrument_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_concept_instrument_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_concept_place_nested:
+          id: relationship_info_relationnode_concept_place_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_concept_place_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_concept_story_nested:
+          id: relationship_info_relationnode_concept_story_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_concept_story_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_document_document_nested:
+          id: relationship_info_relationnode_document_document_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_document_document_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_document_place_nested:
+          id: relationship_info_relationnode_document_place_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_document_place_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_document_strory_nested:
+          id: relationship_info_relationnode_document_strory_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_document_strory_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_institut_concept_nested:
+          id: relationship_info_relationnode_institut_concept_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_institut_concept_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_institut_document_nested:
+          id: relationship_info_relationnode_institut_document_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_institut_document_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_institut_institut_nested:
+          id: relationship_info_relationnode_institut_institut_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_institut_institut_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_institut_instrum_nested:
+          id: relationship_info_relationnode_institut_instrum_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_institut_instrum_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_institut_story_nested:
+          id: relationship_info_relationnode_institut_story_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_institut_story_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_instrum_instrum_nested:
+          id: relationship_info_relationnode_instrum_instrum_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_instrum_instrum_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_instrum_place_nested:
+          id: relationship_info_relationnode_instrum_place_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_instrum_place_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_instrum_story_nested:
+          id: relationship_info_relationnode_instrum_story_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_instrum_story_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_person_concept_nested:
+          id: relationship_info_relationnode_person_concept_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_concept_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_person_document_nested:
+          id: relationship_info_relationnode_person_document_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_document_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_person_institut_nested:
+          id: relationship_info_relationnode_person_institut_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_institut_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_person_instrum_nested:
+          id: relationship_info_relationnode_person_instrum_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_instrum_nested
+          plugin_id: search_api_relationship_filter
+        relationship_info_relationnode_person_person_nested:
+          id: relationship_info_relationnode_person_person_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_person_nested
+          plugin_id: search_api_relationship_filter
+        relationship_info_relationnode_person_place_nested:
+          id: relationship_info_relationnode_person_place_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_place_nested
+          plugin_id: search_api_relationship_filter
+        relationship_info_relationnode_person_story_nested:
+          id: relationship_info_relationnode_person_story_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_story_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Relation person - story [nest obj]'
+            description: ''
+            use_operator: false
+            operator: relationship_info_relationnode_person_story_nested_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: relationship_info_relationnode_person_story_nested
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_place_place_nested:
+          id: relationship_info_relationnode_place_place_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_place_place_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Relation place - place [nest obj]'
+            description: ''
+            use_operator: false
+            operator: relationship_info_relationnode_place_place_nested_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: relationship_info_relationnode_place_place_nested
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_place_story_nested:
+          id: relationship_info_relationnode_place_story_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_place_story_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Relation place - story [nest obj]'
+            description: ''
+            use_operator: false
+            operator: relationship_info_relationnode_place_story_nested_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: relationship_info_relationnode_place_story_nested
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
+        relationship_info_relationnode_story_story_nested:
+          id: relationship_info_relationnode_story_story_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_story_story_nested
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_relationship_filter
+          operator: and
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Relation story - story [nest obj]'
+            description: ''
+            use_operator: false
+            operator: relationship_info_relationnode_story_story_nested_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: relationship_info_relationnode_story_story_nested
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          filter_field_settings: {  }
+          expose_operators: false
       filter_groups:
         operator: AND
         groups:
@@ -1017,6 +2054,7 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -1055,6 +2093,7 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
