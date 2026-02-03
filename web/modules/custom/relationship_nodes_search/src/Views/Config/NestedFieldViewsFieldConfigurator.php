@@ -65,8 +65,6 @@ class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase
       $field_configs,
       $global_settings,
       [
-        'wrapper_key' => 'relation_display_settings',
-        'field_settings_key' => 'field_settings',
         'context_prefix' => $this->getViewsContextPrefix(),
         'show_template' => TRUE,
         'show_grouping' => TRUE,

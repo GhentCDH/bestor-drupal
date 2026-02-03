@@ -117,8 +117,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
     $this->fieldConfigurator->savePluginOptions(
       $form_state,
       $this->getDefaultRelationFieldOptions(),
-      $this->options,
-      'relation_display_settings'
+      $this->options
     );
   }  
 

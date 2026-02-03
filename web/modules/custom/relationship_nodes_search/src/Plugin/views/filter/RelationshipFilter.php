@@ -97,6 +97,12 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
+    
+    // Hide default form fields, we add custom ones in our subfield section
+    if (isset($form['value'])) {
+      $form['value']['#access'] = FALSE;
+    }
+    
     if (isset($form['expose']['multiple'])) {
       $form['expose']['multiple']['#access'] = FALSE;
     }
@@ -128,7 +134,6 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
       '#description' => $this->t('When exposed, allow users to choose the comparison operator for each field.'),
     ];
 
-    $child_fld_settings = $this->getFieldSettings();
     $this->filterConfigurator->buildFilterConfigForm(
       $form, 
       $config['index'], 
@@ -304,7 +309,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
    *   The filter field settings array.
    */
   protected function getFieldSettings(): array {
-    return $this->options['filter_field_settings'] ?? [];
+    return $this->options['field_settings'] ?? [];
   }
 
 
@@ -344,7 +349,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
   protected function getDefaultFilterOptions(): array {
     return [
       'value' => [],
-      'filter_field_settings' => [],
+      'field_settings' => [],
       'operator' => 'and',
       'expose_operators' => FALSE,
     ];

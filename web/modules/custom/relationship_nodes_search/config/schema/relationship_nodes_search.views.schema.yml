@@ -16,7 +16,7 @@ views.filter.search_api_relationship_filter:
             operator:
               type: string
               label: 'Comparison operator'
-    filter_field_settings:
+    field_settings:
       type: mapping
       label: 'Field settings (per child field)'
       mapping:

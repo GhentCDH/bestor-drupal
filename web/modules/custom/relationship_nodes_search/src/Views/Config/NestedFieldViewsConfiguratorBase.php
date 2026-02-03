@@ -22,7 +22,10 @@ use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
  */
 abstract class NestedFieldViewsConfiguratorBase extends FieldConfiguratorBase {
 
+  protected FieldNameResolver $fieldNameResolver;
+  protected NestedIndexFieldHelper $nestedFieldHelper;
   protected CalculatedFieldHelper $calculatedFieldHelper;
+
 
   /**
    * Constructs a NestedFieldViewsConfiguratorBase object.
@@ -170,7 +173,8 @@ abstract class NestedFieldViewsConfiguratorBase extends FieldConfiguratorBase {
   /**
    * Saves plugin options from form state.
    * 
-   * Views-specific wrapper around parent's extractSettingsFromFormState().
+   * Views-specific wrapper for extracting settings from form state.
+   * Reads from the 'options' prefix that Views uses for plugin configuration.
    *
    * @param FormStateInterface $form_state
    *   The form state.
@@ -178,20 +182,14 @@ abstract class NestedFieldViewsConfiguratorBase extends FieldConfiguratorBase {
    *   Default settings structure.
    * @param array &$options
    *   Reference to the options array to update.
-   * @param string|null $wrapper_key
-   *   Optional wrapper key for nested settings.
    */
   public function savePluginOptions(
     FormStateInterface $form_state,
     array $default_settings,
-    array &$options,
-    ?string $wrapper_key = NULL
+    array &$options
   ): void {
-    // Extract from form state
-    $path_prefix = $wrapper_key ? [$wrapper_key] : [];
-    
     foreach ($default_settings as $key => $default_value) {
-      $path = array_merge(['options'], $path_prefix, [$key]);
+      $path = ['options', $key];
       $value = $form_state->getValue($path);
       
       if (isset($value)) {

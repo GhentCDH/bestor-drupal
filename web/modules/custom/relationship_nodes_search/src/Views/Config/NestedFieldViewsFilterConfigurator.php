@@ -80,8 +80,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
       $field_configs,
       [], // No global settings for filters
       [
-        'wrapper_key' => 'filter_settings',
-        'field_settings_key' => 'filter_field_settings',
         'context_prefix' => $this->getViewsContextPrefix(),
         'show_template' => FALSE,
         'show_grouping' => FALSE,
@@ -164,39 +162,37 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
    *   Form structure options.
    */
   public function buildFilterFieldForm(array &$form, array $config, array $options): void {
-    $field_name = $config['field_name'];
-    $wrapper_key = $options['wrapper_key'];
-    $field_settings_key = $options['field_settings_key'];
+  dpm($form, 'start buildFilterFieldFOrm');
+  
+  $field_name = $config['field_name'];
     $context_prefix = $options['context_prefix'];
     $is_enabled = $config['enabled'];
 
     // Build disabled state
     $disabled_state = $this->buildFieldDisabledState(
-      $wrapper_key,
-      $field_settings_key,
       $field_name,
       $context_prefix
     );
 
     // Field container
-    $form[$wrapper_key][$field_settings_key][$field_name] = [
+    $form['field_settings'][$field_name] = [
       '#type' => 'details',
       '#title' => $config['label'],
       '#open' => $is_enabled,
     ];
 
     // Enable checkbox
-    $form[$wrapper_key][$field_settings_key][$field_name]['enabled'] = [
+    $form['field_settings'][$field_name]['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable this filter'),
       '#default_value' => $config['enabled'],
     ];
 
     // Widget type
-    $this->addWidgetSelector($form, $config, $wrapper_key, $field_settings_key, $disabled_state, $context_prefix);
+    $this->addWidgetSelector($form, $config, $disabled_state, $context_prefix);
 
     // Label
-    $form[$wrapper_key][$field_settings_key][$field_name]['label'] = [
+    $form['field_settings'][$field_name]['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#default_value' => $config['label'],
@@ -206,7 +202,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Weight
-    $form[$wrapper_key][$field_settings_key][$field_name]['weight'] = [
+    $form['field_settings'][$field_name]['weight'] = [
       '#type' => 'number',
       '#title' => $this->t('Weight'),
       '#default_value' => $config['weight'],
@@ -216,7 +212,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Required
-    $form[$wrapper_key][$field_settings_key][$field_name]['required'] = [
+    $form['field_settings'][$field_name]['required'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Required'),
       '#default_value' => $config['required'] ?? FALSE,
@@ -225,7 +221,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Placeholder
-    $form[$wrapper_key][$field_settings_key][$field_name]['placeholder'] = [
+    $form['field_settings'][$field_name]['placeholder'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Placeholder'),
       '#default_value' => $config['placeholder'] ?? '',
@@ -234,7 +230,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Operator
-    $form[$wrapper_key][$field_settings_key][$field_name]['field_operator'] = [
+    $form['field_settings'][$field_name]['field_operator'] = [
       '#type' => 'select',
       '#title' => $this->t('Operator'),
       '#options' => $this->operatorHelper->getOperatorOptions(),
@@ -244,7 +240,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Expose operator
-    $form[$wrapper_key][$field_settings_key][$field_name]['expose_field_operator'] = [
+    $form['field_settings'][$field_name]['expose_field_operator'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Let user choose operator'),
       '#default_value' => $config['expose_field_operator'] ?? FALSE,
@@ -260,19 +256,12 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Default value
-    $form[$wrapper_key][$field_settings_key][$field_name]['value'] = [
+    $form['field_settings'][$field_name]['value'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Value'),
       '#default_value' => $config['value'] ?? '',
       '#description' => $this->t('Filter value (only used when filter is not exposed).'),
-      '#states' => array_merge(
-        $disabled_state,
-        [
-          'visible' => [
-            ':input[name="options[expose_button][checkbox][checkbox]"]' => ['checked' => FALSE],
-          ],
-        ]
-      ),
+      '#states' => $disabled_state
     ];
   }
 
@@ -283,10 +272,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
    *   The form array.
    * @param array $config
    *   Field configuration.
-   * @param string $wrapper_key
-   *   Wrapper element key.
-   * @param string $field_settings_key
-   *   Field settings container key.
    * @param array $disabled_state
    *   Disabled state configuration.
    * @param string|null $context_prefix
@@ -295,14 +280,12 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
   protected function addWidgetSelector(
     array &$form,
     array $config,
-    string $wrapper_key,
-    string $field_settings_key,
     array $disabled_state,
     ?string $context_prefix
   ): void {
     $field_name = $config['field_name'];
     
-    $form[$wrapper_key][$field_settings_key][$field_name]['widget'] = [
+    $form['field_settings'][$field_name]['widget'] = [
       '#type' => 'select',
       '#title' => $this->t('Widget type'),
       '#options' => [
@@ -318,14 +301,13 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     if ($config['supports_dropdown'] ?? FALSE) {
       $path_parts = array_filter([
         $context_prefix,
-        $wrapper_key,
-        $field_settings_key,
+        'field_settings',
         $field_name,
         'widget'
       ]);
       $input_name = implode('][', $path_parts);
 
-      $form[$wrapper_key][$field_settings_key][$field_name]['select_display_mode'] = [
+      $form['field_settings'][$field_name]['select_display_mode'] = [
         '#type' => 'radios',
         '#title' => $this->t('Display mode for dropdown options'),
         '#options' => [

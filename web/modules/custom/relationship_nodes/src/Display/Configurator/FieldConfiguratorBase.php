@@ -41,28 +41,28 @@ class FieldConfiguratorBase {
    *   Array of available field names.
    * @param array $saved_settings
    *   Current field settings from saved configuration.
-    * @param array $context
-    *   Extension point for context-specific capabilities. Base class passes 
-    *   this through unchanged - subclasses use it to determine field capabilities.
-    *   Common keys:
-    *   - 'linkable_fields': Fields supporting entity reference display modes
-    *   - 'calculated_fields': Computed/aggregated fields (no separators)
-    *   - 'filterable_fields': Fields available for filtering (Views)
-    *   Empty array is valid - all fields get default capabilities.
-    *
-    * @return array
-    *   Array of field configurations keyed by field name, each containing:
-    *   - 'field_name': (string) The field name
-    *   - 'linkable': (bool) Whether field supports entity linking
-    *   - 'is_calculated': (bool) Whether field is calculated
-    *   - 'enabled': (bool) Whether field is enabled in current settings
-    *   - 'label': (string) Human-readable label
-    *   - 'weight': (int) Display order weight
-    *   - 'display_mode': (string) raw|label|link
-    *   - 'hide_label': (bool) Whether to hide label in output
-    *   - 'multiple_separator': (string) Separator for multiple values
-    *   Plus any additional context-specific properties
-    */
+   * @param array $context
+   *   Extension point for context-specific capabilities. Base class passes 
+   *   this through unchanged - subclasses use it to determine field capabilities.
+   *   Common keys:
+   *   - 'linkable_fields': Fields supporting entity reference display modes
+   *   - 'calculated_fields': Computed/aggregated fields (no separators)
+   *   - 'filterable_fields': Fields available for filtering (Views)
+   *   Empty array is valid - all fields get default capabilities.
+   *
+   * @return array
+   *   Array of field configurations keyed by field name, each containing:
+   *   - 'field_name': (string) The field name
+   *   - 'linkable': (bool) Whether field supports entity linking
+   *   - 'is_calculated': (bool) Whether field is calculated
+   *   - 'enabled': (bool) Whether field is enabled in current settings
+   *   - 'label': (string) Human-readable label
+   *   - 'weight': (int) Display order weight
+   *   - 'display_mode': (string) raw|label|link
+   *   - 'hide_label': (bool) Whether to hide label in output
+   *   - 'multiple_separator': (string) Separator for multiple values
+   *   Plus any additional context-specific properties
+   */
   public function prepareFieldConfigurations(
     array $field_names,
     array $saved_settings,
@@ -108,6 +108,9 @@ class FieldConfiguratorBase {
    * This is the RENDER phase - purely transforms configuration arrays
    * into form elements. Completely context-agnostic.
    *
+   * Builds field_settings container directly on the provided form array.
+   * If you need a wrapper (like <details>), add it to $form before calling this.
+   *
    * @param array &$form
    *   The form array to add elements to.
    * @param array $field_configurations
@@ -116,8 +119,6 @@ class FieldConfiguratorBase {
    *   Global settings like sort_by_field, group_by_field, template.
    * @param array $options
    *   Form structure options:
-   *   - 'wrapper_key': Form wrapper element key (default: NULL)
-   *   - 'field_settings_key': Field container key (default: 'field_settings')
    *   - 'context_prefix': Form state path prefix (default: NULL)
    *   - 'show_template': Include template selector (default: FALSE)
    *   - 'show_grouping': Include grouping options (default: TRUE)
@@ -132,8 +133,6 @@ class FieldConfiguratorBase {
   ): void {
     // Merge with defaults
     $options += [
-      'wrapper_key' => NULL,
-      'field_settings_key' => 'field_settings',
       'context_prefix' => NULL,
       'show_template' => FALSE,
       'show_grouping' => TRUE,
@@ -141,54 +140,31 @@ class FieldConfiguratorBase {
       'field_callback' => NULL,
     ];
 
-    $wrapper_key = $options['wrapper_key'];
-    $field_settings_key = $options['field_settings_key'];
-
-    // If no wrapper key, add fields directly to form root
-    $target = &$form;
-    if ($wrapper_key !== NULL) {
-      // Main wrapper
-      $form[$wrapper_key] = [
-        '#type' => 'details',
-        '#title' => $this->t('Field configuration'),
-        '#open' => TRUE,
-      ];
-      $target = &$form[$wrapper_key];
-    }
-
     // Field configuration container
-    $target[$field_settings_key] = [
-      '#type' => 'fieldset',
+    $form['field_settings'] = [
+      '#type' => 'details',
       '#title' => $this->t('Available fields'),
-      '#description' => $this->t('Select and configure fields to display.'),
-      '#tree' => TRUE,
+      '#description' => $this->t('Select and configure fields.'),
+      '#open' => TRUE
     ];
 
     // Build individual field forms from configurations
     foreach ($field_configurations as $config) {
       if ($options['field_callback'] && is_callable($options['field_callback'])) {
-        // Use custom callback
-        call_user_func(
-          $options['field_callback'],
-          $form,
-          $config,
-          $options
-        );
+        // Use call_user_func_array to support reference parameters
+        call_user_func_array($options['field_callback'], [&$form, $config, $options]);
       } else {
         // Use default display field rendering
         $this->buildFieldFormFromConfig(
           $form,
           $config,
-          $wrapper_key,
-          $field_settings_key,
           $options['context_prefix']
         );
       }
     }
-
     // Global options (sorting, grouping, template)
     $this->addGlobalOptions(
-      $target,
+      $form,
       array_keys($field_configurations),
       $global_settings,
       $options
@@ -205,18 +181,12 @@ class FieldConfiguratorBase {
    *   The form array.
    * @param array $config
    *   Field configuration array.
-   * @param string|null $wrapper_key
-   *   The wrapper element key (can be NULL).
-   * @param string $field_settings_key
-   *   The field settings container key.
    * @param string|null $context_prefix
    *   Optional form state path prefix.
    */
   protected function buildFieldFormFromConfig(
     array &$form,
     array $config,
-    ?string $wrapper_key,
-    string $field_settings_key,
     ?string $context_prefix
   ): void {
     $field_name = $config['field_name'];
@@ -224,28 +194,19 @@ class FieldConfiguratorBase {
     
     // Build disabled state
     $disabled_state = $this->buildFieldDisabledState(
-      $wrapper_key,
-      $field_settings_key,
       $field_name,
       $context_prefix
     );
 
-    // Determine target path
-    if ($wrapper_key !== NULL) {
-      $target = &$form[$wrapper_key][$field_settings_key];
-    } else {
-      $target = &$form[$field_settings_key];
-    }
-
     // Field container
-    $target[$field_name] = [
+    $form['field_settings'][$field_name] = [
       '#type' => 'details',
       '#title' => $config['label'],
       '#open' => $is_enabled,
     ];
 
     // Enable checkbox
-    $target[$field_name]['enabled'] = [
+    $form['field_settings'][$field_name]['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display this field'),
       '#default_value' => $config['enabled'],
@@ -253,7 +214,7 @@ class FieldConfiguratorBase {
 
     // Display mode (only for linkable fields)
     if ($config['linkable']) {
-      $target[$field_name]['display_mode'] = [
+      $form['field_settings'][$field_name]['display_mode'] = [
         '#type' => 'radios',
         '#title' => $this->t('Display mode'),
         '#options' => [
@@ -268,7 +229,7 @@ class FieldConfiguratorBase {
     }
 
     // Label
-    $target[$field_name]['label'] = [
+    $form['field_settings'][$field_name]['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Custom label'),
       '#default_value' => $config['label'],
@@ -278,7 +239,7 @@ class FieldConfiguratorBase {
     ];
 
     // Weight
-    $target[$field_name]['weight'] = [
+    $form['field_settings'][$field_name]['weight'] = [
       '#type' => 'number',
       '#title' => $this->t('Weight'),
       '#default_value' => $config['weight'],
@@ -288,7 +249,7 @@ class FieldConfiguratorBase {
     ];
 
     // Hide label
-    $target[$field_name]['hide_label'] = [
+    $form['field_settings'][$field_name]['hide_label'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Hide label in output'),
       '#default_value' => $config['hide_label'],
@@ -297,7 +258,7 @@ class FieldConfiguratorBase {
 
     // Multiple separator (not for calculated fields)
     if (!$config['is_calculated']) {
-      $target[$field_name]['multiple_separator'] = [
+      $form['field_settings'][$field_name]['multiple_separator'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Multiple values separator'),
         '#default_value' => $config['multiple_separator'],
@@ -312,7 +273,7 @@ class FieldConfiguratorBase {
    * Adds global options (sorting, grouping, template).
    *
    * @param array &$form
-   *   The form array (target container).
+   *   The form array.
    * @param array $field_names
    *   Available field names for options.
    * @param array $settings
@@ -362,10 +323,6 @@ class FieldConfiguratorBase {
   /**
    * Builds Form API states for disabling field elements.
    *
-   * @param string|null $wrapper_key
-   *   The wrapper element key (can be NULL).
-   * @param string $field_settings_key
-   *   The field settings container key.
    * @param string $field_name
    *   The field name.
    * @param string|null $context_prefix
@@ -375,15 +332,12 @@ class FieldConfiguratorBase {
    *   Form API states configuration.
    */
   public function buildFieldDisabledState(
-    ?string $wrapper_key,
-    string $field_settings_key,
     string $field_name,
     ?string $context_prefix
   ): array {
     $path_parts = array_filter([
       $context_prefix,
-      $wrapper_key,
-      $field_settings_key,
+      'field_settings',
       $field_name,
       'enabled'
     ]);
@@ -398,38 +352,41 @@ class FieldConfiguratorBase {
   }
 
 
-  /**
-   * Extracts settings from form state.
-   *
-   * @param FormStateInterface $form_state
-   *   The form state.
-   * @param array $default_settings
-   *   Default settings structure.
-   * @param string|null $wrapper_key
-   *   Optional wrapper key for nested settings.
-   *
-   * @return array
-   *   Extracted settings.
-   */
-  public function extractSettingsFromFormState(
-    FormStateInterface $form_state,
-    array $default_settings,
-    ?string $wrapper_key = NULL
-  ): array {
-    $settings = [];
+/**
+ * Extracts settings from form state.
+ *
+ * Generic helper for extracting configuration values from form state.
+ * Reads values directly from form state path without wrapper prefix.
+ *
+ * @param FormStateInterface $form_state
+ *   The form state.
+ * @param array $default_settings
+ *   Default settings structure.
+ * @param string|null $prefix
+ *   Optional path prefix (e.g., 'settings' for formatters, 'options' for Views).
+ *
+ * @return array
+ *   Extracted settings.
+ */
+public function extractSettingsFromFormState(
+  FormStateInterface $form_state,
+  array $default_settings,
+  ?string $prefix = NULL
+): array {
+  $settings = [];
 
-    foreach ($default_settings as $key => $default_value) {
-      if ($wrapper_key) {
-        $value = $form_state->getValue([$wrapper_key, $key]);
-      } else {
-        $value = $form_state->getValue($key);
-      }
-
-      $settings[$key] = $value ?? $default_value;
+  foreach ($default_settings as $key => $default_value) {
+    if ($prefix) {
+      $value = $form_state->getValue([$prefix, $key]);
+    } else {
+      $value = $form_state->getValue($key);
     }
 
-    return $settings;
+    $settings[$key] = $value ?? $default_value;
   }
+
+  return $settings;
+}
 
   /**
    * Gets default display settings structure.

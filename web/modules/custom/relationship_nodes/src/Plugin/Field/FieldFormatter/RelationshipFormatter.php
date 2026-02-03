@@ -105,9 +105,10 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
     ] + parent::defaultSettings();
   }
 
-  /**
-   * {@inheritdoc}
-   */
+  
+ /**
+ * {@inheritdoc}
+ */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $elements = parent::settingsForm($form, $form_state);
 
@@ -150,8 +151,7 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
       $field_configs,
       $global_settings,
       [
-        'wrapper_key' => NULL,
-        'field_settings_key' => 'field_settings',
+        // 'wrapper_key' => NULL, ← VERWIJDERD
         'show_template' => FALSE,
         'show_grouping' => TRUE,
         'show_sorting' => TRUE,
