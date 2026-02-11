@@ -68,8 +68,6 @@ services:
       - '@relationship_nodes.calculated_field_helper'
       - '@relationship_nodes_search.nested_filter_dropdown_provider'
       - '@relationship_nodes_search.nested_index_field_helper'
-      - '@relationship_nodes_search.nested_facet_result_parser'
-      - '@logger.factory'
   relationship_nodes_search.nested_filter_dropdown_provider:
     class: Drupal\relationship_nodes_search\Views\Widget\NestedFilterDropdownOptionsProvider
     arguments:

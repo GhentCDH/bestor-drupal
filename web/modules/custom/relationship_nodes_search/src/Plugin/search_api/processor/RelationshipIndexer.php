@@ -320,7 +320,11 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
             foreach ($field_values as $field_value) {
               $extracted = $this->extractSingleValue($field_value, $target_type);
               if ($extracted !== NULL) {
-                $values[] = $extracted;
+                // Format volgens configured type
+                $formatted = $this->mapSearchApiFieldTypeToElasticType($extracted, $child_fld_config['type']);
+                if ($formatted !== NULL) {
+                  $values[] = $formatted;
+                }
               }
             }
             
@@ -341,11 +345,9 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
           }
 
           $serialized[] = $nested_values;
-        }
-        
+        }   
       }
       if(empty($serialized)){
-        // Index an explicit empty nested object so ES knows to clear the field
         $sapi_fld->setValues([[]]);
       } else {
         $sapi_fld->setValues($serialized);
@@ -439,4 +441,46 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     
     return $value;
   }  
+
+  /**
+   * Formats a value according to its Search API data type.
+   *
+   * @param mixed $value
+   *   The value to format.
+   * @param string $type
+   *   The Search API data type.
+   *
+   * @return mixed
+   *   The formatted value appropriate for indexing.
+   */
+  protected function mapSearchApiFieldTypeToElasticType($value, string $type) {
+    if ($value === NULL || $value === '') {
+      return NULL;
+    }
+
+    switch ($type) {
+      case 'integer':
+        return is_numeric($value) ? (int) $value : NULL;
+
+      case 'decimal':
+        return is_numeric($value) ? (float) $value : NULL;
+
+      case 'boolean':
+        return (bool) $value;
+
+      case 'date':
+        // Convert to ISO 8601 string instead of timestamp
+        if (is_numeric($value)) {
+          // Unix timestamp → ISO string
+          return date('c', (int) $value);  // '2025-12-26T00:00:00+00:00'
+        }
+        // Already a date string
+        $timestamp = strtotime($value);
+        return $timestamp !== FALSE ? date('c', $timestamp) : NULL;
+      case 'string':
+      case 'text':
+      default:
+        return (string) $value;
+    }
+  }
 }

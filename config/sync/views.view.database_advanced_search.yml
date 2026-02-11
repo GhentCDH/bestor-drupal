@@ -140,7 +140,7 @@ display:
           text_input_required_format: basic_html
           bef:
             general:
-              autosubmit: true
+              autosubmit: false
               auto_submit_sort_only: false
               autosubmit_breakpoint: ''
               autosubmit_exclude_textfield: true
@@ -167,7 +167,82 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_tax_author__int:
+              search_api_fulltext_1:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              tax_author_int:
+                plugin_id: default
+                advanced:
+                  sort_options: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              tax_discipline_int:
+                plugin_id: default
+                advanced:
+                  sort_options: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              tax_specialisation_int:
+                plugin_id: default
+                advanced:
+                  sort_options: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              tax_typology_int:
+                plugin_id: default
+                advanced:
+                  sort_options: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              relationship_info_relationnode_concept_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -180,62 +255,7 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_glossaryaz_title__str:
-                plugin_id: bef_links
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
-                select_all_none: false
-                soft_limit: 0
-                soft_limit_label_less: 'Show less'
-                soft_limit_label_more: 'Show more'
-              facets_content_type__str:
-                plugin_id: bef
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
-                select_all_none: false
-                select_all_none_nested: false
-                display_inline: false
-                soft_limit: 0
-                soft_limit_label_less: 'Show less'
-                soft_limit_label_more: 'Show more'
-              facets_tax_discipline__int:
-                plugin_id: bef
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
-                select_all_none: false
-                select_all_none_nested: false
-                display_inline: false
-                soft_limit: 0
-                soft_limit_label_less: 'Show less'
-                soft_limit_label_more: 'Show more'
-              facets_tax_specialisation__int:
+              relationship_info_relationnode_document_strory_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -248,7 +268,7 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_tax_gender__int:
+              relationship_info_relationnode_institut_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -261,7 +281,7 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_tax_typology__int:
+              relationship_info_relationnode_instrum_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -274,7 +294,7 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_tax_country__int:
+              relationship_info_relationnode_person_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -287,7 +307,20 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_tax_municipality__int:
+              relationship_info_relationnode_place_story_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              relationship_info_relationnode_story_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -3917,7 +3950,7 @@ display:
           plugin_id: search_api_options
           operator: or
           value:
-            concept: concept
+            story: story
           group: 1
           exposed: false
           expose:
@@ -4383,7 +4416,11 @@ display:
           admin_label: ''
           plugin_id: search_api_relationship_filter
           operator: and
-          value: {  }
+          value:
+            calculated_related_name:
+              value: ''
+            calculated_relation_type_name:
+              value: ''
           group: 1
           exposed: true
           expose:
@@ -5072,14 +5109,8 @@ display:
           operator: or
           value:
             concept: concept
-            document: document
-            institution: institution
-            instrument: instrument
-            person: person
-            place: place
-            story: story
           group: 1
-          exposed: true
+          exposed: false
           expose:
             operator_id: content_type_str_op
             label: 'Content type'
@@ -7515,7 +7546,7 @@ display:
           plugin_id: search_api_options
           operator: or
           value:
-            concept: concept
+            institution: institution
           group: 1
           exposed: false
           expose:
@@ -8758,7 +8789,7 @@ display:
           plugin_id: search_api_options
           operator: or
           value:
-            concept: concept
+            instrument: instrument
           group: 1
           exposed: false
           expose:
@@ -9976,7 +10007,7 @@ display:
           plugin_id: search_api_options
           operator: or
           value:
-            concept: concept
+            person: person
           group: 1
           exposed: false
           expose:
@@ -11248,7 +11279,7 @@ display:
           plugin_id: search_api_options
           operator: or
           value:
-            concept: concept
+            place: place
           group: 1
           exposed: false
           expose:

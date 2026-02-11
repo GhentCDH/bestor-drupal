@@ -4,7 +4,6 @@ namespace Drupal\relationship_nodes_search\Views\Widget;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\search_api\Entity\Index;
@@ -14,6 +13,8 @@ use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\Views\Parser\NestedFieldResultViewsParser;
 use Drupal\relationship_nodes_search\QueryHelper\NestedFacetResultParser;
 use Drupal\Core\Language\LanguageManagerInterface; 
+use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\search_api\Query\ConditionGroup;
 
 /**
  * Provides dropdown options for nested filter fields.
@@ -350,5 +351,143 @@ class NestedFilterDropdownOptionsProvider {
     ];
 
     return implode(':', $parts);
+  }
+
+
+  /**
+   * Get dropdown options with view context for filtering.
+   *
+   * @param Index $index
+   *   The search index.
+   * @param string $sapi_fld_nm
+   *   Parent field name.
+   * @param string $child_fld_nm
+   *   Child field name.
+   * @param string $display_mode
+   *   Display mode: 'raw' or 'label'.
+   * @param SearchApiQuery|null $view_query
+   *   The view query to extract non-exposed filters from.
+   *
+   * @return array
+   *   Options array suitable for form select element.
+   */
+  public function getDropdownOptionsWithViewContext(
+    Index $index,
+    string $sapi_fld_nm,
+    string $child_fld_nm,
+    string $display_mode = 'raw',
+    ?SearchApiQuery $view_query = NULL
+  ): array {
+    try {
+      // Create fresh query
+      $query = $index->query();
+
+      // Extract and apply non-exposed conditions
+      if ($view_query) {       
+        $non_exposed_fields = [];
+        foreach ($view_query->view->filter as $filter_id => $filter) {
+          if (!$filter->isExposed() && !empty($filter->value)) {
+            $non_exposed_fields[] = $filter->realField;
+          }
+        }
+
+        if (!empty($non_exposed_fields)) {
+          $source_conditions = $view_query->getSearchApiQuery()->getConditionGroup();
+          $target_conditions = $query->getConditionGroup();
+          
+          $this->copyNonExposedConditionsRecursive(
+            $source_conditions,
+            $target_conditions,
+            $non_exposed_fields
+          );
+        }
+      }
+
+      // Query only needs facets, no results
+      $query->range(0, 0);
+
+      // Add facet configuration
+      $field_key = $sapi_fld_nm . ':' . $child_fld_nm;  // <- FIX
+      $full_field_path = $this->nestedFieldHelper->colonsToDots($field_key);
+      
+      $facets = [
+        $field_key => [
+          'field' => $full_field_path,
+          'limit' => 0,
+          'operator' => 'or',
+          'min_count' => 1,
+          'missing' => FALSE,
+        ],
+      ];
+      
+      $query->setOption('search_api_facets', $facets);
+
+      // Execute query
+      $results = $query->execute();
+      
+      $raw_values = $this->facetResultParser->extractTrimmedFacetValues($results, $field_key);
+      
+      // Reuse existing conversion logic
+      return $this->convertToFormOptions($raw_values, $index, $sapi_fld_nm, $child_fld_nm, $display_mode);  // <- FIX
+
+    } catch (\Exception $e) {
+      $this->loggerFactory->get('relationship_nodes_search')->error(
+        'Failed to fetch facet options: @message',
+        ['@message' => $e->getMessage()]
+      );
+      return [];
+    }
+  }
+
+  /**
+   * Recursively copy non-exposed conditions from source to target group.
+   *
+   * @param ConditionGroupInterface $source
+   *   Source condition group.
+   * @param ConditionGroupInterface $target
+   *   Target condition group.
+   * @param array $non_exposed_fields
+   *   Array of field names that belong to non-exposed filters.
+   */
+  protected function copyNonExposedConditionsRecursive(ConditionGroupInterface $source, ConditionGroupInterface $target, array $non_exposed_fields): void {
+    $conditions = $source->getConditions();
+    
+    foreach ($conditions as $condition) {
+      // Check if this is a nested ConditionGroup
+      if ($condition instanceof ConditionGroupInterface) {
+        // Create new group with same conjunction (AND/OR) and tags
+        $new_group = new ConditionGroup(
+          $condition->getConjunction(),
+          $condition->getTags()
+        );
+        
+        // Recurse into nested group
+        $this->copyNonExposedConditionsRecursive($condition, $new_group, $non_exposed_fields);
+        
+        // Only add group if it has conditions
+        if (!$new_group->isEmpty()) {
+          $target->addConditionGroup($new_group);
+        }
+      } else {
+        // Regular condition - check if it belongs to non-exposed filter
+        $field = $condition->getField();
+        
+        if (in_array($field, $non_exposed_fields, true)) {
+          try {
+            $target->addCondition(
+              $field,
+              $condition->getValue(),
+              $condition->getOperator()
+            );
+          } catch (\Exception $e) {
+            // Skip conditions that can't be copied
+            $this->loggerFactory->get('relationship_nodes_search')->debug(
+              'Skipped condition for field @field: @message',
+              ['@field' => $field, '@message' => $e->getMessage()]
+            );
+          }
+        }
+      }
+    }
   }
 }

@@ -74,36 +74,4 @@ class NestedFieldViewsFieldConfigurator extends NestedFieldViewsConfiguratorBase
       ]
     );
   }
-
-  /**
-   * Gets fields that support entity reference linking in display.
-   * 
-   * Checks each field to determine if it can be rendered as a link
-   * based on index metadata and entity reference structure.
-   *
-   * @param Index $index
-   *   The Search API index.
-   * @param string $sapi_fld_nm
-   *   The parent field name.
-   * @param array $child_field_names
-   *   Available field names to check.
-   *
-   * @return array
-   *   Array of field names that support linking.
-   */
-  protected function getLinkableFields(
-    Index $index,
-    string $sapi_fld_nm,
-    array $child_field_names
-  ): array {
-    $linkable = [];
-    
-    foreach ($child_field_names as $field_name) {
-      if ($this->nestedFieldHelper->childFieldCanLink($index, $sapi_fld_nm, $field_name)) {
-        $linkable[] = $field_name;
-      }
-    }
-    
-    return $linkable;
-  }
 }

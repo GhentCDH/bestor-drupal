@@ -72,10 +72,12 @@ class FieldConfiguratorBase {
     $field_settings = $saved_settings['field_settings'] ?? [];
     $linkable_fields = $context['linkable_fields'] ?? [];
     $calculated_fields = $context['calculated_fields'] ?? [];
+    $support_range = $context['support_range'] ?? [];
 
     foreach ($field_names as $field_name) {
       $saved_config = $field_settings[$field_name] ?? [];
       $is_linkable = in_array($field_name, $linkable_fields);
+      $supports_range = in_array($field_name, $support_range);
       $configurations[$field_name] = [
         // Identity
         'field_name' => $field_name,
@@ -83,7 +85,7 @@ class FieldConfiguratorBase {
         // Capabilities (determined at prepare time)
         'linkable' => $is_linkable,
         'is_calculated' => in_array($field_name, $calculated_fields),
-        
+        'supports_range' => $supports_range,
         // User configuration (from saved settings)
         'enabled' => $saved_config['enabled'] ?? TRUE,
         'label' => $saved_config['label'] ?? $this->formatFieldLabel($field_name),
@@ -92,11 +94,6 @@ class FieldConfiguratorBase {
         'hide_label' => $saved_config['hide_label'] ?? TRUE,
         'multiple_separator' => $saved_config['multiple_separator'] ?? ', ',
       ];
-      
-      // Merge any additional context-specific properties
-      if (isset($context['field_extras'][$field_name])) {
-        $configurations[$field_name] += $context['field_extras'][$field_name];
-      }
     }
 
     return $configurations;

@@ -125,37 +125,38 @@ abstract class NestedFieldViewsConfiguratorBase extends FieldConfiguratorBase {
    *
    * @return array
    *   Context array with:
+   *   - 'capabilities': Full capability data per field
    *   - 'linkable_fields': Array of fields that support linking
    *   - 'calculated_fields': Array of calculated field names
    */
   protected function buildViewsContext(Index $index, string $sapi_fld_nm, array $field_names): array {
+    $capabilities = $this->getAllChildFieldCapabilities($index, $sapi_fld_nm, $field_names); 
+
     return [
-      'linkable_fields' => $this->getLinkableFields($index, $sapi_fld_nm, $field_names),
-      'calculated_fields' => $this->getCalculatedFields($field_names),
+      'capabilities' => $capabilities,
+      'linkable_fields' => $this->extractLinkableFields($capabilities),
+      'calculated_fields' => $this->extractCalculatedFields($field_names),
+      'support_range' => $this->extractSupportRange($capabilities)
     ];
   }
 
-  /**
-   * Gets fields that support entity reference linking.
-   *
-   * @param Index $index
-   *   The Search API index.
-   * @param string $sapi_fld_nm
-   *   The parent field name.
-   * @param array $field_names
-   *   Available field names.
-   *
-   * @return array
-   *   Array of linkable field names.
-   */
-  protected function getLinkableFields(Index $index, string $sapi_fld_nm, array $field_names): array {
-    // This should be implemented by concrete classes or injected as a service
-    // For now, return empty to avoid undefined method errors
-    return [];
-  }
 
   /**
-   * Gets calculated field names from available fields.
+   * Extract linkable field names from capabilities.
+   *
+   * @param array $capabilities
+   *   Capabilities keyed by field name.
+   *
+   * @return array
+   *   Array of field names that can link.
+   */
+  protected function extractLinkableFields(array $capabilities): array {
+    return array_keys(array_filter($capabilities, fn($cap) => $cap['linkable']));
+  }
+
+
+  /**
+   * Extract calculated field names from field list.
    *
    * @param array $field_names
    *   Available field names.
@@ -163,10 +164,61 @@ abstract class NestedFieldViewsConfiguratorBase extends FieldConfiguratorBase {
    * @return array
    *   Array of calculated field names.
    */
-  protected function getCalculatedFields(array $field_names): array {
-    return array_filter($field_names, function($field_name) {
-      return $this->calculatedFieldHelper->isCalculatedChildField($field_name);
-    });
+  protected function extractCalculatedFields(array $field_names): array {
+    return array_filter(
+      $field_names,
+      fn($name) => $this->calculatedFieldHelper->isCalculatedChildField($name)
+    );
+  }
+
+
+  /**
+   * Extract linkable field names from capabilities.
+   *
+   * @param array $capabilities
+   *   Capabilities keyed by field name.
+   *
+   * @return array
+   *   Array of field names that can link.
+   */
+  protected function extractSupportRange(array $capabilities): array {
+    return array_keys(array_filter($capabilities, fn($cap) => $cap['supports_range']));
+  }
+
+
+  /**
+   * Gets comprehensive field capabilities for all child fields.
+   * 
+   * Centralized method that fetches all capability metadata in one pass
+   * for efficiency when multiple capability checks are needed.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $sapi_fld_nm
+   *   The parent field name.
+   * @param array $field_names
+   *   Field names to get capabilities for.
+   *
+   * @return array
+   *   Keyed array of capabilities per field, e.g.:
+   *   ['field_person' => ['linkable' => true, 'is_entity_reference' => true, ...]]
+   */
+  protected function getAllChildFieldCapabilities(
+    Index $index,
+    string $sapi_fld_nm,
+    array $field_names
+  ): array {
+    $capabilities = [];
+    
+    foreach ($field_names as $field_name) {
+      $capabilities[$field_name] = $this->nestedFieldHelper->getChildFieldCapabilities(
+        $index,
+        $sapi_fld_nm,
+        $field_name
+      );
+    }
+    
+    return $capabilities;
   }
 
 

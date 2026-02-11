@@ -83,7 +83,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
       }
 
       $drupal_type = $field_definition->getType();
-      $search_api_type = $this->mapFieldTypeToSearchApiType($drupal_type);
+      $search_api_type = $this->mapDrupalFieldTypeToSearchApiType($drupal_type);
       $label = $this->convertToString($field_definition->getLabel());
       $description = $this->convertToString($field_definition->getDescription());
 
@@ -309,7 +309,7 @@ class RelationProcessorProperty extends ProcessorProperty implements ComplexData
    * @return string
    *   The corresponding Search API type.
    */
-  protected function mapFieldTypeToSearchApiType(string $drupal_type): string {
+  protected function mapDrupalFieldTypeToSearchApiType(string $drupal_type): string {
     $type_map = [
       'entity_reference' => 'string',
       'integer' => 'integer',

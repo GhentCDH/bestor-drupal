@@ -32,6 +32,35 @@ class NestedIndexFieldHelper {
     $this->calculatedFieldHelper = $calculatedFieldHelper;
   }
 
+
+  /**
+   * Get comprehensive field capabilities and metadata.
+   *
+   * @return array
+   *   Array with keys:
+   *   - 'search_api_type': string (e.g., 'date', 'integer')
+   *   - 'is_entity_reference': bool
+   *   - 'target_type': string|null (e.g., 'node', 'taxonomy_term')
+   *   - 'supports_range': bool
+   *   - 'linkable': bool
+   */
+  public function getChildFieldCapabilities(
+    Index $index, 
+    string $parent_field, 
+    string $child_field
+  ): array {
+    $type = $this->getChildFieldType($index, $parent_field, $child_field);
+    
+    return [
+      'search_api_type' => $type,
+      'is_entity_reference' => $this->childFieldIsEntityReference($index, $parent_field, $child_field),
+      'target_type' => $this->getChildFieldTargetType($index, $parent_field, $child_field),
+      'supports_range' => $this->childFieldSupportsRangeOperators($index, $parent_field, $child_field),
+      'linkable' => $this->childFieldCanLink($index, $parent_field, $child_field),
+    ];
+  }
+
+
   /**
    * Validates and parses a nested field path.
    *
@@ -97,6 +126,55 @@ class NestedIndexFieldHelper {
     
     return array_keys($this->getAllNestedChildFieldsConfig($field));
   }
+
+
+  /**
+   * Gets the Search API data type of a nested child field.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $parent_field
+   *   The parent field name.
+   * @param string $child_field
+   *   The child field name.
+   *
+   * @return string|null
+   *   The Search API type ('integer', 'decimal', 'date', 'string', 'text', etc.)
+   *   or NULL if field not found.
+   */
+  public function getChildFieldType(Index $index, string $parent_field, string $child_field): ?string {
+    $full_path = $parent_field . ':' . $child_field;
+    $dotted_path = $this->colonsToDots($full_path);
+    
+    try {
+      $field = $index->getField($dotted_path);
+      return $field ? $field->getType() : NULL;
+    } catch (\Exception $e) {
+      return NULL;
+    }
+  }
+
+
+  /**
+   * Determines if a nested child field supports range operators.
+   *
+   * Range operators (>, <, >=, <=) are supported for numeric and date fields.
+   *
+   * @param Index $index
+   *   The Search API index.
+   * @param string $parent_field
+   *   The parent field name.
+   * @param string $child_field
+   *   The child field name.
+   *
+   * @return bool
+   *   TRUE if the field supports range operators.
+   */
+  public function childFieldSupportsRangeOperators(Index $index, string $parent_field, string $child_field): bool {
+    $field_type = $this->getChildFieldType($index, $parent_field, $child_field);
+    return in_array($field_type, ['integer', 'decimal', 'date'], TRUE);
+  }
+
 
 
   /**

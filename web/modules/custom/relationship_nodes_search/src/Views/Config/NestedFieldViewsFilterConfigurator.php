@@ -111,7 +111,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     array $saved_settings
   ): array {
     // Build filter-specific context
-    $context = $this->buildFilterContext($index, $sapi_fld_nm, $child_fld_nms);
+    $context = $this->buildViewsContext($index, $sapi_fld_nm, $child_fld_nms);
     
     // Use parent's prepare method with context
     $configs = $this->prepareFieldConfigurations($child_fld_nms, $saved_settings, $context);
@@ -135,38 +135,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     return $configs;
   }
   
-
-  /**
-   * Builds filter-specific context for field preparation.
-   *
-   * @param Index $index
-   *   The Search API index.
-   * @param string $sapi_fld_nm
-   *   The parent Search API field name.
-   * @param array $child_fld_nms
-   *   Available child field names.
-   *
-   * @return array
-   *   Context array with filter-specific metadata.
-   */
-  protected function buildFilterContext(Index $index, string $sapi_fld_nm, array $child_fld_nms): array {
-    $linkable = $this->getLinkableFields($index, $sapi_fld_nm, $child_fld_nms);
-    $calculated = $this->getCalculatedFields($child_fld_nms);
-    
-    // Build filter-specific extras
-    $field_extras = [];
-    foreach ($child_fld_nms as $field_name) {
-      $field_extras[$field_name] = [
-        'supports_dropdown' => in_array($field_name, $linkable), // Can show entity labels
-      ];
-    }
-    
-    return [
-      'linkable_fields' => $linkable,
-      'calculated_fields' => $calculated,
-      'field_extras' => $field_extras,
-    ];
-  }
 
   /**
    * Builds form elements for a single filter field.
@@ -316,7 +284,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Display mode for dropdown options (only for linkable fields)
-    if ($config['supports_dropdown'] ?? FALSE) {
+    if ($config['linkable'] ?? FALSE) {
       $path_parts = array_filter([
         $context_prefix,
         'field_settings',
@@ -344,30 +312,5 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
         ),
       ];
     }
-  }
-
-  /**
-   * Gets linkable fields for filter context.
-   *
-   * @param Index $index
-   *   The Search API index.
-   * @param string $sapi_fld_nm
-   *   The parent field name.
-   * @param array $child_fld_nms
-   *   Available field names.
-   *
-   * @return array
-   *   Array of linkable field names.
-   */
-  protected function getLinkableFields(Index $index, string $sapi_fld_nm, array $child_fld_nms): array {
-    $linkable = [];
-    
-    foreach ($child_fld_nms as $field_name) {
-      if ($this->nestedFieldHelper->childFieldCanLink($index, $sapi_fld_nm, $field_name)) {
-        $linkable[] = $field_name;
-      }
-    }
-    
-    return $linkable;
   }
 }
