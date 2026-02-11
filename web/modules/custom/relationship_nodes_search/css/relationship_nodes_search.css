@@ -1,0 +1,14 @@
+.views-exposed-form:has(.relationship-child-field-wrapper){
+  border: solid black 1px;
+  padding: 50px; 
+  margin-bottom:50px; 
+  display:flex;
+  flex-flow:row wrap;
+  align-items: flex-start;
+  gap:10px 30px
+}
+
+.site-wrapper  fieldset:has(.relationship-child-field-wrapper) {
+  border:solid grey 1px;
+  padding:10px;
+}

@@ -91,7 +91,6 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
 
     // Get the currently related entity IDs from this relation node.
     $related_entity_values = $this->nodeInfoService->getRelatedEntityValues($entity);
-
     // Collect IDs from both old and new entity references for reindexing.
     $all_ids = [];
 
@@ -105,6 +104,7 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
       }
     }
 
+
     // Merge the new/current related IDs.
     if (!empty($related_entity_values)) {
       foreach ($related_entity_values as $ids) {
@@ -113,6 +113,8 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
         }
       }
     }
+
+    dpm($all_ids, 'all ids');
 
     // Remove duplicates and ensure we have IDs to reindex.
     $unique_ids = array_unique($all_ids);
@@ -132,7 +134,7 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
         $sapi_ids[] = $nid . ':' . $language_code;
       }
     }
-
+    dpm($sapi_ids, 'sapi ids');
     if (empty($sapi_ids)) {
       return;
     }

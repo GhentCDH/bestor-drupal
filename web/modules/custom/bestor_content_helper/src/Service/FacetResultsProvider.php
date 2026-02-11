@@ -21,26 +21,52 @@ class FacetResultsProvider {
 
 
   public function getFacetResults(string $view_name, string $filter_id, string $display_id = 'default'): array {
-    $view = Views::getView($view_name);
+    $cache_key = "$view_name:$filter_id:$display_id";
+    static $cache = [];
     
+    if (isset($cache[$cache_key])) {
+      return $cache[$cache_key];
+    }
+
+    $view = Views::getView($view_name);
+
     if (!$view) {
+      $cache[$cache_key] = [];
       return [];
     }
 
-    $view->setDisplay($display_id);
-    
-    $view->build();
-    $view->execute();
-    
-    $filters = $view->display_handler->getHandlers('filter');
-    
-    if (!isset($filters[$filter_id])) {
+    try {
+      $view->setDisplay($display_id);
+      $view->setExposedInput([]);
+      $view->initHandlers();
+      $view->preExecute();
+      $view->build();
+      $view->execute();
+
+      $filters = $view->display_handler->getHandlers('filter');
+
+      if (!isset($filters[$filter_id])) {
+        $cache[$cache_key] = [];
+        return [];
+      }
+
+      $results = $filters[$filter_id]->facet_results ?? [];
+      $cache[$cache_key] = $results;
+      
+      $view->destroy();
+      
+      return $results;
+      
+    } catch (\Exception $e) {
+      \Drupal::logger('bestor_content_helper')->error('Error getting facet results for @view/@filter: @message', [
+        '@view' => $view_name,
+        '@filter' => $filter_id,
+        '@message' => $e->getMessage(),
+      ]);
+      
+      $cache[$cache_key] = [];
       return [];
     }
-    
-    $filter = $filters[$filter_id];
-    
-    return $filter->facet_results ?? [];
   }
 
 

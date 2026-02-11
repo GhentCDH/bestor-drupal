@@ -5,6 +5,7 @@
  * Primary module hooks for Relationship Nodes Search module.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\relationship_nodes_search\Form\ExtendedIndexAddFieldsForm;
 
 
@@ -47,4 +48,36 @@ function relationship_nodes_search_search_api_field_type_mapping_alter(array &$m
  */
 function relationship_nodes_search_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
   $query_types['relationship_nodes_search_nested_relationship'] = 'search_api_nested';
+}
+
+
+
+/**
+ * Implements hook_form_views_exposed_form_alter().
+ */
+function relationship_nodes_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $view = $form_state->getStorage()['view'] ?? NULL;
+  if (!$view) {
+    return;
+  }
+
+  $filters = $view->display_handler->getHandlers('filter') ?? [];
+  foreach ($filters as $filter_id => $filter) {
+    if ($filter->getPluginId() === 'search_api_relationship_filter' && $filter->isExposed()) {
+      $form['#attached']['library'][] = 'relationship_nodes_search/exposed_filters_style';
+      $identifier = $filter->options['expose']['identifier'] ?? $filter_id;
+      $wrap_id = $identifier . '_wrapper';
+      
+      if (!empty($form[$wrap_id]) && 
+          is_array($form[$wrap_id]) && 
+          isset($form[$wrap_id][$identifier]['#type']) && 
+          $form[$wrap_id][$identifier]['#type'] === 'details') {
+      
+        if (!empty($form[$wrap_id]['#title'])) {
+          $form[$wrap_id][$identifier]['#title'] = $form[$wrap_id]['#title'];
+          unset($form[$wrap_id]['#title']);
+        }
+      }
+    }
+  }
 }

@@ -114,8 +114,27 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     $context = $this->buildFilterContext($index, $sapi_fld_nm, $child_fld_nms);
     
     // Use parent's prepare method with context
-    return $this->prepareFieldConfigurations($child_fld_nms, $saved_settings, $context);
+    $configs = $this->prepareFieldConfigurations($child_fld_nms, $saved_settings, $context);
+
+    // MERGE saved filter-specific settings back into configs
+    $field_settings = $saved_settings['field_settings'] ?? [];
+    foreach ($configs as $field_name => &$config) {
+      if (isset($field_settings[$field_name])) {
+        // Merge saved filter-specific values
+        $saved = $field_settings[$field_name];
+        $config['widget'] = $saved['widget'] ?? 'textfield';
+        $config['required'] = $saved['required'] ?? FALSE;
+        $config['placeholder'] = $saved['placeholder'] ?? '';
+        $config['field_operator'] = $saved['field_operator'] ?? '=';
+        $config['expose_field_operator'] = $saved['expose_field_operator'] ?? FALSE;
+        $config['select_display_mode'] = $saved['select_display_mode'] ?? 'raw';
+        $config['value'] = $saved['value'] ?? '';
+      }
+    }
+    
+    return $configs;
   }
+  
 
   /**
    * Builds filter-specific context for field preparation.
@@ -162,7 +181,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
    *   Form structure options.
    */
   public function buildFilterFieldForm(array &$form, array $config, array $options): void {
-  dpm($form, 'start buildFilterFieldFOrm');
   
   $field_name = $config['field_name'];
     $context_prefix = $options['context_prefix'];

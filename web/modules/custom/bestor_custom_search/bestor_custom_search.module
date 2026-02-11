@@ -11,7 +11,16 @@ function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state,
   }  
 
   // Hide specific facets (only used in links, no widget needed)
-  if($form_id === 'views_exposed_form' && $form['#id'] === 'views-exposed-form-database-page-1'){
+  if($form_id !== 'views_exposed_form') {
+    return;
+  } 
+
+  $view = $form_state->getStorage()['view'] ?? NULL;
+  if (!$view) {
+    return;
+  }
+  
+  if ($form['#id'] === 'views-exposed-form-database-page-1'){
     $facets_to_hide = ['specialisation', 'gender', 'type', 'country', 'place'];
     foreach ($facets_to_hide as $facet_id) {
       if (isset($form[$facet_id])) {
@@ -19,7 +28,7 @@ function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state,
         $form[$facet_id]['#type'] = 'hidden';
       }
     }   
-  } 
+  }
 }
 
 
@@ -28,7 +37,7 @@ function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state,
  */
 function bestor_custom_search_preprocess_views_exposed_form(&$variables) {
   if ($variables['form']['#id'] === 'views-exposed-form-database-page-1') {
-    // Verberg fullsearch filter in sidebar
+    // hide fullsearch filter in sidebar
     $variables['form']['fullsearch']['#access'] = FALSE;
   }
 }

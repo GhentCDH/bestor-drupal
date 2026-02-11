@@ -81,7 +81,6 @@ class NestedFilterBuilder extends FilterBuilder {
     }
 
     $combined_subfilters = $this->wrapWithConjunction($subfilters, $condition_group->getConjunction());
-
     return ['filters' => $this->queryBuilder->buildNestedFilter($parent, $combined_subfilters)];
   }
 }

@@ -70,8 +70,8 @@ class NestedQueryStructureBuilder {
           'aggs' => $agg_structure,
         ],
       ];
-    }
-
+    } 
+    
     // Wrap in nested aggregation
     return [
       $field_id . '_filtered' => [

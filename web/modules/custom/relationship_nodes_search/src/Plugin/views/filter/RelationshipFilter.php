@@ -195,8 +195,16 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
 
     $exp_op = $this->options['expose_operators'] ?? FALSE;
 
+    $form['value'] = [
+      '#type' => 'details',
+      '#title' => $this->options['expose']['label'] ?? $this->t('Filter Options'),
+      '#open' => $this->hasActiveFilterValues($child_fld_values, $child_fld_settings),
+      '#tree' => TRUE,
+      '#attributes' => ['class' => ['relationship-child-field-wrapper']],
+    ];
+
     $this->exposedFormBuilder->buildExposedFieldWidget(
-      $form, ['value'], $index, $sapi_fld_nm, $child_fld_settings, $child_fld_values, $exp_op
+      $form, ['value'], $index, $sapi_fld_nm, $child_fld_settings, $child_fld_values, $exp_op, $this->query
     );
   }
 
@@ -210,11 +218,9 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     }
 
     $conditions = $this->buildFilterConditions();
-    if (empty($conditions)) {
-      return;
-    }
-
-    $this->applyNestedConditions($conditions);
+    if (!empty($conditions)) {
+      $this->applyNestedConditions($conditions);;
+    } 
   }
 
 
@@ -353,5 +359,39 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
       'operator' => 'and',
       'expose_operators' => FALSE,
     ];
+  }
+
+
+  /**
+   * Check if any filter values are set.
+   *
+   * @param array $values
+   *   The filter values.
+   * @param array $field_settings
+   *   The field settings.
+   *
+   * @return bool
+   *   TRUE if any enabled field has a non-empty value.
+   */
+  protected function hasActiveFilterValues(array $values, array $field_settings): bool {
+    if (empty($values)) {
+      return FALSE;
+    }
+
+    foreach ($field_settings as $field_name => $config) {
+      // Skip disabled fields
+      if (empty($config['enabled'])) {
+        continue;
+      }
+
+      // Check if field has a value
+      $value = $values[$field_name]['value'] ?? $values[$field_name] ?? NULL;
+      
+      if ($value !== NULL && $value !== '') {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
   }
 }

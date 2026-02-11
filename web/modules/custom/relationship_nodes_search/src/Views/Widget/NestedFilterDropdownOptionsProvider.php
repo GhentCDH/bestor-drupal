@@ -8,6 +8,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\search_api\Entity\Index;
+use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
 use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\Views\Parser\NestedFieldResultViewsParser;
@@ -93,27 +94,30 @@ class NestedFilterDropdownOptionsProvider {
    *   Child field name (e.g., 'person', 'calculated_related_id').
    * @param string $display_mode
    *   Display mode: 'raw' (show IDs) or 'label' (show entity labels).
+   * @param ?SearchApiQuery $view_query
+   *   The view query.
    *
    * @return array
    *   Options array suitable for form select element (value => label).
    *   Returns empty array on error.
    */
-  public function getDropdownOptions(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'label'): array {
-    $cache_key = $this->getCacheKey($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
+  public function getDropdownOptions(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'label', ?SearchApiQuery $view_query = NULL): array {
+    dpm($view_query, 'view query');
+    /*$cache_key = $this->getCacheKey($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
     
     if ($cached = $this->cache->get($cache_key)) {
       return $cached->data;
-    }
+    }*/
 
     try {
-      $options = $this->fetchOptionsFromIndex($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
+      $options = $this->fetchOptionsFromIndex($index, $sapi_fld_nm, $child_fld_nm, $display_mode, $view_query);
       // Cache tags include bundle for granular invalidation
       $cache_tags = [
         'relationship_filter_options',
         'relationship_filter_options:' . $sapi_fld_nm,
       ];
 
-      $this->cache->set($cache_key, $options, Cache::PERMANENT, $cache_tags);
+      //$this->cache->set($cache_key, $options, Cache::PERMANENT, $cache_tags);
       return $options;
     }
     catch (\Exception $e) {
@@ -137,17 +141,29 @@ class NestedFilterDropdownOptionsProvider {
    *   Child field name.
    * @param string $display_mode
    *   Display mode.
+   * @param ?SearchApiQuery $view_query
+   *   The view query.
    *
    * @return array
    *   Options array.
    */
-  protected function fetchOptionsFromIndex(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode): array {
+  protected function fetchOptionsFromIndex(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode, ?SearchApiQuery $view_query = NULL): array {
     $field_id = $sapi_fld_nm . ':' . $child_fld_nm;
     $full_field_path = $this->nestedFieldHelper->colonsToDots($field_id);
 
     try {
-      // Build facet query
-      $query = $index->query();
+      if ($view_query && method_exists($view_query, 'getSearchApiQuery')) {
+        $sapi_query = $view_query->getSearchApiQuery();
+        if ($sapi_query) {
+          $query = clone $sapi_query;
+        } else {
+          $query = $index->query();
+        }
+      } else {
+        $query = $index->query();
+      }
+      
+      // Configureer voor facets
       $query->range(0, 0);
       $query->setOption('search_api_facets', [
         $field_id => [
@@ -159,9 +175,10 @@ class NestedFilterDropdownOptionsProvider {
         ],
       ]);
 
-      // Execute and extract facet values
+      // Execute de facet query
       $results = $query->execute();
       $facet_values = $this->facetResultParser->extractTrimmedFacetValues($results, $field_id);
+      
       if (empty($facet_values)) {
         return [];
       }
@@ -177,7 +194,6 @@ class NestedFilterDropdownOptionsProvider {
       return [];
     }
   }
-
 
   /**
    * Convert facet values to form options.

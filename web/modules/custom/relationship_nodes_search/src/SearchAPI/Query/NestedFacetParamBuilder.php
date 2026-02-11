@@ -46,9 +46,10 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
   /**
    * {@inheritdoc}
    */
-  public function buildFacetParams(QueryInterface $query, array $indexFields, array $facetFilters = []) {
+  public function buildFacetParams(QueryInterface $query, array $indexFields, array $facetFilters = []) {    
     $aggs = [];
     $facets = $query->getOption('search_api_facets', []);
+    
     if (empty($facets)) {
       return $aggs;
     }
@@ -56,6 +57,7 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
     $index = $query->getIndex();
     foreach ($facets as $facet_id => $facet) {
       $parsed_names = $this->nestedFieldHelper->validateNestedPath($index, $facet_id);
+
       $check_field = $parsed_names['parent'] ?? $facet['field'];
       if (!$this->checkFieldInIndex($indexFields, $check_field)) {
         continue;
@@ -64,7 +66,8 @@ class NestedFacetParamBuilder extends FacetParamBuilder {
       if (empty($parsed_names['parent'])) {
         $aggs += $this->buildTermBucketAgg($facet_id, $facet, $facetFilters);
       } else {
-        $aggs += $this->buildNestedTermBucketAgg($index, $facet_id, $facet, $facetFilters);
+        $result = $this->buildNestedTermBucketAgg($index, $facet_id, $facet, $facetFilters);
+        $aggs += $result;
       }
     }
     return $aggs;

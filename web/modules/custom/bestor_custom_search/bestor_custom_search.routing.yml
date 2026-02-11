@@ -1,7 +1,0 @@
-bestor_custom_search.form:
-  path: '/advanced-search'
-  defaults:
-    _title: 'Advanced Search'
-    _form: '\Drupal\bestor_advanced_search\Form\AdvancedSearchForm'
-  requirements:
-    _permission: 'access content'

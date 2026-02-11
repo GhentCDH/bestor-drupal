@@ -1,5 +1,4 @@
 relationship_form:
-  version: VERSION
   js:
     js/relationship_form.js: {}
   dependencies:
@@ -13,3 +12,8 @@ vocab_confirm:
     - core/drupal
     - core/once
     - core/jquery
+exposed_filters_style:
+  version: VERSION
+  css:
+    theme:
+      css/relationship_nodes_search.css: {}
