@@ -4,462 +4,344 @@ namespace Drupal\relationship_nodes\Validation;
 
 use Drupal\Core\Config\ConfigImporterEvent;
 use Drupal\Core\Config\StorageInterface;
+use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
+use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationField\RelationshipFieldManager;
-use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
-use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
-use Drupal\relationship_nodes\Validation\ValidationObjectFactory;
-use Drupal\relationship_nodes\Validation\ValidationResultFormatter;
-use Drupal\relationship_nodes\Validation\Bundle\BundleValidator;
-use Drupal\relationship_nodes\Validation\Field\FieldConfigValidator;
-use Drupal\relationship_nodes\Validation\Field\FieldStorageValidator;
 
 /**
  * Service for validating relationship nodes during configuration import.
  */
-class ConfigImportValidator {
+final class ConfigImportValidator {
 
-  protected FieldNameResolver $fieldNameResolver;
-  protected RelationshipFieldManager $relationFieldManager;
-  protected BundleInfoService $bundleInfoService;
-  protected BundleSettingsManager $settingsManager;
-  protected ValidationObjectFactory $validationFactory;
-  protected ValidationResultFormatter $errorFormatter;
-
-
-  /**
-   * Constructs a ConfigImportValidator.
-   *
-   * @param FieldNameResolver $fieldNameResolver
-   *   The field name resolver.
-   * @param RelationshipFieldManager $relationFieldManager
-   *   The field configurator.
-   * @param BundleInfoService $bundleInfoService
-   *   The bundle info service.
-   * @param BundleSettingsManager $settingsManager
-   *   The settings manager.
-   * @param ValidationObjectFactory $validationFactory
-   *   The validation object factory.
-   * @param ValidationResultFormatter $errorFormatter
-   *   The error formatter.
-   */
   public function __construct(
-    FieldNameResolver $fieldNameResolver,
-    RelationshipFieldManager $relationFieldManager,
-    BundleInfoService $bundleInfoService,
-    BundleSettingsManager $settingsManager,
-    ValidationObjectFactory $validationFactory,
-    ValidationResultFormatter $errorFormatter
-  ) {
-    $this->fieldNameResolver = $fieldNameResolver;
-    $this->relationFieldManager = $relationFieldManager;
-    $this->bundleInfoService = $bundleInfoService;
-    $this->settingsManager = $settingsManager;
-    $this->validationFactory = $validationFactory;
-    $this->errorFormatter = $errorFormatter;
-  }
+    private readonly FieldNameResolver $fieldResolver,
+    private readonly RelationshipFieldManager $fieldManager,
+    private readonly BundleInfoService $bundleInfoService,
+    private readonly BundleSettingsManager $settingsManager,
+    private readonly ValidationObjectFactory $validationFactory,
+    private readonly ValidationResultFormatter $formatter,
+  ) {}
 
+  // ========== Public API for Event Subscribers ==========
 
   /**
-   * Validates a single bundle configuration import file.
-   *
-   * @param string $config_name
-   *   The configuration name.
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array
-   *   Array of validation errors.
+   * Validate and display bundle configuration import errors.
    */
-  protected function getBundleCimValidationErrors(string $config_name, StorageInterface $storage): array {
-    $errors = [];
-    $validator = $this->validationFactory->fromBundleConfigFile($config_name, $storage);
-    if (!$validator instanceof BundleValidator) {
-      return [];
-    }
-    if (!$validator->validate()) {
-      foreach ($validator->getErrors() as $error_code) {
-        $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
-        $errors[] = [
-          'error_code' => $error_code,
-          'context' => ['@bundle' => !empty($entity_classes['bundle']) ? $entity_classes['bundle'] : '']
-        ];
-      }
-    }
-    $field_errors = $this->validateCimExistingFields($config_name, $storage);
-    return array_merge($errors, $field_errors);
+  public function displayBundleCimValidationErrors(
+    string $configName,
+    ConfigImporterEvent $event,
+    StorageInterface $storage
+  ): void {
+    $result = $this->validateBundleConfig($configName, $storage);
+    $this->logErrors($result, $configName, $event);
   }
 
-
   /**
-   * Displays bundle configuration import validation errors.
-   *
-   * @param string $config_name
-   *   The configuration name.
-   * @param ConfigImporterEvent $event
-   *   The config import event.
-   * @param StorageInterface $storage
-   *   The configuration storage.
+   * Validate and display field dependency errors.
    */
-  public function displayBundleCimValidationErrors(string $config_name, ConfigImporterEvent $event, StorageInterface $storage): void {
-    $errors = $this->getBundleCimValidationErrors($config_name, $storage);
-    if (empty($errors)) {
-      return;
-    }
-
-    $error_message = $this->errorFormatter->formatValidationErrors($config_name, $errors);
-    $event->getConfigImporter()->logError($error_message);
+  public function displayCimFieldDependenciesValidationErrors(
+    string $configName,
+    ConfigImporterEvent $event,
+    StorageInterface $storage
+  ): void {
+    $result = $this->validateFieldDependencyConfig($configName, $storage);
+    $this->logErrors($result, $configName, $event);
   }
 
+  // ========== Bundle Validation ==========
 
   /**
-   * Validates a single field storage configuration import.
-   *
-   * @param array $config_data
-   *   The configuration data.
-   *
-   * @return array
-   *   Array of validation errors.
+   * Validate a single bundle configuration import.
    */
-  protected function getFieldStorageCimValidationErrors(array $config_data): array {
-    $errors = [];
-    $validator = $this->validationFactory->fromFieldStorageConfigFile($config_data);
-    if (!$validator instanceof FieldStorageValidator) {
-      return [];
+  private function validateBundleConfig(string $configName, StorageInterface $storage): ValidationResult {
+    $validator = $this->validationFactory->fromBundleConfigFile($configName, $storage);
+    
+    if (!$validator) {
+      return ValidationResult::valid();
     }
-    if (!$validator->validate()) {
-      foreach ($validator->getErrors() as $error_code) {
-        $errors[] = [
-          'error_code' => $error_code,
-          'context' => [
-            '@field' => !empty($config_data['field_name']) ? $config_data['field_name'] : '',
-          ]
-        ];
-      }
-    }
-    return $errors;
+
+    $bundleResult = $validator->validate();
+    $fieldsResult = $this->validateBundleFields($configName, $storage);
+
+    return $bundleResult->merge($fieldsResult);
   }
 
-
   /**
-   * Validates a single field configuration import file.
-   *
-   * @param array $config_data
-   *   The configuration data.
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array
-   *   Array of validation errors.
+   * Validate all fields for a bundle import.
    */
-  protected function getFieldConfigCimValidationErrors(array $config_data, StorageInterface $storage): array {
-    $errors = [];
-    $validator = $this->validationFactory->fromFieldConfigConfigFile($config_data, $storage);
-    if (!$validator instanceof FieldConfigValidator) {
-      return [];
-    }
-    if (!$validator->validate()) {
-      foreach ($validator->getErrors() as $error_code) {
-        $errors[] = [
-          'error_code' => $error_code,
-          'context' => [
-            '@bundle' => $config_data['bundle'],
-            '@field' => $config_data['field_name'],
-          ]
-        ];
-      }
-    }
-    return $errors;
-  }
+  private function validateBundleFields(string $configName, StorageInterface $storage): ValidationResult {
+    $fieldsStatus = $this->fieldManager->getCimFieldsStatus($configName, $storage);
+    $existingFields = $fieldsStatus['existing'] ?? [];
 
-
-  /**
-   * Validates existing fields in a configuration import.
-   *
-   * @param string $config_name
-   *   The configuration name.
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array
-   *   Array of validation errors.
-   */
-  protected function validateCimExistingFields(string $config_name, StorageInterface $storage): array {
-    $errors = [];
-    $existing_fields = $this->relationFieldManager->getCimFieldsStatus($config_name, $storage)['existing'] ?? [];
-    foreach ($existing_fields as $field => $field_info) {
-      $entity_classes = $this->settingsManager->getConfigFileEntityClasses($config_name);
-      $error_context = [
-        '@field' => $field,
-        '@bundle' => !empty($entity_classes['bundle']) ? $entity_classes['bundle'] : '',
+    $results = [];
+    foreach ($existingFields as $fieldName => $fieldInfo) {
+      $context = [
+        '@field' => $fieldName,
+        '@bundle' => $this->getBundleFromConfig($configName) ?? '',
       ];
-      if (!isset($field_info['config_file_data'])) {
-        $errors[] = [
-          'error_code' => 'missing_config_file_data',
-          'context' => $error_context
-        ];
+
+      if (!isset($fieldInfo['config_file_data'])) {
+        $results[] = ValidationResult::fromErrorCode('missing_config_file_data', $context);
         continue;
       }
 
-      $field_storage_config = $this->getFieldStorageCimForFieldCim($field_info['config_file_data'], $storage);
-      if (!empty($field_storage_config)) {
-        $field_storage_errors = $this->getFieldStorageCimValidationErrors($field_storage_config);
-        if (!empty($field_storage_errors)) {
-          $errors = array_merge($errors, $field_storage_errors);
+      // Validate field storage
+      $storageConfig = $this->getFieldStorageForField($fieldInfo['config_file_data'], $storage);
+      if (!$storageConfig) {
+        $results[] = ValidationResult::fromErrorCode('no_field_storage', $context);
+        continue;
+      }
+
+      $results[] = $this->validateFieldStorageConfig($storageConfig);
+      $results[] = $this->validateFieldConfigImport($fieldInfo['config_file_data'], $storage);
+    }
+
+    return ValidationResult::mergeAll($results);
+  }
+
+  // ========== Field Validation ==========
+
+  /**
+   * Validate field storage configuration import.
+   */
+  private function validateFieldStorageConfig(array $configData): ValidationResult {
+    $validator = $this->validationFactory->fromFieldStorageConfigFile($configData);
+    return $validator->validate();
+  }
+
+  /**
+   * Validate field configuration import.
+   */
+  private function validateFieldConfigImport(array $configData, StorageInterface $storage): ValidationResult {
+    $validator = $this->validationFactory->fromFieldConfigConfigFile($configData, $storage);
+    return $validator->validate();
+  }
+
+  // ========== Field Dependencies ==========
+
+  /**
+   * Validate field dependencies during deletion.
+   */
+  private function validateFieldDependencyConfig(string $configName, StorageInterface $storage): ValidationResult {
+    // If config exists, it's not being deleted
+    if (!empty($storage->read($configName))) {
+      return ValidationResult::valid();
+    }
+
+    $fieldInfo = $this->fieldManager->getConfigFileFieldClasses($configName);
+    
+    if (!$fieldInfo) {
+      return ValidationResult::fromErrorCode('no_field_config_file');
+    }
+
+    $fieldName = $fieldInfo['field_name'];
+
+    // Field storage being deleted - check if field configs still exist
+    if ($fieldInfo['field_entity_class'] === 'storage') {
+      return $this->validateFieldStorageDeletion($configName, $storage, $fieldName);
+    }
+
+    // Field config being deleted - check bundle dependencies
+    return $this->validateFieldConfigDeletion($fieldInfo, $storage);
+  }
+
+  /**
+   * Validate field storage deletion.
+   */
+  private function validateFieldStorageDeletion(
+    string $configName,
+    StorageInterface $storage,
+    string $fieldName
+  ): ValidationResult {
+    $dependentFields = $this->getFieldConfigsForStorage($configName, $storage);
+    
+    if (!empty($dependentFields)) {
+      return ValidationResult::fromErrorCode('no_field_storage', [
+        '@field' => $fieldName,
+      ]);
+    }
+
+    return ValidationResult::valid();
+  }
+
+  /**
+   * Validate field config deletion.
+   */
+  private function validateFieldConfigDeletion(array $fieldInfo, StorageInterface $storage): ValidationResult {
+    $fieldName = $fieldInfo['field_name'];
+    $entityTypeId = $fieldInfo['entity_type_id'];
+    $bundle = $fieldInfo['bundle'];
+
+    $dependentBundles = $this->getBundlesDependingOnField($fieldName, $entityTypeId, $storage);
+
+    // Check if the bundle being deleted is a dependent
+    foreach ($dependentBundles as $configName => $configData) {
+      $bundleId = $this->getBundleFromConfig($configName);
+      
+      if ($bundleId === $bundle) {
+        return ValidationResult::fromErrorCode('field_has_dependency', [
+          '@field' => $fieldName,
+          '@bundle' => $bundle,
+        ]);
+      }
+    }
+
+    return ValidationResult::valid();
+  }
+
+  /**
+   * Get bundles that depend on a field.
+   */
+  private function getBundlesDependingOnField(
+    string $fieldName,
+    string $entityTypeId,
+    StorageInterface $storage
+  ): array {
+    if (!in_array($entityTypeId, ['node_type', 'taxonomy_vocabulary'], true)) {
+      return [];
+    }
+
+    // Check which bundles need this field
+    if ($fieldName === $this->fieldResolver->getRelationTypeField()) {
+      return $this->bundleInfoService->getAllCimTypedRelationNodeTypes($storage);
+    }
+
+    if (in_array($fieldName, $this->fieldResolver->getRelatedEntityFields(), true)) {
+      return $this->bundleInfoService->getAllCimRelationBundles($storage, $entityTypeId);
+    }
+
+    if ($fieldName === $this->fieldResolver->getMirrorFields('string')) {
+      return $this->bundleInfoService->getAllCimRelationVocabs($storage, 'string');
+    }
+
+    if ($fieldName === $this->fieldResolver->getMirrorFields('entity_reference')) {
+      return $this->bundleInfoService->getAllCimRelationVocabs($storage, 'entity_reference');
+    }
+
+    return [];
+  }
+
+  // ========== Complete Import Validation ==========
+
+  /**
+   * Validate all relation configuration in import.
+   */
+  public function validateAllImportConfig(StorageInterface $storage): ValidationResult {
+    return ValidationResult::mergeAll([
+      $this->validateAllBundleImports($storage),
+      $this->validateAllFieldImports($storage),
+    ]);
+  }
+
+  /**
+   * Validate all bundle imports.
+   */
+  private function validateAllBundleImports(StorageInterface $storage): ValidationResult {
+    $results = [];
+    
+    foreach ($this->bundleInfoService->getAllCimRelationBundles($storage) as $configName => $configData) {
+      $results[] = $this->validateBundleConfig($configName, $storage);
+    }
+
+    return ValidationResult::mergeAll($results);
+  }
+
+  /**
+   * Validate all field imports.
+   */
+  private function validateAllFieldImports(StorageInterface $storage): ValidationResult {
+    $results = [];
+    $rnFields = $this->fieldManager->getAllCimRnCreatedFields($storage);
+    $validFieldNames = $this->fieldResolver->getAllRelationFieldNames();
+
+    foreach ($rnFields as $configName => $configData) {
+      $fieldInfo = $this->fieldManager->getConfigFileFieldClasses($configName);
+      
+      if (empty($fieldInfo['field_entity_class'])) {
+        $results[] = ValidationResult::fromErrorCode('missing_config_file_data', [
+          '@field' => $configName,
+        ]);
+        continue;
+      }
+
+      $fieldName = $fieldInfo['field_name'];
+      $fieldClass = $fieldInfo['field_entity_class'];
+
+      // Validate field
+      if ($fieldClass === 'storage') {
+        $results[] = $this->validateFieldStorageConfig($configData);
+      } elseif ($fieldClass === 'field') {
+        $results[] = $this->validateFieldConfigImport($configData, $storage);
+      }
+
+      // Check for orphaned fields
+      if (!in_array($fieldName, $validFieldNames, true)) {
+        $context = ['@field' => $fieldName];
+        
+        if ($fieldClass === 'field') {
+          $context['@bundle'] = $configData['bundle'];
         }
-      } else {
-        $errors[] = [
-          'error_code' => 'no_field_storage',
-          'context' => $error_context
-        ];
-      }
 
-      $field_errors = $this->getFieldConfigCimValidationErrors($field_info['config_file_data'], $storage);
-      if (!empty($field_errors)) {
-        $errors = array_merge($errors, $field_errors);
+        $results[] = ValidationResult::fromErrorCode('orphaned_rn_field_settings', $context);
       }
     }
-    return $errors;
+
+    return ValidationResult::mergeAll($results);
   }
 
+  // ========== Helper Methods ==========
 
   /**
-   * Validates field dependencies in configuration import.
-   *
-   * @param string $config_name
-   *   The configuration name.
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array
-   *   Array of validation errors.
+   * Get field storage config for a field config.
    */
-  protected function validateCimFieldDependencies(string $config_name, StorageInterface $storage): array {
-    if (!empty($storage->read($config_name))) {
-      return [];
-    }
-
-    $field_info = $this->relationFieldManager->getConfigFileFieldClasses($config_name);
-
-    if (!$field_info) {
-      return [[
-        'error_code' => 'no_field_config_file',
-        'context' => []
-      ]];
-    }
-
-    $field_name = $field_info['field_name'];
-    if ($field_info['field_entity_class'] === 'storage') {
-      if (!empty($this->getFieldCimForFieldStorageCim($config_name, $storage))) {
-        return [[
-          'error_code' => 'no_field_storage',
-          'context' => ['@field' => $field_name]
-        ]];
-      }
-      return [];
-    }
-
-    $entity_type_id = $field_info['entity_type_id'];
-
-    if (!in_array($entity_type_id, ['node_type', 'taxonomy_vocabulary'])) {
-      return [];
-    }
-
-    $bundles_to_check = [];
-    if ($field_name == $this->fieldNameResolver->getRelationTypeField()) {
-      $bundles_to_check = $this->bundleInfoService->getAllCimTypedRelationNodeTypes($storage);
-    } elseif (in_array($field_name, $this->fieldNameResolver->getRelatedEntityFields())) {
-      $bundles_to_check = $this->bundleInfoService->getAllCimRelationBundles($storage, $entity_type_id);
-    } elseif ($field_name == $this->fieldNameResolver->getMirrorFields('string')) {
-      $bundles_to_check = $this->bundleInfoService->getAllCimRelationVocabs($storage, 'string');
-    } elseif ($field_name == $this->fieldNameResolver->getMirrorFields('entity_reference')) {
-      $bundles_to_check = $this->bundleInfoService->getAllCimRelationVocabs($storage, 'entity_reference');
-    }
-    $removed_fields_bundle = $field_info['bundle'];
-    $errors = [];
-    foreach ($bundles_to_check as $config_name => $config_data) {
-      $existing_rn_bundle = $this->settingsManager->getConfigFileEntityClasses($config_name)['bundle'];
-
-      if ($existing_rn_bundle == $removed_fields_bundle) {
-        $errors[] = [
-          'error_code' => 'field_has_dependency',
-          'context' => [
-            '@field' => $field_name,
-            '@bundle' => $removed_fields_bundle,
-          ]
-        ];
+  private function getFieldStorageForField(array $fieldConfigData, StorageInterface $storage): ?array {
+    $dependencies = $fieldConfigData['dependencies']['config'] ?? [];
+    
+    foreach ($dependencies as $dependency) {
+      if (str_starts_with($dependency, 'field.storage.')) {
+        return $storage->read($dependency);
       }
     }
-    return $errors;
+
+    return null;
   }
 
+  /**
+   * Get field configs that depend on a storage.
+   */
+  private function getFieldConfigsForStorage(string $storageConfigName, StorageInterface $storage): array {
+    $dependentFields = [];
+    
+    foreach ($storage->listAll('field.field.') as $fieldConfigName) {
+      $fieldData = $storage->read($fieldConfigName);
+      $dependencies = $fieldData['dependencies']['config'] ?? [];
+      
+      if (in_array($storageConfigName, $dependencies, true)) {
+        $dependentFields[$fieldConfigName] = $fieldData;
+      }
+    }
+
+    return $dependentFields;
+  }
 
   /**
-   * Displays field dependencies validation errors for configuration import.
-   *
-   * @param string $config_name
-   *   The configuration name.
-   * @param ConfigImporterEvent $event
-   *   The config import event.
-   * @param StorageInterface $storage
-   *   The configuration storage.
+   * Get bundle ID from config name.
    */
-  public function displayCimFieldDependenciesValidationErrors(string $config_name, ConfigImporterEvent $event, StorageInterface $storage): void {
-    $errors = $this->validateCimFieldDependencies($config_name, $storage);
+  private function getBundleFromConfig(string $configName): ?string {
+    $entityClasses = $this->settingsManager->getConfigFileEntityClasses($configName);
+    return $entityClasses['bundle'] ?? null;
+  }
 
-    if (empty($errors)) {
+  /**
+   * Log validation errors to config importer.
+   */
+  private function logErrors(ValidationResult $result, string $configName, ConfigImporterEvent $event): void {
+    if ($result->isValid()) {
       return;
     }
 
-    $error_message = $this->errorFormatter->formatValidationErrors($config_name, $errors);
-    $event->getConfigImporter()->logError($error_message);
-  }
-
-
-  /**
-   * Validates all relation bundles in configuration import.
-   *
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array
-   *   Array of all validation errors.
-   */
-  protected function validateAllCimRelationBundles(StorageInterface $storage): array {
-    $all_errors = [];
-
-    foreach ($this->bundleInfoService->getAllCimRelationBundles($storage) as $config_name => $config_data) {
-      $errors = $this->getBundleCimValidationErrors($config_name, $storage);
-      if (!empty($errors)) {
-        $all_errors = array_merge($all_errors, $errors);
-      }
-    }
-    return $all_errors;
-  }
-
-
-  /**
-   * Validates all relation fields in configuration import.
-   *
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array
-   *   Array of all validation errors.
-   */
-  protected function validateAllCimRelationFields(StorageInterface $storage): array {
-    $all_errors = [];
-    $rn_fields = $this->relationFieldManager->getAllCimRnCreatedFields($storage);
-    $relation_field_names = $this->fieldNameResolver->getAllRelationFieldNames();
-    foreach ($rn_fields as $config_name => $config_data) {
-      $field_info = $this->relationFieldManager->getConfigFileFieldClasses($config_name);
-      $field_config = false;
-      if (empty($field_info) || empty($field_info['field_entity_class'])) {
-        return [[
-          'error_code' => 'missing_config_file_data',
-          'context' => ['@field' => $config_name]
-        ]];
-      }
-      $field_entity_class = $field_info['field_entity_class'];
-      if ($field_entity_class === 'storage') {
-        $storage_errors = $this->getFieldStorageCimValidationErrors($config_data);
-        if (!empty($storage_errors)) {
-          $all_errors = array_merge($all_errors, $storage_errors);
-        }
-      } elseif ($field_entity_class === 'field') {
-        $field_config = true;
-        $config_errors = $this->getFieldConfigCimValidationErrors($config_data, $storage);
-        if (!empty($config_errors)) {
-          $all_errors = array_merge($all_errors, $config_errors);
-        }
-      }
-      $field_name = $field_info['field_name'];
-      if (!in_array($field_name, $relation_field_names)) {
-        $context = ['@field' => $field_name];
-        if ($field_config) {
-          $context['@bundle'] = $config_data['bundle'];
-        }
-        $all_errors[] = [
-          'error_code' => 'orphaned_rn_field_settings',
-          'context' => $context
-        ];
-      }
-    }
-    return $all_errors;
-  }
-
-
-  /**
-   * Validates all relation configuration in configuration import.
-   *
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array
-   *   Array of all validation errors.
-   */
-  protected function validateAllCimRelationConfig(StorageInterface $storage): array {
-    return array_merge(
-      $this->validateAllCimRelationBundles($storage),
-      $this->validateAllCimRelationFields($storage)
-    );
-  }
-
-
-  /**
-   * Gets field storage configuration for a field configuration import.
-   *
-   * @param array $field_config_data
-   *   The field configuration data.
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array|null
-   *   The field storage configuration data or NULL.
-   */
-  protected function getFieldStorageCimForFieldCim(array $field_config_data, StorageInterface $storage): ?array {
-    $dependency_config = [];
-    if (!empty($field_config_data['dependencies']['config'])) {
-      $dependency_config = $field_config_data['dependencies']['config'];
-    }
-
-    $field_storage_config_name = '';
-    foreach ($dependency_config as $dependency) {
-      if (str_starts_with($dependency, 'field.storage.')) {
-        $field_storage_config_name = $dependency;
-        break;
-      }
-    }
-
-    if (empty($field_storage_config_name) || empty($storage->read($field_storage_config_name))) {
-      return null;
-    }
-
-    return $storage->read($field_storage_config_name) ?? [];
-  }
-
-
-  /**
-   * Gets field configurations that depend on a field storage configuration.
-   *
-   * @param string $storage_config_name
-   *   The field storage configuration name.
-   * @param StorageInterface $storage
-   *   The configuration storage.
-   *
-   * @return array|null
-   *   Array of dependent field configurations or NULL.
-   */
-  protected function getFieldCimForFieldStorageCim(string $storage_config_name, StorageInterface $storage): ?array {
-    $dependent_field_config = [];
-    $all_fields = $storage->listAll('field.field.');
-    foreach ($all_fields as $field) {
-      $field_data = $storage->read($field);
-      $dependencies = $field_data['dependencies']['config'];
-      if (in_array($storage_config_name, $dependencies)) {
-        $dependent_field_config[$field] = $field_data;
-      }
-    }
-    return $dependent_field_config;
+    $message = $result->getFormattedErrors($this->formatter, $configName);
+    $event->getConfigImporter()->logError($message);
   }
 }

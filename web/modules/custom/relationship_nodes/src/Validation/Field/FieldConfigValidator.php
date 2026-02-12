@@ -2,179 +2,117 @@
 
 namespace Drupal\relationship_nodes\Validation\Field;
 
+use Drupal\Core\Config\StorageInterface;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Drupal\relationship_nodes\RelationField\RelationshipFieldManager;
-use Drupal\Core\Config\StorageInterface;
-
+use Drupal\relationship_nodes\Validation\ValidationResult;
 
 /**
- * Validation object for relationship field configuration.
- *
- * Validates field configurations for relationship node fields.
+ * Validator for field configuration.
  */
-class FieldConfigValidator {
+final class FieldConfigValidator {
 
-  protected string $fieldName;
-  protected string $bundle;
-  protected bool $required;
-  protected string $fieldType;
-  protected ?array $targetBundles;
-  protected ?StorageInterface $storage;
-  protected FieldNameResolver $fieldNameResolver;
-  protected RelationshipFieldManager $relationFieldManager;
-  protected BundleSettingsManager $settingsManager;
-  protected array $errors = [];
-
-
-  /**
-   * Constructs a FieldConfigValidator.
-   *
-   * @param string $fieldName
-   *   The field name.
-   * @param string $bundle
-   *   The bundle name.
-   * @param bool $required
-   *   Whether the field is required.
-   * @param string $fieldType
-   *   The field type.
-   * @param array|null $targetBundles
-   *   Target bundles for entity reference fields.
-   * @param StorageInterface|null $storage
-   *   The configuration storage.
-   * @param FieldNameResolver $fieldNameResolver
-   *   The field name resolver.
-   * @param RelationshipFieldManager $relationFieldManager
-   *   The field configurator.
-   * @param BundleSettingsManager $settingsManager
-   *   The settings manager.
-   */
   public function __construct(
-    string $fieldName,
-    string $bundle,
-    bool $required,
-    string $fieldType,
-    ?array $targetBundles = null,
-    ?StorageInterface $storage,
-    FieldNameResolver $fieldNameResolver,
-    RelationshipFieldManager $relationFieldManager,
-    BundleSettingsManager $settingsManager
-  ) {
-    $this->fieldName = $fieldName;
-    $this->bundle = $bundle;
-    $this->required = $required;
-    $this->fieldType = $fieldType;
-    $this->targetBundles = $targetBundles;
-    $this->storage = $storage;
-    $this->fieldNameResolver = $fieldNameResolver;
-    $this->relationFieldManager = $relationFieldManager;
-    $this->settingsManager = $settingsManager;
-  }
-
+    private readonly string $fieldName,
+    private readonly string $bundle,
+    private readonly bool $required,
+    private readonly string $fieldType,
+    private readonly ?array $targetBundles,
+    private readonly ?StorageInterface $storage,
+    private readonly FieldNameResolver $fieldResolver,
+    private readonly RelationshipFieldManager $fieldManager,
+    private readonly BundleSettingsManager $settingsManager,
+  ) {}
 
   /**
    * Validates the field configuration.
-   *
-   * @return bool
-   *   TRUE if valid, FALSE otherwise.
    */
-  public function validate(): bool {
-    $required_settings = $this->relationFieldManager->getRequiredFieldConfiguration($this->fieldName);
+  public function validate(): ValidationResult {
+    $requiredSettings = $this->fieldManager->getRequiredFieldConfiguration($this->fieldName);
 
-    if (!$required_settings) {
-      // Not a RN field, no validation required. 
-      return TRUE;
+    if (!$requiredSettings) {
+      return ValidationResult::valid();
     }
 
-    $this->validateTargetBundles();
-    $this->validateFieldRequired();
-    $this->validateFieldType($required_settings);
-    $this->validateSelfReferencingMirrorField();
-    if ($required_settings['type'] === 'entity_reference') {
-      $this->validateRelationVocabTarget();
+    $validations = [
+      $this->validateTargetBundles(),
+      $this->validateFieldRequired(),
+      $this->validateFieldType($requiredSettings),
+      $this->validateSelfReferencingMirrorField(),
+    ];
+
+    if ($requiredSettings['type'] === 'entity_reference') {
+      $validations[] = $this->validateRelationVocabTarget();
     }
-    return empty($this->errors);
+
+    return ValidationResult::mergeAll($validations)
+      ->withContext([
+        '@field' => $this->fieldName,
+        '@bundle' => $this->bundle,
+      ]);
   }
 
-
-  /**
-   * Gets validation errors.
-   *
-   * @return array
-   *   Array of error codes.
-   */
-  public function getErrors(): array {
-    return $this->errors;
-  }
-
-  /**
-   * Validates target bundles configuration.
-   */
-  protected function validateTargetBundles(): void {
-    if (!empty($this->targetBundles) && count($this->targetBundles) !== 1) {
-      $this->errors[] = 'multiple_target_bundles';
+  private function validateTargetBundles(): ValidationResult {
+    if (empty($this->targetBundles) || count($this->targetBundles) === 1) {
+      return ValidationResult::valid();
     }
+    return ValidationResult::fromErrorCode('multiple_target_bundles');
   }
 
+  private function validateFieldRequired(): ValidationResult {
+    return $this->required
+      ? ValidationResult::fromErrorCode('field_cannot_be_required')
+      : ValidationResult::valid();
+  }
 
-  /**
-   * Validates that field is not required.
-   */
-  protected function validateFieldRequired(): void {
-    if ($this->required) {
-      $this->errors[] = 'field_cannot_be_required';
+  private function validateFieldType(array $required): ValidationResult {
+    return $this->fieldType === $required['type']
+      ? ValidationResult::valid()
+      : ValidationResult::fromErrorCode('invalid_field_type');
+  }
+
+  private function validateSelfReferencingMirrorField(): ValidationResult {
+    $mirrorField = $this->fieldResolver->getMirrorFields('entity_reference');
+    
+    if ($this->fieldName !== $mirrorField) {
+      return ValidationResult::valid();
     }
-  }
-  
 
-  /**
-   * Validates self-referencing mirror field configuration.
-   */
-  protected function validateSelfReferencingMirrorField(): void {
-    if ($this->fieldName === $this->fieldNameResolver->getMirrorFields('entity_reference')) {
-      if (!empty($this->targetBundles) && key($this->targetBundles) !== $this->bundle) {
-        $this->errors[] = 'mirror_field_bundle_mismatch';
+    if (empty($this->targetBundles) || key($this->targetBundles) === $this->bundle) {
+      return ValidationResult::valid();
+    }
+
+    return ValidationResult::fromErrorCode('mirror_field_bundle_mismatch');
+  }
+
+  private function validateRelationVocabTarget(): ValidationResult {
+    if ($this->fieldName !== $this->fieldResolver->getRelationTypeField()) {
+      return ValidationResult::valid();
+    }
+
+    if (empty($this->targetBundles)) {
+      return ValidationResult::valid();
+    }
+
+    foreach ($this->targetBundles as $vocabName => $vocabLabel) {
+      if (!$this->isValidRelationVocab($vocabName)) {
+        return ValidationResult::fromErrorCode('invalid_relation_vocabulary');
       }
     }
-  }        
-  
 
-  /**
-   * Validates relation vocabulary target for relation type fields.
-   */
-  protected function validateRelationVocabTarget(): void {
-    if ($this->fieldName === $this->fieldNameResolver->getRelationTypeField()) {
-      if (empty($this->targetBundles)) {
-        return;
-      }
-      // werkt niet bij configimport...
-      foreach ($this->targetBundles as $vocab_name => $vocab_label) {
-        $bundle_info = $this->settingsManager->getBundleInfo($vocab_name);   
-        if (empty($this->storage) && $bundle_info && $bundle_info->isRelation()) {
-          continue;
-        } elseif (!empty($this->storage)) {
-          $config_data = $this->storage->read('taxonomy.vocabulary.' . $vocab_name);
-
-          if (!empty($config_data) && $this->settingsManager->isCimRelationEntity($config_data)) {
-            continue;
-          }
-        }
-        $this->errors[] = 'invalid_relation_vocabulary';
-        break;
-      }
-    }
+    return ValidationResult::valid();
   }
- 
-  
-  /**
-   * Validates field type matches required configuration.
-   *
-   * @param array $required_settings
-   *   Required field settings.
-   */
-  protected function validateFieldType(array $required_settings): void {
-    if ($this->fieldType !== $required_settings['type']) {
-      $this->errors[] = 'invalid_field_type';
+
+  private function isValidRelationVocab(string $vocabName): bool {
+    // Runtime check
+    if (empty($this->storage)) {
+      $bundleInfo = $this->settingsManager->getBundleInfo($vocabName);
+      return $bundleInfo && $bundleInfo->isRelation();
     }
+
+    // Config import check
+    $configData = $this->storage->read('taxonomy.vocabulary.' . $vocabName);
+    return !empty($configData) && $this->settingsManager->isCimRelationEntity($configData);
   }
 }

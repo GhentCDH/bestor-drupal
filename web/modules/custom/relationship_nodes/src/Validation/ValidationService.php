@@ -7,338 +7,221 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
+use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationField\RelationshipFieldManager;
-use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
-use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
-use Drupal\relationship_nodes\Validation\ValidationObjectFactory;
-use Drupal\relationship_nodes\Validation\Bundle\BundleValidator;
-use Drupal\relationship_nodes\Validation\Field\FieldConfigValidator;
-use Drupal\relationship_nodes\Validation\Field\FieldStorageValidator;
-use Drupal\relationship_nodes\Validation\ValidationResultFormatter;
-
 
 /**
  * Service for validating relationship nodes configuration.
- *
- * Provides comprehensive validation for bundles, fields, and entire
- * relationship node configurations.
  */
-class ValidationService {
+final class ValidationService {
 
-  protected EntityTypeManagerInterface $entityTypeManager;
-  protected FieldNameResolver $fieldNameResolver;
-  protected RelationshipFieldManager $relationFieldManager;
-  protected BundleInfoService $bundleInfoService;
-  protected BundleSettingsManager $settingsManager;
-  protected ValidationObjectFactory $validationFactory;
-  protected ValidationResultFormatter $errorFormatter;
-
-
-  /**
-   * Constructs a ValidationService.
-   *
-   * @param EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param FieldNameResolver $fieldNameResolver
-   *   The field name resolver.
-   * @param RelationshipFieldManager $relationFieldManager
-   *   The field configurator.
-   * @param BundleInfoService $bundleInfoService
-   *   The bundle info service.
-   * @param BundleSettingsManager $settingsManager
-   *   The settings manager.
-   * @param ValidationObjectFactory $validationFactory
-   *   The validation object factory.
-   * @param ValidationResultFormatter $errorFormatter
-   *   The error formatter.
-   */
   public function __construct(
-    EntityTypeManagerInterface $entityTypeManager,
-    FieldNameResolver $fieldNameResolver,
-    RelationshipFieldManager $relationFieldManager,
-    BundleInfoService $bundleInfoService,
-    BundleSettingsManager $settingsManager,
-    ValidationObjectFactory $validationFactory,
-    ValidationResultFormatter $errorFormatter
-  ) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->fieldNameResolver = $fieldNameResolver;
-    $this->relationFieldManager = $relationFieldManager;
-    $this->bundleInfoService = $bundleInfoService;
-    $this->settingsManager = $settingsManager;
-    $this->validationFactory = $validationFactory;
-    $this->errorFormatter = $errorFormatter;
-  }
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly FieldNameResolver $fieldResolver,
+    private readonly RelationshipFieldManager $fieldManager,
+    private readonly BundleInfoService $bundleInfoService,
+    private readonly BundleSettingsManager $settingsManager,
+    private readonly ValidationObjectFactory $validationFactory,
+    private readonly ValidationResultFormatter $formatter,
+  ) {}
 
+  // ========== Form Validation ==========
 
   /**
-   * Gets validation errors for a bundle entity.
-   *
-   * @param ConfigEntityBundleBase $entity
-   *   The bundle entity.
-   *
-   * @return array
-   *   Array of validation errors.
+   * Validate form state and display errors.
    */
-  protected function getBundleValidationErrors(ConfigEntityBundleBase $entity): array {
-    $errors = [];
-    $validator = $this->validationFactory->fromEntity($entity);
-    if (!$validator instanceof BundleValidator) {
-      return [];
-    }
-    if (!$validator->validate()) {
-      foreach ($validator->getErrors() as $error_code) {
-        $errors[] = [
-          'error_code' => $error_code,
-          'context' => [
-            '@bundle' => $entity->id()
-          ]
-        ];
-      }
-    }
-
-    $field_errors = $this->validateEntityExistingFields($entity);
-    return array_merge($errors, $field_errors);
-  }
-  
-  
-  /**
-   * Gets validation errors from form state.
-   *
-   * @param FormStateInterface $form_state
-   *   The form state.
-   *
-   * @return array
-   *   Array of validation errors.
-   */
-  protected function getFormStateValidationErrors(FormStateInterface $form_state): array {
-    $errors = [];
-
-    $validator = $this->validationFactory->fromFormState($form_state);
-    if (!$validator instanceof BundleValidator) {
-      return [];
-    }
-
-    $entity = $form_state->getFormObject()->getEntity();
-    if (!$validator->validate()) {
-      foreach ($validator->getErrors() as $error_code) {
-        $errors[] = [
-          'error_code' => $error_code,
-          'context' => [
-            '@bundle' => $entity->id()
-          ]
-        ];
-      }
-    }    
-    $rn_settings = $form_state->getValue('relationship_nodes') ?? null;
-    $field_errors = $this->validateEntityExistingFields($entity, $rn_settings);
-    return array_merge($errors, $field_errors);
-  }
-
-
-  /**
-   * Displays form state validation errors.
-   *
-   * @param array $form
-   *   The form array (passed by reference).
-   * @param FormStateInterface $form_state
-   *   The form state.
-   */
-  public function displayFormStateValidationErrors(array &$form, FormStateInterface $form_state): void {
-    $errors = $this->getFormStateValidationErrors($form_state);
-    if (empty($errors)) {
-      return;
-    }
-
-    $error_message = $this->errorFormatter->formatValidationErrors($form_state->getFormObject()->getEntity()->id(), $errors);
-    $form_state->setErrorByName('relationship_nodes', $error_message);
-  }
-
-
-  /**
-   * Gets validation errors for a field storage.
-   *
-   * @param FieldStorageConfig $storage
-   *   The field storage configuration.
-   *
-   * @return array
-   *   Array of validation errors.
-   */
-  public function getFieldStorageValidationErrors(FieldStorageConfig $storage): array {
-    $errors = [];
-    $validator = $this->validationFactory->fromFieldStorage($storage);
-    if (!$validator instanceof FieldStorageValidator) {
-      return [];
-    }
-    if (!$validator->validate()) {
-      foreach ($validator->getErrors() as $error_code) {
-        $errors[] = [
-          'error_code' => $error_code,
-          'context' => [
-            '@field' =>  $storage->getName(),
-          ]
-        ];
-      }
-    } 
-    return $errors;   
-  }
-
-
-  /**
-   * Gets validation errors for a field configuration.
-   *
-   * @param FieldConfig $field_config
-   *   The field configuration.
-   * @param bool $include_storage_validation
-   *   Whether to include storage validation.
-   *
-   * @return array
-   *   Array of validation errors.
-   */
-  public function getFieldConfigValidationErrors(FieldConfig $field_config, bool $include_storage_validation = true): array {
-    $errors = []; 
-    $context = [
-      '@field' =>  $field_config->getName(),
-      '@bundle' => $field_config->getTargetBundle()
-    ];
-    if ($include_storage_validation == true) {
-      $storage = $field_config->getFieldStorageDefinition();
-      if (!$storage instanceof FieldStorageConfig) {
-        $errors[] = [
-          'error_code' => 'no_field_storage',
-          'context' => $context
-        ];
-        return $errors;
-      }
-      $storage_errors = $this->getFieldStorageValidationErrors($storage);
-      if (!empty($storage_errors)) {
-        $errors = $storage_errors;
-      }
-    }
-
-    $validator = $this->validationFactory->fromFieldConfig($field_config);
-    if (!$validator instanceof FieldConfigValidator) {
-      return $errors;
-    }
-    if (!$validator->validate()) {
-      foreach ($validator->getErrors() as $error_code) {
-        $errors[] = [
-          'error_code' => $error_code,
-          'context' => $context 
-        ];
-      }
-    }   
+  public function displayFormStateValidationErrors(array &$form, FormStateInterface $formState): void {
+    $result = $this->validateFormStateBundle($formState);
     
-    return $errors;
+    if (!$result->isValid()) {
+      $entity = $formState->getFormObject()->getEntity();
+      $message = $result->getFormattedErrors($this->formatter, $entity->id());
+      $formState->setErrorByName('relationship_nodes', $message);
+    }
   }
 
+  /**
+   * Validate bundle configuration from form state.
+   */
+  private function validateFormStateBundle(FormStateInterface $formState): ValidationResult {
+    $validator = $this->validationFactory->fromFormState($formState);
+    
+    if (!$validator) {
+      return ValidationResult::valid();
+    }
+
+    $bundleResult = $validator->validate();
+    $fieldsResult = $this->validateFormStateFields($formState);
+
+    return $bundleResult->merge($fieldsResult);
+  }
 
   /**
-   * Validates existing fields for an entity.
-   *
-   * @param ConfigEntityBundleBase $entity
-   *   The bundle entity.
-   * @param array|null $rn_settings
-   *   Optional relationship nodes settings.
-   *
-   * @return array
-   *   Array of validation errors.
+   * Validate existing fields from form state.
    */
-  protected function validateEntityExistingFields(ConfigEntityBundleBase $entity, ?array $rn_settings = null): array {
-    $errors = [];
-    $existing_fields = $this->relationFieldManager->getBundleFieldsStatus($entity, $rn_settings)['existing'];
-    foreach ($existing_fields as $field => $field_info) {
-      if (!isset($field_info['field_config'])) {
-        $errors[] = [
-          'error_code' => 'missing_field_config',
-          'context' => [
-            '@field' => $field,
-            '@bundle' => $entity->id()
-          ]
-        ];
+  private function validateFormStateFields(FormStateInterface $formState): ValidationResult {
+    $entity = $formState->getFormObject()->getEntity();
+    
+    if (!$entity instanceof ConfigEntityBundleBase) {
+      return ValidationResult::valid();
+    }
+
+    $rnSettings = $formState->getValue('relationship_nodes');
+    return $this->validateEntityFields($entity, $rnSettings);
+  }
+
+  // ========== Entity Validation ==========
+
+  /**
+   * Validate a bundle entity and its fields.
+   */
+  public function validateBundleEntity(ConfigEntityBundleBase $entity): ValidationResult {
+    $validator = $this->validationFactory->fromEntity($entity);
+    $bundleResult = $validator->validate();
+    $fieldsResult = $this->validateEntityFields($entity);
+
+    return $bundleResult->merge($fieldsResult);
+  }
+
+  /**
+   * Validate all fields belonging to a bundle entity.
+   */
+  private function validateEntityFields(
+    ConfigEntityBundleBase $entity,
+    ?array $rnSettings = null
+  ): ValidationResult {
+    $fieldsStatus = $this->fieldManager->getBundleFieldsStatus($entity, $rnSettings);
+    $existingFields = $fieldsStatus['existing'] ?? [];
+
+    $results = [];
+    foreach ($existingFields as $fieldName => $fieldInfo) {
+      if (!isset($fieldInfo['field_config'])) {
+        $results[] = ValidationResult::fromErrorCode('missing_field_config', [
+          '@field' => $fieldName,
+          '@bundle' => $entity->id(),
+        ]);
         continue;
       }
-      $field_errors = $this->getFieldConfigValidationErrors($field_info['field_config']);
-      if (!empty($field_errors)) {
-        $errors = array_merge($errors, $field_errors);
-      }
+
+      $results[] = $this->validateFieldConfig($fieldInfo['field_config']);
     }
-    return $errors; 
+
+    return ValidationResult::mergeAll($results);
   }
 
+  // ========== Field Validation ==========
 
   /**
-   * Validates all relation bundles.
-   *
-   * @return array
-   *   Array of all validation errors.
+   * Validate field storage configuration.
    */
-  protected function validateAllRelationBundles(): array {
-    $all_errors = [];
+  public function validateFieldStorage(FieldStorageConfig $storage): ValidationResult {
+    $validator = $this->validationFactory->fromFieldStorage($storage);
+    return $validator->validate();
+  }
+
+  /**
+   * Validate field configuration (with optional storage validation).
+   */
+  public function validateFieldConfig(
+    FieldConfig $fieldConfig,
+    bool $includeStorage = true
+  ): ValidationResult {
+    $results = [];
+
+    // Validate storage if requested
+    if ($includeStorage) {
+      $storage = $fieldConfig->getFieldStorageDefinition();
+      
+      if (!$storage instanceof FieldStorageConfig) {
+        return ValidationResult::fromErrorCode('no_field_storage', [
+          '@field' => $fieldConfig->getName(),
+          '@bundle' => $fieldConfig->getTargetBundle(),
+        ]);
+      }
+
+      $results[] = $this->validateFieldStorage($storage);
+    }
+
+    // Validate field config
+    $validator = $this->validationFactory->fromFieldConfig($fieldConfig);
+    $results[] = $validator->validate();
+
+    return ValidationResult::mergeAll($results);
+  }
+
+  // ========== Complete Validation ==========
+
+  /**
+   * Validate all relation bundles and fields in the system.
+   */
+  public function validateAllRelationConfig(): ValidationResult {
+    return ValidationResult::mergeAll([
+      $this->validateAllBundles(),
+      $this->validateAllFields(),
+    ]);
+  }
+
+  /**
+   * Validate all relation bundles.
+   */
+  private function validateAllBundles(): ValidationResult {
+    $results = [];
     
-    foreach ($this->bundleInfoService->getAllRelationBundles() as $bundle_name => $entity) {
-      $errors = $this->getBundleValidationErrors($entity);
-      if (!empty($errors)) {
-        $all_errors = array_merge($all_errors, $errors);
-      }
+    foreach ($this->bundleInfoService->getAllRelationBundles() as $bundleName => $entity) {
+      $results[] = $this->validateBundleEntity($entity);
     }
-    return $all_errors;
+
+    return ValidationResult::mergeAll($results);
   }
 
-
   /**
-   * Validates all relation fields.
-   *
-   * @return array
-   *   Array of all validation errors.
+   * Validate all relation fields.
    */
-  protected function validateAllRelationFields(): array {
-    $all_errors = [];
-    $rn_fields = $this->relationFieldManager->getAllRnCreatedFields();
-    $relation_field_names = $this->fieldNameResolver->getAllRelationFieldNames();
-    foreach ($rn_fields as $field_id => $field) {
-      $field_config = false;
-      $field_name = $field->getName();
+  private function validateAllFields(): ValidationResult {
+    $results = [];
+    $rnFields = $this->fieldManager->getAllRnCreatedFields();
+    $validFieldNames = $this->fieldResolver->getAllRelationFieldNames();
+
+    foreach ($rnFields as $fieldId => $field) {
+      $fieldName = $field->getName();
+      
+      // Validate the field itself
       if ($field instanceof FieldStorageConfig) {
-        $storage_errors = $this->getFieldStorageValidationErrors($field);
-        if (!empty($storage_errors)) {
-          $all_errors = array_merge($all_errors, $storage_errors);
-        }   
+        $results[] = $this->validateFieldStorage($field);
       } elseif ($field instanceof FieldConfig) {
-        $field_config = true;
-        $config_errors = $this->getFieldConfigValidationErrors($field);
-        if (!empty($config_errors)) {
-          $all_errors = array_merge($all_errors, $config_errors);
-        }       
+        $results[] = $this->validateFieldConfig($field);
       }
-      if (!in_array($field_name, $relation_field_names)) {
-        $context = ['@field' => $field_name];
-        if ($field_config) {
+
+      // Check for orphaned fields
+      if (!in_array($fieldName, $validFieldNames, true)) {
+        $context = ['@field' => $fieldName];
+        
+        if ($field instanceof FieldConfig) {
           $context['@bundle'] = $field->getTargetBundle();
         }
-        $all_errors[] = [
-          'error_code' => 'orphaned_rn_field_settings',
-          'context' => $context
-        ];
+
+        $results[] = ValidationResult::fromErrorCode('orphaned_rn_field_settings', $context);
       }
     }
-    return $all_errors;
+
+    return ValidationResult::mergeAll($results);
   }
 
+  // ========== DEPRECATED: Backwards Compatibility ==========
+  
+  /**
+   * @deprecated Use validateAllRelationConfig() which returns ValidationResult
+   */
+  public function getFieldStorageValidationErrors(FieldStorageConfig $storage): array {
+    return $this->validateFieldStorage($storage)->getErrors();
+  }
 
   /**
-   * Validates all relation configuration.
-   *
-   * @return array
-   *   Array of all validation errors.
+   * @deprecated Use validateFieldConfig() which returns ValidationResult
    */
-  public function validateAllRelationConfig(): array {      
-    return array_merge(
-      // Validate bundles config and existing fields related to this bundle
-      $this->validateAllRelationBundles(), 
-      // Validate all fields marked as created by this module (find orphaned fields)
-      $this->validateAllRelationFields()
-    );
-  }   
-}    
+  public function getFieldConfigValidationErrors(FieldConfig $fieldConfig, bool $includeStorage = true): array {
+    return $this->validateFieldConfig($fieldConfig, $includeStorage)->getErrors();
+  }
+}
