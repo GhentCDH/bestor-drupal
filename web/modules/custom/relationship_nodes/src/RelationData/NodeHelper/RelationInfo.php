@@ -253,8 +253,9 @@ class RelationInfo {
    *  Associative array of related enity field names => array of target IDs, or NULL if not a relation node type.
    *  E.g. ['related_entity_field_1' => 101, 'related_entity_field_2' => 202]
    */
-  public function getRelatedEntityValues(Node $relation_node): ?array {      
-    if (!$this->settingsManager->isRelationNodeType($relation_node->getType())) {
+  public function getRelatedEntityValues(Node $relation_node): ?array {   
+    $bundle_info = $this->settingsManager->getBundleInfo($relation_node->getType());    
+    if (!$bundle_info || !$bundle_info->isRelation()) {
       return null;
     }
 

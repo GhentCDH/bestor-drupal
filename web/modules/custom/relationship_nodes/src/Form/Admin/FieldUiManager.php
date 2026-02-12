@@ -236,7 +236,8 @@ class FieldUiManager {
     if (!$bundle_entity) {
       return false;
     }
-    return $this->settingsManager->isRelationEntity($bundle_entity);
+    $bundle_info = $this->settingsManager->getBundleInfo($bundle_entity);  
+    return $bundle_info && $bundle_info->isRelation();
   }
 
 

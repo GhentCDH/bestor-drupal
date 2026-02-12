@@ -149,7 +149,8 @@ class FieldConfigValidator {
       }
       // werkt niet bij configimport...
       foreach ($this->targetBundles as $vocab_name => $vocab_label) {
-        if (empty($this->storage) && $this->settingsManager->isRelationVocab($vocab_name)) {
+        $bundle_info = $this->settingsManager->getBundleInfo($vocab_name);   
+        if (empty($this->storage) && $bundle_info && $bundle_info->isRelation()) {
           continue;
         } elseif (!empty($this->storage)) {
           $config_data = $this->storage->read('taxonomy.vocabulary.' . $vocab_name);
@@ -163,7 +164,7 @@ class FieldConfigValidator {
       }
     }
   }
-
+ 
   
   /**
    * Validates field type matches required configuration.

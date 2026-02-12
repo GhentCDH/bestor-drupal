@@ -55,7 +55,8 @@ class FieldDeleteController extends ControllerBase {
    */
   public function delete(FieldConfig $field_config): RedirectResponse {
     $rn_field = (bool) $field_config->getThirdPartySetting('relationship_nodes', 'rn_created', FALSE);
-    $relation_entity = $this->settingsManager->isRelationEntity($field_config->getTargetBundle());
+    $bundle_info = $this->settingsManager->getBundleInfo($field_config->getTargetBundle()); 
+    $relation_entity = $bundle_info && $bundle_info->isRelation();
 
     $redirect_url = $this->uiUpdater->getRedirectUrl($field_config);
     if ($relation_entity) {

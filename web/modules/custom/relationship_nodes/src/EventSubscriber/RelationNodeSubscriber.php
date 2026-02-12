@@ -68,12 +68,10 @@ class RelationNodeSubscriber implements EventSubscriberInterface {
       return;
     }
     
-    $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity->bundle());
+    $bundle = $this->entityTypeManager->getStorage('node_type')->load($entity->bundle());
+    $bundle_info = $this->settingsManager->getBundleInfo($bundle);
     if (
-      !$node_type instanceof NodeType || 
-      !$this->settingsManager->isRelationNodeType($node_type) ||
-      !$this->settingsManager->autoCreateTitle($node_type)
-    ) {
+      !$bundle_info || !$bundle_info->isRelation() ||!$bundle_info->hasAutoTitle()) {
       return;
     }
 

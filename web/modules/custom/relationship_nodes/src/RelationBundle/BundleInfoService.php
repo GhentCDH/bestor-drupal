@@ -77,7 +77,8 @@ class BundleInfoService {
    *   Array containing relation bundle information.
    */
   public function getRelationBundleInfo(string $bundle, array $fields = []): array {
-    if (!$this->settingsManager->isRelationNodeType($bundle)) {
+    $bundle_info = $this->settingsManager->getBundleInfo($bundle);    
+    if (!$bundle_info || !$bundle_info->isRelation()) {
       return [];
     }
 
@@ -106,7 +107,7 @@ class BundleInfoService {
       'has_relationtype' => false
     ];
 
-    if (!$this->settingsManager->isTypedRelationNodeType($bundle)) {
+    if (!$bundle_info->isTypedRelation()) {
       return $info;
     }
 
@@ -234,7 +235,8 @@ class BundleInfoService {
 
       $all = $storage->loadMultiple();
       foreach ($all as $type) {
-        if ($type instanceof ConfigEntityBundleBase && $this->settingsManager->isRelationEntity($type)) {
+        $bundle_info = $this->settingsManager->getBundleInfo($type); 
+        if ($bundle_info && $bundle_info->isRelation()) {
           $result[$type->id()] = $type;
         }
       }
@@ -287,7 +289,8 @@ class BundleInfoService {
     $result = [];
     $relation_node_types = $this->getAllRelationBundles('node_type');
     foreach ($relation_node_types as $bundle_id => $node_type) {
-      if ($this->settingsManager->isTypedRelationNodeType($node_type)) {
+      $bundle_info = $this->settingsManager->getBundleInfo($node_type);    
+      if ($bundle_info && $bundle_info->isTypedRelation()) {
         $result[$bundle_id] = $node_type;
       }
     }
@@ -348,7 +351,8 @@ class BundleInfoService {
    *   Array of node type entities keyed by node type ID.
    */
   public function getNodeTypesLinkedToVocab(ConfigEntityBundleBase $vocab): array {
-    if (!$this->settingsManager->isRelationVocab($vocab)) {
+    $bundle_info = $this->settingsManager->getBundleInfo($vocab);  
+    if (!$bundle_info || !$bundle_info->isRelation()) {
       return [];
     }
 

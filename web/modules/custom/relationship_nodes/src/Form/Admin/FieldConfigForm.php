@@ -144,8 +144,8 @@ class FieldConfigForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Save'),
     ];
-
-    if (!$this->settingsManager->isRelationEntity($this->bundle)) {
+    $bundle_info = $this->settingsManager->getBundleInfo($this->bundle);    
+    if (!$bundle_info || !$bundle_info->isRelation()) {
       $form['delete'] = [
         '#type' => 'link',
         '#title' => $this->t('Delete RN Field'),
@@ -216,7 +216,8 @@ class FieldConfigForm extends FormBase {
   protected function getAllRelationVocabs(): array {
     $options = [];
     foreach (Vocabulary::loadMultiple() as $type) {
-      if ($this->settingsManager->isRelationVocab($type)) {
+      $bundle_info = $this->settingsManager->getBundleInfo($type); 
+      if ($bundle_info && $bundle_info->isRelation()) {
         $options[$type->id()] = $type->label();
       } 
     }

@@ -85,7 +85,8 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
   public function trackRelatedEntitiesForReindexing(EntityEvent $event, string $event_name): void {
     // Only process if entity is a recognized relation node type.
     $entity = $event->getEntity();
-    if (!$entity instanceof Node || !$this->settingsManager->isRelationNodeType($entity->bundle())) {
+    $bundleInfo = $this->settingsManager->getBundleInfo($entity->bundle());
+    if (!$entity instanceof Node || !$bundleInfo || !$bundleInfo->isRelation()) {
       return;
     }
 

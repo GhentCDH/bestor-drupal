@@ -62,7 +62,8 @@ class BundleFormHandler {
     }
     $values = $form_state->getValue('relationship_nodes') ?? [];
     $this->settingsManager->setProperties($entity, $values); 
-    if (!$this->settingsManager->isRelationEntity($entity)) {
+    $bundle_info = $this->settingsManager->getBundleInfo($entity);   
+    if (!$bundle_info || !$bundle_info->isRelation()) {
       return;
     }
 

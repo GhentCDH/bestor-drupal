@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
-
+use Drupal\relationship_nodes\RelationBundle\RelationBundleInfo;
 
 /**
  * Service for managing relationship bundle settings.
@@ -29,6 +29,39 @@ class BundleSettingsManager {
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager) {
     $this->entityTypeManager = $entityTypeManager;
+  }
+
+
+  /**
+   * Gets bundle info as value object.
+   * 
+   * 
+   * @param ConfigEntityBundleBase|string $entity
+   * 
+   * @return RelationBundleInfo|null
+   */
+  public function getBundleInfo(ConfigEntityBundleBase|string $entity): ?\Drupal\relationship_nodes\RelationBundle\RelationBundleInfo {
+    if (is_string($entity)) {
+      $entity = $this->ensureNodeType($entity) ?? $this->ensureVocab($entity);
+    }
+    
+    if (!$entity instanceof ConfigEntityBundleBase) {
+      return null;
+    }
+    
+    $properties = $this->getProperties($entity);
+    return RelationBundleInfo::create($entity, $properties);
+  }
+
+  
+  /**
+   * Saves bundle info back to entity.
+   * 
+   * @param RelationBundleInfo $info
+   */
+  public function saveBundleInfo(RelationBundleInfo $info): void {
+    $properties = $info->toArray();
+    $this->setProperties($info->getBundle(), $properties);
   }
 
 
@@ -112,106 +145,6 @@ class BundleSettingsManager {
 
 
   /**
-   * Checks if a node type is a relation node type.
-   *
-   * @param ConfigEntityBundleBase|string $node_type
-   *   The node type entity or ID.
-   *
-   * @return bool
-   *   TRUE if relation node type, FALSE otherwise.
-   */
-  public function isRelationNodeType(ConfigEntityBundleBase|string $node_type): bool {
-    if (!$node_type = $this->ensureNodeType($node_type)) {
-      return false;
-    }
-    $value = $this->getProperty($node_type, 'enabled');
-    return !empty($value);
-  }
-
-
-  /**
-   * Checks if a node type is a typed relation node type.
-   *
-   * @param NodeType|string $node_type
-   *   The node type entity or ID.
-   *
-   * @return bool
-   *   TRUE if typed relation node type, FALSE otherwise.
-   */
-  public function isTypedRelationNodeType(NodeType|string $node_type): bool {
-    if (!$node_type = $this->ensureNodeType($node_type)) {
-      return false;
-    }
-    $typed = $this->getProperty($node_type, 'typed_relation');
-    return $this->isRelationNodeType($node_type) && !empty($typed);
-  }
-
-
-  /**
-   * Checks if a vocabulary is a relation vocabulary.
-   *
-   * @param ConfigEntityBundleBase|string $vocab
-   *   The vocabulary entity or ID.
-   *
-   * @return bool
-   *   TRUE if relation vocabulary, FALSE otherwise.
-   */
-  public function isRelationVocab(ConfigEntityBundleBase|string $vocab): bool {
-    if (!$vocab = $this->ensureVocab($vocab)) {
-        return false;
-    }
-    $value = $this->getProperty($vocab, 'enabled');
-    return !empty($value);
-  }
-
-
-  /**
-   * Gets the relation vocabulary type.
-   *
-   * @param Vocabulary|string $vocab
-   *   The vocabulary entity or ID.
-   *
-   * @return string|null
-   *   The vocabulary type or NULL.
-   */
-  public function getRelationVocabType(Vocabulary|string $vocab): ?string {
-    if (!$vocab = $this->ensureVocab($vocab)) {
-      return null;
-    }
-    return $this->getProperty($vocab, 'referencing_type') ?? null;
-  }
-
-
-  /**
-   * Checks if a vocabulary uses mirroring.
-   *
-   * @param Vocabulary|string $vocab
-   *   The vocabulary entity or ID.
-   *
-   * @return bool
-   *   TRUE if mirroring vocabulary, FALSE otherwise.
-   */
-  public function isMirroringVocab(Vocabulary|string $vocab): bool {
-    $relation_vocab_type = $this->getRelationVocabType($vocab);
-    return in_array($relation_vocab_type, ['string', 'entity_reference']);
-  }
-
-
-  /**
-   * Checks if an entity is a relation entity.
-   *
-   * @param ConfigEntityBundleBase|string $entity
-   *   The entity or entity ID.
-   *
-   * @return bool
-   *   TRUE if relation entity, FALSE otherwise.
-   */
-  public function isRelationEntity(ConfigEntityBundleBase|string $entity): bool {
-    return ($this->isRelationNodeType($entity) || $this->isRelationVocab($entity));
-  }
-
-
-  /**
    * Ensures a node type entity is loaded.
    *
    * @param ConfigEntityBundleBase|string $node_type
@@ -248,25 +181,6 @@ class BundleSettingsManager {
       return null;
     }
     return $vocab;
-  }
-
-
-  /**
-   * Checks if a node type has auto-generated titles.
-   *
-   * @param NodeType|string $node_type
-   *   The node type entity or ID.
-   *
-   * @return bool
-   *   TRUE if auto-create title is enabled, FALSE otherwise.
-   */
-  public function autoCreateTitle(NodeType|string $node_type): bool {
-    $node_type = $this->ensureNodeType($node_type);
-    if (!$node_type || !$this->isRelationNodeType($node_type)) {
-      return false;
-    }
-    $auto_title = $this->getProperty($node_type, 'auto_title');
-    return !empty($auto_title);
   }
 
   
@@ -479,7 +393,7 @@ class BundleSettingsManager {
    *   TRUE if mirroring vocabulary, FALSE otherwise.
    */
   public function isCimMirroringVocab(array $config_data): bool {
-    $relation_vocab_type = $this->getRelationVocabType($config_data);
+    $relation_vocab_type = $this->getCimRelationVocabType($config_data);
     return in_array($relation_vocab_type, ['string', 'entity_reference']);
   }
 }

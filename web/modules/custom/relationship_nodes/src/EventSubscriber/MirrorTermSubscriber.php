@@ -64,10 +64,8 @@ class MirrorTermSubscriber implements EventSubscriberInterface {
       return;      
     }
 
-    $vocab = $term->bundle();
-    if (empty($vocab) || empty($this->settingsManager->isRelationVocab($vocab)) ||
-        $this->settingsManager->getRelationVocabType($vocab) !== 'entity_reference'
-    ) {
+    $bundle_info = $this->settingsManager->getBundleInfo($term->bundle());    
+    if (!$bundle_info || !$bundle_info->isRelation() || $bundle_info->getMirrorType() !== 'entity_reference') {
         return;
     }
     $hook = $this->mapEventNameToHook($event_name);

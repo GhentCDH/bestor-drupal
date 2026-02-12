@@ -387,7 +387,8 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $nested_values[$calc_fld_nms['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
 
     $relation_field = $this->fieldResolver->getRelationTypeField();
-    if ($this->settingsManager->isTypedRelationNodeType($relationship_entity->getType()) && !empty($nested_values[$relation_field])) {
+    $bundle_info = $this->settingsManager->getBundleInfo($relationship_entity->getType()); 
+    if ($bundle_info && $bundle_info->isTypedRelation() && !empty($nested_values[$relation_field])) {
       $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');    
       $relation_parsed = $this->resultParser->parseEntityReferenceString($nested_values[$relation_field]);
       $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : NULL;

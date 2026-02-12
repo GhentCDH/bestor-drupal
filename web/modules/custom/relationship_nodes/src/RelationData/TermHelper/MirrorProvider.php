@@ -72,9 +72,10 @@ class MirrorProvider{
    *   TRUE if mirroring is supported, FALSE otherwise.
    */
   public function elementSupportsMirroring(FieldItemListInterface $items, array $form, FormStateInterface $form_state): bool {   
+    $bundle_info = $this->settingsManager->getBundleInfo($items->getEntity()->getType());
     if (
       !$this->formHelper->isParentFormWithIefSubforms($form, $form_state) ||
-      !$this->settingsManager->isRelationNodeType($items->getEntity()->getType()) ||
+      !$bundle_info || !$bundle_info->isRelation() ||
       !$items->getFieldDefinition() instanceof FieldConfig
     ) {
       return false;
@@ -101,11 +102,8 @@ class MirrorProvider{
     }
     
     $target_vocab = $this->settingsManager->ensureVocab(reset($target_bundles));
-    if (
-      !$target_vocab || 
-      !$this->settingsManager->isRelationVocab($target_vocab) ||
-      !$this->settingsManager->isMirroringVocab($target_vocab)
-    ) {
+    $bundle_info = $this->settingsManager->getBundleInfo($target_vocab);    
+    if (!$bundle_info || !$bundle_info->isRelation() || !$bundle_info->isMirroringVocab()) {
       return false;
     }
 
@@ -239,7 +237,8 @@ class MirrorProvider{
     $result = [$term->id() => $default_label];
       
     $vocab = $term->bundle();
-    $vocab_type = $this->settingsManager->getRelationVocabType($vocab);
+    $bundle_info = $this->settingsManager->getBundleInfo($term->bundle());    
+    $vocab_type = $bundle_info->getMirrorType();
 
     switch ($vocab_type) {
       case 'string':
