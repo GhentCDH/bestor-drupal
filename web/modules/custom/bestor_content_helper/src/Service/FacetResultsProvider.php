@@ -2,7 +2,6 @@
 
 namespace Drupal\bestor_content_helper\Service;
 
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Drupal\facets\Entity\Facet;
 use Drupal\Core\Url;

@@ -5,11 +5,14 @@ namespace Drupal\bestor_custom_search\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Database search form.
  */
 class DatabaseFullTextSearchForm extends FormBase {
+
+  protected $languageManager;
 
   public function getFormId() {
     return 'database_full_text_search_form';
@@ -20,7 +23,7 @@ class DatabaseFullTextSearchForm extends FormBase {
     $form['#attributes']['class'][] = 'bef-exposed-form';
     $form['#attributes']['class'][] = 'views-exposed-form';
     $form['#method'] = 'get';
-    $form['#action'] = '/database';
+    $form['#action'] = Url::fromRoute('view.database.page_1', [], ['language' => \Drupal::languageManager()->getCurrentLanguage()])->toString();
     
     $form['fullsearch'] = [
       '#type' => 'textfield',
