@@ -13,8 +13,15 @@
  */
 #}
 
+{% set content %}
+  <form{{ attributes }}>
+    {{ children }}
+  </form>
+{% endset %}
+
+
  {{ include('jakarta:c-structured-layout', {
   top: top,
-  content: children,
+  content,
   attributes: attributes.addClass('pagecontent-form'),
 }, with_context = false) }}

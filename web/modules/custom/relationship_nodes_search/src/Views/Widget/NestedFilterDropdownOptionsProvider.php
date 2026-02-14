@@ -103,13 +103,6 @@ class NestedFilterDropdownOptionsProvider {
    *   Returns empty array on error.
    */
   public function getDropdownOptions(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'label', ?SearchApiQuery $view_query = NULL): array {
-    dpm($view_query, 'view query');
-    /*$cache_key = $this->getCacheKey($index, $sapi_fld_nm, $child_fld_nm, $display_mode);
-    
-    if ($cached = $this->cache->get($cache_key)) {
-      return $cached->data;
-    }*/
-
     try {
       $options = $this->fetchOptionsFromIndex($index, $sapi_fld_nm, $child_fld_nm, $display_mode, $view_query);
       // Cache tags include bundle for granular invalidation

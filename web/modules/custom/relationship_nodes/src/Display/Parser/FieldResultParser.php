@@ -29,11 +29,13 @@ class FieldResultParser extends FieldResultParserBase {
    *   - 'entity_id': The entity ID
    * @param array $config
    *   Field configuration with 'display_mode' and 'linkable' keys.
+   * @param string|null $langcode
+   *   Optional language code. If NULL, uses current language.
    *
    * @return array
    *   Array of processed values with 'value' and 'link_url' keys.
    */
-  public function processEntityReferences(array $entity_references, array $config): array {
+  public function processEntityReferences(array $entity_references, array $config, ?string $langcode = NULL): array {
     if (empty($entity_references)) {
       return [];
     }
@@ -64,7 +66,7 @@ class FieldResultParser extends FieldResultParserBase {
     }
 
     // Batch load all entities
-    $loaded_entities = $this->batchLoadEntities($entity_ids_by_type);
+    $loaded_entities = $this->batchLoadEntities($entity_ids_by_type, $langcode);
 
     // Process each reference using loaded entities
     $values = [];
@@ -143,11 +145,13 @@ class FieldResultParser extends FieldResultParserBase {
    *   The entity type for all IDs.
    * @param array $config
    *   Field configuration.
+   * @param string|null $langcode
+   *   Optional language code. If NULL, uses current language.
    *
    * @return array
    *   Array of processed values.
    */
-  public function processEntityIds(array $entity_ids, string $entity_type, array $config): array {
+  public function processEntityIds(array $entity_ids, string $entity_type, array $config, ?string $langcode = NULL): array {
     $references = array_map(function($id) use ($entity_type) {
       return [
         'entity_type' => $entity_type,
@@ -155,6 +159,6 @@ class FieldResultParser extends FieldResultParserBase {
       ];
     }, $entity_ids);
 
-    return $this->processEntityReferences($references, $config);
+    return $this->processEntityReferences($references, $config, $langcode);
   }
 }

@@ -115,8 +115,6 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
       }
     }
 
-    dpm($all_ids, 'all ids');
-
     // Remove duplicates and ensure we have IDs to reindex.
     $unique_ids = array_unique($all_ids);
     if (empty($unique_ids)) {
@@ -135,7 +133,7 @@ class ReindexTargetsOnRelationUpdate implements EventSubscriberInterface {
         $sapi_ids[] = $nid . ':' . $language_code;
       }
     }
-    dpm($sapi_ids, 'sapi ids');
+
     if (empty($sapi_ids)) {
       return;
     }

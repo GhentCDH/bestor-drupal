@@ -12,6 +12,7 @@ use Drupal\relationship_nodes\Display\Parser\FieldResultParser;
 use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
 use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Service for building relationship data structures.
@@ -33,6 +34,7 @@ class RelationshipDataBuilder {
   protected RelationInfo $nodeInfoService;
   protected FieldNameResolver $fieldNameResolver;
   protected EntityTypeManagerInterface $entityTypeManager;
+  protected LanguageManagerInterface $languageManager;
   protected CalculatedFieldHelper $calculatedFieldHelper;
   protected FieldResultParser $parser;
   protected MirrorProvider $mirrorProvider;
@@ -48,6 +50,8 @@ class RelationshipDataBuilder {
    *   The field name resolver.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager.
    * @param \Drupal\relationship_nodes\RelationField\CalculatedFieldHelper $calculatedFieldHelper
    *   The calculated field helper.
    * @param \Drupal\relationship_nodes\Display\Parser\FieldResultParser $parser
@@ -61,6 +65,7 @@ class RelationshipDataBuilder {
     RelationInfo $nodeInfoService,
     FieldNameResolver $fieldNameResolver,
     EntityTypeManagerInterface $entityTypeManager,
+    LanguageManagerInterface $languageManager,
     CalculatedFieldHelper $calculatedFieldHelper,
     FieldResultParser $parser,
     MirrorProvider $mirrorProvider,
@@ -69,6 +74,7 @@ class RelationshipDataBuilder {
     $this->nodeInfoService = $nodeInfoService;
     $this->fieldNameResolver = $fieldNameResolver;
     $this->entityTypeManager = $entityTypeManager;
+    $this->languageManager = $languageManager;
     $this->calculatedFieldHelper = $calculatedFieldHelper;
     $this->parser = $parser;
     $this->mirrorProvider = $mirrorProvider;
@@ -99,20 +105,20 @@ class RelationshipDataBuilder {
    */
   public function buildRelationshipData(array $relation_nodes, array $settings = []): array {
     $field_configs = $settings['field_configs'] ?? [];
-    $viewing_node = $settings['viewing_node'] ?? NULL;
-    
     if (empty($field_configs)) {
       return [];
     }
-
-    $data = [];
-    
+  
     // Filter to only enabled fields
     $enabled_configs = array_filter($field_configs, fn($config) => !empty($config['enabled']));
-
     if (empty($enabled_configs)) {
       return [];
     }
+
+    $viewing_node = $settings['viewing_node'] ?? NULL;
+    $langcode = $settings['language'] ?? $this->languageManager->getCurrentLanguage()->getId();
+
+    $data = [];
 
     foreach ($relation_nodes as $relation_node) {
       if (!$relation_node instanceof NodeInterface) {
@@ -127,10 +133,10 @@ class RelationshipDataBuilder {
         if ($this->calculatedFieldHelper->isCalculatedChildField($field_name)) {
           // Special case: relation type name is calculated (mirrored) text, not entity reference
           $field_data = $field_name === 'calculated_relation_type_name'
-            ? $this->buildRelationTypeNameData($relation_node, $config, $viewing_node)
-            : $this->buildCalculatedFieldData($relation_node, $field_name, $config, $viewing_node);
+            ? $this->buildRelationTypeNameData($relation_node, $config, $viewing_node, $langcode)
+            : $this->buildCalculatedFieldData($relation_node, $field_name, $config, $viewing_node, $langcode);
         } else {
-          $field_data = $this->buildRealFieldData($relation_node, $field_name, $config);
+          $field_data = $this->buildRealFieldData($relation_node, $field_name, $config, $langcode);
         }
         if (!empty($field_data)) {
           $item[$field_name] = $field_data;
@@ -167,6 +173,8 @@ class RelationshipDataBuilder {
    *   Field configuration.
    * @param \Drupal\node\NodeInterface|null $viewing_node
    *   Optional viewing context node.
+   * @param ?string $langcode
+   *   The language code.
    *
    * @return array|null
    *   Field data array with 'field_values' and 'separator', or NULL if no data.
@@ -175,7 +183,8 @@ class RelationshipDataBuilder {
     NodeInterface $relation_node, 
     string $field_name, 
     array $config,
-    ?NodeInterface $viewing_node = NULL
+    ?NodeInterface $viewing_node = NULL,
+    ?string $langcode = NULL
   ): ?array {
     // Get all related entity IDs from the relation node
     $related_entities = $this->nodeInfoService->getRelatedEntityValues($relation_node);
@@ -223,7 +232,7 @@ class RelationshipDataBuilder {
     }, $entity_ids);
 
     // Use parser to resolve labels/links
-    $values = $this->parser->processEntityReferences($entity_references, $config);
+    $values = $this->parser->processEntityReferences($entity_references, $config, $langcode);
 
     if (empty($values)) {
       return NULL;
@@ -247,6 +256,8 @@ class RelationshipDataBuilder {
    *   The real field name (e.g., 'field_notes').
    * @param array $config
    *   Field configuration.
+   * @param ?string $langcode
+   *   The language code.
    *
    * @return array|null
    *   Field data array with 'field_values' and 'separator', or NULL if no data.
@@ -254,11 +265,16 @@ class RelationshipDataBuilder {
   protected function buildRealFieldData(
     NodeInterface $relation_node,
     string $field_name,
-    array $config
+    array $config,
+    ?string $langcode = NULL
   ): ?array {
     // Check if field exists on the relation node
     if (!$relation_node->hasField($field_name)) {
       return NULL;
+    }
+
+    if ($langcode && $relation_node->isTranslatable() && $relation_node->hasTranslation($langcode)) {
+      $relation_node = $relation_node->getTranslation($langcode);
     }
 
     $field = $relation_node->get($field_name);
@@ -275,7 +291,7 @@ class RelationshipDataBuilder {
         return NULL;
       }
       
-      $values = $this->parser->processEntityReferences($entity_references, $config);
+      $values = $this->parser->processEntityReferences($entity_references, $config, $langcode);
     } else {
       // For non-entity-reference fields, extract raw values
       $values = [];
@@ -312,6 +328,8 @@ class RelationshipDataBuilder {
    *   Field configuration.
    * @param \Drupal\node\NodeInterface|null $viewing_node
    *   Optional viewing context node.
+   * @param ?string $langcode
+   *   The language code.
    *
    * @return array|null
    *   Field data array with 'field_values' and 'separator', or NULL if no data.
@@ -319,7 +337,8 @@ class RelationshipDataBuilder {
   protected function buildRelationTypeNameData(
     NodeInterface $relation_node,
     array $config,
-    ?NodeInterface $viewing_node = NULL
+    ?NodeInterface $viewing_node = NULL,
+    ?string $langcode = NULL
   ): ?array {
     // Get relation type term
     $relation_type_field = $this->fieldNameResolver->getRelationTypeField();
@@ -342,6 +361,11 @@ class RelationshipDataBuilder {
 
     if(!$term instanceof TermInterface) {
       return NULL;
+    }
+
+    // Get translated term if language specified
+    if ($langcode && $term->hasTranslation($langcode)) {
+      $term = $term->getTranslation($langcode);
     }
 
     // Check if we need mirror label

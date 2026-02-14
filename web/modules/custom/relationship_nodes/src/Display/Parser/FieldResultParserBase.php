@@ -59,14 +59,16 @@ abstract class FieldResultParserBase {
    * @param array $entity_ids_by_type
    *   Array keyed by entity type with arrays of entity IDs as values.
    *   Example: ['node' => [1, 2, 3], 'taxonomy_term' => [10, 11]]
+   * @param string|null $langcode
+   *   Optional language code. If NULL, uses current language.
    *
    * @return array
    *   Loaded entities keyed by "entity_type/id" format.
    *   Example: ['node/1' => Node object, 'taxonomy_term/10' => Term object]
    */
-  protected function batchLoadEntities(array $entity_ids_by_type): array {
+  protected function batchLoadEntities(array $entity_ids_by_type, ?string $langcode = NULL): array {
     $loaded_entities = [];
-    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+    $langcode = $langcode ?? $this->languageManager->getCurrentLanguage()->getId();
     
     foreach ($entity_ids_by_type as $entity_type => $ids) {
       // Remove duplicates
@@ -78,8 +80,8 @@ abstract class FieldResultParserBase {
         
         foreach ($entities as $id => $entity) {
           // Load translated version if available
-          if ($entity instanceof ContentEntityInterface && $entity->hasTranslation($current_language)) {
-            $entity = $entity->getTranslation($current_language);
+          if ($entity instanceof ContentEntityInterface && $entity->hasTranslation($langcode)) {
+            $entity = $entity->getTranslation($langcode);
           }
           
           $cache_key = $entity_type . '/' . $id;
@@ -175,11 +177,13 @@ abstract class FieldResultParserBase {
    *   The entity type (e.g., 'node', 'taxonomy_term').
    * @param mixed $entity_id
    *   The entity ID.
+   * @param string|null $langcode
+   *   Optional language code. If NULL, uses current language.
    *
    * @return ContentEntityInterface|null
    *   The loaded entity, or NULL if not found.
    */
-  protected function loadEntity(string $entity_type, $entity_id): ?ContentEntityInterface {
+  protected function loadEntity(string $entity_type, $entity_id, ?string $langcode = NULL): ?ContentEntityInterface {
     try {
       $storage = $this->entityTypeManager->getStorage($entity_type);
       $entity = $storage->load($entity_id);
@@ -189,9 +193,9 @@ abstract class FieldResultParserBase {
       }
       
       // Load translated version if available
-      $current_language = $this->languageManager->getCurrentLanguage()->getId();
-      if ($entity->hasTranslation($current_language)) {
-        $entity = $entity->getTranslation($current_language);
+      $langcode = $langcode ?? $this->languageManager->getCurrentLanguage()->getId();
+      if ($entity->hasTranslation($langcode)) {
+        $entity = $entity->getTranslation($langcode);
       }
       
       return $entity;

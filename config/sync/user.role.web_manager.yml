@@ -128,6 +128,7 @@ permissions:
   - 'access toolbar'
   - 'access user profiles'
   - 'access webmanager dashboard'
+  - 'add new links to main menu from menu interface'
   - 'administer bestor site settings'
   - 'administer main menu items'
   - 'administer nodes'

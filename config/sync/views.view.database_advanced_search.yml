@@ -12,6 +12,7 @@ dependencies:
     - taxonomy.vocabulary.institution_type
     - taxonomy.vocabulary.specialisation
     - user.role.administrator
+    - user.role.web_manager
   module:
     - better_exposed_filters
     - relationship_nodes_search
@@ -337,6 +338,7 @@ display:
         type: role
         options:
           role:
+            web_manager: web_manager
             administrator: administrator
       cache:
         type: search_api_none
