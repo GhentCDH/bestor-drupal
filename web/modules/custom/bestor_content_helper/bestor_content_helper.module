@@ -137,32 +137,6 @@ function  bestor_content_helper_field_widget_single_element_form_alter(array &$e
 
 
 /**
- * Implements hook_entity_presave.
- */
-function bestor_content_helper_entity_presave(EntityInterface $entity) : void {
-  if(!in_array($entity->getEntityTypeId(), ['node', 'paragraph'])){
-    return;
-  }
-  $fields_to_update = ['body', 'field_formatted_text', 'field_table', 'field_references'];
-  $needs_update = [];
-  foreach($fields_to_update as $field_name) {
-    dpm($entity->hasField($field_name));
-  
-    if ($entity->hasField($field_name) && !empty($entity->get($field_name)->getValue())) {
-      
-      $field_content = $entity->get($field_name)->getValue()[0]['value'];
-      if(!empty($field_content)) {
-        $needs_update[$field_name] = $field_content;
-      }
-    }
-    if(!empty($needs_update)) {
-      _convertHyperlinks($entity, $needs_update);
-    }
-  }
-}
-
-
-/**
  * Helper function: get url of page view by view and display id.
  */
 function _getViewLink($view_id, $display_id){
