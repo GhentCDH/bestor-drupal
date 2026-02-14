@@ -28,7 +28,7 @@ display:
             future_format: '@interval hence'
             past_format: '@interval ago'
         operations:
-          label: Actions
+          label: Operations
         mail:
           separator: ', '
       pager:
@@ -39,14 +39,14 @@ display:
             first: '« First'
             last: 'Last »'
           expose:
-            items_per_page_label: 'Éléments par page'
-            items_per_page_options_all_label: '- Tout -'
-            offset_label: Décalage
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
       exposed_form:
         options:
           submit_button: Filtrer
-          reset_button_label: Réinitialiser
-          exposed_sorts_label: 'Trier par'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           sort_asc_label: Asc
           sort_desc_label: Desc
       empty:
@@ -72,7 +72,7 @@ display:
             label: Permission
       use_more_text: more
   page_1:
-    display_title: 'Homepage: En vedette'
+    display_title: Page
     display_options:
       menu:
         title: List

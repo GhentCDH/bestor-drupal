@@ -10,13 +10,13 @@ display:
         description:
           label: Beschrijving
         operation:
-          label: Bewerkingen
+          label: Operations
       exposed_form:
         options:
-          submit_button: Toepassen
-          reset_button_label: 'Opnieuw instellen'
-          exposed_sorts_label: 'Sorteren op'
-          sort_asc_label: Oplopend
-          sort_desc_label: Aflopend
+          submit_button: Apply
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
   page_1:
-    display_title: 'Homepage: In de kijker'
+    display_title: Page

@@ -24,7 +24,7 @@ display:
           label: Taal
           separator: ', '
         operations:
-          label: Bewerkingen
+          label: Operations
       pager:
         options:
           tags:
@@ -35,10 +35,10 @@ display:
       exposed_form:
         options:
           submit_button: Filter
-          reset_button_label: 'Opnieuw instellen'
-          exposed_sorts_label: 'Sorteren op'
-          sort_asc_label: Oplopend
-          sort_desc_label: Aflopend
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
       empty:
         area_text_custom:
           content: 'Geen inhoud beschikbaar.'
@@ -63,7 +63,7 @@ display:
           expose:
             label: Taal
   page_1:
-    display_title: 'Homepage: In de kijker'
+    display_title: Page
     display_options:
       menu:
         title: Inhoud

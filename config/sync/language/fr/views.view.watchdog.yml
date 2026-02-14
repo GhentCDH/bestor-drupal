@@ -25,21 +25,21 @@ display:
           label: Utilisateur
           separator: ', '
         link:
-          label: Actions
+          label: Operations
       pager:
         options:
           tags:
             next: ››
             previous: ‹‹
           expose:
-            items_per_page_label: 'Éléments par page'
-            items_per_page_options_all_label: '- Tout -'
-            offset_label: Décalage
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
       exposed_form:
         options:
           submit_button: Filtrer
-          reset_button_label: Réinitialiser
-          exposed_sorts_label: 'Trier par'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           sort_asc_label: Asc
           sort_desc_label: Desc
       empty:
@@ -54,4 +54,4 @@ display:
           expose:
             label: Severity
   page:
-    display_title: 'Homepage: En vedette'
+    display_title: Page

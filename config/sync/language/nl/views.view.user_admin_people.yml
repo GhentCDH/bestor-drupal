@@ -28,7 +28,7 @@ display:
             future_format: '@interval vanaf nu'
             past_format: '@interval geleden'
         operations:
-          label: Bewerkingen
+          label: Operations
         mail:
           separator: ', '
       pager:
@@ -39,16 +39,16 @@ display:
             first: '« Eerste'
             last: 'Laatste »'
           expose:
-            items_per_page_label: 'Items per pagina'
-            items_per_page_options_all_label: '- Alle -'
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
             offset_label: Offset
       exposed_form:
         options:
           submit_button: Filter
-          reset_button_label: 'Opnieuw instellen'
-          exposed_sorts_label: 'Sorteren op'
-          sort_asc_label: Oplopend
-          sort_desc_label: Aflopend
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
       empty:
         area_text_custom:
           content: 'Geen personen beschikbaar.'
@@ -72,10 +72,10 @@ display:
             label: Toegangsrechten
       use_more_text: meer
   page_1:
-    display_title: 'Homepage: In de kijker'
+    display_title: Page
     display_options:
       menu:
-        title: Lijst
+        title: List
         description: 'Vind en beheer personen die gebruik maken van de website.'
       tab_options:
         title: Personen

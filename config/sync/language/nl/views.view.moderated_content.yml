@@ -22,7 +22,7 @@ display:
           label: Bijgewerkt
           separator: ', '
         operations:
-          label: Bewerkingen
+          label: Operations
       pager:
         options:
           tags:
@@ -31,16 +31,16 @@ display:
             first: '« Eerste'
             last: 'Laatste »'
           expose:
-            items_per_page_label: 'Items per pagina'
-            items_per_page_options_all_label: '- Alle -'
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
             offset_label: Offset
       exposed_form:
         options:
           submit_button: Filter
-          reset_button_label: 'Opnieuw instellen'
-          exposed_sorts_label: 'Sorteren op'
-          sort_asc_label: Oplopend
-          sort_desc_label: Aflopend
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
       empty:
         area_text_custom:
           content: 'Geen inhoud beschikbaar voor moderatie. Alleen inhoud die op moderatie wacht, zoals concepten, wordt hier getoond.'

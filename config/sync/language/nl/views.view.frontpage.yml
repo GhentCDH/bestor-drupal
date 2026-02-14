@@ -5,7 +5,7 @@ display:
         area_text_custom:
           content: "Op dit moment staan er geen lemma's in de kijker."
       display_description: 'In de kijker'
-    display_title: 'Homepage: In de kijker'
+    display_title: Page
   block_1:
     display_title: Niews
     display_options:
@@ -54,11 +54,11 @@ display:
     display_options:
       exposed_form:
         options:
-          submit_button: Toepassen
-          reset_button_label: 'Opnieuw instellen'
-          exposed_sorts_label: 'Sorteren op'
-          sort_asc_label: Oplopend
-          sort_desc_label: Aflopend
+          submit_button: Apply
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
       empty:
         area_text_custom:
           content: 'Er is nog geen inhoud gemaakt voor de voorpagina.<br />Volg de <a target="_blank" href="https://www.drupal.org/docs/user_guide/en/index.html">Gebruikershandleiding</a> om uw site te bouwen.'

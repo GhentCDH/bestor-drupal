@@ -1,7 +1,7 @@
 label: 'Formulaires de contact'
 display:
   default:
-    display_title: Principal
+    display_title: Master
     display_options:
       title: 'Formulaires de contact'
       fields:
@@ -10,13 +10,13 @@ display:
         reply:
           label: Destinataires
         operation:
-          label: Actions
+          label: Operations
       exposed_form:
         options:
-          submit_button: Appliquer
-          reset_button_label: Réinitialiser
-          exposed_sorts_label: 'Trier par'
+          submit_button: Apply
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           sort_asc_label: Asc
           sort_desc_label: Desc
   page_1:
-    display_title: 'Homepage: En vedette'
+    display_title: Page

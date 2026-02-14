@@ -5,7 +5,7 @@ display:
       empty:
         area_text_custom:
           content: "Nous n'avons aucun lemme en vedette pour le moment."
-    display_title: 'Homepage: En vedette'
+    display_title: Page
   block_1:
     display_title: Actualités
     display_options:
@@ -52,9 +52,9 @@ display:
     display_options:
       exposed_form:
         options:
-          submit_button: Appliquer
-          reset_button_label: Réinitialiser
-          exposed_sorts_label: 'Trier par'
+          submit_button: Apply
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           sort_asc_label: Asc
           sort_desc_label: Desc
 label: Frontpage
