@@ -7,6 +7,23 @@ $databases = [];
  */
 $settings['config_sync_directory'] = '../config/sync';
 
+$app_env = getenv('DRUPAL_APP_ENV') ?: 'prod';
+
+if ($app_env === 'dev') {
+  // Aggregation
+  $config['system.performance']['css']['preprocess'] = FALSE;
+  $config['system.performance']['js']['preprocess'] = FALSE;
+  
+  // Config split
+  $config['config_split.config_split.bestor_dev_only']['status'] = TRUE;
+
+  // Config ignore
+  $settings['config_ignore_deactivate'] = TRUE;
+} else {  
+  // Config split
+  $config['config_split.config_split.bestor_dev_only']['status'] = FALSE;
+}
+
 /**
  * Salt for one-time login links, cancel links, form tokens, etc.
  */
@@ -86,8 +103,6 @@ $settings['file_assets_path'] = 'sites/default/files';
 $settings['migrate_node_migrate_type_classic'] = FALSE;
 
 $settings['locale_translation_auto_update'] = FALSE;
-
-$settings['config_exclude_modules'] = ['devel', 'devel_generate'];
 
 $config['system.site']['name'] = getenv('DRUPAL_SITE_NAME');
 

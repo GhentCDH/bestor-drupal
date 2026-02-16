@@ -14,7 +14,9 @@ module:
   breakpoint: 0
   ckeditor5: 0
   config: 0
+  config_ignore: 0
   config_perms: 0
+  config_split: 0
   config_translation: 0
   config_views: 0
   contact: 0
@@ -27,6 +29,7 @@ module:
   datetime: 0
   datetime_range: 0
   dblog: 0
+  devel: 0
   devel_entity_updates: 0
   ds: 0
   dynamic_page_cache: 0

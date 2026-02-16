@@ -1,0 +1,19 @@
+uuid: 66284bd5-c9f4-41ab-b8b7-55740cc22147
+langcode: en
+status: true
+dependencies: {  }
+id: bestor_dev_only
+label: 'Bestor DEV only'
+description: ''
+weight: 0
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/dev
+module:
+  devel: 0
+  devel_entity_updates: 0
+  devel_generate: 0
+theme: {  }
+complete_list: {  }
+partial_list: {  }

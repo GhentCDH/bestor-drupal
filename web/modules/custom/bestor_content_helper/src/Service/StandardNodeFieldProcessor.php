@@ -658,7 +658,9 @@ class StandardNodeFieldProcessor {
    *   Formatted string or markup.
    */
   protected function periodDataFormatter(array $values): string|Markup {
-    return trim($this->renderValue($values['field_date_start']) . ' → ' . $this->renderValue($values['field_date_end']));
+    $start = $this->renderValue($values['field_date_start'] ?? null);
+    $end = $this->renderValue($values['field_date_end'] ?? null);
+    return ($start || $end) ? trim($start . ' → ' . $end) : '';
   }
 
 
@@ -672,8 +674,15 @@ class StandardNodeFieldProcessor {
    *   Formatted life data string or markup.
    */
   protected function lifeDataFormatter(array $values): string|Markup {
-    $birth = $this->twoFieldsKeyDataFormatter(array_filter([$values['field_date_start'], $values['field_municipality']]));
-    $death = $this->twoFieldsKeyDataFormatter(array_filter([$values['field_date_end'], $values['field_end_municipality']]));
+    $birth = $this->twoFieldsKeyDataFormatter(array_filter([
+      $values['field_date_start'] ?? null, 
+      $values['field_municipality'] ?? null
+    ]));
+
+    $death = $this->twoFieldsKeyDataFormatter(array_filter([
+      $values['field_date_end'] ?? null, 
+      $values['field_end_municipality'] ?? null
+    ]));
     return trim($birth . ' → ' . $death);
   }
 

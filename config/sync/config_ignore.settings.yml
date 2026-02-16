@@ -1,0 +1,8 @@
+_core:
+  default_config_hash: IgOVnECx6lbVt6JVFnadoEEugneDf3UblPZnOzov43Q
+mode: simple
+ignored_config_entities:
+  - 'contact.form.feedback:recipients'
+  - 'system.performance:*'
+  - 'system.site:mail'
+  - 'system.site:name'
