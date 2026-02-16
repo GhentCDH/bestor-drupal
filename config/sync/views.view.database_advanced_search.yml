@@ -10626,13 +10626,13 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            field_date_start:
-              value: ''
-            field_date_end:
-              value: ''
             calculated_related_name:
               value: ''
             calculated_relation_type_name:
+              value: ''
+            field_date_start:
+              value: ''
+            field_date_end:
               value: ''
           group: 1
           exposed: true
@@ -10684,7 +10684,7 @@ display:
               weight: '3'
               required: 0
               placeholder: ''
-              field_operator: '='
+              field_operator: '>='
               expose_field_operator: 0
               value: ''
             field_date_start_year_only:
@@ -10704,7 +10704,7 @@ display:
               weight: '4'
               required: 0
               placeholder: ''
-              field_operator: '='
+              field_operator: '>'
               expose_field_operator: 0
               value: ''
             calculated_this_id:

@@ -216,10 +216,11 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Operator
+    dpm($config);
     $form['field_settings'][$field_name]['field_operator'] = [
       '#type' => 'select',
       '#title' => $this->t('Operator'),
-      '#options' => $this->operatorHelper->getOperatorOptions(),
+      '#options' =>  $this->operatorHelper->getOperatorOptionsForField($config['supports_range'] ?? FALSE),
       '#default_value' => $config['field_operator'] ?? $this->operatorHelper->getDefaultOperator(),
       '#description' => $this->t('Comparison operator for this field.'),
       '#states' => $disabled_state,

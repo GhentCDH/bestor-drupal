@@ -143,15 +143,16 @@ class NestedIndexFieldHelper {
    *   or NULL if field not found.
    */
   public function getChildFieldType(Index $index, string $parent_field, string $child_field): ?string {
-    $full_path = $parent_field . ':' . $child_field;
-    $dotted_path = $this->colonsToDots($full_path);
-    
-    try {
-      $field = $index->getField($dotted_path);
-      return $field ? $field->getType() : NULL;
-    } catch (\Exception $e) {
+    $sapi_fld = $index->getField($parent_field);
+    if (!$sapi_fld instanceof Field || empty($sapi_fld->getConfiguration()['nested_fields'])) {
       return NULL;
     }
+    $nested_fields = $sapi_fld->getConfiguration()['nested_fields'];
+    if(empty($nested_fields[$child_field])) {
+      return NULL;
+    }
+
+    return $nested_fields[$child_field]['type'] ?? NULL;
   }
 
 
@@ -172,6 +173,7 @@ class NestedIndexFieldHelper {
    */
   public function childFieldSupportsRangeOperators(Index $index, string $parent_field, string $child_field): bool {
     $field_type = $this->getChildFieldType($index, $parent_field, $child_field);
+    dpm($field_type, $child_field);
     return in_array($field_type, ['integer', 'decimal', 'date'], TRUE);
   }
 
