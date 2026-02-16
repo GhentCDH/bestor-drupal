@@ -7,9 +7,7 @@ $databases = [];
  */
 $settings['config_sync_directory'] = '../config/sync';
 
-$app_env = getenv('DRUPAL_APP_ENV') ?: 'prod';
-
-if ($app_env === 'dev') {
+if (getenv('DRUPAL_APP_ENV')) {
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = TRUE;
 
