@@ -3,6 +3,7 @@ _core:
 mode: simple
 ignored_config_entities:
   - 'contact.form.feedback:recipients'
+  - smtp.settings
   - 'system.performance:*'
   - 'system.site:mail'
   - 'system.site:name'

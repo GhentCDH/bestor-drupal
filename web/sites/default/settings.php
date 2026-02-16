@@ -10,10 +10,6 @@ $settings['config_sync_directory'] = '../config/sync';
 $app_env = getenv('DRUPAL_APP_ENV') ?: 'prod';
 
 if ($app_env === 'dev') {
-  // Aggregation
-  $config['system.performance']['css']['preprocess'] = FALSE;
-  $config['system.performance']['js']['preprocess'] = FALSE;
-  
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = TRUE;
 

@@ -66,6 +66,7 @@
         "drupal/selectify": "^2.0",
         "drupal/single_user_role": "^1.0@beta",
         "drupal/smart_date": "^4.2",
+        "drupal/smtp": "^1.4",
         "drupal/straw": "^2.0@beta",
         "drupal/term_merge": "^2.0",
         "drupal/term_reference_change": "^2.0@beta",
