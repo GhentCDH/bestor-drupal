@@ -110,6 +110,9 @@
             },
             "drupal/focal_point":{
                 "https://www.drupal.org/project/focal_point/issues/3467462":"https://www.drupal.org/files/issues/2024-05-16/3094478-64.patch"
+            },
+            "drupal/contact_storage":{
+                "Add view submission permission:":"https://www.drupal.org/files/issues/2022-11-07/revisit_permissions-2708809-61.patch"
             }                                                              
         },
         "drupal-scaffold": {

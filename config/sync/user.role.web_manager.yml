@@ -93,6 +93,7 @@ dependencies:
     - block_content
     - config_perms
     - config_translation
+    - contact_storage
     - content_moderation
     - content_translation
     - contextual
@@ -269,6 +270,7 @@ permissions:
   - 'delete any soundcloud media'
   - 'delete any story content'
   - 'delete any video media'
+  - 'delete contact messages'
   - 'delete content translations'
   - 'delete media'
   - 'delete own article content'
@@ -626,6 +628,7 @@ permissions:
   - 'translate specialisation taxonomy_term'
   - 'translate story node'
   - 'update any media'
+  - 'update contact messages'
   - 'update content translations'
   - 'update media'
   - 'use text format basic_html'
@@ -642,6 +645,7 @@ permissions:
   - 'view any video media revisions'
   - 'view article revisions'
   - 'view concept revisions'
+  - 'view contact messages'
   - 'view document revisions'
   - 'view event revisions'
   - 'view institution revisions'

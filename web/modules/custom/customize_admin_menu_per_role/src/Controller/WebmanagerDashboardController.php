@@ -64,6 +64,19 @@ class WebmanagerDashboardController extends ControllerBase {
       ],
     ];
 
+    // Contact form access and config
+    $blocks['contact'] = [
+      '#theme' => 'admin_block',
+      '#attributes' => ['class' => ['admin-block', 'admin-block--config']],
+      '#block' => [
+        'title' => $this->t('Contact form'),
+        'content' => $this->buildLinks([
+          'Contact messages' => ['entity.contact_message.collection', ['form' => 'feedback']],
+          'Contact form configuration' => ['entity.contact_form.edit_form', ['contact_form' => 'feedback']],
+        ]),
+      ],
+    ];
+
     // Site config block
     $blocks['config'] = [
       '#theme' => 'admin_block',

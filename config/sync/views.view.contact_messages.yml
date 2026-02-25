@@ -25,7 +25,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'administer contact forms'
+          perm: 'view contact messages'
       cache:
         type: none
         options: {  }
