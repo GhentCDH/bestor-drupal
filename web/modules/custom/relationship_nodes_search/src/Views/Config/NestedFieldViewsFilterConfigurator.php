@@ -149,8 +149,8 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
    *   Form structure options.
    */
   public function buildFilterFieldForm(array &$form, array $config, array $options): void {
-  
-  $field_name = $config['field_name'];
+    dpm($options, "OPTIONS");
+    $field_name = $config['field_name'];
     $context_prefix = $options['context_prefix'];
     $is_enabled = $config['enabled'];
 
@@ -216,7 +216,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ];
 
     // Operator
-    dpm($config);
     $form['field_settings'][$field_name]['field_operator'] = [
       '#type' => 'select',
       '#title' => $this->t('Operator'),
@@ -250,6 +249,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
       '#description' => $this->t('Filter value (only used when filter is not exposed).'),
       '#states' => $disabled_state
     ];
+    dpm($form['field_settings'][$field_name]['value']);
   }
 
   /**
@@ -271,29 +271,30 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     ?string $context_prefix
   ): void {
     $field_name = $config['field_name'];
+    $widget_options = [
+      'textfield' => $this->t('Text field'),
+      'select' => $this->t('Dropdown (from indexed values)'),
+    ];
+
+    if ($config['supports_range'] ?? FALSE) {
+      $widget_options['int_select'] = $this->t('Dropdown of consecutive integers');
+    }
     
     $form['field_settings'][$field_name]['widget'] = [
-      '#type' => 'select',
+      '#type' => 'radios',
       '#title' => $this->t('Widget type'),
-      '#options' => [
-        'textfield' => $this->t('Text field'),
-        'select' => $this->t('Dropdown (from indexed values)'),
-      ],
+      '#options' => $widget_options,
       '#default_value' => $config['widget'] ?? 'textfield',
       '#states' => $disabled_state,
       '#description' => $this->t('Dropdown automatically loads all unique values from the search index.'),
     ];
-
+    if ($context_prefix) {
+      $input_name = $context_prefix . '[field_settings][' . $field_name . '][widget]';
+    } else {
+      $input_name = 'field_settings[' . $field_name . '][widget]';
+    }
     // Display mode for dropdown options (only for linkable fields)
     if ($config['linkable'] ?? FALSE) {
-      $path_parts = array_filter([
-        $context_prefix,
-        'field_settings',
-        $field_name,
-        'widget'
-      ]);
-      $input_name = implode('][', $path_parts);
-
       $form['field_settings'][$field_name]['select_display_mode'] = [
         '#type' => 'radios',
         '#title' => $this->t('Display mode for dropdown options'),
@@ -313,5 +314,72 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
         ),
       ];
     }
+    dpm(json_encode( array_merge(
+          $disabled_state,
+          [
+            'visible' => [
+              ':input[name="' . $input_name . '"]' => ['value' => 'select'],
+            ],
+          ]
+        )));
+    if ($config['supports_range'] ?? FALSE) {
+      $range_field_state = array_merge(
+        $disabled_state,
+        [
+          'visible' => [
+            ':input[name="' . $input_name . '"]' => ['value' => 'int_select'],
+          ],
+        ]
+      );
+      $form['field_settings'][$field_name]['int_range'] = [
+        '#type' => 'container',
+        '#title' => $this->t('Integer range configuration'),
+        '#description' => $this->t('Configure the range of consecutive integers for the dropdown.'),
+      ];
+      
+      $form['field_settings'][$field_name]['int_range']['min'] = [
+        '#type' => 'number',
+        '#title' => $this->t('Minimum value'),
+        '#default_value' => $config['int_range']['min'] ?? NULL,
+        '#description' => $this->t('Starting value for the dropdown.'),
+        '#size' => 10,
+        '#states' => $range_field_state
+      ];
+      
+      $form['field_settings'][$field_name]['int_range']['use_current_year_min'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Use current year as minimum'),
+        '#default_value' => $config['int_range']['use_current_year_min'] ?? FALSE,
+        '#description' => $this->t('Automatically set minimum to the current year (overrides minimum value above).'),
+        '#states' => $range_field_state
+      ];
+      
+      $form['field_settings'][$field_name]['int_range']['max'] = [
+        '#type' => 'number',
+        '#title' => $this->t('Maximum value'),
+        '#default_value' => $config['int_range']['max'] ?? NULL,
+        '#description' => $this->t('Ending value for the dropdown.'),
+        '#size' => 10,
+        '#states' => $range_field_state
+      ];
+      
+      $form['field_settings'][$field_name]['int_range']['use_current_year_max'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Use current year as maximum'),
+        '#default_value' => $config['int_range']['use_current_year_max'] ?? FALSE,
+        '#description' => $this->t('Automatically set maximum to the current year (overrides maximum value above).'),
+        '#states' => $range_field_state
+      ];
+    }
+  }
+
+  protected function buildWidgetSelectorVisibleState(){
+    if ($context_prefix) {
+      $input_name = $context_prefix . '[field_settings][' . $field_name . '][widget]';
+    } else {
+      $input_name = 'field_settings[' . $field_name . '][widget]';
+    }
+    
+
   }
 }

@@ -332,14 +332,13 @@ class FieldConfiguratorBase {
     string $field_name,
     ?string $context_prefix
   ): array {
-    $path_parts = array_filter([
-      $context_prefix,
-      'field_settings',
-      $field_name,
-      'enabled'
-    ]);
-
-    $input_name = implode('][', $path_parts);
+    $field_parts = ['field_settings', $field_name, 'enabled'];
+  
+    if ($context_prefix) {
+      $input_name = $context_prefix . '[' . implode('][', $field_parts) . ']';
+    } else {
+      $input_name = implode('][', $field_parts) . ']';
+    }
 
     return [
       'disabled' => [

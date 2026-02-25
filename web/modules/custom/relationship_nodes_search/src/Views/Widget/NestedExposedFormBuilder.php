@@ -165,6 +165,8 @@ class NestedExposedFormBuilder {
       case 'select':
         $this->addSelectWidget($form, $path, $field_config, $label, $required, $field_value);
         break;
+      case 'int_select':
+        break;
       case 'textfield':
       default:
         $this->addTextfieldWidget($form, $path, $label, $required, $placeholder, $field_value);
