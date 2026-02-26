@@ -149,7 +149,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
    *   Form structure options.
    */
   public function buildFilterFieldForm(array &$form, array $config, array $options): void {
-    dpm($options, "OPTIONS");
     $field_name = $config['field_name'];
     $context_prefix = $options['context_prefix'];
     $is_enabled = $config['enabled'];

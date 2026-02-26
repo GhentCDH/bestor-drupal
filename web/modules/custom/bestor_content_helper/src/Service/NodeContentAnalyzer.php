@@ -31,9 +31,10 @@ class NodeContentAnalyzer {
     }
     $words = '';
     if (isset($node_fields['field_description']) && $node->field_description->getFieldDefinition()->getType() === 'entity_reference_revisions') {
-      if ($node_fields['field_description']->referencedEntities() > 0) {
-        foreach ($node_fields['field_description']->referencedEntities() as $paragraph) {
-          if ($paragraph->field_formatted_text->value) {
+      $paragraphs = $node_fields['field_description']->referencedEntities();
+      if (!empty($paragraphs)) {
+        foreach ($paragraphs as $paragraph) {
+          if ($paragraph->hasField('field_formatted_text') && !$paragraph->get('field_formatted_text')->isEmpty()) {
             $paragraph_text = strip_tags($paragraph->field_formatted_text->value);
             $words = $words ? $words . ' ' . $paragraph_text : $paragraph_text;
           }
