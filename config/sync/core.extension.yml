@@ -60,6 +60,7 @@ module:
   link: 0
   linkit: 0
   locale: 0
+  matomo: 0
   media: 0
   media_entity_soundcloud: 0
   media_iframe: 0
