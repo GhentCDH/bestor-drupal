@@ -98,6 +98,47 @@ class RelationIefWidget extends InlineEntityFormSimple {
 
   /**
    * {@inheritdoc}
+   *
+   * Sets #relation_extended_widget on the widget container so that
+   * getRelationExtendedWidgetFields() can identify this widget via the form
+   * render array in all phases (build, AJAX rebuild, submit rebuild).
+   *
+   * This flag cannot be reliably set in formElement() or in form state:
+   * InlineEntityFormSimple::formElement() resets the entire IEF form state to []
+   * on every delta call, overwriting anything written in a previous delta.
+   * formMultipleElements() is called once per field and its return value becomes
+   * $form[$field_name]['widget'], making it the only safe location for the flag.
+   *
+   * This method also snapshots all current entity IDs into a dedicated form state
+   * key (rn_summary_entities) before parent::formMultipleElements() is called.
+   * That snapshot is used by extractFormValues() to restore non-rendered entities
+   * and prevent getRemovedRelations() from falsely treating them as deleted.
+   */
+  protected function formMultipleElements(FieldItemListInterface $items, array &$form, FormStateInterface $form_state) {
+    $field_name = $this->fieldDefinition->getName();
+    $ief_id = $this->makeIefId(array_merge($form['#parents'], [$field_name]));
+
+    // Snapshot entity IDs before parent calls formElement() per delta, each of
+    // which resets $form_state['inline_entity_form'][$ief_id] to [].
+    $all_entities = [];
+    foreach ($items as $delta => $item) {
+      if ($item->entity) {
+        $all_entities[$delta] = $item->entity;
+      }
+    }
+    $form_state->set(['rn_summary_entities', $ief_id], $all_entities);
+
+    $element = parent::formMultipleElements($items, $form, $form_state);
+
+    // Flag on the widget container, readable as $form[$field_name]['widget']['#relation_extended_widget'].
+    $element['#relation_extended_widget'] = TRUE;
+
+    return $element;
+  }
+
+
+  /**
+   * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
@@ -110,13 +151,37 @@ class RelationIefWidget extends InlineEntityFormSimple {
 
   /**
    * {@inheritdoc}
+   *
+   * Safety net: parent::extractFormValues() replaces $items with only the entities
+   * that had an IEF element in the form render array. Any entity rendered as a
+   * summary row (no IEF subform) is dropped, which would cause getRemovedRelations()
+   * to falsely delete it from the DB.
+   *
+   * This override re-adds those non-rendered entities to $items using the snapshot
+   * stored by formMultipleElements() in rn_summary_entities. The snapshot must be
+   * read from there — NOT from widget_state['entities'], which parent already
+   * overwrote with only the rendered entities before this code runs.
+   *
+   * Non-rendered entities are intentionally NOT added to widget_state['entities']
+   * so that parent::doSubmit() does not re-save them.
    */
   public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state) {
     parent::extractFormValues($items, $form, $form_state);
+
     $field_name = $this->fieldDefinition->getName();
-    $parents = array_merge($form['#parents'], [$field_name]);
-    $ief_id = $this->makeIefId($parents);
-    $form_state->set(['inline_entity_form', $ief_id, 'relation_extended_widget'], true);
+    $ief_id = $this->makeIefId(array_merge($form['#parents'], [$field_name]));
+
+    $all_entities = $form_state->get(['rn_summary_entities', $ief_id]) ?? [];
+    $current_ids = array_filter(array_map(
+      fn($item) => $item->entity?->id(),
+      iterator_to_array($items)
+    ));
+
+    foreach ($all_entities as $entity) {
+      if (!in_array($entity->id(), $current_ids, TRUE)) {
+        $items->appendItem(['target_id' => $entity->id(), 'entity' => $entity]);
+      }
+    }
   }
 
 
@@ -124,6 +189,6 @@ class RelationIefWidget extends InlineEntityFormSimple {
    * {@inheritdoc}
    */
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
-    return $this->relationFormHandler->clearEmptyRelationsFromInput($values, $form, $form_state, $this->fieldDefinition->getName());
+    return $this->relationFormHandler->clearEmptyRelationsFromInput($values, $form, $form_state, $this->fieldDefinition);
   }
 }

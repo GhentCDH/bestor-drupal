@@ -56,23 +56,34 @@ class RelationFormHelper {
   /**
    * Gets relation extended widget field names.
    *
+   * Detects which IEF fields use RelationIefWidget by reading the
+   * #relation_extended_widget flag from the widget container in the form render
+   * array. This flag is set by RelationIefWidget::formMultipleElements(), which
+   * is called once per field and whose return value becomes $form[$field]['widget'].
+   *
+   * Form state cannot be used here: InlineEntityFormSimple::formElement() resets
+   * the IEF form state to [] on every delta call, overwriting any flag written in
+   * a previous delta. The render array is stable across build, AJAX rebuild, and
+   * submit rebuild phases.
+   *
+   * For top-level node forms, makeIefId() produces implode('-', [$field_name]),
+   * which equals the field name — the same key used in the form render array.
+   *
    * @param array $form
    *   The form array (passed by reference).
    * @param FormStateInterface $form_state
    *   The form state.
    *
    * @return array
-   *   Array of field names.
+   *   Array of IEF IDs that belong to relation extended widgets.
    */
   public function getRelationExtendedWidgetFields(array &$form, FormStateInterface $form_state): array {
-    $ief_fields = $this->getAllIefWidgetFields( $form_state);
     $result = [];
-    foreach ($ief_fields as $field_name) {
-      $ief = $form[$field_name]['widget'][0]['inline_entity_form'];
-      if (empty($ief) || !isset($ief['#relation_extended_widget']) || $ief['#relation_extended_widget'] != true) {
-        continue;
+    foreach ($this->getAllIefWidgetFields($form_state) as $ief_id) {
+      $widget = $form[$ief_id]['widget'] ?? NULL;
+      if (is_array($widget) && !empty($widget['#relation_extended_widget'])) {
+        $result[] = $ief_id;
       }
-      $result[] = $field_name;
     }
     return $result;
   }

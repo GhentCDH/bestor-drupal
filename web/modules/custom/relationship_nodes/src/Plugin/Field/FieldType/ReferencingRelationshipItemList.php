@@ -5,6 +5,9 @@ namespace Drupal\relationship_nodes\Plugin\Field\FieldType;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\node\Entity\Node;
+use Drupal\relationship_nodes\RelationData\NodeHelper\RelationInfo;
+use Drupal\relationship_nodes\RelationData\NodeHelper\RelationWeightManager;
+
 
 
 /**

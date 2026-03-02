@@ -108,8 +108,8 @@ class VirtualFieldManager {
   public function getReferencingRelationshipFields(NodeInterface $node): array {
     $relationship_fields = [];
     
-    foreach ($node->getFields() as $field_name => $field) {
-      if ($field instanceof ReferencingRelationshipItemList) {
+    foreach ($node->getFieldDefinitions() as $field_name => $definition) {
+      if ($definition->getClass() === ReferencingRelationshipItemList::class) {
         $relationship_fields[] = $field_name;
       }
     }

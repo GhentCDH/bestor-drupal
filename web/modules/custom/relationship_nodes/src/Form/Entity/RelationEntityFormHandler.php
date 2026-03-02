@@ -5,9 +5,11 @@ namespace Drupal\relationship_nodes\Form\Entity;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\relationship_nodes\RelationData\NodeHelper\RelationSync;
 use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
+use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 
 
 /**
@@ -86,8 +88,8 @@ class RelationEntityFormHandler {
    *   The form array (passed by reference).
    * @param FormStateInterface $form_state
    *   The form state.
-   * @param string $field_name
-   *   The field name.
+   * @param FieldDefinitionInterface $field_definition
+   *   The field definition.
    *
    * @return array|null
    *   The cleaned values array or NULL.
@@ -96,12 +98,13 @@ class RelationEntityFormHandler {
     array $values, 
     array &$form, 
     FormStateInterface $form_state, 
-    string $field_name
+    FieldDefinitionInterface $field_definition
   ): ?array {
-    if ($field_name == null || empty($values) || !str_starts_with($field_name, 'computed_relationshipfield__')) {
+    if($field_definition->getClass() !== ReferencingRelationshipItemList::class || empty($values)) {
       return $values;
     }
 
+    $field_name = $field_definition->getName();
     $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
     if ($ief_widget_state == null || !isset($ief_widget_state[$field_name])) {
       return $values;

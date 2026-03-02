@@ -71,7 +71,7 @@ class RelationInlineEntityForm extends NodeInlineForm {
       return;
     }
 
-    if ($form_state->get('inline_entity_form') == null) {
+    if ($form_state->get('inline_entity_form') === null) {
       return;
     }
 
