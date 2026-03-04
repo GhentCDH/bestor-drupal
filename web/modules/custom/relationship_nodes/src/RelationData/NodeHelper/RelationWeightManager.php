@@ -53,7 +53,8 @@ class RelationWeightManager {
    */
   public function getWeight(int $relation_nid, string $reference_field_name): int {
     $key = $this->getKey($relation_nid, $reference_field_name);
-    return (int) $this->getStore()->get($key, 9999);
+    $weight = (int) $this->getStore()->get($key, 9999);
+    return $weight;
   }
 
 

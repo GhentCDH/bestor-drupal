@@ -43,14 +43,19 @@ class WidgetSubmitHandler extends WidgetSubmit{
    */
   public static function doSubmit(array $form, FormStateInterface $form_state): void {
     $relationFormHelper = \Drupal::service('relationship_nodes.relation_form_helper');
-    $relation_widgets = $relationFormHelper->getRelationExtendedWidgetFields($form, $form_state);
-    $widget_states =& $form_state->get('inline_entity_form');
-
     $relationFormHandler = \Drupal::service('relationship_nodes.relation_entity_form_handler');
-    foreach ($relation_widgets as $field_name) {
-      $widget_state =& $widget_states[$field_name];
-      $relationFormHandler->handleRelationWidgetSubmit($field_name, $widget_state, $form, $form_state);
+    
+    // Returns: ['field_relations-form' => 'field_relations']
+    $relation_widgets = $relationFormHelper->getRelationExtendedWidgetFields($form_state);
+    $all_widget_states = $form_state->get('inline_entity_form');
+
+    foreach ($relation_widgets as $ief_id => $field_name) {
+      $widget_state = $all_widget_states[$ief_id];
+      $relationFormHandler->handleRelationWidgetSubmit($ief_id, $widget_state, $form, $form_state);
+      $all_widget_states[$ief_id] = $widget_state;
     }
+
+    $form_state->set('inline_entity_form', $all_widget_states);
     parent::doSubmit($form, $form_state);
   }
 }

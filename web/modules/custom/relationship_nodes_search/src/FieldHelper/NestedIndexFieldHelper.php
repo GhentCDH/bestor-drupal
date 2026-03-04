@@ -172,9 +172,11 @@ class NestedIndexFieldHelper {
    *   TRUE if the field supports range operators.
    */
   public function childFieldSupportsRangeOperators(Index $index, string $parent_field, string $child_field): bool {
-    $field_type = $this->getChildFieldType($index, $parent_field, $child_field);
-    dpm($field_type, $child_field);
-    return in_array($field_type, ['integer', 'decimal', 'date'], TRUE);
+    return in_array(
+      $this->getChildFieldType($index, $parent_field, $child_field), 
+      ['integer', 'decimal', 'date'], 
+      TRUE
+    );
   }
 
 

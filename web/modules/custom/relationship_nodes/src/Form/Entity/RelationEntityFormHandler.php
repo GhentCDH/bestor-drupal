@@ -58,9 +58,9 @@ class RelationEntityFormHandler {
    *   The form state.
    */
   public function handleRelationWidgetSubmit(
-    string $field_name, 
-    array &$widget_state, 
-    array &$form, 
+    string $ief_id,
+    array &$widget_state,
+    array &$form,
     FormStateInterface $form_state
   ): void {
     $parent_node = $this->formHelper->getParentFormNode($form_state);
@@ -69,73 +69,13 @@ class RelationEntityFormHandler {
     }
 
     if (!$parent_node->isNew()) {
-      $removed = $this->syncService->getRemovedRelations($parent_node, $field_name);
-      if (!empty($removed)) {
-        $this->syncService->deleteNodes($removed);
+      // Use IEF ID for delete tracking
+      $delete_ids = array_keys($form_state->get(['rn_delete_ids', $ief_id]) ?? []);
+      if (!empty($delete_ids)) {
+        $this->syncService->deleteNodes($delete_ids);
       }
     }
-
-    $this->syncService->saveSubformRelations($parent_node, $field_name, $widget_state, $form, $form_state);  
-  }
-
-
-  /**
-   * Clears empty relations from form input.
-   *
-   * @param array $values
-   *   The form values.
-   * @param array $form
-   *   The form array (passed by reference).
-   * @param FormStateInterface $form_state
-   *   The form state.
-   * @param FieldDefinitionInterface $field_definition
-   *   The field definition.
-   *
-   * @return array|null
-   *   The cleaned values array or NULL.
-   */
-  public function clearEmptyRelationsFromInput(
-    array $values, 
-    array &$form, 
-    FormStateInterface $form_state, 
-    FieldDefinitionInterface $field_definition
-  ): ?array {
-    if($field_definition->getClass() !== ReferencingRelationshipItemList::class || empty($values)) {
-      return $values;
-    }
-
-    $field_name = $field_definition->getName();
-    $ief_widget_state = $form_state->get('inline_entity_form') ?? null;
-    if ($ief_widget_state == null || !isset($ief_widget_state[$field_name])) {
-      return $values;
-    }
-    $form_field_elements = $form_state->getValue($field_name);
-    foreach ($form_field_elements as $i => $element) {
-      if (!is_array($element) || empty($element['inline_entity_form'])) {
-        continue;
-      }
-      $ief = $element['inline_entity_form'];
-      $filled_ief = false;      
-      foreach ($this->fieldNameResolver->getRelatedEntityFields() as $related_entity_field) {
-        $ref_field = (array) ($ief[$related_entity_field] ?? []);
-        if (empty($ref_field)) {
-          continue;
-        }
-        foreach ($ref_field as $reference) {
-          if (!empty($reference['target_id'])) {
-            $filled_ief = true;  
-            break;
-          }
-        }
-        if ($filled_ief) {
-          break;
-        }
-      }
-      if (!$filled_ief) {
-        unset($values[$i]);
-      }  
-    }
-
-    return $values;
+    
+    $this->syncService->saveSubformRelations($parent_node, $widget_state, $form, $form_state);  
   }
 }

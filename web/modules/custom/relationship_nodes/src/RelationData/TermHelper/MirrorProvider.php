@@ -74,7 +74,7 @@ class MirrorProvider{
   public function elementSupportsMirroring(FieldItemListInterface $items, array $form, FormStateInterface $form_state): bool {   
     $bundle_info = $this->settingsManager->getBundleInfo($items->getEntity()->getType());
     if (
-      !$this->formHelper->isParentFormWithIefSubforms($form, $form_state) ||
+      !$this->formHelper->isParentFormWithIefSubforms($form_state) ||
       !$bundle_info || !$bundle_info->isRelation() ||
       !$items->getFieldDefinition() instanceof FieldConfig
     ) {

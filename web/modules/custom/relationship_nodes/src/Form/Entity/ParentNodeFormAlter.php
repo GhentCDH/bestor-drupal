@@ -42,7 +42,7 @@ class ParentNodeFormAlter {
    *   The form ID.
    */
   public function alterForm(array &$form, FormStateInterface $form_state, $form_id) {  
-    if (!$this->formHelper->isParentFormWithRelationSubforms($form, $form_state)) {
+    if (!$this->formHelper->isParentFormWithRelationSubforms($form_state)) {
       return;
     }
     

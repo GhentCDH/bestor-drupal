@@ -248,7 +248,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
       '#description' => $this->t('Filter value (only used when filter is not exposed).'),
       '#states' => $disabled_state
     ];
-    dpm($form['field_settings'][$field_name]['value']);
   }
 
   /**
@@ -313,14 +312,6 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
         ),
       ];
     }
-    dpm(json_encode( array_merge(
-          $disabled_state,
-          [
-            'visible' => [
-              ':input[name="' . $input_name . '"]' => ['value' => 'select'],
-            ],
-          ]
-        )));
     if ($config['supports_range'] ?? FALSE) {
       $range_field_state = array_merge(
         $disabled_state,

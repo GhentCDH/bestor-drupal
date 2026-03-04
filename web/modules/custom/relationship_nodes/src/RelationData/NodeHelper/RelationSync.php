@@ -109,8 +109,6 @@ class RelationSync {
    *
    * @param NodeInterface $parent_node
    *   The parent node.
-   * @param string $field_name
-   *   The field name.
    * @param array $widget_state
    *   The widget state array (passed by reference).
    * @param array $form
@@ -120,7 +118,6 @@ class RelationSync {
    */
   public function saveSubformRelations(
     NodeInterface $parent_node, 
-    string $field_name, 
     array &$widget_state, 
     array &$form, 
     FormStateInterface $form_state
@@ -130,29 +127,33 @@ class RelationSync {
     }
 
     $new_parent = $parent_node->isNew();
-  
     foreach ($widget_state['entities'] as $delta => &$entity_item) {
-      if (!$this->relationNeedsSave($entity_item)) {
-        continue;
-      }
-
-      $entity = $entity_item['entity'];
+      $entity = $entity_item['entity'] ?? null;
       if (!$entity instanceof NodeInterface) {
         continue;
       }
 
       $foreign_key = $this->foreignKeyResolver->getEntityFormForeignKeyField($entity, $form_state);
+      $weight = $entity_item['weight'] ?? $delta;
 
-      $this->entityTypeManager->getHandler('node', 'inline_form')->save($entity);
-      $relation_id = $entity->id();
+      $needs_save = $this->relationNeedsSave($entity_item);
 
-      $this->relationWeightManager->setWeight($relation_id, $foreign_key, $delta);
+      // Save new entities first so they get an ID.
+      if ($needs_save) {
+        $this->entityTypeManager->getHandler('node', 'inline_form')->save($entity);
+        $entity_item['needs_save'] = FALSE;
 
-      if ($new_parent) {
-        $form_state->set(['created_relation_ids', $entity->id()], $foreign_key);
+        if ($new_parent) {
+          $form_state->set(['created_relation_ids', $entity->id()], $foreign_key);
+        }
       }
 
-      $entity_item['needs_save'] = FALSE;
+      // Always save the weight, including for reordered but unedited entities.
+      // For new entities this runs after save() so the ID is available.
+      $relation_id = $entity->id();
+      if ($relation_id && $foreign_key) {
+        $this->relationWeightManager->setWeight((int) $relation_id, $foreign_key, $weight);
+      }
     }      
   }
 
@@ -192,21 +193,5 @@ class RelationSync {
     return !empty($entity_item['entity'])
       && $entity_item['entity'] instanceof NodeInterface
       && !empty($entity_item['needs_save']);
-  }
-
-
-  /**
-   * Gets an entity form by delta from a form field.
-   *
-   * @param array $form_field
-   *   The form field array.
-   * @param int $delta
-   *   The delta.
-   *
-   * @return array|null
-   *   The entity form array or NULL.
-   */
-  private function getEntityFormByDelta($form_field, $delta): ?array {
-    return $form_field['widget'][$delta]['inline_entity_form'] ?? null;
   }
 }
