@@ -3,7 +3,7 @@
 namespace Drupal\bestor_content_helper\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\bestor_content_helper\Service\UrlProvider;
 use Drupal\Core\Render\Markup;
 
 
@@ -11,7 +11,7 @@ use Drupal\Core\Render\Markup;
 class SiteSettingManager {
 
   protected EntityTypeManagerInterface $entityTypeManager;
-  protected LanguageManagerInterface $languageManager;
+  protected UrlProvider $urlProvider;
 
 
   /**
@@ -19,10 +19,10 @@ class SiteSettingManager {
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
-    LanguageManagerInterface $language_manager
+    UrlProvider $urlProvider
   ) {
     $this->entityTypeManager = $entityTypeManager;
-    $this->languageManager = $language_manager;
+    $this->urlProvider = $urlProvider;
   }
 
 
@@ -37,20 +37,16 @@ class SiteSettingManager {
   }
 
 
-  public function getSearchTagline(string $langcode = null): ?Markup{
-    $url_lang_prefix = '';
-    if(!empty($langcode) && $langcode !== $this->languageManager->getDefaultLanguage()->getId()){
-      $url_lang_prefix = '/' . $langcode;
+  public function getSearchTagline(): ?Markup {
+    $prefix = $this->getBestorSiteSetting('searchbanner_subtitle_prefix');
+    $linktext = $this->getBestorSiteSetting('searchbanner_subtitle_link');
+    $suffix = $this->getBestorSiteSetting('searchbanner_subtitle_suffix');
+
+    if ($linktext) {
+      $url = $this->urlProvider->getTranslatedUrlFromRoute('view.database.page_1')->toString();
+      $linktext = '<a href="' . $url . '">' . $linktext . '</a>';
     }
 
-    $prefix = $this->getBestorSiteSetting('searchbanner_subtitle_prefix', $langcode);
-    $linktext = $this->getBestorSiteSetting('searchbanner_subtitle_link', $langcode);
-    $suffix = $this->getBestorSiteSetting('searchbanner_subtitle_suffix', $langcode);
-
-    if($linktext) {
-      $linktext = '<a href="' . $url_lang_prefix . '/database">' . $linktext . '</a>';
-    }
-    
-    return Markup::create(implode(' ', [$prefix, $linktext, $suffix])) ?? NULL;
+    return Markup::create(implode(' ', array_filter([$prefix, $linktext, $suffix])));
   }
 }

@@ -312,23 +312,11 @@ bundle: person
 mode: default
 content:
   computed_relationshipfield__person__concept:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 23
     region: content
     settings:
-      form_mode: default
-      label_singular: ''
-      label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
-    third_party_settings: {  }
-  computed_relationshipfield__person__document:
-    type: relation_extended_ief_widget
-    weight: 24
-    region: content
-    settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -336,12 +324,35 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
+    third_party_settings: {  }
+  computed_relationshipfield__person__document:
+    type: relation_extended_ief_complex_widget
+    weight: 24
+    region: content
+    settings:
+      match_operator: CONTAINS
+      form_mode: default
+      revision: false
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__person__institution:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 0
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -349,12 +360,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__person__instrument:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 26
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -362,12 +378,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__person__person:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 24
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -375,12 +396,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__person__place:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 27
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -388,12 +414,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__person__story:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 28
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -401,6 +432,10 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   created:
     type: datetime_timestamp

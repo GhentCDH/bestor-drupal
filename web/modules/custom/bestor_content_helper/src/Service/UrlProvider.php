@@ -3,6 +3,7 @@
 namespace Drupal\bestor_content_helper\Service;
 
 use Drupal\Core\Url;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 class UrlProvider {
