@@ -283,7 +283,7 @@ bundle: story
 mode: default
 content:
   computed_relationshipfield__story__concept:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 2
     region: content
     settings:
@@ -294,12 +294,18 @@ content:
       override_labels: 0
       collapsible: 0
       collapsed: 0
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      match_operator: CONTAINS
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__story__document:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 22
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -307,12 +313,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__story__institution:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 4
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -320,12 +331,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__story__instrument:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 5
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -333,12 +349,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__story__person:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 2
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -346,12 +367,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__story__place:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 1
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -359,12 +385,17 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   computed_relationshipfield__story__story:
-    type: relation_extended_ief_widget
+    type: relation_extended_ief_complex_widget
     weight: 3
     region: content
     settings:
+      match_operator: CONTAINS
       form_mode: default
       revision: false
       override_labels: false
@@ -372,6 +403,10 @@ content:
       label_plural: ''
       collapsible: false
       collapsed: false
+      allow_new: true
+      allow_existing: false
+      removed_reference: delete
+      allow_duplicate: false
     third_party_settings: {  }
   created:
     type: datetime_timestamp
