@@ -1,0 +1,22 @@
+uuid: e120a33a-00b0-47b0-a08f-85233d0b39e8
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bestor_admin
+_core:
+  default_config_hash: VkSoZEoIdICFR6e0fg5UIo7-FJJyLfz4EnCRAgRkhF8
+id: bestor_admin_content
+theme: bestor_admin
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

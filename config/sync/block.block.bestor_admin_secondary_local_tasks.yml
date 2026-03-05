@@ -1,0 +1,22 @@
+uuid: 843ea181-19fd-46d5-a3fe-0daae072819f
+langcode: en
+status: true
+dependencies:
+  theme:
+    - bestor_admin
+_core:
+  default_config_hash: '-nQevCPBP7X3juWFC6toqSotoDRkgIMkdjJZEF1wf5Y'
+id: bestor_admin_secondary_local_tasks
+theme: bestor_admin
+region: pre_content
+weight: 0
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Secondary tabs'
+  label_display: '0'
+  provider: core
+  primary: false
+  secondary: true
+visibility: {  }

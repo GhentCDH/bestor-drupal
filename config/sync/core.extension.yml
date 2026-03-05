@@ -132,4 +132,5 @@ theme:
   stable9: 0
   jakarta: 0
   bestor: 0
+  bestor_admin: 0
 profile: minimal

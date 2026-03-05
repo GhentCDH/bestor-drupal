@@ -1,0 +1,22 @@
+uuid: baf19453-c638-4d92-83ea-61f9a0abdcb4
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bestor_admin
+_core:
+  default_config_hash: r1h_y7l_PVtNe9XbNdpha2InlBz0nysbRKq_Bf1m4W8
+id: bestor_admin_messages
+theme: bestor_admin
+region: highlighted
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

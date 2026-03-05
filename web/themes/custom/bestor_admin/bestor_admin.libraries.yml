@@ -1,0 +1,8 @@
+global:
+  css:
+    theme:
+      css/bestor_admin.css: {}
+  js:
+    js/bestor_admin.js: {}
+  dependencies:
+    - claro/global-styling

@@ -1,0 +1,22 @@
+uuid: a923386b-8788-4271-a47c-4cf9ce03499d
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - bestor_admin
+_core:
+  default_config_hash: yT0gKQZutg-t6C4pdyjhY_d2ym-ruSCf_lqAZX4Wyas
+id: bestor_admin_help
+theme: bestor_admin
+region: help
+weight: 0
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

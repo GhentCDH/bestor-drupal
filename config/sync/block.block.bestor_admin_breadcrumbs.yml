@@ -1,0 +1,22 @@
+uuid: 30df8a01-c72f-48ba-b172-22461095dbcf
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bestor_admin
+_core:
+  default_config_hash: xtLKf383QvtM1BJWzFDZXhw89BUznG07aSuf7YAz4GQ
+id: bestor_admin_breadcrumbs
+theme: bestor_admin
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }
