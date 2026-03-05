@@ -15,7 +15,7 @@ third_party_settings:
     typed_relation: 0
     auto_title: 0
   toc_js:
-    toc_js_active: 1
+    toc_js_active: true
     title: ''
     title_tag: ''
     title_classes: ''

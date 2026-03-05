@@ -560,7 +560,12 @@ display:
             hard_limit: 0
             min_count: 1
             show_numbers: false
-            processor_configs: {  }
+            processor_configs:
+              list_item:
+                processor_id: list_item
+                weights:
+                  build: 5
+                settings: {  }
         search_api_language:
           id: search_api_language
           table: search_api_index_bestor_main_search_index

@@ -13,3 +13,7 @@ accent_color: neutral
 accent_color_mode: light
 disable_views_widgets: true
 disabled_pages: admin/appearance/settings/gin
+enable_form_api_selects: false
+form_api_widget_map: {  }
+widget_for_filters: {  }
+css_selector_widget_map: {  }
