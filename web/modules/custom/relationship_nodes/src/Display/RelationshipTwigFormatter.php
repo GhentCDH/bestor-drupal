@@ -146,10 +146,13 @@ class RelationshipTwigFormatter {
     );
 
     // Build relationship data
-    $relationships = $this->dataBuilder->buildRelationshipData($relation_nodes, [
+    $rel_data = $this->dataBuilder->buildRelationshipData($relation_nodes, [
       'field_configs' => $field_configs,
       'viewing_node' => $node,
     ]);
+    $relationships = $rel_data['items'];
+    $cache = $rel_data['cache'];
+    $cache->addCacheTags(['node_list:' . $relation_bundle]);
 
     if (empty($relationships)) {
       return NULL;
@@ -172,6 +175,7 @@ class RelationshipTwigFormatter {
       'field_name' => $relation_field_name,
       'relation_bundle' => $relation_bundle,
       'items' => $items,
+      '_cache' => $cache,
     ];
   }
 

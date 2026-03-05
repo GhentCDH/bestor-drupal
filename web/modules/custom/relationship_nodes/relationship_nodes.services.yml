@@ -205,6 +205,7 @@ services:
     class: Drupal\relationship_nodes\Twig\RelationshipNodesTwigExtension
     arguments:
       - '@relationship_nodes.twig_formatter'
+      - '@renderer'
     tags:
       - { name: twig.extension }
   relationship_nodes.relation_weight_manager:

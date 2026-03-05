@@ -209,7 +209,7 @@ class RelationInfo {
     }
     $flattened = [];
     foreach($result as $field_result){
-      $flattened = array_merge($flattened, $field_result);
+      $flattened = $flattened + $field_result;
     }
     return $flattened;
   }

@@ -255,13 +255,15 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
     $viewing_node = $items->getEntity();
 
     // Build relationship data with viewing context for calculated fields
-    $relationships = $this->displayBuilder->buildRelationshipData(
+    $rel_data = $this->displayBuilder->buildRelationshipData(
       $relation_nodes,
       [
         'field_configs' => $field_configs,
         'viewing_node' => $viewing_node,
       ]
     );
+
+    $relationships = $rel_data['items'];
 
     // Apply sorting if configured
     if ($sort_field = $this->getSetting('sort_by_field')) {
@@ -290,7 +292,7 @@ class RelationshipFormatter extends EntityReferenceFormatterBase implements Cont
         'library' => ['relationship_nodes/relationship_field'],
       ],
     ];
-
+    $rel_data['cache']->applyTo($elements[0]);
     return $elements;
   }
 

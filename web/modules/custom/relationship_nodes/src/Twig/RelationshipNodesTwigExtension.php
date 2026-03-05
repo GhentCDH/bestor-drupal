@@ -3,6 +3,7 @@
 namespace Drupal\relationship_nodes\Twig;
 
 use Drupal\relationship_nodes\Display\RelationshipTwigFormatter;
+use Drupal\Core\Render\RendererInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -12,12 +13,14 @@ use Twig\TwigFunction;
 class RelationshipNodesTwigExtension extends AbstractExtension {
 
   protected RelationshipTwigFormatter $formatter;
+  protected RendererInterface $renderer;
 
   /**
    * Constructs a RelationshipNodesTwigExtension object.
    */
-  public function __construct(RelationshipTwigFormatter $formatter) {
+  public function __construct(RelationshipTwigFormatter $formatter, RendererInterface $renderer) {
     $this->formatter = $formatter;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -43,12 +46,20 @@ class RelationshipNodesTwigExtension extends AbstractExtension {
    *   The result of the operation.
    */
   public function rn(string $operation, ...$args) {
-    return match($operation) {
+    $result = match($operation) {
       'relation_fields_list' => $this->formatter->getAllRelationFields(...$args),
       'formatted_relations' => $this->formatter->getFormattedRelationships(...$args),
       default => NULL,
     };
-  }
+    if (is_array($result) && isset($result['_cache'])) {
+      $build = [];
+      $result['_cache']->applyTo($build);
+      $this->renderer->render($build);
+      unset($result['_cache']);
+    }
+
+    return $result;
+}
 
   /**
    * {@inheritdoc}

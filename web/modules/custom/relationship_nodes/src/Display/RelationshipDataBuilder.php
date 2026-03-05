@@ -13,6 +13,7 @@ use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
 use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Service for building relationship data structures.
@@ -120,11 +121,12 @@ class RelationshipDataBuilder {
 
     $data = [];
 
+    $cache = new CacheableMetadata();
     foreach ($relation_nodes as $relation_node) {
       if (!$relation_node instanceof NodeInterface) {
         continue;
       }
-
+      $cache->addCacheableDependency($relation_node);
       $item = [];
 
       // Process each enabled field
@@ -153,7 +155,10 @@ class RelationshipDataBuilder {
       $data[] = $item;
     }
 
-    return $data;
+    return [
+        'items' => $data,
+        'cache' => $cache,
+    ];
   }
 
   /**
@@ -378,7 +383,7 @@ class RelationshipDataBuilder {
     }
     // Get appropriate label
     $label = $use_mirror 
-    ? $this->mirrorProvider->getTermMirrorLabel($term)
+    ? ($this->mirrorProvider->getTermMirrorLabel($term) ?? $term->getName())
     : $term->getName();
 
     return [
