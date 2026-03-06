@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - contact
+    - klaro
     - media
     - system
 _core:
@@ -15,4 +16,5 @@ is_admin: false
 permissions:
   - 'access content'
   - 'access site-wide contact form'
+  - 'use klaro'
   - 'view media'

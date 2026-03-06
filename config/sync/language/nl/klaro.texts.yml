@@ -1,0 +1,31 @@
+consentModal:
+  description: 'Kies de diensten en toepassingen van derden die u wilt toestaan.'
+  privacyPolicy:
+    name: privacybeleid
+    text: "Lees ons {privacyPolicy} voor meer informatie.\r\n"
+    url: 'internal:/nl/node/6180'
+consentNotice:
+  changeDescription: 'Er zijn wijzigingen sinds uw laatste bezoek, gelieve uw toestemming bij te werken.'
+  description: 'Wij gebruiken cookies en verwerken persoonsgegevens. Lees ons {privacyPolicy} voor meer informatie.'
+  learnMore: Aanpassen
+ok: Accepteren
+save: Opslaan
+decline: Weigeren
+close: Sluiten
+acceptAll: 'Alles accepteren'
+acceptSelected: 'Selectie accepteren'
+service:
+  disableAll:
+    title: 'Alle diensten in-/uitschakelen'
+    description: 'Gebruik deze schakelaar om alle diensten in of uit te schakelen.'
+  optOut:
+    description: 'Deze dienst wordt standaard geladen (opt-out mogelijk).'
+  required:
+    title: '(altijd vereist)'
+    description: 'Deze dienst is altijd vereist.'
+  purposes: Doeleinden
+  purpose: Doeleinde
+contextualConsent:
+  acceptAlways: Altijd
+  acceptOnce: 'Ja (deze keer)'
+  description: 'Externe inhoud van {title} laden?'

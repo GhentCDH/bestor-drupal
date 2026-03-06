@@ -47,6 +47,7 @@
         "drupal/geofield": "^1.61",
         "drupal/honeypot": "^2.2",
         "drupal/inline_entity_form": "^3.0@RC",
+        "drupal/klaro": "^3.0",
         "drupal/leaflet": "^10.3",
         "drupal/linkit": "^7.0",
         "drupal/matomo": "^1.26",

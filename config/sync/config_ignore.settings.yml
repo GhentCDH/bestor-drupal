@@ -3,7 +3,7 @@ _core:
 mode: simple
 ignored_config_entities:
   - 'contact.form.feedback:recipients'
-  - matomo.settings
+  - 'matomo.settings:site_id'
   - smtp.settings
   - 'system.performance:*'
   - 'system.site:mail'

@@ -1,0 +1,33 @@
+consentModal:
+  title: 'Cookies & Confidentialité'
+  description: 'Veuillez choisir les services et applications tiers que vous souhaitez autoriser.'
+  privacyPolicy:
+    name: 'politique de confidentialité'
+    text: 'Pour en savoir plus, veuillez lire notre {privacyPolicy}.'
+    url: 'internal:/fr/node/6180'
+consentNotice:
+  title: 'Cookies & Confidentialité'
+  changeDescription: 'Des modifications ont eu lieu depuis votre dernière visite, veuillez mettre à jour votre consentement.'
+  description: ' Nous utilisons des cookies et traitons des données personnelles. Pour en savoir plus, veuillez lire notre {privacyPolicy}.'
+  learnMore: Personnaliser
+ok: Accepter
+save: Enregistrer
+decline: Refuser
+close: Fermer
+acceptAll: 'Tout accepter'
+acceptSelected: 'Accepter la sélection'
+service:
+  disableAll:
+    title: 'Activer/désactiver tous les services'
+    description: 'Utilisez ce bouton pour activer ou désactiver tous les services.'
+  optOut:
+    description: 'Ce service est chargé par défaut (opt-out possible).'
+  required:
+    title: '(toujours requis)'
+    description: 'Ce service est toujours requis.'
+  purposes: Finalités
+  purpose: Finalité
+contextualConsent:
+  acceptAlways: Toujours
+  acceptOnce: 'Oui (cette fois)'
+  description: 'Charger le contenu externe fourni par {title}?'

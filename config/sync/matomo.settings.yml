@@ -17,8 +17,8 @@ track:
   messages: {  }
   site_search: false
 privacy:
-  donottrack: true
-  disablecookies: true
+  donottrack: false
+  disablecookies: false
 custom:
   variable:
     1:

@@ -55,6 +55,7 @@ module:
   iframe: 0
   image: 0
   inline_entity_form: 0
+  klaro: 0
   language: 0
   layout_discovery: 0
   leaflet: 0
