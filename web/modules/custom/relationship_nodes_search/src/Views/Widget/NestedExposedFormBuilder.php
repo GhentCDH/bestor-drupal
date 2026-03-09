@@ -60,9 +60,10 @@ class NestedExposedFormBuilder {
     $enabled_fields = $this->getEnabledAndSortedFields($child_fld_settings);
 
     foreach ($enabled_fields as $child_fld_nm => $child_fld_config) {
-      $child_fld_value = $child_fld_values[$child_fld_nm] ?? NULL;
-      $child_path = array_merge($path, [$child_fld_nm]);
-      if (($child_fld_config['widget'] ?? 'textfield') === 'select') {
+      $child_filter_id = $child_fld_config['child_filter_id'] ?? $child_fld_nm;
+      $child_fld_value = $child_fld_values[$child_filter_id] ?? NULL;
+      $child_path = array_merge($path, [$child_filter_id]);
+      if (($child_fld_config['widget'] ?? 'textfield') === 'select_indexed') {
         $options = $this->dropdownProvider->getDropdownOptionsWithViewContext(
           $index,
           $sapi_fld_nm,
@@ -71,8 +72,9 @@ class NestedExposedFormBuilder {
           $view_query
         );
         $child_fld_config['options'] = $options;
+      } elseif (($child_fld_config['widget'] ?? 'textfield') === 'select_range') {
+        $child_fld_config['options'] = $this->buildIntRangeOptions($child_fld_config['int_range'] ?? []);
       }
-
       $this->buildChildFieldElement(
         $form,
         $child_path,
@@ -162,10 +164,9 @@ class NestedExposedFormBuilder {
     }
 
     switch ($widget_type) {
-      case 'select':
+      case 'select_indexed':
+      case 'select_range':
         $this->addSelectWidget($form, $path, $field_config, $label, $required, $field_value);
-        break;
-      case 'int_select':
         break;
       case 'textfield':
       default:
@@ -241,7 +242,8 @@ class NestedExposedFormBuilder {
       '#empty_option' => $required ? NULL : $this->t('- Any -'),
     ];
     $this->setFormNestedValue($form, $path, $value);
-}
+  }
+  
 
 
   /**
@@ -311,7 +313,6 @@ class NestedExposedFormBuilder {
   }*/
 
 
-
   /**
    * Set a nested value in form array.
    *
@@ -351,6 +352,24 @@ class NestedExposedFormBuilder {
     }
   }
 
+  protected function buildIntRangeOptions(array $int_range): array {
+    $min = $int_range['use_current_year_min'] ?? FALSE
+      ? (int) date('Y')
+      : (int) ($int_range['min'] ?? date('Y'));
 
-  
+    $max = $int_range['use_current_year_max'] ?? FALSE
+      ? (int) date('Y')
+      : (int) ($int_range['max'] ?? date('Y'));
+
+    if ($min > $max) {
+      [$min, $max] = [$max, $min]; // silently swap
+    }
+
+    $values = range($min, $max);
+    // Descending order is often more useful (newest year first).
+    $values = array_reverse($values);
+
+    return array_combine($values, $values);
+  }
+
 }

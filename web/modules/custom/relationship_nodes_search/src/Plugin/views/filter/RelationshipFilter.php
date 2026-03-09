@@ -246,8 +246,12 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
       }
 
       // Get value
+      $child_filter_id = $field_config['child_filter_id'] ?? $child_fld_nm;
+
       if ($this->options['exposed']) {
-        $value = $this->value[$child_fld_nm]['value'] ?? $this->value[$child_fld_nm] ?? '';
+        $value = $this->value[$child_filter_id]['value']
+         ?? $this->value[$child_filter_id]
+         ?? '';
       } else {
         $value = $field_config['value'] ?? '';
       }
@@ -260,7 +264,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
         continue;
       }
 
-      $operator = $this->operatorHelper->determineFieldOperator($field_config, $child_fld_nm, $this->value);
+      $operator = $this->operatorHelper->determineFieldOperator($field_config, $child_filter_id, $this->value);
 
       $conditions[] = [
         'child_field_name' => $child_fld_nm,
@@ -385,7 +389,8 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
       }
 
       // Check if field has a value
-      $value = $values[$field_name]['value'] ?? $values[$field_name] ?? NULL;
+      $child_filter_id = $config['child_filter_id'] ?? $field_name;
+      $value = $values[$child_filter_id]['value'] ?? $values[$child_filter_id] ?? NULL;
       
       if ($value !== NULL && $value !== '') {
         return TRUE;

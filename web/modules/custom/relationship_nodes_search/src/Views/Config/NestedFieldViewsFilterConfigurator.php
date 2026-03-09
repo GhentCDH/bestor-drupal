@@ -128,7 +128,9 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
         $config['field_operator'] = $saved['field_operator'] ?? '=';
         $config['expose_field_operator'] = $saved['expose_field_operator'] ?? FALSE;
         $config['select_display_mode'] = $saved['select_display_mode'] ?? 'raw';
+        $config['int_range'] = $saved['int_range'] ?? [];
         $config['value'] = $saved['value'] ?? '';
+        $config['child_filter_id'] = $saved['child_filter_id'] ?? $this->generateChildfieldFilterId($field_name);
       }
     }
     
@@ -248,6 +250,19 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
       '#description' => $this->t('Filter value (only used when filter is not exposed).'),
       '#states' => $disabled_state
     ];
+
+
+    // Url child field filter identifier
+    $form['field_settings'][$field_name]['child_filter_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Child field filter identifier'),
+      '#default_value' => $config['child_filter_id'] ?? $this->generateChildfieldFilterId($field_name),
+      '#description' => $this->t('This will appear in the URL after the ? and parent filter id to identify this child filter. Only alphanumeric characters and underscores. Must be unique within this filter.'),
+      '#size' => 20,
+      '#maxlength' => 30,
+      '#pattern' => '[a-z0-9_]+',
+      '#states' => $disabled_state
+    ];
   }
 
   /**
@@ -270,12 +285,12 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
   ): void {
     $field_name = $config['field_name'];
     $widget_options = [
-      'textfield' => $this->t('Text field'),
-      'select' => $this->t('Dropdown (from indexed values)'),
+      'textfield'      => $this->t('Text field'),
+      'select_indexed' => $this->t('Dropdown (from indexed values)'),
     ];
 
     if ($config['supports_range'] ?? FALSE) {
-      $widget_options['int_select'] = $this->t('Dropdown of consecutive integers');
+      $widget_options['select_range'] = $this->t('Dropdown (consecutive integer range)');
     }
     
     $form['field_settings'][$field_name]['widget'] = [
@@ -306,7 +321,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
           $disabled_state,
           [
             'visible' => [
-              ':input[name="' . $input_name . '"]' => ['value' => 'select'],
+              ':input[name="' . $input_name . '"]' => ['value' => 'select_indexed'],
             ],
           ]
         ),
@@ -317,7 +332,7 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
         $disabled_state,
         [
           'visible' => [
-            ':input[name="' . $input_name . '"]' => ['value' => 'int_select'],
+            ':input[name="' . $input_name . '"]' => ['value' => 'select_range'],
           ],
         ]
       );
@@ -369,7 +384,11 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
     } else {
       $input_name = 'field_settings[' . $field_name . '][widget]';
     }
-    
+  }
 
+
+  private function generateChildfieldFilterId(string $child_field_name): string {
+    $key = preg_replace('/^(field_|rn_|calculated_)/', '', $child_field_name);
+    return substr($key, 0, 20);
   }
 }

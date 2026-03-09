@@ -153,18 +153,18 @@ class FilterOperatorHelper {
    *
    * @param array $field_config
    *   The field configuration array.
-   * @param string $child_fld_nm
-   *   The child field name.
+   * @param string $child_filter_id
+   *   The child field filter id.
    * @param array $form_values
    *   The form values array (typically $this->value from the filter).
    *
    * @return string
    *   The sanitized operator.
    */
-  public function determineFieldOperator(array $field_config, string $child_fld_nm, array $form_values): string {
+  public function determineFieldOperator(array $field_config, string $child_filter_id, array $form_values): string {
     // First check exposed form value
-    if (!empty($field_config['expose_field_operator']) && isset($form_values[$child_fld_nm]['operator'])) {
-      return $this->sanitizeOperator($form_values[$child_fld_nm]['operator']);
+    if (!empty($field_config['expose_field_operator']) && isset($form_values[$child_filter_id]['operator'])) {
+      return $this->sanitizeOperator($form_values[$child_filter_id]['operator']);
     }
     
     // Fall back to configured operator
