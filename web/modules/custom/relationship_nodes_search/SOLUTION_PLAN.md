@@ -1,216 +1,175 @@
-## Problem — Better widgets for integer and date subfields
+## Range overlap search — implementation status
 
-### 1A — Integer range dropdown (`select_range`)
+### Concept
 
-Widget keys in use:
-- `textfield` — free text input
-- `select_indexed` — dropdown populated from Search API indexed values
-- `select_range` — dropdown of a manually configured consecutive integer range
-- `date_select` — date picker (outstanding, see 1B)
+Two child fields on a record define a date/integer range `[start, end]`.
+The exposed filter shows two inputs: **From** and **To**.
+A record matches when the filter range overlaps the data range:
 
-#### 1A-2 — Better default values for the integer range
-
-**Current:** `min` and `max` default to `NULL` in the config form, which renders as
-an empty number field. The fallback in `buildIntRangeOptions()` is `date('Y')` for
-both, producing a single-item dropdown — useless.
-
-**Fix 1 — config form defaults** in `addWidgetSelector()`:
-```php
-$form['field_settings'][$field_name]['int_range']['min'] = [
-  '#type'          => 'number',
-  '#default_value' => $config['int_range']['min'] ?? 1,   // was: NULL
-  ...
-];
-
-$form['field_settings'][$field_name]['int_range']['max'] = [
-  '#type'          => 'number',
-  '#default_value' => $config['int_range']['max'] ?? 10,  // was: NULL
-  ...
-];
+```
+(record.end >= filter.from  OR  record.end is missing)
+AND
+(record.start <= filter.to  OR  record.start is missing)
 ```
 
-`1` and `10` are neutral starting points — the admin will always set these to
-something meaningful (e.g. 1900 / 2030 for a year range).
+Both conditions must be satisfied by the **same** nested document. This is why
+both OR-conditions live inside one `NestedParentFieldConditionGroup` with AND
+conjunction — two separate nested queries would allow cross-object false
+positives.
 
-**Fix 2 — runtime fallback** in `buildIntRangeOptions()` (`NestedExposedFormBuilder`):
-```php
-$min = ... ($int_range['min'] ?? 1);   // was: date('Y')
-$max = ... ($int_range['max'] ?? 10);  // was: date('Y')
-```
-
-This way, even if the admin forgot to save the config, the dropdown shows
-something (1–10) rather than a single entry with the current year.
+Partial input is supported:
+- Only **From** → only the `end >= from OR end missing` condition is added
+- Only **To**   → only the `start <= to OR start missing` condition is added
+- Both         → full overlap check
 
 ---
 
-#### 1A-3 — Conditional states: hide min/max when "use current year" is checked
+### Design decisions
 
-**Current problem:** when the admin checks "Use current year as minimum", the
-`min` number field stays visible and editable, even though it has no effect. Same
-for `max` / `use_current_year_max`. The fields should disappear when their
-respective checkbox is checked.
-
-**How Drupal `#states` AND conditions work:**
-Multiple selector entries under the same state key are combined with AND.
-So to make `min` visible only when `widget = select_range` **and** `use_current_year_min`
-is **unchecked**, provide both conditions under `'visible'`:
-
-```php
-'visible' => [
-  ':input[name="options[field_settings][FIELD][widget]"]'                          => ['value' => 'select_range'],
-  ':input[name="options[field_settings][FIELD][int_range][use_current_year_min]"]' => ['checked' => FALSE],
-],
-```
-
-**Implementation in `addWidgetSelector()`:**
-
-Build the input names once at the top of the `if ($config['supports_range'])` block:
-
-```php
-$field_prefix       = ($context_prefix ? $context_prefix . '[' : '') . 'field_settings][' . $field_name . ']';
-$widget_input       = ($context_prefix ? $context_prefix . '[' : '') . 'field_settings][' . $field_name . '][widget]';
-$cur_year_min_input = $field_prefix . '[int_range][use_current_year_min]';
-$cur_year_max_input = $field_prefix . '[int_range][use_current_year_max]';
-```
-
-Then replace the current `$range_field_state` (used for all four sub-fields) with
-**three separate states**:
-
-```php
-// Checkboxes: visible when select_range widget is active
-$range_visible_state = array_merge($disabled_state, [
-  'visible' => [
-    ':input[name="' . $widget_input . '"]' => ['value' => 'select_range'],
-  ],
-]);
-
-// min field: visible only when select_range AND use_current_year_min unchecked
-$min_state = array_merge($disabled_state, [
-  'visible' => [
-    ':input[name="' . $widget_input . '"]'       => ['value' => 'select_range'],
-    ':input[name="' . $cur_year_min_input . '"]'  => ['checked' => FALSE],
-  ],
-]);
-
-// max field: visible only when select_range AND use_current_year_max unchecked
-$max_state = array_merge($disabled_state, [
-  'visible' => [
-    ':input[name="' . $widget_input . '"]'       => ['value' => 'select_range'],
-    ':input[name="' . $cur_year_max_input . '"]'  => ['checked' => FALSE],
-  ],
-]);
-```
-
-Apply them:
-```
-$form[...]['int_range']['min']                  → '#states' => $min_state
-$form[...]['int_range']['use_current_year_min'] → '#states' => $range_visible_state
-$form[...]['int_range']['max']                  → '#states' => $max_state
-$form[...]['int_range']['use_current_year_max'] → '#states' => $range_visible_state
-```
-
-> **Note on the container:** the `int_range` container itself has no `#states`
-> right now. That is fine — it is invisible because all its children are. If you
-> want the container title/description to also disappear, change its `#type` to
-> `fieldset` and give it `'#states' => $range_visible_state`. The `container` type
-> has no visible wrapper so `#states` on it has no visual effect.
-
----
-
-### 1B — Date picker widget
-
-#### Step 1 — expose `search_api_type` in field configs
-
-**File:** `NestedFieldViewsFilterConfigurator::prepareFilterFieldConfigurations()`
-
-`$context['capabilities'][$field_name]['search_api_type']` is already available
-(built by `buildViewsContext()`), but it is never written into `$config`. Add it
-inside the merge loop for **all** fields, before the `if (isset(...))` block:
-
-```php
-foreach ($configs as $field_name => &$config) {
-  $config['search_api_type'] = $context['capabilities'][$field_name]['search_api_type'] ?? NULL;
-
-  if (isset($field_settings[$field_name])) {
-    // ... existing merges ...
-  }
-}
-```
-
-#### Step 2 — add `date_select` widget option
-
-**File:** `NestedFieldViewsFilterConfigurator::addWidgetSelector()`
-
-After the `select_range` block, add:
-```php
-if (($config['search_api_type'] ?? NULL) === 'date') {
-  $widget_options['date_select'] = $this->t('Date picker');
-}
-```
-
-Date fields also pass `supports_range`, so `select_range` will appear for them
-too. Both being available is intentional — an admin might prefer a year range
-dropdown over a calendar picker.
-
-#### Step 3 — implement `addDateWidget()`
-
-**File:** `NestedExposedFormBuilder`
-
-New protected method:
-```php
-protected function addDateWidget(
-  array &$form,
-  array $path,
-  string $label,
-  bool $required,
-  ?array $field_value = NULL
-): void {
-  $path[] = 'value';
-  $this->setFormNestedValue($form, $path, [
-    '#type'          => 'date',
-    '#title'         => $label,
-    '#default_value' => $field_value['value'] ?? '',
-    '#required'      => $required,
-  ]);
-}
-```
-
-Wire it in `buildChildFieldElement()`:
-```php
-case 'date_select':
-  $this->addDateWidget($form, $path, $label, $required, $field_value);
-  break;
-```
-
-#### Step 4 — convert Y-m-d to Unix timestamp before querying
-
-**File:** `RelationshipFilter::buildFilterConditions()`
-
-Search API stores date fields as Unix timestamps (integers). The HTML `date`
-input returns `Y-m-d` strings. Add this block **after** `sanitizeFieldValue()`
-and **before** the empty-check:
-
-```php
-$field_type = $field_config['search_api_type'] ?? NULL;
-if ($field_type === 'date' && is_string($value) && $value !== '') {
-  $ts = strtotime($value . 'T00:00:00');
-  if ($ts !== FALSE) {
-    $value = $ts;
-  }
-}
-```
-
-> **BETWEEN operator and date ranges:** for BETWEEN you would need two separate
-> date inputs (from / to) returning an array value. Deferred. For now `date_select`
-> works correctly with all single-value operators (`=`, `!=`, `<`, `<=`, `>`, `>=`).
-> Advise admins to use those operators when configuring a `date_select` field.
-
----
-
-## Summary of files still to change
-
-| File | Remaining work |
+| Decision | Choice |
 |---|---|
-| `src/Views/Config/NestedFieldViewsFilterConfigurator.php` | Fix `int_range` defaults to 1/10; add split `#states` for min/max fields; expose `search_api_type` in field configs; add `date_select` widget option. |
-| `src/Views/Widget/NestedExposedFormBuilder.php` | Fix fallback defaults in `buildIntRangeOptions()`; add `addDateWidget()`; wire `date_select` case. |
-| `src/Plugin/views/filter/RelationshipFilter.php` | Add Y-m-d → timestamp conversion in `buildFilterConditions()`. |
+| Multiple pairs per filter | No — one pair per filter instance |
+| From/To URL keys | Hardcoded as `from` and `to` |
+| Shown always | No — only when ≥ 2 rangeable subfields exist |
+| Field dropdowns | Only rangeable fields shown |
+| Storage location | Inside `field_settings['range_pair']` — saves automatically with the field_settings blob, grouped under "Available fields" in the config form |
+| Reserved keys `from`/`to` | Warning shown in range pair form when enabled; validation blocks saving if any child field uses them as identifier |
+
+URL pattern: `?filter_id[from][value]=1800&filter_id[to][value]=1802`
+
+---
+
+### NULL field handling
+
+Elasticsearch does not index null fields — a range condition on a missing field
+silently fails. The correct semantic for a null start/end is **COALESCE(end,
+start)** and **COALESCE(start, end)** — a null bound is replaced by the other
+bound, making the record a point range for filtering purposes.
+
+**Fix:** each range bound uses a nested OR with an AND sub-group:
+- `end >= from  OR  (end missing AND start >= from)` — COALESCE(end, start)
+- `start <= to  OR  (start missing AND end <= to)` — COALESCE(start, end)
+
+These sub-groups are expressed inside **one** nested query using
+`NestedChildFieldConditionGroup` (with recursive nesting for the AND branch).
+This is critical — two separate nested queries would evaluate independently per
+document, allowing cross-object false positives.
+
+---
+
+### Done
+
+#### ✅ `select_range` on date fields
+
+Two root causes fixed:
+- `search_api_type` was never saved. Fix: live lookup via
+  `$this->nestedFieldHelper->getChildFieldType()` at query time.
+- `convertYearToTimestamp()` returned a Unix integer, but dates are stored as
+  ISO 8601 strings. Fix: renamed to `convertYearToDateString()`, returns
+  `date('c', mktime(...))`.
+
+#### ✅ `NestedIndexFieldHelper` injected into `RelationshipFilter`
+
+Injected directly; removed the unnecessary delegate method that was previously
+added to `NestedFieldViewsFilterConfigurator`.
+
+#### ✅ Query infrastructure — null-safe nested sub-groups
+
+New class hierarchy for nested condition groups:
+
+```
+ConditionGroup  (Search API)
+  └── NestedConditionGroupBase
+        ├── NestedParentFieldConditionGroup
+        └── NestedChildFieldConditionGroup
+```
+
+**`NestedConditionGroupBase`** — shared base:
+- Properties: `$parentFieldName`, `$index`, `$queryBuilder`
+- Setters: `setParentFieldName()`, `setIndex()`, `setQueryBuilder()`, `getParentFieldName()`
+- `addChildFieldCondition()` — resolves full ES field path and creates a
+  `NestedChildFieldCondition`
+
+**`NestedParentFieldConditionGroup`** — top-level nested query:
+- `isNestedParentField()` — used by `NestedFilterBuilder` to detect nested groups
+- `addChildConditionGroup()` — inherited from base
+
+**`NestedChildFieldConditionGroup`** — inner OR/AND sub-group inside the nested query:
+- Inherits everything from base including `addChildConditionGroup()` for deeper nesting
+- Exists to give `NestedFilterBuilder` a concrete type to `instanceof` check
+
+**`NestedFilterBuilder`** updated — condition processing is extracted into
+`buildConditionGroupSubfilters(NestedConditionGroupBase $group)` which recurses
+into `NestedChildFieldConditionGroup` at any depth:
+
+```php
+if ($condition instanceof NestedChildFieldConditionGroup) {
+  $inner = $this->buildConditionGroupSubfilters($condition, $index_fields);
+  $subfilters[] = $this->wrapWithConjunction($inner, $condition->getConjunction());
+}
+elseif ($condition instanceof NestedChildFieldCondition) {
+  $subfilters[] = $this->buildFilterTerm($condition, $index_fields);
+}
+```
+
+#### ✅ `buildIntRangeSubForm()` — shared private method
+
+Shared between `addWidgetSelector()` (per-field) and `buildRangePairForm()` (pair).
+Builds the four int_range form elements with correct `#states` visibility logic.
+Pair defaults: `max = current year`, `use_current_year_max = TRUE`.
+
+#### ✅ Config form — `NestedFieldViewsFilterConfigurator::buildRangePairForm()`
+
+- Guard in `buildFilterConfigForm()`: only called when ≥ 2 rangeable subfields exist
+- Form placed at `$form['field_settings']['range_pair']` (inside "Available fields")
+- Reads saved data from `$saved_settings['field_settings']['range_pair']`
+- `#states` paths include `[field_settings]` segment
+- Warning markup shown when enabled, listing `from` and `to` as reserved identifiers
+- Delegates int_range sub-form to `buildIntRangeSubForm()`
+
+#### ✅ Exposed form — `NestedExposedFormBuilder::buildRangePairWidget()`
+
+Renders `from` and `to` inputs (textfield or select_range) into the exposed form.
+
+#### ✅ `RelationshipFilter` — all methods updated
+
+- `getFieldSettings()` — strips `range_pair` key so field loops stay clean
+- `getRangePairConfig()` — reads `$this->options['field_settings']['range_pair']`
+- `buildRangePairConditions()` — builds one `NestedParentFieldConditionGroup` (AND)
+  with two inner `NestedChildFieldConditionGroup` (OR) sub-groups for null safety
+- `query()` — calls `buildRangePairConditions()` after regular conditions
+- `valueForm()` — calls `buildRangePairWidget()` when pair is enabled and exposed
+- `hasActiveFilterValues()` — checks `from`/`to` keys when pair is enabled
+- `validateOptionsForm()` — skips `range_pair` key in field loop; validates that
+  start/end fields are selected, are different, and that no regular field uses
+  `from` or `to` as its child filter identifier
+
+---
+
+### To do
+
+- [ ] **Test end-to-end**: configure a filter with two date fields, enable range pair,
+      verify URL params and that the Elasticsearch query contains one nested query
+      with two inner `bool.should` sub-conditions.
+- [ ] **Test partial input**: only From filled, only To filled — confirm only the
+      relevant OR sub-group is added.
+- [ ] **Test null handling**: verify records with null start or end are correctly
+      included or excluded depending on the filter values.
+- [ ] **Test select_range widget**: verify year dropdown options build correctly for
+      the pair, and that year-to-date-string conversion fires for date-typed fields.
+- [ ] **adminSummary()**: currently shows only enabled child field count; consider
+      whether range pair enabled state should be reflected.
+
+---
+
+### Files changed
+
+| File | Changes |
+|---|---|
+| `src/SearchAPI/Query/NestedConditionGroupBase.php` | New — shared base for nested condition groups |
+| `src/SearchAPI/Query/NestedChildFieldConditionGroup.php` | New — inner OR/AND sub-group within a nested query |
+| `src/SearchAPI/Query/NestedParentFieldConditionGroup.php` | Extends base; adds `addChildConditionGroup()` |
+| `src/SearchAPI/Query/NestedFilterBuilder.php` | Handles `NestedChildFieldConditionGroup` in condition loop |
+| `src/Plugin/views/filter/RelationshipFilter.php` | `getFieldSettings()`, `getRangePairConfig()`, `buildRangePairConditions()`, `query()`, `valueForm()`, `hasActiveFilterValues()`, `validateOptionsForm()` |
+| `src/Views/Config/NestedFieldViewsFilterConfigurator.php` | `buildRangePairForm()`, `buildIntRangeSubForm()`, rangeable guard |
+| `src/Views/Widget/NestedExposedFormBuilder.php` | `buildRangePairWidget()` |

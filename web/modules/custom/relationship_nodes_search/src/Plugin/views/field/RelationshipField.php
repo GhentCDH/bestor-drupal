@@ -85,7 +85,7 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state) { 
     parent::buildOptionsForm($form, $form_state);
     
     $config = $this->fieldConfigurator->validateAndPreparePluginForm(
@@ -433,8 +433,8 @@ class RelationshipField extends SearchApiStandard implements ContainerFactoryPlu
    */
   protected function getEmptyTemplateData(): array {
     return [
-      'relationships' => [],
-      'grouped' => [],
+      'items' => [],
+      'groups' => [],
       'summary' => [
         'total' => 0,
         'fields' => [],

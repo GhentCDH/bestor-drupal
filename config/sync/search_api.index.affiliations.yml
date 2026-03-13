@@ -1,0 +1,188 @@
+uuid: 4599f20a-4fef-432a-9e66-bb18156bda20
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_end
+    - field.storage.node.field_date_start
+    - field.storage.node.rn_related_entity_1
+    - field.storage.node.rn_related_entity_2
+    - field.storage.node.rn_relation_type
+    - field.storage.taxonomy_term.rn_mirror_string
+    - search_api.server.esconnectordocker
+  module:
+    - node
+    - relationship_nodes_search
+    - taxonomy
+id: affiliations
+name: affiliations
+description: ''
+read_only: false
+field_settings:
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
+  rn_related_entity_1_id__int:
+    label: 'Rn related entity 1 ID'
+    datasource_id: 'entity:node'
+    property_path: rn_related_entity_1
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_1
+  rn_related_entity_1_status__bool:
+    label: 'Rn related entity 1 » Content » Published'
+    datasource_id: 'entity:node'
+    property_path: 'rn_related_entity_1:entity:status'
+    type: boolean
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_1
+      module:
+        - node
+  rn_related_entity_1_title__str:
+    label: 'Rn related entity 1 » Content » Title'
+    datasource_id: 'entity:node'
+    property_path: 'rn_related_entity_1:entity:title'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_1
+      module:
+        - node
+  rn_related_entity_2_id__int:
+    label: 'Rn related entity 2 ID'
+    datasource_id: 'entity:node'
+    property_path: rn_related_entity_2
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_2
+  rn_related_entity_2_status__bool:
+    label: 'Rn related entity 2 » Content » Published'
+    datasource_id: 'entity:node'
+    property_path: 'rn_related_entity_2:entity:status'
+    type: boolean
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_2
+      module:
+        - node
+  rn_related_entity_2_title__str:
+    label: 'Rn related entity 2 » Content » Title'
+    datasource_id: 'entity:node'
+    property_path: 'rn_related_entity_2:entity:title'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_2
+      module:
+        - node
+  rn_relation_field_date_end__date:
+    label: 'End date'
+    datasource_id: 'entity:node'
+    property_path: field_date_end
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_end
+  rn_relation_field_date_start__date:
+    label: 'Start date'
+    datasource_id: 'entity:node'
+    property_path: field_date_start
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_start
+  rn_relation_type_id__int:
+    label: 'Rn relation type ID'
+    datasource_id: 'entity:node'
+    property_path: rn_relation_type
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.rn_relation_type
+  rn_relation_type_mirror__str:
+    label: 'Rn relation type » Taxonomy term » Mirror'
+    datasource_id: 'entity:node'
+    property_path: 'rn_relation_type:entity:rn_mirror_string'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.rn_relation_type
+        - field.storage.taxonomy_term.rn_mirror_string
+      module:
+        - taxonomy
+  rn_relation_type_name__str:
+    label: 'Rn relation type » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'rn_relation_type:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.rn_relation_type
+      module:
+        - taxonomy
+  role_access:
+    label: 'Role-based access information'
+    property_path: search_api_role_access
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
+  status:
+    label: Boolean
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+  uid:
+    label: 'Entity reference'
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - relationnode__person_institut
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
+  custom_value: {  }
+  entity_status: {  }
+  entity_type: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+  role_access:
+    weights:
+      preprocess_query: -30
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  delete_on_fail: true
+  index_directly: true
+  track_changes_in_references: true
+server: esconnectordocker

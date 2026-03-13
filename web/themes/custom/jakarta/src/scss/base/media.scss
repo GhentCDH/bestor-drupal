@@ -3,8 +3,12 @@
   svg {
     vertical-align: top;
     max-width: 100%;
-    width: auto;
     height: auto;
+  }
+
+  img:not(.field--type-text-with-summary img):not(.field--type-text-long img),
+  svg:not(.field--type-text-with-summary svg):not(.field--type-text-long svg) {
+    width: auto;
   }
 
   video {

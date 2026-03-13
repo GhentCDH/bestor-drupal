@@ -269,12 +269,32 @@ class MirrorProvider{
    * @param string|null $default_label
    *   The default label.
    *
-   * @return null|string
-   *   Array with term ID as key and label as value.
+   * @return string|null
+   *   The mirror label, or NULL if no mirror is configured.
    */
-  public function getTermMirrorLabel(TermInterface $term): ?string {
-     $mirror_array = $this->getTermMirrorArray($term);
+  public function getMirrorLabelFromTerm(TermInterface $term): ?string {
+    $mirror_array = $this->getTermMirrorArray($term);
     return reset($mirror_array) ?: NULL;
+  }
+
+
+  /**
+   * Resolves the mirror label for a term ID.
+   *
+   * Convenience wrapper that loads the term internally, so callers do not
+   * need to manage term storage themselves.
+   *
+   * @param string $term_id
+   *   The taxonomy term ID.
+   *
+   * @return string|null
+   *   The mirror label, or NULL if the term does not exist or has no mirror.
+   */
+  public function getMirrorLabelFromId(string $term_id): ?string {
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $mirror_array = $this->getMirrorArray($term_storage, $term_id);
+    $label = reset($mirror_array);
+    return !empty($label) ? (string) $label : NULL;
   }
 
 

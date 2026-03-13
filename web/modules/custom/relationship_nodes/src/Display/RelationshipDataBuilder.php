@@ -161,6 +161,7 @@ class RelationshipDataBuilder {
     ];
   }
 
+
   /**
    * Builds data for a calculated field.
    * 
@@ -248,6 +249,7 @@ class RelationshipDataBuilder {
       'separator' => $config['multiple_separator'] ?? ', ',
     ];
   }
+
 
   /**
    * Builds data for a real (non-calculated) field.
@@ -383,7 +385,7 @@ class RelationshipDataBuilder {
     }
     // Get appropriate label
     $label = $use_mirror 
-    ? ($this->mirrorProvider->getTermMirrorLabel($term) ?? $term->getName())
+    ? ($this->mirrorProvider->getMirrorLabelFromTerm($term) ?? $term->getName())
     : $term->getName();
 
     return [
@@ -441,6 +443,7 @@ class RelationshipDataBuilder {
     return $grouped;
   }
 
+  
   /**
    * Sorts relationships by a specific field value.
    * 

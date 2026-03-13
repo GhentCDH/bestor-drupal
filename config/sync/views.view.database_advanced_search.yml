@@ -15,7 +15,6 @@ dependencies:
     - user.role.web_manager
   module:
     - better_exposed_filters
-    - relationship_nodes_search
     - search_api
     - user
 id: database_advanced_search
@@ -4318,9 +4317,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            concept:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -4332,7 +4331,7 @@ display:
             operator: relationship_info_relationnode_concept_story_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_conc
+            identifier: rel_concept
             required: false
             remember: false
             multiple: false
@@ -4366,6 +4365,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -4376,6 +4376,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -4387,9 +4388,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Concept
               weight: '0'
               required: 0
@@ -4397,9 +4399,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: concept
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -4407,6 +4410,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_document_strory_nested:
@@ -4419,9 +4423,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            document:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -4433,7 +4437,7 @@ display:
             operator: relationship_info_relationnode_document_strory_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_doc
+            identifier: rel_document
             required: false
             remember: false
             multiple: false
@@ -4467,6 +4471,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -4477,6 +4482,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -4488,9 +4494,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Document
               weight: '0'
               required: 0
@@ -4498,9 +4505,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: document
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -4508,6 +4516,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
         relationship_info_relationnode_institut_story_nested:
           id: relationship_info_relationnode_institut_story_nested
@@ -4519,9 +4528,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            institution:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -4533,7 +4542,7 @@ display:
             operator: relationship_info_relationnode_institut_story_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_institut
+            identifier: rel_institution
             required: false
             remember: false
             multiple: false
@@ -4567,6 +4576,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -4577,6 +4587,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -4588,9 +4599,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Institution
               weight: '0'
               required: 0
@@ -4598,9 +4610,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: institution
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -4608,6 +4621,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_instrum_story_nested:
@@ -4620,21 +4634,21 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            instrument:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
           expose:
             operator_id: ''
-            label: 'Instrument relation'
+            label: conceptrelation
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_story_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_instrum
+            identifier: rel_instrument
             required: false
             remember: false
             multiple: false
@@ -4668,6 +4682,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -4678,6 +4693,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -4689,9 +4705,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Instrument
               weight: '0'
               required: 0
@@ -4699,9 +4716,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: instrument
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -4709,6 +4727,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_story_nested:
@@ -4721,9 +4740,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            person:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -4735,7 +4754,7 @@ display:
             operator: relationship_info_relationnode_person_story_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pers
+            identifier: rel_person
             required: false
             remember: false
             multiple: false
@@ -4769,6 +4788,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -4779,6 +4799,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -4790,9 +4811,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Person
               weight: '0'
               required: 0
@@ -4800,9 +4822,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: person
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -4810,6 +4833,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_place_story_nested:
@@ -4822,9 +4846,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            place:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -4836,7 +4860,7 @@ display:
             operator: relationship_info_relationnode_place_story_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pl
+            identifier: rel_place
             required: false
             remember: false
             multiple: false
@@ -4870,6 +4894,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -4880,6 +4905,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -4891,9 +4917,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Place
               weight: '0'
               required: 0
@@ -4901,9 +4928,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: place
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -4911,6 +4939,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_story_story_nested:
@@ -4923,9 +4952,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            story:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -4971,6 +5000,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -4981,6 +5011,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -4992,9 +5023,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Story
               weight: '0'
               required: 0
@@ -5002,9 +5034,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: story
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -5012,6 +5045,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
       filter_groups:
@@ -5536,9 +5570,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            concept:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -5550,7 +5584,7 @@ display:
             operator: relationship_info_relationnode_concept_concept_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_conc
+            identifier: rel_concept
             required: false
             remember: false
             multiple: false
@@ -5584,6 +5618,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -5594,6 +5629,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -5605,9 +5641,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Concept
               weight: '0'
               required: 0
@@ -5615,9 +5652,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: concept
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -5625,6 +5663,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_concept_document_nested:
@@ -5637,9 +5676,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            document:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -5651,7 +5690,7 @@ display:
             operator: relationship_info_relationnode_concept_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_doc
+            identifier: rel_document
             required: false
             remember: false
             multiple: false
@@ -5685,6 +5724,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -5695,6 +5735,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -5706,9 +5747,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Document
               weight: '0'
               required: 0
@@ -5716,9 +5758,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: document
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -5726,6 +5769,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_concept_nested:
@@ -5738,9 +5782,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            institution:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -5752,7 +5796,7 @@ display:
             operator: relationship_info_relationnode_institut_concept_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_institut
+            identifier: rel_institution
             required: false
             remember: false
             multiple: false
@@ -5786,6 +5830,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -5796,6 +5841,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -5807,9 +5853,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Institution
               weight: '0'
               required: 0
@@ -5817,9 +5864,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: institution
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -5827,6 +5875,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_concept_instrument_nested:
@@ -5839,9 +5888,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            instrument:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -5853,7 +5902,7 @@ display:
             operator: relationship_info_relationnode_concept_instrument_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_instrum
+            identifier: rel_instrument
             required: false
             remember: false
             multiple: false
@@ -5887,6 +5936,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -5897,6 +5947,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -5908,9 +5959,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Instrument
               weight: '0'
               required: 0
@@ -5918,9 +5970,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: instrument
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -5928,6 +5981,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_concept_nested:
@@ -5940,9 +5994,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            person:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -5954,7 +6008,7 @@ display:
             operator: relationship_info_relationnode_person_concept_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pers
+            identifier: rel_person
             required: false
             remember: false
             multiple: false
@@ -5988,6 +6042,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -5998,9 +6053,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
-              widget: select
+              widget: textfield
               select_display_mode: raw
               label: 'Calculated Related Id'
               weight: '0'
@@ -6009,9 +6065,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Person
               weight: '0'
               required: 0
@@ -6019,9 +6076,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: person
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -6029,6 +6087,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_concept_place_nested:
@@ -6041,9 +6100,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            place:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -6055,7 +6114,7 @@ display:
             operator: relationship_info_relationnode_concept_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pl
+            identifier: rel_place
             required: false
             remember: false
             multiple: false
@@ -6089,6 +6148,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -6099,6 +6159,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -6110,9 +6171,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Place
               weight: '0'
               required: 0
@@ -6120,9 +6182,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: place
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '0'
               required: 0
@@ -6130,6 +6193,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_concept_story_nested:
@@ -6142,9 +6206,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            story:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -6190,6 +6254,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -6200,6 +6265,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -6211,9 +6277,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Story
               weight: '0'
               required: 0
@@ -6221,9 +6288,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: story
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -6231,6 +6299,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
       filter_groups:
@@ -6755,9 +6824,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            concept:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -6769,7 +6838,7 @@ display:
             operator: relationship_info_relationnode_concept_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_conc
+            identifier: rel_concept
             required: false
             remember: false
             multiple: false
@@ -6803,6 +6872,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -6813,6 +6883,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -6824,9 +6895,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Concept
               weight: '0'
               required: 0
@@ -6834,9 +6906,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: concept
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -6844,6 +6917,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_document_document_nested:
@@ -6856,9 +6930,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            document:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -6870,7 +6944,7 @@ display:
             operator: relationship_info_relationnode_document_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_doc
+            identifier: rel_document
             required: false
             remember: false
             multiple: false
@@ -6904,6 +6978,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -6914,6 +6989,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -6925,9 +7001,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Document
               weight: '0'
               required: 0
@@ -6935,9 +7012,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: document
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -6945,6 +7023,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_document_nested:
@@ -6957,9 +7036,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            institution:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -6971,7 +7050,7 @@ display:
             operator: relationship_info_relationnode_institut_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_institut
+            identifier: rel_institution
             required: false
             remember: false
             multiple: false
@@ -7005,6 +7084,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -7015,6 +7095,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -7026,9 +7107,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Institution
               weight: '0'
               required: 0
@@ -7036,9 +7118,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: institution
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -7046,6 +7129,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_instrum_document_nested:
@@ -7058,9 +7142,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            instrument:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -7072,7 +7156,7 @@ display:
             operator: relationship_info_relationnode_instrum_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_instrum
+            identifier: rel_instrument
             required: false
             remember: false
             multiple: false
@@ -7106,6 +7190,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -7116,6 +7201,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -7127,9 +7213,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Instrument
               weight: '0'
               required: 0
@@ -7137,9 +7224,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: instrument
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -7147,6 +7235,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_document_nested:
@@ -7159,9 +7248,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            person:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -7173,7 +7262,7 @@ display:
             operator: relationship_info_relationnode_person_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pers
+            identifier: rel_person
             required: false
             remember: false
             multiple: false
@@ -7207,6 +7296,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -7217,6 +7307,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -7228,9 +7319,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Person
               weight: '0'
               required: 0
@@ -7238,9 +7330,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: person
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -7248,6 +7341,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_document_place_nested:
@@ -7260,9 +7354,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            place:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -7274,7 +7368,7 @@ display:
             operator: relationship_info_relationnode_document_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pl
+            identifier: rel_place
             required: false
             remember: false
             multiple: false
@@ -7308,6 +7402,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -7318,6 +7413,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -7329,9 +7425,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Place
               weight: '0'
               required: 0
@@ -7339,9 +7436,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: place
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -7349,6 +7447,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_document_strory_nested:
@@ -7361,9 +7460,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            story:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -7409,6 +7508,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -7419,6 +7519,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -7430,9 +7531,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Story
               weight: '0'
               required: 0
@@ -7440,9 +7542,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: story
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -7450,6 +7553,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
       filter_groups:
@@ -7963,9 +8067,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            concept:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -7977,7 +8081,7 @@ display:
             operator: relationship_info_relationnode_institut_concept_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_conc
+            identifier: rel_concept
             required: false
             remember: false
             multiple: false
@@ -8011,6 +8115,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -8021,6 +8126,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -8032,9 +8138,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Concept
               weight: '0'
               required: 0
@@ -8042,9 +8149,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: concept
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -8052,6 +8160,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_document_nested:
@@ -8064,9 +8173,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            document:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -8078,7 +8187,7 @@ display:
             operator: relationship_info_relationnode_institut_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_doc
+            identifier: rel_document
             required: false
             remember: false
             multiple: false
@@ -8112,6 +8221,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -8122,6 +8232,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -8133,9 +8244,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Document
               weight: '0'
               required: 0
@@ -8143,9 +8255,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: document
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -8153,6 +8266,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_institut_nested:
@@ -8165,9 +8279,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            institution:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -8179,7 +8293,7 @@ display:
             operator: relationship_info_relationnode_institut_institut_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_institut
+            identifier: rel_institution
             required: false
             remember: false
             multiple: false
@@ -8213,6 +8327,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -8223,6 +8338,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -8234,9 +8350,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Institution
               weight: '0'
               required: 0
@@ -8244,9 +8361,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: institution
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -8254,6 +8372,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_instrum_nested:
@@ -8266,9 +8385,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            instrument:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -8280,7 +8399,7 @@ display:
             operator: relationship_info_relationnode_institut_instrum_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_instrum
+            identifier: rel_instrument
             required: false
             remember: false
             multiple: false
@@ -8314,6 +8433,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -8324,6 +8444,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -8335,9 +8456,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Instrument
               weight: '0'
               required: 0
@@ -8345,9 +8467,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: instrument
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -8355,6 +8478,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_institut_nested:
@@ -8366,7 +8490,15 @@ display:
           admin_label: ''
           plugin_id: search_api_relationship_filter
           operator: and
-          value: {  }
+          value:
+            person:
+              value: ''
+            type:
+              value: ''
+            start:
+              value: ''
+            end:
+              value: ''
           group: 1
           exposed: true
           expose:
@@ -8377,7 +8509,7 @@ display:
             operator: relationship_info_relationnode_person_institut_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pers
+            identifier: rel_person
             required: false
             remember: false
             multiple: false
@@ -8410,16 +8542,23 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: date_end_year_only
             field_date_start:
               enabled: 1
-              widget: textfield
+              widget: select_range
+              int_range:
+                min: '1700'
+                use_current_year_min: 0
+                max: ''
+                use_current_year_max: 1
               label: 'Date start'
               weight: '2'
               required: 0
               placeholder: ''
-              field_operator: '='
+              field_operator: '>='
               expose_field_operator: 0
               value: ''
+              child_filter_id: start
             field_date_start_year_only:
               enabled: 0
               widget: textfield
@@ -8430,16 +8569,23 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: date_start_year_only
             field_date_end:
               enabled: 1
-              widget: textfield
+              widget: select_range
+              int_range:
+                min: '1700'
+                use_current_year_min: 0
+                max: ''
+                use_current_year_max: 1
               label: 'Date end'
               weight: '3'
               required: 0
               placeholder: ''
-              field_operator: '='
+              field_operator: '<='
               expose_field_operator: 0
               value: ''
+              child_filter_id: end
             calculated_this_id:
               enabled: 0
               widget: textfield
@@ -8451,6 +8597,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -8461,6 +8608,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -8472,9 +8620,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Person
               weight: '0'
               required: 0
@@ -8482,9 +8631,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: person
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '0'
               required: 0
@@ -8492,6 +8642,17 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
+            range_pair:
+              enabled: 1
+              start_field: field_date_start
+              end_field: field_date_end
+              widget: select_range
+              int_range:
+                min: '1700'
+                use_current_year_min: 0
+                max: '2026'
+                use_current_year_max: 1
           expose_operators: false
         relationship_info_relationnode_institut_place_nested:
           id: relationship_info_relationnode_institut_place_nested
@@ -8503,9 +8664,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            place:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -8517,7 +8678,7 @@ display:
             operator: relationship_info_relationnode_institut_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pl
+            identifier: rel_place
             required: false
             remember: false
             multiple: false
@@ -8551,6 +8712,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -8561,6 +8723,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -8572,9 +8735,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Place
               weight: '0'
               required: 0
@@ -8582,9 +8746,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: place
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -8592,6 +8757,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_story_nested:
@@ -8604,9 +8770,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            story:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -8652,6 +8818,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -8662,6 +8829,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -8673,9 +8841,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Story
               weight: '0'
               required: 0
@@ -8683,9 +8852,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: story
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -8693,6 +8863,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
       filter_groups:
@@ -9217,9 +9388,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            concept:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -9231,7 +9402,7 @@ display:
             operator: relationship_info_relationnode_concept_instrument_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_conc
+            identifier: rel_concept
             required: false
             remember: false
             multiple: false
@@ -9265,6 +9436,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -9275,6 +9447,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -9286,9 +9459,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Concept
               weight: '0'
               required: 0
@@ -9296,9 +9470,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: concept
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -9306,6 +9481,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_instrum_document_nested:
@@ -9318,9 +9494,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            document:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -9332,7 +9508,7 @@ display:
             operator: relationship_info_relationnode_instrum_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_doc
+            identifier: rel_document
             required: false
             remember: false
             multiple: false
@@ -9366,6 +9542,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -9376,6 +9553,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -9387,9 +9565,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Document
               weight: '0'
               required: 0
@@ -9397,9 +9576,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: document
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -9407,6 +9587,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_instrum_nested:
@@ -9419,9 +9600,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            institution:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -9433,7 +9614,7 @@ display:
             operator: relationship_info_relationnode_institut_instrum_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_institut
+            identifier: rel_institution
             required: false
             remember: false
             multiple: false
@@ -9467,6 +9648,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -9477,6 +9659,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -9488,9 +9671,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Institution
               weight: '0'
               required: 0
@@ -9498,9 +9682,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: institution
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -9508,6 +9693,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_instrum_instrum_nested:
@@ -9520,9 +9706,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            instrument:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -9534,7 +9720,7 @@ display:
             operator: relationship_info_relationnode_instrum_instrum_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_instrum
+            identifier: rel_instrument
             required: false
             remember: false
             multiple: false
@@ -9568,6 +9754,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -9578,6 +9765,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -9589,9 +9777,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Instrument
               weight: '0'
               required: 0
@@ -9599,9 +9788,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: instrument
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -9609,6 +9799,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_instrum_nested:
@@ -9621,9 +9812,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            person:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -9635,7 +9826,7 @@ display:
             operator: relationship_info_relationnode_person_instrum_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pers
+            identifier: rel_person
             required: false
             remember: false
             multiple: false
@@ -9669,6 +9860,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -9679,6 +9871,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -9690,9 +9883,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Person
               weight: '0'
               required: 0
@@ -9700,9 +9894,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: person
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -9710,6 +9905,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
         relationship_info_relationnode_instrum_place_nested:
           id: relationship_info_relationnode_instrum_place_nested
@@ -9721,9 +9917,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            place:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -9735,7 +9931,7 @@ display:
             operator: relationship_info_relationnode_instrum_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pl
+            identifier: rel_place
             required: false
             remember: false
             multiple: false
@@ -9769,6 +9965,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -9779,6 +9976,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -9790,9 +9988,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Place
               weight: '0'
               required: 0
@@ -9800,9 +9999,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: place
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -9810,6 +10010,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_instrum_story_nested:
@@ -9822,9 +10023,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            story:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -9870,6 +10071,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -9880,6 +10082,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -9891,9 +10094,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Story
               weight: '0'
               required: 0
@@ -9901,9 +10105,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: story
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -9911,6 +10116,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
       filter_groups:
@@ -10424,9 +10630,11 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            related_id:
               value: ''
-            calculated_relation_type_name:
+            concept:
+              value: ''
+            type:
               value: ''
           group: 1
           exposed: true
@@ -10438,7 +10646,7 @@ display:
             operator: relationship_info_relationnode_person_concept_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_conc
+            identifier: rel_concept
             required: false
             remember: false
             multiple: false
@@ -10472,6 +10680,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -10482,9 +10691,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
-              widget: select
+              widget: textfield
               select_display_mode: raw
               label: 'Calculated Related Id'
               weight: '0'
@@ -10493,9 +10703,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Concept
               weight: '0'
               required: 0
@@ -10503,9 +10714,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: concept
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -10513,6 +10725,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_document_nested:
@@ -10525,9 +10738,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            document:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -10539,7 +10752,7 @@ display:
             operator: relationship_info_relationnode_person_document_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_doc
+            identifier: rel_document
             required: false
             remember: false
             multiple: false
@@ -10573,6 +10786,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -10583,6 +10797,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -10594,9 +10809,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Document
               weight: '0'
               required: 0
@@ -10604,9 +10820,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: document
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -10614,6 +10831,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_institut_nested:
@@ -10626,13 +10844,13 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            institution:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
-            field_date_start:
+            start:
               value: ''
-            field_date_end:
+            end:
               value: ''
           group: 1
           exposed: true
@@ -10644,7 +10862,7 @@ display:
             operator: relationship_info_relationnode_person_institut_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_institut
+            identifier: rel_institution
             required: false
             remember: false
             multiple: false
@@ -10677,9 +10895,15 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: date_end_year_only
             field_date_start:
               enabled: 1
-              widget: textfield
+              widget: select_range
+              int_range:
+                min: '1700'
+                use_current_year_min: 0
+                max: ''
+                use_current_year_max: 1
               label: 'Date Start'
               weight: '3'
               required: 0
@@ -10687,6 +10911,7 @@ display:
               field_operator: '>='
               expose_field_operator: 0
               value: ''
+              child_filter_id: start
             field_date_start_year_only:
               enabled: 0
               widget: textfield
@@ -10697,9 +10922,15 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: date_start_year_only
             field_date_end:
               enabled: 1
-              widget: textfield
+              widget: select_range
+              int_range:
+                min: '1700'
+                use_current_year_min: 0
+                max: ''
+                use_current_year_max: 1
               label: 'Date End'
               weight: '4'
               required: 0
@@ -10707,6 +10938,7 @@ display:
               field_operator: '>'
               expose_field_operator: 0
               value: ''
+              child_filter_id: end
             calculated_this_id:
               enabled: 0
               widget: textfield
@@ -10718,6 +10950,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -10728,6 +10961,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -10739,9 +10973,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Institution
               weight: '0'
               required: 0
@@ -10749,9 +10984,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: institution
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -10759,6 +10995,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_instrum_nested:
@@ -10771,9 +11008,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            instrument:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -10785,7 +11022,7 @@ display:
             operator: relationship_info_relationnode_person_instrum_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_instrum
+            identifier: rel_instrument
             required: false
             remember: false
             multiple: false
@@ -10819,6 +11056,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -10829,6 +11067,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -10840,9 +11079,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Instrument
               weight: '0'
               required: 0
@@ -10850,9 +11090,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: instrument
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -10860,6 +11101,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
         relationship_info_relationnode_person_person_nested:
           id: relationship_info_relationnode_person_person_nested
@@ -10871,11 +11113,11 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            person:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
-            field_municipality:
+            location:
               value: ''
           group: 1
           exposed: true
@@ -10887,7 +11129,7 @@ display:
             operator: relationship_info_relationnode_person_person_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pers
+            identifier: rel_person
             required: false
             remember: false
             multiple: false
@@ -10920,9 +11162,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: location_text
             field_municipality:
               enabled: 1
-              widget: select
+              widget: select_indexed
               select_display_mode: raw
               label: Place
               weight: '3'
@@ -10931,6 +11174,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: location
             calculated_this_id:
               enabled: 0
               widget: textfield
@@ -10942,6 +11186,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -10952,6 +11197,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -10963,9 +11209,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Person
               weight: '0'
               required: 0
@@ -10973,9 +11220,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: person
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -10983,6 +11231,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
         relationship_info_relationnode_person_place_nested:
           id: relationship_info_relationnode_person_place_nested
@@ -10994,9 +11243,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            place:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -11008,7 +11257,7 @@ display:
             operator: relationship_info_relationnode_person_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pl
+            identifier: rel_place
             required: false
             remember: false
             multiple: false
@@ -11042,6 +11291,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -11052,6 +11302,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -11063,9 +11314,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Place
               weight: '0'
               required: 0
@@ -11073,9 +11325,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: place
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -11083,6 +11336,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
         relationship_info_relationnode_person_story_nested:
           id: relationship_info_relationnode_person_story_nested
@@ -11094,9 +11348,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            story:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -11142,6 +11396,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -11152,6 +11407,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -11163,9 +11419,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Story
               weight: '0'
               required: 0
@@ -11173,9 +11430,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: story
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -11183,6 +11441,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
       filter_groups:
@@ -11696,9 +11955,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            concept:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -11710,7 +11969,7 @@ display:
             operator: relationship_info_relationnode_concept_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_conc
+            identifier: rel_concept
             required: false
             remember: false
             multiple: false
@@ -11744,6 +12003,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -11754,6 +12014,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -11765,9 +12026,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Concept
               weight: '0'
               required: 0
@@ -11775,9 +12037,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: concept
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -11785,6 +12048,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_document_place_nested:
@@ -11797,9 +12061,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            document:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -11811,7 +12075,7 @@ display:
             operator: relationship_info_relationnode_document_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_doc
+            identifier: rel_document
             required: false
             remember: false
             multiple: false
@@ -11845,6 +12109,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -11855,6 +12120,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -11866,9 +12132,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Document
               weight: '0'
               required: 0
@@ -11876,9 +12143,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: document
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -11886,6 +12154,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_institut_place_nested:
@@ -11898,9 +12167,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            institution:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -11912,7 +12181,7 @@ display:
             operator: relationship_info_relationnode_institut_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_institut
+            identifier: rel_institution
             required: false
             remember: false
             multiple: false
@@ -11946,6 +12215,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -11956,6 +12226,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -11967,9 +12238,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Institution
               weight: '0'
               required: 0
@@ -11977,9 +12249,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: institution
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -11987,6 +12260,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_instrum_place_nested:
@@ -11999,9 +12273,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            instrument:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -12013,7 +12287,7 @@ display:
             operator: relationship_info_relationnode_instrum_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_instrum
+            identifier: rel_instrument
             required: false
             remember: false
             multiple: false
@@ -12047,6 +12321,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -12057,6 +12332,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -12068,9 +12344,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Instrument
               weight: '0'
               required: 0
@@ -12078,9 +12355,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: instrument
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -12088,6 +12366,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_place_nested:
@@ -12100,9 +12379,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            person:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -12114,7 +12393,7 @@ display:
             operator: relationship_info_relationnode_person_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pers
+            identifier: rel_person
             required: false
             remember: false
             multiple: false
@@ -12148,6 +12427,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -12158,6 +12438,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -12169,9 +12450,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Person
               weight: '0'
               required: 0
@@ -12179,9 +12461,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: person
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -12189,6 +12472,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
         relationship_info_relationnode_place_place_nested:
           id: relationship_info_relationnode_place_place_nested
@@ -12200,9 +12484,9 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            calculated_related_name:
+            place:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -12214,7 +12498,7 @@ display:
             operator: relationship_info_relationnode_place_place_nested_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rel_pl
+            identifier: rel_place
             required: false
             remember: false
             multiple: false
@@ -12248,6 +12532,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -12258,6 +12543,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -12269,9 +12555,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Place
               weight: '0'
               required: 0
@@ -12279,9 +12566,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: place
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -12289,6 +12577,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_place_story_nested:
@@ -12299,11 +12588,11 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: search_api_relationship_filter
-          operator: and
+          operator: or
           value:
-            calculated_related_name:
+            story:
               value: ''
-            calculated_relation_type_name:
+            type:
               value: ''
           group: 1
           exposed: true
@@ -12349,6 +12638,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_id
             calculated_this_name:
               enabled: 0
               widget: textfield
@@ -12359,6 +12649,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: this_name
             calculated_related_id:
               enabled: 0
               widget: textfield
@@ -12370,9 +12661,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: related_id
             calculated_related_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: Story
               weight: '0'
               required: 0
@@ -12380,9 +12672,10 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: story
             calculated_relation_type_name:
               enabled: 1
-              widget: select
+              widget: select_indexed
               label: 'Relation type'
               weight: '1'
               required: 0
@@ -12390,6 +12683,7 @@ display:
               field_operator: '='
               expose_field_operator: 0
               value: ''
+              child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
       filter_groups:

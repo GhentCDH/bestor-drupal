@@ -228,7 +228,7 @@ class RelationInlineEntityForm extends NodeInlineForm {
 		$fk_field = $foreignKeyResolver->getEntityForeignKeyField($entity, $current_node);
 		$use_mirror = ($fk_field === $fieldNameResolver->getRelatedEntityFields(2));
 
-		$label = $use_mirror ? ($mirrorProvider->getTermMirrorLabel($term) ?? $term->getName()) : $term->getName();
+		$label = $use_mirror ? ($mirrorProvider->getMirrorLabelFromTerm($term) ?? $term->getName()) : $term->getName();
 
 		return ['#markup' => $label];
 	}

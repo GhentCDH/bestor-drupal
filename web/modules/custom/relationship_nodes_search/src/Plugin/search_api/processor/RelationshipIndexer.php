@@ -39,7 +39,7 @@ use Drupal\search_api\IndexInterface;
  * )
  */
 
-class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFactoryPluginInterface {
+class RelationshipIndexer extends ProcessorPluginBase implements ContainerFactoryPluginInterface {
 
   protected EntityTypeManagerInterface $entityTypeManager;
   protected EntityFieldManagerInterface $entityFieldManager;
@@ -150,28 +150,29 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
    * {@inheritdoc}
    */
   public function getPropertyDefinitions(?DatasourceInterface $datasource = NULL) {
-    $properties = [];
     if (!$datasource || !$datasource->getEntityTypeId()) {
-      return $properties;
+      return [];
     }
 
-    $node_types_in_index = $datasource->getConfiguration()['bundles']['selected']  ?? [];
+    $index_bundles = $datasource->getConfiguration()['bundles']['selected']  ?? [];
     
-    $relationship_node_types = [];
-    foreach($node_types_in_index as $node_type_in_index){
-      $related_relationships = $this->bundleInfoService->getRelationInfoForTargetBundle($node_type_in_index);
+    $relation_bundles = [];
+    foreach($index_bundles as $index_bundle){
+      $related_relationships = $this->bundleInfoService->getRelationInfoForTargetBundle($index_bundle);
       if (!is_array($related_relationships)) {
         continue;
       }
-      foreach($related_relationships as $relation_node_type => $info){
-        if(!in_array($relation_node_type, $relationship_node_types)){
-          $relationship_node_types[] = $relation_node_type;
+      foreach($related_relationships as $relation_bundle => $info){
+        if(!in_array($relation_bundle, $relation_bundles)){
+          $relation_bundles[] = $relation_bundle;
         }
       }
     }
 
     $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(NULL, NULL, TRUE);
-    foreach($relationship_node_types as $relationship_node_type){
+    $properties = [];
+
+    foreach($relation_bundles as $relationship_node_type){
       $definition = [
         'label' => $this->t('Related nodes of type @type', ['@type' => $relationship_node_type]),
         'description' => $this->t('All related @type nodes, with selectable fields.', ['@type' => $relationship_node_type]),
@@ -387,18 +388,16 @@ class RelationshipIndexer extends ProcessorPluginBase  implements ContainerFacto
     $nested_values[$calc_fld_nms['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
 
     $relation_field = $this->fieldResolver->getRelationTypeField();
-    $bundle_info = $this->settingsManager->getBundleInfo($relationship_entity->getType()); 
+    $bundle_info = $this->settingsManager->getBundleInfo($relationship_entity->getType());
     if ($bundle_info && $bundle_info->isTypedRelation() && !empty($nested_values[$relation_field])) {
-      $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');    
       $relation_parsed = $this->resultParser->parseEntityReferenceString($nested_values[$relation_field]);
-      $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : NULL;
-      $default_label = $relation_term ? $relation_term->getName() : '';
 
       if ($join_field === $this->fieldResolver->getRelatedEntityFields(2) && !empty($relation_parsed['id'])) {
-        $mirror_array = $this->mirrorProvider->getMirrorArray($term_storage, $relation_parsed['id']);
-        $nested_values[$calc_fld_nms['relation_type']['name']] = reset($mirror_array);
+        $nested_values[$calc_fld_nms['relation_type']['name']] = $this->mirrorProvider->getMirrorLabelFromId($relation_parsed['id']);
       } else {
-        $nested_values[$calc_fld_nms['relation_type']['name']] = $default_label;
+        $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+        $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : NULL;
+        $nested_values[$calc_fld_nms['relation_type']['name']] = $relation_term ? $relation_term->getName() : '';
       }
     }
   }

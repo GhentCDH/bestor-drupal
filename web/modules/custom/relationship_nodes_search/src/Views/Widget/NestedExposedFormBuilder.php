@@ -351,25 +351,76 @@ class NestedExposedFormBuilder {
       }
     }
   }
+  
 
-  protected function buildIntRangeOptions(array $int_range): array {
-    $min = $int_range['use_current_year_min'] ?? FALSE
-      ? (int) date('Y')
-      : (int) ($int_range['min'] ?? date('Y'));
+  /**
+   * Builds From/To range pair widgets into the exposed form.
+   *
+   * @param array &$form
+   *   The form array.
+   * @param array $path
+   *   Path to the value container (e.g. ['value']).
+   * @param array $pair_config
+   *   Range pair configuration (widget, int_range, etc.).
+   * @param array $pair_values
+   *   Current submitted/default values.
+   */
+  public function buildRangePairWidget(
+    array &$form,
+    array $path,
+    array $pair_config,
+    array $pair_values = []
+  ): void {
+    $widget = $pair_config['widget'] ?? 'textfield';
 
-    $max = $int_range['use_current_year_max'] ?? FALSE
-      ? (int) date('Y')
-      : (int) ($int_range['max'] ?? date('Y'));
-
-    if ($min > $max) {
-      [$min, $max] = [$max, $min]; // silently swap
+    if ($widget === 'select_range') {
+      $options = $this->buildIntRangeOptions($pair_config['int_range'] ?? []);
     }
 
-    $values = range($min, $max);
-    // Descending order is often more useful (newest year first).
-    $values = array_reverse($values);
+    foreach (['from' => 'From', 'to' => 'To'] as $key => $label) {
+      $val = $pair_values[$key]['value'] ?? $pair_values[$key] ?? '';
+      $element_path = array_merge($path, [$key, 'value']);
 
-    return array_combine($values, $values);
+      if ($widget === 'select_range') {
+        $this->setFormNestedValue($form, $element_path, [
+          '#type' => 'select',
+          '#title' => $this->t($label),
+          '#options' => $options,
+          '#default_value' => $val,
+          '#empty_option' => $this->t('- Any -'),
+        ]);
+      } else {
+        $this->setFormNestedValue($form, $element_path, [
+          '#type' => 'textfield',
+          '#title' => $this->t($label),
+          '#default_value' => $val,
+        ]);
+      }
+    }
+  }
+
+
+  protected function buildIntRangeOptions(array $int_range): array {
+    $min = ($int_range['use_current_year_min'] ?? FALSE)
+      ? (int) date('Y')
+      : (isset($int_range['min']) && $int_range['min'] !== '' ? (int) $int_range['min'] : NULL);
+
+    $max = ($int_range['use_current_year_max'] ?? FALSE)
+      ? (int) date('Y')
+      : (isset($int_range['max']) && $int_range['max'] !== '' ? (int) $int_range['max'] : NULL);
+
+    if ($min === NULL || $max === NULL) {
+      return [];
+    }
+
+    if ($min > $max) {
+      [$min, $max] = [$max, $min];
+    }
+
+    return array_combine(
+      $values = array_reverse(range($min, $max)),
+      $values
+    );
   }
 
 }

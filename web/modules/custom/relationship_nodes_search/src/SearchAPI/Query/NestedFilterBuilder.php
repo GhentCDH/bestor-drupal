@@ -4,6 +4,8 @@ namespace Drupal\relationship_nodes_search\SearchAPI\Query;
 
 use Drupal\elasticsearch_connector\SearchAPI\Query\FilterBuilder;
 use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\relationship_nodes_search\SearchAPI\Query\NestedChildFieldConditionGroup;
+use Drupal\relationship_nodes_search\SearchAPI\Query\NestedConditionGroupBase;
 use Psr\Log\LoggerInterface;
 use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 
@@ -47,18 +49,36 @@ class NestedFilterBuilder extends FilterBuilder {
 
 
   /**
-   * Builds filters for nested field conditions.
+   * Recursively builds the subfilter array for a nested condition group.
    *
-   * Constructs an Elasticsearch nested query with proper path and child
-   * conditions for filtering on nested relationship fields.
+   * Handles NestedChildFieldConditionGroup at any depth by recursing into
+   * sub-groups, and NestedChildFieldCondition as leaf nodes.
    *
-   * @param NestedParentFieldConditionGroup $condition_group
-   *   The nested condition group.
+   * @param NestedConditionGroupBase $group
+   *   The condition group to process.
    * @param array $index_fields
    *   The index fields configuration.
    *
    * @return array
-   *   The nested filter structure.
+   *   Flat list of Elasticsearch filter fragments.
+   */
+  protected function buildConditionGroupSubfilters(NestedConditionGroupBase $group, array $index_fields): array {
+    $subfilters = [];
+    foreach ($group->getConditions() as $condition) {
+      if ($condition instanceof NestedChildFieldConditionGroup) {
+        $inner = $this->buildConditionGroupSubfilters($condition, $index_fields);
+        $subfilters[] = $this->wrapWithConjunction($inner, $condition->getConjunction());
+      }
+      elseif ($condition instanceof NestedChildFieldCondition) {
+        $subfilters[] = $this->buildFilterTerm($condition, $index_fields);
+      }
+    }
+    return $subfilters;
+  }
+
+
+  /**
+   * Builds an Elasticsearch nested query from a NestedParentFieldConditionGroup.
    */
   protected function buildNestedFieldConditionFilters(NestedParentFieldConditionGroup $condition_group, array $index_fields): array {
     $parent = $condition_group->getParentFieldName();
@@ -68,13 +88,7 @@ class NestedFilterBuilder extends FilterBuilder {
       return [];
     }
 
-    $subfilters = [];
-    
-    foreach ($condition_group->getConditions() as $condition) {
-      if ($condition instanceof NestedChildFieldCondition) {
-        $subfilters[] = $this->buildFilterTerm($condition, $index_fields);
-      }
-    }
+    $subfilters = $this->buildConditionGroupSubfilters($condition_group, $index_fields);
 
     if (empty($subfilters)) {
       return [];

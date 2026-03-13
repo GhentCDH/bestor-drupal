@@ -40,7 +40,7 @@ class BundleSettingsManager {
    * 
    * @return RelationBundleInfo|null
    */
-  public function getBundleInfo(ConfigEntityBundleBase|string $entity): ?\Drupal\relationship_nodes\RelationBundle\RelationBundleInfo {
+  public function getBundleInfo(ConfigEntityBundleBase|string $entity): ?RelationBundleInfo {
     if (is_string($entity)) {
       $entity = $this->ensureNodeType($entity) ?? $this->ensureVocab($entity);
     }
@@ -49,7 +49,7 @@ class BundleSettingsManager {
       return null;
     }
     
-    $properties = $this->getProperties($entity);
+    $properties = $this->getProperties($entity) ?? [];
     return RelationBundleInfo::create($entity, $properties);
   }
 
