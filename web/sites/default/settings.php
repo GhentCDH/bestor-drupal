@@ -101,9 +101,9 @@ $settings['locale_translation_auto_update'] = FALSE;
 $config['system.site']['name'] = getenv('DRUPAL_SITE_NAME');
 
 $settings['trusted_host_patterns'] = [
-  '^' . preg_quote(getenv('DOMAIN'), '/') . '$',
+        '^bestor\.be$',
+        '^prd\.bestor\.ugent\.be$'
 ];
-
 
 /**
  * Database connection settings.
