@@ -168,6 +168,7 @@ $settings['reverse_proxy'] = TRUE;
 // client connected to your Drupal server (which may be another proxy).
 $settings['reverse_proxy_addresses'] = [
   '172.18.56.0/24',
+  '127.0.0.1'
 ];
 
 $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO | \Symfony\Component\HttpFoundation\Request::HEADER_FORWARDED;
