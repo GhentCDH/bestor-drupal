@@ -2,89 +2,55 @@
 
 namespace Drupal\relationship_nodes_search\Plugin\search_api\processor;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
 use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
-use Drupal\search_api\Item\FieldInterface;
-use Drupal\search_api\Processor\FieldsProcessorPluginBase;
+use Drupal\search_api\Datasource\DatasourceInterface;
+use Drupal\search_api\Item\ItemInterface;
+use Drupal\search_api\Processor\ProcessorPluginBase;
+use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\search_api\SearchApiException;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Enriches the relation type mirror field with a fallback label.
+ * Adds a relation type label field per typed relation bundle.
  *
- * If a mirror label exists for the relation type term, it is indexed.
- * If no mirror exists, the term name is used as fallback.
- * Only processes typed relation bundles that have a mirroring vocabulary.
+ * Provides one field per typed relation bundle containing the mirror label
+ * of the relation type term. If no mirror label is configured, the term
+ * name itself is used as fallback.
  *
  * @SearchApiProcessor(
  *   id = "relation_type_mirror_fallback_provider",
  *   label = @Translation("Relation Type Mirror Fallback Provider"),
- *   description = @Translation("When relation type mirrors are indexed, the original relation type will be indexed as fallback if the mirror is empty."),
+ *   description = @Translation("Adds a relation type label field per typed relation bundle. Uses the mirror label if configured, otherwise falls back to the term name."),
  *   stages = {
+ *     "add_properties" = 0,
  *     "preprocess_index" = 0,
  *   }
  * )
  */
-class RelationTypeMirrorFallbackProvider extends FieldsProcessorPluginBase implements ContainerFactoryPluginInterface {
+class RelationTypeMirrorFallbackProvider extends ProcessorPluginBase implements ContainerFactoryPluginInterface {
 
-  protected LoggerChannelFactoryInterface $loggerFactory;
+  /**
+   * Prefix for the relation type label property IDs.
+   */
+  const FIELD_PREFIX = 'mirror_w_fallback_';
+
   protected BundleSettingsManager $settingsManager;
   protected BundleInfoService $bundleInfoService;
   protected FieldNameResolver $fieldResolver;
   protected MirrorProvider $mirrorProvider;
   protected EntityTypeManagerInterface $entityTypeManager;
 
-  /**
-   * Resolves the mirror field property path for a given bundle.
-   *
-   * Returns NULL if the bundle has no mirroring vocabulary.
-   */
-  protected function resolveMirrorPropertyPath(string $bundle): ?string {
-    $relation_bundle_info = $this->bundleInfoService->getRelationBundleInfo($bundle);
-    $vocab_name = $relation_bundle_info['vocabulary'] ?? NULL;
-    if (!$vocab_name) {
-      return NULL;
-    }
-
-    $vocab_bundle_info = $this->settingsManager->getBundleInfo($vocab_name);
-    if (!$vocab_bundle_info || !$vocab_bundle_info->isMirroringVocab()) {
-      return NULL;
-    }
-
-    $mirror_field = $this->fieldResolver->getMirrorFields($vocab_bundle_info->getMirrorType());
-    return $this->fieldResolver->getRelationTypeField() . ':entity:' . $mirror_field;
-  }
-
-  /**
-   * The current entity being processed, set per item in preprocessIndexItems.
-   */
-  protected ?object $currentEntity = NULL;
-
-  /**
-   * The expected property path for the mirror field of the current entity.
-   *
-   * E.g. "rn_relation_type:entity:rn_mirror_string"
-   */
-  protected ?string $currentMirrorPropertyPath = NULL;
-
-  /**
-   * Cache of resolved mirror property paths per bundle.
-   *
-   * Avoids repeated fieldManager::getFieldDefinitions() calls per item.
-   */
-  protected array $mirrorPropertyPathCache = [];
-
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    LoggerChannelFactoryInterface $logger_factory,
     BundleSettingsManager $settings_manager,
     BundleInfoService $bundle_info_service,
     FieldNameResolver $field_resolver,
@@ -92,7 +58,6 @@ class RelationTypeMirrorFallbackProvider extends FieldsProcessorPluginBase imple
     EntityTypeManagerInterface $entity_type_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->loggerFactory = $logger_factory;
     $this->settingsManager = $settings_manager;
     $this->bundleInfoService = $bundle_info_service;
     $this->fieldResolver = $field_resolver;
@@ -110,7 +75,6 @@ class RelationTypeMirrorFallbackProvider extends FieldsProcessorPluginBase imple
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory'),
       $container->get('relationship_nodes.bundle_settings_manager'),
       $container->get('relationship_nodes.bundle_info_service'),
       $container->get('relationship_nodes.field_name_resolver'),
@@ -121,86 +85,77 @@ class RelationTypeMirrorFallbackProvider extends FieldsProcessorPluginBase imple
 
   /**
    * {@inheritdoc}
-   *
-   * Only process typed relation bundles with a mirroring vocabulary.
    */
-  public function preprocessIndexItems(array $items) {
-    /** @var \Drupal\search_api\Item\ItemInterface $item */
-    foreach ($items as $item) {
-      $this->currentEntity = NULL;
-      $this->currentMirrorPropertyPath = NULL;
+  public function getPropertyDefinitions(?DatasourceInterface $datasource = NULL): array {
+    if (!$datasource || $datasource->getEntityTypeId() !== 'node') {
+      return [];
+    }
 
-      try {
-        $entity = $item->getOriginalObject()->getValue();
-      }
-      catch (SearchApiException $e) {
-        continue;
-      }
+    $properties = [];
 
-      if (!$entity) {
-        continue;
-      }
-
-      $bundle = $entity->bundle();
-
-      // Only typed relation bundles.
+    foreach ($datasource->getBundles() as $bundle => $label) {
       $bundle_info = $this->settingsManager->getBundleInfo($bundle);
       if (!$bundle_info || !$bundle_info->isTypedRelation()) {
         continue;
       }
 
-      // Resolve mirror property path, using per-bundle cache.
-      if (!array_key_exists($bundle, $this->mirrorPropertyPathCache)) {
-        $this->mirrorPropertyPathCache[$bundle] = $this->resolveMirrorPropertyPath($bundle);
-      }
+      // Sanitize bundle name: replace __ with _ to avoid Views field ID issues.
+      $safe_bundle = preg_replace('/__+/', '_', $bundle);
+      $field_id = self::FIELD_PREFIX . '_' . $safe_bundle;
 
-      $this->currentMirrorPropertyPath = $this->mirrorPropertyPathCache[$bundle];
-      if (!$this->currentMirrorPropertyPath) {
-        continue;
-      }
-
-      $this->currentEntity = $entity;
-
-      foreach ($item->getFields() as $name => $field) {
-        if ($this->testField($name, $field)) {
-          $this->processField($field);
-        }
-      }
+      $properties[$field_id] = new ProcessorProperty([
+        'label' => $this->t('Relation type label (@bundle)', [
+          '@bundle' => $bundle,
+        ]),
+        'description' => $this->t('The mirror label of the relation type term for @bundle, or the term name if no mirror label is configured.', [
+          '@bundle' => $bundle,
+        ]),
+        'type' => 'string',
+        'processor_id' => $this->getPluginId(),
+      ]);
     }
 
-    $this->currentEntity = NULL;
-    $this->currentMirrorPropertyPath = NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * Only match the exact mirror property path for this entity.
-   */
-  protected function testField($name, FieldInterface $field): bool {
-    if (!$this->currentMirrorPropertyPath) {
-      return FALSE;
-    }
-    return $field->getPropertyPath() === $this->currentMirrorPropertyPath;
+    return $properties;
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function processField(FieldInterface $field) {
-    // Only fill empty fields.
-    if (!empty($field->getValues())) {
+  public function addFieldValues(ItemInterface $item) {
+    try {
+      $entity = $item->getOriginalObject()->getValue();
+    }
+    catch (SearchApiException $e) {
       return;
     }
 
-    if (!$this->currentEntity) {
+    if (!($entity instanceof EntityInterface)) {
       return;
     }
 
-    $relation_type_field = $this->fieldResolver->getRelationTypeField();
+    $bundle = $entity->bundle();
+    $bundle_info = $this->settingsManager->getBundleInfo($bundle);
+    if (!$bundle_info || !$bundle_info->isTypedRelation()) {
+      return;
+    }
+
+    $safe_bundle = preg_replace('/__+/', '_', $bundle);
+    $field_id = self::FIELD_PREFIX . '_' . $safe_bundle;
+
+    $fields = $this->getFieldsHelper()->filterForPropertyPath(
+      $item->getFields(),
+      $item->getDatasourceId(),
+      $field_id
+    );
+
+    if (empty($fields)) {
+      return;
+    }
+
+    $relation_field = $this->fieldResolver->getRelationTypeField();
 
     try {
-      $term_id = $this->currentEntity->get($relation_type_field)->target_id ?? NULL;
+      $term_id = $entity->get($relation_field)->target_id ?? NULL;
     }
     catch (\Exception $e) {
       return;
@@ -212,13 +167,20 @@ class RelationTypeMirrorFallbackProvider extends FieldsProcessorPluginBase imple
 
     $label = $this->resolveLabel((string) $term_id);
 
-    if ($label) {
-      $field->setValues([$label]);
+    if (!$label) {
+      return;
+    }
+
+    foreach ($fields as $field) {
+      $field->addValue($label);
     }
   }
 
   /**
-   * Resolves the label: mirror label if available, term name as fallback.
+   * Returns the mirror label for the given term, or the term name as fallback.
+   *
+   * If the relation type term has a mirror label configured, that label is
+   * returned. If not, the term name itself is returned instead.
    */
   protected function resolveLabel(string $term_id): ?string {
     $mirror_label = $this->mirrorProvider->getMirrorLabelFromId($term_id);
@@ -226,20 +188,14 @@ class RelationTypeMirrorFallbackProvider extends FieldsProcessorPluginBase imple
       return $mirror_label;
     }
 
-    try {
-      $term = $this->entityTypeManager
-        ->getStorage('taxonomy_term')
-        ->load((int) $term_id);
-    }
-    catch (\Exception $e) {
-      return NULL;
-    }
+    $term = $this->entityTypeManager
+      ->getStorage('taxonomy_term')
+      ->load((int) $term_id);
 
     if (!$term instanceof TermInterface) {
       return NULL;
     }
 
-    return $term->getName() ?: NULL;
+    return $term->label() ?: NULL;
   }
-
 }
