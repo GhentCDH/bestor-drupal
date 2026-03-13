@@ -43,10 +43,6 @@ class ExtendedIndexAddFieldsForm extends IndexAddFieldsForm {
    * and adds custom checkbox/button UI for relationship field selection.
    */
   protected function getPropertiesList(array $props, string $active_prop_path, $base_url, ?string $datasource_id, string $parent_path = '', string $label_prefix = '', int $depth = 0, array $rows = []): array {
-    dpm($props)  ;
-    if (isset($props['relation_type_mirror_test'])) {
-    dpm('GEVONDEN op depth=' . $depth . ' parent_path=' . $parent_path);
-  }
     // Filter out calculated fields from nested relationship properties.
     if ($depth > 0 && str_starts_with($parent_path, 'relationship_info__')) {
       $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames(NULL, NULL, TRUE);

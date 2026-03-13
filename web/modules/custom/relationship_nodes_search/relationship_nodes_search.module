@@ -81,3 +81,19 @@ function relationship_nodes_search_form_views_exposed_form_alter(&$form, FormSta
     }
   }
 }
+
+/**
+ * Implements hook_search_api_index_presave().
+ */
+function relationship_nodes_search_search_api_index_presave(\Drupal\search_api\IndexInterface $index) {
+  $needs_save = FALSE;
+  foreach ($index->getFields() as $field_id => $field) {
+    $sanitized = preg_replace('/__+/', '_', $field_id);
+    if ($sanitized !== $field_id) {
+      $index->removeField($field_id);
+      $field->setFieldIdentifier($sanitized);
+      $index->addField($field);
+      $needs_save = TRUE;
+    }
+  }
+}
