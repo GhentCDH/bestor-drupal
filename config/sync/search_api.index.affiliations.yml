@@ -7,13 +7,10 @@ dependencies:
     - field.storage.node.field_date_start
     - field.storage.node.rn_related_entity_1
     - field.storage.node.rn_related_entity_2
-    - field.storage.node.rn_relation_type
-    - field.storage.taxonomy_term.rn_mirror_string
     - search_api.server.esconnectordocker
   module:
     - node
     - relationship_nodes_search
-    - taxonomy
 id: affiliations
 name: affiliations
 description: ''
@@ -28,7 +25,13 @@ field_settings:
       separator: |+
 
 
+
       fields: {  }
+  mirror_w_fallback__relationnode_person_institut:
+    label: 'Relation type label (relationnode__person_institut)'
+    datasource_id: 'entity:node'
+    property_path: mirror_w_fallback__relationnode_person_institut
+    type: string
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
@@ -54,16 +57,6 @@ field_settings:
         - field.storage.node.rn_related_entity_1
       module:
         - node
-  rn_related_entity_1_title__str:
-    label: 'Rn related entity 1 » Content » Title'
-    datasource_id: 'entity:node'
-    property_path: 'rn_related_entity_1:entity:title'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.rn_related_entity_1
-      module:
-        - node
   rn_related_entity_2_id__int:
     label: 'Rn related entity 2 ID'
     datasource_id: 'entity:node'
@@ -77,16 +70,6 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'rn_related_entity_2:entity:status'
     type: boolean
-    dependencies:
-      config:
-        - field.storage.node.rn_related_entity_2
-      module:
-        - node
-  rn_related_entity_2_title__str:
-    label: 'Rn related entity 2 » Content » Title'
-    datasource_id: 'entity:node'
-    property_path: 'rn_related_entity_2:entity:title'
-    type: string
     dependencies:
       config:
         - field.storage.node.rn_related_entity_2
@@ -108,35 +91,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_date_start
-  rn_relation_type_id__int:
-    label: 'Rn relation type ID'
-    datasource_id: 'entity:node'
-    property_path: rn_relation_type
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.rn_relation_type
-  rn_relation_type_mirror__str:
-    label: 'Rn relation type » Taxonomy term » Rn mirror string'
-    datasource_id: 'entity:node'
-    property_path: 'rn_relation_type:entity:rn_mirror_string'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.rn_relation_type
-        - field.storage.taxonomy_term.rn_mirror_string
-      module:
-        - taxonomy
-  rn_relation_type_name__str:
-    label: 'Rn relation type » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'rn_relation_type:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.rn_relation_type
-      module:
-        - taxonomy
   role_access:
     label: 'Role-based access information'
     property_path: search_api_role_access
