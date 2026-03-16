@@ -1,0 +1,29 @@
+uuid: d69ee776-e908-4d2f-b3e1-f9ec44125b6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.advanced-search
+  module:
+    - system
+  theme:
+    - bestor
+id: bestor_advancedsearch
+theme: bestor
+region: sidebar
+weight: 0
+provider: null
+plugin: 'system_menu_block:advanced-search'
+settings:
+  id: 'system_menu_block:advanced-search'
+  label: 'Advanced search'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/database/advanced-search/*'

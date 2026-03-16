@@ -7,6 +7,7 @@ dependencies:
     - field.storage.node.field_date_start
     - field.storage.node.rn_related_entity_1
     - search_api.index.affiliations
+    - system.menu.advanced-search
     - user.role.administrator
     - user.role.web_manager
   module:
@@ -506,7 +507,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'Select an option to see results, or change your selection.'
+          content: 'Your search returned no results.'
           tokenize: false
       sorts:
         rn_relation_field_date_start_date:
@@ -945,6 +946,15 @@ display:
       display_extenders:
         ajax_history: {  }
       path: database/advanced-search/affiliations
+      menu:
+        type: normal
+        title: Affiliations
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: advanced-search
+        parent: ''
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:

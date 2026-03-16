@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.storage.node.field_alternative_name
     - search_api.index.bestor_main_search_index
+    - system.menu.advanced-search
+    - system.menu.main
     - taxonomy.vocabulary.author
     - taxonomy.vocabulary.country
     - taxonomy.vocabulary.discipline
@@ -15,6 +17,7 @@ dependencies:
     - user.role.web_manager
   module:
     - better_exposed_filters
+    - relationship_nodes_search
     - search_api
     - user
 id: database_advanced_search
@@ -5064,12 +5067,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/story
       menu:
-        type: none
-        title: Database
+        type: normal
+        title: Stories
         description: ''
-        weight: -49
+        weight: 14
         expanded: false
-        menu_name: main
+        menu_name: advanced-search
         parent: ''
         context: '0'
     cache_metadata:
@@ -6318,12 +6321,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/concept
       menu:
-        type: none
-        title: Database
+        type: normal
+        title: Concepts
         description: ''
-        weight: -49
+        weight: 2
         expanded: false
-        menu_name: main
+        menu_name: advanced-search
         parent: ''
         context: '0'
     cache_metadata:
@@ -7572,12 +7575,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/document
       menu:
-        type: none
-        title: Database
+        type: normal
+        title: Documents
         description: ''
-        weight: -49
+        weight: 4
         expanded: false
-        menu_name: main
+        menu_name: advanced-search
         parent: ''
         context: '0'
     cache_metadata:
@@ -8882,12 +8885,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/institution
       menu:
-        type: none
-        title: Database
+        type: normal
+        title: Institutions
         description: ''
-        weight: -49
+        weight: 6
         expanded: false
-        menu_name: main
+        menu_name: advanced-search
         parent: ''
         context: '0'
     cache_metadata:
@@ -10135,10 +10138,10 @@ display:
           exclude_args: ''
       path: database/advanced-search/instruments
       menu:
-        type: none
-        title: Database
+        type: normal
+        title: Instruments
         description: ''
-        weight: -49
+        weight: 8
         expanded: false
         menu_name: main
         parent: ''
@@ -11460,12 +11463,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/person
       menu:
-        type: none
-        title: Database
+        type: normal
+        title: Persons
         description: ''
-        weight: -49
+        weight: 10
         expanded: false
-        menu_name: main
+        menu_name: advanced-search
         parent: ''
         context: '0'
     cache_metadata:
@@ -12702,12 +12705,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/place
       menu:
-        type: none
-        title: Database
+        type: normal
+        title: Places
         description: ''
-        weight: -49
+        weight: 12
         expanded: false
-        menu_name: main
+        menu_name: advanced-search
         parent: ''
         context: '0'
     cache_metadata:
