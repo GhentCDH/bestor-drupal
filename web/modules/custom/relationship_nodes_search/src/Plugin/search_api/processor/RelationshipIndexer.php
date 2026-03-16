@@ -333,7 +333,7 @@ class RelationshipIndexer extends ProcessorPluginBase implements ContainerFactor
           }
 
           try {
-            $this->fillCalculatedFields($nested_values, $entity, $relationship_entity, $join_field);
+            $this->fillCalculatedFields($nested_values, $entity, $relationship_entity, $join_field, $item->getLanguage());
           }
           catch (\Exception $e) {
             $this->loggerFactory->get('relationship_nodes_search')->error(
@@ -373,7 +373,8 @@ class RelationshipIndexer extends ProcessorPluginBase implements ContainerFactor
     array &$nested_values, 
     EntityInterface $entity, 
     EntityInterface $relationship_entity, 
-    string $join_field
+    string $join_field,
+    string $langcode
   ): void { 
     $calc_fld_nms = $this->calculatedFieldHelper->getCalculatedFieldNames();
     
@@ -383,9 +384,15 @@ class RelationshipIndexer extends ProcessorPluginBase implements ContainerFactor
     $node_storage = $this->entityTypeManager->getStorage('node');
     $other_field = $this->fieldResolver->getOppositeRelatedEntityField($join_field);
     $other_parsed = $this->resultParser->parseEntityReferenceString($nested_values[$other_field] ?? NULL);
+
     $related_entity = !empty($other_parsed['id']) ? $node_storage->load($other_parsed['id']) : NULL;
-    $nested_values[$calc_fld_nms['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
-    $nested_values[$calc_fld_nms['related_entity']['name']] = !empty($related_entity) ? $related_entity->label() : '';
+    if (!empty($related_entity)) {
+      $related_label = $related_entity->hasTranslation($langcode)
+        ? $related_entity->getTranslation($langcode)->label()
+        : $related_entity->label();
+      $nested_values[$calc_fld_nms['related_entity']['name']] = $related_label;
+      $nested_values[$calc_fld_nms['related_entity']['id']] = isset($nested_values[$other_field]) ? $nested_values[$other_field] : '';
+    }
 
     $relation_field = $this->fieldResolver->getRelationTypeField();
     $bundle_info = $this->settingsManager->getBundleInfo($relationship_entity->getType());
@@ -393,11 +400,16 @@ class RelationshipIndexer extends ProcessorPluginBase implements ContainerFactor
       $relation_parsed = $this->resultParser->parseEntityReferenceString($nested_values[$relation_field]);
 
       if ($join_field === $this->fieldResolver->getRelatedEntityFields(2) && !empty($relation_parsed['id'])) {
-        $nested_values[$calc_fld_nms['relation_type']['name']] = $this->mirrorProvider->getMirrorLabelFromId($relation_parsed['id']);
+        $nested_values[$calc_fld_nms['relation_type']['name']] = $this->mirrorProvider->getMirrorLabelFromId($relation_parsed['id'], $langcode);
       } else {
         $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
         $relation_term = !empty($relation_parsed['id']) ? $term_storage->load($relation_parsed['id']) : NULL;
-        $nested_values[$calc_fld_nms['relation_type']['name']] = $relation_term ? $relation_term->getName() : '';
+        if (!empty($relation_term)) {
+          $term_label = $relation_term->hasTranslation($langcode)
+            ? $relation_term->getTranslation($langcode)->getName()
+            : $relation_term->getName();
+          $nested_values[$calc_fld_nms['relation_type']['name']] = $term_label;
+        }
       }
     }
   }

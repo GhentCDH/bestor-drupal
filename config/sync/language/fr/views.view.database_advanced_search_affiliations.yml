@@ -4,16 +4,11 @@ display:
       fields:
         rn_related_entity_1_id_int:
           label: Personne
-        mirror_w_fallback_relationnode_person_institut:
-          label: 'Type de relation'
         rn_relation_field_date_start_date:
           label: De
         rn_relation_field_date_end_date:
           label: "Jusqu'à"
       filters:
-        facets_mirror_w_fallback__relationnode_person_institut:
-          expose:
-            label: 'Type de relation'
         search_api_range_filter:
           expose:
             label: Période

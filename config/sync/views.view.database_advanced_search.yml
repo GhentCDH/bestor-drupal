@@ -10966,9 +10966,9 @@ display:
               value: ''
               child_filter_id: this_name
             calculated_related_id:
-              enabled: 0
-              widget: textfield
-              select_display_mode: raw
+              enabled: 1
+              widget: select_indexed
+              select_display_mode: label
               label: 'Calculated Related Id'
               weight: '0'
               required: 0
@@ -10999,6 +10999,16 @@ display:
               expose_field_operator: 0
               value: ''
               child_filter_id: type
+            range_pair:
+              enabled: 0
+              start_field: ''
+              end_field: ''
+              widget: textfield
+              int_range:
+                min: 1
+                use_current_year_min: 0
+                max: 2026
+                use_current_year_max: 0
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_instrum_nested:
