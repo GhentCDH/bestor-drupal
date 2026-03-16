@@ -3,4 +3,19 @@ display:
     display_options:
       empty:
         area_text_custom:
-          content: "Votre recherche n'a donné aucun résultat"
+          content: "Votre recherche n'a donné aucun résultat."
+  page_1:
+    display_title: Histoires
+    display_options:
+      menu:
+        title: Histoires
+  page_6:
+    display_title: Personnes
+    display_options:
+      menu:
+        title: Personnes
+  page_7:
+    display_title: Lieux
+    display_options:
+      menu:
+        title: Lieux

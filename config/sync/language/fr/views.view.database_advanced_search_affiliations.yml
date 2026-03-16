@@ -19,3 +19,6 @@ display:
             label: Période
           from_label: De
           to_label: "Jusqu'à"
+      empty:
+        area_text_custom:
+          content: "Votre recherche n'a donné aucun résultat."

@@ -55,3 +55,16 @@ function bestor_preprocess_field__field_media_multiple(&$variables) {
     $variables['gallery_items'] = $items;
   }
 }
+
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function bestor_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if ($hook === 'views_view') {
+    $view = $variables['view'];
+    if ($view->id() === 'database_advanced_search_affiliations') {
+      $suggestions[] = 'views_view__database_advanced_search';
+    }
+  }
+}

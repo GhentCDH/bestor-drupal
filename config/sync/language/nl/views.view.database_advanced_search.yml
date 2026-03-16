@@ -4,3 +4,38 @@ display:
       empty:
         area_text_custom:
           content: 'Uw zoekopdracht leverde geen resultaten op.'
+  page_1:
+    display_title: Verhalen
+    display_options:
+      menu:
+        title: Verhalen
+  page_2:
+    display_title: Concepten
+    display_options:
+      menu:
+        title: Concepten
+  page_3:
+    display_title: Documenten
+    display_options:
+      menu:
+        title: Documenten
+  page_4:
+    display_title: Instellingen
+    display_options:
+      menu:
+        title: Instellingen
+  page_5:
+    display_title: Instrumenten
+    display_options:
+      menu:
+        title: Instrumenten
+  page_6:
+    display_title: Personen
+    display_options:
+      menu:
+        title: Personen
+  page_7:
+    display_title: Plaatsen
+    display_options:
+      menu:
+        title: Plaatsen

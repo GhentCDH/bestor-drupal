@@ -22,3 +22,10 @@ display:
             label: Periode
           from_label: Van
           to_label: Tot
+      empty:
+        area_text_custom:
+          content: 'Uw zoekopdracht leverde geen resultaten op.'
+  page_1:
+    display_options:
+      menu:
+        title: Affiliaties
