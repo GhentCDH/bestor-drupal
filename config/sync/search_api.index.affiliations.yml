@@ -57,6 +57,16 @@ field_settings:
         - field.storage.node.rn_related_entity_1
       module:
         - node
+  rn_related_entity_1_title__str:
+    label: 'Rn related entity 2 » Content » Title'
+    datasource_id: 'entity:node'
+    property_path: 'rn_related_entity_2:entity:title'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_2
+      module:
+        - node
   rn_related_entity_2_id__int:
     label: 'Rn related entity 2 ID'
     datasource_id: 'entity:node'
@@ -73,6 +83,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.rn_related_entity_2
+      module:
+        - node
+  rn_related_entity_2_title__str:
+    label: 'Rn related entity 1 » Content » Title'
+    datasource_id: 'entity:node'
+    property_path: 'rn_related_entity_1:entity:title'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.rn_related_entity_1
       module:
         - node
   rn_relation_field_date_end__date:
