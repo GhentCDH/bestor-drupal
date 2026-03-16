@@ -7,11 +7,15 @@ dependencies:
     - field.storage.node.field_date_start
     - field.storage.node.rn_related_entity_1
     - search_api.index.affiliations
+    - user.role.administrator
+    - user.role.web_manager
   module:
     - better_exposed_filters
     - datetime
     - facets_exposed_filters
     - search_api
+    - search_api_range_filter
+    - user
 id: database_advanced_search_affiliations
 label: 'Database Advanced search Affiliations'
 module: views
@@ -36,7 +40,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: search_api_field
-          label: 'Rn related entity 1 ID (indexed field)'
+          label: Person
           exclude: false
           alter:
             alter_text: false
@@ -224,7 +228,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: search_api
-          label: 'Relation type label (relationnode__person_institut) (indexed field)'
+          label: 'Relation type'
           exclude: false
           alter:
             alter_text: false
@@ -269,10 +273,10 @@ display:
           use_highlighting: false
           multi_type: separator
           multi_separator: ', '
-        rn_relation_field_date_end_date:
-          id: rn_relation_field_date_end_date
+        rn_relation_field_date_start_date:
+          id: rn_relation_field_date_start_date
           table: search_api_index_affiliations
-          field: rn_relation_field_date_end_date
+          field: rn_relation_field_date_start_date
           relationship: none
           group_type: group
           admin_label: ''
@@ -340,10 +344,10 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        rn_relation_field_date_start_date:
-          id: rn_relation_field_date_start_date
+        rn_relation_field_date_end_date:
+          id: rn_relation_field_date_end_date
           table: search_api_index_affiliations
-          field: rn_relation_field_date_start_date
+          field: rn_relation_field_date_end_date
           relationship: none
           group_type: group
           admin_label: ''
@@ -484,12 +488,26 @@ display:
                   field_classes: ''
                   sort_options_unsupported: ''
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            web_manager: web_manager
+            administrator: administrator
       cache:
         type: search_api_none
         options: {  }
-      empty: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'Select an option to see results, or change your selection.'
+          tokenize: false
       sorts:
         rn_relation_field_date_start_date:
           id: rn_relation_field_date_start_date
@@ -517,10 +535,23 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-        rn_related_entity_1_id_int:
-          id: rn_related_entity_1_id_int
+        rn_related_entity_2_title_str:
+          id: rn_related_entity_2_title_str
           table: search_api_index_affiliations
-          field: rn_related_entity_1_id_int
+          field: rn_related_entity_2_title_str
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        rn_related_entity_1_title_str:
+          id: rn_related_entity_1_title_str
+          table: search_api_index_affiliations
+          field: rn_related_entity_1_title_str
           relationship: none
           group_type: group
           admin_label: ''
@@ -662,13 +693,13 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Rn related entity 2 ID'
+            label: Institution
             description: ''
             use_operator: false
             operator: ''
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rn_related_entity_2_id__int
+            identifier: institution
             required: false
             remember: false
             multiple: false
@@ -696,7 +727,7 @@ display:
           facet:
             query_operator: or
             hard_limit: 0
-            min_count: 1
+            min_count: 0
             show_numbers: false
             processor_configs:
               translate_entity:
@@ -704,62 +735,12 @@ display:
                 weights:
                   build: 5
                 settings: {  }
-        facets_rn_related_entity_1_id__int:
-          id: facets_rn_related_entity_1_id__int
-          table: search_api_index_affiliations
-          field: facets_rn_related_entity_1_id__int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: facets_filter
-          operator: '='
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: 'Rn related entity 1 ID'
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: rn_related_entity_1_id__int
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              0: '0'
-              anonymous: '0'
-              redactor: '0'
-              web_manager: '0'
-              administrator: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          hierarchy: false
-          label_display: visible
-          facet:
-            query_operator: or
-            hard_limit: 0
-            min_count: 1
-            show_numbers: false
-            processor_configs:
-              translate_entity:
-                processor_id: translate_entity
+              display_value_widget_order:
+                processor_id: display_value_widget_order
                 weights:
-                  build: 5
-                settings: {  }
+                  sort: 40
+                settings:
+                  sort: ASC
         facets_mirror_w_fallback__relationnode_person_institut:
           id: facets_mirror_w_fallback__relationnode_person_institut
           table: search_api_index_affiliations
@@ -774,13 +755,13 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Relation type label (relationnode__person_institut)'
+            label: 'Relation type'
             description: ''
             use_operator: false
             operator: ''
             operator_limit_selection: false
             operator_list: {  }
-            identifier: mirror_w_fallback__relationnode_person_institut
+            identifier: type
             required: false
             remember: false
             multiple: false
@@ -808,9 +789,69 @@ display:
           facet:
             query_operator: or
             hard_limit: 0
-            min_count: 1
+            min_count: 0
             show_numbers: false
-            processor_configs: {  }
+            processor_configs:
+              display_value_widget_order:
+                processor_id: display_value_widget_order
+                weights:
+                  sort: 40
+                settings:
+                  sort: ASC
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_affiliations
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Period
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: period
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: rn_relation_field_date_start__date
+          end_field: rn_relation_field_date_end__date
+          widget: select_range
+          from_label: From
+          to_label: To
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
       filter_groups:
         operator: AND
         groups:
@@ -888,6 +929,7 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_date_end'
         - 'config:field.storage.node.field_date_start'
@@ -911,6 +953,7 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_date_end'
         - 'config:field.storage.node.field_date_start'

@@ -267,6 +267,33 @@ class RangeFilter extends FilterPluginBase {
 
 
   // -------------------------------------------------------------------------
+  // Exposed input acceptance
+  // -------------------------------------------------------------------------
+
+  /**
+   * {@inheritdoc}
+   *
+   * Skip the filter entirely when both from and to are empty.
+   */
+  public function acceptExposedInput($input): bool {
+    if (empty($this->options['exposed'])) {
+      return TRUE;
+    }
+
+    $rc = parent::acceptExposedInput($input);
+
+    if ($rc && empty($this->options['expose']['required'])) {
+      $value = $this->value;
+      if (is_array($value) && ($value['from'] ?? '') === '' && ($value['to'] ?? '') === '') {
+        return FALSE;
+      }
+    }
+
+    return $rc;
+  }
+
+
+  // -------------------------------------------------------------------------
   // Exposed filter widget
   // -------------------------------------------------------------------------
 
@@ -274,6 +301,9 @@ class RangeFilter extends FilterPluginBase {
    * {@inheritdoc}
    */
   protected function valueForm(&$form, FormStateInterface $form_state): void {
+    // Required so submitted values arrive as ['from' => ..., 'to' => ...].
+    $form['value']['#tree'] = TRUE;
+
     $widget     = $this->options['widget']     ?? 'textfield';
     $from_label = $this->options['from_label'] ?: $this->t('From');
     $to_label   = $this->options['to_label']   ?: $this->t('To');

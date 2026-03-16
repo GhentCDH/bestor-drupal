@@ -1,7 +1,13 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\area\TextCustom;
 
+
+/**
+ * Implements hook_form_alter.
+ */
 function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'database_full_text_search_form') {
     // Remove form system elements die in URL komen
@@ -29,6 +35,13 @@ function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state,
       }
     }   
   }
+
+  if ($form['#id']  === 'views-exposed-form-database-advanced-search-affiliations-page-1') {
+     if (isset($form['institution'])) {
+      $form['institution']['#options']['All'] = t('- Make a choice -');
+      $form['institution']['#required'] = TRUE;
+    }
+  }
 }
 
 
@@ -39,5 +52,29 @@ function bestor_custom_search_preprocess_views_exposed_form(&$variables) {
   if ($variables['form']['#id'] === 'views-exposed-form-database-page-1') {
     // hide fullsearch filter in sidebar
     $variables['form']['fullsearch']['#access'] = FALSE;
+  }
+}
+
+
+/**
+ * Implements hook_views_pre_render.
+ */
+function bestor_custom_search_views_pre_render(ViewExecutable $view) {
+  if ($view->id() !== 'database_advanced_search_affiliations') {
+    return;
+  }
+
+  $input = $view->getExposedInput();
+  $val = $input['institution'] ?? NULL;
+
+  if (empty($val) || strtolower($val) === 'all') {
+    $view->result = [];
+    $view->total_rows = 0;
+
+    foreach ($view->empty as $handler) {
+      if ($handler instanceof TextCustom) {
+        $handler->options['content'] = t('Select an institution to see its affiliations.');
+      }
+    }
   }
 }
