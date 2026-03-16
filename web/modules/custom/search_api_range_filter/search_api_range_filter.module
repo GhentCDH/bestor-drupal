@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * @file
+ * Provides a Search API Views range filter spanning two index fields.
+ *
+ * Views integration (hook_views_data_alter) is in
+ * search_api_range_filter.views.inc and is auto-loaded by Views.
+ */

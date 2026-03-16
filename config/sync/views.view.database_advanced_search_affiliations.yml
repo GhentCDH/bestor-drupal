@@ -3,9 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.rn_mirror_string
+    - field.storage.node.field_date_end
+    - field.storage.node.field_date_start
+    - field.storage.node.rn_related_entity_1
     - search_api.index.affiliations
   module:
+    - better_exposed_filters
+    - datetime
     - facets_exposed_filters
     - search_api
 id: database_advanced_search_affiliations
@@ -24,15 +28,256 @@ display:
     display_options:
       title: 'Advanced search'
       fields:
-        rn_related_entity_1_title_str:
-          id: rn_related_entity_1_title_str
+        rn_related_entity_1_id_int:
+          id: rn_related_entity_1_id_int
           table: search_api_index_affiliations
-          field: rn_related_entity_1_title_str
+          field: rn_related_entity_1_id_int
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api_field
-          label: 'Rn related entity 1 » Content » Title (indexed field)'
+          label: 'Rn related entity 1 ID (indexed field)'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          field_rendering: true
+          fallback_handler: search_api_entity
+          fallback_options:
+            link_to_item: false
+            use_highlighting: false
+            multi_type: separator
+            multi_separator: ', '
+            display_methods:
+              article:
+                display_method: label
+                view_mode: default
+              concept:
+                display_method: label
+                view_mode: default
+              document:
+                display_method: label
+                view_mode: default
+              event:
+                display_method: label
+                view_mode: default
+              institution:
+                display_method: label
+                view_mode: default
+              instrument:
+                display_method: label
+                view_mode: default
+              page:
+                display_method: label
+                view_mode: default
+              person:
+                display_method: label
+                view_mode: default
+              place:
+                display_method: label
+                view_mode: default
+              publication:
+                display_method: label
+                view_mode: default
+              relationnode__concept_concept:
+                display_method: label
+                view_mode: default
+              relationnode__concept_document:
+                display_method: label
+                view_mode: default
+              relationnode__concept_instrument:
+                display_method: label
+                view_mode: default
+              relationnode__concept_place:
+                display_method: label
+                view_mode: default
+              relationnode__concept_story:
+                display_method: label
+                view_mode: default
+              relationnode__document_document:
+                display_method: label
+                view_mode: default
+              relationnode__document_place:
+                display_method: label
+                view_mode: default
+              relationnode__document_strory:
+                display_method: label
+                view_mode: default
+              relationnode__institut_concept:
+                display_method: label
+                view_mode: default
+              relationnode__institut_document:
+                display_method: label
+                view_mode: default
+              relationnode__institut_institut:
+                display_method: label
+                view_mode: default
+              relationnode__institut_instrum:
+                display_method: label
+                view_mode: default
+              relationnode__institut_place:
+                display_method: label
+                view_mode: default
+              relationnode__institut_story:
+                display_method: label
+                view_mode: default
+              relationnode__instrum_document:
+                display_method: label
+                view_mode: default
+              relationnode__instrum_instrum:
+                display_method: label
+                view_mode: default
+              relationnode__instrum_place:
+                display_method: label
+                view_mode: default
+              relationnode__instrum_story:
+                display_method: label
+                view_mode: default
+              relationnode__person_concept:
+                display_method: label
+                view_mode: default
+              relationnode__person_document:
+                display_method: label
+                view_mode: default
+              relationnode__person_institut:
+                display_method: label
+                view_mode: default
+              relationnode__person_instrum:
+                display_method: label
+                view_mode: default
+              relationnode__person_person:
+                display_method: label
+                view_mode: default
+              relationnode__person_place:
+                display_method: label
+                view_mode: default
+              relationnode__person_story:
+                display_method: label
+                view_mode: default
+              relationnode__place_place:
+                display_method: label
+                view_mode: default
+              relationnode__place_story:
+                display_method: label
+                view_mode: default
+              relationnode__story_story:
+                display_method: label
+                view_mode: default
+              story:
+                display_method: label
+                view_mode: default
+        mirror_w_fallback_relationnode_person_institut:
+          id: mirror_w_fallback_relationnode_person_institut
+          table: search_api_index_affiliations
+          field: mirror_w_fallback_relationnode_person_institut
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          label: 'Relation type label (relationnode__person_institut) (indexed field)'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          link_to_item: false
+          use_highlighting: false
+          multi_type: separator
+          multi_separator: ', '
+        rn_relation_field_date_end_date:
+          id: rn_relation_field_date_end_date
+          table: search_api_index_affiliations
+          field: rn_relation_field_date_end_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_field
+          label: From
           exclude: false
           alter:
             alter_text: false
@@ -74,9 +319,10 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: string
+          type: datetime_custom
           settings:
-            link_to_entity: false
+            timezone_override: ''
+            date_format: 'Y'
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -94,15 +340,15 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        rn_relation_type_name_str:
-          id: rn_relation_type_name_str
+        rn_relation_field_date_start_date:
+          id: rn_relation_field_date_start_date
           table: search_api_index_affiliations
-          field: rn_relation_type_name_str
+          field: rn_relation_field_date_start_date
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api_field
-          label: 'Rn relation type » Taxonomy term » Name (indexed field)'
+          label: Until
           exclude: false
           alter:
             alter_text: false
@@ -144,128 +390,10 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: string
+          type: datetime_custom
           settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: true
-          fallback_handler: search_api
-          fallback_options:
-            link_to_item: false
-            use_highlighting: false
-            multi_type: separator
-            multi_separator: ', '
-        search_api_id:
-          id: search_api_id
-          table: search_api_index_affiliations
-          field: search_api_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: standard
-          label: 'Item ID'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-        rn_relation_type_mirror_str:
-          id: rn_relation_type_mirror_str
-          table: search_api_index_affiliations
-          field: rn_relation_type_mirror_str
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_field
-          label: 'Rn relation type » Taxonomy term » Rn mirror string (indexed field)'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
+            timezone_override: ''
+            date_format: 'Y'
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -303,7 +431,7 @@ display:
             offset: false
             offset_label: Offset
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Apply
           reset_button: false
@@ -312,6 +440,49 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: false
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+              reset_button_always_show: false
+            filter:
+              facets_rn_related_entity_2_id__int:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              facets_rn_related_entity_1_id__int:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
       access:
         type: none
         options: {  }
@@ -319,9 +490,88 @@ display:
         type: search_api_none
         options: {  }
       empty: {  }
-      sorts: {  }
+      sorts:
+        rn_relation_field_date_start_date:
+          id: rn_relation_field_date_start_date
+          table: search_api_index_affiliations
+          field: rn_relation_field_date_start_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        rn_relation_field_date_end_date:
+          id: rn_relation_field_date_end_date
+          table: search_api_index_affiliations
+          field: rn_relation_field_date_end_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        rn_related_entity_1_id_int:
+          id: rn_related_entity_1_id_int
+          table: search_api_index_affiliations
+          field: rn_related_entity_1_id_int
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters:
+        search_api_language:
+          id: search_api_language
+          table: search_api_index_affiliations
+          field: search_api_language
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_language
+          operator: in
+          value:
+            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
         rn_related_entity_1_status_bool:
           id: rn_related_entity_1_status_bool
           table: search_api_index_affiliations
@@ -421,9 +671,10 @@ display:
             identifier: rn_related_entity_2_id__int
             required: false
             remember: false
-            multiple: true
+            multiple: false
             remember_roles:
               authenticated: authenticated
+              0: '0'
               anonymous: '0'
               redactor: '0'
               web_manager: '0'
@@ -453,9 +704,117 @@ display:
                 weights:
                   build: 5
                 settings: {  }
+        facets_rn_related_entity_1_id__int:
+          id: facets_rn_related_entity_1_id__int
+          table: search_api_index_affiliations
+          field: facets_rn_related_entity_1_id__int
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Rn related entity 1 ID'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: rn_related_entity_1_id__int
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              0: '0'
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+        facets_mirror_w_fallback__relationnode_person_institut:
+          id: facets_mirror_w_fallback__relationnode_person_institut
+          table: search_api_index_affiliations
+          field: facets_mirror_w_fallback__relationnode_person_institut
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Relation type label (relationnode__person_institut)'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: mirror_w_fallback__relationnode_person_institut
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              0: '0'
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs: {  }
       filter_groups:
         operator: AND
-        groups: {  }
+        groups:
+          1: AND
       style:
         type: table
         options:
@@ -463,11 +822,35 @@ display:
           row_class: ''
           default_row_class: true
           columns:
-            node_grants: node_grants
+            rn_related_entity_1_id_int: rn_related_entity_1_id_int
+            mirror_w_fallback_relationnode_person_institut: mirror_w_fallback_relationnode_person_institut
+            rn_relation_field_date_end_date: rn_relation_field_date_end_date
+            rn_relation_field_date_start_date: rn_relation_field_date_start_date
           default: '-1'
           info:
-            node_grants:
-              sortable: false
+            rn_related_entity_1_id_int:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            mirror_w_fallback_relationnode_person_institut:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            rn_relation_field_date_end_date:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            rn_relation_field_date_start_date:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
@@ -506,7 +889,9 @@ display:
         - url.query_args
         - 'user.node_grants:view'
       tags:
-        - 'config:field.storage.taxonomy_term.rn_mirror_string'
+        - 'config:field.storage.node.field_date_end'
+        - 'config:field.storage.node.field_date_start'
+        - 'config:field.storage.node.rn_related_entity_1'
         - 'config:search_api.index.affiliations'
         - 'search_api_list:affiliations'
   page_1:
@@ -527,6 +912,8 @@ display:
         - url.query_args
         - 'user.node_grants:view'
       tags:
-        - 'config:field.storage.taxonomy_term.rn_mirror_string'
+        - 'config:field.storage.node.field_date_end'
+        - 'config:field.storage.node.field_date_start'
+        - 'config:field.storage.node.rn_related_entity_1'
         - 'config:search_api.index.affiliations'
         - 'search_api_list:affiliations'
