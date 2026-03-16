@@ -7,10 +7,10 @@ dependencies:
     - field.storage.node.field_date_start
     - field.storage.node.rn_related_entity_1
     - field.storage.node.rn_related_entity_2
+    - field.storage.node.rn_relation_type
     - search_api.server.esconnectordocker
   module:
     - node
-    - relationship_nodes_search
 id: affiliations
 name: affiliations
 description: ''
@@ -27,11 +27,6 @@ field_settings:
 
 
       fields: {  }
-  mirror_w_fallback__relationnode_person_institut:
-    label: 'Relation type label (relationnode__person_institut)'
-    datasource_id: 'entity:node'
-    property_path: mirror_w_fallback__relationnode_person_institut
-    type: string
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
@@ -111,6 +106,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_date_start
+  rn_relation_type_id__int:
+    label: 'Rn relation type'
+    datasource_id: 'entity:node'
+    property_path: rn_relation_type
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.rn_relation_type
   role_access:
     label: 'Role-based access information'
     property_path: search_api_role_access
@@ -157,8 +160,6 @@ processor_settings:
   entity_status: {  }
   entity_type: {  }
   language_with_fallback: {  }
-  relation_type_mirror_fallback_provider:
-    all_fields: false
   rendered_item: {  }
   role_access:
     weights:
