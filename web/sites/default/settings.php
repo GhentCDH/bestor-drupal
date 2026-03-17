@@ -8,12 +8,21 @@ $databases = [];
 $settings['config_sync_directory'] = '../config/sync';
 
 if (getenv('DRUPAL_APP_ENV')) {
+  // Trusted hosts
+  $settings['trusted_host_patterns'] = [
+    '^' . preg_quote(getenv('DOMAIN'), '/') . '$',
+  ];
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = TRUE;
 
   // Config ignore
   $settings['config_ignore_deactivate'] = TRUE;
 } else {  
+  // Trusted hosts
+  $settings['trusted_host_patterns'] = [
+    '^bestor\.be$',
+    '^prd\.bestor\.ugent\.be$'
+  ];
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = FALSE;
 }
@@ -99,11 +108,6 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 $settings['locale_translation_auto_update'] = FALSE;
 
 $config['system.site']['name'] = getenv('DRUPAL_SITE_NAME');
-
-$settings['trusted_host_patterns'] = [
-        '^bestor\.be$',
-        '^prd\.bestor\.ugent\.be$'
-];
 
 /**
  * Database connection settings.

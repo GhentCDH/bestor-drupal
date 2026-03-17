@@ -1,0 +1,7 @@
+database_search_form:
+  js:
+    js/database_search_form.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
