@@ -15,6 +15,7 @@ dependencies:
     - better_exposed_filters
     - datetime
     - facets_exposed_filters
+    - relationship_nodes
     - search_api
     - search_api_range_filter
     - user
@@ -272,9 +273,9 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: entity_reference_label
+          type: relation_type_mirror_label
           settings:
-            link: false
+            link: 0
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -538,180 +539,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        rn_relation_type_mirr_int:
-          id: rn_relation_type_mirr_int
-          table: search_api_index_affiliations
-          field: rn_relation_type_mirr_int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_field
-          label: 'Rn relation type mirror (post-processed) (indexed field)'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: false
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: true
-          fallback_handler: search_api_entity
-          fallback_options:
-            link_to_item: false
-            use_highlighting: false
-            multi_type: separator
-            multi_separator: ', '
-            display_methods:
-              author:
-                display_method: label
-              country:
-                display_method: label
-              discipline:
-                display_method: label
-              gender:
-                display_method: label
-              institution_type:
-                display_method: label
-              municipality:
-                display_method: label
-              place_type:
-                display_method: label
-                view_mode: default
-              profile:
-                display_method: label
-              relationtype_cross__conc_docu:
-                display_method: label
-                view_mode: default
-              relationtype_cross__conc_inst:
-                display_method: label
-                view_mode: default
-              relationtype_cross__conc_plac:
-                display_method: label
-                view_mode: default
-              relationtype_cross__conc_stor:
-                display_method: label
-                view_mode: default
-              relationtype_cross__docu_plac:
-                display_method: label
-                view_mode: default
-              relationtype_cross__docu_stor:
-                display_method: label
-                view_mode: default
-              relationtype_cross__inst_docu:
-                display_method: label
-                view_mode: default
-              relationtype_cross__inst_plac:
-                display_method: label
-                view_mode: default
-              relationtype_cross__inst_stor:
-                display_method: label
-                view_mode: default
-              relationtype_cross__orga_conc:
-                display_method: label
-                view_mode: default
-              relationtype_cross__orga_docu:
-                display_method: label
-                view_mode: default
-              relationtype_cross__orga_inst:
-                display_method: label
-                view_mode: default
-              relationtype_cross__orga_plac:
-                display_method: label
-                view_mode: default
-              relationtype_cross__orga_stor:
-                display_method: label
-                view_mode: default
-              relationtype_cross__pers_conc:
-                display_method: label
-                view_mode: default
-              relationtype_cross__pers_docu:
-                display_method: label
-                view_mode: default
-              relationtype_cross__pers_inst:
-                display_method: label
-                view_mode: default
-              relationtype_cross__pers_orga:
-                display_method: label
-                view_mode: default
-              relationtype_cross__pers_plac:
-                display_method: label
-                view_mode: default
-              relationtype_cross__pers_stor:
-                display_method: label
-                view_mode: default
-              relationtype_cross__plac_stor:
-                display_method: label
-                view_mode: default
-              relationtype_self__conc_conc:
-                display_method: label
-                view_mode: default
-              relationtype_self__docu_docu:
-                display_method: label
-                view_mode: default
-              relationtype_self__inst_inst:
-                display_method: label
-                view_mode: default
-              relationtype_self__orga_orga:
-                display_method: label
-                view_mode: default
-              relationtype_self__pers_pers:
-                display_method: label
-                view_mode: default
-              relationtype_self__plac_plac:
-                display_method: label
-                view_mode: default
-              relationtype_self__stor_stor:
-                display_method: label
-                view_mode: default
-              specialisation:
-                display_method: label
       pager:
         type: mini
         options:
@@ -1088,7 +915,17 @@ display:
             hard_limit: 0
             min_count: 0
             show_numbers: false
-            processor_configs: {  }
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+              translate_entity_mirror_label:
+                processor_id: translate_entity_mirror_label
+                weights:
+                  build: 25
+                settings: {  }
         search_api_range_filter:
           id: search_api_range_filter
           table: search_api_index_affiliations

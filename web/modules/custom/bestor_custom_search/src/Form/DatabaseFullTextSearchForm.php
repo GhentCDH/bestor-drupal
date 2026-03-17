@@ -25,9 +25,11 @@ class DatabaseFullTextSearchForm extends FormBase {
     $form['#method'] = 'get';
     $form['#action'] = Url::fromRoute('view.database.page_1', [], ['language' => \Drupal::languageManager()->getCurrentLanguage()])->toString();
     
+    $current_value = \Drupal::request()->query->get('fullsearch', '');
     $form['fullsearch'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Fulltext search'),
+      '#default_value' => $current_value,
       '#title_display' => 'invisible',
       '#placeholder' => $this->t('Search...'),
       '#size' => 30,
