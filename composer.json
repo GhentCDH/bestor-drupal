@@ -112,7 +112,9 @@
                 "Exposed forms in a block are not updated by AJAX, issue 3032353":"https://www.drupal.org/files/issues/2025-12-08/3032353-96-MR12051.patch"
             },
             "drupal/search_api_glossary":{
-                "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch"
+                "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch",
+                "https://www.drupal.org/project/search_api_glossary/issues/3398948":"https://www.drupal.org/files/issues/2023-11-03/3398948-02.patch"
+            
             },
             "drupal/focal_point":{
                 "https://www.drupal.org/project/focal_point/issues/3467462":"https://www.drupal.org/files/issues/2024-05-16/3094478-64.patch"
