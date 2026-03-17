@@ -198,14 +198,13 @@ class MirrorProvider{
    * @return array
    *   Array with term ID as key and label as value.
    */
-  public function getMirrorArray(TermStorageInterface $term_storage, string $term_id, string $default_label = null, ?string $langcode = NULL): array {
+  public function getMirrorArray(TermStorageInterface $term_storage, string $term_id, string $default_label = null): array {
     $term = $term_storage->load((int) $term_id);
+
     if (!$term instanceof TermInterface) {
       return [$term_id => $default_label ?? ''];
     }
-    if ($langcode && $term->hasTranslation($langcode)) {
-      $term = $term->getTranslation($langcode);
-    }
+
     return $this->getTermMirrorArray($term, true, $default_label);
   }
 
@@ -291,9 +290,9 @@ class MirrorProvider{
    * @return string|null
    *   The mirror label, or NULL if the term does not exist or has no mirror.
    */
-  public function getMirrorLabelFromId(string $term_id, ?string $langcode = NULL): ?string {
+  public function getMirrorLabelFromId(string $term_id): ?string {
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $mirror_array = $this->getMirrorArray($term_storage, $term_id, NULL, $langcode);
+    $mirror_array = $this->getMirrorArray($term_storage, $term_id);
     $label = reset($mirror_array);
     return !empty($label) ? (string) $label : NULL;
   }
@@ -342,16 +341,12 @@ class MirrorProvider{
     }
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $mirror_term = $term_storage->load((int) $id_value);
-    if (!($mirror_term instanceof TermInterface) || $mirror_term->bundle() !== $vocab) {
+    if (!($mirror_term instanceof TermInterface) || $mirror_term->bundle()!== $vocab) {
       return null;
     }
 
-    $langcode = $term->language()->getId();
-    if ($mirror_term->hasTranslation($langcode)) {
-      $mirror_term = $mirror_term->getTranslation($langcode);
-    }
-
     $mirror_label = $mirror_term->getName();
+    
     return $mirror_label !== null ? [$mirror_term->id() => $mirror_label] : null;
-    }
+  }
 }

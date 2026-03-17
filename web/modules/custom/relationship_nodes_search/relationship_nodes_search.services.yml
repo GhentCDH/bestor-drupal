@@ -80,4 +80,3 @@ services:
       - '@relationship_nodes.calculated_field_helper'
       - '@relationship_nodes_search.nested_field_result_views_parser'
       - '@relationship_nodes_search.nested_facet_result_parser'
-      - '@relationship_nodes.mirror_provider'

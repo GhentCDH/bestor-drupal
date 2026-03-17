@@ -12,14 +12,13 @@ use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
 use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
 use Drupal\relationship_nodes_search\Views\Parser\NestedFieldResultViewsParser;
 use Drupal\relationship_nodes_search\QueryHelper\NestedFacetResultParser;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
+use Drupal\Core\Language\LanguageManagerInterface; 
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\Query\ConditionGroup;
 
 /**
  * Provides dropdown options for nested filter fields.
- *
+ * 
  * Handles facet queries, entity loading, caching, and conversion
  * to form-compatible option arrays.
  */
@@ -34,7 +33,6 @@ class NestedFilterDropdownOptionsProvider {
   protected CalculatedFieldHelper $calculatedFieldHelper;
   protected NestedFieldResultViewsParser $resultParser;
   protected NestedFacetResultParser $facetResultParser;
-  protected MirrorProvider $mirrorProvider;
 
 
   /**
@@ -58,8 +56,6 @@ class NestedFilterDropdownOptionsProvider {
    *   The child field entity reference helper service.
    * @param NestedFacetResultParser $facetResultParser
    *   The facet result parser service.
-   * @param MirrorProvider $mirrorProvider
-   *   The mirror provider service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
@@ -70,8 +66,7 @@ class NestedFilterDropdownOptionsProvider {
     NestedIndexFieldHelper $nestedFieldHelper,
     CalculatedFieldHelper $calculatedFieldHelper,
     NestedFieldResultViewsParser $resultParser,
-    NestedFacetResultParser $facetResultParser,
-    MirrorProvider $mirrorProvider
+    NestedFacetResultParser $facetResultParser
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->cache = $cache;
@@ -82,7 +77,6 @@ class NestedFilterDropdownOptionsProvider {
     $this->calculatedFieldHelper = $calculatedFieldHelper;
     $this->resultParser = $resultParser;
     $this->facetResultParser = $facetResultParser;
-    $this->mirrorProvider = $mirrorProvider;
   }
 
 
@@ -111,6 +105,7 @@ class NestedFilterDropdownOptionsProvider {
   public function getDropdownOptions(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode = 'label', ?SearchApiQuery $view_query = NULL): array {
     try {
       $options = $this->fetchOptionsFromIndex($index, $sapi_fld_nm, $child_fld_nm, $display_mode, $view_query);
+      // Cache tags include bundle for granular invalidation
       $cache_tags = [
         'relationship_filter_options',
         'relationship_filter_options:' . $sapi_fld_nm,
@@ -155,15 +150,13 @@ class NestedFilterDropdownOptionsProvider {
         $sapi_query = $view_query->getSearchApiQuery();
         if ($sapi_query) {
           $query = clone $sapi_query;
-        }
-        else {
+        } else {
           $query = $index->query();
         }
-      }
-      else {
+      } else {
         $query = $index->query();
       }
-
+      
       // Configureer voor facets
       $query->range(0, 0);
       $query->setOption('search_api_facets', [
@@ -179,7 +172,7 @@ class NestedFilterDropdownOptionsProvider {
       // Execute de facet query
       $results = $query->execute();
       $facet_values = $this->facetResultParser->extractTrimmedFacetValues($results, $field_id);
-
+      
       if (empty($facet_values)) {
         return [];
       }
@@ -195,7 +188,6 @@ class NestedFilterDropdownOptionsProvider {
       return [];
     }
   }
-
 
   /**
    * Convert facet values to form options.
@@ -219,52 +211,42 @@ class NestedFilterDropdownOptionsProvider {
       return [];
     }
 
-    // Raw mode: ID is both value and label.
+    // Raw mode: ID is both value and label
     if ($display_mode === 'raw') {
       return array_combine($facet_values, $facet_values);
     }
 
-    // Determine target entity type.
+    // Determine target entity type
     $target_type = $this->calculatedFieldHelper->isCalculatedChildField($child_fld_nm)
       ? $this->calculatedFieldHelper->getCalculatedFieldTargetType($child_fld_nm)
       : $this->nestedFieldHelper->getChildFieldTargetType($index, $sapi_fld_nm, $child_fld_nm);
 
-    // Validate entity type.
+    // Validate entity type
     if (!$target_type || !in_array($target_type, ['node', 'taxonomy_term'])) {
       return array_combine($facet_values, $facet_values);
     }
 
-    // Load entities and build options.
-    return $this->buildEntityOptions($facet_values, $target_type, $display_mode);
+    // Load entities and build options
+    return $this->buildEntityOptions($facet_values, $target_type);
   }
 
 
   /**
    * Build form options by loading entities with access control.
    *
-   * Entity labels are loaded in the current interface language.
-   * If no translation exists for the current language, the default
-   * language label is used as fallback.
-   *
-   * For taxonomy terms, the display mode determines the label:
-   * - 'label': the plain term label
-   * - 'mirror_label': the mirror label, falling back to the term label
-   *
    * @param array $entity_ids
    *   Array of entity ID strings (e.g., ['node/123', 'node/456']).
    * @param string $target_type
    *   Entity type (e.g., 'node', 'taxonomy_term').
-   * @param string $display_mode
-   *   Display mode: 'label' or 'mirror_label'.
    *
    * @return array
    *   Form options array (value => label).
    */
-  protected function buildEntityOptions(array $entity_ids, string $target_type, string $display_mode = 'label'): array {
+  protected function buildEntityOptions(array $entity_ids, string $target_type): array {
     try {
-      // Extract numeric IDs.
+      // Extract numeric IDs
       $numeric_ids = $this->resultParser->extractIntIdsFromStrings($entity_ids, $target_type);
-
+      
       if (empty($numeric_ids)) {
         $this->loggerFactory->get('relationship_nodes_search')->warning(
           'No valid numeric IDs found in entity reference values for type @type',
@@ -272,11 +254,11 @@ class NestedFilterDropdownOptionsProvider {
         );
         return [];
       }
-
-      // Load entities.
+      
+      // Load entities
       $storage = $this->entityTypeManager->getStorage($target_type);
       $entities = $storage->loadMultiple($numeric_ids);
-
+      
       if (empty($entities)) {
         $this->loggerFactory->get('relationship_nodes_search')->warning(
           'Failed to load any entities of type @type for @count IDs',
@@ -284,34 +266,28 @@ class NestedFilterDropdownOptionsProvider {
         );
         return [];
       }
-
-      // Build options with labels - only for entities user can view.
+      
+      // Build options with labels - only for entities user can view
       $options = [];
       $current_language = $this->languageManager->getCurrentLanguage()->getId();
 
       foreach ($entities as $id => $entity) {
-        // Check access.
+        // Check access
         if (!$entity->access('view', $this->currentUser)) {
           continue;
         }
 
-        $translated_entity = $entity->hasTranslation($current_language)
-          ? $entity->getTranslation($current_language)
-          : $entity;
-
-        // For taxonomy terms, apply mirror label logic if requested.
-        if ($target_type === 'taxonomy_term' && $display_mode === 'mirror_label') {
-          $label = $this->mirrorProvider->getMirrorLabelFromTerm($translated_entity)
-            ?? $translated_entity->label();
+        if ($entity->hasTranslation($current_language)) {
+          $translated_entity = $entity->getTranslation($current_language);
+        } else {
+          $translated_entity = $entity;
         }
-        else {
-          $label = $translated_entity->label();
-        }
-
-        $options[$target_type . '/' . $id] = $label;
+        
+        $options[$target_type . '/' . $id] = $translated_entity->label();
       }
 
-      // Log if some entities failed to load or were filtered by access control.
+
+      // Log if some entities failed to load or were filtered by access control
       if (count($entities) < count($numeric_ids)) {
         $loaded_ids = array_keys($entities);
         $missing_ids = array_diff($numeric_ids, $loaded_ids);
@@ -320,11 +296,11 @@ class NestedFilterDropdownOptionsProvider {
           [
             '@count' => count($missing_ids),
             '@type' => $target_type,
-            '@ids' => implode(', ', array_slice($missing_ids, 0, 10)),
+            '@ids' => implode(', ', array_slice($missing_ids, 0, 10)) // Only first 10 to avoid huge logs
           ]
         );
       }
-
+      
       return $options;
     }
     catch (\Exception $e) {
@@ -332,6 +308,7 @@ class NestedFilterDropdownOptionsProvider {
         'Failed to load entities for options: @message',
         ['@message' => $e->getMessage()]
       );
+      
       return [];
     }
   }
@@ -339,7 +316,6 @@ class NestedFilterDropdownOptionsProvider {
 
   /**
    * Generate cache key for dropdown options.
-   *
    * Includes language to ensure translated labels are cached separately.
    *
    * @param Index $index
@@ -356,15 +332,15 @@ class NestedFilterDropdownOptionsProvider {
    */
   protected function getCacheKey(Index $index, string $sapi_fld_nm, string $child_fld_nm, string $display_mode): string {
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
-
+    
     $parts = [
-      'relationship_filter_options',
-      $index->id(),
-      str_replace([':', '.', '/'], '_', $sapi_fld_nm),
-      str_replace([':', '.', '/'], '_', $child_fld_nm),
-      $display_mode,
-      $this->currentUser->id(),
-      $current_language,
+        'relationship_filter_options',
+        $index->id(),
+        str_replace([':', '.', '/'], '_', $sapi_fld_nm),
+        str_replace([':', '.', '/'], '_', $child_fld_nm),
+        $display_mode,
+        $this->currentUser->id(),
+        $current_language,
     ];
 
     return implode(':', $parts);
@@ -396,11 +372,11 @@ class NestedFilterDropdownOptionsProvider {
     ?SearchApiQuery $view_query = NULL
   ): array {
     try {
-      // Create fresh query.
+      // Create fresh query
       $query = $index->query();
 
-      // Extract and apply non-exposed conditions.
-      if ($view_query) {
+      // Extract and apply non-exposed conditions
+      if ($view_query) {       
         $non_exposed_fields = [];
         foreach ($view_query->view->filter as $filter_id => $filter) {
           if (!$filter->isExposed() && !empty($filter->value)) {
@@ -411,7 +387,7 @@ class NestedFilterDropdownOptionsProvider {
         if (!empty($non_exposed_fields)) {
           $source_conditions = $view_query->getSearchApiQuery()->getConditionGroup();
           $target_conditions = $query->getConditionGroup();
-
+          
           $this->copyNonExposedConditionsRecursive(
             $source_conditions,
             $target_conditions,
@@ -420,14 +396,14 @@ class NestedFilterDropdownOptionsProvider {
         }
       }
 
-      // Query only needs facets, no results.
+      // Query only needs facets, no results
       $query->range(0, 0);
 
-      // Add facet configuration.
-      $field_key = $sapi_fld_nm . ':' . $child_fld_nm;
+      // Add facet configuration
+      $field_key = $sapi_fld_nm . ':' . $child_fld_nm;  // <- FIX
       $full_field_path = $this->nestedFieldHelper->colonsToDots($field_key);
-
-      $query->setOption('search_api_facets', [
+      
+      $facets = [
         $field_key => [
           'field' => $full_field_path,
           'limit' => 0,
@@ -435,16 +411,19 @@ class NestedFilterDropdownOptionsProvider {
           'min_count' => 1,
           'missing' => FALSE,
         ],
-      ]);
+      ];
+      
+      $query->setOption('search_api_facets', $facets);
 
-      // Execute query.
+      // Execute query
       $results = $query->execute();
+      
       $raw_values = $this->facetResultParser->extractTrimmedFacetValues($results, $field_key);
+      
+      // Reuse existing conversion logic
+      return $this->convertToFormOptions($raw_values, $index, $sapi_fld_nm, $child_fld_nm, $display_mode);  // <- FIX
 
-      // Reuse existing conversion logic.
-      return $this->convertToFormOptions($raw_values, $index, $sapi_fld_nm, $child_fld_nm, $display_mode);
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       $this->loggerFactory->get('relationship_nodes_search')->error(
         'Failed to fetch facet options: @message',
         ['@message' => $e->getMessage()]
@@ -452,7 +431,6 @@ class NestedFilterDropdownOptionsProvider {
       return [];
     }
   }
-
 
   /**
    * Recursively copy non-exposed conditions from source to target group.
@@ -466,32 +444,36 @@ class NestedFilterDropdownOptionsProvider {
    */
   protected function copyNonExposedConditionsRecursive(ConditionGroupInterface $source, ConditionGroupInterface $target, array $non_exposed_fields): void {
     $conditions = $source->getConditions();
-
+    
     foreach ($conditions as $condition) {
+      // Check if this is a nested ConditionGroup
       if ($condition instanceof ConditionGroupInterface) {
+        // Create new group with same conjunction (AND/OR) and tags
         $new_group = new ConditionGroup(
           $condition->getConjunction(),
           $condition->getTags()
         );
-
+        
+        // Recurse into nested group
         $this->copyNonExposedConditionsRecursive($condition, $new_group, $non_exposed_fields);
-
+        
+        // Only add group if it has conditions
         if (!$new_group->isEmpty()) {
           $target->addConditionGroup($new_group);
         }
-      }
-      else {
+      } else {
+        // Regular condition - check if it belongs to non-exposed filter
         $field = $condition->getField();
-
-        if (in_array($field, $non_exposed_fields, TRUE)) {
+        
+        if (in_array($field, $non_exposed_fields, true)) {
           try {
             $target->addCondition(
               $field,
               $condition->getValue(),
               $condition->getOperator()
             );
-          }
-          catch (\Exception $e) {
+          } catch (\Exception $e) {
+            // Skip conditions that can't be copied
             $this->loggerFactory->get('relationship_nodes_search')->debug(
               'Skipped condition for field @field: @message',
               ['@field' => $field, '@message' => $e->getMessage()]
@@ -501,5 +483,4 @@ class NestedFilterDropdownOptionsProvider {
       }
     }
   }
-
 }

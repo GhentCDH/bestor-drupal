@@ -1,12 +1,10 @@
 consentModal:
-  title: 'Cookies & Privacy'
   description: 'Kies de diensten en toepassingen van derden die u wilt toestaan.'
   privacyPolicy:
     name: privacybeleid
     text: "Lees ons {privacyPolicy} voor meer informatie.\r\n"
     url: 'internal:/nl/node/6180'
 consentNotice:
-  title: 'Cookies & Privacy'
   changeDescription: 'Er zijn wijzigingen sinds uw laatste bezoek, gelieve uw toestemming bij te werken.'
   description: 'Wij gebruiken cookies en verwerken persoonsgegevens. Lees ons {privacyPolicy} voor meer informatie.'
   learnMore: Aanpassen

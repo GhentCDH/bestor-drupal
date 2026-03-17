@@ -5,8 +5,6 @@ dependencies:
   config:
     - field.storage.node.field_alternative_name
     - search_api.index.bestor_main_search_index
-    - system.menu.advanced-search
-    - system.menu.main
     - taxonomy.vocabulary.author
     - taxonomy.vocabulary.country
     - taxonomy.vocabulary.discipline
@@ -17,7 +15,6 @@ dependencies:
     - user.role.web_manager
   module:
     - better_exposed_filters
-    - relationship_nodes_search
     - search_api
     - user
 id: database_advanced_search
@@ -5067,12 +5064,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/story
       menu:
-        type: normal
-        title: Stories
+        type: none
+        title: Database
         description: ''
-        weight: 14
+        weight: -49
         expanded: false
-        menu_name: advanced-search
+        menu_name: main
         parent: ''
         context: '0'
     cache_metadata:
@@ -6321,12 +6318,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/concept
       menu:
-        type: normal
-        title: Concepts
+        type: none
+        title: Database
         description: ''
-        weight: 2
+        weight: -49
         expanded: false
-        menu_name: advanced-search
+        menu_name: main
         parent: ''
         context: '0'
     cache_metadata:
@@ -7575,12 +7572,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/document
       menu:
-        type: normal
-        title: Documents
+        type: none
+        title: Database
         description: ''
-        weight: 4
+        weight: -49
         expanded: false
-        menu_name: advanced-search
+        menu_name: main
         parent: ''
         context: '0'
     cache_metadata:
@@ -8885,12 +8882,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/institution
       menu:
-        type: normal
-        title: Institutions
+        type: none
+        title: Database
         description: ''
-        weight: 6
+        weight: -49
         expanded: false
-        menu_name: advanced-search
+        menu_name: main
         parent: ''
         context: '0'
     cache_metadata:
@@ -10138,10 +10135,10 @@ display:
           exclude_args: ''
       path: database/advanced-search/instruments
       menu:
-        type: normal
-        title: Instruments
+        type: none
+        title: Database
         description: ''
-        weight: 8
+        weight: -49
         expanded: false
         menu_name: main
         parent: ''
@@ -10966,9 +10963,9 @@ display:
               value: ''
               child_filter_id: this_name
             calculated_related_id:
-              enabled: 1
-              widget: select_indexed
-              select_display_mode: label
+              enabled: 0
+              widget: textfield
+              select_display_mode: raw
               label: 'Calculated Related Id'
               weight: '0'
               required: 0
@@ -10999,16 +10996,6 @@ display:
               expose_field_operator: 0
               value: ''
               child_filter_id: type
-            range_pair:
-              enabled: 0
-              start_field: ''
-              end_field: ''
-              widget: textfield
-              int_range:
-                min: 1
-                use_current_year_min: 0
-                max: 2026
-                use_current_year_max: 0
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_instrum_nested:
@@ -11473,12 +11460,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/person
       menu:
-        type: normal
-        title: Persons
+        type: none
+        title: Database
         description: ''
-        weight: 10
+        weight: -49
         expanded: false
-        menu_name: advanced-search
+        menu_name: main
         parent: ''
         context: '0'
     cache_metadata:
@@ -12715,12 +12702,12 @@ display:
           exclude_args: ''
       path: database/advanced-search/place
       menu:
-        type: normal
-        title: Places
+        type: none
+        title: Database
         description: ''
-        weight: 12
+        weight: -49
         expanded: false
-        menu_name: advanced-search
+        menu_name: main
         parent: ''
         context: '0'
     cache_metadata:

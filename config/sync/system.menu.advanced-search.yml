@@ -1,8 +1,0 @@
-uuid: 17dae574-2bd9-439d-9231-3bf022f7533d
-langcode: en
-status: true
-dependencies: {  }
-id: advanced-search
-label: 'Advanced search'
-description: ''
-locked: false
