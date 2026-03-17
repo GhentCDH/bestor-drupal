@@ -9,8 +9,6 @@ dependencies:
     - field.storage.node.rn_relation_type
     - search_api.index.affiliations
     - system.menu.advanced-search
-    - user.role.administrator
-    - user.role.web_manager
   module:
     - better_exposed_filters
     - datetime
@@ -18,7 +16,6 @@ dependencies:
     - relationship_nodes
     - search_api
     - search_api_range_filter
-    - user
 id: database_advanced_search_affiliations
 label: 'Database Advanced search Affiliations'
 module: views
@@ -612,11 +609,8 @@ display:
                   field_classes: ''
                   sort_options_unsupported: ''
       access:
-        type: role
-        options:
-          role:
-            web_manager: web_manager
-            administrator: administrator
+        type: none
+        options: {  }
       cache:
         type: search_api_none
         options: {  }
@@ -921,6 +915,11 @@ display:
                 weights:
                   build: 5
                 settings: {  }
+              entity_reference_content_access:
+                processor_id: entity_reference_content_access
+                weights:
+                  build: 5
+                settings: {  }
               translate_entity_mirror_label:
                 processor_id: translate_entity_mirror_label
                 weights:
@@ -1057,7 +1056,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_date_end'
         - 'config:field.storage.node.field_date_start'
@@ -1091,7 +1089,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_date_end'
         - 'config:field.storage.node.field_date_start'

@@ -17,8 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @FieldFormatter(
  *   id = "relation_type_mirror_label",
- *   label = @Translation("Mirror label"),
- *   description = @Translation("Displays the mirror label of the relation type term, falling back to the term label."),
+ *   label = @Translation("Mirror label (relation type only)"),
+ *   description = @Translation("Only for use on the relation type field of typed relation bundles."),
  *   field_types = {
  *     "entity_reference"
  *   }

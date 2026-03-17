@@ -8,6 +8,7 @@ dependencies:
   module:
     - better_exposed_filters
     - facets_exposed_filters
+    - relationship_nodes_search
     - search_api
 id: database
 label: Database
@@ -96,6 +97,11 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
+        relationship_info_relationnode_person_instrum_nested:
+          id: relationship_info_relationnode_person_instrum_nested
+          table: search_api_index_bestor_main_search_index
+          field: relationship_info_relationnode_person_instrum_nested
+          plugin_id: search_api_relationship_field
       pager:
         type: full
         options:
@@ -447,6 +453,12 @@ display:
                 weights:
                   build: 5
                 settings: {  }
+              display_value_widget_order:
+                processor_id: display_value_widget_order
+                weights:
+                  sort: 40
+                settings:
+                  sort: ASC
         facets_glossaryaz_title__str:
           id: facets_glossaryaz_title__str
           table: search_api_index_bestor_main_search_index
@@ -568,6 +580,12 @@ display:
                 weights:
                   build: 5
                 settings: {  }
+              display_value_widget_order:
+                processor_id: display_value_widget_order
+                weights:
+                  sort: 40
+                settings:
+                  sort: ASC
         search_api_language:
           id: search_api_language
           table: search_api_index_bestor_main_search_index
@@ -664,6 +682,12 @@ display:
                 weights:
                   build: 5
                 settings: {  }
+              display_value_widget_order:
+                processor_id: display_value_widget_order
+                weights:
+                  sort: 40
+                settings:
+                  sort: ASC
         facets_tax_specialisation__int:
           id: facets_tax_specialisation__int
           table: search_api_index_bestor_main_search_index
