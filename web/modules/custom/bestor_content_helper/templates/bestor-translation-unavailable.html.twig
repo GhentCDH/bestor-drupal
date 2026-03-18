@@ -1,0 +1,25 @@
+<div class="translation-unavailable">
+  <p class="translation-unavailable__message">
+    {{ 'This page is not available in @language.'|t({'@language': current_language}) }}
+  </p>
+
+  {% if language_links %}
+    <p class="translation-unavailable__intro">
+      {{ 'It is available in the following languages:'|t }}
+    </p>
+    <ul class="translation-unavailable__list">
+      {% for langcode, info in language_links %}
+        <li class="translation-unavailable__item">
+          <a href="{{ info.url }}" class="translation-unavailable__link" hreflang="{{ langcode }}">
+            <span class="translation-unavailable__language">{{ info.language_name }}</span>
+            <span class="translation-unavailable__title">{{ info.title }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="translation-unavailable__none">
+      {{ 'This page is currently not available in any language.'|t }}
+    </p>
+  {% endif %}
+</div>

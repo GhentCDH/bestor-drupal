@@ -17,3 +17,12 @@ entity.bestor_site_setting.edit_form:
     parameters:
       bestor_site_setting:
         type: entity:bestor_site_setting
+
+bestor_content_helper.translation_unavailable:
+  path: '/translation-unavailable/{nid}'
+  defaults:
+    _controller: '\Drupal\bestor_content_helper\Controller\TranslationUnavailableController::page'
+    _title_callback: '\Drupal\bestor_content_helper\Controller\TranslationUnavailableController::title'
+  requirements:
+    _permission: 'access content'
+    nid: \d+

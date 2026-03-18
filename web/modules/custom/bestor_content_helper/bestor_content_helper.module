@@ -147,3 +147,54 @@ function _getViewLink($view_id, $display_id){
     Url::fromRoute('view.' . $view_id . '.' . $display_id, [], [])
   );
 }
+
+
+function bestor_content_helper_theme(): array {
+  return [
+    'bestor_translation_unavailable' => [
+      'variables' => [
+        'node' => NULL,
+        'current_language' => '',
+        'language_links' => [],
+      ],
+    ],
+  ];
+}
+
+
+function bestor_content_helper_language_switch_links_alter(array &$links, $type, $path): void {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+
+  $all_languages = \Drupal::languageManager()->getLanguages();
+
+  foreach ($all_languages as $langcode => $language) {
+    $available = $node->hasTranslation($langcode)
+      && $node->getTranslation($langcode)->isPublished();
+
+    if ($available) {
+      continue;
+    }
+
+    // Load ConfigurableLanguage so theme preprocessors that call ->get()
+    // on the language object keep working.
+    $configurable_language = \Drupal::entityTypeManager()
+      ->getStorage('configurable_language')
+      ->load($langcode);
+
+    $links[$langcode] = [
+      'title' => $language->getName(),
+      'url' => Url::fromRoute(
+        'bestor_content_helper.translation_unavailable',
+        ['nid' => $node->id()]
+      ),
+      'language' => $configurable_language ?? $language,
+      'attributes' => [
+        'class' => ['language-link', 'language-link--unavailable'],
+        'title' => t('Not available in @lang', ['@lang' => $language->getName()]),
+      ],
+    ];
+  }
+}

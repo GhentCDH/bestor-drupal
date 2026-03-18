@@ -50,3 +50,9 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@file_url_generator'
+  bestor_content_helper.node_language_fallback_subscriber:
+    class: Drupal\bestor_content_helper\EventSubscriber\NodeLanguageFallbackSubscriber
+    arguments:
+      - '@language_manager'
+    tags:
+      - { name: event_subscriber }
