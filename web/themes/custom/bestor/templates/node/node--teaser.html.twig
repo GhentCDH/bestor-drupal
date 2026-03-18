@@ -72,7 +72,7 @@
 #}
 {% set tag %}
   {{ include('jakarta:c-tag', {
-    attr_variant: 'corner_down',
+    attr_variant: 'corner_up',
     color: 'primary',
     content: node.type.entity.label,
   }, with_context = false) }}
@@ -97,7 +97,7 @@
   </ul>
 {% endset %}
 
-<div style="max-width: 400px;">
+<div>
   {{ include('jakarta:c-card', {
     tag,
     title: label,
