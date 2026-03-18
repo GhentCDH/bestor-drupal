@@ -6,7 +6,6 @@ dependencies:
     - field.storage.node.field_alternative_name
     - search_api.index.bestor_main_search_index
     - system.menu.advanced-search
-    - system.menu.main
     - taxonomy.vocabulary.author
     - taxonomy.vocabulary.country
     - taxonomy.vocabulary.discipline
@@ -10143,7 +10142,7 @@ display:
         description: ''
         weight: 8
         expanded: false
-        menu_name: main
+        menu_name: advanced-search
         parent: ''
         context: '0'
     cache_metadata:
