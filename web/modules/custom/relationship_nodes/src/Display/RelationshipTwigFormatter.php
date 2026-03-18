@@ -82,7 +82,7 @@ class RelationshipTwigFormatter {
     return $fields;
   }
 
-  
+
   /**
    * Get formatted relationships ready for Twig rendering.
    *
@@ -244,8 +244,32 @@ class RelationshipTwigFormatter {
     return $all_extra[$relation_field_name] ?? [];
   }
 
-  /**
-   * Simplify relationship data for Twig rendering.
+
+ /**
+   * Simplifies relationship data for Twig rendering.
+   *
+   * Passes through availability metadata (_is_fallback, _langcode,
+   * _available_languages) so the consuming template can decide how to
+   * render unavailable relations — e.g. a styled link, a tooltip, or
+   * a redirect to an informational page.
+   *
+   * @param array $relationships
+   *   Relationship data from buildRelationshipData().
+   * @param string $format
+   *   'simple' (flat strings) or 'rich' (with metadata).
+   * @param bool $include_links
+   *   Whether to render entity references as links.
+   * @param array $extra_fields
+   *   Extra field names to place under '_extra_fields'.
+   *
+   * @return array
+   *   Simplified items ready for Twig, each containing:
+   *   - Field values keyed by clean field name.
+   *   - '_extra_fields': Extra field values.
+   *   - '_is_fallback': TRUE if the item is not available in the requested language.
+   *   - '_langcode': The effective language used for loading field values.
+   *   - '_available_languages': Languages in which all referenced entities
+   *     have a published translation.
    */
   protected function simplifyForTwig(
     array $relationships,
@@ -257,9 +281,12 @@ class RelationshipTwigFormatter {
 
     foreach ($relationships as $rel) {
       $item = ['_main' => [], '_extra' => []];
+      $is_fallback = $rel['_is_fallback'] ?? FALSE;
+      $effective_langcode = $rel['_langcode'] ?? NULL;
+      $available_languages = $rel['_available_languages'] ?? [];
 
       foreach ($rel as $field_name => $field_data) {
-        if ($field_name === '_relation_node') {
+        if (in_array($field_name, ['_relation_node', '_langcode', '_is_fallback', '_available_languages'])) {
           continue;
         }
 
@@ -271,34 +298,55 @@ class RelationshipTwigFormatter {
         $clean_name = str_replace('calculated_', '', $field_name);
         $is_extra = !empty($extra_fields) && in_array($field_name, $extra_fields);
         $target_key = $is_extra ? '_extra' : '_main';
-        
+
         if ($format === 'simple') {
           if ($include_links && !empty($first_value['link_url'])) {
             $item[$target_key][$clean_name] = $this->renderLink(
               $first_value['value'],
               $first_value['link_url']
             );
-          } else {
+          }
+          else {
             $item[$target_key][$clean_name] = $first_value['value'];
           }
-        } else {
+        }
+        else {
+          // Rich format — include full metadata so the template decides
+          // how to handle unavailable relations.
           $item[$target_key][$clean_name] = [
             'value' => $first_value['value'],
             'url' => $first_value['link_url'],
+            'is_fallback' => $is_fallback,
+            'langcode' => $effective_langcode,
+            'available_languages' => $available_languages,
           ];
         }
       }
 
       if (!empty($item['_main'])) {
-        $simple[] = array_merge($item['_main'], ['_extra_fields' => $item['_extra']]);
+        $simple[] = array_merge($item['_main'], [
+          '_extra_fields' => $item['_extra'],
+          '_is_fallback' => $is_fallback,
+          '_langcode' => $effective_langcode,
+          '_available_languages' => $available_languages,
+        ]);
       }
     }
 
     return $simple;
   }
 
+
   /**
-   * Render a link using render arrays.
+   * Renders a standard entity link.
+   *
+   * @param string $title
+   *   The link label.
+   * @param \Drupal\Core\Url $url
+   *   The link URL.
+   *
+   * @return \Drupal\Core\Render\Markup
+   *   Rendered link markup.
    */
   protected function renderLink(string $title, $url): Markup {
     $link_array = [
@@ -313,6 +361,7 @@ class RelationshipTwigFormatter {
     ];
     return Markup::create($this->renderer->renderPlain($link_array));
   }
+
 
   /**
    * Extract related bundle from field name.

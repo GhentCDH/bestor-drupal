@@ -14,19 +14,20 @@ use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\relationship_nodes\Display\RelationAvailability;
 
 /**
  * Service for building relationship data structures.
  *
  * Provides consistent data formatting for field formatters.
- * Converts relation node data into a standardized structure suitable for templates.
- * 
+ * Converts relation node data into a standardized structure suitable for
+ * templates.
+ *
  * Supports both real fields and calculated fields:
- * - Real fields: Direct field values from relation nodes
+ * - Real fields: Direct field values from relation nodes.
  * - Calculated fields: Runtime-resolved values based on viewing context
- *   (e.g., calculated_related_id resolves to "the other entity" in relationship)
- * 
+ *   (e.g., calculated_related_id resolves to "the other entity" in the
+ *   relationship).
+ *
  * Works exclusively with field configurations from FieldConfiguratorBase.
  */
 class RelationshipDataBuilder {
@@ -41,7 +42,6 @@ class RelationshipDataBuilder {
   protected FieldResultParser $parser;
   protected MirrorProvider $mirrorProvider;
   protected ForeignKeyResolver $foreignKeyResolver;
-  
 
   /**
    * Constructs a RelationshipDataBuilder object.
@@ -58,10 +58,10 @@ class RelationshipDataBuilder {
    *   The calculated field helper.
    * @param \Drupal\relationship_nodes\Display\Parser\FieldResultParser $parser
    *   The formatter parser for entity loading.
-   * @param \Drupal\relationship_nodes\RelationData\TermHelperMirrorProvider $mirrorProvider
+   * @param \Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider $mirrorProvider
    *   The mirror term helper service.
    * @param \Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver $foreignKeyResolver
-   *   The mirror term helper service.
+   *   The foreign key resolver service.
    */
   public function __construct(
     RelationInfo $nodeInfoService,
@@ -83,29 +83,32 @@ class RelationshipDataBuilder {
     $this->foreignKeyResolver = $foreignKeyResolver;
   }
 
-   /**
+
+  /**
    * Builds relationship data from relation nodes using field configurations.
    *
-   * Filters out relations where referenced entities are not published in the
-   * requested language before processing. When language_fallback is TRUE,
-   * relations unavailable in the requested language may still be included
-   * using the first available language instead.
+   * Classifies relations by availability before processing. UNAVAILABLE
+   * relations (no published translation in any language) are always discarded.
+   * LANGUAGE_UNAVAILABLE relations are discarded unless language_fallback is
+   * TRUE, in which case they are loaded in the best available language.
    *
    * @param \Drupal\node\NodeInterface[] $relation_nodes
    *   Array of relation node entities.
    * @param array $settings
    *   Configuration settings:
-   *   - 'field_configs': Array of field configurations (REQUIRED)
-   *   - 'viewing_node': NodeInterface viewing context for calculated fields (OPTIONAL)
-   *   - 'language': Language code to use. Falls back to current language (OPTIONAL)
-   *   - 'language_fallback': If TRUE, show relations in a fallback language when
-   *     the requested language is unavailable (OPTIONAL, default FALSE)
+   *   - 'field_configs': Array of field configurations (REQUIRED).
+   *   - 'viewing_node': NodeInterface viewing context for calculated fields
+   *     (OPTIONAL).
+   *   - 'language': Language code to use. Falls back to current language
+   *     (OPTIONAL).
+   *   - 'language_fallback': If TRUE, load field values in a fallback language
+   *     when the requested language is unavailable (OPTIONAL, default FALSE).
    *
    * @return array
    *   Array with keys:
-   *   - 'items': Array of relationship data, each containing field data and
-   *     '_relation_node' reference.
-   *   - 'cache': CacheableMetadata object with tags for all referenced entities.
+   *   - 'items': Relationship data arrays, each containing field data,
+   *     '_relation_node', '_langcode', '_is_fallback', '_available_languages'.
+   *   - 'cache': CacheableMetadata with tags for all referenced entities.
    */
   public function buildRelationshipData(array $relation_nodes, array $settings = []): array {
     $field_configs = $settings['field_configs'] ?? [];
@@ -119,31 +122,44 @@ class RelationshipDataBuilder {
     }
 
     $viewing_node = $settings['viewing_node'] ?? NULL;
+    $language_fallback = $settings['language_fallback'] ?? FALSE;
 
     // Fall back to current language if not explicitly provided.
-    $langcode = $settings['language']
-      ?? $this->languageManager->getCurrentLanguage()->getId();
+    $langcode = $settings['language'] ?? $this->languageManager->getCurrentLanguage()->getId();
 
     $cache = new CacheableMetadata();
 
-    // Filter out relations where referenced entities are not published in the
-    // requested language. Returns items with 'node' and effective 'langcode'.
-    $filtered = $this->filterByPublishedReferences(
-      $relation_nodes,
-      $langcode,
-      $cache,
-      $settings['language_fallback'] ?? FALSE
-    );
+    // Classify relations by availability. Cache tags are always collected,
+    // even for discarded relations, so the page invalidates on publish changes.
+    $classified = $this->classifyRelations($relation_nodes, $langcode, $cache);
 
-    if (empty($filtered)) {
+    if (empty($classified)) {
       return ['items' => [], 'cache' => $cache];
     }
 
     $data = [];
 
-    foreach ($filtered as $filtered_item) {
-      $relation_node = $filtered_item['node'];
-      $effective_langcode = $filtered_item['langcode'];
+    foreach ($classified as $classified_item) {
+      $relation_node = $classified_item['node'];
+      /** @var \Drupal\relationship_nodes\Display\RelationAvailability $availability */
+      $availability = $classified_item['availability'];
+
+      if ($availability->isAvailable()) {
+        $effective_langcode = $langcode;
+        $is_fallback = FALSE;
+      }
+      elseif ($availability->isLanguageUnavailable()) {
+        if (!$language_fallback) {
+          // Not available in current language and no fallback requested.
+          continue;
+        }
+        $effective_langcode = $this->resolveFallbackLanguage($availability);
+        $is_fallback = TRUE;
+      }
+      else {
+        // Should not happen — UNAVAILABLE is discarded in classifyRelations().
+        continue;
+      }
 
       $cache->addCacheableDependency($relation_node);
       $item = [];
@@ -167,7 +183,12 @@ class RelationshipDataBuilder {
         continue;
       }
 
+      // Attach availability metadata for use by the template layer.
       $item['_relation_node'] = $relation_node;
+      $item['_langcode'] = $effective_langcode;
+      $item['_is_fallback'] = $is_fallback;
+      $item['_available_languages'] = $availability->getAvailableLanguages();
+
       $data[] = $item;
     }
 
@@ -178,14 +199,156 @@ class RelationshipDataBuilder {
   }
 
 
+  /**
+   * Classifies relation nodes by their availability in the requested language.
+   *
+   * UNAVAILABLE relations (no published translation in any language) are
+   * discarded here. Both AVAILABLE and LANGUAGE_UNAVAILABLE relations are
+   * returned so buildRelationshipData() can decide how to handle each case.
+   *
+   * Cache tags are always collected, including for discarded relations, so
+   * the page invalidates when a referenced entity changes publish state.
+   *
+   * @param \Drupal\node\NodeInterface[] $relation_nodes
+   *   Relation nodes to classify.
+   * @param string $langcode
+   *   The requested language code.
+   * @param \Drupal\Core\Cache\CacheableMetadata $cache
+   *   Cache metadata object to collect tags into.
+   *
+   * @return array
+   *   Array of items, each with:
+   *   - 'node': The relation NodeInterface.
+   *   - 'availability': RelationAvailability value object.
+   */
+  protected function classifyRelations(
+    array $relation_nodes,
+    string $langcode,
+    CacheableMetadata $cache
+  ): array {
+    $classified = [];
+
+    foreach ($relation_nodes as $relation_node) {
+      $availability = $this->getRelationAvailability($relation_node, $langcode);
+
+      // Always collect cache tags, even for discarded relations.
+      $cache->addCacheTags($availability->getCacheTags());
+
+      if ($availability->isUnavailable()) {
+        continue;
+      }
+
+      $classified[] = [
+        'node' => $relation_node,
+        'availability' => $availability,
+      ];
+    }
+
+    return $classified;
+  }
+
+
+  /**
+   * Determines the availability of a relation node in a given language.
+   *
+   * Checks all entity reference fields pointing to nodes and computes the
+   * intersection of languages in which all referenced entities have a
+   * published translation.
+   *
+   * @param \Drupal\node\NodeInterface $relation_node
+   *   The relation node to check.
+   * @param string $langcode
+   *   The requested language code.
+   *
+   * @return \Drupal\relationship_nodes\Display\RelationAvailability
+   *   Value object describing availability, available languages, and cache tags.
+   */
+  protected function getRelationAvailability(NodeInterface $relation_node, string $langcode): RelationAvailability {
+    $node_storage = $this->entityTypeManager->getStorage('node');
+
+    // Start with NULL so the first entity sets the baseline language list.
+    $intersection = NULL;
+    $cache_tags = [];
+
+    foreach ($relation_node->getFieldDefinitions() as $field_name => $definition) {
+      if ($definition->getType() !== 'entity_reference') continue;
+      if ($definition->getSetting('target_type') !== 'node') continue;
+      if ($relation_node->get($field_name)->isEmpty()) continue;
+
+      $target_id = $relation_node->get($field_name)->target_id;
+      $referenced = $node_storage->load($target_id);
+
+      if (!$referenced) {
+        // Referenced entity no longer exists.
+        return new RelationAvailability(RelationAvailability::UNAVAILABLE, [], $cache_tags);
+      }
+
+      // Collect cache tags so the page invalidates on publish/unpublish.
+      $cache_tags = array_merge($cache_tags, $referenced->getCacheTags());
+
+      // Collect languages with a published translation for this entity.
+      $published_langs = [];
+      foreach ($referenced->getTranslationLanguages() as $lang => $language) {
+        if ($referenced->getTranslation($lang)->isPublished()) {
+          $published_langs[] = $lang;
+        }
+      }
+
+      if (empty($published_langs)) {
+        // No published translation in any language.
+        return new RelationAvailability(RelationAvailability::UNAVAILABLE, [], $cache_tags);
+      }
+
+      // Narrow the intersection across all referenced entities.
+      $intersection = $intersection === NULL ? $published_langs : array_values(array_intersect($intersection, $published_langs));
+
+      if (empty($intersection)) {
+        // Entities exist and are published but share no common language.
+        return new RelationAvailability(RelationAvailability::UNAVAILABLE, [], $cache_tags);
+      }
+    }
+
+    // No entity reference fields found — treat as available.
+    if ($intersection === NULL) {
+      return new RelationAvailability(RelationAvailability::AVAILABLE, [], $cache_tags);
+    }
+
+    if (in_array($langcode, $intersection)) {
+      return new RelationAvailability(RelationAvailability::AVAILABLE, $intersection, $cache_tags);
+    }
+
+    // Requested language missing, but other languages are available.
+    return new RelationAvailability(RelationAvailability::LANGUAGE_UNAVAILABLE, $intersection, $cache_tags);
+  }
+
+
+  /**
+   * Resolves the best fallback language from an availability object.
+   *
+   * Prefers the site default language if it is in the available set.
+   * Falls back to the first available language otherwise.
+   *
+   * @param \Drupal\relationship_nodes\Display\RelationAvailability $availability
+   *   The availability value object.
+   *
+   * @return string
+   *   The resolved fallback language code.
+   */
+  protected function resolveFallbackLanguage(RelationAvailability $availability): string {
+    $available = $availability->getAvailableLanguages();
+    $default = $this->languageManager->getDefaultLanguage()->getId();
+    return in_array($default, $available) ? $default : $available[0];
+  }
+
 
   /**
    * Builds data for a calculated field.
-   * 
+   *
    * Calculated fields are resolved at runtime based on viewing context:
-   * - calculated_related_id: Shows "the other entity" in the relationship
-   * - calculated_relation_type_name: Shows relation type from viewer's perspective
-   * 
+   * - calculated_related_id: Shows "the other entity" in the relationship.
+   * - calculated_relation_type_name: Shows relation type from viewer's
+   *   perspective.
+   *
    * If no viewing context is provided, shows all related entities.
    *
    * @param \Drupal\node\NodeInterface $relation_node
@@ -196,42 +359,39 @@ class RelationshipDataBuilder {
    *   Field configuration.
    * @param \Drupal\node\NodeInterface|null $viewing_node
    *   Optional viewing context node.
-   * @param ?string $langcode
+   * @param string|null $langcode
    *   The language code.
    *
    * @return array|null
    *   Field data array with 'field_values' and 'separator', or NULL if no data.
    */
   protected function buildCalculatedFieldData(
-    NodeInterface $relation_node, 
-    string $field_name, 
+    NodeInterface $relation_node,
+    string $field_name,
     array $config,
     ?NodeInterface $viewing_node = NULL,
     ?string $langcode = NULL
   ): ?array {
-    // Get all related entity IDs from the relation node
     $related_entities = $this->nodeInfoService->getRelatedEntityValues($relation_node);
-    
+
     if (empty($related_entities)) {
       return NULL;
     }
 
-    // Determine which entities to show based on viewing context
     $entity_ids = [];
-    
+
     if ($viewing_node) {
-      // Get FK field that contains the viewing node
+      // Show only entities from the field that does not contain the viewing node.
       $viewing_fk = $this->foreignKeyResolver->getEntityForeignKeyField($relation_node, $viewing_node);
-      
-      // Show entities from the "other" FK field only
       foreach ($related_entities as $field => $ids) {
         if ($field !== $viewing_fk) {
           $entity_ids = array_merge($entity_ids, $ids);
         }
       }
-    } else {
-      // No viewing context - show all related entities
-      foreach ($related_entities as $field => $ids) {
+    }
+    else {
+      // No viewing context — show all related entities.
+      foreach ($related_entities as $ids) {
         $entity_ids = array_merge($entity_ids, $ids);
       }
     }
@@ -240,21 +400,16 @@ class RelationshipDataBuilder {
       return NULL;
     }
 
-    // Get target entity type for calculated field
     $target_type = $this->calculatedFieldHelper->getCalculatedFieldTargetType($field_name);
     if (empty($target_type)) {
       return NULL;
     }
 
-    // Build entity references for parser
-    $entity_references = array_map(function($id) use ($target_type) {
-      return [
-        'entity_type' => $target_type,
-        'entity_id' => $id,
-      ];
-    }, $entity_ids);
+    $entity_references = array_map(fn($id) => [
+      'entity_type' => $target_type,
+      'entity_id' => $id,
+    ], $entity_ids);
 
-    // Use parser to resolve labels/links
     $values = $this->parser->processEntityReferences($entity_references, $config, $langcode);
 
     if (empty($values)) {
@@ -270,7 +425,7 @@ class RelationshipDataBuilder {
 
   /**
    * Builds data for a real (non-calculated) field.
-   * 
+   *
    * Extracts field values directly from the relation node entity.
    * Supports both entity reference fields and other field types.
    *
@@ -280,7 +435,7 @@ class RelationshipDataBuilder {
    *   The real field name (e.g., 'field_notes').
    * @param array $config
    *   Field configuration.
-   * @param ?string $langcode
+   * @param string|null $langcode
    *   The language code.
    *
    * @return array|null
@@ -292,7 +447,6 @@ class RelationshipDataBuilder {
     array $config,
     ?string $langcode = NULL
   ): ?array {
-    // Check if field exists on the relation node
     if (!$relation_node->hasField($field_name)) {
       return NULL;
     }
@@ -302,22 +456,22 @@ class RelationshipDataBuilder {
     }
 
     $field = $relation_node->get($field_name);
-    
+
     if ($field->isEmpty()) {
       return NULL;
     }
 
-    // For entity references, use parser
     if ($field->getFieldDefinition()->getType() === 'entity_reference') {
       $entity_references = $this->parser->extractEntityReferencesFromField($relation_node, $field_name);
-      
+
       if (empty($entity_references)) {
         return NULL;
       }
-      
+
       $values = $this->parser->processEntityReferences($entity_references, $config, $langcode);
-    } else {
-      // For non-entity-reference fields, extract raw values
+    }
+    else {
+      // Extract raw values for non-entity-reference fields.
       $values = [];
       foreach ($field->getValue() as $item) {
         $value = $item['value'] ?? reset($item);
@@ -343,8 +497,9 @@ class RelationshipDataBuilder {
 
   /**
    * Builds data for the calculated relation type name field.
-   * 
-   * Returns the relation type name with mirror support based on viewing context.
+   *
+   * Returns the relation type name with mirror label support based on the
+   * viewing context.
    *
    * @param \Drupal\node\NodeInterface $relation_node
    *   The relation node.
@@ -352,7 +507,7 @@ class RelationshipDataBuilder {
    *   Field configuration.
    * @param \Drupal\node\NodeInterface|null $viewing_node
    *   Optional viewing context node.
-   * @param ?string $langcode
+   * @param string|null $langcode
    *   The language code.
    *
    * @return array|null
@@ -364,46 +519,43 @@ class RelationshipDataBuilder {
     ?NodeInterface $viewing_node = NULL,
     ?string $langcode = NULL
   ): ?array {
-    // Get relation type term
     $relation_type_field = $this->fieldNameResolver->getRelationTypeField();
-    
+
     if (!$relation_node->hasField($relation_type_field)) {
       return NULL;
     }
-    
+
     $term_values = $relation_node->get($relation_type_field)->getValue();
     if (empty($term_values)) {
       return NULL;
     }
-    
+
     $term_id = $term_values[0]['target_id'] ?? NULL;
     if (!$term_id) {
       return NULL;
     }
-    
+
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
 
-    if(!$term instanceof TermInterface) {
+    if (!$term instanceof TermInterface) {
       return NULL;
     }
 
-    // Get translated term if language specified
     if ($langcode && $term->hasTranslation($langcode)) {
       $term = $term->getTranslation($langcode);
     }
 
-    // Check if we need mirror label
+    // Use the mirror label when the viewing node is on the second FK side.
     $use_mirror = FALSE;
-
     if ($viewing_node) {
       $fk_field = $this->foreignKeyResolver->getEntityForeignKeyField($relation_node, $viewing_node);
       $fk2_field = $this->fieldNameResolver->getRelatedEntityFields(2);
       $use_mirror = ($fk_field === $fk2_field);
     }
-    // Get appropriate label
-    $label = $use_mirror 
-    ? ($this->mirrorProvider->getMirrorLabelFromTerm($term) ?? $term->getName())
-    : $term->getName();
+
+    $label = $use_mirror
+      ? ($this->mirrorProvider->getMirrorLabelFromTerm($term) ?? $term->getName())
+      : $term->getName();
 
     return [
       'field_values' => [[
@@ -417,11 +569,9 @@ class RelationshipDataBuilder {
 
   /**
    * Groups relationships by a specific field value.
-   * 
+   *
    * Takes the first value of the specified field from each relationship
    * and uses it as the grouping key.
-   * 
-   * Useful for organizing relationships by type, category, or status.
    *
    * @param array $relationships
    *   Array of relationship data from buildRelationshipData().
@@ -450,7 +600,6 @@ class RelationshipDataBuilder {
         $grouped[$group_key] = [];
       }
 
-      // Remove internal keys before adding
       $clean_relationship = $relationship;
       unset($clean_relationship['_relation_node']);
 
@@ -460,10 +609,10 @@ class RelationshipDataBuilder {
     return $grouped;
   }
 
-  
+
   /**
    * Sorts relationships by a specific field value.
-   * 
+   *
    * Uses case-insensitive alphabetical sorting based on the first value
    * of the specified field.
    *
@@ -480,157 +629,13 @@ class RelationshipDataBuilder {
       return $relationships;
     }
 
-    usort($relationships, function($a, $b) use ($field_name) {
-      if (!isset($a[$field_name]) || !isset($b[$field_name])) {
-        return 0;
-      }
-
+    usort($relationships, function ($a, $b) use ($field_name) {
       $val_a = $a[$field_name]['field_values'][0]['value'] ?? '';
       $val_b = $b[$field_name]['field_values'][0]['value'] ?? '';
-
       return strcasecmp($val_a, $val_b);
     });
 
     return $relationships;
   }
 
-
-  /**
-   * Filters relation nodes to those available in the requested language.
-   *
-   * When language_fallback is TRUE, relations where the requested language is
-   * unavailable but other published languages exist will still be included,
-   * using the first available language instead. Relations where no published
-   * translation exists at all are always removed, regardless of fallback.
-   *
-   * Cache tags are always collected, even for filtered-out relations, so the
-   * page invalidates when a referenced entity gets published or unpublished.
-   *
-   * @param \Drupal\node\NodeInterface[] $relation_nodes
-   *   Relation nodes to filter.
-   * @param string $langcode
-   *   The requested language code.
-   * @param \Drupal\Core\Cache\CacheableMetadata $cache
-   *   Cache metadata object to collect tags into.
-   * @param bool $language_fallback
-   *   If TRUE, include relations in a fallback language when the requested
-   *   language is unavailable.
-   *
-   * @return array
-   *   Array of items, each with:
-   *   - 'node': The relation NodeInterface.
-   *   - 'langcode': The effective language to use (may differ from $langcode
-   *     when falling back).
-   */
-  protected function filterByPublishedReferences(
-    array $relation_nodes,
-    string $langcode,
-    CacheableMetadata $cache,
-    bool $language_fallback = FALSE
-  ): array {
-    $filtered = [];
-
-    foreach ($relation_nodes as $relation_node) {
-      $availability = $this->getRelationAvailability($relation_node, $langcode);
-
-      // Always collect cache tags, including for unavailable relations, so the
-      // page invalidates when a referenced entity changes publish state.
-      $cache->addCacheTags($availability->getCacheTags());
-
-      if ($availability->isAvailable()) {
-        $filtered[] = [
-          'node' => $relation_node,
-          'langcode' => $langcode,
-        ];
-      }
-      elseif ($language_fallback && $availability->isLanguageUnavailable()) {
-        // Requested language unavailable, but other languages exist. Use the
-        // first available language as fallback.
-        $filtered[] = [
-          'node' => $relation_node,
-          'langcode' => $availability->getAvailableLanguages()[0],
-        ];
-      }
-      // UNAVAILABLE (no published translations at all): always discard.
-    }
-
-    return $filtered;
-  }
-
-
-  /**
-   * Determines the availability of a relation node in a given language.
-   *
-   * Checks all entity reference fields on the relation node and computes the
-   * intersection of languages in which all referenced entities have a published
-   * translation.
-   *
-   * @param \Drupal\node\NodeInterface $relation_node
-   *   The relation node to check.
-   * @param string $langcode
-   *   The requested language code.
-   *
-   * @return \Drupal\relationship_nodes\Display\RelationAvailability
-   *   Value object describing availability, available languages, and cache tags.
-   */
-  protected function getRelationAvailability(NodeInterface $relation_node, string $langcode): RelationAvailability {
-    $node_storage = $this->entityTypeManager->getStorage('node');
-
-    // Start with NULL so the first entity sets the baseline language list.
-    $intersection = NULL;
-    $cache_tags = [];
-
-    foreach ($relation_node->getFieldDefinitions() as $field_name => $definition) {
-      if ($definition->getType() !== 'entity_reference') continue;
-      if ($definition->getSetting('target_type') !== 'node') continue;
-      if ($relation_node->get($field_name)->isEmpty()) continue;
-
-      $target_id = $relation_node->get($field_name)->target_id;
-      $referenced = $node_storage->load($target_id);
-
-      if (!$referenced) {
-        // Referenced entity no longer exists — hard unavailable.
-        return new RelationAvailability(RelationAvailability::UNAVAILABLE, [], $cache_tags);
-      }
-
-      // Collect cache tags so callers can invalidate on publish/unpublish.
-      $cache_tags = array_merge($cache_tags, $referenced->getCacheTags());
-
-      // Build the list of languages with a published translation for this entity.
-      $published_langs = [];
-      foreach ($referenced->getTranslationLanguages() as $lang => $language) {
-        if ($referenced->getTranslation($lang)->isPublished()) {
-          $published_langs[] = $lang;
-        }
-      }
-
-      if (empty($published_langs)) {
-        // No published translation in any language — hard unavailable.
-        return new RelationAvailability(RelationAvailability::UNAVAILABLE, [], $cache_tags);
-      }
-
-      // Narrow the intersection with each referenced entity.
-      $intersection = $intersection === NULL
-        ? $published_langs
-        : array_values(array_intersect($intersection, $published_langs));
-
-      if (empty($intersection)) {
-        // Entities exist and are published, but share no common language.
-        return new RelationAvailability(RelationAvailability::UNAVAILABLE, [], $cache_tags);
-      }
-    }
-
-    // No entity reference fields found — nothing to check, treat as available.
-    if ($intersection === NULL) {
-      return new RelationAvailability(RelationAvailability::AVAILABLE, [], $cache_tags);
-    }
-
-    // Check whether the requested language is in the intersection.
-    if (in_array($langcode, $intersection)) {
-      return new RelationAvailability(RelationAvailability::AVAILABLE, $intersection, $cache_tags);
-    }
-
-    // Requested language missing, but other languages are available.
-    return new RelationAvailability(RelationAvailability::LANGUAGE_UNAVAILABLE, $intersection, $cache_tags);
-  }
 }
