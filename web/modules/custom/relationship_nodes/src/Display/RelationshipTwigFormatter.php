@@ -82,42 +82,30 @@ class RelationshipTwigFormatter {
     return $fields;
   }
 
+  
   /**
    * Get formatted relationships ready for Twig rendering.
    *
    * @param \Drupal\node\NodeInterface $node
    *   The viewing node.
    * @param string $relation_field_name
-   *   Field name like 'computed_relationshipfield__person__concept'
+   *   Field name like 'computed_relationshipfield__person__concept'.
    * @param array $options
    *   Options:
-   *   - 'default_fields': Array of field names to include 
+   *   - 'default_fields': Array of field names to include
    *     (default: ['calculated_related_id', 'calculated_relation_type_name'])
    *   - 'format': 'simple' (default, flat strings) or 'rich' (with metadata)
    *   - 'include_links': Whether to render entity references as links (default: TRUE)
+   *   - 'language': Language code to use. Falls back to current language (OPTIONAL)
+   *   - 'language_fallback': If TRUE, show relations in a fallback language when
+   *     the requested language is unavailable (default: FALSE)
    *   - 'extra_fields': Associative array per relation field:
    *       ['computed_relationshipfield__person__person' => ['field_date_start', 'field_municipality']]
-   * 
    * @param array $field_settings
-   *   Custom field configuration per field. Merges with defaults
-   *   Example: [
-   *    'calculated_related_id' => [
-   *      'display_mode' => 'raw',
-   *      'hide_label' => FALSE,
-   *    ]
-   *   ]
+   *   Custom field configuration per field. Merges with defaults.
    *
    * @return array|null
    *   Formatted relationship data, or NULL if none.
-   *   Structure: [
-   *     'title' => 'Concept',  // Auto-generated from bundle
-   *     'field_name' => 'computed_relationshipfield__person__concept',
-   *     'relation_bundle' => 'relationnode__person_concept',
-   *     'items' => [
-   *       ['related_id' => 'Name', 'relation_type_name' => 'Parent', '_extra_fields' => [...]],
-   *       ...
-   *     ]
-   *   ]
    */
   public function getFormattedRelationships(
     NodeInterface $node,
@@ -125,19 +113,19 @@ class RelationshipTwigFormatter {
     array $options = [],
     array $field_settings = []
   ): ?array {
-    // Load relation nodes
+    // Load relation nodes.
     $relation_nodes = $this->loadRelationNodes($node, $relation_field_name);
     if (!$relation_nodes) {
       return NULL;
     }
 
-    // Get relation bundle
+    // Get relation bundle.
     $relation_bundle = $this->getRelationBundle($node, $relation_field_name);
     if (!$relation_bundle) {
       return NULL;
     }
 
-    // Build field configurations
+    // Build field configurations.
     $field_configs = $this->buildFieldConfigurations(
       $relation_bundle,
       $relation_field_name,
@@ -145,11 +133,14 @@ class RelationshipTwigFormatter {
       $field_settings
     );
 
-    // Build relationship data
+    // Build relationship data, passing language and fallback options through.
     $rel_data = $this->dataBuilder->buildRelationshipData($relation_nodes, [
       'field_configs' => $field_configs,
       'viewing_node' => $node,
+      'language' => $options['language'] ?? NULL,
+      'language_fallback' => $options['language_fallback'] ?? FALSE,
     ]);
+
     $relationships = $rel_data['items'];
     $cache = $rel_data['cache'];
     $cache->addCacheTags(['node_list:' . $relation_bundle]);
@@ -158,7 +149,7 @@ class RelationshipTwigFormatter {
       return NULL;
     }
 
-    // Simplify for Twig
+    // Simplify for Twig.
     $extra_fields = $this->getExtraFields($relation_field_name, $options);
     $items = $this->simplifyForTwig(
       $relationships,
@@ -167,7 +158,7 @@ class RelationshipTwigFormatter {
       $extra_fields
     );
 
-    // Generate title from bundle name
+    // Generate title from bundle name.
     $title = $this->extractRelatedBundle($relation_field_name);
 
     return [
@@ -178,6 +169,7 @@ class RelationshipTwigFormatter {
       '_cache' => $cache,
     ];
   }
+
 
   /**
    * Load relation nodes from a field.
