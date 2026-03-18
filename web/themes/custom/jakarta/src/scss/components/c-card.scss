@@ -1,0 +1,30 @@
+.c-card {
+
+    .c-icon--birthdate, .c-icon--death {
+    display: inline-block;
+    min-width: 1rem;
+    }
+
+    .c-icon--birthdate::before {
+    position:relative;
+    left: -0.2rem;
+    }
+
+    .c-card__extras {
+        font-size: var(--font-size-smaller);
+
+        .c-icon {
+            font-size: var(--font-size-smaller);
+        }
+    }
+
+    .c-card__read-time, .c-card__authors {
+        color: var(--color-grey) !important;
+        font-size: var(--font-size-smaller);
+
+        .c-icon {
+            font-size: var(--font-size-smaller);
+        }
+    }
+
+}

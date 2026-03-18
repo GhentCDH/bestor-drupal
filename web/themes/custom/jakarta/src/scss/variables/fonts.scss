@@ -23,6 +23,7 @@
 :root {
   --font-family-base: "Libre Baskerville", serif;
   --font-family-title: "TT Firs Neue", "Arial", sans-serif;
+  --font-family-sans-serif: "TT Firs Neue", "Arial", sans-serif;
   --font-size-base: 16px;
   --font-size-base-line-height: 1.875;
   --font-weight-thin: 100;
@@ -35,8 +36,11 @@
   --font-weight-black: 900;
   --font-weight-base: var(--font-weight-regular);
 
-  --font-h1-size: 55px;
-  --font-h2-size: 41px;
+  --font-size-smaller: 14.5px;
+  --font-size-small: 13px;
+  --font-h1-size: 47px;
+  --font-h2-size: 35px;
   --font-h3-size: 26px;
   --font-h4-size: 19px;
+  --font-h5-size: 16px;
 }

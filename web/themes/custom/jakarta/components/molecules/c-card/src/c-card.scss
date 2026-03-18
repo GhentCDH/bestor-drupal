@@ -31,6 +31,8 @@
     display: flex;
     flex-direction: column;
     gap: functions.rem(20px);
+    position: relative;
+    height: 100%;
 
     &:hover,
     &:focus {
@@ -95,6 +97,36 @@
     }
   }
 
+  &--horizontal-outline {
+    
+    #{$self}__link {
+      @media screen and (min-width: variables.$breakpoints-mobile-large) {
+        flex-direction: row;
+        align-items: start;
+      }
+    }
+
+    #{$self}__tag {
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      z-index: 5;
+    }
+
+    #{$self}__link {
+      border: 2px solid var(--color-border-grey-light);
+      border-radius: 1rem;
+      padding: functions.rem(30px);
+      padding-top: functions.rem(45px);
+
+      @media screen and (min-width: variables.$breakpoints-mobile-large) {
+        padding: functions.rem(40px);
+        padding-top: functions.rem(60px);
+      }
+    }
+
+  }
+
   // VERTICAL.
   &--vertical {
     height: 100%;
@@ -109,8 +141,8 @@
 
     #{$self}__tag {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: -2px;
+      left: -2px;
       z-index: 5;
     }
 
@@ -135,8 +167,10 @@
 
     #{$self}__link {
       gap: 0;
-      border: 1px solid var(--color-dark);
+      border: 2px solid var(--color-border-grey-light);
+      border-radius: 1rem;
       padding: functions.rem(30px);
+      padding-top: functions.rem(45px);
       height: 100%;
 
       &:hover,
@@ -148,13 +182,14 @@
 
       @media screen and (min-width: variables.$breakpoints-mobile-large) {
         padding: functions.rem(40px);
+        padding-top: functions.rem(60px);
       }
     }
 
     #{$self}__tag {
       position: absolute;
-      top: functions.rem(-33px);
-      left: 0;
+      top: -2px;
+      left: -2px;
       z-index: 5;
     }
 
@@ -183,5 +218,17 @@
   // NO MEDIA.
   &.no-media {
     position: relative;
+  }
+
+  &.c-card--color-grey {
+      #{$self}__link {
+        border: 2px solid var(--color-border-grey-light);
+      }
+  }
+
+  &.c-card--bg-white {
+      #{$self}__link {
+        background: white;
+      }
   }
 }

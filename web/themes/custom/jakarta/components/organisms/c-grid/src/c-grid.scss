@@ -19,10 +19,12 @@
   }
 
   #{$self}__title {
+    margin-block-start: functions.rem(40px);
     margin-block-end: functions.rem(40px);
 
     @media screen and (min-width: variables.$breakpoints-tablet) {
-      margin-block-end: functions.rem(70px);
+      margin-block-start: functions.rem(60px);
+      margin-block-end: functions.rem(90px);
     }
   }
 
@@ -49,12 +51,12 @@
   }
 
   // WITH BACKGROUND COLOR.
-  &.h-bg-color-tertiary {
-    #{$self}__grid-items__item {
-      border: 1px solid var(--color-dark);
-      padding: functions.rem(40px);
+  // &.h-bg-color-tertiary {
+  //   #{$self}__grid-items__item {
+  //     border: 1px solid var(--color-dark);
+  //     padding: functions.rem(40px);
 
-       // CHECK WHEN CONTENT IS HIGHER OR SMALLER
-    }
-  }
+  //      // CHECK WHEN CONTENT IS HIGHER OR SMALLER
+  //   }
+  // }
 }

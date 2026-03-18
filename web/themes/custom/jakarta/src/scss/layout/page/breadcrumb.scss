@@ -1,0 +1,12 @@
+@use "./../../variables";
+
+.c-page-intro .c-page-intro__breadcrumb {
+    margin-block-end: 2rem;
+    font-family: var(--font-family-sans-serif);
+}
+
+@media screen and (min-width: 90em) {
+  .c-page-intro .c-page-intro__breadcrumb {
+    margin-block-end: 2rem;
+  }
+}

@@ -19,22 +19,9 @@
   {% if url %}
     <a href="{{ url }}" class="{{ component_name }}__link">
   {% endif %}
-  {% if tag and not media %}
+  {% if tag %}
     <div class="{{ component_name }}__tag">
       {{ tag }}
-    </div>
-  {% endif %}
-  {% if media %}
-    <div class="{{ component_name }}__media-wrapper">
-      <div class="{{ component_name }}__media h-image-children-display-block h-image-full-width">
-        {{ media }}
-      </div>
-
-      {% if tag %}
-      <div class="{{ component_name }}__tag">
-        {{ tag }}
-      </div>
-      {% endif %}
     </div>
   {% endif %}
   <div class="{{ component_name }}__content">
@@ -47,8 +34,8 @@
       <div class="{{ component_name }}__title">
         {{ include('jakarta:c-heading', {
           content: title,
-          heading_tag: attr_variant is same as ('horizontal') ? 'h4' : 'h3',
-          heading_class: attr_variant is same as ('horizontal') ? 'h4' : 'h3',
+          heading_tag: attr_variant in ['horizontal', 'horizontal_outline'] ? 'h4' : 'h3',
+          heading_class: attr_variant in ['horizontal', 'horizontal_outline'] ? 'h4' : 'h3',
         }, with_context = false) }}
         {% if is_external_link %}
           {{ include('jakarta:c-icon', {
@@ -57,7 +44,7 @@
         {% endif %}
       </div>
     {% endif %}
-    {% if attr_variant is same as ('horizontal') %}
+    {% if attr_variant in ['horizontal', 'horizontal_outline'] %}
       {% if authors %}
         <div class="{{ component_name }}__authors">
           {{ authors }}
@@ -93,6 +80,13 @@
         {% endif %}
       </div>
     {% endif %}
+  {% endif %}
+  {% if media %}
+    <div class="{{ component_name }}__media-wrapper">
+      <div class="{{ component_name }}__media h-image-children-display-block h-image-full-width">
+        {{ media }}
+      </div>
+    </div>
   {% endif %}
   {% if url %}
     </a>

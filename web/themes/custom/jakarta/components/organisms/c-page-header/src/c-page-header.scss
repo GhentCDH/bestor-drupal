@@ -28,38 +28,9 @@
   // Search.
   .block-views-exposed-filter-blocksearch-page-1 {
     display: none;
-    position: relative;
 
-    .form-item-fullsearch {
-      margin-bottom: 0;
-
-      input {
-        padding-block: functions.rem(29px);
-        padding-inline-start: functions.rem(100px);
-        max-inline-size: functions.rem(590px);
-        width: 100%;
-        font-size: functions.rem(18px);
-      }
-    }
-
-    .form-actions {
-      margin-top: 0;
-      position: absolute;
-      top: 50%;
-      left: functions.rem(29px);
-      transform: translateY(-50%);
-      z-index: 5;
-
-      .c-button {
-        padding: functions.rem(10px);
-        border: 0;
-        background: transparent;
-      }
-
-      .c-icon {
-        font-size: functions.rem(25px);
-        color: var(--color-grey);
-      }
+    form {
+      max-inline-size: functions.rem(590px);
     }
 
     @media screen and (min-width: variables.$breakpoints-menu-switch) {

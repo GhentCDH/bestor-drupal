@@ -6,6 +6,8 @@ description: "A component that displays a card."
 variants:
   horizontal:
     title: Horizontal
+  horizontal_outline:
+    title: Horizontal Outline
   vertical:
     title: Vertical
   vertical_outline:

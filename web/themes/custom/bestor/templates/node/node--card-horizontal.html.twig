@@ -74,7 +74,7 @@
 {% set internal = bestor('field_values', node, 'field_issued_by_bestor') %}
 {% set tag %}
   {{ include('jakarta:c-tag', {
-    attr_variant: 'corner_down',
+    attr_variant: 'corner_up',
     color: internal ? 'primary' : 'grey',
     content: (node.type.entity.label|lower|capitalize) ~ (internal ? ' ' ~ 'from'|t ~ ' Bestor' : ''),
   }, with_context = false) }}
@@ -97,7 +97,7 @@
     title: label,
     text: content.field_summary,
     url: path('entity.node.canonical', {'node': node.id}),
-    attr_variant: 'horizontal',
+    attr_variant: 'horizontal_outline',
     c_card_utility_classes: ['bestor-img-wrapper', 'bestor-card-horizontal']
   }, with_context = false) }}
 </div>

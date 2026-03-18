@@ -91,7 +91,7 @@
   {% set identity_kit_list %}
     {% for key_element in bestor('lemma_key_data', node, 'full', 'database', 'page_1') %}
       {{ include('jakarta:c-identity-kit-item', {
-        title: '/' ~ key_element.label ,
+        title: key_element.label ,
         values: key_element.value,
       }, with_context = false) }}
     {% endfor %}

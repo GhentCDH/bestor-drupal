@@ -6,13 +6,15 @@
   $self: &;
 
   padding-block-end: functions.rem(30px);
-  border-block-end: 1px solid var(--color-dark);
+  // border-block-end: 1px solid var(--color-dark);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: functions.rem(20px);
-  margin-block-end: functions.rem(40px);
+  margin-block-end: functions.rem(20px);
+  color: var(--color-grey);
+  font-size: var(--font-size-smaller);
 
   #{$self}__read-time {
     display: flex;
@@ -21,13 +23,13 @@
 
 
     .c-icon {
-      font-size: functions.rem(24px);
+      // font-size: functions.rem(24px);
       line-height: 1;
     }
   }
 
   @media screen and (min-width: variables.$breakpoints-desktop) {
-    margin-block-end: functions.rem(65px);
+    margin-block-end: functions.rem(40px);
   }
 
   + .c-text,

@@ -5,46 +5,43 @@
 .c-tag {
   font-family: var(--font-family-title);
   line-height: 1.25;
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  .c-tag__content {
+    z-index: 1;
+    padding: functions.rem(6px) functions.rem(4px) functions.rem(4px) functions.rem(16px);
+    font-weight: var(--font-weight-light);
+    line-height: 1.25;
+    text-transform: uppercase;
+    border-top-left-radius: 1rem;
+    text-wrap: nowrap;
+  }
 }
 
 // CORNER DOWN.
 .c-tag--corner-down {
-  .c-tag__content {
-    border-top-left-radius: functions.rem(10px);
-    z-index: 1;
-    padding: functions.rem(8px) 0 functions.rem(1px) functions.rem(11px);
-  }
 
   .c-tag__corner {
     mask-size: contain;
     mask-image: url("./c-tag-corner-down.svg");
     mask-repeat: no-repeat;
-    mask-position: center center;
-    height: functions.rem(34px);
-    width: functions.rem(39px);
-    transform: translateX(#{functions.rem(-2px)});
+    mask-position: left center;
+    height: 100%;
+    aspect-ratio: 1;
   }
 }
 
 // CORNER UP.
 .c-tag--corner-up {
-  .c-tag__content {
-    z-index: 1;
-    padding: functions.rem(11px) functions.rem(5px) functions.rem(3px) functions.rem(16px);
-    font-size: var(--font-h4-size);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.25;
-  }
 
   .c-tag__corner {
     mask-size: contain;
     mask-image: url("./c-tag-corner-up.svg");
     mask-repeat: no-repeat;
-    mask-position: center center;
-    height: functions.rem(42px);
-    width: functions.rem(39px);
-    transform: translateX(#{functions.rem(-2px)});
+    mask-position: left center;
+    height: 100%;
+    aspect-ratio: 1;
   }
 }
 
@@ -53,7 +50,7 @@
   .c-tag__content,
   .c-tag__corner {
     background: var(--color-primary);
-    color: var(--color-text);
+    color: var(--color-grey-light);
   }
 }
 
@@ -61,7 +58,7 @@
 .c-tag--color-grey {
   .c-tag__content,
   .c-tag__corner {
-    background: var(--color-grey-light);
+    background: var(--color-border-grey-light);
     color: var(--color-text);
   }
 }
