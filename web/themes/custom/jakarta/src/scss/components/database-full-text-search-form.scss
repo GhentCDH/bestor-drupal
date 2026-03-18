@@ -1,0 +1,41 @@
+@use "./../variables";
+@use "./../mixins";
+@use "./../functions";
+
+
+.database-full-text-search-form {
+
+    position: relative;
+
+    .form-item-fullsearch {
+      margin-bottom: 0;
+
+      input {
+        padding-block: 0.5rem;
+        padding-inline-start: 1.5rem;
+        width: 100%;
+        font-size: functions.rem(18px);
+      }
+    }
+
+    .form-actions {
+      margin-top: 0;
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      z-index: 5;
+
+      .c-button {
+        padding: functions.rem(10px);
+        border: 0;
+        background: transparent;
+      }
+
+      .c-icon {
+        font-size: functions.rem(25px);
+        color: var(--color-grey);
+      }
+    }
+
+}

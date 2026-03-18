@@ -7,7 +7,14 @@
   --color-dark: #000000;
   --color-primary: #F36D63;
   --color-secondary: #000000;
-  --color-tertiary: #FFFAF0;
+  // --color-tertiary: #FFFAF0;
+  --color-tertiary: #F4C78A;
+
+  --color-tertiary-candidate: #f3b563;
+  --color-tertiary-candidate2: #63a1f3;
+  --color-tertiary-candidate3: #F1B565;
+  --color-tertiary-candidate4: #F4C78A;
+
 
   // Specific use colors.
   --color-background: var(--color-light);
@@ -15,4 +22,5 @@
   --color-text-link: var(--color-text);
   --color-text-link-hover: var(--color-primary);
   --color-error: #a94442;
+  --color-border-grey-light: #eee;
 }
