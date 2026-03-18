@@ -354,7 +354,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'Your search returned no results.'
+          content: "Votre recherche n'a donné aucun résultat."
           tokenize: false
       sorts:
         search_api_relevance:
@@ -3900,6 +3900,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Advanced search: stories'
       cache:
         type: search_api_none
       filters:
@@ -4002,7 +4003,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: ' Open search'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -5056,6 +5057,7 @@ display:
           1: AND
       defaults:
         cache: false
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -5069,7 +5071,7 @@ display:
         type: normal
         title: Stories
         description: ''
-        weight: 14
+        weight: 0
         expanded: false
         menu_name: advanced-search
         parent: ''
@@ -5093,6 +5095,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Advanced search: concepts'
       cache:
         type: search_api_none
       filters:
@@ -5195,7 +5198,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: 'Free search'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -6310,6 +6313,7 @@ display:
           1: AND
       defaults:
         cache: false
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -6323,7 +6327,7 @@ display:
         type: normal
         title: Concepts
         description: ''
-        weight: 2
+        weight: 0
         expanded: false
         menu_name: advanced-search
         parent: ''
@@ -6347,6 +6351,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Advanced search: documents'
       cache:
         type: search_api_none
       filters:
@@ -6449,7 +6454,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: ' Free search'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -7564,6 +7569,7 @@ display:
           1: AND
       defaults:
         cache: false
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -7577,7 +7583,7 @@ display:
         type: normal
         title: Documents
         description: ''
-        weight: 4
+        weight: 0
         expanded: false
         menu_name: advanced-search
         parent: ''
@@ -7601,6 +7607,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Advanced search: institutions'
       cache:
         type: search_api_none
       filters:
@@ -7703,7 +7710,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: 'Free search'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -8874,6 +8881,7 @@ display:
           1: AND
       defaults:
         cache: false
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -8887,7 +8895,7 @@ display:
         type: normal
         title: Institutions
         description: ''
-        weight: 6
+        weight: 0
         expanded: false
         menu_name: advanced-search
         parent: ''
@@ -8911,6 +8919,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Advanced search: instruments'
       cache:
         type: search_api_none
       filters:
@@ -9013,7 +9022,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: 'Free search'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -10127,6 +10136,7 @@ display:
           1: AND
       defaults:
         cache: false
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -10140,7 +10150,7 @@ display:
         type: normal
         title: Instruments
         description: ''
-        weight: 8
+        weight: 0
         expanded: false
         menu_name: advanced-search
         parent: ''
@@ -10164,6 +10174,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Advanced search: persons'
       cache:
         type: search_api_none
       filters:
@@ -10266,7 +10277,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: 'Free search'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -11462,6 +11473,7 @@ display:
           1: AND
       defaults:
         cache: false
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -11475,7 +11487,7 @@ display:
         type: normal
         title: Persons
         description: ''
-        weight: 10
+        weight: 0
         expanded: false
         menu_name: advanced-search
         parent: ''
@@ -11499,6 +11511,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Advanced search: places'
       cache:
         type: search_api_none
       filters:
@@ -11601,7 +11614,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: 'Free search'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -12704,6 +12717,7 @@ display:
           1: AND
       defaults:
         cache: false
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -12717,7 +12731,7 @@ display:
         type: normal
         title: Places
         description: ''
-        weight: 12
+        weight: 0
         expanded: false
         menu_name: advanced-search
         parent: ''

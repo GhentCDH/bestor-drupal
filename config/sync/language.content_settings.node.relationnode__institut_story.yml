@@ -14,5 +14,5 @@ third_party_settings:
 id: node.relationnode__institut_story
 target_entity_type_id: node
 target_bundle: relationnode__institut_story
-default_langcode: current_interface
+default_langcode: und
 language_alterable: false

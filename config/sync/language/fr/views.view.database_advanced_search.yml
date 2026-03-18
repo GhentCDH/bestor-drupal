@@ -1,9 +1,4 @@
 display:
-  default:
-    display_options:
-      empty:
-        area_text_custom:
-          content: "Votre recherche n'a donné aucun résultat."
   page_1:
     display_title: Histoires
     display_options:
@@ -15,7 +10,7 @@ display:
       menu:
         title: Personnes
   page_7:
-    display_title: Lieux
+    display_title: Lieus
     display_options:
       menu:
-        title: Lieux
+        title: Lieus

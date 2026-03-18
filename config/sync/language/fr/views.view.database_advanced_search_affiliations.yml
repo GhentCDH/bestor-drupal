@@ -8,12 +8,18 @@ display:
           label: De
         rn_relation_field_date_end_date:
           label: "Jusqu'à"
+        rn_relation_type_id_int:
+          label: 'Type de relation'
       filters:
         search_api_range_filter:
           expose:
             label: Période
           from_label: De
           to_label: "Jusqu'à"
+        facets_rn_relation_type_id__int:
+          expose:
+            label: 'Type de relation'
       empty:
         area_text_custom:
           content: "Votre recherche n'a donné aucun résultat."
+      title: 'Recherche avancée : affiliations'

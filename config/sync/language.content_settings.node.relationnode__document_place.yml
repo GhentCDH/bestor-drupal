@@ -14,5 +14,5 @@ third_party_settings:
 id: node.relationnode__document_place
 target_entity_type_id: node
 target_bundle: relationnode__document_place
-default_langcode: current_interface
+default_langcode: und
 language_alterable: false

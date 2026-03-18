@@ -8,6 +8,8 @@ display:
           label: Van
         rn_relation_field_date_end_date:
           label: Tot
+        rn_relation_type_id_int:
+          label: Relatietype
       filters:
         facets_rn_related_entity_2_id__int:
           expose:
@@ -17,9 +19,13 @@ display:
             label: Periode
           from_label: Van
           to_label: Tot
+        facets_rn_relation_type_id__int:
+          expose:
+            label: Relatietype
       empty:
         area_text_custom:
           content: 'Uw zoekopdracht leverde geen resultaten op.'
+      title: 'Geavanceerd zoeken: affiliaties'
   page_1:
     display_options:
       menu:
