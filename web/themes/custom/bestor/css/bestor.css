@@ -335,3 +335,13 @@
   align-items: flex-start;
   gap:10px 30px
 }
+
+/* Translation not available page */
+
+.translation-unavailable ul {
+  padding: revert;
+}
+
+.translation-unavailable li {
+  list-style-type: disc;
+}

@@ -1,0 +1,66 @@
+{#
+/**
+ * @file
+ * Template for the "translation unavailable" page.
+ *
+ * Available variables:
+ * - current_language: Name of the current interface language.
+ * - language_links: Array keyed by langcode, each with:
+ *   - language_name: Name of the language in the current interface language.
+ *   - title: Node title in that language.
+ *   - url: URL to the translation.
+ */
+#}
+
+{% set content %}
+  <div class="translation-unavailable">
+
+    {% if language_links %}
+
+      {% set link_count = language_links|length %}
+
+      {% if link_count == 1 %}
+
+        {% set info = language_links|first %}
+        {% set langcode = language_links|keys|first %}
+
+        <p class="translation-unavailable__message">
+          {{ 'This content is not available in @current, but you can read it in'|t({'@current': current_language}) }}
+          <span class="translation-unavailable__language">{{ info.language_name }}</span>:
+          <a href="{{ info.url }}"
+             class="translation-unavailable__link"
+             hreflang="{{ langcode }}">{{ info.title }}</a>
+        </p>
+
+      {% else %}
+
+        <p class="translation-unavailable__message">
+          {{ 'This content is not available in @current, but you can read it in the following languages:'|t({'@current': current_language}) }}
+        </p>
+        <ul class="translation-unavailable__list">
+          {% for langcode, info in language_links %}
+            <li class="translation-unavailable__item">
+              <span class="translation-unavailable__language">{{ info.language_name }}:</span>
+              <a href="{{ info.url }}"
+                 class="translation-unavailable__link"
+                 hreflang="{{ langcode }}">{{ info.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {% endif %}
+
+    {% else %}
+
+      <p class="translation-unavailable__message translation-unavailable__message--none">
+        {{ 'This content is not available in @current.'|t({'@current': current_language}) }}
+      </p>
+
+    {% endif %}
+
+  </div>
+{% endset %}
+
+{{ include('jakarta:c-structured-layout', {
+  content: content,
+}, with_context = false) }}

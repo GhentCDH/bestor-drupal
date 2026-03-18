@@ -188,6 +188,7 @@ class RelationshipDataBuilder {
       $item['_langcode'] = $effective_langcode;
       $item['_is_fallback'] = $is_fallback;
       $item['_available_languages'] = $availability->getAvailableLanguages();
+      $item['_related_nid'] = $is_fallback ? $this->resolveRelatedNid($relation_node, $viewing_node) : NULL;
 
       $data[] = $item;
     }
@@ -636,6 +637,44 @@ class RelationshipDataBuilder {
     });
 
     return $relationships;
+  }
+
+
+  /**
+   * Resolves the nid of the "other" referenced entity in a relation node.
+   *
+   * When a viewing node is provided, returns the nid of the entity on the
+   * opposite FK field. Without viewing context, returns the first referenced
+   * entity nid found.
+   *
+   * @param \Drupal\node\NodeInterface $relation_node
+   *   The relation node.
+   * @param \Drupal\node\NodeInterface|null $viewing_node
+   *   Optional viewing context node.
+   *
+   * @return int|null
+   *   The related entity nid, or NULL if not resolvable.
+   */
+  protected function resolveRelatedNid(NodeInterface $relation_node, ?NodeInterface $viewing_node): ?int {
+    $related = $this->nodeInfoService->getRelatedEntityValues($relation_node);
+
+    if (empty($related)) {
+      return NULL;
+    }
+
+    if ($viewing_node) {
+      // Return the nid from the field that does NOT contain the viewing node.
+      $viewing_fk = $this->foreignKeyResolver->getEntityForeignKeyField($relation_node, $viewing_node);
+      foreach ($related as $field => $ids) {
+        if ($field !== $viewing_fk && !empty($ids)) {
+          return (int) reset($ids);
+        }
+      }
+    }
+
+    // No viewing context — return the first nid found.
+    $first = reset($related);
+    return !empty($first) ? (int) reset($first) : NULL;
   }
 
 }

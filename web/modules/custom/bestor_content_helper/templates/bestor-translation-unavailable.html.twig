@@ -1,25 +1,60 @@
+{#
+/**
+ * @file
+ * Template for the "translation unavailable" page.
+ *
+ * Available variables:
+ * - current_language: Name of the current interface language.
+ * - language_links: Array keyed by langcode, each with:
+ *   - language_name: Name of the language in the current interface language.
+ *   - title: Node title in that language.
+ *   - url: URL to the translation.
+ */
+#}
+
 <div class="translation-unavailable">
-  <p class="translation-unavailable__message">
-    {{ 'This page is not available in @language.'|t({'@language': current_language}) }}
-  </p>
 
   {% if language_links %}
-    <p class="translation-unavailable__intro">
-      {{ 'It is available in the following languages:'|t }}
-    </p>
-    <ul class="translation-unavailable__list">
-      {% for langcode, info in language_links %}
-        <li class="translation-unavailable__item">
-          <a href="{{ info.url }}" class="translation-unavailable__link" hreflang="{{ langcode }}">
-            <span class="translation-unavailable__language">{{ info.language_name }}</span>
-            <span class="translation-unavailable__title">{{ info.title }}</span>
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+
+    {% set link_count = language_links|length %}
+
+    {% if link_count == 1 %}
+
+      {% set info = language_links|first %}
+      {% set langcode = language_links|keys|first %}
+
+      <p class="translation-unavailable__message">
+        {{ 'This content is not available in @current, but you can read it in'|t({'@current': current_language}) }}
+        <span class="translation-unavailable__language">{{ info.language_name }}</span>:
+        <a href="{{ info.url }}"
+           class="translation-unavailable__link"
+           hreflang="{{ langcode }}">{{ info.title }}</a>
+      </p>
+
+    {% else %}
+
+      <p class="translation-unavailable__message">
+        {{ 'This content is not available in @current, but you can read it in the following languages:'|t({'@current': current_language}) }}
+      </p>
+      <ul class="translation-unavailable__list">
+        {% for langcode, info in language_links %}
+          <li class="translation-unavailable__item">
+            <span class="translation-unavailable__language">{{ info.language_name }}:</span>
+            <a href="{{ info.url }}"
+               class="translation-unavailable__link"
+               hreflang="{{ langcode }}">{{ info.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+
+    {% endif %}
+
   {% else %}
-    <p class="translation-unavailable__none">
-      {{ 'This page is currently not available in any language.'|t }}
+
+    <p class="translation-unavailable__message translation-unavailable__message--none">
+      {{ 'This content is not available in @current.'|t({'@current': current_language}) }}
     </p>
+
   {% endif %}
+
 </div>

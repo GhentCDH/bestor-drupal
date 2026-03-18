@@ -2,7 +2,6 @@
 
 namespace Drupal\relationship_nodes\Display;
 
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\node\NodeInterface;
 use Drupal\relationship_nodes\RelationField\VirtualFieldManager;
@@ -11,9 +10,11 @@ use Drupal\relationship_nodes\Display\RelationshipDataBuilder;
 
 /**
  * Generic service for formatting relationships for Twig rendering.
- * 
- * Provides simple, performant relationship data structures optimized
- * for template rendering without complex nested loops.
+ *
+ * Provides rich relationship data structures optimized for template rendering.
+ * Always returns rich format — each field value is an array with 'value',
+ * 'url', 'is_fallback', 'langcode', and 'available_languages' keys.
+ * The template is responsible for deciding how to render each field.
  */
 class RelationshipTwigFormatter {
 
@@ -37,6 +38,7 @@ class RelationshipTwigFormatter {
     $this->configurator = $configurator;
   }
 
+
   /**
    * Get all relation field names for a node.
    *
@@ -51,40 +53,37 @@ class RelationshipTwigFormatter {
    */
   public function getAllRelationFields(NodeInterface $node, array $bundle_order = []): ?array {
     $fields = $this->virtualFieldManager->getReferencingRelationshipFields($node);
-    
+
     if (!$fields) {
       return NULL;
     }
 
     if (empty($bundle_order)) {
-      // Alphabetical by related bundle name
-      usort($fields, function($a, $b) use ($node) {
-        $bundle_a = $this->extractRelatedBundle($a,);
-        $bundle_b = $this->extractRelatedBundle($b);
-        return strcasecmp($bundle_a, $bundle_b);
+      // Sort alphabetically by related bundle name.
+      usort($fields, function ($a, $b) {
+        return strcasecmp($this->extractRelatedBundle($a), $this->extractRelatedBundle($b));
       });
-    } else {
-      // Custom order
-      usort($fields, function($a, $b) use ($bundle_order, $node) {
-        $bundle_a = $this->extractRelatedBundle($a);
-        $bundle_b = $this->extractRelatedBundle($b);
-        
-        $pos_a = array_search($bundle_a, $bundle_order);
-        $pos_b = array_search($bundle_b, $bundle_order);
-        
+    }
+    else {
+      // Sort by custom bundle order.
+      usort($fields, function ($a, $b) use ($bundle_order) {
+        $pos_a = array_search($this->extractRelatedBundle($a), $bundle_order);
+        $pos_b = array_search($this->extractRelatedBundle($b), $bundle_order);
         if ($pos_a === FALSE) $pos_a = 999;
         if ($pos_b === FALSE) $pos_b = 999;
-        
         return $pos_a <=> $pos_b;
       });
     }
-    
+
     return $fields;
   }
 
 
   /**
    * Get formatted relationships ready for Twig rendering.
+   *
+   * Always returns rich format — each field value is an array with 'value',
+   * 'url', 'is_fallback', 'langcode', and 'available_languages' keys.
    *
    * @param \Drupal\node\NodeInterface $node
    *   The viewing node.
@@ -94,18 +93,28 @@ class RelationshipTwigFormatter {
    *   Options:
    *   - 'default_fields': Array of field names to include
    *     (default: ['calculated_related_id', 'calculated_relation_type_name'])
-   *   - 'format': 'simple' (default, flat strings) or 'rich' (with metadata)
-   *   - 'include_links': Whether to render entity references as links (default: TRUE)
-   *   - 'language': Language code to use. Falls back to current language (OPTIONAL)
-   *   - 'language_fallback': If TRUE, show relations in a fallback language when
-   *     the requested language is unavailable (default: FALSE)
+   *   - 'include_links': Whether to resolve entity references as links
+   *     (default: TRUE)
+   *   - 'language': Language code to use. Falls back to current language
+   *     (OPTIONAL)
+   *   - 'language_fallback': If TRUE, include relations unavailable in the
+   *     requested language using the best available language (default: FALSE)
    *   - 'extra_fields': Associative array per relation field:
-   *       ['computed_relationshipfield__person__person' => ['field_date_start', 'field_municipality']]
+   *       ['computed_relationshipfield__person__person' => ['field_date_start']]
    * @param array $field_settings
    *   Custom field configuration per field. Merges with defaults.
    *
    * @return array|null
-   *   Formatted relationship data, or NULL if none.
+   *   Formatted relationship data, or NULL if none. Structure:
+   *   - 'title': Related bundle name.
+   *   - 'field_name': The relation field name.
+   *   - 'relation_bundle': The relation bundle machine name.
+   *   - 'items': Array of items, each containing fields as:
+   *     ['value' => ..., 'url' => ..., 'is_fallback' => ...,
+   *      'langcode' => ..., 'available_languages' => [...]]
+   *     Plus '_is_fallback', '_langcode', '_available_languages',
+   *     '_extra_fields'.
+   *   - '_cache': CacheableMetadata object.
    */
   public function getFormattedRelationships(
     NodeInterface $node,
@@ -113,19 +122,16 @@ class RelationshipTwigFormatter {
     array $options = [],
     array $field_settings = []
   ): ?array {
-    // Load relation nodes.
     $relation_nodes = $this->loadRelationNodes($node, $relation_field_name);
     if (!$relation_nodes) {
       return NULL;
     }
 
-    // Get relation bundle.
     $relation_bundle = $this->getRelationBundle($node, $relation_field_name);
     if (!$relation_bundle) {
       return NULL;
     }
 
-    // Build field configurations.
     $field_configs = $this->buildFieldConfigurations(
       $relation_bundle,
       $relation_field_name,
@@ -133,7 +139,6 @@ class RelationshipTwigFormatter {
       $field_settings
     );
 
-    // Build relationship data, passing language and fallback options through.
     $rel_data = $this->dataBuilder->buildRelationshipData($relation_nodes, [
       'field_configs' => $field_configs,
       'viewing_node' => $node,
@@ -149,20 +154,15 @@ class RelationshipTwigFormatter {
       return NULL;
     }
 
-    // Simplify for Twig.
     $extra_fields = $this->getExtraFields($relation_field_name, $options);
     $items = $this->simplifyForTwig(
       $relationships,
-      $options['format'] ?? 'simple',
       $options['include_links'] ?? TRUE,
       $extra_fields
     );
 
-    // Generate title from bundle name.
-    $title = $this->extractRelatedBundle($relation_field_name);
-
     return [
-      'title' => $title,
+      'title' => $this->extractRelatedBundle($relation_field_name),
       'field_name' => $relation_field_name,
       'relation_bundle' => $relation_bundle,
       'items' => $items,
@@ -172,7 +172,15 @@ class RelationshipTwigFormatter {
 
 
   /**
-   * Load relation nodes from a field.
+   * Loads relation nodes from a field on a node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node.
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return \Drupal\node\NodeInterface[]|null
+   *   Array of relation nodes, or NULL if none.
    */
   protected function loadRelationNodes(NodeInterface $node, string $field_name): ?array {
     if (!$node->hasField($field_name) || $node->get($field_name)->isEmpty()) {
@@ -189,8 +197,17 @@ class RelationshipTwigFormatter {
     return $relation_nodes ?: NULL;
   }
 
+
   /**
-   * Get relation bundle from field definition.
+   * Returns the relation bundle machine name from a field definition.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node.
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return string|null
+   *   The relation bundle machine name, or NULL if not found.
    */
   protected function getRelationBundle(NodeInterface $node, string $field_name): ?string {
     $field_def = $node->get($field_name)->getFieldDefinition();
@@ -198,8 +215,21 @@ class RelationshipTwigFormatter {
     return reset($target_bundles) ?: NULL;
   }
 
+
   /**
-   * Build field configurations for relationship data builder.
+   * Builds field configurations for the relationship data builder.
+   *
+   * @param string $relation_bundle
+   *   The relation bundle machine name.
+   * @param string $relation_field_name
+   *   The relation field name.
+   * @param array $options
+   *   Options array from getFormattedRelationships().
+   * @param array $field_settings
+   *   Custom field settings to merge with defaults.
+   *
+   * @return array
+   *   Field configurations keyed by field name.
    */
   protected function buildFieldConfigurations(
     string $relation_bundle,
@@ -208,15 +238,15 @@ class RelationshipTwigFormatter {
     array $field_settings = []
   ): array {
     $field_names = $this->configurator->getAvailableFieldNames($relation_bundle);
-    
+
     $default_fields = $options['default_fields'] ?? ['calculated_related_id', 'calculated_relation_type_name'];
     $extra_fields = $this->getExtraFields($relation_field_name, $options);
     $fields_to_enable = array_merge($default_fields, $extra_fields);
-    
+
     $field_configs = [];
     foreach ($field_names as $field_name) {
       if (in_array($field_name, $fields_to_enable)) {
-         $defaults = [
+        $defaults = [
           'field_name' => $field_name,
           'enabled' => TRUE,
           'display_mode' => 'link',
@@ -228,52 +258,32 @@ class RelationshipTwigFormatter {
           'multiple_separator' => ', ',
         ];
 
-        $custom = $field_settings[$field_name] ?? [];
-        $field_configs[$field_name] = array_merge($defaults, $custom);
+        $field_configs[$field_name] = array_merge($defaults, $field_settings[$field_name] ?? []);
       }
     }
 
     return $field_configs;
   }
 
+
   /**
-   * Get extra fields for a specific relation field.
-   */
-  protected function getExtraFields(string $relation_field_name, array $options): array {
-    $all_extra = $options['extra_fields'] ?? [];
-    return $all_extra[$relation_field_name] ?? [];
-  }
-
-
- /**
    * Simplifies relationship data for Twig rendering.
    *
-   * Passes through availability metadata (_is_fallback, _langcode,
-   * _available_languages) so the consuming template can decide how to
-   * render unavailable relations — e.g. a styled link, a tooltip, or
-   * a redirect to an informational page.
+   * Always returns rich format: each field value is an array with 'value',
+   * 'url', 'is_fallback', 'langcode', and 'available_languages' keys.
    *
    * @param array $relationships
    *   Relationship data from buildRelationshipData().
-   * @param string $format
-   *   'simple' (flat strings) or 'rich' (with metadata).
    * @param bool $include_links
-   *   Whether to render entity references as links.
+   *   Whether to resolve entity references as links (populates 'url').
    * @param array $extra_fields
    *   Extra field names to place under '_extra_fields'.
    *
    * @return array
-   *   Simplified items ready for Twig, each containing:
-   *   - Field values keyed by clean field name.
-   *   - '_extra_fields': Extra field values.
-   *   - '_is_fallback': TRUE if the item is not available in the requested language.
-   *   - '_langcode': The effective language used for loading field values.
-   *   - '_available_languages': Languages in which all referenced entities
-   *     have a published translation.
+   *   Simplified items ready for Twig.
    */
   protected function simplifyForTwig(
     array $relationships,
-    string $format,
     bool $include_links,
     array $extra_fields
   ): array {
@@ -286,7 +296,7 @@ class RelationshipTwigFormatter {
       $available_languages = $rel['_available_languages'] ?? [];
 
       foreach ($rel as $field_name => $field_data) {
-        if (in_array($field_name, ['_relation_node', '_langcode', '_is_fallback', '_available_languages'])) {
+        if (in_array($field_name, ['_relation_node', '_langcode', '_is_fallback', '_available_languages', '_related_nid'])) {
           continue;
         }
 
@@ -299,28 +309,10 @@ class RelationshipTwigFormatter {
         $is_extra = !empty($extra_fields) && in_array($field_name, $extra_fields);
         $target_key = $is_extra ? '_extra' : '_main';
 
-        if ($format === 'simple') {
-          if ($include_links && !empty($first_value['link_url'])) {
-            $item[$target_key][$clean_name] = $this->renderLink(
-              $first_value['value'],
-              $first_value['link_url']
-            );
-          }
-          else {
-            $item[$target_key][$clean_name] = $first_value['value'];
-          }
-        }
-        else {
-          // Rich format — include full metadata so the template decides
-          // how to handle unavailable relations.
-          $item[$target_key][$clean_name] = [
-            'value' => $first_value['value'],
-            'url' => $first_value['link_url'],
-            'is_fallback' => $is_fallback,
-            'langcode' => $effective_langcode,
-            'available_languages' => $available_languages,
-          ];
-        }
+        $item[$target_key][$clean_name] = [
+          'value' => $first_value['value'],
+          'url' => $include_links ? ($first_value['link_url'] ?? NULL) : NULL,
+        ];
       }
 
       if (!empty($item['_main'])) {
@@ -329,6 +321,7 @@ class RelationshipTwigFormatter {
           '_is_fallback' => $is_fallback,
           '_langcode' => $effective_langcode,
           '_available_languages' => $available_languages,
+          '_related_nid' => $rel['_related_nid'] ?? NULL
         ]);
       }
     }
@@ -338,39 +331,36 @@ class RelationshipTwigFormatter {
 
 
   /**
-   * Renders a standard entity link.
+   * Returns extra fields for a specific relation field from options.
    *
-   * @param string $title
-   *   The link label.
-   * @param \Drupal\Core\Url $url
-   *   The link URL.
+   * @param string $relation_field_name
+   *   The relation field name.
+   * @param array $options
+   *   Options array from getFormattedRelationships().
    *
-   * @return \Drupal\Core\Render\Markup
-   *   Rendered link markup.
+   * @return array
+   *   Extra field names, or empty array if none.
    */
-  protected function renderLink(string $title, $url): Markup {
-    $link_array = [
-      '#type' => 'link',
-      '#title' => $title,
-      '#url' => $url,
-      '#options' => [
-        'attributes' => [
-          'class' => ['relationship-link'],
-        ],
-      ],
-    ];
-    return Markup::create($this->renderer->renderPlain($link_array));
+  protected function getExtraFields(string $relation_field_name, array $options): array {
+    return ($options['extra_fields'] ?? [])[$relation_field_name] ?? [];
   }
 
 
   /**
-   * Extract related bundle from field name.
-   * 
+   * Extracts the related bundle name from a relation field name.
+   *
    * Format: computed_relationshipfield__bundle1__bundle2
    * Returns bundle2 (always the related/target bundle).
+   *
+   * @param string $field_name
+   *   The relation field name.
+   *
+   * @return string
+   *   The related bundle name.
    */
   protected function extractRelatedBundle(string $field_name): string {
     $parts = explode('__', $field_name);
     return $parts[2] ?? '';
   }
+
 }

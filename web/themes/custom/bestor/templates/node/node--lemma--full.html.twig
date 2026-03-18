@@ -91,7 +91,7 @@
   {% set identity_kit_list %}
     {% for key_element in bestor('lemma_key_data', node, 'full', 'database', 'page_1') %}
       {{ include('jakarta:c-identity-kit-item', {
-        title: key_element.label ,
+        title: '/' ~ key_element.label ,
         values: key_element.value,
       }, with_context = false) }}
     {% endfor %}
@@ -181,6 +181,7 @@
         'field_date_end_year_only'
       ] %}
       {% set rel_data = rn('formatted_relations', node, relfield, {
+        'language_fallback': true,
         'extra_fields': {
           'computed_relationshipfield__person__institution': extra_pers_inst_flds,
           'computed_relationshipfield__institution__person': extra_pers_inst_flds,
@@ -189,9 +190,13 @@
       {% if rel_data %}
         {% set items %}
           <ul class="links">
-            {% for rel in rel_data.items  %}
+            {% for rel in rel_data.items %}
               <li>
-                {{ rel.related_id }} {% if rel.relation_type_name %}({{ rel.relation_type_name }}){% endif %}
+                <a href="{{ rel._is_fallback ? path('bestor_content_helper.translation_unavailable', {nid: rel._related_nid}) : rel.related_id.url }}"
+                  class="relationship-link{{ rel._is_fallback ? ' relationship-link--unavailable' : '' }}">
+                  {{ rel.related_id.value }}
+                </a>
+                {% if rel.relation_type_name %}({{ rel.relation_type_name.value }}){% endif %}
               </li>
             {% endfor %}
           </ul>
