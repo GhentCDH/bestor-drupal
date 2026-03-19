@@ -230,4 +230,15 @@
     }
   };
 
+
+  // Disable scroll to top on toggling facets.
+  Drupal.behaviors.disableViewsScrollTop = {
+    attach: function (context) {
+      once('disable-scroll-top', 'body', context).forEach(function () {
+        Drupal.AjaxCommands.prototype.viewsScrollTop = function () {};
+        Drupal.AjaxCommands.prototype.scrollTop = function () {};
+      });
+    }
+  };
+
 })(jQuery, Drupal, once);

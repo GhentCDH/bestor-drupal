@@ -386,7 +386,7 @@
 
 .views-filters-summary .reset:hover {
     background: transparent;
-    color: var(--color-primary);
+    color: var(--color-primary) !important;
 }
 
 
@@ -400,5 +400,5 @@
 }
 
 .block-local-tasks-block ul{
-    column-gap: 0.8rem;
+  column-gap: 0.8rem;
 }
