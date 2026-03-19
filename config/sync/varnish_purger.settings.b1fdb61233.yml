@@ -13,8 +13,11 @@ scheme: http
 verify: '1'
 headers:
   -
-    field: 'Cache-tags'
+    field: Cache-tags
     value: '[invalidation:expression]'
+  -
+    field: X-VC-Purge-Key
+    value: setecastronomy
 body: null
 body_content_type: null
 runtime_measurement: true

@@ -345,3 +345,31 @@
 .translation-unavailable li {
   list-style-type: disc;
 }
+
+/* Mobile menu */
+
+.c-page-overlay .navigation.menu--main .menu__item--level-2 > *{
+  font-size: 1.2rem;
+  
+}
+
+.c-page-overlay .navigation.menu--main li > span {
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  margin-bottom: 0.25rem;
+
+}
+
+.c-page-overlay .navigation.menu--main li > a {
+  font-size: 1.8rem;
+}
+
+
+.c-page-overlay .navigation.menu--main li > span:before, 
+.c-page-overlay .navigation.menu--main li > span:after{
+  content: '-';
+  margin:0 5px;
+}
+
