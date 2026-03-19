@@ -8,3 +8,12 @@ display:
         facets_tax_author__int:
           expose:
             label: Auteur
+        facets_content_type__str:
+          expose:
+            label: Catégorie
+      header:
+        views_filters_summary:
+          filters_summary_prefix: pour
+          filters_result_label:
+            plural: résultat
+            singular: 'résultats '

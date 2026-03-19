@@ -10,6 +10,7 @@ dependencies:
     - facets_exposed_filters
     - relationship_nodes_search
     - search_api
+    - views_filters_summary
 id: database
 label: Database
 module: views
@@ -538,7 +539,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Content type'
+            label: Category
             description: ''
             use_operator: false
             operator: ''
@@ -794,7 +795,12 @@ display:
             hard_limit: 0
             min_count: 1
             show_numbers: false
-            processor_configs: {  }
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
         facets_tax_typology__int:
           id: facets_tax_typology__int
           table: search_api_index_bestor_main_search_index
@@ -846,8 +852,8 @@ display:
             min_count: 1
             show_numbers: false
             processor_configs:
-              list_item:
-                processor_id: list_item
+              translate_entity:
+                processor_id: translate_entity
                 weights:
                   build: 5
                 settings: {  }
@@ -902,8 +908,8 @@ display:
             min_count: 1
             show_numbers: false
             processor_configs:
-              list_item:
-                processor_id: list_item
+              translate_entity:
+                processor_id: translate_entity
                 weights:
                   build: 5
                 settings: {  }
@@ -957,7 +963,12 @@ display:
             hard_limit: 0
             min_count: 1
             show_numbers: false
-            processor_configs: {  }
+            processor_configs:
+              translate_entity_aggregated_fields:
+                processor_id: translate_entity_aggregated_fields
+                weights:
+                  build: 5
+                settings: {  }
       filter_groups:
         operator: AND
         groups:
@@ -991,7 +1002,28 @@ display:
       relationships: {  }
       css_class: database-view
       use_ajax: true
-      header: {  }
+      header:
+        views_filters_summary:
+          id: views_filters_summary
+          table: views
+          field: views_filters_summary
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: views_filters_summary
+          empty: false
+          filters: {  }
+          show_labels: false
+          show_remove_link: false
+          show_reset_link: true
+          group_values: false
+          content: '@total @result_label @exposed_filter_summary'
+          filters_reset_link_title: Reset
+          filters_summary_separator: ''
+          filters_summary_prefix: for
+          filters_result_label:
+            plural: results
+            singular: result
       footer: {  }
       display_extenders: {  }
     cache_metadata:
