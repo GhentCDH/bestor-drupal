@@ -391,7 +391,7 @@
 
 
 /* Admin quick edit bar */
-#block-bestor-local-tasks {
+.block-local-tasks-block {
   background-color:#fff;
   border-radius:0.25rem;
   border: solid black 2px;
@@ -399,6 +399,6 @@
   font-family: var(--font-family-sans-serif);
 }
 
-#block-bestor-local-tasks ul{
+.block-local-tasks-block ul{
     column-gap: 0.8rem;
 }
