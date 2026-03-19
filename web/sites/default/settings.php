@@ -8,24 +8,25 @@ $databases = [];
 $settings['config_sync_directory'] = '../config/sync';
 
 if (getenv('DRUPAL_APP_ENV')) {
-  // Trusted hosts
-  $settings['trusted_host_patterns'] = [
-    '^' . preg_quote(getenv('DOMAIN'), '/') . '$',
-  ];
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = TRUE;
 
   // Config ignore
   $settings['config_ignore_deactivate'] = TRUE;
 } else {  
-  // Trusted hosts
-  $settings['trusted_host_patterns'] = [
-    '^bestor\.be$',
-    '^prd\.bestor\.ugent\.be$'
-  ];
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = FALSE;
 }
+
+// Trusted hosts configuration
+// Based on getenv('DOMAIN')
+// Split values separated by comma and add domains to trusted_host_patterns
+$domains = explode(',', getenv('DOMAIN'));
+$trusted_hosts = [];
+foreach ($domains as $domain) {
+  $trusted_hosts[] = '^' . preg_quote(trim($domain), '/') . '$';
+}
+$settings['trusted_host_patterns'] = $trusted_hosts;
 
 /**
  * Salt for one-time login links, cancel links, form tokens, etc.
@@ -176,6 +177,19 @@ $settings['reverse_proxy_addresses'] = [
 ];
 
 $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO | \Symfony\Component\HttpFoundation\Request::HEADER_FORWARDED;
+
+/* Varnish configuration */
+$config['varnish_purger.settings.b1fdb61233']['headers'] = [
+  [
+    'field' => 'Cache-Tags',
+    'value' => '[invalidation:expression]',
+  ],
+  [
+    'field' => 'X-VC-Purge-Key',
+    'value' => getenv('VARNISH_PURGE_KEY'),
+  ],
+];
+
 
 // Load local settings if available.
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
