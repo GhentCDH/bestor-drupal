@@ -8,25 +8,25 @@ $databases = [];
 $settings['config_sync_directory'] = '../config/sync';
 
 if (getenv('DRUPAL_APP_ENV')) {
-  // Trusted hosts
-  $settings['trusted_host_patterns'] = [
-    '^' . preg_quote(getenv('DOMAIN'), '/') . '$',
-  ];
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = TRUE;
 
   // Config ignore
   $settings['config_ignore_deactivate'] = TRUE;
 } else {  
-  // Trusted hosts
-  $settings['trusted_host_patterns'] = [
-    '^bestor\.be$',
-    '^prd\.bestor\.ugent\.be$',
-    '^dev\.bestor\.ugent\.be$',
-  ];
   // Config split
   $config['config_split.config_split.bestor_dev_only']['status'] = FALSE;
 }
+
+// Trusted hosts configuration
+// Based on getenv('DOMAIN')
+// Split values separated by comma and add domains to trusted_host_patterns
+$domains = explode(',', getenv('DOMAIN'));
+$trusted_hosts = [];
+foreach ($domains as $domain) {
+  $trusted_hosts[] = '^' . preg_quote(trim($domain), '/') . '$';
+}
+$settings['trusted_host_patterns'] = $trusted_hosts;
 
 /**
  * Salt for one-time login links, cancel links, form tokens, etc.
