@@ -9,6 +9,10 @@
 
   #{$self}__wrapper {
     @include mixins.grid-wrapper(0);
+
+    @media screen and (min-width: variables.$breakpoints-tablet) and (max-width: calc(#{variables.$breakpoints-desktop} - 0.01em)) {
+      gap: var(--grid-gutter);
+    }
   }
 
   #{$self}__title,
@@ -19,12 +23,11 @@
     @media screen and (min-width: variables.$breakpoints-tablet) {
       @include mixins.grid-item(6);
     }
-
   }
 
   #{$self}__title {
-    @media screen and (min-width: variables.$breakpoints-desktop) {
-      @include mixins.grid-item(24);
+    @media screen and (min-width: variables.$breakpoints-tablet) and (max-width: calc(#{variables.$breakpoints-desktop} - 0.01em)) {
+      @include mixins.grid-item(12);
     }
 
     @media screen and (min-width: variables.$breakpoints-desktop) {
@@ -34,6 +37,10 @@
   }
 
   #{$self}__tabs {
+    @media screen and (min-width: variables.$breakpoints-tablet) and (max-width: calc(#{variables.$breakpoints-desktop} - 0.01em)) {
+      @include mixins.grid-item(8);
+    }
+
     @media screen and (min-width: variables.$breakpoints-desktop) {
       @include mixins.grid-item(13);
       @include mixins.grid-item-start(2);
@@ -41,6 +48,11 @@
   }
 
   #{$self}__sidebar {
+    @media screen and (min-width: variables.$breakpoints-tablet) and (max-width: calc(#{variables.$breakpoints-desktop} - 0.01em)) {
+      @include mixins.grid-item(4);
+      @include mixins.grid-item-start(9);
+    }
+
     @media screen and (min-width: variables.$breakpoints-desktop) {
       @include mixins.grid-item(7);
       @include mixins.grid-item-start(17);
