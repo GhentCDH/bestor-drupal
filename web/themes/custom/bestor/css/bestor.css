@@ -369,7 +369,7 @@
 .views-filters-summary .reset {
   background: var(--color-primary);
     border: 2px solid var(--color-primary);
-    color: var(--color-light);
+    color: var(--color-light) !important;
     font-family: var(--font-family-sans-serif);
     border-radius: 0.25rem;
     padding: .20rem 0.4rem;
