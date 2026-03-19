@@ -388,3 +388,17 @@
     background: transparent;
     color: var(--color-primary);
 }
+
+
+/* Admin quick edit bar */
+#block-bestor-local-tasks {
+  background-color:#fff;
+  border-radius:0.25rem;
+  border: solid black 2px;
+  padding: 10px 20px;
+  font-family: var(--font-family-sans-serif);
+}
+
+#block-bestor-local-tasks ul{
+    column-gap: 0.8rem;
+}
