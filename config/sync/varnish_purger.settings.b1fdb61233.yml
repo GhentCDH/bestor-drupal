@@ -13,7 +13,7 @@ scheme: http
 verify: '1'
 headers:
   -
-    field: 'Cache-tags '
+    field: 'Cache-tags'
     value: '[invalidation:expression]'
 body: null
 body_content_type: null
