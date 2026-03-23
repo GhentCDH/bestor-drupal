@@ -77,16 +77,22 @@
       }
     }
 
-    .views-exposed-form > label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: var(--font-h4-size);
-      font-weight: var(--font-weight-medium);
-      font-family: var(--font-family-sans-serif);
-      line-height: 1.25;
+    .block-database-full-text-search-block > label {
+      display: none;
+    }
 
-      @media screen and (min-width: variables.$breakpoints-tablet) {
-        display: none;
+    #{$self}__search {
+      .block-database-full-text-search-block > label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: var(--font-h4-size);
+        font-weight: var(--font-weight-medium);
+        font-family: var(--font-family-sans-serif);
+        line-height: 1.25;
+
+        @media screen and (min-width: variables.$breakpoints-tablet) {
+          display: none;
+        }
       }
     }
   }

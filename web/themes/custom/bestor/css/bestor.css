@@ -417,3 +417,8 @@
     --klaro-button-border-radius: 0.25rem;
     font-family: var(--font-family-sans-serif);
 }
+
+
+.block-database-full-text-search-block > label {
+  display: none;
+}
