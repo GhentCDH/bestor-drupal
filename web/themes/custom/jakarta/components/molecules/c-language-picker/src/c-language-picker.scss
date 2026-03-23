@@ -35,7 +35,7 @@
   opacity: 0;
   position: absolute;
   top: calc(100% + #{functions.rem(7.5px)});
-  left: 0;
+  right: 0;
   z-index: 20;
   transition: var(--transition-eased);
 

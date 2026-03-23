@@ -402,3 +402,18 @@
 .block-local-tasks-block ul{
   column-gap: 0.8rem;
 }
+
+
+.form-item select,
+.form-item input,
+.form-item label,
+.form-item summary{
+  font-family: var(--font-family-sans-serif);
+}
+
+
+.klaro {
+    --klaro-primary-color: var(--color-primary);
+    --klaro-button-border-radius: 0.25rem;
+    font-family: var(--font-family-sans-serif);
+}
