@@ -1,5 +1,4 @@
 /* FIX: menu items can also be spans */
-
 .menu--main > .menu > .menu__item > span{
   font-size: 18px;
 }
@@ -13,7 +12,6 @@
 }
 
 /* FEAT: placeholder when image unavailable */
-
 .c-card__media img,
 .c-info-box__media img {
   text-align: center;
@@ -22,7 +20,6 @@
 }
 
 /* FEAT: caption for table paragraphs */
-
 .bestor-table-caption {
     font-size: 15px;
     font-style: italic;
@@ -31,7 +28,6 @@
 
 
 /* FEAT: hide dropdown toc if no elements */
-
 @supports selector(:has(*)) {
   .c-dropdown:has(.toc-js nav:empty) {
     display: none;
@@ -44,7 +40,6 @@
 
 
 /* FEAT: provide fixes for non-lemma pages */
-
 @media screen and (min-width: 90em) {
   .c-structured-layout--no-top .c-structured-layout__content {
     grid-column-start: 1 !important;
@@ -60,7 +55,6 @@
 
 
 /* FIX: improve facet subtitle styling */
-
 .views-exposed-form form > .form-item > label,
 .views-exposed-form form > .selectify-multi > label {
   margin-bottom: 10px;
@@ -80,13 +74,11 @@
 }
 
 /* FIX: improve general checkboxes display */
-
 .c-input-checkbox ~ label::before {
     top: 0.15rem;
 }
 
 /* FEAT: update multiselect to visually better single select dropdown */
-
 .c-select-wrapper {
   position: relative;
   display: inline-block;
@@ -120,14 +112,12 @@
 } */
 
 /* FEAT: full page form and system block styling */
-
 .pagecontent-form .c-structured-layout__content{
   grid-column-start: 1;
 }
 
 
 /* FIX: make space between paragraphs smaller */
-
 @media screen and (min-width: 90em) {
 
   .field--type-entity-reference-revisions .c-text,
@@ -142,14 +132,12 @@
 }
 
 /* FIX: remove border of footnotes block */
-
 #footnotes_group {
   border: unset;
 }
 
 
 /* FEAT: sidebar with key info for events */
-
 .node-event-full  .c-lemma-sidebar__related-items {
   border: solid black 1px;
   padding: 30px;
@@ -161,7 +149,6 @@
 
 
 /* FIX: general adaptations of empty space: padding, margin */
-
 .c-grid.h-bg-color-tertiary .c-grid__grid-items__item > div{
   margin-left:auto;
   margin-right: auto;
@@ -214,8 +201,6 @@
 }
 
 /* FEAT: fallback when no img styling */
-
-
 .bestor-card-horizontal .c-card__media {
   width: 320px;
   height: 211px;
@@ -261,7 +246,6 @@
 }
 
 /* FEAT: style remote videos in paragraphs */
-
 .field--type-entity-reference-revisions .media--type-remote-video .field--name-field-media-oembed-video{
   position: relative;
   width: 100%;
@@ -279,7 +263,6 @@
 }
 
 /* FEAT: citation block lemma */
-
 .citation-popup {
   position: absolute;
   z-index: 1000;
@@ -324,7 +307,6 @@
 }
 
 /* Advanced search */
-
 .view-database-advanced-search .views-exposed-form ,
 .view-database-advanced-search-affiliations .views-exposed-form{
   border: solid black 1px;
@@ -337,7 +319,6 @@
 }
 
 /* Translation not available page */
-
 .translation-unavailable ul {
   padding: revert;
 }
@@ -347,7 +328,6 @@
 }
 
 /* views filter summary */
-
 .views-filters-summary .value-container{
   border: 2px solid var(--color-grey-light);
   border-radius: 0.25rem;
@@ -389,7 +369,6 @@
     color: var(--color-primary) !important;
 }
 
-
 /* Admin quick edit bar */
 .block-local-tasks-block {
   background-color:#fff;
@@ -403,21 +382,19 @@
   column-gap: 0.8rem;
 }
 
-
 .form-item select,
 .form-item input,
 .form-item label,
-.form-item summary{
+.form-item summary,
+.view-header {
   font-family: var(--font-family-sans-serif);
 }
-
 
 .klaro {
     --klaro-primary-color: var(--color-primary);
     --klaro-button-border-radius: 0.25rem;
     font-family: var(--font-family-sans-serif);
 }
-
 
 .block-database-full-text-search-block > label {
   display: none;
