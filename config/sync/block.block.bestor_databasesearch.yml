@@ -14,7 +14,7 @@ provider: null
 plugin: database_full_text_search_block
 settings:
   id: database_full_text_search_block
-  label: 'Database Search'
-  label_display: '0'
+  label: 'Search everything'
+  label_display: visible
   provider: bestor_custom_search
 visibility: {  }
