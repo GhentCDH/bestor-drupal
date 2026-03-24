@@ -26,6 +26,12 @@ display:
         area_text_custom:
           content: 'Uw zoekopdracht leverde geen resultaten op.'
       title: 'Geavanceerd zoeken: affiliaties'
+      header:
+        views_filters_summary:
+          filters_summary_prefix: voor
+          filters_result_label:
+            plural: resultaat
+            singular: resultaten
   page_1:
     display_options:
       menu:

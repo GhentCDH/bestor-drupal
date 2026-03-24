@@ -19,6 +19,7 @@ dependencies:
     - search_api
     - search_api_range_filter
     - user
+    - views_filters_summary
 id: database_advanced_search_affiliations
 label: 'Database Advanced search Affiliations'
 module: views
@@ -995,7 +996,28 @@ display:
           preserve_facet_query_args: false
           query_tags: {  }
       relationships: {  }
-      header: {  }
+      header:
+        views_filters_summary:
+          id: views_filters_summary
+          table: views
+          field: views_filters_summary
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: views_filters_summary
+          empty: false
+          filters: {  }
+          show_labels: false
+          show_remove_link: false
+          show_reset_link: true
+          group_values: false
+          content: '@total @result_label @exposed_filter_summary'
+          filters_reset_link_title: Reset
+          filters_summary_separator: ', '
+          filters_summary_prefix: 'for '
+          filters_result_label:
+            plural: results
+            singular: result
       footer: {  }
       display_extenders: {  }
     cache_metadata:

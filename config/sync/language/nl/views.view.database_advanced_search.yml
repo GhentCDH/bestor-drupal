@@ -4,6 +4,12 @@ display:
       empty:
         area_text_custom:
           content: 'Uw zoekopdracht leverde geen resultaten op.'
+      header:
+        views_filters_summary:
+          filters_summary_prefix: voor
+          filters_result_label:
+            plural: resultaat
+            singular: resultaten
   page_1:
     display_title: Verhalen
     display_options:

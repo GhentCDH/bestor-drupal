@@ -23,3 +23,9 @@ display:
         area_text_custom:
           content: "Votre recherche n'a donné aucun résultat."
       title: 'Recherche avancée : affiliations'
+      header:
+        views_filters_summary:
+          filters_summary_prefix: pour
+          filters_result_label:
+            plural: résultat
+            singular: résultats

@@ -14,3 +14,11 @@ display:
     display_options:
       menu:
         title: Lieus
+  default:
+    display_options:
+      header:
+        views_filters_summary:
+          filters_summary_prefix: pour
+          filters_result_label:
+            plural: résultat
+            singular: résultats

@@ -16,4 +16,4 @@ display:
           filters_summary_prefix: pour
           filters_result_label:
             plural: résultat
-            singular: 'résultats '
+            singular: résultats
