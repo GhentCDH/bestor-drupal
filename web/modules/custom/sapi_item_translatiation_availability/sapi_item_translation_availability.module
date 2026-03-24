@@ -1,0 +1,63 @@
+<?php
+
+use Drupal\node\NodeInterface;
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function sapi_item_translation_availability_views_data_alter(array &$data): void {
+  foreach ($data as $table => &$fields) {
+    if (isset($fields['available_translations']['filter'])) {
+      $fields['available_translations']['filter']['id'] = 'sapi_translation_availability';
+    }
+  }
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function sapi_item_translation_availability_node_update(NodeInterface $node): void {
+  _item_translation_reindex($node);
+}
+
+/**
+ * Implements hook_views_node_insert().
+ */
+function sapi_item_translation_availability_node_insert(NodeInterface $node): void {
+  _item_translation_reindex($node);
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function sapi_item_translation_availability_node_delete(NodeInterface $node): void {
+  _item_translation_reindex($node);
+}
+
+/**
+ * Reindex function.
+ */
+function _item_translation_reindex(NodeInterface $node): void {
+  foreach (Index::loadMultiple() as $index) {
+    // Check for node datasource like supportsIndex() does.
+    $has_node_datasource = FALSE;
+    foreach ($index->getDatasources() as $datasource) {
+      if ($datasource->getPluginId() === 'entity:node') {
+        $has_node_datasource = TRUE;
+        break;
+      }
+    }
+
+    if (!$has_node_datasource) {
+      continue;
+    }
+
+    $processors = $index->getProcessors();
+    if (!isset($processors['item_translation_availability'])) {
+      continue;
+    }
+
+    $index->trackItemsUpdated('entity:node', [$node->id() . ':' . $node->language()->getId()]);
+  }
+}

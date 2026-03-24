@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a views exposed form.
+ *
+ * Available variables:
+ * - form: A render element representing the form.
+ *
+ * @see template_preprocess_views_exposed_form()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if q is not empty %}
+  {#
+    This ensures that, if clean URLs are off, the 'q' is added first,
+    as a hidden form element, so that it shows up first in the POST URL.
+  #}
+{{ q }}
+ {{devel_dump(q)}}
+{% endif %}
+{{devel_dump(form)}}
+{{ form }}
+
+
+<div class="c-database-filters">
+
+  <div class="c-database-filters__search">
+    {{ form.full }}
+    {{ form.title }}
+    {{ form.actions }}
+  </div>
+
+  <details class="c-database-filters__group">
+    <summary>{{ 'Filters'|t }}</summary>
+    {{ form.author }}
+    {{ form.inventor }}
+    {{ form.discipline }}
+    {{ form.specialisation }}
+    {{ form.type }}
+  </details>
+
+  <details class="c-database-filters__group">
+    <summary>{{ 'Relations'|t }}</summary>
+    {{ form.rel_concept_wrapper }}
+    {{ form.rel_document_wrapper }}
+    {{ form.rel_institution_wrapper }}
+    {{ form.rel_instrument_wrapper }}
+    {{ form.rel_person_wrapper }}
+    {{ form.rel_place_wrapper }}
+    {{ form.rel_story_wrapper }}
+  </details>
+
+  {{ form.form_build_id }}
+  {{ form.form_id }}
+  {{ form.form_token }}
+
+</div>

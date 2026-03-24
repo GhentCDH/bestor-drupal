@@ -1,0 +1,8 @@
+name: 'SAPI Item Translation Availability'
+type: module
+description: 'Adds per-language translation availability fields to Search API indexes for node items.'
+core_version_requirement: ^10 || ^11
+package: Search
+dependencies:
+  - search_api:search_api
+  - drupal:node

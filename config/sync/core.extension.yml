@@ -91,6 +91,7 @@ module:
   relationship_nodes_search: 0
   rh_node: 0
   rh_taxonomy: 0
+  sapi_language_fallback: 0
   sdc: 0
   sdc_component_library: 0
   search_api: 0

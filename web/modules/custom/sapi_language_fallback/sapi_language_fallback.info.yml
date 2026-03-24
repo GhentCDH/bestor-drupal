@@ -1,0 +1,12 @@
+name: 'Search API Language Fallback'
+type: module
+description: >
+  Adds a Views filter for Search API views that shows one result per node,
+  preferring the current interface language and optionally falling back to
+  other available language versions.
+core_version_requirement: ^10 || ^11
+package: Search
+dependencies:
+  - drupal:node
+  - drupal:views
+  - search_api:search_api

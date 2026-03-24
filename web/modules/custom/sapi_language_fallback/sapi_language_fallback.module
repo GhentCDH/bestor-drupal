@@ -1,0 +1,188 @@
+<?php
+
+/**
+ * @file
+ * Search API Language Fallback module hooks.
+ */
+
+use Drupal\node\NodeInterface;
+use Drupal\views\ResultRow;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function sapi_language_fallback_views_data_alter(array &$data): void {
+  foreach ($data as $table_name => &$table_data) {
+    if (!str_starts_with($table_name, 'search_api_index_')) {
+      continue;
+    }
+    $table_data['sapi_language_fallback_filter'] = [
+      'title' => t('Language with fallback'),
+      'help' => t('Filters by the current language, with an optional user-facing toggle to include other language versions as fallback.'),
+      'filter' => [
+        'title' => t('Language with fallback'),
+        'help' => t('Use instead of the standard language filter when you want per-node language fallback support.'),
+        'id' => 'sapi_language_fallback',
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_post_execute().
+ *
+ * Deduplicates result rows by node ID when fallback mode is active.
+ * For each node appearing in multiple language versions, only the best
+ * match is kept based on current language and priority list.
+ *
+ * Pager note: effective page size may be smaller than configured because
+ * deduplication happens after the query. This is a known trade-off of
+ * backend-agnostic post-processing.
+ */
+function sapi_language_fallback_views_post_execute(ViewExecutable $view): void {
+  if (empty($view->sapi_language_fallback['enabled'])) {
+    return;
+  }
+
+  $current = $view->sapi_language_fallback['current_langcode'];
+  $priority = $view->sapi_language_fallback['language_priority'];
+
+  $groups = [];
+  $order = [];
+  $loose = [];
+
+  foreach ($view->result as $row) {
+    $nid = _sapi_language_fallback_parse_nid($row);
+    if ($nid === NULL) {
+      $loose[] = $row;
+      continue;
+    }
+    if (!array_key_exists($nid, $groups)) {
+      $order[] = $nid;
+      $groups[$nid] = [];
+    }
+    $groups[$nid][] = $row;
+  }
+
+  $result = [];
+  foreach ($order as $nid) {
+    $result[] = _sapi_language_fallback_best_row($groups[$nid], $current, $priority);
+  }
+  foreach ($loose as $row) {
+    $result[] = $row;
+  }
+
+  $view->result = array_values($result);
+  foreach ($view->result as $i => $row) {
+    $row->index = $i;
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * In 'current_language' link mode: swaps both _entity and _item to the
+ * current-language translation so that all SAPI indexed fields (including
+ * title links) generate current-language URLs.
+ *
+ * In 'actual_language' mode (default): no-op. The entity and item are already
+ * in the fallback language and render correctly without intervention.
+ */
+function sapi_language_fallback_views_pre_render(ViewExecutable $view): void {
+  if (empty($view->sapi_language_fallback['enabled'])) {
+    return;
+  }
+
+  $link_mode = $view->sapi_language_fallback['link_mode'] ?? 'actual_language';
+  $current_langcode = $view->sapi_language_fallback['current_langcode'];
+
+  if ($link_mode !== 'current_language') {
+    return;
+  }
+
+  foreach ($view->result as $row) {
+    if (!isset($row->_entity) || !$row->_entity instanceof NodeInterface) {
+      continue;
+    }
+    $entity = $row->_entity;
+
+    if ($entity->hasTranslation($current_langcode)) {
+      $target = $entity->getTranslation($current_langcode);
+    }
+    else {
+      // No current-language translation exists: clone and force the langcode
+      // so toUrl() returns the current-language URL. The clone is never saved.
+      $target = clone $entity;
+      $target->set('langcode', $current_langcode);
+    }
+
+    // Swap both _entity and _item's original object. The SAPI indexed title
+    // field uses _item->getOriginalObject() for its link — not _entity —
+    // so both must be updated.
+    $row->_entity = $target;
+    if (isset($row->_item)) {
+      $row->_item->setOriginalObject($target->getTypedData());
+    }
+  }
+}
+
+/**
+ * Picks the best result row from a group sharing the same node ID.
+ *
+ * @param \Drupal\views\ResultRow[] $rows
+ * @param string $current_langcode
+ * @param string[] $priority
+ */
+function _sapi_language_fallback_best_row(array $rows, string $current_langcode, array $priority): ResultRow {
+  $by_lang = [];
+  foreach ($rows as $row) {
+    $lang = _sapi_language_fallback_parse_langcode($row);
+    if ($lang !== NULL && !isset($by_lang[$lang])) {
+      $by_lang[$lang] = $row;
+    }
+  }
+
+  if (isset($by_lang[$current_langcode])) {
+    return $by_lang[$current_langcode];
+  }
+  foreach ($priority as $code) {
+    if (isset($by_lang[$code])) {
+      return $by_lang[$code];
+    }
+  }
+  return $rows[0];
+}
+
+/**
+ * Parses the node ID from a Views result row.
+ *
+ * Tries the SAPI item ID first (entity:node/{nid}:{langcode}), then falls
+ * back to the loaded entity.
+ */
+function _sapi_language_fallback_parse_nid(ResultRow $row): ?int {
+  if (isset($row->_item)) {
+    if (preg_match('#^entity:node/(\d+)(?::|$)#', $row->_item->getId(), $m)) {
+      return (int) $m[1];
+    }
+  }
+  if (isset($row->_entity) && $row->_entity instanceof NodeInterface) {
+    return (int) $row->_entity->id();
+  }
+  return NULL;
+}
+
+/**
+ * Parses the language code from a Views result row.
+ */
+function _sapi_language_fallback_parse_langcode(ResultRow $row): ?string {
+  if (isset($row->_item)) {
+    if (preg_match('#^entity:node/\d+:(.+)$#', $row->_item->getId(), $m)) {
+      return $m[1];
+    }
+  }
+  if (isset($row->_entity) && method_exists($row->_entity, 'language')) {
+    return $row->_entity->language()->getId();
+  }
+  return NULL;
+}
