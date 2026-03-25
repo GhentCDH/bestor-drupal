@@ -4098,6 +4098,60 @@ display:
           min_length: null
           fields:
             - title__ft
+        search_api_range_filter_1:
+          id: search_api_range_filter_1
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Date range'
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         sapi_language_fallback_filter:
           id: sapi_language_fallback_filter
           table: search_api_index_bestor_main_search_index
@@ -5084,6 +5138,7 @@ display:
           table: search_api_index_bestor_main_search_index
           field: search_api_range_filter
           plugin_id: search_api_range_filter
+          group: 1
       filter_groups:
         operator: AND
         groups:
@@ -5302,6 +5357,60 @@ display:
           min_length: null
           fields:
             - title__ft
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Date range'
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         search_api_fulltext_3:
           id: search_api_fulltext_3
           table: search_api_index_bestor_main_search_index
@@ -6562,6 +6671,60 @@ display:
           min_length: null
           fields:
             - title__ft
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Date range'
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         search_api_fulltext_3:
           id: search_api_fulltext_3
           table: search_api_index_bestor_main_search_index
@@ -7822,6 +7985,60 @@ display:
           min_length: null
           fields:
             - title__ft
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Date range'
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         sapi_language_fallback_filter:
           id: sapi_language_fallback_filter
           table: search_api_index_bestor_main_search_index
@@ -9138,6 +9355,60 @@ display:
           min_length: null
           fields:
             - title__ft
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Date range'
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         search_api_fulltext_3:
           id: search_api_fulltext_3
           table: search_api_index_bestor_main_search_index
@@ -10397,6 +10668,60 @@ display:
           min_length: null
           fields:
             - title__ft
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Date range'
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         sapi_language_fallback_filter:
           id: sapi_language_fallback_filter
           table: search_api_index_bestor_main_search_index
@@ -11740,6 +12065,60 @@ display:
           min_length: null
           fields:
             - title__ft
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_range_filter
+          operator: '='
+          value:
+            from: ''
+            to: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Date range'
+            description: ''
+            use_operator: false
+            operator: search_api_range_filter_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         sapi_language_fallback_filter:
           id: sapi_language_fallback_filter
           table: search_api_index_bestor_main_search_index

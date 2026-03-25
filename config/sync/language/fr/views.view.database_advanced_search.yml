@@ -4,16 +4,34 @@ display:
     display_options:
       menu:
         title: Histoires
+      filters:
+        search_api_range_filter_1:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
   page_6:
     display_title: Personnes
     display_options:
       menu:
         title: Personnes
+      filters:
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
   page_7:
     display_title: Lieus
     display_options:
       menu:
         title: Lieus
+      filters:
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
   default:
     display_options:
       header:
@@ -22,3 +40,35 @@ display:
           filters_result_label:
             plural: résultat
             singular: résultats
+  page_2:
+    display_options:
+      filters:
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
+  page_3:
+    display_options:
+      filters:
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
+  page_4:
+    display_options:
+      filters:
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
+  page_5:
+    display_options:
+      filters:
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
