@@ -266,9 +266,8 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     $exp_op = $this->options['expose_operators'] ?? FALSE;
 
     $form['value'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->options['expose']['label'] ?? $this->t('Filter Options'),
-      '#open' => $this->hasActiveFilterValues($child_fld_values, $child_fld_settings),
       '#tree' => TRUE,
       '#attributes' => ['class' => ['relationship-child-field-wrapper']],
     ];

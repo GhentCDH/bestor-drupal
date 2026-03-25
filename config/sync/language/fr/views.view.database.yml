@@ -11,6 +11,11 @@ display:
         facets_content_type__str:
           expose:
             label: Catégorie
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: de
+          to_label: à
       header:
         views_filters_summary:
           filters_summary_prefix: pour

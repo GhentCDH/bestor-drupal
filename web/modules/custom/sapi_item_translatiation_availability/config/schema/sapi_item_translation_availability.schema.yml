@@ -1,3 +1,0 @@
-views.filter.sapi_translation_availability:
-  type: views.filter.in_operator
-  label: 'Translation availability filter'

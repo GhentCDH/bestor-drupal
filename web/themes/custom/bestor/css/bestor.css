@@ -79,23 +79,8 @@
 }
 
 /* FEAT: update multiselect to visually better single select dropdown */
-.c-select-wrapper {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
 
-.c-select-caret {
-  position: absolute;
-  right: 1.3125rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.3125rem;
-  pointer-events: none;
-  transition: transform 0.3s ease;
-}
-
-.js-hide, .author-facet-hidden {
+.js-hide, .author-facet-hidden, .c-select-caret {
   display:none;
   visibility: hidden;
 }
@@ -306,18 +291,6 @@
   font-size: 0.875rem;
 }
 
-/* Advanced search */
-.view-database-advanced-search .views-exposed-form ,
-.view-database-advanced-search-affiliations .views-exposed-form{
-  border: solid black 1px;
-  padding: 50px; 
-  margin-bottom:50px; 
-  display:flex;
-  flex-flow:row wrap;
-  align-items: flex-start;
-  gap:10px 30px
-}
-
 /* Translation not available page */
 .translation-unavailable ul {
   padding: revert;
@@ -398,4 +371,14 @@
 
 .block-database-full-text-search-block > label {
   display: none;
+}
+
+.date-range-filter > .fieldset-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(5px, 2vw, 20px);
+}
+
+.date-range-filter > .fieldset-wrapper > * {
+  flex: 1 1 100px;
 }

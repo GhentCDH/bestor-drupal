@@ -1005,7 +1005,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: views_filters_summary
-          empty: false
+          empty: true
           filters: {  }
           show_labels: false
           show_remove_link: false

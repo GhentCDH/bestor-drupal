@@ -8,6 +8,14 @@ global:
   dependencies:
     - jakarta/global-styling
     - core/jquery
+advanced-search-filters:
+  css:
+    theme:
+      css/advanced-search-filters.css: {}
+  js:
+    js/advanced-search-filters.js: {}
+  dependencies:
+    - core/drupal
 lightbox:
   css:
     theme:

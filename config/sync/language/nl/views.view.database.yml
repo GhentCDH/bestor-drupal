@@ -11,6 +11,11 @@ display:
         facets_content_type__str:
           expose:
             label: Categorie
+        search_api_range_filter:
+          expose:
+            label: Periode
+          from_label: van
+          to_label: tot
       header:
         views_filters_summary:
           filters_summary_prefix: voor

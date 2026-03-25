@@ -10,6 +10,7 @@ dependencies:
     - facets_exposed_filters
     - relationship_nodes_search
     - search_api
+    - search_api_range_filter
     - views_filters_summary
 id: database
 label: Database
@@ -166,19 +167,6 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_tax_author__int:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
               facets_glossaryaz_title__str:
                 plugin_id: bef
                 advanced:
@@ -236,6 +224,32 @@ display:
                 soft_limit: 0
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+              search_api_range_filter:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: date-range-filter
+                  sort_options_unsupported: ''
+              facets_tax_author__int:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
               facets_tax_specialisation__int:
                 plugin_id: default
                 advanced:
@@ -398,33 +412,34 @@ display:
           parse_mode: terms
           min_length: null
           fields: {  }
-        facets_tax_author__int:
-          id: facets_tax_author__int
+        search_api_range_filter:
+          id: search_api_range_filter
           table: search_api_index_bestor_main_search_index
-          field: facets_tax_author__int
+          field: search_api_range_filter
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: facets_filter
+          plugin_id: search_api_range_filter
           operator: '='
-          value: ''
+          value:
+            from: ''
+            to: ''
           group: 1
           exposed: true
           expose:
             operator_id: ''
-            label: Author
+            label: 'Date range'
             description: ''
             use_operator: false
-            operator: ''
+            operator: search_api_range_filter_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: author
+            identifier: date
             required: false
             remember: false
-            multiple: true
+            multiple: false
             remember_roles:
               authenticated: authenticated
-              0: '0'
               anonymous: '0'
               redactor: '0'
               web_manager: '0'
@@ -441,25 +456,16 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          hierarchy: false
-          label_display: visible
-          facet:
-            query_operator: or
-            hard_limit: 0
-            min_count: 1
-            show_numbers: false
-            processor_configs:
-              translate_entity:
-                processor_id: translate_entity
-                weights:
-                  build: 5
-                settings: {  }
-              display_value_widget_order:
-                processor_id: display_value_widget_order
-                weights:
-                  sort: 40
-                settings:
-                  sort: ASC
+          start_field: field_date_start
+          end_field: field_date_end
+          widget: select_range
+          from_label: from
+          to_label: to
+          int_range:
+            min: 1700
+            max: 2026
+            use_current_year_min: false
+            use_current_year_max: true
         facets_glossaryaz_title__str:
           id: facets_glossaryaz_title__str
           table: search_api_index_bestor_main_search_index
@@ -648,6 +654,68 @@ display:
             operator_limit_selection: false
             operator_list: {  }
             identifier: discipline
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              0: '0'
+              anonymous: '0'
+              redactor: '0'
+              web_manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: or
+            hard_limit: 0
+            min_count: 1
+            show_numbers: false
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+              display_value_widget_order:
+                processor_id: display_value_widget_order
+                weights:
+                  sort: 40
+                settings:
+                  sort: ASC
+        facets_tax_author__int:
+          id: facets_tax_author__int
+          table: search_api_index_bestor_main_search_index
+          field: facets_tax_author__int
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Author
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: author
             required: false
             remember: false
             multiple: true
@@ -1011,7 +1079,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: views_filters_summary
-          empty: false
+          empty: true
           filters: {  }
           show_labels: false
           show_remove_link: false

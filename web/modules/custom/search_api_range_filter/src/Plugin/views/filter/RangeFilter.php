@@ -42,12 +42,12 @@ class RangeFilter extends FilterPluginBase {
     $options['value'] = ['default' => ['from' => '', 'to' => '']];
 
     // Range configuration options.
-    $options['start_field']  = ['default' => ''];
-    $options['end_field']    = ['default' => ''];
-    $options['widget']       = ['default' => 'textfield'];
-    $options['int_range']    = ['default' => []];
-    $options['from_label']   = ['default' => 'From'];
-    $options['to_label']     = ['default' => 'To'];
+    $options['start_field'] = ['default' => ''];
+    $options['end_field'] = ['default' => ''];
+    $options['widget'] = ['default' => 'textfield'];
+    $options['int_range'] = ['default' => []];
+    $options['from_label'] = ['default' => 'From'];
+    $options['to_label'] = ['default' => 'To'];
 
     return $options;
   }
@@ -123,7 +123,7 @@ class RangeFilter extends FilterPluginBase {
       '#type' => 'radios',
       '#title' => $this->t('Widget type'),
       '#options' => [
-        'textfield'    => $this->t('Text field'),
+        'textfield' => $this->t('Text field'),
         'select_range' => $this->t('Dropdown (consecutive integer range)'),
       ],
       '#default_value' => $this->options['widget'],
@@ -147,7 +147,7 @@ class RangeFilter extends FilterPluginBase {
    */
   protected function buildIntRangeSubForm(array &$parent, array $saved): void {
     // Input name of the widget radio — used in #states conditions.
-    $widget_name  = 'options[range_config][widget]';
+    $widget_name = 'options[range_config][widget]';
     $cur_year_min = 'options[range_config][int_range][use_current_year_min]';
     $cur_year_max = 'options[range_config][int_range][use_current_year_max]';
 
@@ -157,22 +157,22 @@ class RangeFilter extends FilterPluginBase {
 
     $min_state = [
       'visible' => [
-        ':input[name="' . $widget_name . '"]'  => ['value' => 'select_range'],
+        ':input[name="' . $widget_name . '"]' => ['value' => 'select_range'],
         ':input[name="' . $cur_year_min . '"]' => ['checked' => FALSE],
       ],
       'required' => [
-        ':input[name="' . $widget_name . '"]'  => ['value' => 'select_range'],
+        ':input[name="' . $widget_name . '"]' => ['value' => 'select_range'],
         ':input[name="' . $cur_year_min . '"]' => ['checked' => FALSE],
       ],
     ];
 
     $max_state = [
       'visible' => [
-        ':input[name="' . $widget_name . '"]'  => ['value' => 'select_range'],
+        ':input[name="' . $widget_name . '"]' => ['value' => 'select_range'],
         ':input[name="' . $cur_year_max . '"]' => ['checked' => FALSE],
       ],
       'required' => [
-        ':input[name="' . $widget_name . '"]'  => ['value' => 'select_range'],
+        ':input[name="' . $widget_name . '"]' => ['value' => 'select_range'],
         ':input[name="' . $cur_year_max . '"]' => ['checked' => FALSE],
       ],
     ];
@@ -180,37 +180,37 @@ class RangeFilter extends FilterPluginBase {
     $parent['int_range'] = ['#type' => 'container'];
 
     $parent['int_range']['min'] = [
-      '#type'          => 'number',
-      '#title'         => $this->t('Minimum value'),
+      '#type' => 'number',
+      '#title' => $this->t('Minimum value'),
       '#default_value' => $saved['min'] ?? 1,
-      '#description'   => $this->t('Starting value for the dropdown.'),
-      '#size'          => 10,
-      '#states'        => $min_state,
+      '#description' => $this->t('Starting value for the dropdown.'),
+      '#size' => 10,
+      '#states' => $min_state,
     ];
 
     $parent['int_range']['use_current_year_min'] = [
-      '#type'          => 'checkbox',
-      '#title'         => $this->t('Use current year as minimum'),
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use current year as minimum'),
       '#default_value' => $saved['use_current_year_min'] ?? FALSE,
-      '#description'   => $this->t('Overrides the minimum value above with the current year.'),
-      '#states'        => $range_visible,
+      '#description' => $this->t('Overrides the minimum value above with the current year.'),
+      '#states' => $range_visible,
     ];
 
     $parent['int_range']['max'] = [
-      '#type'          => 'number',
-      '#title'         => $this->t('Maximum value'),
+      '#type' => 'number',
+      '#title' => $this->t('Maximum value'),
       '#default_value' => $saved['max'] ?? (int) date('Y'),
-      '#description'   => $this->t('Ending value for the dropdown.'),
-      '#size'          => 10,
-      '#states'        => $max_state,
+      '#description' => $this->t('Ending value for the dropdown.'),
+      '#size' => 10,
+      '#states' => $max_state,
     ];
 
     $parent['int_range']['use_current_year_max'] = [
-      '#type'          => 'checkbox',
-      '#title'         => $this->t('Use current year as maximum'),
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use current year as maximum'),
       '#default_value' => $saved['use_current_year_max'] ?? TRUE,
-      '#description'   => $this->t('Overrides the maximum value above with the current year.'),
-      '#states'        => $range_visible,
+      '#description' => $this->t('Overrides the maximum value above with the current year.'),
+      '#states' => $range_visible,
     ];
   }
 
@@ -222,8 +222,8 @@ class RangeFilter extends FilterPluginBase {
     parent::validateOptionsForm($form, $form_state);
 
     $config = $form_state->getValue(['options', 'range_config']) ?? [];
-    $start  = $config['start_field'] ?? '';
-    $end    = $config['end_field']   ?? '';
+    $start = $config['start_field'] ?? '';
+    $end = $config['end_field'] ?? '';
 
     if ($start && $end && $start === $end) {
       $form_state->setError(
@@ -304,47 +304,47 @@ class RangeFilter extends FilterPluginBase {
     // Required so submitted values arrive as ['from' => ..., 'to' => ...].
     $form['value']['#tree'] = TRUE;
 
-    $widget     = $this->options['widget']     ?? 'textfield';
+    $widget = $this->options['widget'] ?? 'textfield';
     $from_label = $this->options['from_label'] ?: $this->t('From');
-    $to_label   = $this->options['to_label']   ?: $this->t('To');
+    $to_label = $this->options['to_label'] ?: $this->t('To');
 
     // Resolve current values whether coming from a submission or defaults.
-    $values   = is_array($this->value) ? $this->value : [];
+    $values = is_array($this->value) ? $this->value : [];
     $from_val = $values['from'] ?? '';
-    $to_val   = $values['to']   ?? '';
+    $to_val = $values['to'] ?? '';
 
     if ($widget === 'select_range') {
       $options = $this->buildIntRangeOptions($this->options['int_range'] ?? []);
 
       $form['value']['from'] = [
-        '#type'          => 'select',
-        '#title'         => $from_label,
-        '#options'       => $options,
+        '#type' => 'select',
+        '#title' => $from_label,
+        '#options' => $options,
         '#default_value' => $from_val,
-        '#empty_option'  => $this->t('- Any -'),
+        '#empty_option' => $this->t('- Any -'),
       ];
 
       $form['value']['to'] = [
-        '#type'          => 'select',
-        '#title'         => $to_label,
-        '#options'       => $options,
+        '#type' => 'select',
+        '#title' => $to_label,
+        '#options' => $options,
         '#default_value' => $to_val,
-        '#empty_option'  => $this->t('- Any -'),
+        '#empty_option' => $this->t('- Any -'),
       ];
     }
     else {
       $form['value']['from'] = [
-        '#type'          => 'textfield',
-        '#title'         => $from_label,
+        '#type' => 'textfield',
+        '#title' => $from_label,
         '#default_value' => $from_val,
-        '#size'          => 20,
+        '#size' => 20,
       ];
 
       $form['value']['to'] = [
-        '#type'          => 'textfield',
-        '#title'         => $to_label,
+        '#type' => 'textfield',
+        '#title' => $to_label,
         '#default_value' => $to_val,
-        '#size'          => 20,
+        '#size' => 20,
       ];
     }
   }
@@ -379,21 +379,15 @@ class RangeFilter extends FilterPluginBase {
     }
 
     $start_field = $this->options['start_field'] ?? '';
-    $end_field   = $this->options['end_field']   ?? '';
+    $end_field = $this->options['end_field'] ?? '';
 
     if (!$start_field || !$end_field) {
       return;
     }
 
-    $values   = is_array($this->value) ? $this->value : [];
+    $values = is_array($this->value) ? $this->value : [];
     $from_val = $this->sanitizeRangeValue((string) ($values['from'] ?? ''));
-    $to_val   = $this->sanitizeRangeValue((string) ($values['to']   ?? ''));
-
-    // TEMPORARY DEBUG — remove after diagnosis.
-    \Drupal::logger('search_api_range_filter')->debug(
-      'query() called. value=@v from=@f to=@t start_field=@sf end_field=@ef',
-      ['@v' => json_encode($this->value), '@f' => $from_val, '@t' => $to_val, '@sf' => $start_field, '@ef' => $end_field]
-    );
+    $to_val = $this->sanitizeRangeValue((string) ($values['to'] ?? ''));
 
     if ($from_val === '' && $to_val === '') {
       return;
@@ -458,7 +452,7 @@ class RangeFilter extends FilterPluginBase {
    */
   public function adminSummary(): string {
     $start = $this->options['start_field'] ?? '';
-    $end   = $this->options['end_field']   ?? '';
+    $end = $this->options['end_field'] ?? '';
 
     if (!$start || !$end) {
       return (string) $this->t('Not configured');

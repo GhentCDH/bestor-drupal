@@ -7,6 +7,8 @@ dependencies:
     - field.storage.node.field_author
     - field.storage.node.field_country
     - field.storage.node.field_creator
+    - field.storage.node.field_date_end
+    - field.storage.node.field_date_start
     - field.storage.node.field_description
     - field.storage.node.field_discipline
     - field.storage.node.field_end_municipality
@@ -110,6 +112,22 @@ field_settings:
         - field.storage.node.field_discipline
       module:
         - taxonomy
+  field_date_end:
+    label: 'Situated until'
+    datasource_id: 'entity:node'
+    property_path: field_date_end
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_end
+  field_date_start:
+    label: 'Situated from'
+    datasource_id: 'entity:node'
+    property_path: field_date_start
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_start
   gender_name__ft:
     label: 'Gender name [ft]'
     datasource_id: 'entity:node'

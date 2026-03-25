@@ -19,6 +19,7 @@ dependencies:
     - relationship_nodes_search
     - sapi_language_fallback
     - search_api
+    - search_api_range_filter
     - user
     - views_filters_summary
 id: database_advanced_search
@@ -5078,6 +5079,11 @@ display:
               child_filter_id: type
           expose_operators: false
           filter_field_settings: {  }
+        search_api_range_filter:
+          id: search_api_range_filter
+          table: search_api_index_bestor_main_search_index
+          field: search_api_range_filter
+          plugin_id: search_api_range_filter
       filter_groups:
         operator: AND
         groups:
@@ -10904,6 +10910,8 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
+            related_id:
+              value: ''
             institution:
               value: ''
             type:
@@ -11023,7 +11031,7 @@ display:
               value: ''
               child_filter_id: this_name
             calculated_related_id:
-              enabled: 1
+              enabled: 0
               widget: select_indexed
               select_display_mode: label
               label: 'Calculated Related Id'
