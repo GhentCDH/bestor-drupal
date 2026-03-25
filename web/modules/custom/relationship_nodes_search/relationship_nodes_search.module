@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Primary module hooks for Relationship Nodes Search module.
- */
-
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\relationship_nodes_search\Form\ExtendedIndexAddFieldsForm;
 

@@ -39,6 +39,40 @@ function bestor_theme_suggestions_select_alter(array &$suggestions, array $varia
   }
 }
 
+
+/**
+ * Implements hook_preprocess_views_exposed_form().
+ */
+function bestor_preprocess_views_exposed_form(&$variables) {
+  $form = &$variables['form'];
+  $rel_types = ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'];
+
+  foreach ($rel_types as $key) {
+    $wrapper_key = 'rel_' . $key . '_wrapper';
+    if (!isset($form[$wrapper_key]['rel_' . $key])) {
+      continue;
+    }
+    $inner = &$form[$wrapper_key]['rel_' . $key];
+    $has_start = isset($inner['start']);
+    $has_end   = isset($inner['end']);
+
+    if (!$has_start && !$has_end) {
+      continue;
+    }
+
+    // Open wrapper on the first date field present.
+    $open_key  = $has_start ? 'start' : 'end';
+    // Close wrapper on the last date field present.
+    $close_key = $has_end   ? 'end'   : 'start';
+
+    $inner[$open_key]['#prefix']  = '<div class="relationship-filter-dates-wrapper">'
+      . ($inner[$open_key]['#prefix'] ?? '');
+    $inner[$close_key]['#suffix'] = ($inner[$close_key]['#suffix'] ?? '')
+      . '</div>';
+  }
+}
+
+
 /**
  * Implements hook_preprocess_field().
  */

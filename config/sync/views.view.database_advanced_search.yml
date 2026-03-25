@@ -11569,7 +11569,7 @@ display:
             field_municipality:
               enabled: 1
               widget: select_indexed
-              select_display_mode: raw
+              select_display_mode: label
               label: Place
               weight: '3'
               required: 0

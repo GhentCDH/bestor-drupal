@@ -164,6 +164,8 @@ class NestedFilterDropdownOptionsProvider {
         $query = $index->query();
       }
 
+      $query->addCondition('search_api_language', $this->languageManager->getCurrentLanguage()->getId());
+
       // Configureer voor facets
       $query->range(0, 0);
       $query->setOption('search_api_facets', [
@@ -398,7 +400,8 @@ class NestedFilterDropdownOptionsProvider {
     try {
       // Create fresh query.
       $query = $index->query();
-
+      $query->addCondition('search_api_language', $this->languageManager->getCurrentLanguage()->getId());
+      
       // Extract and apply non-exposed conditions.
       if ($view_query) {
         $non_exposed_fields = [];
