@@ -401,7 +401,7 @@ class NestedFilterDropdownOptionsProvider {
       // Create fresh query.
       $query = $index->query();
       $query->addCondition('search_api_language', $this->languageManager->getCurrentLanguage()->getId());
-      
+
       // Extract and apply non-exposed conditions.
       if ($view_query) {
         $non_exposed_fields = [];
@@ -503,6 +503,29 @@ class NestedFilterDropdownOptionsProvider {
         }
       }
     }
+  }
+
+  
+  /**
+   * Resolves a single raw filter value to a translated entity label.
+   *
+   * Handles entity reference strings ("node/123", "taxonomy_term/32")
+   * and falls back to the raw value for plain strings.
+   *
+   * @param string $value
+   *   Raw filter value.
+   *
+   * @return string
+   *   Translated entity label, or the raw value as fallback.
+   */
+  public function resolveEntityLabel(string $value): string {
+    if (!preg_match('#^(node|taxonomy_term)/(\d+)$#', $value, $m)) {
+      return $value;
+    }
+
+    // Reuse buildEntityOptions() which already handles language + access.
+    $options = $this->buildEntityOptions([$value], $m[1]);
+    return $options[$value] ?? $value;
   }
 
 }

@@ -2,6 +2,8 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\relationship_nodes_search\Form\ExtendedIndexAddFieldsForm;
+use Drupal\views\Plugin\views\filter\FilterPluginBase;
+use Drupal\relationship_nodes_search\Plugin\views\filter\RelationshipFilter;
 
 
 /**
@@ -46,7 +48,6 @@ function relationship_nodes_search_facets_search_api_query_type_mapping_alter($b
 }
 
 
-
 /**
  * Implements hook_form_views_exposed_form_alter().
  */
@@ -75,4 +76,71 @@ function relationship_nodes_search_form_views_exposed_form_alter(&$form, FormSta
       }
     }
   }
+}
+
+
+/**
+ * Implements hook_views_filters_summary_info_alter().
+ */
+function relationship_nodes_search_views_filters_summary_info_alter(array &$info, FilterPluginBase $filter): void {
+  if (!$filter instanceof RelationshipFilter) {
+    return;
+  }
+
+  $identifier = $filter->options['expose']['identifier'] ?? NULL;
+  if (!$identifier) {
+    return;
+  }
+
+  $values = \Drupal::request()->query->all()[$identifier] ?? [];
+  $field_settings = $filter->options['field_settings'] ?? [];
+  unset($field_settings['range_pair']);
+
+  $entity_label = NULL;
+  $type_label   = NULL;
+
+  /** @var \Drupal\relationship_nodes_search\Views\Widget\NestedFilterDropdownOptionsProvider $provider */
+  $provider = \Drupal::service('relationship_nodes_search.nested_filter_dropdown_provider');
+
+  foreach ($field_settings as $field_name => $config) {
+    if (empty($config['enabled'])) {
+      continue;
+    }
+    // Date/range fields are irrelevant for the summary.
+    if (($config['widget'] ?? '') === 'select_range') {
+      continue;
+    }
+
+    $child_filter_id = $config['child_filter_id'] ?? $field_name;
+    $raw = $values[$child_filter_id]['value'] ?? $values[$child_filter_id] ?? '';
+    if ($raw === '' || $raw === NULL) {
+      continue;
+    }
+
+    // Relation type → suffix only.
+    if ($child_filter_id === 'type') {
+      $type_label = (string) $raw;
+      continue;
+    }
+
+    // First remaining enabled field is the main entity.
+    if ($entity_label === NULL) {
+      $entity_label = $provider->resolveEntityLabel((string) $raw);
+    }
+  }
+
+  if ($entity_label === NULL) {
+    $info['value'] = NULL;
+    return;
+  }
+
+  $display = $type_label !== NULL
+    ? $entity_label . ' (' . $type_label . ')'
+    : $entity_label;
+
+  $info['value'] = [[
+    'id'    => 0,
+    'raw'   => $display,
+    'value' => $display,
+  ]];
 }

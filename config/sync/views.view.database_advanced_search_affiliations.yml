@@ -1013,7 +1013,7 @@ display:
           group_values: false
           content: '@total @result_label @exposed_filter_summary'
           filters_reset_link_title: Reset
-          filters_summary_separator: ', '
+          filters_summary_separator: ''
           filters_summary_prefix: 'for '
           filters_result_label:
             plural: results

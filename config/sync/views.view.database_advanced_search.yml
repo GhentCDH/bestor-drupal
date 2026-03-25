@@ -3890,7 +3890,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: views_filters_summary
-          empty: false
+          empty: true
           filters: {  }
           show_labels: false
           show_remove_link: false
@@ -3898,7 +3898,7 @@ display:
           group_values: false
           content: '@total @result_label @exposed_filter_summary'
           filters_reset_link_title: Reset
-          filters_summary_separator: ', '
+          filters_summary_separator: ''
           filters_summary_prefix: 'for '
           filters_result_label:
             plural: results
