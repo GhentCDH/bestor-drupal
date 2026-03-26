@@ -172,10 +172,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
 
     $field_settings = $form_state->getValue(['options', 'field_settings']) ?? [];
     foreach ($field_settings as $field_name => $settings) {
-      if ($field_name === 'range_pair') {
-        continue;
-      }
-      if (($settings['widget'] ?? '') !== 'select_range') {
+      if (empty($settings['enabled']) || $field_name === 'range_pair' || ($settings['widget'] ?? '') !== 'select_range') {
         continue;
       }
       $range = $settings['int_range'] ?? [];
@@ -235,16 +232,19 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
       return parent::adminSummary();
     }
 
-    $child_fld_settings =  $this->getFieldSettings();
+    $child_fld_settings = $this->getFieldSettings();
     $enabled = $this->exposedFormBuilder->getEnabledFields($child_fld_settings);
-    if (empty($enabled)) {
+    $pair = $this->getRangePairConfig();
+    $count = count($enabled) + (!empty($pair['enabled']) ? 1 : 0);
+
+    if ($count === 0) {
       return $this->t('Not configured');
     }
 
     $operator = $this->options['operator'] ?? 'and';
-    
+
     return $this->t('@count fields (@operator)', [
-      '@count' => count($enabled),
+      '@count' => $count,
       '@operator' => strtoupper($operator),
     ]);
   }
@@ -320,8 +320,8 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     if (!$sapi_fld_nm || !$index instanceof Index) return;
 
     $values = is_array($this->value) ? $this->value : [];
-    $from_val = $values['from']['value'] ?? $values['from'] ?? '';
-    $to_val = $values['to']['value'] ?? $values['to'] ?? '';
+    $from_val = $values['range_pair']['from']['value'] ?? $values['range_pair']['from'] ?? '';
+    $to_val = $values['range_pair']['to']['value'] ?? $values['range_pair']['to'] ?? '';
 
     if (is_string($from_val)) $from_val = $this->sanitizeFieldValue($from_val);
     if (is_string($to_val)) $to_val = $this->sanitizeFieldValue($to_val);
@@ -589,7 +589,7 @@ class RelationshipFilter extends FilterPluginBase implements ContainerFactoryPlu
     $pair = $this->getRangePairConfig();
     if (!empty($pair['enabled'])) {
       foreach (['from', 'to'] as $key) {
-        $val = $values[$key]['value'] ?? $values[$key] ?? NULL;
+        $val = $values['range_pair'][$key]['value'] ?? $values['range_pair'][$key] ?? NULL;
         if ($val !== NULL && $val !== '') return TRUE;
       }
     }

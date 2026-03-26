@@ -8770,6 +8770,11 @@ display:
               value: ''
             end:
               value: ''
+            range_pair:
+              from:
+                value: ''
+              to:
+                value: ''
           group: 1
           exposed: true
           expose:
@@ -8815,13 +8820,13 @@ display:
               value: ''
               child_filter_id: date_end_year_only
             field_date_start:
-              enabled: 1
+              enabled: 0
               widget: select_range
               int_range:
                 min: '1700'
                 use_current_year_min: 0
                 max: ''
-                use_current_year_max: 1
+                use_current_year_max: 0
               label: 'Date start'
               weight: '2'
               required: 0
@@ -8842,13 +8847,13 @@ display:
               value: ''
               child_filter_id: date_start_year_only
             field_date_end:
-              enabled: 1
+              enabled: 0
               widget: select_range
               int_range:
                 min: '1700'
                 use_current_year_min: 0
                 max: ''
-                use_current_year_max: 1
+                use_current_year_max: 0
               label: 'Date end'
               weight: '3'
               required: 0
@@ -8916,8 +8921,11 @@ display:
               child_filter_id: type
             range_pair:
               enabled: 1
+              label: 'Date range'
               start_field: field_date_start
+              from_label: from
               end_field: field_date_end
+              to_label: to
               widget: select_range
               int_range:
                 min: '1700'
@@ -11235,16 +11243,15 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            related_id:
-              value: ''
             institution:
               value: ''
             type:
               value: ''
-            start:
-              value: ''
-            end:
-              value: ''
+            range_pair:
+              from:
+                value: ''
+              to:
+                value: ''
           group: 1
           exposed: true
           expose:
@@ -11290,13 +11297,13 @@ display:
               value: ''
               child_filter_id: date_end_year_only
             field_date_start:
-              enabled: 1
+              enabled: 0
               widget: select_range
               int_range:
                 min: '1700'
                 use_current_year_min: 0
                 max: ''
-                use_current_year_max: 1
+                use_current_year_max: 0
               label: 'Date Start'
               weight: '3'
               required: 0
@@ -11317,13 +11324,13 @@ display:
               value: ''
               child_filter_id: date_start_year_only
             field_date_end:
-              enabled: 1
+              enabled: 0
               widget: select_range
               int_range:
                 min: '1700'
                 use_current_year_min: 0
                 max: ''
-                use_current_year_max: 1
+                use_current_year_max: 0
               label: 'Date End'
               weight: '4'
               required: 0
@@ -11390,15 +11397,18 @@ display:
               value: ''
               child_filter_id: type
             range_pair:
-              enabled: 0
-              start_field: ''
-              end_field: ''
-              widget: textfield
+              enabled: 1
+              label: 'Date range'
+              start_field: field_date_start
+              from_label: from
+              end_field: field_date_end
+              to_label: to
+              widget: select_range
               int_range:
-                min: 1
+                min: '1700'
                 use_current_year_min: 0
-                max: 2026
-                use_current_year_max: 0
+                max: '2026'
+                use_current_year_max: 1
           expose_operators: false
           filter_field_settings: {  }
         relationship_info_relationnode_person_instrum_nested:

@@ -8,6 +8,17 @@ global:
   dependencies:
     - jakarta/global-styling
     - core/jquery
+    - core/once
+
+database-search:
+  js:
+    js/database-search.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/once
+    - views_filters_summary/views_filters_summary
+
 advanced-search-filters:
   css:
     theme:
@@ -16,6 +27,9 @@ advanced-search-filters:
     js/advanced-search-filters.js: {}
   dependencies:
     - core/drupal
+    - core/once
+    - bestor/database-search
+
 lightbox:
   css:
     theme:

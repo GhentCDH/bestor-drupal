@@ -1,0 +1,9 @@
+
+nested-filters-summary:
+  js:
+    js/views_nested_filters_summary.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/jquery
+    - views_filters_summary/views_filters_summary

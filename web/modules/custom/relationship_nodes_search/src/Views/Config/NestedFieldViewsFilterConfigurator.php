@@ -366,6 +366,15 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
 
     $field_options = array_combine($rangeable_fields, $rangeable_fields);
 
+    $form['field_settings']['range_pair']['label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Fieldset title'),
+      '#default_value' => $pair['label'] ?? $this->t('Date range'),
+      '#description' => $this->t('Title shown above the from/to inputs.'),
+      '#size' => 30,
+      '#states' => $disabled_state,
+    ];
+
     $form['field_settings']['range_pair']['start_field'] = [
       '#type' => 'select',
       '#title' => $this->t('Start field'),
@@ -376,6 +385,14 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
       '#states' => $disabled_state,
     ];
 
+    $form['field_settings']['range_pair']['from_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('"From" label'),
+      '#default_value' => $pair['from_label'] ?? $this->t('From'),
+      '#size' => 20,
+      '#states' => $disabled_state,
+    ];
+
     $form['field_settings']['range_pair']['end_field'] = [
       '#type' => 'select',
       '#title' => $this->t('End field'),
@@ -383,6 +400,14 @@ class NestedFieldViewsFilterConfigurator extends NestedFieldViewsConfiguratorBas
       '#default_value' => $pair['end_field'] ?? '',
       '#empty_option' => $this->t('- Select -'),
       '#description' => $this->t('Child field holding the range end value (e.g. field_date_end).'),
+      '#states' => $disabled_state,
+    ];
+
+    $form['field_settings']['range_pair']['to_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('"To" label'),
+      '#default_value' => $pair['to_label'] ?? $this->t('To'),
+      '#size' => 20,
       '#states' => $disabled_state,
     ];
 

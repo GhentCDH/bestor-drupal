@@ -42,7 +42,7 @@ class NestedChildFieldConditionGroup extends NestedConditionGroupBase {
    *
    * @return $this
    */
-  public function addChildFieldCondition(string $child_fld_nm, $value, string $operator = '='): self {
+  public function addChildFieldCondition(string $child_fld_nm, $value, string $operator = '='): static {
     $path = $this->queryBuilder->getElasticQueryFieldPath(
       $this->index,
       $this->parentFieldName,

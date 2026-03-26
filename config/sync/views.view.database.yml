@@ -1082,7 +1082,7 @@ display:
           empty: true
           filters: {  }
           show_labels: false
-          show_remove_link: false
+          show_remove_link: true
           show_reset_link: true
           group_values: false
           content: '@total @result_label @exposed_filter_summary'

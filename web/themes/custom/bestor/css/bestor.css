@@ -373,14 +373,17 @@
   display: none;
 }
 
-.date-range-filter > .fieldset-wrapper,
-.relationship-filter-dates-wrapper {
+.date-range-filter > .fieldset-wrapper{
   display: flex;
   flex-wrap: wrap;
   gap: clamp(5px, 2vw, 20px);
 }
 
-.date-range-filter > .fieldset-wrapper > *,
-.relationship-filter-dates-wrapper > * {
+.date-range-filter > .fieldset-wrapper > * {
   flex: 1 1 100px;
+}
+
+.views-filters-summary a.remove-filter {
+  background-color: unset;
+  font-size: 12px;
 }

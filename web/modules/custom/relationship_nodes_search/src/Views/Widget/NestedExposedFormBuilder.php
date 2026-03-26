@@ -365,34 +365,42 @@ class NestedExposedFormBuilder {
    * @param array $pair_values
    *   Current submitted/default values.
    */
-  public function buildRangePairWidget(
-    array &$form,
-    array $path,
-    array $pair_config,
-    array $pair_values = []
-  ): void {
-    $widget = $pair_config['widget'] ?? 'textfield';
+  public function buildRangePairWidget(array &$form, array $path, array $pair_config, array $pair_values = []): void {
+    $widget     = $pair_config['widget']     ?? 'textfield';
+    $title      = $pair_config['label']      ?? $this->t('Date range');
+    $from_label = $pair_config['from_label'] ?? $this->t('From');
+    $to_label   = $pair_config['to_label']   ?? $this->t('To');
 
     if ($widget === 'select_range') {
       $options = $this->buildIntRangeOptions($pair_config['int_range'] ?? []);
     }
 
-    foreach (['from' => 'From', 'to' => 'To'] as $key => $label) {
-      $val = $pair_values[$key]['value'] ?? $pair_values[$key] ?? '';
-      $element_path = array_merge($path, [$key, 'value']);
+    $fieldset_path = array_merge($path, ['range_pair']);
+    $this->setFormNestedValue($form, $fieldset_path, [
+      '#type'       => 'fieldset',
+      '#title'      => $title,
+      '#attributes' => ['class' => ['date-range-filter']],
+    ]);
+
+    foreach (['from' => $from_label, 'to' => $to_label] as $key => $label) {
+      // Values are now nested under range_pair in the submitted values.
+      $val = $pair_values['range_pair'][$key]['value'] ?? $pair_values['range_pair'][$key] ?? '';
+      // Elements go inside the fieldset.
+      $element_path = array_merge($fieldset_path, [$key, 'value']);
 
       if ($widget === 'select_range') {
         $this->setFormNestedValue($form, $element_path, [
-          '#type' => 'select',
-          '#title' => $this->t($label),
-          '#options' => $options,
+          '#type'          => 'select',
+          '#title'         => $label,
+          '#options'       => $options,
           '#default_value' => $val,
-          '#empty_option' => $this->t('- Any -'),
+          '#empty_option'  => $this->t('- Any -'),
         ]);
-      } else {
+      }
+      else {
         $this->setFormNestedValue($form, $element_path, [
-          '#type' => 'textfield',
-          '#title' => $this->t($label),
+          '#type'          => 'textfield',
+          '#title'         => $label,
           '#default_value' => $val,
         ]);
       }

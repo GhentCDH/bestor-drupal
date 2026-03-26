@@ -64,7 +64,7 @@ class NestedFilterBuilder extends FilterBuilder {
    */
   protected function buildConditionGroupSubfilters(NestedConditionGroupBase $group, array $index_fields): array {
     $subfilters = [];
-    foreach ($group->getConditions() as $condition) {
+    foreach ($group->getConditions() ?? [] as $condition) {
       if ($condition instanceof NestedChildFieldConditionGroup) {
         $inner = $this->buildConditionGroupSubfilters($condition, $index_fields);
         $subfilters[] = $this->wrapWithConjunction($inner, $condition->getConjunction());

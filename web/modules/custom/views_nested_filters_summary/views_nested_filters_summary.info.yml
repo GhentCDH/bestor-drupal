@@ -1,0 +1,7 @@
+name: Views Nested Filters Summary
+type: module
+description: Fixes and extensions for views_filters_summary when filters use nested URL params (Facets, range filters, relationship filters).
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - views_filters_summary:views_filters_summary

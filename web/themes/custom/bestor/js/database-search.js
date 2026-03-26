@@ -96,4 +96,70 @@
     }
   };
 
+  // After every AJAX rebuild, remove 'disabled' from summary links and
+  // ensure the contrib behavior is re-attached on the full document.
+  // Without this, the once() block prevents re-attachment after AJAX,
+  // leaving links with no click handler — causing navigation to href="/".
+  Drupal.behaviors.summaryLinksEnable = {
+    attach() {
+      document.querySelectorAll(
+        '.views-filters-summary a.remove-filter.disabled, .views-filters-summary a.reset.disabled'
+      ).forEach(link => link.classList.remove('disabled'));
+    }
+  };
+
+  // Safety net: prevent navigation to href="/" if the contrib handler
+  // failed to attach. The contrib handler calls preventDefault itself,
+  // but if it's missing (e.g. after AJAX rebuild), we catch it here.
+  Drupal.behaviors.summaryLinksSafetyNet = {
+    attach(context) {
+      once('summary-safety', 'body', context).forEach(() => {
+        document.addEventListener('click', e => {
+          const link = e.target.closest('.views-filters-summary a.remove-filter, .views-filters-summary a.reset');
+          if (!link) return;
+          // Always prevent default — the contrib handler or our own logic
+          // will handle the actual filter removal via AJAX/form submit.
+          // This stops the browser from following href="/".
+          e.preventDefault();
+        }, true); // capture phase — runs before contrib handler
+      });
+    }
+  };
+
+  // Patch views_filters_summary to fix two contrib bugs:
+  //
+  // 1. reset() regex only strips one bracket level, so nested input names
+  //    like rel_institution[institution][value] are never matched.
+  //
+  // 2. getFilterSubmit() fails with BEF because the apply button has class
+  //    js-hide (display:none), causing the visibility check to skip it and
+  //    fall back to the reset button — sending reset=Reset in the request.
+  Drupal.behaviors.viewsFiltersSummaryFixes = {
+    attach(context) {
+      once('summary-fixes', 'body', context).forEach(() => {
+        if (!Drupal.ViewsFiltersSummaryHandler) return;
+
+        // Fix 1: nested input names.
+        const origReset = Drupal.ViewsFiltersSummaryHandler.prototype.reset;
+        Drupal.ViewsFiltersSummaryHandler.prototype.reset = function (exposedForm, filterIds) {
+          origReset.call(this, exposedForm, filterIds);
+          if (!filterIds || !filterIds.length) return;
+          filterIds.forEach(id => {
+            exposedForm.querySelectorAll(`select[name^="${id}["], input[name^="${id}["]`).forEach(el => {
+              if (el.tagName === 'SELECT') el.selectedIndex = -1;
+              else el.value = '';
+            });
+          });
+        };
+
+        // Fix 2: prefer BEF's marked submit button.
+        const origGetSubmit = Drupal.ViewsFiltersSummaryHandler.prototype.getFilterSubmit;
+        Drupal.ViewsFiltersSummaryHandler.prototype.getFilterSubmit = function (exposedForm) {
+          return exposedForm.querySelector('[data-bef-auto-submit-click]')
+            || origGetSubmit.call(this, exposedForm);
+        };
+      });
+    }
+  };
+
 })(jQuery, Drupal, once);

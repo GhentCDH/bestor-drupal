@@ -1,0 +1,142 @@
+<?php
+
+use Drupal\Core\Url;
+use Drupal\views\Plugin\views\filter\FilterPluginBase;
+use Drupal\views\ViewExecutable;
+
+
+/**
+ * Implements hook_views_filters_summary_item_alter().
+ *
+ * Replaces href="/" on remove-filter links with href="#".
+ * The contrib module generates Url::fromUserInput('/') as placeholder —
+ * this prevents accidental navigation to the homepage if JS fails.
+ */
+function views_nested_filters_summary_views_filters_summary_item_alter(array &$item): void {
+  if (isset($item['link']['#url'])) {
+    $item['link']['#url'] = Url::fromUserInput('#');
+  }
+}
+
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Populates $filter->value and exposed_input for facets_filter plugins.
+ * Facets filters use their own URL processor and never populate $filter->value,
+ * causing views_filters_summary to skip them entirely.
+ */
+function views_nested_filters_summary_views_pre_render(ViewExecutable $view): void {
+  foreach ($view->filter as $filter) {
+    if ($filter->getPluginId() !== 'facets_filter') {
+      continue;
+    }
+    $identifier = $filter->options['expose']['identifier'] ?? NULL;
+    if (!$identifier) {
+      continue;
+    }
+    $raw = \Drupal::request()->query->all()[$identifier] ?? [];
+    if (empty($raw) || !is_array($raw)) {
+      continue;
+    }
+    $filter->value = array_keys($raw);
+    $exposed = $view->getExposedInput();
+    if (!isset($exposed[$identifier])) {
+      $exposed[$identifier] = array_keys($raw);
+      $view->setExposedInput($exposed);
+    }
+  }
+}
+
+
+/**
+ * Implements hook_views_filters_summary_info_alter().
+ *
+ * Builds summary labels for facets_filter plugins.
+ * Resolves taxonomy term IDs to labels, node bundle keys to bundle labels,
+ * and falls back to the raw value for simple strings (e.g. startchar).
+ */
+function views_nested_filters_summary_views_filters_summary_info_alter(array &$info, FilterPluginBase $filter): void {
+  if ($filter->getPluginId() !== 'facets_filter') {
+    return;
+  }
+
+  $identifier = $filter->options['expose']['identifier'] ?? NULL;
+  if (!$identifier) {
+    return;
+  }
+
+  $raw = \Drupal::request()->query->all()[$identifier] ?? [];
+  if (empty($raw) || !is_array($raw)) {
+    $info['value'] = NULL;
+    return;
+  }
+
+  $items = [];
+  foreach (array_keys($raw) as $value) {
+    $label = _views_nested_filters_summary_facets_label($identifier, (string) $value);
+    if ($label !== NULL) {
+      $items[] = [
+        'id'    => $value,
+        'raw'   => $value,
+        'value' => $label,
+      ];
+    }
+  }
+
+  $info['value'] = $items ?: NULL;
+}
+
+
+/**
+ * Resolves a display label for a facets_filter value.
+ *
+ * Resolution order:
+ * 1. Numeric value → load as taxonomy term, return translated label.
+ * 2. identifier === 'category' → resolve as node bundle label.
+ * 3. Fallback → return value as-is (e.g. startchar letters).
+ *
+ * @param string $identifier
+ *   The Views exposed filter identifier.
+ * @param string $value
+ *   The raw filter value from the URL.
+ *
+ * @return string|null
+ *   Human-readable label, or NULL if unresolvable.
+ */
+function _views_nested_filters_summary_facets_label(string $identifier, string $value): ?string {
+  if (is_numeric($value)) {
+    try {
+      $term = \Drupal::entityTypeManager()
+        ->getStorage('taxonomy_term')
+        ->load((int) $value);
+      if ($term) {
+        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        if ($term->hasTranslation($langcode)) {
+          $term = $term->getTranslation($langcode);
+        }
+        return $term->label();
+      }
+    }
+    catch (\Exception $e) {
+      // Fall through.
+    }
+  }
+
+  if ($identifier === 'category') {
+    $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo('node');
+    if (isset($bundles[$value]['label'])) {
+      return (string) $bundles[$value]['label'];
+    }
+  }
+
+  return $value;
+}
+
+
+/**
+ * Implements hook_page_attachments().
+ */
+function views_nested_filters_summary_page_attachments(array &$attachments): void {
+  $attachments['#attached']['library'][] = 'views_nested_filters_summary/nested-filters-summary';
+}

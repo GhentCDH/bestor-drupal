@@ -36,7 +36,7 @@ function relationship_nodes_search_entity_type_alter(array &$entity_types) {
  * Implements hook_search_api_field_type_mapping_alter().
  */
 function relationship_nodes_search_search_api_field_type_mapping_alter(array &$mapping) {
- $mapping['relation_info'] = 'relationship_nodes_search_nested_relationship';
+  $mapping['relation_info'] = 'relationship_nodes_search_nested_relationship';
 }
 
 
@@ -63,12 +63,12 @@ function relationship_nodes_search_form_views_exposed_form_alter(&$form, FormSta
       $form['#attached']['library'][] = 'relationship_nodes_search/exposed_filters_style';
       $identifier = $filter->options['expose']['identifier'] ?? $filter_id;
       $wrap_id = $identifier . '_wrapper';
-      
-      if (!empty($form[$wrap_id]) && 
-          is_array($form[$wrap_id]) && 
-          isset($form[$wrap_id][$identifier]['#type']) && 
+
+      if (!empty($form[$wrap_id]) &&
+          is_array($form[$wrap_id]) &&
+          isset($form[$wrap_id][$identifier]['#type']) &&
           $form[$wrap_id][$identifier]['#type'] === 'details') {
-      
+
         if (!empty($form[$wrap_id]['#title'])) {
           $form[$wrap_id][$identifier]['#title'] = $form[$wrap_id]['#title'];
           unset($form[$wrap_id]['#title']);
@@ -106,7 +106,6 @@ function relationship_nodes_search_views_filters_summary_info_alter(array &$info
     if (empty($config['enabled'])) {
       continue;
     }
-    // Date/range fields are irrelevant for the summary.
     if (($config['widget'] ?? '') === 'select_range') {
       continue;
     }
@@ -117,13 +116,11 @@ function relationship_nodes_search_views_filters_summary_info_alter(array &$info
       continue;
     }
 
-    // Relation type → suffix only.
     if ($child_filter_id === 'type') {
       $type_label = (string) $raw;
       continue;
     }
 
-    // First remaining enabled field is the main entity.
     if ($entity_label === NULL) {
       $entity_label = $provider->resolveEntityLabel((string) $raw);
     }
@@ -135,12 +132,12 @@ function relationship_nodes_search_views_filters_summary_info_alter(array &$info
   }
 
   $display = $type_label !== NULL
-    ? $entity_label . ' (' . $type_label . ')'
-    : $entity_label;
+    ? "\u{1F517} " . $entity_label . ' (' . $type_label . ')'
+    : "\u{1F517} " . $entity_label;
 
   $info['value'] = [[
     'id'    => 0,
-    'raw'   => $display,
+    'raw'   => $identifier,
     'value' => $display,
   ]];
 }
