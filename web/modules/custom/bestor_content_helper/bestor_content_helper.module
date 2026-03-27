@@ -157,7 +157,7 @@ function bestor_content_helper_theme(): array {
         'current_language' => '',
         'language_links' => [],
       ],
-    ],
+    ]
   ];
 }
 

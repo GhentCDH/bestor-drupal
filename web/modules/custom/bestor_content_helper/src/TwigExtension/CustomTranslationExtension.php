@@ -13,6 +13,7 @@ use Drupal\bestor_content_helper\Service\CurrentPageAnalyzer;
 use Drupal\bestor_content_helper\Service\StandardNodeFieldProcessor;
 use Drupal\bestor_content_helper\Service\MediaProcessor;
 use Drupal\bestor_content_helper\Service\UrlProvider;
+use Drupal\bestor_content_helper\Service\NodeLanguageAnalyzer;
 use Drupal\filter\Render\FilteredMarkup;
 use Drupal\Core\Url;
 
@@ -28,6 +29,7 @@ class CustomTranslationExtension extends AbstractExtension {
   protected NodeContentAnalyzer $nodeContentAnalyzer;
   protected StandardNodeFieldProcessor $standardFieldProcessor;
   protected MediaProcessor $mediaProcessor;
+  protected NodeLanguageAnalyzer $languageAnalyzer;
   protected UrlProvider $urlProvider;
 
   /**
@@ -41,6 +43,7 @@ class CustomTranslationExtension extends AbstractExtension {
     NodeContentAnalyzer $nodeContentAnalyzer,
     StandardNodeFieldProcessor $standardFieldProcessor,
     MediaProcessor $mediaProcessor,
+    NodeLanguageAnalyzer $languageAnalyzer,
     UrlProvider $urlProvider
   ) {
     $this->languageManager = $languageManager;
@@ -50,6 +53,7 @@ class CustomTranslationExtension extends AbstractExtension {
     $this->nodeContentAnalyzer = $nodeContentAnalyzer;
     $this->standardFieldProcessor = $standardFieldProcessor;
     $this->mediaProcessor = $mediaProcessor;
+    $this->languageAnalyzer = $languageAnalyzer;
     $this->urlProvider = $urlProvider;
   }
 
@@ -80,6 +84,7 @@ class CustomTranslationExtension extends AbstractExtension {
       'site_setting' => $this->siteSettingManager->getBestorSiteSetting(...$args),
       'translated_url' => $this->urlProvider->getTranslatedPageUrl(...$args),
       'citation' => $this->standardFieldProcessor->getCitation(...$args),
+      'translation_suggestions' => $this->languageAnalyzer->getTranslationSuggestions(...$args),
       default => NULL,
     };
   }

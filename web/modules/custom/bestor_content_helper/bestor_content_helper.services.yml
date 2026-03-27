@@ -18,6 +18,7 @@ services:
   bestor_content_helper.node_language_analyzer:
     class: Drupal\bestor_content_helper\Service\NodeLanguageAnalyzer
     arguments:
+      - '@language_manager'
       - '@bestor_content_helper.node_content_analyzer'
   bestor_content_helper.site_setting_manager:
     class: Drupal\bestor_content_helper\Service\SiteSettingManager
@@ -42,7 +43,8 @@ services:
       - '@bestor_content_helper.node_content_analyzer'
       - '@bestor_content_helper.standard_node_field_processor'  
       - '@bestor_content_helper.media_processor'    
-      - '@bestor_content_helper.url_provider'    
+      - '@bestor_content_helper.node_language_analyzer' 
+      - '@bestor_content_helper.url_provider'   
     tags:
       - { name: twig.extension }
   bestor_content_helper.media_processor:

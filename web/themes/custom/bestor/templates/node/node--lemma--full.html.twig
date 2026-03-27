@@ -111,6 +111,18 @@
     read_time: bestor('reading_time', node),
   }, with_context = false) }}
 
+  {% set suggestions = bestor('translation_suggestions', node) %}
+  {% if suggestions %}
+    <div class="translation-suggestion">
+      {{ 'We have a more extensive version of this lemma in another language:'|t }}
+      {% for langcode, alt in suggestions.alternatives %}
+        {% if not loop.first %} {{ 'or'|t }} {% endif %}
+        <a href="{{ alt.url }}" hreflang="{{ langcode }}">{{ alt.title }}</a>
+        <span>({{ alt.language_name }})</span>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   {% if content.field_description %}
     {{content.field_description}}
   {% endif %}

@@ -4,10 +4,11 @@ namespace Drupal\bestor_content_helper\Service;
 
 use Drupal\node\NodeInterface;
 use Drupal\bestor_content_helper\Service\NodeContentAnalyzer;
-use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 class NodeLanguageAnalyzer {
 
+  protected LanguageManagerInterface $languageManager;
   protected NodeContentAnalyzer $contentAnalyzer;
 
   // Configurable values of what is a short translation and a long translation.
@@ -16,7 +17,8 @@ class NodeLanguageAnalyzer {
   const MIN_LONG_TRANSLATION = 1000;
 
 
-  public function __construct(NodeContentAnalyzer $contentAnalyzer) {
+  public function __construct(LanguageManagerInterface $languageManager, NodeContentAnalyzer $contentAnalyzer) {
+    $this->languageManager = $languageManager;
     $this->contentAnalyzer = $contentAnalyzer;
   }
 
@@ -24,10 +26,12 @@ class NodeLanguageAnalyzer {
   /**
    * Find substantially better translations.
    */
-  public function getTranslationSuggestions(NodeInterface $node, string $current_langcode): ?array {
-    
+  public function getTranslationSuggestions(NodeInterface $node, ?string $current_langcode = null): ?array {
+    if (empty($current_langcode)) {
+      $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
     if (!$node->hasTranslation($current_langcode)) {
-      return $this->listSuggestions($node, 0);
+      return $this->listSuggestions($node, 0, $current_langcode);
     }
     
     $translation = $node->getTranslation($current_langcode);
@@ -41,11 +45,7 @@ class NodeLanguageAnalyzer {
   }
  
 
-  protected function listSuggestions(
-    NodeInterface $node, 
-    int $original_word_count,
-    ?string $exclude_langcode = null
-  ): ?array {
+  protected function listSuggestions(NodeInterface $node, int $original_word_count, ?string $exclude_langcode = null): ?array {
     
     $suggest_translations = [];
     
@@ -55,6 +55,10 @@ class NodeLanguageAnalyzer {
       }
       
       $translation = $node->getTranslation($langcode);
+      if (!$translation->isPublished()) {
+        continue;
+      }
+
       $translation_word_count = $this->contentAnalyzer->countContentWords($translation);
       
       if (empty($translation_word_count)) {
@@ -72,7 +76,7 @@ class NodeLanguageAnalyzer {
         $suggest_translations[$langcode] =  [
           'language_name' => $language->getName(),
           'word_count' => $translation_word_count,
-          'url' => $translation->toUrl()->toString(),
+          'url' => $translation->toUrl('canonical')->setOption('language', $language)->toString(),
           'title' => $translation->getTitle(),
         ];
       }

@@ -7,6 +7,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Displays an informational page when a translation is not available in the
@@ -33,12 +34,22 @@ class TranslationUnavailableController extends ControllerBase {
    * @return array
    *   A render array.
    */
-  public function page(int $nid): array {
+  public function page(int $nid): array|RedirectResponse {
     $node = $this->entityTypeManager()->getStorage('node')->load($nid);
     if (!$node instanceof NodeInterface) {
       throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
     }
+
     $current_language = $this->languageManager->getCurrentLanguage();
+    $current_langcode =  $current_language->getId();
+
+    if ($node->hasTranslation($current_langcode) && $node->getTranslation($current_langcode)->isPublished()) {
+      $url = $node->getTranslation($current_langcode)
+        ->toUrl('canonical')
+        ->setOption('language',  $current_language)
+        ->toString();
+      return new RedirectResponse($url, 302);
+    }
 
     // Build links to all available published translations.
     $language_links = [];
