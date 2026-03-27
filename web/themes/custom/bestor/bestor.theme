@@ -76,11 +76,11 @@ function bestor_theme_suggestions_alter(array &$suggestions, array $variables, $
 function bestor_preprocess_views_view(&$variables): void {
   $view = $variables['view'];
 
-  if (in_array($view->id(), ['database', 'database_advanced_search_affiliations'])) {
+  if (in_array($view->id(), ['database'])) {
     $variables['#attached']['library'][] = 'bestor/database-search';
   }
 
-  if ($view->id() === 'database_advanced_search') {
+  if (in_array($view->id(), ['database_advanced_search', 'database_advanced_search_affiliations'])) {
     $variables['#attached']['library'][] = 'bestor/database-search';
     $variables['#attached']['library'][] = 'bestor/advanced-search-filters';
   }

@@ -563,7 +563,7 @@ display:
         type: bef
         options:
           submit_button: Apply
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
@@ -599,7 +599,20 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              facets_rn_related_entity_1_id__int:
+              facets_rn_relation_type_id__int:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              search_api_range_filter:
                 plugin_id: default
                 advanced:
                   rewrite:

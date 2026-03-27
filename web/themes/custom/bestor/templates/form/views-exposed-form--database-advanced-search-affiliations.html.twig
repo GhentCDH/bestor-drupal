@@ -1,0 +1,46 @@
+{% if q is not empty %}
+  {{ q }}
+{% endif %}
+
+<div class="database-filters">
+
+  <p class="database-filters__heading">{{ 'Filters'|t }}</p>
+
+  {# --- Affiliation filters --- #}
+  <details class="database-filters-section" id="filters-affiliation" open>
+    <summary class="database-filters-section__title">
+      <span><span class="filter-badge"></span>{{ 'Affiliation'|t }}</span>
+    </summary>
+    <div class="database-filters-row database-filters-row--2">
+      {% if form.institution is not empty %}
+        <div class="database-filters-field">{{ form.institution }}</div>
+      {% endif %}
+      {% if form.type is not empty %}
+        <div class="database-filters-field">{{ form.type }}</div>
+      {% endif %}
+    </div>
+  </details>
+
+  {# --- Date range --- #}
+  {% if form.period_wrapper is not empty %}
+    <details class="database-filters-section database-filters-section--period" id="filters-period" open>
+      <summary class="database-filters-section__title">
+        <span><span class="filter-badge"></span>{{ 'Period'|t }}</span>
+      </summary>
+      <div class="database-filters-row database-filters-row--1">
+        <div class="database-filters-field database-filters-field--date">
+          {{ form.period_wrapper }}
+        </div>
+      </div>
+    </details>
+  {% endif %}
+
+  {{ form.form_build_id }}
+  {{ form.form_id }}
+  {{ form.form_token }}
+
+</div>
+
+<div class="database-filters-actions">
+  {{ form.actions }}
+</div>
