@@ -21,11 +21,10 @@
 
 /* FEAT: caption for table paragraphs */
 .bestor-table-caption {
-    font-size: 15px;
-    font-style: italic;
-    margin-block-start: 18px;
+  font-size: 15px;
+  font-style: italic;
+  margin-block-start: 18px;
 }
-
 
 /* FEAT: hide dropdown toc if no elements */
 @supports selector(:has(*)) {
@@ -38,7 +37,6 @@
   display: none;
 }
 
-
 /* FEAT: provide fixes for non-lemma pages */
 @media screen and (min-width: 90em) {
   .c-structured-layout--no-top .c-structured-layout__content {
@@ -46,13 +44,11 @@
   }
 }
 
-
 @media screen and (min-width: 90em) {
   .c-structured-layout--no-sidebar .c-structured-layout__content {
     grid-column-end: span 18 !important; 
   }
 }
-
 
 /* FIX: improve facet subtitle styling */
 .views-exposed-form form > .form-item > label,
@@ -85,22 +81,10 @@
   visibility: hidden;
 }
 
-/* FEAT: style reset button */
-/* .views-exposed-form .form-submit{
-  padding: 3px 8px;
-  border: solid black 1px;
-  border-radius: 10px;
-}
-
-.views-exposed-form .form-submit:hover{
-  color:  var(--color-primary);
-} */
-
 /* FEAT: full page form and system block styling */
 .pagecontent-form .c-structured-layout__content{
   grid-column-start: 1;
 }
-
 
 /* FIX: make space between paragraphs smaller */
 @media screen and (min-width: 90em) {
@@ -132,13 +116,11 @@
     gap: 0px;
 }
 
-
 /* FIX: general adaptations of empty space: padding, margin */
 .c-grid.h-bg-color-tertiary .c-grid__grid-items__item > div{
   margin-left:auto;
   margin-right: auto;
 }
-
 
 .c-tabs .c-tabs__tab__content {
   padding-block-start: 0px;
@@ -195,11 +177,6 @@
   width: 199px;
   height: 302px;
 }
-
-/* .bestor-card-vertical .c-card__media {
-  width: 402px;
-  height: 456px;
-} */
 
 .c-info-box__media {
   width: 100%;
@@ -355,11 +332,7 @@
   column-gap: 0.8rem;
 }
 
-.form-item select,
-.form-item input,
-.form-item label,
-.form-item summary,
-.view-header {
+.form-item select, .form-item input, .form-item label, .form-item summary, .view-header {
   font-family: var(--font-family-sans-serif);
 }
 
