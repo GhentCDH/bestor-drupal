@@ -1,38 +1,106 @@
 .database-filters {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0;
+  background: var(--color-white, #fff);
+  border: 1px solid var(--color-border-grey-light);
+  border-radius: .75rem;
+  overflow: hidden;
 }
+
+/* Subtle heading strip — present but not dominant */
+.database-filters__heading {
+  margin: 0;
+  padding: .4rem 1rem;
+  font-family: var(--font-family-sans-serif);
+  letter-spacing: .1em;
+  color: var(--color-white, #fff);
+  background: var(--color-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Accordion sections
+ * --------------------------------------------------------------------------- */
 
 .database-filters-section {
   display: flex;
   flex-direction: column;
-  gap: .75rem;
-  padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--color-border-grey-light);
 }
 
 .database-filters-section:last-of-type {
   border-bottom: none;
-  padding-bottom: 0;
 }
+
+/* Header row: noticeably darker than white content zone */
+.database-filters-section summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 10px 30px;
+  background: color-mix(in srgb, var(--color-grey-light, #f0f0f0) 100%, #000 10%);
+  border-bottom: 1px solid transparent;
+  transition: background .15s ease;
+}
+
+.database-filters-section[open] > summary {
+  border-bottom-color: var(--color-border-grey-light);
+}
+
+.database-filters-section summary:hover {
+  filter: brightness(.95);
+}
+
+.database-filters-section summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Content zone: white, with unified padding */
+.database-filters-section[open] > *:not(summary) {
+  padding: 10px 30px;
+  background: var(--color-white, #fff);
+}
+
+/* Section title layout and typography */
+.database-filters-section__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-family-sans-serif);
+  font-size: var(--font-h4-size);
+  font-weight: var(--font-weight-medium);
+  margin: 0;
+}
+
+/* Chevron in primary colour so it reads as interactive */
+.database-filters-section__title::after {
+  content: '';
+  display: inline-block;
+  width: .625rem;
+  height: .625rem;
+  border-right: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  transform: rotate(45deg) translateY(-.2rem);
+  transition: transform .2s ease;
+  flex-shrink: 0;
+}
+
+.database-filters-section[open] > summary .database-filters-section__title::after {
+  transform: rotate(-135deg) translateY(.1rem);
+}
+
+/* ---------------------------------------------------------------------------
+ * Form fields
+ * --------------------------------------------------------------------------- */
 
 .database-filters-row {
   display: grid;
-  gap: .75rem;
+  gap: .5rem;
 }
 
-.database-filters-row--2 {
-  grid-template-columns: 1fr 1fr;
-}
-
-.database-filters-row--3 {
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.database-filters-row--4 {
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-}
+.database-filters-row--2 { grid-template-columns: 1fr 1fr; }
+.database-filters-row--3 { grid-template-columns: 1fr 1fr 1fr; }
+.database-filters-row--4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
 
 @media screen and (max-width: 61.25em) {
   .database-filters-row--2,
@@ -45,35 +113,52 @@
 .database-filters-field {
   display: flex;
   flex-direction: column;
-  gap: .375rem;
+  gap: .25rem;
 }
 
 .database-filters-field label {
   font-family: var(--font-family-sans-serif);
-  font-size: var(--font-h4-size);
+  font-size: .75rem;
   font-weight: var(--font-weight-medium);
+  color: var(--color-grey, #888);
   line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
-/* Period filter: two selects side by side within a single field */
-.database-filters-field--period {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+/* Inputs: light grey so they stand out against the white content zone */
+.database-filters .database-filters-section input,
+.database-filters .database-filters-section select,
+.database-filters .database-filters-section textarea {
+  background-color: var(--color-grey-light, #f0f0f0);
+  border: 1px solid var(--color-border-grey-light);
+}
+
+/* Hide the redundant "Date range" fieldset legend in the Period section */
+.database-filters-section--period fieldset > legend {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Actions row — sits outside and below the filter container
+ * --------------------------------------------------------------------------- */
+
+.database-filters-actions {
+  display: flex;
   gap: .5rem;
-  align-items: end;
+  margin-top: .75rem;
 }
 
-/* Relations accordion */
+/* ---------------------------------------------------------------------------
+ * Relations tab panel
+ * --------------------------------------------------------------------------- */
 
 .database-filters-rel-layout {
   display: grid;
   grid-template-columns: 11.25rem 1fr;
-  border: 1px solid var(--color-border-grey-light);
-  border-radius: .9375rem;
   overflow: hidden;
 }
 
-/* Stack nav above forms on small screens */
 @media screen and (max-width: 61.25em) {
   .database-filters-rel-layout {
     grid-template-columns: 1fr;
@@ -95,13 +180,13 @@
   }
 }
 
-/* Override global button reset for relation tabs */
 .database-filters-rel-tab {
-  padding: .5rem .875rem;
+  padding: .375rem .75rem;
   font-family: var(--font-family-sans-serif);
   font-size: .8125rem;
   color: var(--color-grey);
   text-align: left;
+  background: transparent;
   border-top: none;
   border-right: none;
   border-bottom: 1px solid var(--color-border-grey-light);
@@ -119,7 +204,6 @@
   background: var(--color-grey-light);
 }
 
-/* Active tab: primary color left border + highlighted background */
 .database-filters-rel-tab.is-active {
   color: var(--color-dark);
   font-weight: var(--font-weight-medium);
@@ -128,10 +212,9 @@
 }
 
 .database-filters-rel-forms {
-  padding: 1rem;
+  padding: .75rem;
 }
 
-/* Hide all relation forms by default, show only the active one */
 .database-filters-rel-form {
   display: none;
 }
@@ -140,7 +223,6 @@
   display: block;
 }
 
-/* Strip fieldset styling inside relation forms */
 .database-filters-rel-form fieldset.relationship-child-field-wrapper {
   border: none;
   padding: 0;
@@ -149,4 +231,24 @@
 
 .database-filters-rel-form fieldset.relationship-child-field-wrapper > legend {
   display: none;
+}
+
+.database-filters-section__title > span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.filter-badge {
+  display: inline-block;
+  width: .4rem;
+  height: .4rem;
+  border-radius: 50%;
+  background: var(--color-grey, #aaa);
+  flex-shrink: 0;
+  margin-right: .4rem;
+  transition: background .15s ease;
+}
+
+.filter-badge.is-active {
+  background: var(--color-primary);
 }

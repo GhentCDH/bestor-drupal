@@ -126,17 +126,26 @@ function relationship_nodes_search_views_filters_summary_info_alter(array &$info
     }
   }
 
-  if ($entity_label === NULL) {
+  // Nothing active at all.
+  if ($entity_label === NULL && $type_label === NULL) {
     $info['value'] = NULL;
     return;
   }
 
-  $display = $type_label !== NULL
-    ? "\u{1F517} " . $entity_label . ' (' . $type_label . ')'
-    : "\u{1F517} " . $entity_label;
+  // Build display label from whatever is present.
+  if ($entity_label !== NULL && $type_label !== NULL) {
+    $display = "\u{1F517} " . $entity_label . ' (' . $type_label . ')';
+  }
+  elseif ($entity_label !== NULL) {
+    $display = "\u{1F517} " . $entity_label;
+  }
+  else {
+    // Type-only: "co-worker of anybody"
+    $display = "\u{1F517} " . $type_label;
+  }
 
   $info['value'] = [[
-    'id'    => 0,
+    'id'    => $identifier,
     'raw'   => $identifier,
     'value' => $display,
   ]];

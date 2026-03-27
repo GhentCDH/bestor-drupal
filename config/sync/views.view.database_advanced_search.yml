@@ -186,6 +186,32 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
+              search_api_range_filter:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: date-range-filter
+                  sort_options_unsupported: ''
+              sapi_language_fallback_filter:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
               tax_author_int:
                 plugin_id: default
                 advanced:
@@ -247,7 +273,22 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-              relationship_info_relationnode_concept_story_nested:
+              tax_country_int:
+                plugin_id: default
+                advanced:
+                  sort_options: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              relationship_info_relationnode_institut_concept_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -260,7 +301,59 @@ display:
                   hide_label: false
                   field_classes: ''
                   sort_options_unsupported: ''
-              relationship_info_relationnode_document_strory_nested:
+              relationship_info_relationnode_institut_document_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              relationship_info_relationnode_institut_institut_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              relationship_info_relationnode_institut_instrum_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              relationship_info_relationnode_person_institut_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  sort_options_unsupported: ''
+              relationship_info_relationnode_institut_place_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -274,58 +367,6 @@ display:
                   field_classes: ''
                   sort_options_unsupported: ''
               relationship_info_relationnode_institut_story_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
-              relationship_info_relationnode_instrum_story_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
-              relationship_info_relationnode_person_story_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
-              relationship_info_relationnode_place_story_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-                  sort_options_unsupported: ''
-              relationship_info_relationnode_story_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -3893,7 +3934,7 @@ display:
           empty: true
           filters: {  }
           show_labels: false
-          show_remove_link: false
+          show_remove_link: true
           show_reset_link: true
           group_values: false
           content: '@total @result_label @exposed_filter_summary'

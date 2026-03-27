@@ -1,103 +1,136 @@
-{#
-/**
- * @file
- * Default theme implementation of a views exposed form.
- *
- * Available variables:
- * - form: A render element representing the form.
- *
- * @see template_preprocess_views_exposed_form()
- *
- * @ingroup themeable
- */
-#}
 {% if q is not empty %}
-  {#
-    This ensures that, if clean URLs are off, the 'q' is added first,
-    as a hidden form element, so that it shows up first in the POST URL.
-  #}
-{{ q }}
-
+  {{ q }}
 {% endif %}
- {{devel_dump(form)}}
 
 <div class="database-filters">
 
-  <div class="database-filters-section">
+  <p class="database-filters__heading">{{ 'Filters'|t }}</p>
+
+  {# --- Fulltext search --- #}
+  <details class="database-filters-section" id="filters-search" open>
+    <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Search'|t }}</span></summary>
     <div class="database-filters-row database-filters-row--2">
-      <div class="database-filters-field">
-        {{ form.full }}
+      {% if form.full is not empty %}
+        <div class="database-filters-field">{{ form.full }}</div>
+      {% endif %}
+      {% if form.title is not empty %}
+        <div class="database-filters-field">{{ form.title }}</div>
+      {% endif %}
+    </div>
+    {% if form.creator is not empty or form.inventor is not empty %}
+      <div class="database-filters-row database-filters-row--2">
+        {% if form.creator is not empty %}
+          <div class="database-filters-field">{{ form.creator }}</div>
+        {% endif %}
+        {% if form.inventor is not empty %}
+          <div class="database-filters-field">{{ form.inventor }}</div>
+        {% endif %}
       </div>
-      <div class="database-filters-field">
-        {{ form.title }}
+    {% endif %}
+  </details>
+
+  {# --- Taxonomy / type filters --- #}
+  {% if form.discipline is not empty
+    or form.specialisation is not empty
+    or form.type is not empty
+    or form.gender is not empty
+    or form.country is not empty
+    or form.category is not empty %}
+    <details class="database-filters-section" id="filters-characteristics">
+      <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Characteristics'|t }}</span></summary>
+      <div class="database-filters-row database-filters-row--3">
+        {% if form.discipline is not empty %}
+          <div class="database-filters-field">{{ form.discipline }}</div>
+        {% endif %}
+        {% if form.specialisation is not empty %}
+          <div class="database-filters-field">{{ form.specialisation }}</div>
+        {% endif %}
+        {% if form.type is not empty %}
+          <div class="database-filters-field">{{ form.type }}</div>
+        {% endif %}
+        {% if form.gender is not empty %}
+          <div class="database-filters-field">{{ form.gender }}</div>
+        {% endif %}
+        {% if form.country is not empty %}
+          <div class="database-filters-field">{{ form.country }}</div>
+        {% endif %}
+        {% if form.category is not empty %}
+          <div class="database-filters-field">{{ form.category }}</div>
+        {% endif %}
       </div>
-    </div>
-  </div>
+    </details>
+  {% endif %}
 
-  <div class="database-filters-section">
-    <div class="database-filters-row database-filters-row--3">
-      {% if form.discipline is not empty %}
-        <div class="database-filters-field">
-          {{ form.discipline }}
+  {# --- Date range --- #}
+  {% if form.date_wrapper is not empty %}
+    <details class="database-filters-section database-filters-section--period" id="filters-period">
+      <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Period'|t }}</span></summary>
+      <div class="database-filters-row database-filters-row--1">
+        <div class="database-filters-field database-filters-field--date">
+          {{ form.date_wrapper }}
         </div>
-      {% endif %}
-      {% if form.specialisation is not empty %}
-        <div class="database-filters-field">
-          {{ form.specialisation }}
-        </div>
-      {% endif %}
-      {% if form.type is not empty %}
-        <div class="database-filters-field">
-          {{ form.type }}
-        </div>
-      {% endif %}
-    </div>
-
-    {% block specific_filters %}{% endblock %}
-
-  </div>
-
-  <div class="database-filters-section database-filters-section--relations">
-    <div class="database-filters-rel-layout">
-      <nav class="database-filters-rel-nav">
-        {% for key in ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'] %}
-          {% if form['rel_' ~ key ~ '_wrapper'] is not empty %}
-            <button type="button" class="database-filters-rel-tab {% if loop.first %}is-active{% endif %}" data-target="rel-{{ key }}">
-            {{ key|t }}
-          </button>
-          {% endif %}
-        {% endfor %}
-      </nav>
-      <div class="database-filters-rel-forms">
-        {% for key in ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'] %}
-          {% if form['rel_' ~ key ~ '_wrapper'] is not empty %}
-            <div class="database-filters-rel-form {% if loop.first %}is-active{% endif %}" id="rel-{{ key }}">
-              {{ form['rel_' ~ key ~ '_wrapper'] }}
-            </div>
-          {% endif %}
-        {% endfor %}
       </div>
-    </div>
-  </div>
+    </details>
+  {% endif %}
 
-  <div class="database-filters-section">
-    <div class="database-filters-row database-filters-row--2">
-      {% if form.author is not empty %}
-        <div class="database-filters-field">
-          {{ form.author }}
+  {# --- Relaties --- #}
+  {% set has_relations = false %}
+  {% for key in ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'] %}
+    {% if form['rel_' ~ key ~ '_wrapper'] is not empty %}
+      {% set has_relations = true %}
+    {% endif %}
+  {% endfor %}
+
+  {% if has_relations %}
+    <details class="database-filters-section database-filters-section--relations" id="filters-relations">
+      <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Relations'|t }}</span></summary>
+      <div class="database-filters-rel-layout">
+        <nav class="database-filters-rel-nav">
+          {% for key in ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'] %}
+            {% if form['rel_' ~ key ~ '_wrapper'] is not empty %}
+              <button type="button"
+                      class="database-filters-rel-tab {% if loop.first %}is-active{% endif %}"
+                      data-target="rel-{{ key }}">
+                {{ key|t }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </nav>
+        <div class="database-filters-rel-forms">
+          {% for key in ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'] %}
+            {% if form['rel_' ~ key ~ '_wrapper'] is not empty %}
+              <div class="database-filters-rel-form {% if loop.first %}is-active{% endif %}"
+                   id="rel-{{ key }}">
+                {{ form['rel_' ~ key ~ '_wrapper'] }}
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
-      {% endif %}
-      {% if form.language is not empty %}
-        <div class="database-filters-field">
-          {{ form.language }}
-        </div>
-      {% endif %}
-    </div>
-  </div>
+      </div>
+    </details>
+  {% endif %}
+
+  {# --- Editorial metadata --- #}
+  {% if form.author is not empty or form.language is not empty %}
+    <details class="database-filters-section" id="filters-metadata">
+      <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Metadata'|t }}</span></summary>
+      <div class="database-filters-row database-filters-row--2">
+        {% if form.author is not empty %}
+          <div class="database-filters-field">{{ form.author }}</div>
+        {% endif %}
+        {% if form.language is not empty %}
+          <div class="database-filters-field">{{ form.language }}</div>
+        {% endif %}
+      </div>
+    </details>
+  {% endif %}
 
   {{ form.form_build_id }}
   {{ form.form_id }}
   {{ form.form_token }}
-  {{ form.actions }}
 
+</div>
+
+<div class="database-filters-actions">
+  {{ form.actions }}
 </div>
