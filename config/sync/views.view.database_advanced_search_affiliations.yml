@@ -835,11 +835,6 @@ display:
                 weights:
                   build: 5
                 settings: {  }
-              entity_reference_content_access:
-                processor_id: entity_reference_content_access
-                weights:
-                  build: 5
-                settings: {  }
               translate_entity_mirror_label:
                 processor_id: translate_entity_mirror_label
                 weights:
@@ -899,50 +894,6 @@ display:
             max: 2026
             use_current_year_min: false
             use_current_year_max: true
-        rn_related_entity_1_id_int:
-          id: rn_related_entity_1_id_int
-          table: search_api_index_affiliations
-          field: rn_related_entity_1_id_int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_numeric
-          operator: 'not empty'
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1021,7 +972,7 @@ display:
           empty: true
           filters: {  }
           show_labels: false
-          show_remove_link: false
+          show_remove_link: true
           show_reset_link: true
           group_values: false
           content: '@total @result_label @exposed_filter_summary'

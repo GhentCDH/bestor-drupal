@@ -28,19 +28,22 @@
       once('filters-accordion', '.database-filters', context).forEach(wrapper => {
         const sections = wrapper.querySelectorAll('details.database-filters-section[id]');
 
-        // Restore saved state before first paint.
+        // Restore saved state only if it was saved on the same page path.
         const saved = storageGet(SECTIONS_KEY) || {};
-        sections.forEach(el => {
-          if (el.id in saved) el.open = saved[el.id];
-        });
+        if (saved._path === window.location.pathname) {
+          sections.forEach(el => {
+            if (el.id in saved) el.open = saved[el.id];
+          });
+        }
 
         // Update badges after state is restored.
         updateAllBadges(wrapper);
 
-        // Persist state on every toggle.
+        // Persist state on every toggle, including the current page path.
         sections.forEach(el => {
           el.addEventListener('toggle', () => {
             const state = storageGet(SECTIONS_KEY) || {};
+            state._path = window.location.pathname;
             state[el.id] = el.open;
             storageSet(SECTIONS_KEY, state);
           });
@@ -50,7 +53,7 @@
         const form = wrapper.closest('form');
         if (form) {
           form.addEventListener('submit', () => {
-            const state = {};
+            const state = { _path: window.location.pathname };
             sections.forEach(el => { state[el.id] = el.open; });
             storageSet(SECTIONS_KEY, state);
           });
@@ -160,5 +163,22 @@
       badge.classList.toggle('is-active', countActiveInputs(section) > 0);
     });
   }
+
+
+  // ---------------------------------------------------------------------------
+  // 5. Active class in advanced search menu
+  // ---------------------------------------------------------------------------
+
+  Drupal.behaviors.advancedSearchMenuActive = {
+  attach(context) {
+    once('menu-active', '.menu--advanced-search', context).forEach(menu => {
+      menu.querySelectorAll('a').forEach(link => {
+        if (link.pathname === window.location.pathname) {
+          link.classList.add('is-active');
+        }
+      });
+    });
+  }
+};
 
 }(Drupal, once));
