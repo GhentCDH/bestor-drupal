@@ -1,0 +1,7 @@
+name: 'Cytoscape Block'
+description: 'Generic block that renders any JSON endpoint as a Cytoscape.js graph.'
+type: module
+core_version_requirement: ^10 || ^11
+package: 'Graph'
+dependencies:
+  - drupal:block
