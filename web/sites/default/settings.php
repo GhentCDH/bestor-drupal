@@ -195,3 +195,5 @@ $config['varnish_purger.settings.b1fdb61233']['headers'] = [
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
 }
+
+$config['smtp.settings']['smtp_password'] = getenv('SMTP_PASSWORD');
