@@ -383,3 +383,19 @@
   border-radius:1rem;
   background-color:#f8f8f8;
 }
+
+.c-lemma-sidebar__related-items .c-related-items__items .more-link{
+  margin: 10px 0;
+}
+
+.c-lemma-sidebar__related-items .c-related-items__items .more-link > a{
+  text-decoration: none;
+  background-color: var(--color-grey-light);
+  padding: 7px;
+  border: solid 1px #ccc;
+  color: #444;
+}
+
+.c-lemma-sidebar__related-items .c-related-items__items .more-link > a:hover{
+  color: var(--color-primary);
+}

@@ -156,11 +156,20 @@
   }
 
   function updateAllBadges(wrapper) {
+    // Top-level accordion secties.
     wrapper.querySelectorAll('details.database-filters-section[id]').forEach(section => {
-      const badge = section.querySelector('.filter-badge');
+      const badge = section.querySelector(':scope > summary .filter-badge');
       if (!badge) return;
-      // Toggle .is-active: primary colour when filled, grey otherwise.
       badge.classList.toggle('is-active', countActiveInputs(section) > 0);
+    });
+
+    // Relatie sub-tabs.
+    wrapper.querySelectorAll('.database-filters-rel-tab').forEach(tab => {
+      const badge = tab.querySelector('.filter-badge');
+      if (!badge) return;
+      const panel = document.getElementById(tab.dataset.target);
+      if (!panel) return;
+      badge.classList.toggle('is-active', countActiveInputs(panel) > 0);
     });
   }
 

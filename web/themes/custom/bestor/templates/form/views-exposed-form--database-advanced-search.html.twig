@@ -88,9 +88,8 @@
         <nav class="database-filters-rel-nav">
           {% for key in ['concept', 'document', 'institution', 'instrument', 'person', 'place', 'story'] %}
             {% if form['rel_' ~ key ~ '_wrapper'] is not empty %}
-              <button type="button"
-                      class="database-filters-rel-tab {% if loop.first %}is-active{% endif %}"
-                      data-target="rel-{{ key }}">
+              <button type="button" class="database-filters-rel-tab {% if loop.first %}is-active{% endif %}" data-target="rel-{{ key }}">
+                <span class="filter-badge" hidden></span>
                 {{ key|t }}
               </button>
             {% endif %}

@@ -70,24 +70,26 @@
 {# c-structured-layout.story.twig #}
 
 {#
-  Bundle config: per related bundle, label + optional more_base URL.
-  more_base is the base path of the search view for that bundle type.
-  The filter URL is built automatically as:
-  [more_base]?rel_[current_bundle][current_bundle][value]=node/[nid]
+  Bundle config: per related bundle, label + route naar de zoekpagina.
+  Routes komen uit de view 'database_advanced_search' (views.view.database_advanced_search).
+  De filter URL wordt automatisch opgebouwd als:
+  [route]?rel_[node.bundle()][node.bundle()][value]=node/[node.id()]
 #}
 {% set limit = 10 %}
 {% set bundles = {
-  'story':       { label: 'Related stories'|t,       more_base: '/database/advanced-search/story' },
-  'person':      { label: 'Related persons'|t,        more_base: '/database/advanced-search/person' },
-  'institution': { label: 'Related institutions'|t,   more_base: '/database/advanced-search/institution' },
-  'place':       { label: 'Related places'|t,         more_base: '/database/advanced-search/place' },
-  'concept':     { label: 'Related concepts'|t,       more_base: '/database/advanced-search/concept' },
-  'document':    { label: 'Related documents'|t,      more_base: '/database/advanced-search/document' },
-  'instrument':  { label: 'Related instruments'|t,    more_base: '/database/advanced-search/instrument' },
+  'story':       { label: 'Related stories'|t,       more_route: 'view.database_advanced_search.page_1' },
+  'concept':     { label: 'Related concepts'|t,       more_route: 'view.database_advanced_search.page_2' },
+  'document':    { label: 'Related documents'|t,      more_route: 'view.database_advanced_search.page_3' },
+  'institution': { label: 'Related institutions'|t,   more_route: 'view.database_advanced_search.page_4' },
+  'instrument':  { label: 'Related instruments'|t,    more_route: 'view.database_advanced_search.page_5' },
+  'person':      { label: 'Related persons'|t,        more_route: 'view.database_advanced_search.page_6' },
+  'place':       { label: 'Related places'|t,         more_route: 'view.database_advanced_search.page_7' },
 } %}
 {% set bundle_order = bundles|keys %}
 
-{# Filter key is based on the current node's bundle. #}
+{# Filter key gebaseerd op de bundle van de huidige node.
+   Patroon: rel_[bundle][bundle][value]=node/[nid]
+   Voorbeeld: rel_institution[institution][value]=node/37 #}
 {% set filter_key = 'rel_' ~ node.bundle() ~ '[' ~ node.bundle() ~ '][value]' %}
 {% set filter_value = 'node/' ~ node.id() %}
 
@@ -222,10 +224,10 @@
       {% if rel_data %}
         {% set bundle_config = bundles[rel_data.title] ?? null %}
 
-        {# Build more URL if there are more items and a base path is configured. #}
+        {# Bouw more URL op via route + filterparameter. #}
         {% set more_url = null %}
-        {% if rel_data.has_more and bundle_config and bundle_config.more_base %}
-          {% set more_url = bundle_config.more_base ~ '?' ~ filter_key ~ '=' ~ filter_value %}
+        {% if rel_data.has_more and bundle_config and bundle_config.more_route %}
+          {% set more_url = path(bundle_config.more_route) ~ '?' ~ filter_key ~ '=' ~ filter_value %}
         {% endif %}
 
         {% set items %}
