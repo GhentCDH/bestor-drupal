@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Cytoscape Ego Network module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function cytoscape_egonetwork_uninstall(): void {
+  // Remove the base field data from all node bundles before the field
+  // definition disappears with the module.
+  $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $field = $definition_update_manager->getFieldStorageDefinition('show_ego_network', 'node');
+  if ($field) {
+    $definition_update_manager->uninstallFieldStorageDefinition($field);
+  }
+}

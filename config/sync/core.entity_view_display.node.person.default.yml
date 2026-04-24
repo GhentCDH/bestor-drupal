@@ -88,6 +88,11 @@ content:
     third_party_settings: {  }
     weight: 14
     region: content
+  cytoscape_egonetwork:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 19
+    region: content
   field_alternative_name:
     type: string
     label: hidden
@@ -233,7 +238,7 @@ content:
   toc_js:
     settings: {  }
     third_party_settings: {  }
-    weight: 19
+    weight: 20
     region: content
 hidden:
   computed_relationshipfield__person__document: true

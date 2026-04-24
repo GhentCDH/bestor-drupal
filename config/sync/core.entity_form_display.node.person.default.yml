@@ -58,6 +58,7 @@ third_party_settings:
         width_breakpoint: null
     group_key_data:
       children:
+        - show_ego_network
         - title
         - field_alternative_name
         - field_gender
@@ -445,7 +446,7 @@ content:
     third_party_settings: {  }
   field_alternative_name:
     type: string_textfield
-    weight: 2
+    weight: 102
     region: content
     settings:
       size: 60
@@ -472,26 +473,26 @@ content:
     third_party_settings: {  }
   field_date_end:
     type: datetime_default
-    weight: 6
+    weight: 106
     region: content
     settings: {  }
     third_party_settings: {  }
   field_date_end_year_only:
     type: boolean_checkbox
-    weight: 7
+    weight: 107
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_date_start:
     type: datetime_default
-    weight: 4
+    weight: 104
     region: content
     settings: {  }
     third_party_settings: {  }
   field_date_start_year_only:
     type: boolean_checkbox
-    weight: 5
+    weight: 105
     region: content
     settings:
       display_label: true
@@ -522,19 +523,19 @@ content:
     third_party_settings: {  }
   field_end_municipality:
     type: selectify_dropdown_searchable
-    weight: 10
+    weight: 109
     region: content
     settings: {  }
     third_party_settings: {  }
   field_gender:
     type: selectify_dropdown_searchable
-    weight: 3
+    weight: 103
     region: content
     settings: {  }
     third_party_settings: {  }
   field_image:
     type: media_library_widget
-    weight: 11
+    weight: 110
     region: content
     settings:
       media_types: {  }
@@ -544,7 +545,7 @@ content:
         edit_form_mode: media_library
   field_municipality:
     type: selectify_dropdown_searchable
-    weight: 9
+    weight: 108
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -585,7 +586,7 @@ content:
     third_party_settings: {  }
   field_summary:
     type: string_textarea
-    weight: 12
+    weight: 111
     region: content
     settings:
       rows: 5
@@ -625,6 +626,13 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  show_ego_network:
+    type: boolean_checkbox
+    weight: 100
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 4
@@ -641,7 +649,7 @@ content:
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 1
+    weight: 101
     region: content
     settings:
       size: 60

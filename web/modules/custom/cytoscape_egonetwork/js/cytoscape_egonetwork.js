@@ -1,22 +1,21 @@
 (function (Drupal, once) {
 
-  Drupal.behaviors.cytoscapeBlock = {
+  Drupal.behaviors.cytoscapeEgonetwork = {
     attach(context) {
-      once('cytoscape-block', '.cytoscape-block', context).forEach(el => {
-        const data = drupalSettings.cytoscape_block_data ?? null;
-        const layout = drupalSettings.cytoscapeBlock?.layout ?? 'cose';
-
-        if (!data) {
+      once('cytoscape-egonetwork', '.cytoscape-egonetwork', context).forEach(el => {
+        const settings = drupalSettings.cytoscapeEgonetwork ?? null;
+        if (!settings?.graph?.elements?.length) {
           return;
         }
 
-        const bundleColors = data.meta?.bundleColors ?? {};
+        const { graph, layout: layoutName } = settings;
+        const bundleColors = graph.meta?.bundleColors ?? {};
 
         const cy = cytoscape({
           container: el,
-          elements: data.elements,
+          elements: graph.elements,
           style: buildStyle(bundleColors),
-          layout: buildLayout(layout),
+          layout: buildLayout(layoutName ?? 'cose'),
         });
 
         cy.on('tap', 'node', e => {
@@ -97,7 +96,6 @@
 
   function buildLayout(name) {
     const shared = { animate: false, padding: 40 };
-
     switch (name) {
       case 'breadthfirst':
         return { ...shared, name: 'breadthfirst', directed: true, spacingFactor: 1.5 };
@@ -113,12 +111,10 @@
     }
   }
 
-  // Highlight neighbours on hover, fade the rest.
   function attachHoverBehaviour(cy) {
     cy.on('mouseover', 'node', e => {
       const node = e.target;
       const neighbourhood = node.closedNeighborhood();
-
       cy.elements().addClass('faded');
       neighbourhood.removeClass('faded').addClass('highlighted');
     });
@@ -128,7 +124,6 @@
     });
   }
 
-  // Naive hex lightener for hover highlight — keeps it dependency-free.
   function lighten(hex) {
     const n = parseInt(hex.replace('#', ''), 16);
     const r = Math.min(255, ((n >> 16) & 0xff) + 40);

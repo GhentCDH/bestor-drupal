@@ -6,10 +6,10 @@ cytoscape:
       type: external
       minified: true
 
-graph:
+egonetwork:
   js:
-    js/cytoscape-block.js: {}
+    js/cytoscape-egonetwork.js: {}
   dependencies:
     - core/once
     - core/drupal
-    - cytoscape_block/cytoscape
+    - cytoscape_egonetwork/cytoscape

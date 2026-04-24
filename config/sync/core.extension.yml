@@ -27,6 +27,7 @@ module:
   crop: 0
   customize_admin_menu_per_role: 0
   customviewfilters: 0
+  cytoscape_egonetwork: 0
   datetime: 0
   datetime_range: 0
   dblog: 0
