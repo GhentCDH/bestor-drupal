@@ -64,21 +64,37 @@
  *   is an administrator.
  *
  * @see template_preprocess_node()
- *
- * @todo Remove the id attribute (or make it a class), because if that gets
- *   rendered twice on a page this is invalid CSS for example: two lists
- *   in different view modes.
  */
 #}
 
 {# c-structured-layout.story.twig #}
 
+{#
+  Bundle config: per related bundle, label + optional more_base URL.
+  more_base is the base path of the search view for that bundle type.
+  The filter URL is built automatically as:
+  [more_base]?rel_[current_bundle][current_bundle][value]=node/[nid]
+#}
+{% set limit = 10 %}
+{% set bundles = {
+  'story':       { label: 'Related stories'|t,       more_base: '/database/advanced-search/story' },
+  'person':      { label: 'Related persons'|t,        more_base: '/database/advanced-search/person' },
+  'institution': { label: 'Related institutions'|t,   more_base: '/database/advanced-search/institution' },
+  'place':       { label: 'Related places'|t,         more_base: '/database/advanced-search/place' },
+  'concept':     { label: 'Related concepts'|t,       more_base: '/database/advanced-search/concept' },
+  'document':    { label: 'Related documents'|t,      more_base: '/database/advanced-search/document' },
+  'instrument':  { label: 'Related instruments'|t,    more_base: '/database/advanced-search/instrument' },
+} %}
+{% set bundle_order = bundles|keys %}
+
+{# Filter key is based on the current node's bundle. #}
+{% set filter_key = 'rel_' ~ node.bundle() ~ '[' ~ node.bundle() ~ '][value]' %}
+{% set filter_value = 'node/' ~ node.id() %}
 
 {% set toc = content.toc_js %}
+
 {% set top %}
-
   {% set all_media = bestor('media_info', node, 'field_image', {'image_style': 'id_kit'}) %}
-
   {% set image_info = all_media|length > 0 ? all_media|first : null %}
   {% if image_info %}
     {% set media %}
@@ -91,7 +107,7 @@
   {% set identity_kit_list %}
     {% for key_element in bestor('lemma_key_data', node, 'full', 'database', 'page_1') %}
       {{ include('jakarta:c-identity-kit-item', {
-        title: key_element.label ,
+        title: key_element.label,
         values: key_element.value,
       }, with_context = false) }}
     {% endfor %}
@@ -124,25 +140,26 @@
   {% endif %}
 
   {% if content.field_description %}
-    {{content.field_description}}
+    {{ content.field_description }}
   {% endif %}
 
   {% if content.body %}
-    {{content.body}}
+    {{ content.body }}
   {% endif %}
 
   {% if content.field_geolocation %}
-    {{content.field_geolocation}}
+    {{ content.field_geolocation }}
   {% endif %}
+
   {% if content.show_ego_network %}
-    {{content.show_ego_network}}
+    {{ content.show_ego_network }}
   {% endif %}
 {% endset %}
 
 {% set sidebar %}
   {% set contact_url = bestor('translated_url', 'contact') %}
   {% set citation_text = bestor('citation') %}
-  
+
   {% set buttons %}
     {% if contact_url %}
       {{ include('jakarta:c-button', {
@@ -178,7 +195,7 @@
 
   {% set table_of_contents %}
     {% set dropdown_items %}
-      {{toc}}
+      {{ toc }}
     {% endset %}
     {{ include('jakarta:c-dropdown', {
       toggle: 'Table of contents'|t,
@@ -187,26 +204,16 @@
   {% endset %}
 
   {% set related_items %}
-    {% set bundles = {
-      'story': { label: 'Related stories'|t, more_url: null },
-      'person': { label: 'Related persons'|t, more_url: null },
-      'institution': { label: 'Related institutions'|t, more_url: null },
-      'place': { label: 'Related places'|t, more_url: null },
-      'concept': { label: 'Related concepts'|t, more_url: null },
-      'document': { label: 'Related documents'|t, more_url: null },
-      'instrument': { label: 'Related instruments'|t, more_url: null },
-    } %}
-    {% set bundle_order = bundles|keys %}
+    {% set extra_pers_inst_flds = [
+      'field_date_start',
+      'field_date_start_year_only',
+      'field_date_end_year_only'
+    ] %}
 
     {% for relfield in rn('relation_fields_list', node, bundle_order) %}
-      {% set extra_pers_inst_flds = [
-        'field_date_start',
-        'field_date_start_year_only',
-        'field_date_end_year_only'
-      ] %}
       {% set rel_data = rn('formatted_relations', node, relfield, {
         'language_fallback': true,
-        'limit': 10,
+        'limit': limit,
         'extra_fields': {
           'computed_relationshipfield__person__institution': extra_pers_inst_flds,
           'computed_relationshipfield__institution__person': extra_pers_inst_flds,
@@ -214,6 +221,13 @@
       }) %}
       {% if rel_data %}
         {% set bundle_config = bundles[rel_data.title] ?? null %}
+
+        {# Build more URL if there are more items and a base path is configured. #}
+        {% set more_url = null %}
+        {% if rel_data.has_more and bundle_config and bundle_config.more_base %}
+          {% set more_url = bundle_config.more_base ~ '?' ~ filter_key ~ '=' ~ filter_value %}
+        {% endif %}
+
         {% set items %}
           <ul class="links">
             {% for rel in rel_data.items %}
@@ -225,13 +239,14 @@
                 {% if rel.relation_type_name %}({{ rel.relation_type_name.value }}){% endif %}
               </li>
             {% endfor %}
-            {% if rel_data.has_more and bundle_config and bundle_config.more_url %}
+            {% if more_url %}
               <li class="more-link">
-                <a href="{{ bundle_config.more_url }}">{{ 'Show all'|t }}</a>
+                <a href="{{ more_url }}">{{ 'Show all'|t }}</a>
               </li>
             {% endif %}
           </ul>
         {% endset %}
+
         {{ include('jakarta:c-related-items', {
           title: bundle_config ? bundle_config.label : rel_data.title,
           items,
@@ -239,16 +254,14 @@
       {% endif %}
     {% endfor %}
   {% endset %}
+
   {{ include('jakarta:c-lemma-sidebar', {
     buttons,
     table_of_contents,
     related_items,
   }, with_context = false) }}
-
-  {% if citation_text %}
-
-  {% endif %}
 {% endset %}
+
 {{ include('jakarta:c-structured-layout', {
   top,
   content,
