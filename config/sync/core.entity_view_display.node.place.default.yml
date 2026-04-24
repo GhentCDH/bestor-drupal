@@ -21,6 +21,7 @@ dependencies:
     - field.field.node.place.field_typology
     - node.type.place
   module:
+    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - leaflet
@@ -239,6 +240,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  show_ego_network:
+    type: cytoscape_egonetwork
+    label: hidden
+    settings:
+      language_unavailable: fade
+    third_party_settings: {  }
+    weight: 100
     region: content
   toc_js:
     settings: {  }

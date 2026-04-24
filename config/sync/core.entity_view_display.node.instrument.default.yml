@@ -18,6 +18,7 @@ dependencies:
     - field.field.node.instrument.field_summary
     - node.type.instrument
   module:
+    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - user
@@ -123,6 +124,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  show_ego_network:
+    type: cytoscape_egonetwork
+    label: hidden
+    settings:
+      language_unavailable: fade
+    third_party_settings: {  }
+    weight: 100
     region: content
   toc_js:
     settings: {  }
