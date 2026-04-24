@@ -101,6 +101,8 @@ class RelationshipTwigFormatter {
    *     requested language using the best available language (default: FALSE)
    *   - 'extra_fields': Associative array per relation field:
    *       ['computed_relationshipfield__person__person' => ['field_date_start']]
+   *   - 'limit': If set, return at most this many items and set 'has_more'
+   *     (OPTIONAL, default: NULL = no limit)
    * @param array $field_settings
    *   Custom field configuration per field. Merges with defaults.
    *
@@ -109,6 +111,7 @@ class RelationshipTwigFormatter {
    *   - 'title': Related bundle name.
    *   - 'field_name': The relation field name.
    *   - 'relation_bundle': The relation bundle machine name.
+   *   - 'has_more': TRUE if there are more items than the limit allows.
    *   - 'items': Array of items, each containing fields as:
    *     ['value' => ..., 'url' => ..., 'is_fallback' => ...,
    *      'langcode' => ..., 'available_languages' => [...]]
@@ -122,6 +125,8 @@ class RelationshipTwigFormatter {
     array $options = [],
     array $field_settings = []
   ): ?array {
+    $limit = isset($options['limit']) ? (int) $options['limit'] : NULL;
+
     $relation_nodes = $this->loadRelationNodes($node, $relation_field_name);
     if (!$relation_nodes) {
       return NULL;
@@ -161,15 +166,22 @@ class RelationshipTwigFormatter {
       $extra_fields
     );
 
+    // Apply limit after simplification so language filtering is already done.
+    $has_more = FALSE;
+    if ($limit !== NULL && count($items) > $limit) {
+      $has_more = TRUE;
+      $items = array_slice($items, 0, $limit);
+    }
+
     return [
-      'title' => $this->extractRelatedBundle($relation_field_name),
-      'field_name' => $relation_field_name,
+      'title'           => $this->extractRelatedBundle($relation_field_name),
+      'field_name'      => $relation_field_name,
       'relation_bundle' => $relation_bundle,
-      'items' => $items,
-      '_cache' => $cache,
+      'has_more'        => $has_more,
+      'items'           => $items,
+      '_cache'          => $cache,
     ];
   }
-
 
   /**
    * Loads relation nodes from a field on a node.

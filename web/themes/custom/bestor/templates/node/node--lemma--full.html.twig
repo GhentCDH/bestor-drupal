@@ -187,22 +187,33 @@
   {% endset %}
 
   {% set related_items %}
-    {% set bundle_order = ['story', 'person', 'institution', 'place', 'concept', 'document', 'instrument'] %}
+    {% set bundles = {
+      'story': { label: 'Related stories'|t, more_url: null },
+      'person': { label: 'Related persons'|t, more_url: null },
+      'institution': { label: 'Related institutions'|t, more_url: null },
+      'place': { label: 'Related places'|t, more_url: null },
+      'concept': { label: 'Related concepts'|t, more_url: null },
+      'document': { label: 'Related documents'|t, more_url: null },
+      'instrument': { label: 'Related instruments'|t, more_url: null },
+    } %}
+    {% set bundle_order = bundles|keys %}
+
     {% for relfield in rn('relation_fields_list', node, bundle_order) %}
       {% set extra_pers_inst_flds = [
-        'field_date_start', 
-        'field_date_start_year_only', 
-        'field_date_start_year_only', 
+        'field_date_start',
+        'field_date_start_year_only',
         'field_date_end_year_only'
       ] %}
       {% set rel_data = rn('formatted_relations', node, relfield, {
         'language_fallback': true,
+        'limit': 10,
         'extra_fields': {
           'computed_relationshipfield__person__institution': extra_pers_inst_flds,
           'computed_relationshipfield__institution__person': extra_pers_inst_flds,
         }
       }) %}
       {% if rel_data %}
+        {% set bundle_config = bundles[rel_data.title] ?? null %}
         {% set items %}
           <ul class="links">
             {% for rel in rel_data.items %}
@@ -214,19 +225,15 @@
                 {% if rel.relation_type_name %}({{ rel.relation_type_name.value }}){% endif %}
               </li>
             {% endfor %}
+            {% if rel_data.has_more and bundle_config and bundle_config.more_url %}
+              <li class="more-link">
+                <a href="{{ bundle_config.more_url }}">{{ 'Show all'|t }}</a>
+              </li>
+            {% endif %}
           </ul>
         {% endset %}
-        {% set related_titles = {
-          'story': 'Related stories'|t,
-          'person': 'Related persons'|t,
-          'institution': 'Related institutions'|t,
-          'place': 'Related places'|t,
-          'concept': 'Related concepts'|t,
-          'document': 'Related documents'|t,
-          'instrument': 'Related instruments'|t
-        } %}
         {{ include('jakarta:c-related-items', {
-          title: related_titles[rel_data.title] ,
+          title: bundle_config ? bundle_config.label : rel_data.title,
           items,
         }, with_context = false) }}
       {% endif %}
