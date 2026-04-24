@@ -42,7 +42,7 @@
           'text-halign': 'center',
           'text-wrap': 'wrap',
           'text-max-width': '80px',
-          'font-size': 11,
+          'font-size': 9,
           width: 70,
           height: 70,
           'border-width': node => node.data('isRoot') ? 4 : 0,
@@ -50,10 +50,20 @@
         },
       },
       {
+        // Language-unavailable nodes: faded with dashed border.
+        selector: 'node[?langUnavailable]',
+        style: {
+          opacity: 0.45,
+          'border-width': 2,
+          'border-style': 'dashed',
+          'border-color': '#aaaaaa',
+        },
+      },
+      {
         selector: 'edge',
         style: {
-          label: 'data(label)',
-          'font-size': 9,
+          label: ele => ele.data('label') || '',
+          'font-size': 8,
           'curve-style': 'bezier',
           'target-arrow-shape': 'triangle',
           'line-color': '#aaaaaa',
@@ -89,6 +99,14 @@
         selector: '.faded',
         style: {
           opacity: 0.2,
+        },
+      },
+      {
+        selector: 'node[?isRoot]',
+        style: {
+          shape: 'star',
+          width: 100,
+          height: 100,
         },
       },
     ];

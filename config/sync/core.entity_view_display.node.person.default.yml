@@ -23,6 +23,7 @@ dependencies:
     - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
+    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - link
@@ -234,6 +235,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  show_ego_network:
+    type: cytoscape_egonetwork
+    label: above
+    settings:
+      language_unavailable: fade
+    third_party_settings: {  }
+    weight: 101
     region: content
   toc_js:
     settings: {  }

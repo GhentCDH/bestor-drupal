@@ -1,4 +1,10 @@
 _core:
   default_config_hash: 4ExYvLuZ2O5Dh7eAjxkOmQ7Z9YJ7cXfyTj49_6eaeVI
 enabled_bundles:
+  - concept
+  - document
+  - institution
+  - instrument
   - person
+  - place
+  - story

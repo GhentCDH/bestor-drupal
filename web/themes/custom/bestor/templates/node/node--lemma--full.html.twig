@@ -134,7 +134,9 @@
   {% if content.field_geolocation %}
     {{content.field_geolocation}}
   {% endif %}
-  {{devel_dump(content)}}
+  {% if content.show_ego_network %}
+    {{content.show_ego_network}}
+  {% endif %}
 {% endset %}
 
 {% set sidebar %}

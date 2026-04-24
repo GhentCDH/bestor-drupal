@@ -1,9 +1,21 @@
 <?php
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
+
 /**
- * @file
- * Install, update and uninstall functions for the Cytoscape Ego Network module.
+ * Implements hook_install().
  */
+function cytoscape_egonetwork_install(): void {
+  $definition = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Show ego network'))
+    ->setTargetEntityTypeId('node');
+
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition(
+    'show_ego_network', 'node', 'cytoscape_egonetwork', $definition
+  );
+}
+
 
 /**
  * Implements hook_uninstall().

@@ -377,3 +377,9 @@
 .translation-suggestion a:hover {
   text-decoration: none;
 }
+
+.cytoscape-egonetwork {
+  border:solid 1px #ddd;
+  border-radius:1rem;
+  background-color:#f8f8f8;
+}

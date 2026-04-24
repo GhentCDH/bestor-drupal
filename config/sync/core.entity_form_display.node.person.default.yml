@@ -58,7 +58,6 @@ third_party_settings:
         width_breakpoint: null
     group_key_data:
       children:
-        - show_ego_network
         - title
         - field_alternative_name
         - field_gender
@@ -121,6 +120,7 @@ third_party_settings:
         required_fields: true
     group_relations:
       children:
+        - show_ego_network
         - group_relation_types
       label: Relations
       region: content
@@ -147,7 +147,7 @@ third_party_settings:
       label: 'relation types'
       region: content
       parent_name: group_relations
-      weight: 20
+      weight: 101
       format_type: tabs
       format_settings:
         classes: ''
@@ -162,7 +162,7 @@ third_party_settings:
       label: Concepts
       region: content
       parent_name: group_relation_types
-      weight: 20
+      weight: 101
       format_type: tab
       format_settings:
         classes: ''
@@ -178,7 +178,7 @@ third_party_settings:
       label: Documents
       region: content
       parent_name: group_relation_types
-      weight: 21
+      weight: 102
       format_type: tab
       format_settings:
         classes: ''
@@ -194,7 +194,7 @@ third_party_settings:
       label: Institutions
       region: content
       parent_name: group_relation_types
-      weight: 22
+      weight: 103
       format_type: tab
       format_settings:
         classes: ''
@@ -210,7 +210,7 @@ third_party_settings:
       label: Instruments
       region: content
       parent_name: group_relation_types
-      weight: 23
+      weight: 104
       format_type: tab
       format_settings:
         classes: ''
@@ -226,7 +226,7 @@ third_party_settings:
       label: Persons
       region: content
       parent_name: group_relation_types
-      weight: 24
+      weight: 105
       format_type: tab
       format_settings:
         classes: ''
@@ -242,7 +242,7 @@ third_party_settings:
       label: Places
       region: content
       parent_name: group_relation_types
-      weight: 25
+      weight: 106
       format_type: tab
       format_settings:
         classes: ''
@@ -258,7 +258,7 @@ third_party_settings:
       label: Stories
       region: content
       parent_name: group_relation_types
-      weight: 26
+      weight: 107
       format_type: tab
       format_settings:
         classes: ''

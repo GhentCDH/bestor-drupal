@@ -264,7 +264,7 @@ class RelationshipDataBuilder {
    * @return \Drupal\relationship_nodes\Display\RelationAvailability
    *   Value object describing availability, available languages, and cache tags.
    */
-  protected function getRelationAvailability(NodeInterface $relation_node, string $langcode): RelationAvailability {
+  public function getRelationAvailability(NodeInterface $relation_node, string $langcode): RelationAvailability {
     $node_storage = $this->entityTypeManager->getStorage('node');
 
     // Start with NULL so the first entity sets the baseline language list.

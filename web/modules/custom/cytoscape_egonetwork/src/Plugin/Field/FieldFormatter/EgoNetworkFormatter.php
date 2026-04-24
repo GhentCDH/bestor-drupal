@@ -5,11 +5,9 @@ namespace Drupal\cytoscape_egonetwork\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\cytoscape_egonetwork\Service\EgoNetworkBuilder;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
 
 /**
  * Renders the ego network graph when the field value is TRUE.
@@ -20,36 +18,31 @@ use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
  *   field_types = {"boolean"},
  * )
  */
-class EgoNetworkFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
-    
-  protected EgoNetworkBuilder $networkBuilder;
-  protected MirrorProvider $mirrorProvider;
+class EgoNetworkFormatter extends FormatterBase {
 
-  public function __construct(
-    $plugin_id,
-    $plugin_definition,
-    FieldDefinitionInterface $field_definition,
-    array $settings,
-    $label,
-    $view_mode,
-    array $third_party_settings,
-    EgoNetworkBuilder $networkBuilder,
-  ) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->networkBuilder = $networkBuilder;
+  public static function defaultSettings(): array {
+    return [
+      'language_unavailable' => 'hide',
+    ];
   }
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $plugin_id,
-      $plugin_definition,
-      $configuration['field_definition'],
-      $configuration['settings'],
-      $configuration['label'],
-      $configuration['view_mode'],
-      $configuration['third_party_settings'],
-      $container->get('cytoscape_egonetwork.ego_network_builder'),
-    );
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
+    $form['language_unavailable'] = [
+      '#type'          => 'select',
+      '#title'         => $this->t('Relations unavailable in current language'),
+      '#options'       => [
+        'hide' => $this->t('Hide'),
+        'fade' => $this->t('Show faded'),
+      ],
+      '#default_value' => $this->getSetting('language_unavailable'),
+    ];
+    return $form;
+  }
+
+  public function settingsSummary(): array {
+    $setting = $this->getSetting('language_unavailable');
+    $labels  = ['hide' => $this->t('Hidden'), 'fade' => $this->t('Shown faded')];
+    return [$this->t('Unavailable languages: @val', ['@val' => $labels[$setting] ?? $setting])];
   }
 
   public function viewElements(FieldItemListInterface $items, $langcode): array {
@@ -66,9 +59,11 @@ class EgoNetworkFormatter extends FormatterBase implements ContainerFactoryPlugi
       \Drupal::service('entity_type.manager'),
       \Drupal::service('relationship_nodes.relation_info'),
       \Drupal::service('relationship_nodes.field_name_resolver'),
+      \Drupal::service('language_manager'),
+      \Drupal::service('relationship_nodes.relationship_data_builder'),
     );
 
-    $graph = $builder->build($node);
+    $graph = $builder->build($node, $this->getSetting('language_unavailable'));
     if (empty($graph['elements'])) {
       return [];
     }

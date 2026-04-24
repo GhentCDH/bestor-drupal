@@ -85,6 +85,7 @@ third_party_settings:
         required_fields: true
     group_relations:
       children:
+        - show_ego_network
         - group_relation_types
       label: Relations
       region: content
@@ -158,7 +159,7 @@ third_party_settings:
       label: 'relation types'
       region: content
       parent_name: group_relations
-      weight: 20
+      weight: 101
       format_type: tabs
       format_settings:
         classes: ''
@@ -562,6 +563,13 @@ content:
   promote:
     type: boolean_checkbox
     weight: 12
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  show_ego_network:
+    type: boolean_checkbox
+    weight: 100
     region: content
     settings:
       display_label: true
