@@ -1,0 +1,7 @@
+services:
+  cytoscape_egonetwork.ego_network_builder:
+    class: Drupal\cytoscape_egonetwork\Service\EgoNetworkBuilder
+    arguments:
+      - '@entity_type.manager'
+      - '@relationship_nodes.relation_info'
+      - '@relationship_nodes.field_name_resolver'

@@ -1,0 +1,6 @@
+cytoscape_egonetwork.settings:
+  title: 'Cytoscape Ego Network'
+  description: 'Configure which node bundles can show an ego network graph.'
+  route_name: cytoscape_egonetwork.settings
+  parent: system.admin_config_content
+  weight: 10

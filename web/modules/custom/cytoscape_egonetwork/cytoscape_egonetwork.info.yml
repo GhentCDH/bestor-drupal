@@ -1,0 +1,8 @@
+name: Cytoscape Ego Network
+type: module
+description: Visualises the ego network of a node using Cytoscape.js, built on top of relationship_nodes.
+package: Graph
+core_version_requirement: ^10
+dependencies:
+  - drupal:node
+  - relationship_nodes:relationship_nodes
