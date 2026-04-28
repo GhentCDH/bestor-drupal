@@ -14,6 +14,22 @@
             "url":"https://git.drupalcode.org/issue/elasticsearch_connector-3550775.git"
         },
         {
+            "type": "vcs",
+            "url": "https://github.com/GhentCDH/relationship_nodes"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/GhentCDH/cytoscape_egonetwork"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/GhentCDH/views_date_past_upcoming"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/GhentCDH/search_api_range_filter"
+        },
+        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
@@ -36,6 +52,7 @@
         "drupal/core-project-message": "^10.3",
         "drupal/core-recommended": "^10.3",
         "drupal/crop": "^2.5",
+        "drupal/cytoscape_egonetwork": "^1.0",
         "drupal/ds": "^3.24",
         "drupal/elasticsearch_connector": "dev-3550775-close-and-reopen-index",
         "drupal/entity_events": "^2.0",
@@ -63,10 +80,12 @@
         "drupal/pathauto": "^1.14",
         "drupal/purge": "^3.6",
         "drupal/rabbit_hole": "^1.0",
+        "drupal/relationship_nodes": "1.0.0-beta1",
         "drupal/ruhi": "^10.2",
         "drupal/sdc_component_library": "^1.0",
         "drupal/search_api": "^1.38",
         "drupal/search_api_glossary": "^4.2",
+        "drupal/search_api_range_filter": "^1.0",
         "drupal/selectify": "^2.0",
         "drupal/simple_cron": "^1.1",
         "drupal/single_user_role": "^1.0@beta",
@@ -82,6 +101,7 @@
         "drupal/views_add_button": "^2.0",
         "drupal/views_ajax_history": "^1.8",
         "drupal/views_autocomplete_filters": "^2.0",
+        "drupal/views_date_past_upcoming": "^1.0",
         "drupal/views_filters_summary": "^3.3",
         "drupal/views_sort_expression": "^2.0",
         "drush/drush": "^12.5",
@@ -90,7 +110,7 @@
     "conflict": {
         "drupal/drupal": "*"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {

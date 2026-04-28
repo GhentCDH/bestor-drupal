@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "269b7988e1245e81e951ebea62d23803",
+    "content-hash": "42254be0255335e449e6f90744f2d394",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2459,6 +2459,43 @@
             }
         },
         {
+            "name": "drupal/cytoscape_egonetwork",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GhentCDH/cytoscape_egonetwork.git",
+                "reference": "faba45b5faab2fa4d0b93a17afa9f5e33200d5ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GhentCDH/cytoscape_egonetwork/zipball/faba45b5faab2fa4d0b93a17afa9f5e33200d5ec",
+                "reference": "faba45b5faab2fa4d0b93a17afa9f5e33200d5ec",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "drupal/relationship_nodes": "^1.0"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Ego network visualisation using Cytoscape.js, built on top of relationship_nodes.",
+            "keywords": [
+                "cytoscape",
+                "drupal",
+                "graph",
+                "network",
+                "relationship-nodes",
+                "visualization"
+            ],
+            "support": {
+                "source": "https://github.com/GhentCDH/cytoscape_egonetwork/tree/1.0.0",
+                "issues": "https://github.com/GhentCDH/cytoscape_egonetwork/issues"
+            },
+            "time": "2026-04-28T15:02:37+00:00"
+        },
+        {
             "name": "drupal/ds",
             "version": "3.37.0",
             "source": {
@@ -4559,6 +4596,43 @@
             "time": "2025-12-29T15:30:47+00:00"
         },
         {
+            "name": "drupal/relationship_nodes",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GhentCDH/relationship_nodes.git",
+                "reference": "97b5800c7f13b4489d76a04b2670911f35507dcf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GhentCDH/relationship_nodes/zipball/97b5800c7f13b4489d76a04b2670911f35507dcf",
+                "reference": "97b5800c7f13b4489d76a04b2670911f35507dcf",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "drupal/entity_events": "^2.0",
+                "drupal/inline_entity_form": "^3.0"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Bidirectional node relationships via dedicated relation nodes, with typed relation labels and mirror taxonomy support.",
+            "keywords": [
+                "drupal",
+                "inline-entity-form",
+                "nodes",
+                "relationships",
+                "taxonomy"
+            ],
+            "support": {
+                "source": "https://github.com/GhentCDH/relationship_nodes/tree/1.0.0-beta1",
+                "issues": "https://github.com/GhentCDH/relationship_nodes/issues"
+            },
+            "time": "2026-04-28T15:02:06+00:00"
+        },
+        {
             "name": "drupal/ruhi",
             "version": "10.2.1",
             "source": {
@@ -4789,6 +4863,43 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/search_api_glossary"
             }
+        },
+        {
+            "name": "drupal/search_api_range_filter",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hblomme/search_api_range_filter.git",
+                "reference": "349af09bd842001a3a2577edf27f7b76ea890d2b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hblomme/search_api_range_filter/zipball/349af09bd842001a3a2577edf27f7b76ea890d2b",
+                "reference": "349af09bd842001a3a2577edf27f7b76ea890d2b",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "drupal/search_api": "^1.0"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Search API Views filter for range-overlap queries across two index fields.",
+            "keywords": [
+                "drupal",
+                "elasticsearch",
+                "filter",
+                "range",
+                "search-api",
+                "views"
+            ],
+            "support": {
+                "source": "https://github.com/hblomme/search_api_range_filter/tree/1.0.0",
+                "issues": "https://github.com/hblomme/search_api_range_filter/issues"
+            },
+            "time": "2026-04-28T14:32:37+00:00"
         },
         {
             "name": "drupal/selectify",
@@ -5749,6 +5860,34 @@
                 "source": "https://git.drupalcode.org/project/views_autocomplete_filters",
                 "issues": "https://www.drupal.org/project/issues/views_autocomplete_filters"
             }
+        },
+        {
+            "name": "drupal/views_date_past_upcoming",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GhentCDH/views_date_past_upcoming.git",
+                "reference": "d00686c0b2ba213db93ff1b30c5db2d6042673fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GhentCDH/views_date_past_upcoming/zipball/d00686c0b2ba213db93ff1b30c5db2d6042673fd",
+                "reference": "d00686c0b2ba213db93ff1b30c5db2d6042673fd",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "^10"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Views field and sort plugins that classify a date as past or upcoming.",
+            "support": {
+                "source": "https://github.com/GhentCDH/views_date_past_upcoming/tree/1.0.0",
+                "issues": "https://github.com/GhentCDH/views_date_past_upcoming/issues"
+            },
+            "time": "2026-04-28T13:50:58+00:00"
         },
         {
             "name": "drupal/views_filters_summary",
@@ -11621,11 +11760,12 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "stability-flags": {
         "drupal/elasticsearch_connector": 20,
         "drupal/footnotes": 10,
         "drupal/inline_entity_form": 5,
+        "drupal/relationship_nodes": 10,
         "drupal/single_user_role": 10,
         "drupal/straw": 10,
         "drupal/term_reference_change": 10,
