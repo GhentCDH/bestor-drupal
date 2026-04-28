@@ -1,20 +1,5 @@
 # relationship_nodes — TODO
 
-## Bugs
-
-- **`relationship_nodes.install` line 19**: `$errorFormatter` is used but never defined.
-  `$validation_result->getFormattedErrors($errorFormatter, 'relationship_nodes')` will throw an
-  undefined-variable notice. Should be:
-  `\Drupal::service('relationship_nodes.validation_result_formatter')`.
-
-- **`SettingsCleanupService::unsetRnEntitySettings()`**: assigns `$updated` after the save call
-  but never uses it. Either remove the assignment or act on the return value.
-
-- **`ValidRelationReferenceConstraintValidator`** and **`AvailableMirrorTermConstraintValidator`**:
-  both use `\Drupal::service()` for dependency lookup instead of constructor injection.
-  The constraint validator factory supports DI — these should declare their services properly.
-
-
 ## Missing features / known gaps
 
 - **Nested field display not functional**: `computed_relationshipfield__*` fields show the
