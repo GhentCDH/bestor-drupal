@@ -2,7 +2,6 @@
 
 namespace Drupal\relationship_nodes\Display;
 
-use Drupal\Core\Render\RendererInterface;
 use Drupal\node\NodeInterface;
 use Drupal\relationship_nodes\RelationField\VirtualFieldManager;
 use Drupal\relationship_nodes\Display\Configurator\FormatterConfigurator;
@@ -18,7 +17,6 @@ use Drupal\relationship_nodes\Display\RelationshipDataBuilder;
  */
 class RelationshipTwigFormatter {
 
-  protected RendererInterface $renderer;
   protected VirtualFieldManager $virtualFieldManager;
   protected RelationshipDataBuilder $dataBuilder;
   protected FormatterConfigurator $configurator;
@@ -27,12 +25,10 @@ class RelationshipTwigFormatter {
    * Constructs a RelationshipTwigFormatter object.
    */
   public function __construct(
-    RendererInterface $renderer,
     VirtualFieldManager $virtualFieldManager,
     RelationshipDataBuilder $dataBuilder,
     FormatterConfigurator $configurator
   ) {
-    $this->renderer = $renderer;
     $this->virtualFieldManager = $virtualFieldManager;
     $this->dataBuilder = $dataBuilder;
     $this->configurator = $configurator;

@@ -25,16 +25,6 @@
 
 ## Code quality / technical debt
 
-- **`RelationNode::generateTitle()`**: uses the fully-qualified class name
-  `\Drupal\Core\Entity\EntityTypeManagerInterface` inline instead of a `use` import.
-
-- **`RelationInlineEntityForm::getTableFields()`**: indentation switches from tabs to four spaces
-  partway through the method; should be normalised to two spaces.
-
-- **`RendererInterface $renderer` in `RelationshipTwigFormatter`**: injected but may be unused
-  inside the class itself (the renderer call may be fully delegated to the twig extension).
-  Verify and remove if not needed.
-
 - **Two deprecated methods in `ValidationService`**: `getFieldStorageValidationErrors()` and
   `getFieldConfigValidationErrors()` are marked `@deprecated` but have no removal target version.
   Add a target or remove them once callers are confirmed gone.

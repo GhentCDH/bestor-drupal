@@ -2,6 +2,7 @@
 
 namespace Drupal\relationship_nodes\RelationData\NodeHelper;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\relationship_nodes\RelationBundle\RelationBundleInfo;
 
@@ -111,7 +112,7 @@ final class RelationNode {
   /**
    * Generates automatic title.
    */
-  public function generateTitle(\Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager): string {
+  public function generateTitle(EntityTypeManagerInterface $entityTypeManager): string {
     $relatedEntities = $this->getRelatedEntityIds();
     
     if (empty($relatedEntities)) {
