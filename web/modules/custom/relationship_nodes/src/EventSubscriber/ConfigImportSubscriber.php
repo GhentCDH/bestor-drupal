@@ -197,7 +197,7 @@ class ConfigImportSubscriber implements EventSubscriberInterface {
    * @return array
    *   Array of loaded entities.
    */
-  protected function fromConfigToEntities(array $config_list){
+  protected function fromConfigToEntities(array $config_list): array {
     $load = ['node_type' => [], 'taxonomy_vocabulary' => [],];
     $result = [];
     foreach ($config_list as $config_name => $config_data) {

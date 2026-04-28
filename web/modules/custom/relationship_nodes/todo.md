@@ -25,17 +25,8 @@
 
 ## Code quality / technical debt
 
-- **`fromConfigToEntities()` in `ConfigImportSubscriber`**: missing return type annotation (`array`).
-
 - **`RelationNode::generateTitle()`**: uses the fully-qualified class name
   `\Drupal\Core\Entity\EntityTypeManagerInterface` inline instead of a `use` import.
-
-- **`RelationIefWidget::__construct()`**: missing `{@inheritdoc}` docblock.
-
-- **`RelationWeightManager::getAllWeights()`**: missing return type annotation.
-
-- **`RelationFormHelper`**: uses hard tabs throughout instead of the two-space indentation
-  required by Drupal coding standards.
 
 - **`RelationInlineEntityForm::getTableFields()`**: indentation switches from tabs to four spaces
   partway through the method; should be normalised to two spaces.

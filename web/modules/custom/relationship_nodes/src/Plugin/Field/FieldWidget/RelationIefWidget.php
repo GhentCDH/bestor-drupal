@@ -34,52 +34,6 @@ class RelationIefWidget extends InlineEntityFormComplex {
 
 	protected RelationEntityFormHandler $relationFormHandler;
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public static function defaultSettings() {
-		$defaults = parent::defaultSettings();
-		$defaults['removed_reference'] = self::REMOVED_DELETE;
-		$defaults['allow_duplicate'] = FALSE;
-		return $defaults;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function settingsForm(array $form, FormStateInterface $form_state) {
-		$element = parent::settingsForm($form, $form_state);
-    $unset_els = ['removed_reference', 'allow_existing', 'match_operator', 'allow_duplicate'];
-    foreach($unset_els as $unset_el){
-      unset($element[$unset_el]);
-    }
-		return $element;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function settingsSummary() {
-		$summary = [];
-		$labels = $this->getEntityTypeLabels();
-
-		$form_modes = $this->entityDisplayRepository
-			->getFormModeOptions($this->getFieldSetting('target_type'));
-		$form_mode = $this->getSetting('form_mode');
-		$summary[] = $this->t('Form mode: @mode', [
-			'@mode' => $form_modes[$form_mode] ?? $form_mode,
-		]);
-
-		$summary[] = $this->getSetting('allow_new')
-			? $this->t('New @label can be added.', ['@label' => $labels['plural']])
-			: $this->t('New @label can not be created.', ['@label' => $labels['plural']]);
-
-		$summary[] = $this->t('Removed @label are always deleted.', [
-			'@label' => $labels['plural'],
-		]);
-
-		return $summary;
-	}
 
 	/**
 	 * {@inheritdoc}
@@ -112,6 +66,7 @@ class RelationIefWidget extends InlineEntityFormComplex {
 		$this->relationFormHandler = $relationFormHandler;
 	}
 
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -130,6 +85,7 @@ class RelationIefWidget extends InlineEntityFormComplex {
 			$container->get('relationship_nodes.relation_entity_form_handler')
 		);
 	}
+
 
 	/**
 	 * {@inheritdoc}
@@ -183,6 +139,57 @@ class RelationIefWidget extends InlineEntityFormComplex {
 		return $element;
 	}
 
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function defaultSettings() {
+		$defaults = parent::defaultSettings();
+		$defaults['removed_reference'] = self::REMOVED_DELETE;
+		$defaults['allow_duplicate'] = FALSE;
+		return $defaults;
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function settingsForm(array $form, FormStateInterface $form_state) {
+		$element = parent::settingsForm($form, $form_state);
+    $unset_els = ['removed_reference', 'allow_existing', 'match_operator', 'allow_duplicate'];
+    foreach($unset_els as $unset_el){
+      unset($element[$unset_el]);
+    }
+		return $element;
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function settingsSummary() {
+		$summary = [];
+		$labels = $this->getEntityTypeLabels();
+
+		$form_modes = $this->entityDisplayRepository
+			->getFormModeOptions($this->getFieldSetting('target_type'));
+		$form_mode = $this->getSetting('form_mode');
+		$summary[] = $this->t('Form mode: @mode', [
+			'@mode' => $form_modes[$form_mode] ?? $form_mode,
+		]);
+
+		$summary[] = $this->getSetting('allow_new')
+			? $this->t('New @label can be added.', ['@label' => $labels['plural']])
+			: $this->t('New @label can not be created.', ['@label' => $labels['plural']]);
+
+		$summary[] = $this->t('Removed @label are always deleted.', [
+			'@label' => $labels['plural'],
+		]);
+
+		return $summary;
+	}
+
+
 	/**
 	 * After build callback: customize button labels for relation forms.
 	 */
@@ -201,6 +208,7 @@ class RelationIefWidget extends InlineEntityFormComplex {
 
 		return $element;
 	}
+
 
 	/**
 	 * Submit handler: remove entity directly without confirmation.
@@ -231,5 +239,4 @@ class RelationIefWidget extends InlineEntityFormComplex {
 		$form_state->set(['inline_entity_form', $ief_id], $widget_state);
 		$form_state->setRebuild();
 	}
-
 }
