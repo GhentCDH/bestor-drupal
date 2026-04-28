@@ -135,10 +135,7 @@ class RelationWeightManager {
    *   All key-value pairs in the weights store.
    */
   public function getAllWeights(): array {
-    if ($this->store === NULL) {
-      $this->store = $this->keyValueFactory->get('relationship_nodes_weights');
-    }
-    return $this->store->getAll();
+    return $this->getStore()->getAll();
   }
 
   /**
