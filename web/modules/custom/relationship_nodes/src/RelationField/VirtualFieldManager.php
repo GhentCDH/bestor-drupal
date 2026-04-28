@@ -5,9 +5,9 @@ namespace Drupal\relationship_nodes\RelationField;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\node\NodeInterface;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
-use Drupal\node\NodeInterface;
 
 
 /**

@@ -4,9 +4,9 @@ namespace Drupal\relationship_nodes\RelationBundle\Settings;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
 use Drupal\relationship_nodes\RelationField\RelationshipFieldManager;
-use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 
 
 /**

@@ -3,8 +3,8 @@
 namespace Drupal\relationship_nodes\Form\Entity;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\relationship_nodes\Form\Widget\WidgetSubmitHandler;
 use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
+use Drupal\relationship_nodes\Form\Widget\WidgetSubmitHandler;
 
 /**
  * Form alter service for parent node forms with relationship subforms.

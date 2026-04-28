@@ -5,11 +5,9 @@ namespace Drupal\relationship_nodes\Form\Entity;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
-use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\relationship_nodes\RelationData\NodeHelper\RelationSync;
 use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
+use Drupal\relationship_nodes\RelationData\NodeHelper\RelationSync;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 
 
 /**
@@ -48,8 +46,8 @@ class RelationEntityFormHandler {
   /**
    * Handles relation widget submit processing.
    *
-   * @param string $field_name
-   *   The field name.
+   * @param string $ief_id
+   *   The Inline Entity Form widget ID.
    * @param array $widget_state
    *   The widget state (passed by reference).
    * @param array $form

@@ -7,9 +7,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\Entity\Node;
-use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationBundle\BundleInfoService;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 
 
 /**

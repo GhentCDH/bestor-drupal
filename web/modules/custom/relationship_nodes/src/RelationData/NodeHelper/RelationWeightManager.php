@@ -3,7 +3,6 @@
 namespace Drupal\relationship_nodes\RelationData\NodeHelper;
 
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
-use Drupal\node\Entity\Node;
 use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
 
 /**
@@ -130,7 +129,10 @@ class RelationWeightManager {
 
   
   /**
-   * Generates a storage key.
+   * Returns all stored weights across all relations and reference fields.
+   *
+   * @return array
+   *   All key-value pairs in the weights store.
    */
   public function getAllWeights() {
     if ($this->store === NULL) {

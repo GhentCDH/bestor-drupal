@@ -6,8 +6,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\NodeType;
-use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\relationship_nodes\RelationBundle\RelationBundleInfo;
+use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * Service for managing relationship bundle settings.

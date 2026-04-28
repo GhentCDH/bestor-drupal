@@ -3,15 +3,20 @@
 namespace Drupal\relationship_nodes\RelationField;
 
 /**
- * Helper for calculated relationship field names and metadata.
- * 
- * Provides unified calculated field naming for both:
- * - Search API indexing (relationship_nodes_search module)
- * - Field formatters (relationship_nodes module)
- * 
- * The field NAMES are shared, but resolution differs:
- * - In Search API: Fields are indexed in Elasticsearch nested structure
- * - In Formatters: Fields are resolved at render time from entities
+ * Registry of calculated relationship field names shared across two modules.
+ *
+ * Calculated fields (calculated_related_id, calculated_related_name, …) are
+ * not stored in the database. Their names are defined here as the single source
+ * of truth so that the formatter layer (relationship_nodes) and the indexing
+ * layer (relationship_nodes_search) always refer to the same identifiers.
+ *
+ * Not storing values is intentional: the "related" entity in a relationship
+ * depends on which node is being viewed. Storing a pre-computed value would
+ * require re-saving relation nodes whenever a parent is viewed from a different
+ * context, and would also disagree with Search API's per-document indexing
+ * (which indexes the relation node itself, not the viewing context). Resolution
+ * is therefore deferred to render time (formatter) or index time (Search API
+ * processor), each applying the correct perspective.
  */
 class CalculatedFieldHelper {
 

@@ -7,8 +7,8 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\relationship_nodes\Display\RelationshipDataBuilder;
 use Drupal\relationship_nodes\Display\Configurator\FormatterConfigurator;
+use Drupal\relationship_nodes\Display\RelationshipDataBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

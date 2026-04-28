@@ -24,11 +24,12 @@ final class RelationBundleInfo {
   ) {}
 
   /**
-   * Creates from entity.
-   * 
+   * Creates a RelationBundleInfo from a bundle entity and its third-party settings.
+   *
    * @param ConfigEntityBundleBase $bundle
+   *   The node type or vocabulary entity.
    * @param array $properties
-   *   Third-party settings array.
+   *   The relationship_nodes third-party settings for this entity.
    */
   public static function create(
     ConfigEntityBundleBase $bundle,
@@ -47,7 +48,7 @@ final class RelationBundleInfo {
     );
   }
 
-  // ===== Getters (vervangen oude BundleSettingsManager methods) =====
+  // ===== Public API =====
 
   public function getBundle(): ConfigEntityBundleBase {
     return $this->bundle;
@@ -62,37 +63,35 @@ final class RelationBundleInfo {
   }
 
   /**
-   * Replaces: $settingsManager->isRelationNodeType()
-   * Replaces: $settingsManager->isRelationVocab()
-   * Replaces: $settingsManager->isRelationEntity()
+   * Returns TRUE if this bundle is enabled as a relation bundle.
    */
   public function isRelation(): bool {
     return $this->isRelation;
   }
 
   /**
-   * Replaces: $settingsManager->isTypedRelationNodeType()
+   * Returns TRUE if this is a typed relation (has a relation type vocabulary).
    */
   public function isTypedRelation(): bool {
     return $this->isTyped;
   }
 
   /**
-   * Replaces: $settingsManager->autoCreateTitle()
+   * Returns TRUE if relation nodes of this bundle get an auto-generated title.
    */
   public function hasAutoTitle(): bool {
     return $this->autoTitle;
   }
 
   /**
-   * Replaces: $settingsManager->getRelationVocabType()
+   * Returns the mirror field type ('string', 'entity_reference', 'none', or NULL).
    */
   public function getMirrorType(): ?string {
     return $this->mirrorType;
   }
 
   /**
-   * Replaces: $settingsManager->isMirroringVocab()
+   * Returns TRUE if this vocabulary has a configured bidirectional mirror field.
    */
   public function isMirroringVocab(): bool {
     return in_array($this->mirrorType, ['string', 'entity_reference'], true);
@@ -107,7 +106,13 @@ final class RelationBundleInfo {
   }
 
   /**
-   * Replaces: $settingsManager->getEntityTypeObjectClass()
+   * Returns the Drupal entity type ID for the bundle entity's object class.
+   *
+   * @return string
+   *   'node' for node types, 'taxonomy_term' for vocabularies.
+   *
+   * @throws \InvalidArgumentException
+   *   If the bundle entity type is not recognised.
    */
   public function getObjectClass(): string {
     return match($this->entityTypeId) {
@@ -119,8 +124,10 @@ final class RelationBundleInfo {
 
   
   /**
-   * Gets required field names based on configuration.
-   * 
+   * Returns the rn_* field names that must exist for this bundle configuration.
+   *
+   * @return array
+   *   List of required field machine names, or empty array if not a relation.
    */
   public function getRequiredFieldNames(): array {
     if (!$this->isRelation) {

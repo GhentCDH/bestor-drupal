@@ -3,8 +3,8 @@
 namespace Drupal\relationship_nodes\Validation\Field;
 
 use Drupal\Core\Config\StorageInterface;
-use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\relationship_nodes\RelationField\RelationshipFieldManager;
 use Drupal\relationship_nodes\Validation\ValidationResult;
 

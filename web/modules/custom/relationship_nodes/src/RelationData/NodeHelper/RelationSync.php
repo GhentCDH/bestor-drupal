@@ -5,10 +5,10 @@ namespace Drupal\relationship_nodes\RelationData\NodeHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
+use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
 use Drupal\relationship_nodes\Plugin\Field\FieldType\ReferencingRelationshipItemList;
 use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\relationship_nodes\RelationData\NodeHelper\RelationInfo;
-use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
 use Drupal\relationship_nodes\RelationData\NodeHelper\RelationWeightManager;
 
 
@@ -84,7 +84,14 @@ class RelationSync {
 
 
   /**
-   * Deletes nodes by their IDs.
+   * Hard-deletes relation nodes and their associated weights.
+   *
+   * Relations are hard-deleted (not unpublished or soft-deleted) because a
+   * relation node with a missing parent is structurally invalid — it can no
+   * longer be displayed or edited meaningfully. Soft-deletion would leave
+   * dangling references in the Elasticsearch index and confuse weight ordering.
+   * Weights are removed first so the keyvalue store does not accumulate stale
+   * entries for IDs that will never exist again.
    *
    * @param array $ids_to_remove
    *   Array of node IDs to delete.

@@ -3,8 +3,8 @@
 namespace Drupal\relationship_nodes\RelationData\TermHelper;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\taxonomy\TermInterface;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Service for automatically updating mirror term links.

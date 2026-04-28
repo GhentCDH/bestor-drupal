@@ -2,18 +2,18 @@
 
 namespace Drupal\relationship_nodes\Display;
 
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
-use Drupal\relationship_nodes\RelationData\NodeHelper\RelationInfo;
-use Drupal\relationship_nodes\RelationField\FieldNameResolver;
-use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\relationship_nodes\Display\Parser\FieldResultParser;
-use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
 use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
+use Drupal\relationship_nodes\RelationData\NodeHelper\RelationInfo;
+use Drupal\relationship_nodes\RelationData\TermHelper\MirrorProvider;
+use Drupal\relationship_nodes\RelationField\CalculatedFieldHelper;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\taxonomy\TermInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Service for building relationship data structures.

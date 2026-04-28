@@ -13,8 +13,12 @@ use Drupal\relationship_nodes_search\QueryHelper\NestedQueryStructureBuilder;
 /**
  * Extended filter builder with nested field support.
  *
- * Decorates the standard FilterBuilder to add support for nested Elasticsearch
- * queries when encountering NestedParentFieldConditionGroup conditions.
+ * Decorates elasticsearch_connector.query_filter_builder (via the `decorates`
+ * key in services.yml). Like NestedFacetParamBuilder, this is a decorator
+ * rather than a replacement so that filter building for flat fields continues
+ * to use the original service unchanged. The decorator only acts when it
+ * encounters a NestedParentFieldConditionGroup in the condition tree; all other
+ * condition groups are handled by the parent FilterBuilder.
  */
 class NestedFilterBuilder extends FilterBuilder {
    

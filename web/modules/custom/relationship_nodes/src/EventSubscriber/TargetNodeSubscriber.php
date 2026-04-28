@@ -10,7 +10,11 @@ use Drupal\relationship_nodes\RelationData\NodeHelper\RelationSync;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Event subscriber for target node operations.
+ * Cleans up orphaned relation nodes when a target node is deleted.
+ *
+ * Only handles DELETE — not saves — so there is no interaction with
+ * RelationNodeSubscriber (which only handles PRESAVE). The two subscribers
+ * operate on different events and cannot trigger each other.
  */
 class TargetNodeSubscriber implements EventSubscriberInterface {
 

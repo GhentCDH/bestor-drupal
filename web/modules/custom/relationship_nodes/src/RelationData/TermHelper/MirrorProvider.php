@@ -6,13 +6,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\taxonomy\TermStorageInterface;
-use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
+use Drupal\node\NodeInterface;
 use Drupal\relationship_nodes\Form\Entity\RelationFormHelper;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
+use Drupal\relationship_nodes\RelationData\NodeHelper\ForeignKeyResolver;
 use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 use Drupal\taxonomy\TermInterface;
-use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermStorageInterface;
 
 
 /**
@@ -261,14 +261,13 @@ class MirrorProvider{
 
 
   /**
-   * Gets mirror information as an array for a term.
+   * Returns the mirror label string for a term.
    *
-   * @param TermStorageInterface $term_storage
-   *   The term storage.
-   * @param string $term_id
-   *   The term ID.
-   * @param string|null $default_label
-   *   The default label.
+   * Convenience wrapper over getTermMirrorArray() for callers that only need
+   * the plain label string, not the full [id => label] array.
+   *
+   * @param TermInterface $term
+   *   The term.
    *
    * @return string|null
    *   The mirror label, or NULL if no mirror is configured.

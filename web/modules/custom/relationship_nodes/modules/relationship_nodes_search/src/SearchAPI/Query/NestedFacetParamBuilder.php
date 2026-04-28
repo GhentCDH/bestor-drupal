@@ -13,8 +13,12 @@ use Drupal\relationship_nodes_search\FieldHelper\NestedIndexFieldHelper;
 /**
  * Extended facet builder with nested field support.
  *
- * Builds Elasticsearch aggregation parameters for both regular and nested
- * relationship fields, with support for facet interaction through post-filters.
+ * Decorates elasticsearch_connector.facet_builder (via the `decorates` key in
+ * services.yml) rather than replacing it. This is intentional: replacing the
+ * service entirely would break aggregations for all non-nested fields, which
+ * make up the majority of facets on the site. The decorator intercepts only
+ * nested relationship fields and delegates everything else to the parent class /
+ * inner service, ensuring non-nested behaviour is completely unchanged.
  */
 class NestedFacetParamBuilder extends FacetParamBuilder {
 

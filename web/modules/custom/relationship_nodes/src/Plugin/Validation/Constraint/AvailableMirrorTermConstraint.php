@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 
 
 /**
- * Provides a Custom Desk Constraint.
+ * Validates that a mirror term is not already used by another relation type.
  *
  * @Constraint(
  *   id = "available_mirror_term_constraint",

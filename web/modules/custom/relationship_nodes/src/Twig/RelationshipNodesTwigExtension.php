@@ -2,8 +2,8 @@
 
 namespace Drupal\relationship_nodes\Twig;
 
-use Drupal\relationship_nodes\Display\RelationshipTwigFormatter;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\relationship_nodes\Display\RelationshipTwigFormatter;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -17,6 +17,11 @@ class RelationshipNodesTwigExtension extends AbstractExtension {
 
   /**
    * Constructs a RelationshipNodesTwigExtension object.
+   *
+   * @param RelationshipTwigFormatter $formatter
+   *   The formatter service that resolves and formats relationship data.
+   * @param RendererInterface $renderer
+   *   The Drupal renderer, used to bubble cache metadata from render arrays.
    */
   public function __construct(RelationshipTwigFormatter $formatter, RendererInterface $renderer) {
     $this->formatter = $formatter;

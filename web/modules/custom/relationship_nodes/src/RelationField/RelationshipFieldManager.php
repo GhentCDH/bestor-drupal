@@ -2,18 +2,16 @@
 
 namespace Drupal\relationship_nodes\RelationField;
 
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\field\FieldConfigStorage;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\node\Entity\NodeType;
-use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\relationship_nodes\RelationField\FieldNameResolver;
+use Drupal\field\FieldConfigStorage;
 use Drupal\relationship_nodes\RelationBundle\Settings\BundleSettingsManager;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\relationship_nodes\RelationField\FieldNameResolver;
 
 
 /**

@@ -5,6 +5,8 @@ namespace Drupal\relationship_nodes\Plugin\Validation\Constraint;
 use Symfony\Component\Validator\Constraint;
 
 /**
+ * Validates that a relation node references two distinct, non-self entities.
+ *
  * @Constraint(
  *   id = "valid_relation_reference_constraint",
  *   label = @Translation("Valid Related Entities", context = "Validation"),

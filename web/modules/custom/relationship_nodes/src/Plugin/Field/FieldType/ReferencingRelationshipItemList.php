@@ -11,7 +11,12 @@ use Drupal\relationship_nodes\RelationData\NodeHelper\RelationWeightManager;
 
 
 /**
- * Defines the 'entity_reference' entity field type.
+ * Computed entity reference field listing all relation nodes for a bundle.
+ *
+ * This is the runtime list class that backs each
+ * `computed_relationshipfield__*` virtual field. On first access it queries
+ * the database for relation nodes that reference the host entity through
+ * one of the configured join fields, then sorts them by stored weight.
  *
  * @FieldType(
  *   id = "referencing_relationship_item_list",
@@ -19,16 +24,14 @@ use Drupal\relationship_nodes\RelationData\NodeHelper\RelationWeightManager;
  *   description = @Translation("Field type: reference in two directions (referencing and referenced)."),
  * )
  */
-
-
-/**
- * Item list class for the Referencing Relationships.
- */
 class ReferencingRelationshipItemList extends EntityReferenceFieldItemList {
-  
-  use ComputedItemListTrait;
-  
 
+  use ComputedItemListTrait;
+
+
+  /**
+   * {@inheritdoc}
+   */
   protected function computeValue() : void {
     $related_nodes = $this->collectExistingRelations();
     if(empty($related_nodes)){
@@ -43,6 +46,12 @@ class ReferencingRelationshipItemList extends EntityReferenceFieldItemList {
   }   
   
 
+  /**
+   * Queries and returns all existing relation nodes for the host entity.
+   *
+   * @return array
+   *   Relation node entities keyed by ID, sorted by weight.
+   */
   public function collectExistingRelations(): array{
     $current_node = $this->getParent()->getEntity() ?? null;
     if(!($current_node instanceof Node) || $current_node->isNew()){
@@ -66,11 +75,20 @@ class ReferencingRelationshipItemList extends EntityReferenceFieldItemList {
   }
 
 
+  /**
+   * Returns the RelationInfo service.
+   *
+   * Accessed via the service container rather than constructor injection
+   * because field item list classes are instantiated by Drupal's typed data
+   * layer, which does not support DI constructor arguments.
+   */
   protected function getRelationInfoService(): RelationInfo {
     return \Drupal::service('relationship_nodes.relation_info');
   }
 
-
+  /**
+   * Returns the RelationWeightManager service.
+   */
   protected function getRelationWeightManager(): RelationWeightManager {
     return \Drupal::service('relationship_nodes.relation_weight_manager');
   }

@@ -16,7 +16,7 @@ relationship_nodes.relation_taxonomy_term_field_form:
   path: '/admin/structure/taxonomy/manage/{taxonomy_vocabulary}/overview/fields/relationship-nodes-edit/{field_config}'
   defaults:
     _form: '\Drupal\relationship_nodes\Form\Admin\FieldConfigForm'
-    _title: 'Edit Rrelation Field'
+    _title: 'Edit Relation Field'
   requirements:
     _permission: 'administer taxonomy'
   options:

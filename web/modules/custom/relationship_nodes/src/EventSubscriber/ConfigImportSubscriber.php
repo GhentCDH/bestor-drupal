@@ -57,10 +57,12 @@ class ConfigImportSubscriber implements EventSubscriberInterface {
   }
 
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getSubscribedEvents(): array {
     return [
       ConfigEvents::IMPORT_VALIDATE => 'onConfigImportValidate',
-      // Respond to configuration import.
       ConfigEvents::IMPORT => 'onConfigImport',
     ];
   }

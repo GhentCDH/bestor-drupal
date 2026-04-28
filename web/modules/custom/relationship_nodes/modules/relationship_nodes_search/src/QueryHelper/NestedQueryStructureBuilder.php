@@ -35,6 +35,14 @@ class NestedQueryStructureBuilder {
    * - With filter: nested → filter → terms aggregation
    * - Without filter: nested → terms aggregation
    *
+   * The filter wrapper is needed when other active facets must narrow the
+   * aggregation bucket counts. Without it, an active facet on field A would not
+   * affect the bucket counts shown for field B — Facets expects counts to
+   * reflect the currently filtered result set, not the full index. Passing the
+   * combined active filter as $filter produces a "filtered aggregation" that
+   * counts only within the current selection, which is what Facets uses to
+   * show how many results each option would yield.
+   *
    * @param Index $index
    *   The Search API index.
    * @param string $field_id

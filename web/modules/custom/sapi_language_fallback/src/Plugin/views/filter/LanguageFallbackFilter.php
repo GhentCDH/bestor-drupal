@@ -195,8 +195,15 @@ class LanguageFallbackFilter extends FilterPluginBase {
       return;
     }
 
-    // Fallback mode: no language condition; post_execute + pre_render handle
-    // deduplication and entity swapping.
+    // Fallback mode: no language condition added here.
+    // Search API cannot express "match current language, OR match any language
+    // IF no current-language version exists" as a single query condition —
+    // Elasticsearch can only filter by stored field values, and there is no
+    // stored flag indicating "this is the best available translation for node X".
+    // Fetching all languages and deduplicating in post_execute is the only
+    // reliable approach. The trade-off: Elasticsearch may return more items than
+    // the pager limit before deduplication, so pages near the result tail can
+    // be shorter than expected.
     $this->view->sapi_language_fallback = [
       'enabled' => TRUE,
       'current_langcode' => $current_lang,
