@@ -25,10 +25,6 @@
 
 ## Code quality / technical debt
 
-- **Two deprecated methods in `ValidationService`**: `getFieldStorageValidationErrors()` and
-  `getFieldConfigValidationErrors()` are marked `@deprecated` but have no removal target version.
-  Add a target or remove them once callers are confirmed gone.
-
 - **`BundleInfoService`** mixes live-site query methods with CIM (config-import) query methods in
   one class. Consider splitting into `BundleInfoService` (runtime) and a dedicated CIM helper,
   or at minimum group and comment the two sets of methods clearly.

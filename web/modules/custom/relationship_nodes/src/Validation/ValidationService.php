@@ -208,20 +208,4 @@ final class ValidationService {
 
     return ValidationResult::mergeAll($results);
   }
-
-  // ========== DEPRECATED: Backwards Compatibility ==========
-  
-  /**
-   * @deprecated Use validateAllRelationConfig() which returns ValidationResult
-   */
-  public function getFieldStorageValidationErrors(FieldStorageConfig $storage): array {
-    return $this->validateFieldStorage($storage)->getErrors();
-  }
-
-  /**
-   * @deprecated Use validateFieldConfig() which returns ValidationResult
-   */
-  public function getFieldConfigValidationErrors(FieldConfig $fieldConfig, bool $includeStorage = true): array {
-    return $this->validateFieldConfig($fieldConfig, $includeStorage)->getErrors();
-  }
 }

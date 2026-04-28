@@ -64,7 +64,6 @@ Use this filter **instead of** (not alongside) the built-in "Search: Language" f
 See `relationship_nodes/todo.md` for the current backlog. Key items:
 - Nested field display not yet functional
 - Relation nodes can only be enabled on existing (not newly created) content types
-- `relationship_nodes_search` should be a submodule of `relationship_nodes` (currently a sibling)
 - Autocomplete widget for relationship search filters not yet implemented
 
 ## Further reading
