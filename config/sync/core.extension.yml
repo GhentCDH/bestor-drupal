@@ -113,6 +113,7 @@ module:
   token: 0
   toolbar: 0
   twig_tweak: 0
+  update: 0
   user: 0
   varnish_purger: 0
   views_add_button: 0
