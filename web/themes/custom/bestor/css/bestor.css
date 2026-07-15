@@ -399,3 +399,8 @@
 .c-lemma-sidebar__related-items .c-related-items__items .more-link > a:hover{
   color: var(--color-primary);
 }
+
+.site-wrapper .field--name-body a:not(.c-button) {
+  text-decoration: underline;
+  text-underline-offset: 15%;
+}

@@ -131,6 +131,9 @@
                 "Sort out and fix language fallback inconsistencies":"https://www.drupal.org/files/issues/2023-01-30/drupal-fix_fallback-2951294-58.patch",
                 "Exposed forms in a block are not updated by AJAX, issue 3032353":"https://www.drupal.org/files/issues/2025-12-08/3032353-96-MR12051.patch"
             },
+            "drupal/core":{
+                "https://www.drupal.org/project/drupal/issues/3209204":"https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch"
+            },
             "drupal/search_api_glossary":{
                 "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch",
                 "https://www.drupal.org/project/search_api_glossary/issues/3398948":"https://www.drupal.org/files/issues/2023-11-03/3398948-02.patch"

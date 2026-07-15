@@ -31,7 +31,7 @@ class NodeLanguageFallbackSubscriber implements EventSubscriberInterface {
 
   public function onException(ExceptionEvent $event): void {
     $exception = $event->getThrowable();
-
+     \Drupal::logger('bestor_content_helper')->notice('Exception class: @class', ['@class' => get_class($exception)]);
     // Only handle access denied exceptions.
     if (!$exception instanceof CacheableAccessDeniedHttpException) {
       return;

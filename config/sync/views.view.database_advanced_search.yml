@@ -171,7 +171,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               search_api_fulltext_1:
                 plugin_id: default
                 advanced:
@@ -185,7 +184,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               search_api_range_filter:
                 plugin_id: default
                 advanced:
@@ -198,7 +196,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: date-range-filter
-                  sort_options_unsupported: ''
               sapi_language_fallback_filter:
                 plugin_id: default
                 advanced:
@@ -211,7 +208,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               tax_author_int:
                 plugin_id: default
                 advanced:
@@ -300,7 +296,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               relationship_info_relationnode_institut_document_nested:
                 plugin_id: default
                 advanced:
@@ -313,7 +308,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               relationship_info_relationnode_institut_institut_nested:
                 plugin_id: default
                 advanced:
@@ -326,7 +320,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               relationship_info_relationnode_institut_instrum_nested:
                 plugin_id: default
                 advanced:
@@ -339,7 +332,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               relationship_info_relationnode_person_institut_nested:
                 plugin_id: default
                 advanced:
@@ -352,7 +344,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               relationship_info_relationnode_institut_place_nested:
                 plugin_id: default
                 advanced:
@@ -365,7 +356,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               relationship_info_relationnode_institut_story_nested:
                 plugin_id: default
                 advanced:
@@ -378,7 +368,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
       access:
         type: role
         options:

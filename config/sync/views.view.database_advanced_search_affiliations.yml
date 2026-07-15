@@ -598,7 +598,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               facets_rn_relation_type_id__int:
                 plugin_id: default
                 advanced:
@@ -611,7 +610,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
               search_api_range_filter:
                 plugin_id: default
                 advanced:
@@ -624,7 +622,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
       access:
         type: role
         options:

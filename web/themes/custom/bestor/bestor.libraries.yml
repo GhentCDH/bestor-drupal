@@ -9,6 +9,7 @@ global:
     - jakarta/global-styling
     - core/jquery
     - core/once
+    - core/drupal.ajax
 
 database-search:
   js:
