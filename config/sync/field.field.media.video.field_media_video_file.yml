@@ -6,14 +6,7 @@ dependencies:
     - field.storage.media.field_media_video_file
     - media.type.video
   module:
-    - content_translation
     - file
-third_party_settings:
-  content_translation:
-    translation_sync:
-      display: display
-      description: description
-      target_id: '0'
 _core:
   default_config_hash: 6kMMjmk2r_csGQ52qI9BUaO8r_oAzNLbxlclaj-JlDQ
 id: media.video.field_media_video_file
@@ -23,7 +16,7 @@ bundle: video
 label: 'Video file'
 description: ''
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
