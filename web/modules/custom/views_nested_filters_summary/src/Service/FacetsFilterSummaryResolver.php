@@ -111,6 +111,11 @@ class FacetsFilterSummaryResolver {
   /**
    * Normalizes a facets URL parameter to a flat array of string values.
    *
+   * Two URL styles coexist because Facets 3.x changed its default URL processor
+   * format. Both styles are in active use across different Views on this site:
+   * older Views were configured with the array-style URL processor; newer ones
+   * use the simpler scalar style. Both must be handled to avoid silent failures.
+   *
    * @param mixed $raw
    *   Raw value from the request query.
    *

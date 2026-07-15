@@ -1,7 +1,0 @@
-cytoscape_egonetwork.settings:
-  path: '/admin/config/content/cytoscape-egonetwork'
-  defaults:
-    _form: '\Drupal\cytoscape_egonetwork\Form\EgoNetworkSettingsForm'
-    _title: 'Cytoscape Ego Network settings'
-  requirements:
-    _permission: 'administer site configuration'

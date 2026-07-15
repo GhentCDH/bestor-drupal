@@ -6,17 +6,10 @@ dependencies:
     - field.storage.media.field_media_document
     - media.type.document
   module:
-    - content_translation
     - file
   enforced:
     module:
       - media
-third_party_settings:
-  content_translation:
-    translation_sync:
-      description: description
-      target_id: '0'
-      display: '0'
 _core:
   default_config_hash: DY5HtJTxUjFRGU_PaY6ifo2nhR-nAZ0y0s6kLmUbv5g
 id: media.document.field_media_document
@@ -26,7 +19,7 @@ bundle: document
 label: Document
 description: ''
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

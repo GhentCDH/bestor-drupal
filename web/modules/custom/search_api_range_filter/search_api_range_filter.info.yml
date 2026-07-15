@@ -1,8 +1,0 @@
-name: 'Search API Range Filter'
-type: module
-description: 'Provides a Search API Views filter that spans two index fields for range overlap filtering (e.g. date_start / date_end). Designed for Elasticsearch-backed Search API views.'
-package: 'Custom'
-core_version_requirement: ^10
-dependencies:
-  - drupal:views
-  - search_api:search_api

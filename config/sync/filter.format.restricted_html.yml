@@ -25,6 +25,7 @@ filters:
       footnotes_collapse: false
       footnotes_css: true
       footnotes_dialog: true
+      footnotes_dialog_prevent_bubbling: false
       footnotes_footer_disable: false
   filter_html:
     id: filter_html
