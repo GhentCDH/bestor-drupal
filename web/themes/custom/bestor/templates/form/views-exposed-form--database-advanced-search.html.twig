@@ -3,8 +3,7 @@
 {% endif %}
 
 <div class="database-filters">
-
-  <p class="database-filters__heading">{{ 'Filters'|t }}</p>
+  <p class="database-filters__heading">{{ 'Search by'|t }} {{ form['#view_menu_title']|lower }}</p>
 
   {# --- Fulltext search --- #}
   <details class="database-filters-section" id="filters-search" open>

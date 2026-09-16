@@ -3954,7 +3954,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Advanced search: stories'
+      title: 'Data analysis: stories'
       cache:
         type: search_api_none
       filters:
@@ -5184,7 +5184,7 @@ display:
         ajax_history:
           enable_history: false
           exclude_args: ''
-      path: database/advanced-search/story
+      path: database/data-analysis/story
       menu:
         type: normal
         title: Stories
@@ -5213,7 +5213,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Advanced search: concepts'
+      title: 'Data analysis: concepts'
       cache:
         type: search_api_none
       filters:
@@ -6498,7 +6498,7 @@ display:
         ajax_history:
           enable_history: false
           exclude_args: ''
-      path: database/advanced-search/concept
+      path: database/data-analysis/concept
       menu:
         type: normal
         title: Concepts
@@ -6527,7 +6527,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Advanced search: documents'
+      title: 'Data analysis: documents'
       cache:
         type: search_api_none
       filters:
@@ -7812,7 +7812,7 @@ display:
         ajax_history:
           enable_history: false
           exclude_args: ''
-      path: database/advanced-search/document
+      path: database/data-analysis/document
       menu:
         type: normal
         title: Documents
@@ -7841,7 +7841,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Advanced search: institutions'
+      title: 'Data analysis: institutions'
       cache:
         type: search_api_none
       filters:
@@ -9186,7 +9186,7 @@ display:
         ajax_history:
           enable_history: false
           exclude_args: ''
-      path: database/advanced-search/institution
+      path: database/data-analysis/institution
       menu:
         type: normal
         title: Institutions
@@ -9215,7 +9215,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Advanced search: instruments'
+      title: 'Data analysis: instruments'
       cache:
         type: search_api_none
       filters:
@@ -10499,7 +10499,7 @@ display:
         ajax_history:
           enable_history: false
           exclude_args: ''
-      path: database/advanced-search/instruments
+      path: database/data-analysis/instruments
       menu:
         type: normal
         title: Instruments
@@ -10528,7 +10528,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Advanced search: persons'
+      title: 'Data analysis: persons'
       cache:
         type: search_api_none
       filters:
@@ -11900,7 +11900,7 @@ display:
         ajax_history:
           enable_history: false
           exclude_args: ''
-      path: database/advanced-search/person
+      path: database/data-analysis/person
       menu:
         type: normal
         title: Persons
@@ -11929,7 +11929,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Advanced search: places'
+      title: 'Data analysis: places'
       cache:
         type: search_api_none
       filters:
@@ -13202,7 +13202,7 @@ display:
         ajax_history:
           enable_history: false
           exclude_args: ''
-      path: database/advanced-search/place
+      path: database/data-analysis/place
       menu:
         type: normal
         title: Places

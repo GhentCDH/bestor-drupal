@@ -475,7 +475,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: Glossary
+            label: A-Z
             description: ''
             use_operator: false
             operator: ''
@@ -510,7 +510,11 @@ display:
             query_operator: or
             hard_limit: 0
             min_count: 1
+            missing: false
+            missing_label: others
             show_numbers: false
+            show_only_one_result: false
+            depends_on_exposed_filter: ''
             processor_configs:
               glossaryaz_widget_order:
                 processor_id: glossaryaz_widget_order

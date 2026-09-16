@@ -42,6 +42,11 @@ function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state,
       $form['institution']['#required'] = TRUE;
     }
   }
+
+  $menu_option = $view->getDisplay()->getOption('menu');
+  if (!empty($menu_option['title'])) {
+    $form['#view_menu_title'] = $menu_option['title'];
+  }
 }
 
 

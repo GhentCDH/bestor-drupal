@@ -16,8 +16,8 @@ provider: null
 plugin: 'system_menu_block:advanced-search'
 settings:
   id: 'system_menu_block:advanced-search'
-  label: 'Advanced search'
-  label_display: '0'
+  label: 'Search by'
+  label_display: visible
   provider: system
   level: 1
   depth: 0
@@ -26,4 +26,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: '/database/advanced-search/*'
+    pages: '/database/data-analysis/*'

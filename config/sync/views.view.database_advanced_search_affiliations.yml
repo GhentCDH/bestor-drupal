@@ -34,7 +34,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Advanced search: affiliations'
+      title: 'Data analysis – Affiliations'
       fields:
         rn_related_entity_1_id_int:
           id: rn_related_entity_1_id_int
@@ -1005,7 +1005,7 @@ display:
     display_options:
       display_extenders:
         ajax_history: {  }
-      path: database/advanced-search/affiliations
+      path: database/data-analysis/affiliations
       menu:
         type: normal
         title: Affiliations
