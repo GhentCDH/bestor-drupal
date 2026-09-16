@@ -36,6 +36,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Set working directory
 WORKDIR /app
 
+ENV PATH="/app/vendor/bin:${PATH}"
+
 RUN mkdir -p /app/web/sites/default/files
 RUN chown -R application:application /app/web/sites/default/files
 RUN chmod -R 775 /app/web/sites/default/files
@@ -67,7 +69,6 @@ COPY --chown=application:application ./web /app/web
 COPY --chown=application:application ./config /app/config
 
 RUN composer install --no-interaction --optimize-autoloader --no-dev
-RUN ln -s /app/vendor/drush/drush/drush /usr/local/bin/drush
 
 COPY scripts/startup-prod.sh /startup.sh
 RUN chmod +x /startup.sh

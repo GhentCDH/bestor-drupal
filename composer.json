@@ -104,7 +104,7 @@
         "drupal/views_date_past_upcoming": "^1.0",
         "drupal/views_filters_summary": "^3.3",
         "drupal/views_sort_expression": "^2.0",
-        "drush/drush": "^12.5",
+        "drush/drush": "^13.8",
         "elasticsearch/elasticsearch": "^8.11"
     },
     "conflict": {
@@ -203,6 +203,6 @@
         }
     },
     "require-dev": {
-        "drupal/devel": "^5.3"
+        "drupal/devel": "^5.5"
     }
 }
