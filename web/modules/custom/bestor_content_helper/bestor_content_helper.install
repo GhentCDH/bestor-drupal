@@ -79,3 +79,27 @@ function _bestor_site_settings_sync() {
     }
   }
 }
+
+
+/**
+ * Remove obsolete searchbanner_subtitle_* settings, replaced by searchbanner_tagline.
+ */
+function bestor_content_helper_update_9010() {
+  $storage = \Drupal::entityTypeManager()->getStorage('bestor_site_setting');
+
+  $obsolete_ids = [
+    'searchbanner_subtitle_prefix',
+    'searchbanner_subtitle_link',
+    'searchbanner_subtitle_middle_text',
+    'searchbanner_subtitle_link2',
+    'searchbanner_subtitle_suffix',
+  ];
+
+  $entities = $storage->loadMultiple($obsolete_ids);
+  if ($entities) {
+    $storage->delete($entities);
+    \Drupal::logger('bestor_content_helper')->notice('Deleted @count obsolete site settings.', ['@count' => count($entities)]);
+  }
+
+  return t('Removed obsolete searchbanner_subtitle_* settings.');
+}

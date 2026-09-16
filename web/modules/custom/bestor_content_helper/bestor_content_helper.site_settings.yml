@@ -36,26 +36,12 @@ searchbanner_title:
   default_value_nl: "Zoek in onze database"
   default_value_fr: "Recherchez dans notre base de données"
   setting_group: 'search_banner'
-searchbanner_subtitle_prefix:
-  label: 'Search Banner Link Prefix'
-  description: 'Text displayed before the clickable link below the search box.'
-  default_value: 'Use the'
-  default_value_nl: "Maak gebruik van de"
-  default_value_fr: "Utilisez la"
-  setting_group: 'search_banner'
-searchbanner_subtitle_link:
-  label: 'Search Banner Link Text'
-  description: 'Clickable link text displayed below the search box on the homepage.'
-  default_value: 'advanced search function with numerous parameters'
-  default_value_nl: "uitgebreide zoekfunctie met talloze parameters"
-  default_value_fr: "fonction de recherche avancée avec de nombreux paramètres"
-  setting_group: 'search_banner'
-searchbanner_subtitle_suffix:
-  label: 'Search Banner Link Suffix'
-  description: 'Text displayed after the clickable link below the search box.'
-  default_value: 'to find a specific keyword.'
-  default_value_nl: "pour trouver un mot-clé spécifique."
-  default_value_fr: "om een specfiek trefwoord te vinden."
+searchbanner_tagline:
+  label: 'Search Banner Tagline'
+  description: 'Full sentence for below the search box. Wrap the first clickable phrase in square brackets [ ] — it links to the search page. Wrap a second phrase in [ ] further in the sentence to link to the analysis page. Leave a phrase without brackets to show it as plain text.'
+  default_value: 'Use the [advanced search function] with numerous parameters or [analyze the data] for your own research.'
+  default_value_nl: 'Maak gebruik van de [uitgebreide zoekfunctie] met talloze parameters of [analyseer de data] voor je eigen onderzoek.'
+  default_value_fr: 'Utilisez la [fonction de recherche] avancée avec de nombreux paramètres ou [analysez les données] pour votre propre recherche.'
   setting_group: 'search_banner'
 default_author:
   label: 'Default Author'
