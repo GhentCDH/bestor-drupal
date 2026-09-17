@@ -10,6 +10,39 @@ display:
           filters_result_label:
             plural: resultaat
             singular: resultaten
+      pager:
+        options:
+          tags:
+            next: 'Volgende ›'
+            previous: '‹ Vorige'
+            first: '« Eerste'
+            last: 'Laatste »'
+      title: Data-analyse
+      exposed_form:
+        options:
+          submit_button: Zoeken
+      filters:
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        search_api_fulltext_3:
+          expose:
+            label: Uitvinder
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        tax_typology_int:
+          expose:
+            label: Profiel
+        tax_country_int:
+          expose:
+            label: Land
   page_1:
     display_title: Verhalen
     display_options:
@@ -21,6 +54,43 @@ display:
             label: Periode
           from_label: van
           to_label: tot
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        relationship_info_relationnode_concept_story_nested:
+          expose:
+            label: 'Relatie met concept'
+        relationship_info_relationnode_document_strory_nested:
+          expose:
+            label: 'Relatie met document'
+        relationship_info_relationnode_institut_story_nested:
+          expose:
+            label: 'Relatie met instelling'
+        relationship_info_relationnode_instrum_story_nested:
+          expose:
+            label: 'Relatie met instrument'
+        relationship_info_relationnode_person_story_nested:
+          expose:
+            label: 'Relatie met persoon'
+        relationship_info_relationnode_place_story_nested:
+          expose:
+            label: 'Relatie met plaats'
+        relationship_info_relationnode_story_story_nested:
+          expose:
+            label: "\tRelatie met verhaal"
+      title: 'Data-analyse – Verhalen'
   page_2:
     display_title: Concepten
     display_options:
@@ -32,6 +102,46 @@ display:
             label: Periode
           from_label: van
           to_label: tot
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        search_api_fulltext_3:
+          expose:
+            label: Uitvinder
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        relationship_info_relationnode_concept_concept_nested:
+          expose:
+            label: 'Relatie met concept'
+        relationship_info_relationnode_concept_document_nested:
+          expose:
+            label: 'Relatie met document'
+        relationship_info_relationnode_institut_concept_nested:
+          expose:
+            label: 'Relatie met instelling'
+        relationship_info_relationnode_concept_instrument_nested:
+          expose:
+            label: 'Relatie met instrument'
+        relationship_info_relationnode_person_concept_nested:
+          expose:
+            label: 'Relatie met persoon'
+        relationship_info_relationnode_concept_place_nested:
+          expose:
+            label: 'Relatie met plaats'
+        relationship_info_relationnode_concept_story_nested:
+          expose:
+            label: 'Relatie met verhaal'
+      title: 'Data-analyse – Concepten'
   page_3:
     display_title: Documenten
     display_options:
@@ -43,6 +153,46 @@ display:
             label: Periode
           from_label: van
           to_label: tot
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        search_api_fulltext_3:
+          expose:
+            label: Maker
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        relationship_info_relationnode_concept_document_nested:
+          expose:
+            label: 'Relatie met concept'
+        relationship_info_relationnode_document_document_nested:
+          expose:
+            label: 'Relatie met document'
+        relationship_info_relationnode_institut_document_nested:
+          expose:
+            label: 'Relatie met instelling'
+        relationship_info_relationnode_instrum_document_nested:
+          expose:
+            label: 'Relatie met instrument'
+        relationship_info_relationnode_person_document_nested:
+          expose:
+            label: 'Relatie met persoon'
+        relationship_info_relationnode_document_place_nested:
+          expose:
+            label: "\tRelatie met plaats"
+        relationship_info_relationnode_document_strory_nested:
+          expose:
+            label: 'Relatie met verhaal'
+      title: 'Data-analyse – Documenten'
   page_4:
     display_title: Instellingen
     display_options:
@@ -54,6 +204,49 @@ display:
             label: Periode
           from_label: van
           to_label: tot
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        tax_typology_int:
+          expose:
+            label: Instellingstype
+        tax_country_int:
+          expose:
+            label: Land
+        relationship_info_relationnode_institut_concept_nested:
+          expose:
+            label: 'Relatie met concept'
+        relationship_info_relationnode_institut_document_nested:
+          expose:
+            label: 'Relatie met document'
+        relationship_info_relationnode_institut_institut_nested:
+          expose:
+            label: 'Relatie met instelling'
+        relationship_info_relationnode_institut_instrum_nested:
+          expose:
+            label: 'Relatie met instrument'
+        relationship_info_relationnode_person_institut_nested:
+          expose:
+            label: 'Relatie met persoon'
+        relationship_info_relationnode_institut_place_nested:
+          expose:
+            label: 'Relatie met plaats'
+        relationship_info_relationnode_institut_story_nested:
+          expose:
+            label: 'Relatie met verhaal'
+      title: 'Data-analyse – Instellingen'
   page_5:
     display_title: Instrumenten
     display_options:
@@ -65,6 +258,46 @@ display:
             label: Periode
           from_label: van
           to_label: tot
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        search_api_fulltext_3:
+          expose:
+            label: Uitvinder
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        relationship_info_relationnode_concept_instrument_nested:
+          expose:
+            label: 'Relatie met concept'
+        relationship_info_relationnode_instrum_document_nested:
+          expose:
+            label: 'Relatie met document'
+        relationship_info_relationnode_institut_instrum_nested:
+          expose:
+            label: 'Relatie met instelling'
+        relationship_info_relationnode_instrum_instrum_nested:
+          expose:
+            label: 'Relatie met instrument'
+        relationship_info_relationnode_person_instrum_nested:
+          expose:
+            label: 'Relatie met persoon'
+        relationship_info_relationnode_instrum_place_nested:
+          expose:
+            label: 'Relatie met plaats'
+        relationship_info_relationnode_instrum_story_nested:
+          expose:
+            label: 'Relatie met verhaal'
+      title: 'Data-analyse – Instrumenten'
   page_6:
     display_title: Personen
     display_options:
@@ -76,6 +309,46 @@ display:
             label: Periode
           from_label: van
           to_label: tot
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        tax_typology_int:
+          expose:
+            label: Profiel
+        relationship_info_relationnode_person_concept_nested:
+          expose:
+            label: 'Relatie met concept'
+        relationship_info_relationnode_person_document_nested:
+          expose:
+            label: 'Relatie met document'
+        relationship_info_relationnode_person_institut_nested:
+          expose:
+            label: 'Relatie met instelling'
+        relationship_info_relationnode_person_instrum_nested:
+          expose:
+            label: 'Relatie met instrument'
+        relationship_info_relationnode_person_person_nested:
+          expose:
+            label: 'Relatie met persoon'
+        relationship_info_relationnode_person_place_nested:
+          expose:
+            label: "\tRelatie met plaats"
+        relationship_info_relationnode_person_story_nested:
+          expose:
+            label: 'Relatie met verhaal'
+      title: 'Data-analyse – Personen'
   page_7:
     display_title: Plaatsen
     display_options:
@@ -87,3 +360,47 @@ display:
             label: Periode
           from_label: van
           to_label: tot
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        tax_typology_int:
+          expose:
+            label: Plaatstype
+        tax_country_int:
+          expose:
+            label: Land
+        relationship_info_relationnode_concept_place_nested:
+          expose:
+            label: 'Relatie met concept'
+        relationship_info_relationnode_document_place_nested:
+          expose:
+            label: 'Relatie met document'
+        relationship_info_relationnode_institut_place_nested:
+          expose:
+            label: 'Relatie met instelling'
+        relationship_info_relationnode_instrum_place_nested:
+          expose:
+            label: 'Relatie met instrument'
+        relationship_info_relationnode_person_place_nested:
+          expose:
+            label: 'Relatie met persoon'
+        relationship_info_relationnode_place_place_nested:
+          expose:
+            label: "\tRelatie met plaats"
+        relationship_info_relationnode_place_story_nested:
+          expose:
+            label: 'Relatie met verhaal'
+      title: 'Data-analyse – Plaatsen'
+label: Data-analyse

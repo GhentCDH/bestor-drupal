@@ -80,7 +80,7 @@
         "drupal/pathauto": "^1.14",
         "drupal/purge": "^3.6",
         "drupal/rabbit_hole": "^1.0",
-        "drupal/relationship_nodes": "1.0.0-beta1",
+        "drupal/relationship_nodes": "1.0.0-beta3",
         "drupal/ruhi": "^10.2",
         "drupal/sdc_component_library": "^1.0",
         "drupal/search_api": "^1.38",

@@ -27,7 +27,7 @@ function bestor_custom_search_form_alter(&$form, FormStateInterface $form_state,
   }
   
   if ($form['#id'] === 'views-exposed-form-database-page-1'){
-    $facets_to_hide = ['specialisation', 'gender', 'type', 'country', 'place'];
+    $facets_to_hide = ['specialisation', 'gender', 'profile', 'country', 'place'];
     foreach ($facets_to_hide as $facet_id) {
       if (isset($form[$facet_id])) {
         $form[$facet_id]['#access'] = FALSE;
@@ -60,6 +60,25 @@ function bestor_custom_search_preprocess_views_exposed_form(&$variables) {
   }
 }
 
+
+/**
+ * Implements hook_views_data_alter().
+ *
+ * Fixes: https://www.drupal.org/project/search_api/issues/3359351
+ *
+ * field_typology is reused across the institution/person/place bundles,
+ * each pointing to a different vocabulary (institution_type/profile/
+ * place_type). Search API can only detect a single vocabulary for the
+ * indexed field and hardcodes it into the filter plugin definition, which
+ * then forces every display's "vid" back to that one vocabulary and hides
+ * the "Vocabulary" option in the Views UI. Removing it here restores the
+ * normal per-display Vocabulary setting.
+ */
+function bestor_custom_search_views_data_alter(&$data) {
+  if (isset($data['search_api_index_bestor_main_search_index']['tax_typology_int']['filter']['vocabulary'])) {
+    unset($data['search_api_index_bestor_main_search_index']['tax_typology_int']['filter']['vocabulary']);
+  }
+}
 
 /**
  * Implements hook_views_pre_render.

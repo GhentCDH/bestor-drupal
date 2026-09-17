@@ -207,7 +207,7 @@ class FacetsFilterSummaryResolver {
    * Resolves a human-readable label for a single facet value.
    *
    * Resolution order:
-   * 1. identifier === 'category' → node bundle label.
+   * 1. identifier === 'type' → node bundle label.
    * 2. Numeric + mirror enabled + MirrorProvider available → mirror label.
    * 3. Numeric → load entity from correct storage, return translated label.
    * 4. Fallback → return value as-is (e.g. startchar letters).
@@ -225,8 +225,8 @@ class FacetsFilterSummaryResolver {
    *   Human-readable label, or NULL if unresolvable.
    */
   private function resolveLabel(string $identifier, string $value, string $entityTypeId, bool $useMirror): ?string {
-    // Node bundle label (e.g. category facet).
-    if ($identifier === 'category') {
+    // Node bundle label (e.g. type facet).
+    if ($identifier === 'type') {
       $bundles = $this->bundleInfo->getBundleInfo('node');
       if (isset($bundles[$value]['label'])) {
         return (string) $bundles[$value]['label'];

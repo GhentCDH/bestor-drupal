@@ -31,7 +31,7 @@
   {# --- Taxonomy / type filters --- #}
   {% if form.discipline is not empty
     or form.specialisation is not empty
-    or form.type is not empty
+    or form.profile is not empty
     or form.gender is not empty
     or form.country is not empty
     or form.category is not empty %}
@@ -44,8 +44,8 @@
         {% if form.specialisation is not empty %}
           <div class="database-filters-field">{{ form.specialisation }}</div>
         {% endif %}
-        {% if form.type is not empty %}
-          <div class="database-filters-field">{{ form.type }}</div>
+        {% if form.profile is not empty %}
+          <div class="database-filters-field">{{ form.profile }}</div>
         {% endif %}
         {% if form.gender is not empty %}
           <div class="database-filters-field">{{ form.gender }}</div>

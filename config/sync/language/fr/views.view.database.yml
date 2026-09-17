@@ -9,16 +9,30 @@ display:
           expose:
             label: Auteur
         facets_content_type__str:
-          expose:
-            label: Catégorie
+          expose: {  }
         search_api_range_filter:
           expose:
             label: Période
           from_label: de
           to_label: à
+        facets_tax_specialisation__int:
+          expose:
+            label: Spécialisation
       header:
         views_filters_summary:
           filters_summary_prefix: pour
           filters_result_label:
             plural: résultat
             singular: résultats
+          filters_reset_link_title: Réinitialiser
+      exposed_form:
+        options:
+          submit_button: Rechercher
+          reset_button_label: Réinitialiser
+      pager:
+        options:
+          tags:
+            next: 'Suivant ›'
+            previous: '‹ Précédent'
+            first: '« Premier'
+            last: 'Dernier »'

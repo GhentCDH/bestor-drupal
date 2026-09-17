@@ -211,7 +211,7 @@ class StandardNodeFieldProcessor {
     return match ($field_name) {
       'field_discipline' => 'discipline',
       'field_specialisation' => 'specialisation',
-      'field_typology' => 'type',
+      'field_typology' => 'profile',
       'field_country' => 'country',
       'field_municipality' => 'place',
       'field_end_municipality' => 'place',

@@ -25,14 +25,25 @@ display:
       empty:
         area_text_custom:
           content: 'Uw zoekopdracht leverde geen resultaten op.'
-      title: 'Geavanceerd zoeken: affiliaties'
+      title: 'Data-analyse – Affiliaties'
       header:
         views_filters_summary:
           filters_summary_prefix: voor
           filters_result_label:
             plural: resultaat
             singular: resultaten
+      pager:
+        options:
+          tags:
+            next: 'Volgende ›'
+            previous: '‹ Vorige'
+            first: '« Eerste'
+            last: 'Laatste »'
+      exposed_form:
+        options:
+          submit_button: Zoeken
   page_1:
     display_options:
       menu:
         title: Affiliaties
+label: 'Data-analyse – Affiliaties '

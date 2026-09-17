@@ -9,8 +9,7 @@ display:
           expose:
             label: Auteur
         facets_content_type__str:
-          expose:
-            label: Categorie
+          expose: {  }
         search_api_range_filter:
           expose:
             label: Periode
@@ -22,3 +21,10 @@ display:
           filters_result_label:
             plural: resultaat
             singular: resultaten
+      pager:
+        options:
+          tags:
+            next: 'Volgende ›'
+            previous: '‹ Vorige'
+            first: '« Eerste'
+            last: 'Laatste »'

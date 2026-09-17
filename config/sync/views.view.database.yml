@@ -544,13 +544,13 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: Category
+            label: Type
             description: ''
             use_operator: false
             operator: ''
             operator_limit_selection: false
             operator_list: {  }
-            identifier: category
+            identifier: type
             required: false
             remember: false
             multiple: true
@@ -579,7 +579,11 @@ display:
             query_operator: or
             hard_limit: 0
             min_count: 1
+            missing: false
+            missing_label: others
             show_numbers: false
+            show_only_one_result: false
+            depends_on_exposed_filter: ''
             processor_configs:
               list_item:
                 processor_id: list_item
@@ -882,13 +886,13 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: Type
+            label: Profile
             description: ''
             use_operator: false
             operator: ''
             operator_limit_selection: false
             operator_list: {  }
-            identifier: type
+            identifier: profile
             required: false
             remember: false
             multiple: true
@@ -917,7 +921,11 @@ display:
             query_operator: or
             hard_limit: 0
             min_count: 1
+            missing: false
+            missing_label: others
             show_numbers: false
+            show_only_one_result: false
+            depends_on_exposed_filter: ''
             processor_configs:
               translate_entity:
                 processor_id: translate_entity

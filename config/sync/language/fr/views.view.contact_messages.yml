@@ -6,7 +6,7 @@ display:
       exposed_form:
         options:
           submit_button: Apply
-          reset_button_label: Reset
+          reset_button_label: Réinitialiser
           exposed_sorts_label: 'Sort by'
           sort_asc_label: Asc
           sort_desc_label: Desc

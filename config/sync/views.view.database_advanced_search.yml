@@ -11,6 +11,8 @@ dependencies:
     - taxonomy.vocabulary.discipline
     - taxonomy.vocabulary.gender
     - taxonomy.vocabulary.institution_type
+    - taxonomy.vocabulary.place_type
+    - taxonomy.vocabulary.profile
     - taxonomy.vocabulary.specialisation
     - user.role.administrator
     - user.role.web_manager
@@ -134,7 +136,7 @@ display:
       exposed_form:
         type: bef
         options:
-          submit_button: Apply
+          submit_button: Search
           reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
@@ -184,7 +186,7 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-              search_api_range_filter:
+              search_api_range_filter_1:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -195,7 +197,7 @@ display:
                   open_by_default: false
                   is_secondary: false
                   hide_label: false
-                  field_classes: date-range-filter
+                  field_classes: ''
               sapi_language_fallback_filter:
                 plugin_id: default
                 advanced:
@@ -269,22 +271,7 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-              tax_country_int:
-                plugin_id: default
-                advanced:
-                  sort_options: false
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-              relationship_info_relationnode_institut_concept_nested:
+              relationship_info_relationnode_concept_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -296,55 +283,7 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-              relationship_info_relationnode_institut_document_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-              relationship_info_relationnode_institut_institut_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-              relationship_info_relationnode_institut_instrum_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-              relationship_info_relationnode_person_institut_nested:
-                plugin_id: default
-                advanced:
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  open_by_default: false
-                  is_secondary: false
-                  hide_label: false
-                  field_classes: ''
-              relationship_info_relationnode_institut_place_nested:
+              relationship_info_relationnode_document_strory_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -357,6 +296,54 @@ display:
                   hide_label: false
                   field_classes: ''
               relationship_info_relationnode_institut_story_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              relationship_info_relationnode_instrum_story_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              relationship_info_relationnode_person_story_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              relationship_info_relationnode_place_story_nested:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              relationship_info_relationnode_story_story_nested:
                 plugin_id: default
                 advanced:
                   rewrite:
@@ -3954,7 +3941,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Data analysis: stories'
+      title: 'Data analysis – Stories'
       cache:
         type: search_api_none
       filters:
@@ -4196,7 +4183,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Language with fallback'
+            label: Language
             description: ''
             use_operator: false
             operator: sapi_language_fallback_filter_op
@@ -4373,55 +4360,6 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        tax_typology_int:
-          id: tax_typology_int
-          table: search_api_index_bestor_main_search_index
-          field: tax_typology_int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_term
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: tax_typology_int_op
-            label: Type
-            description: ''
-            use_operator: false
-            operator: tax_typology_int_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: type
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              redactor: '0'
-              web_manager: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: institution_type
-          type: select
-          hierarchy: false
-          limit: true
-          error_message: true
         relationship_info_relationnode_concept_story_nested:
           id: relationship_info_relationnode_concept_story_nested
           table: search_api_index_bestor_main_search_index
@@ -4440,7 +4378,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Concept relation'
+            label: 'Relation to concept'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_story_nested_op
@@ -4546,7 +4484,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Document relation'
+            label: 'Relation to document'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_document_strory_nested_op
@@ -4651,7 +4589,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Institution relation'
+            label: 'Relation to institution'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_story_nested_op
@@ -4757,7 +4695,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: conceptrelation
+            label: 'Relation to instrument'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_story_nested_op
@@ -4863,7 +4801,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Person relation'
+            label: 'Relation to person'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_story_nested_op
@@ -4969,7 +4907,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Place relation'
+            label: 'Relation to place'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_place_story_nested_op
@@ -5075,7 +5013,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Story relation'
+            label: 'Relation to story'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_story_story_nested_op
@@ -5213,7 +5151,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Data analysis: concepts'
+      title: 'Data analysis – Concepts'
       cache:
         type: search_api_none
       filters:
@@ -5515,7 +5453,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Language with fallback'
+            label: Language
             description: ''
             use_operator: false
             operator: sapi_language_fallback_filter_op
@@ -5692,55 +5630,6 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        tax_typology_int:
-          id: tax_typology_int
-          table: search_api_index_bestor_main_search_index
-          field: tax_typology_int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_term
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: tax_typology_int_op
-            label: Type
-            description: ''
-            use_operator: false
-            operator: tax_typology_int_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: type
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              redactor: '0'
-              web_manager: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: institution_type
-          type: select
-          hierarchy: false
-          limit: true
-          error_message: true
         relationship_info_relationnode_concept_concept_nested:
           id: relationship_info_relationnode_concept_concept_nested
           table: search_api_index_bestor_main_search_index
@@ -5759,7 +5648,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Concept relation'
+            label: 'Relation to concept'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_concept_nested_op
@@ -5865,7 +5754,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Document relation'
+            label: 'Relation to document'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_document_nested_op
@@ -5971,7 +5860,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Institution relation'
+            label: 'Relation to institution'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_concept_nested_op
@@ -6077,7 +5966,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Instrument relation'
+            label: 'Relation to instrument'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_instrument_nested_op
@@ -6183,7 +6072,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Person relation'
+            label: 'Relation to person'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_concept_nested_op
@@ -6289,7 +6178,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Place relation'
+            label: 'Relation to place'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_place_nested_op
@@ -6395,7 +6284,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Story relation'
+            label: 'Relation to story'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_story_nested_op
@@ -6527,7 +6416,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Data analysis: documents'
+      title: 'Data analysis – Documents'
       cache:
         type: search_api_none
       filters:
@@ -6769,7 +6658,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_3_op
-            label: Inventor
+            label: Creator
             description: ''
             use_operator: false
             operator: search_api_fulltext_3_op
@@ -6829,7 +6718,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Language with fallback'
+            label: Language
             description: ''
             use_operator: false
             operator: sapi_language_fallback_filter_op
@@ -7006,55 +6895,6 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        tax_typology_int:
-          id: tax_typology_int
-          table: search_api_index_bestor_main_search_index
-          field: tax_typology_int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_term
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: tax_typology_int_op
-            label: Type
-            description: ''
-            use_operator: false
-            operator: tax_typology_int_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: type
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              redactor: '0'
-              web_manager: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: institution_type
-          type: select
-          hierarchy: false
-          limit: true
-          error_message: true
         relationship_info_relationnode_concept_document_nested:
           id: relationship_info_relationnode_concept_document_nested
           table: search_api_index_bestor_main_search_index
@@ -7073,7 +6913,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Concept relation'
+            label: 'Relation to concept'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_document_nested_op
@@ -7179,7 +7019,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Document relation'
+            label: 'Relation to document'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_document_document_nested_op
@@ -7285,7 +7125,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Institution relation'
+            label: 'Relation to institution'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_document_nested_op
@@ -7391,7 +7231,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Instrument relation'
+            label: 'Relation to instrument'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_document_nested_op
@@ -7497,7 +7337,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Person relation'
+            label: 'Relation to person'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_document_nested_op
@@ -7603,7 +7443,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Place relation'
+            label: 'Relation to place'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_document_place_nested_op
@@ -7709,7 +7549,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Story relation'
+            label: 'Relation to story'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_document_strory_nested_op
@@ -7841,7 +7681,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Data analysis: institutions'
+      title: 'Data analysis – Institutions'
       cache:
         type: search_api_none
       filters:
@@ -8083,7 +7923,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Language with fallback'
+            label: Language
             description: ''
             use_operator: false
             operator: sapi_language_fallback_filter_op
@@ -8274,7 +8114,7 @@ display:
           exposed: true
           expose:
             operator_id: tax_typology_int_op
-            label: Type
+            label: 'Institution type'
             description: ''
             use_operator: false
             operator: tax_typology_int_op
@@ -8376,7 +8216,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Concept relation'
+            label: 'Relation to concept'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_concept_nested_op
@@ -8482,7 +8322,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Document relation'
+            label: 'Relation to document'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_document_nested_op
@@ -8588,7 +8428,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Institution relation'
+            label: 'Relation to institution'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_institut_nested_op
@@ -8694,7 +8534,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Instrument relation'
+            label: 'Relation to instrument'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_instrum_nested_op
@@ -8805,7 +8645,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Person relation'
+            label: 'Relation to person'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_institut_nested_op
@@ -8977,7 +8817,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Place relation'
+            label: 'Relation to place'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_place_nested_op
@@ -9083,7 +8923,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Story relation'
+            label: 'Relation to story'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_story_nested_op
@@ -9215,7 +9055,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Data analysis: instruments'
+      title: 'Data analysis – Instruments'
       cache:
         type: search_api_none
       filters:
@@ -9517,7 +9357,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Language with fallback'
+            label: Language
             description: ''
             use_operator: false
             operator: sapi_language_fallback_filter_op
@@ -9694,55 +9534,6 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        tax_typology_int:
-          id: tax_typology_int
-          table: search_api_index_bestor_main_search_index
-          field: tax_typology_int
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_term
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: tax_typology_int_op
-            label: Type
-            description: ''
-            use_operator: false
-            operator: tax_typology_int_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: type
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              redactor: '0'
-              web_manager: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: institution_type
-          type: select
-          hierarchy: false
-          limit: true
-          error_message: true
         relationship_info_relationnode_concept_instrument_nested:
           id: relationship_info_relationnode_concept_instrument_nested
           table: search_api_index_bestor_main_search_index
@@ -9761,7 +9552,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Concept relation'
+            label: 'Relation to concept'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_instrument_nested_op
@@ -9867,7 +9658,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Document relation'
+            label: 'Relation to document'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_document_nested_op
@@ -9973,7 +9764,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Institution relation'
+            label: 'Relation to institution'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_instrum_nested_op
@@ -10079,7 +9870,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Instrument relation'
+            label: 'Relation to instrument'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_instrum_nested_op
@@ -10185,7 +9976,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Person relation'
+            label: 'Relation to person'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_instrum_nested_op
@@ -10290,7 +10081,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Place relation'
+            label: 'Relation to place'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_place_nested_op
@@ -10396,7 +10187,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Story relation'
+            label: 'Relation to story'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_story_nested_op
@@ -10528,7 +10319,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Data analysis: persons'
+      title: 'Data analysis – Persons'
       cache:
         type: search_api_none
       filters:
@@ -10770,7 +10561,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Language with fallback'
+            label: Language
             description: ''
             use_operator: false
             operator: sapi_language_fallback_filter_op
@@ -11010,13 +10801,13 @@ display:
           exposed: true
           expose:
             operator_id: tax_typology_int_op
-            label: Type
+            label: Profile
             description: ''
             use_operator: false
             operator: tax_typology_int_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: type
+            identifier: profile
             required: false
             remember: false
             multiple: false
@@ -11040,7 +10831,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          vid: institution_type
+          vid: profile
           type: select
           hierarchy: false
           limit: true
@@ -11055,8 +10846,6 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            related_id:
-              value: ''
             concept:
               value: ''
             type:
@@ -11065,7 +10854,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Concept relation'
+            label: 'Relation to concept'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_concept_nested_op
@@ -11171,7 +10960,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Document relation'
+            label: 'Relation to document'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_document_nested_op
@@ -11269,8 +11058,6 @@ display:
           plugin_id: search_api_relationship_filter
           operator: and
           value:
-            related_id:
-              value: ''
             institution:
               value: ''
             type:
@@ -11284,7 +11071,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Institution relation'
+            label: 'Relation to institution'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_institut_nested_op
@@ -11457,7 +11244,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Instrument relation'
+            label: 'Relation to instrument'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_instrum_nested_op
@@ -11564,7 +11351,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Person relation'
+            label: 'Relation to person'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_person_nested_op
@@ -11692,7 +11479,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Place relation'
+            label: 'Relation to place'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_place_nested_op
@@ -11797,7 +11584,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Story relation'
+            label: 'Relation to story'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_story_nested_op
@@ -11929,7 +11716,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      title: 'Data analysis: places'
+      title: 'Data analysis – Places'
       cache:
         type: search_api_none
       filters:
@@ -12171,7 +11958,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Language with fallback'
+            label: Language
             description: ''
             use_operator: false
             operator: sapi_language_fallback_filter_op
@@ -12362,13 +12149,13 @@ display:
           exposed: true
           expose:
             operator_id: tax_typology_int_op
-            label: Type
+            label: 'Place type'
             description: ''
             use_operator: false
             operator: tax_typology_int_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: type
+            identifier: profile
             required: false
             remember: false
             multiple: false
@@ -12392,7 +12179,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          vid: institution_type
+          vid: place_type
           type: select
           hierarchy: false
           limit: true
@@ -12464,7 +12251,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Concept relation'
+            label: 'Relation to concept'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_concept_place_nested_op
@@ -12570,7 +12357,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Document relation'
+            label: 'Relation to document'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_document_place_nested_op
@@ -12676,7 +12463,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Institution relation'
+            label: 'Relation to institution'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_institut_place_nested_op
@@ -12782,7 +12569,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Instrument relation'
+            label: 'Relation to instrument'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_instrum_place_nested_op
@@ -12888,7 +12675,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Person relation'
+            label: 'Relation to person'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_person_place_nested_op
@@ -12993,7 +12780,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Place relation'
+            label: 'Relation to place'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_place_place_nested_op
@@ -13099,7 +12886,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Story relation'
+            label: 'Relation to story'
             description: ''
             use_operator: false
             operator: relationship_info_relationnode_place_story_nested_op

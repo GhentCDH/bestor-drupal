@@ -22,10 +22,23 @@ display:
       empty:
         area_text_custom:
           content: "Votre recherche n'a donné aucun résultat."
-      title: 'Recherche avancée : affiliations'
+      title: 'Analyse des données – Affiliations'
       header:
         views_filters_summary:
           filters_summary_prefix: pour
           filters_result_label:
             plural: résultat
             singular: résultats
+          filters_reset_link_title: Réinitialiser
+      pager:
+        options:
+          tags:
+            next: 'Suivant ›'
+            previous: '‹ Précédent'
+            first: '« Premier'
+            last: 'Dernier »'
+      exposed_form:
+        options:
+          submit_button: Rechercher
+          reset_button_label: Réinitialiser
+label: 'Analyse des données – Affiliations'

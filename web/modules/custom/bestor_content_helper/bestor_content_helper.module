@@ -83,7 +83,7 @@ function bestor_content_helper_system_breadcrumb_alter(Breadcrumb &$breadcrumb, 
       $links[] = _getViewLink('database', 'page_1');
       $links[] = Link::fromTextAndUrl(
         t(NodeType::load($node->bundle())->label()), 
-        Url::fromRoute('view.database.page_1', [], ['query' => ['category['. $bundle . ']' => $bundle]])
+        Url::fromRoute('view.database.page_1', [], ['query' => ['type['. $bundle . ']' => $bundle]])
       );
 
     } elseif ($bundle === 'article') {

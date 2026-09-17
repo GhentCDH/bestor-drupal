@@ -45,6 +45,7 @@ filters:
     settings:
       footnotes_collapse: true
       footnotes_css: true
+      footnotes_clean_anchors: false
       footnotes_dialog: false
       footnotes_dialog_prevent_bubbling: false
       footnotes_footer_disable: true

@@ -10,6 +10,43 @@ display:
             label: Période
           from_label: de
           to_label: à
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        relationship_info_relationnode_concept_story_nested:
+          expose:
+            label: 'Relation avec un concept'
+        relationship_info_relationnode_document_strory_nested:
+          expose:
+            label: 'Relation avec un document'
+        relationship_info_relationnode_institut_story_nested:
+          expose:
+            label: 'Relation avec une institution'
+        relationship_info_relationnode_person_story_nested:
+          expose:
+            label: 'Relation avec une personne'
+        relationship_info_relationnode_place_story_nested:
+          expose:
+            label: 'Relation avec un lieu'
+        relationship_info_relationnode_story_story_nested:
+          expose:
+            label: 'Relation avec une histoire'
+        relationship_info_relationnode_instrum_story_nested:
+          expose:
+            label: 'Relation avec un instrument'
+      title: 'Analyse des données – Histoires'
   page_6:
     display_title: Personnes
     display_options:
@@ -21,6 +58,49 @@ display:
             label: Période
           from_label: de
           to_label: à
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        tax_gender_int:
+          expose:
+            label: Sexe
+        tax_typology_int:
+          expose:
+            label: Profil
+        relationship_info_relationnode_person_concept_nested:
+          expose:
+            label: 'Relation avec un concept'
+        relationship_info_relationnode_person_document_nested:
+          expose:
+            label: 'Relation avec un document'
+        relationship_info_relationnode_person_institut_nested:
+          expose:
+            label: 'Relation avec une institution'
+        relationship_info_relationnode_person_instrum_nested:
+          expose:
+            label: 'Relation avec un instrument'
+        relationship_info_relationnode_person_person_nested:
+          expose:
+            label: 'Relation avec une personne'
+        relationship_info_relationnode_person_place_nested:
+          expose:
+            label: 'Relation avec un lieu'
+        relationship_info_relationnode_person_story_nested:
+          expose:
+            label: 'Relation avec une histoire'
+      title: 'Analyse des données – Personnes'
   page_7:
     display_title: Lieus
     display_options:
@@ -32,6 +112,49 @@ display:
             label: Période
           from_label: de
           to_label: à
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        tax_typology_int:
+          expose:
+            label: 'Type de lieu'
+        tax_country_int:
+          expose:
+            label: Pays
+        relationship_info_relationnode_concept_place_nested:
+          expose:
+            label: 'Relation avec un concept'
+        relationship_info_relationnode_document_place_nested:
+          expose:
+            label: 'Relation avec un document'
+        relationship_info_relationnode_institut_place_nested:
+          expose:
+            label: 'Relation avec une institution'
+        relationship_info_relationnode_instrum_place_nested:
+          expose:
+            label: 'Relation avec un instrument'
+        relationship_info_relationnode_person_place_nested:
+          expose:
+            label: 'Relation avec une personne'
+        relationship_info_relationnode_place_place_nested:
+          expose:
+            label: 'Relation avec un lieu'
+        relationship_info_relationnode_place_story_nested:
+          expose:
+            label: 'Relation avec une histoire'
+      title: 'Analyse des données – Lieus'
   default:
     display_options:
       header:
@@ -40,6 +163,53 @@ display:
           filters_result_label:
             plural: résultat
             singular: résultats
+          filters_reset_link_title: Réinitialiser
+      filters:
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        search_api_fulltext_2:
+          expose:
+            label: Créateur
+        search_api_fulltext_3:
+          expose:
+            label: Inventeur
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        tax_gender_int:
+          expose:
+            label: Sexe
+        tax_country_int:
+          expose:
+            label: Pays
+        content_type_str:
+          expose:
+            label: Type
+        tax_typology_int:
+          expose:
+            label: Profil
+      title: 'Analyse des données'
+      pager:
+        options:
+          tags:
+            next: 'Suivant ›'
+            previous: '‹ Précédent'
+            first: '« Premier'
+            last: 'Dernier »'
+      exposed_form:
+        options:
+          submit_button: Rechercher
+          reset_button_label: Réinitialiser
+      empty:
+        area_text_custom:
+          content: "Votre recherche n'a donné aucun résultat."
   page_2:
     display_options:
       filters:
@@ -48,6 +218,46 @@ display:
             label: Période
           from_label: de
           to_label: à
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        search_api_fulltext_3:
+          expose:
+            label: Inventeur
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        relationship_info_relationnode_concept_concept_nested:
+          expose:
+            label: 'Relation avec un concept'
+        relationship_info_relationnode_concept_document_nested:
+          expose:
+            label: 'Relation avec un document'
+        relationship_info_relationnode_institut_concept_nested:
+          expose:
+            label: 'Relation avec une institution'
+        relationship_info_relationnode_concept_instrument_nested:
+          expose:
+            label: 'Relation avec un instrument'
+        relationship_info_relationnode_person_concept_nested:
+          expose:
+            label: 'Relation avec une personne'
+        relationship_info_relationnode_concept_place_nested:
+          expose:
+            label: 'Relation avec un lieu'
+        relationship_info_relationnode_concept_story_nested:
+          expose:
+            label: 'Relation avec une histoire'
+      title: 'Analyse des données – Concepts'
   page_3:
     display_options:
       filters:
@@ -56,6 +266,46 @@ display:
             label: Période
           from_label: de
           to_label: à
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        search_api_fulltext_3:
+          expose:
+            label: Createur
+        relationship_info_relationnode_concept_document_nested:
+          expose:
+            label: 'Relation avec un concept'
+        relationship_info_relationnode_document_document_nested:
+          expose:
+            label: 'Relation avec un document'
+        relationship_info_relationnode_institut_document_nested:
+          expose:
+            label: 'Relation avec une institution'
+        relationship_info_relationnode_instrum_document_nested:
+          expose:
+            label: 'Relation avec un instrument'
+        relationship_info_relationnode_person_document_nested:
+          expose:
+            label: 'Relation avec une personne'
+        relationship_info_relationnode_document_place_nested:
+          expose:
+            label: 'Relation avec un lieu'
+        relationship_info_relationnode_document_strory_nested:
+          expose:
+            label: 'Relation avec une histoire'
+      title: 'Analyse des données – Documents'
   page_4:
     display_options:
       filters:
@@ -64,6 +314,49 @@ display:
             label: Période
           from_label: de
           to_label: à
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        tax_typology_int:
+          expose:
+            label: "Type d'institution"
+        tax_country_int:
+          expose:
+            label: Pays
+        relationship_info_relationnode_institut_concept_nested:
+          expose:
+            label: 'Relation avec un concept'
+        relationship_info_relationnode_institut_document_nested:
+          expose:
+            label: 'Relation avec un document'
+        relationship_info_relationnode_institut_institut_nested:
+          expose:
+            label: 'Relation avec une institution'
+        relationship_info_relationnode_institut_instrum_nested:
+          expose:
+            label: 'Relation avec un instrument'
+        relationship_info_relationnode_person_institut_nested:
+          expose:
+            label: 'Relation avec une personne'
+        relationship_info_relationnode_institut_place_nested:
+          expose:
+            label: 'Relation avec un lieu'
+        relationship_info_relationnode_institut_story_nested:
+          expose:
+            label: 'Relation avec une histoire'
+      title: 'Analyse des données – Institutions'
   page_5:
     display_options:
       filters:
@@ -72,3 +365,44 @@ display:
             label: Période
           from_label: de
           to_label: à
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        search_api_fulltext_3:
+          expose:
+            label: Inventeur
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        relationship_info_relationnode_concept_instrument_nested:
+          expose:
+            label: 'Relation avec un concept'
+        relationship_info_relationnode_instrum_document_nested:
+          expose:
+            label: 'Relation avec un document'
+        relationship_info_relationnode_institut_instrum_nested:
+          expose:
+            label: 'Relation avec une institution'
+        relationship_info_relationnode_instrum_instrum_nested:
+          expose:
+            label: 'Relation avec un instrument'
+        relationship_info_relationnode_person_instrum_nested:
+          expose:
+            label: "\tRelation avec une personne"
+        relationship_info_relationnode_instrum_place_nested:
+          expose:
+            label: "\tRelation avec un lieu"
+        relationship_info_relationnode_instrum_story_nested:
+          expose:
+            label: 'Relation avec une histoire'
+      title: 'Analyse des données – Instruments'
+label: 'Analyse des données'

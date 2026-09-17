@@ -19,7 +19,7 @@ js/views_nested_filters_summary.js            — dynamic summary UI updates
 `FacetsFilterSummaryResolver::populateFacetValues()` is called in a pre-render hook. For each `facets_filter` plugin in the View, it reads the active values from the request URL and sets them on `$filter->value`. The summary module then sees populated values and includes those filters in the output.
 
 Label resolution order (in `resolveLabel()`):
-1. If the identifier is `category` → node bundle label
+1. If the identifier is `type` → node bundle label
 2. If numeric + mirror processor configured + `MirrorProvider` available → mirror label (for relation type facets)
 3. If numeric → load entity from correct storage, return translated label
 4. Fallback → return raw value (e.g. startchar letters)
