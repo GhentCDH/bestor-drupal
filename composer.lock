@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acb12fa5f1895068440a2e8224a2a06b",
+    "content-hash": "53b0d323cedbb1f192628ab55f8f7990",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3503,26 +3503,26 @@
         },
         {
             "name": "drupal/linkit",
-            "version": "7.0.16",
+            "version": "7.0.17",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/linkit.git",
-                "reference": "7.0.16"
+                "reference": "7.0.17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/linkit-7.0.16.zip",
-                "reference": "7.0.16",
-                "shasum": "72e598acf5ba56db25989754393bbce6597a29af"
+                "url": "https://ftp.drupal.org/files/projects/linkit-7.0.17.zip",
+                "reference": "7.0.17",
+                "shasum": "114d863a2232e76abd37e7d789fd34afc0e253b2"
             },
             "require": {
-                "drupal/core": "^10.2 || ^11"
+                "drupal/core": "^10.2 || ^11 || ^12"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.0.16",
-                    "datestamp": "1781283687",
+                    "version": "7.0.17",
+                    "datestamp": "1789675704",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3543,6 +3543,10 @@
                 {
                     "name": "idebr",
                     "homepage": "https://www.drupal.org/user/1879760"
+                },
+                {
+                    "name": "joegraduate",
+                    "homepage": "https://www.drupal.org/user/789384"
                 },
                 {
                     "name": "johnwebdev",
@@ -4555,16 +4559,16 @@
         },
         {
             "name": "drupal/relationship_nodes",
-            "version": "1.0.0-beta3",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GhentCDH/relationship_nodes.git",
-                "reference": "630824da262b0815d4c86f62118860d91fbd0618"
+                "reference": "85ea4053c1d5af8d9b031016c0ecc75f9ce9c357"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GhentCDH/relationship_nodes/zipball/630824da262b0815d4c86f62118860d91fbd0618",
-                "reference": "630824da262b0815d4c86f62118860d91fbd0618",
+                "url": "https://api.github.com/repos/GhentCDH/relationship_nodes/zipball/85ea4053c1d5af8d9b031016c0ecc75f9ce9c357",
+                "reference": "85ea4053c1d5af8d9b031016c0ecc75f9ce9c357",
                 "shasum": ""
             },
             "require": {
@@ -4585,10 +4589,10 @@
                 "taxonomy"
             ],
             "support": {
-                "source": "https://github.com/GhentCDH/relationship_nodes/tree/1.0.0-beta3",
+                "source": "https://github.com/GhentCDH/relationship_nodes/tree/1.0.0-beta2",
                 "issues": "https://github.com/GhentCDH/relationship_nodes/issues"
             },
-            "time": "2026-09-17T20:25:03+00:00"
+            "time": "2026-09-17T21:28:21+00:00"
         },
         {
             "name": "drupal/ruhi",

@@ -28,24 +28,57 @@ display:
         relationship_info_relationnode_concept_story_nested:
           expose:
             label: 'Relation avec un concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_document_strory_nested:
           expose:
             label: 'Relation avec un document'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_story_nested:
           expose:
             label: 'Relation avec une institution'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_story_nested:
           expose:
             label: 'Relation avec une personne'
+          field_settings:
+            calculated_related_id:
+              label: Personne
+            calculated_related_name:
+              label: Personne
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_place_story_nested:
           expose:
             label: 'Relation avec un lieu'
+          field_settings:
+            calculated_related_id:
+              label: Lieu
+            calculated_related_name:
+              label: Lieu
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_story_story_nested:
           expose:
             label: 'Relation avec une histoire'
+          field_settings:
+            calculated_related_id:
+              label: Histoire
+            calculated_related_name:
+              label: Histoire
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_instrum_story_nested:
           expose:
             label: 'Relation avec un instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
       title: 'Analyse des données – Histoires'
   page_6:
     display_title: Personnes
@@ -82,24 +115,61 @@ display:
         relationship_info_relationnode_person_concept_nested:
           expose:
             label: 'Relation avec un concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_document_nested:
           expose:
             label: 'Relation avec un document'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_institut_nested:
           expose:
             label: 'Relation avec une institution'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
+            range_pair:
+              label: Période
+              from_label: De
+              to_label: À
         relationship_info_relationnode_person_instrum_nested:
           expose:
             label: 'Relation avec un instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_person_nested:
           expose:
             label: 'Relation avec une personne'
+          field_settings:
+            calculated_related_id:
+              label: Personne
+            calculated_related_name:
+              label: Personne
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_place_nested:
           expose:
             label: 'Relation avec un lieu'
+          field_settings:
+            calculated_related_id:
+              label: Lieu
+            calculated_related_name:
+              label: Lieu
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_story_nested:
           expose:
             label: 'Relation avec une histoire'
+          field_settings:
+            calculated_related_id:
+              label: Histoire
+            calculated_related_name:
+              label: Histoire
+            calculated_relation_type_name:
+              label: 'Type de relation'
       title: 'Analyse des données – Personnes'
   page_7:
     display_title: Lieus
@@ -136,24 +206,57 @@ display:
         relationship_info_relationnode_concept_place_nested:
           expose:
             label: 'Relation avec un concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_document_place_nested:
           expose:
             label: 'Relation avec un document'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_place_nested:
           expose:
             label: 'Relation avec une institution'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_instrum_place_nested:
           expose:
             label: 'Relation avec un instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_place_nested:
           expose:
             label: 'Relation avec une personne'
+          field_settings:
+            calculated_related_id:
+              label: Personne
+            calculated_related_name:
+              label: Personne
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_place_place_nested:
           expose:
             label: 'Relation avec un lieu'
+          field_settings:
+            calculated_related_id:
+              label: Lieu
+            calculated_related_name:
+              label: Lieu
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_place_story_nested:
           expose:
             label: 'Relation avec une histoire'
+          field_settings:
+            calculated_related_id:
+              label: Histoire
+            calculated_related_name:
+              label: Histoire
+            calculated_relation_type_name:
+              label: 'Type de relation'
       title: 'Analyse des données – Lieus'
   default:
     display_options:
@@ -239,24 +342,57 @@ display:
         relationship_info_relationnode_concept_concept_nested:
           expose:
             label: 'Relation avec un concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_concept_document_nested:
           expose:
             label: 'Relation avec un document'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_concept_nested:
           expose:
             label: 'Relation avec une institution'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_concept_instrument_nested:
           expose:
             label: 'Relation avec un instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_concept_nested:
           expose:
             label: 'Relation avec une personne'
+          field_settings:
+            calculated_related_id:
+              label: Personne
+            calculated_related_name:
+              label: Personne
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_concept_place_nested:
           expose:
             label: 'Relation avec un lieu'
+          field_settings:
+            calculated_related_id:
+              label: Lieu
+            calculated_related_name:
+              label: Lieu
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_concept_story_nested:
           expose:
             label: 'Relation avec une histoire'
+          field_settings:
+            calculated_related_id:
+              label: Histoire
+            calculated_related_name:
+              label: Histoire
+            calculated_relation_type_name:
+              label: 'Type de relation'
       title: 'Analyse des données – Concepts'
   page_3:
     display_options:
@@ -287,24 +423,57 @@ display:
         relationship_info_relationnode_concept_document_nested:
           expose:
             label: 'Relation avec un concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_document_document_nested:
           expose:
             label: 'Relation avec un document'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_document_nested:
           expose:
             label: 'Relation avec une institution'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_instrum_document_nested:
           expose:
             label: 'Relation avec un instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_document_nested:
           expose:
             label: 'Relation avec une personne'
+          field_settings:
+            calculated_related_id:
+              label: Personne
+            calculated_related_name:
+              label: Personne
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_document_place_nested:
           expose:
             label: 'Relation avec un lieu'
+          field_settings:
+            calculated_related_id:
+              label: Lieu
+            calculated_related_name:
+              label: Lieu
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_document_strory_nested:
           expose:
             label: 'Relation avec une histoire'
+          field_settings:
+            calculated_related_id:
+              label: Histoire
+            calculated_related_name:
+              label: Histoire
+            calculated_relation_type_name:
+              label: 'Type de relation'
       title: 'Analyse des données – Documents'
   page_4:
     display_options:
@@ -338,24 +507,54 @@ display:
         relationship_info_relationnode_institut_concept_nested:
           expose:
             label: 'Relation avec un concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_document_nested:
           expose:
             label: 'Relation avec un document'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_institut_nested:
           expose:
             label: 'Relation avec une institution'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_instrum_nested:
           expose:
             label: 'Relation avec un instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_institut_nested:
           expose:
             label: 'Relation avec une personne'
+          field_settings:
+            calculated_related_id:
+              label: Personne
+            calculated_related_name:
+              label: Personne
+            calculated_relation_type_name:
+              label: 'Type de relation'
+            range_pair:
+              label: Période
+              from_label: De
+              to_label: À
         relationship_info_relationnode_institut_place_nested:
           expose:
             label: 'Relation avec un lieu'
         relationship_info_relationnode_institut_story_nested:
           expose:
             label: 'Relation avec une histoire'
+          field_settings:
+            calculated_related_id:
+              label: Histoire
+            calculated_related_name:
+              label: Histoire
+            calculated_relation_type_name:
+              label: 'Type de relation'
       title: 'Analyse des données – Institutions'
   page_5:
     display_options:
@@ -386,23 +585,56 @@ display:
         relationship_info_relationnode_concept_instrument_nested:
           expose:
             label: 'Relation avec un concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_instrum_document_nested:
           expose:
             label: 'Relation avec un document'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_institut_instrum_nested:
           expose:
             label: 'Relation avec une institution'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_instrum_instrum_nested:
           expose:
             label: 'Relation avec un instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_person_instrum_nested:
           expose:
             label: "\tRelation avec une personne"
+          field_settings:
+            calculated_related_id:
+              label: Personne
+            calculated_related_name:
+              label: Personne
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_instrum_place_nested:
           expose:
             label: "\tRelation avec un lieu"
+          field_settings:
+            calculated_related_id:
+              label: Lieu
+            calculated_related_name:
+              label: Lieu
+            calculated_relation_type_name:
+              label: 'Type de relation'
         relationship_info_relationnode_instrum_story_nested:
           expose:
             label: 'Relation avec une histoire'
+          field_settings:
+            calculated_related_id:
+              label: Histoire
+            calculated_related_name:
+              label: Histoire
+            calculated_relation_type_name:
+              label: 'Type de relation'
       title: 'Analyse des données – Instruments'
 label: 'Analyse des données'
