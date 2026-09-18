@@ -18,4 +18,4 @@ definitions:
     parent: ''
     weight: -50
     expanded: true
-    enabled: true
+    enabled: false

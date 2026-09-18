@@ -150,6 +150,8 @@ display:
               label: Personne
             calculated_relation_type_name:
               label: 'Type de relation'
+            field_municipality:
+              label: Lieu
         relationship_info_relationnode_person_place_nested:
           expose:
             label: 'Relation avec un lieu'

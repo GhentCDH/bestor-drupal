@@ -72,24 +72,61 @@ display:
         relationship_info_relationnode_concept_story_nested:
           expose:
             label: 'Relatie met concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_document_strory_nested:
           expose:
             label: 'Relatie met document'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_story_nested:
           expose:
             label: 'Relatie met instelling'
+          field_settings:
+            calculated_related_id:
+              label: Instelling
+            calculated_related_name:
+              label: Instelling
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_instrum_story_nested:
           expose:
             label: 'Relatie met instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_story_nested:
           expose:
             label: 'Relatie met persoon'
+          field_settings:
+            calculated_related_id:
+              label: Persoon
+            calculated_related_name:
+              label: Persoon
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_place_story_nested:
           expose:
             label: 'Relatie met plaats'
+          field_settings:
+            calculated_related_id:
+              label: Plaats
+            calculated_related_name:
+              label: Plaats
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_story_story_nested:
           expose:
             label: "\tRelatie met verhaal"
+          field_settings:
+            calculated_related_id:
+              label: Verhaal
+            calculated_related_name:
+              label: Verhaal
+            calculated_relation_type_name:
+              label: Relatietype
       title: 'Data-analyse – Verhalen'
   page_2:
     display_title: Concepten
@@ -123,24 +160,61 @@ display:
         relationship_info_relationnode_concept_concept_nested:
           expose:
             label: 'Relatie met concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_concept_document_nested:
           expose:
             label: 'Relatie met document'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_concept_nested:
           expose:
             label: 'Relatie met instelling'
+          field_settings:
+            calculated_related_id:
+              label: Instelling
+            calculated_related_name:
+              label: Instelling
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_concept_instrument_nested:
           expose:
             label: 'Relatie met instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_concept_nested:
           expose:
             label: 'Relatie met persoon'
+          field_settings:
+            calculated_related_id:
+              label: Persoon
+            calculated_related_name:
+              label: Persoon
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_concept_place_nested:
           expose:
             label: 'Relatie met plaats'
+          field_settings:
+            calculated_related_id:
+              label: Plaats
+            calculated_related_name:
+              label: Plaats
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_concept_story_nested:
           expose:
             label: 'Relatie met verhaal'
+          field_settings:
+            calculated_related_id:
+              label: Verhaal
+            calculated_related_name:
+              label: Verhaal
+            calculated_relation_type_name:
+              label: Relatietype
       title: 'Data-analyse – Concepten'
   page_3:
     display_title: Documenten
@@ -174,24 +248,61 @@ display:
         relationship_info_relationnode_concept_document_nested:
           expose:
             label: 'Relatie met concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_document_document_nested:
           expose:
             label: 'Relatie met document'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_document_nested:
           expose:
             label: 'Relatie met instelling'
+          field_settings:
+            calculated_related_id:
+              label: Instelling
+            calculated_related_name:
+              label: Instelling
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_instrum_document_nested:
           expose:
             label: 'Relatie met instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_document_nested:
           expose:
             label: 'Relatie met persoon'
+          field_settings:
+            calculated_related_id:
+              label: Persoon
+            calculated_related_name:
+              label: Persoon
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_document_place_nested:
           expose:
             label: "\tRelatie met plaats"
+          field_settings:
+            calculated_related_id:
+              label: Plaats
+            calculated_related_name:
+              label: Plaats
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_document_strory_nested:
           expose:
             label: 'Relatie met verhaal'
+          field_settings:
+            calculated_related_id:
+              label: Verhaal
+            calculated_related_name:
+              label: Verhaal
+            calculated_relation_type_name:
+              label: Relatietype
       title: 'Data-analyse – Documenten'
   page_4:
     display_title: Instellingen
@@ -228,24 +339,65 @@ display:
         relationship_info_relationnode_institut_concept_nested:
           expose:
             label: 'Relatie met concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_document_nested:
           expose:
             label: 'Relatie met document'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_institut_nested:
           expose:
             label: 'Relatie met instelling'
+          field_settings:
+            calculated_related_id:
+              label: Instelling
+            calculated_related_name:
+              label: Instelling
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_instrum_nested:
           expose:
             label: 'Relatie met instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_institut_nested:
           expose:
             label: 'Relatie met persoon'
+          field_settings:
+            calculated_related_id:
+              label: Persoon
+            calculated_related_name:
+              label: Persoon
+            calculated_relation_type_name:
+              label: Relatietype
+            range_pair:
+              label: Periode
+              from_label: Van
+              to_label: Tot
         relationship_info_relationnode_institut_place_nested:
           expose:
             label: 'Relatie met plaats'
+          field_settings:
+            calculated_related_id:
+              label: Plaats
+            calculated_related_name:
+              label: Plaats
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_story_nested:
           expose:
             label: 'Relatie met verhaal'
+          field_settings:
+            calculated_related_id:
+              label: Verhaal
+            calculated_related_name:
+              label: Verhaal
+            calculated_relation_type_name:
+              label: Relatietype
       title: 'Data-analyse – Instellingen'
   page_5:
     display_title: Instrumenten
@@ -279,24 +431,61 @@ display:
         relationship_info_relationnode_concept_instrument_nested:
           expose:
             label: 'Relatie met concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_instrum_document_nested:
           expose:
             label: 'Relatie met document'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_instrum_nested:
           expose:
             label: 'Relatie met instelling'
+          field_settings:
+            calculated_related_id:
+              label: Instelling
+            calculated_related_name:
+              label: Instelling
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_instrum_instrum_nested:
           expose:
             label: 'Relatie met instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_instrum_nested:
           expose:
             label: 'Relatie met persoon'
+          field_settings:
+            calculated_related_id:
+              label: Persoon
+            calculated_related_name:
+              label: Persoon
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_instrum_place_nested:
           expose:
             label: 'Relatie met plaats'
+          field_settings:
+            calculated_related_id:
+              label: Plaats
+            calculated_related_name:
+              label: Plaats
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_instrum_story_nested:
           expose:
             label: 'Relatie met verhaal'
+          field_settings:
+            calculated_related_id:
+              label: Verhaal
+            calculated_related_name:
+              label: Verhaal
+            calculated_relation_type_name:
+              label: Relatietype
       title: 'Data-analyse – Instrumenten'
   page_6:
     display_title: Personen
@@ -330,24 +519,67 @@ display:
         relationship_info_relationnode_person_concept_nested:
           expose:
             label: 'Relatie met concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_document_nested:
           expose:
             label: 'Relatie met document'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_institut_nested:
           expose:
             label: 'Relatie met instelling'
+          field_settings:
+            calculated_related_id:
+              label: Instelling
+            calculated_related_name:
+              label: Instelling
+            calculated_relation_type_name:
+              label: Relatietype
+            range_pair:
+              label: Periode
+              from_label: Van
+              to_label: Tot
         relationship_info_relationnode_person_instrum_nested:
           expose:
             label: 'Relatie met instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_person_nested:
           expose:
             label: 'Relatie met persoon'
+          field_settings:
+            field_municipality:
+              label: Plaats
+            calculated_related_id:
+              label: Persoon
+            calculated_related_name:
+              label: Persoon
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_place_nested:
           expose:
             label: "\tRelatie met plaats"
+          field_settings:
+            calculated_related_id:
+              label: Plaats
+            calculated_related_name:
+              label: Plaats
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_story_nested:
           expose:
             label: 'Relatie met verhaal'
+          field_settings:
+            calculated_related_id:
+              label: Verhaal
+            calculated_related_name:
+              label: Verhaal
+            calculated_relation_type_name:
+              label: Relatietype
       title: 'Data-analyse – Personen'
   page_7:
     display_title: Plaatsen
@@ -384,23 +616,60 @@ display:
         relationship_info_relationnode_concept_place_nested:
           expose:
             label: 'Relatie met concept'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_document_place_nested:
           expose:
             label: 'Relatie met document'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_institut_place_nested:
           expose:
             label: 'Relatie met instelling'
+          field_settings:
+            calculated_related_id:
+              label: Instelling
+            calculated_related_name:
+              label: Instelling
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_instrum_place_nested:
           expose:
             label: 'Relatie met instrument'
+          field_settings:
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_person_place_nested:
           expose:
             label: 'Relatie met persoon'
+          field_settings:
+            calculated_related_id:
+              label: Persoon
+            calculated_related_name:
+              label: Persoon
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_place_place_nested:
           expose:
             label: "\tRelatie met plaats"
+          field_settings:
+            calculated_related_id:
+              label: Plaats
+            calculated_related_name:
+              label: Plaats
+            calculated_relation_type_name:
+              label: Relatietype
         relationship_info_relationnode_place_story_nested:
           expose:
             label: 'Relatie met verhaal'
+          field_settings:
+            calculated_related_id:
+              label: Verhaal
+            calculated_related_name:
+              label: Verhaal
+            calculated_relation_type_name:
+              label: Relatietype
       title: 'Data-analyse – Plaatsen'
 label: Data-analyse
