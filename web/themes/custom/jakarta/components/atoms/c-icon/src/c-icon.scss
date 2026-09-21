@@ -41,7 +41,7 @@ $icons: (
   "marker": "\e90f",
   "light": "\e910",
   "death": "\e911",
-  "birthdate": "\e912",
+  "birthdate": "\e912"
 );
 
 @each $name, $glyph in $icons {
