@@ -12,6 +12,8 @@ dependencies:
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
     - field.field.node.person.field_end_municipality
+    - field.field.node.person.field_external_link
+    - field.field.node.person.field_external_reference
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
@@ -294,6 +296,7 @@ third_party_settings:
     group_linked_data:
       children:
         - field_wikidata_entry
+        - field_external_reference
       label: 'Linked data'
       region: content
       parent_name: group_base_foprm
@@ -526,6 +529,22 @@ content:
     weight: 109
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_external_link:
+    type: link_default
+    weight: 4
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_external_reference:
+    type: link_default
+    weight: 3
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   field_gender:
     type: selectify_dropdown_searchable

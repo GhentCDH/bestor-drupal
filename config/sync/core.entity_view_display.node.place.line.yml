@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.place.field_date_start_year_only
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
+    - field.field.node.place.field_external_reference
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_image
     - field.field.node.place.field_municipality
@@ -20,10 +21,13 @@ dependencies:
     - field.field.node.place.field_specialisation
     - field.field.node.place.field_summary
     - field.field.node.place.field_typology
+    - field.field.node.place.field_wikidata_entry
     - node.type.place
   module:
+    - cytoscape_egonetwork
     - entity_reference_revisions
     - geofield
+    - link
     - user
 id: node.place.line
 targetEntityType: node
@@ -120,10 +124,30 @@ content:
     third_party_settings: {  }
     weight: 8
     region: content
+  field_wikidata_entry:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 8
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  show_ego_network:
+    type: cytoscape_egonetwork
+    label: hidden
+    settings:
+      language_unavailable: hide
+    third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   computed_relationshipfield__place__concept: true
@@ -137,7 +161,9 @@ hidden:
   field_date_end_year_only: true
   field_date_start: true
   field_date_start_year_only: true
+  field_external_reference: true
   field_references: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
+  toc_js: true

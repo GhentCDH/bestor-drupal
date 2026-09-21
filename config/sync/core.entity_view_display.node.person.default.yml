@@ -12,6 +12,8 @@ dependencies:
     - field.field.node.person.field_description
     - field.field.node.person.field_discipline
     - field.field.node.person.field_end_municipality
+    - field.field.node.person.field_external_link
+    - field.field.node.person.field_external_reference
     - field.field.node.person.field_gender
     - field.field.node.person.field_image
     - field.field.node.person.field_municipality
@@ -162,6 +164,30 @@ content:
       link: true
     third_party_settings: {  }
     weight: 2
+    region: content
+  field_external_link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_external_reference:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 102
     region: content
   field_gender:
     type: entity_reference_label

@@ -1,0 +1,23 @@
+uuid: c9c9f472-c0f7-4673-a032-307481b2bf61
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_external_reference
+    - node.type.concept
+  module:
+    - link
+id: node.concept.field_external_reference
+field_name: field_external_reference
+entity_type: node
+bundle: concept
+label: 'Other external references'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 16
+field_type: link

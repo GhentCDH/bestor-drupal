@@ -1,0 +1,156 @@
+uuid: 670316e3-e37f-43c0-8ea7-500e0f56eb40
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_vertical_slim
+    - field.field.node.person.field_alternative_name
+    - field.field.node.person.field_author
+    - field.field.node.person.field_date_end
+    - field.field.node.person.field_date_end_year_only
+    - field.field.node.person.field_date_start
+    - field.field.node.person.field_date_start_year_only
+    - field.field.node.person.field_description
+    - field.field.node.person.field_discipline
+    - field.field.node.person.field_end_municipality
+    - field.field.node.person.field_external_link
+    - field.field.node.person.field_external_reference
+    - field.field.node.person.field_gender
+    - field.field.node.person.field_image
+    - field.field.node.person.field_municipality
+    - field.field.node.person.field_publications
+    - field.field.node.person.field_references
+    - field.field.node.person.field_specialisation
+    - field.field.node.person.field_summary
+    - field.field.node.person.field_typology
+    - field.field.node.person.field_wikidata_entry
+    - node.type.person
+  module:
+    - cytoscape_egonetwork
+    - link
+    - relationship_nodes
+    - user
+id: node.person.card_vertical_slim
+targetEntityType: node
+bundle: person
+mode: card_vertical_slim
+content:
+  computed_relationshipfield__person__concept:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings: {  }
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  computed_relationshipfield__person__document:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings: {  }
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  computed_relationshipfield__person__institution:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings: {  }
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  computed_relationshipfield__person__instrument:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings: {  }
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  computed_relationshipfield__person__person:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings: {  }
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  computed_relationshipfield__person__place:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings: {  }
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  computed_relationshipfield__person__story:
+    type: relationship_formatter
+    label: above
+    settings:
+      field_settings: {  }
+      sort_by_field: ''
+      group_by_field: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_external_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  show_ego_network:
+    type: cytoscape_egonetwork
+    label: hidden
+    settings:
+      language_unavailable: hide
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_alternative_name: true
+  field_author: true
+  field_date_end: true
+  field_date_end_year_only: true
+  field_date_start: true
+  field_date_start_year_only: true
+  field_description: true
+  field_discipline: true
+  field_end_municipality: true
+  field_external_reference: true
+  field_gender: true
+  field_image: true
+  field_municipality: true
+  field_publications: true
+  field_references: true
+  field_specialisation: true
+  field_summary: true
+  field_typology: true
+  field_wikidata_entry: true
+  footnotes_group: true
+  langcode: true
+  search_api_excerpt: true
+  toc_js: true

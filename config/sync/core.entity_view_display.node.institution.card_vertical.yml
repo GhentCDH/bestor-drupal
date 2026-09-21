@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.institution.field_date_start_year_only
     - field.field.node.institution.field_description
     - field.field.node.institution.field_discipline
+    - field.field.node.institution.field_external_reference
     - field.field.node.institution.field_geolocation
     - field.field.node.institution.field_image
     - field.field.node.institution.field_municipality
@@ -20,11 +21,14 @@ dependencies:
     - field.field.node.institution.field_specialisation
     - field.field.node.institution.field_summary
     - field.field.node.institution.field_typology
+    - field.field.node.institution.field_wikidata_entry
     - node.type.institution
   module:
+    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - geofield
+    - link
     - user
 id: node.institution.card_vertical
 targetEntityType: node
@@ -149,10 +153,30 @@ content:
     third_party_settings: {  }
     weight: 9
     region: content
+  field_wikidata_entry:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 8
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  show_ego_network:
+    type: cytoscape_egonetwork
+    label: hidden
+    settings:
+      language_unavailable: hide
+    third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   computed_relationshipfield__institution__concept: true
@@ -163,7 +187,9 @@ hidden:
   computed_relationshipfield__institution__place: true
   computed_relationshipfield__institution__story: true
   field_date_start_year_only: true
+  field_external_reference: true
   field_references: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
+  toc_js: true

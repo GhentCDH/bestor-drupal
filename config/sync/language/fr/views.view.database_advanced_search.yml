@@ -639,4 +639,10 @@ display:
             calculated_relation_type_name:
               label: 'Type de relation'
       title: 'Analyse des données – Instruments'
+  page_8:
+    display_title: 'Critères de discipline'
+    display_options:
+      title: 'Analyse des données – Critères de discipline'
+      menu:
+        title: 'Critères de discipline'
 label: 'Analyse des données'

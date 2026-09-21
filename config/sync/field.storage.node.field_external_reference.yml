@@ -1,0 +1,19 @@
+uuid: 7775bea1-97d1-4f7a-8c14-d16348d60683
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_external_reference
+field_name: field_external_reference
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

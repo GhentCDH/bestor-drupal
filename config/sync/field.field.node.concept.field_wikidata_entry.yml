@@ -1,0 +1,23 @@
+uuid: 43f988ce-4294-4a16-8edf-30c3466807d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wikidata_entry
+    - node.type.concept
+  module:
+    - link
+id: node.concept.field_wikidata_entry
+field_name: field_wikidata_entry
+entity_type: node
+bundle: concept
+label: Wikidata
+description: 'Link to a wikidata entry for this person, like https://www.wikidata.org/wiki/Q42'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

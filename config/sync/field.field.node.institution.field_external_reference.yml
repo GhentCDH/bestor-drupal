@@ -1,0 +1,23 @@
+uuid: 3f644f31-906e-4b2c-ab50-6ff1ed25a2a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_external_reference
+    - node.type.institution
+  module:
+    - link
+id: node.institution.field_external_reference
+field_name: field_external_reference
+entity_type: node
+bundle: institution
+label: 'Other external references'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 16
+field_type: link

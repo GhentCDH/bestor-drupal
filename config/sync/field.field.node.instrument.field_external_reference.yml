@@ -1,0 +1,23 @@
+uuid: ba3b96a9-b653-4ec1-a5a1-5021eb000ad4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_external_reference
+    - node.type.instrument
+  module:
+    - link
+id: node.instrument.field_external_reference
+field_name: field_external_reference
+entity_type: node
+bundle: instrument
+label: 'Other external references'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 16
+field_type: link

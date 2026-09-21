@@ -5,36 +5,55 @@
 <div class="database-filters">
   <p class="database-filters__heading">{{ 'Search by'|t }} {{ form['#view_menu_title']|lower }}</p>
 
-  {# --- Fulltext search --- #}
-  <details class="database-filters-section" id="filters-search" open>
-    <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Search'|t }}</span></summary>
-    <div class="database-filters-row database-filters-row--2">
-      {% if form.full is not empty %}
-        <div class="database-filters-field">{{ form.full }}</div>
-      {% endif %}
-      {% if form.title is not empty %}
-        <div class="database-filters-field">{{ form.title }}</div>
-      {% endif %}
-    </div>
-    {% if form.creator is not empty or form.inventor is not empty %}
-      <div class="database-filters-row database-filters-row--2">
-        {% if form.creator is not empty %}
-          <div class="database-filters-field">{{ form.creator }}</div>
+  {% if form['#id'] === 'views-exposed-form-database-advanced-search-page-8' %}
+    <details class="database-filters-section" id="filters-disciplines" open>
+      <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Disciplines'|t }}</span></summary>
+      <div class="database-filters-row database-filters-row--3">
+        {% if form.discipline is not empty %}
+          <div class="database-filters-field">{{ form.discipline }}</div>
         {% endif %}
-        {% if form.inventor is not empty %}
-          <div class="database-filters-field">{{ form.inventor }}</div>
+        {% if form.specialisation is not empty %}
+          <div class="database-filters-field">{{ form.specialisation }}</div>
+        {% endif %}
+        {% if form.category is not empty %}
+          <div class="database-filters-field">{{ form.category }}</div>
         {% endif %}
       </div>
-    {% endif %}
-  </details>
+    </details>
+    <details class="database-filters-section" id="filters-search">
+  {% else %}
+  {# --- Fulltext search --- #}
+    <details class="database-filters-section" id="filters-search" open>
+  {% endif %}
+      <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Search'|t }}</span></summary>
+      <div class="database-filters-row database-filters-row--2">
+        {% if form.full is not empty %}
+          <div class="database-filters-field">{{ form.full }}</div>
+        {% endif %}
+        {% if form.title is not empty %}
+          <div class="database-filters-field">{{ form.title }}</div>
+        {% endif %}
+      </div>
+      {% if form.creator is not empty or form.inventor is not empty %}
+        <div class="database-filters-row database-filters-row--2">
+          {% if form.creator is not empty %}
+            <div class="database-filters-field">{{ form.creator }}</div>
+          {% endif %}
+          {% if form.inventor is not empty %}
+            <div class="database-filters-field">{{ form.inventor }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </details>
 
   {# --- Taxonomy / type filters --- #}
-  {% if form.discipline is not empty
+  {% if form['#id'] != 'views-exposed-form-database-advanced-search-page-8' and
+    (form.discipline is not empty
     or form.specialisation is not empty
     or form.profile is not empty
     or form.gender is not empty
     or form.country is not empty
-    or form.category is not empty %}
+    or form.category is not empty) %}
     <details class="database-filters-section" id="filters-characteristics">
       <summary class="database-filters-section__title"><span><span class="filter-badge" hidden></span>{{ 'Characteristics'|t }}</span></summary>
       <div class="database-filters-row database-filters-row--3">

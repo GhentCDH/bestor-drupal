@@ -13,14 +13,18 @@ dependencies:
     - field.field.node.document.field_date_start_year_only
     - field.field.node.document.field_description
     - field.field.node.document.field_discipline
+    - field.field.node.document.field_external_reference
     - field.field.node.document.field_image
     - field.field.node.document.field_references
     - field.field.node.document.field_specialisation
     - field.field.node.document.field_summary
+    - field.field.node.document.field_wikidata_entry
     - node.type.document
   module:
+    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
+    - link
     - user
 id: node.document.teaser
 targetEntityType: node
@@ -110,10 +114,30 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
+  field_wikidata_entry:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 8
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  show_ego_network:
+    type: cytoscape_egonetwork
+    label: hidden
+    settings:
+      language_unavailable: hide
+    third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   computed_relationshipfield__document__concept: true
@@ -125,7 +149,9 @@ hidden:
   computed_relationshipfield__document__story: true
   field_date_end_year_only: true
   field_date_start_year_only: true
+  field_external_reference: true
   field_references: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
+  toc_js: true

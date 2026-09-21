@@ -11,16 +11,19 @@ dependencies:
     - field.field.node.concept.field_date_start_year_only
     - field.field.node.concept.field_description
     - field.field.node.concept.field_discipline
+    - field.field.node.concept.field_external_reference
     - field.field.node.concept.field_image
     - field.field.node.concept.field_inventor
     - field.field.node.concept.field_references
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
+    - field.field.node.concept.field_wikidata_entry
     - node.type.concept
   module:
     - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
+    - link
     - user
 id: node.concept.default
 targetEntityType: node
@@ -70,6 +73,18 @@ content:
     third_party_settings: {  }
     weight: 7
     region: content
+  field_external_reference:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 102
+    region: content
   field_image:
     type: entity_reference_entity_view
     label: inline
@@ -99,6 +114,18 @@ content:
     type: basic_string
     label: hidden
     settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_wikidata_entry:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
     third_party_settings: {  }
     weight: 8
     region: content

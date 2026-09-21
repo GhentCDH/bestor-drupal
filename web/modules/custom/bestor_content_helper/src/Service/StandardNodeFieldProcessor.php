@@ -134,7 +134,7 @@ class StandardNodeFieldProcessor {
         'icon' => '',
       ],
       'linked_data' => [
-        'fields' => ['field_wikidata_entry'],
+        'fields' => ['field_wikidata_entry', 'field_external_reference'],
         'label_override' => t('See also'),
         'icon' => '',
       ],
@@ -609,6 +609,7 @@ class StandardNodeFieldProcessor {
       'birth_death' => $this->lifeDataFormatter($values),
       'period' => $this->periodDataFormatter($values),
       'birth', 'death', 'location' => $this->twoFieldsKeyDataFormatter($values),
+      'linked_data'=> $this->commaSeparatedListFormatter($values),
       default => $this->defaultDataFormatter($values),
     };
 
@@ -809,6 +810,42 @@ class StandardNodeFieldProcessor {
 
     $citation .= '"' . $title . '," ' . $in_label . ' <em>Bestor</em>, ' . $changed_label . ' ' . $changed_time . ', ' . $url . '.';
     return Markup::create($citation);
+  }
+
+
+  /**
+   * Format all values as a single comma-separated list.
+   *
+   * Flattens per-field arrays (e.g. multiple links per field, multiple
+   * fields merged together) into one flat, comma-separated Markup string.
+   *
+   * @param array $values
+   *   Values array, each entry possibly itself an array of Markup/strings.
+   *
+   * @return string|Markup
+   *   Comma-separated rendered list, or empty string if nothing to show.
+   */
+  protected function commaSeparatedListFormatter(array $values): string|Markup {
+    $flat = [];
+    array_walk_recursive($values, function ($item) use (&$flat) {
+      if ($item !== NULL && $item !== '') {
+        $flat[] = $item;
+      }
+    });
+
+    if (empty($flat)) {
+      return '';
+    }
+
+    $rendered = implode(', ', array_map([$this, 'renderValue'], $flat));
+
+    foreach ($flat as $item) {
+      if ($item instanceof Markup) {
+        return Markup::create($rendered);
+      }
+    }
+
+    return $rendered;
   }
 
 }

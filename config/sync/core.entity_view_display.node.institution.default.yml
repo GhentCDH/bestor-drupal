@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.institution.field_date_start_year_only
     - field.field.node.institution.field_description
     - field.field.node.institution.field_discipline
+    - field.field.node.institution.field_external_reference
     - field.field.node.institution.field_geolocation
     - field.field.node.institution.field_image
     - field.field.node.institution.field_municipality
@@ -19,12 +20,14 @@ dependencies:
     - field.field.node.institution.field_specialisation
     - field.field.node.institution.field_summary
     - field.field.node.institution.field_typology
+    - field.field.node.institution.field_wikidata_entry
     - node.type.institution
   module:
     - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - leaflet
+    - link
     - user
 id: node.institution.default
 targetEntityType: node
@@ -99,6 +102,18 @@ content:
       link: true
     third_party_settings: {  }
     weight: 9
+    region: content
+  field_external_reference:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 102
     region: content
   field_geolocation:
     type: leaflet_formatter_default
@@ -233,6 +248,18 @@ content:
     label: hidden
     settings:
       link: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_wikidata_entry:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
     third_party_settings: {  }
     weight: 8
     region: content

@@ -11,15 +11,18 @@ dependencies:
     - field.field.node.story.field_date_start_year_only
     - field.field.node.story.field_description
     - field.field.node.story.field_discipline
+    - field.field.node.story.field_external_reference
     - field.field.node.story.field_image
     - field.field.node.story.field_references
     - field.field.node.story.field_specialisation
     - field.field.node.story.field_summary
+    - field.field.node.story.field_wikidata_entry
     - node.type.story
   module:
     - datetime
     - entity_reference_modal
     - field_group
+    - link
     - media_library
     - media_library_edit
     - paragraphs
@@ -35,6 +38,7 @@ third_party_settings:
         - group_content
         - group_tags
         - group_relations
+        - group_linked_data
         - group_metadata
       label: base_form
       region: content
@@ -252,7 +256,7 @@ third_party_settings:
       label: Metadata
       region: content
       parent_name: group_base_form
-      weight: 24
+      weight: 25
       format_type: tab
       format_settings:
         classes: ''
@@ -268,6 +272,23 @@ third_party_settings:
       label: Persons
       region: content
       parent_name: group_relation_types
+      weight: 24
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_linked_data:
+      children:
+        - field_wikidata_entry
+        - field_external_reference
+      label: 'Linked data'
+      region: content
+      parent_name: group_base_form
       weight: 24
       format_type: tab
       format_settings:
@@ -505,6 +526,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_external_reference:
+    type: link_default
+    weight: 3
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
   field_image:
     type: media_library_widget
     weight: 5
@@ -536,6 +565,14 @@ content:
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  field_wikidata_entry:
+    type: link_default
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   langcode:
     type: language_select

@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.place.field_date_start_year_only
     - field.field.node.place.field_description
     - field.field.node.place.field_discipline
+    - field.field.node.place.field_external_reference
     - field.field.node.place.field_geolocation
     - field.field.node.place.field_image
     - field.field.node.place.field_municipality
@@ -19,12 +20,14 @@ dependencies:
     - field.field.node.place.field_specialisation
     - field.field.node.place.field_summary
     - field.field.node.place.field_typology
+    - field.field.node.place.field_wikidata_entry
     - node.type.place
   module:
     - datetime
     - entity_reference_modal
     - field_group
     - leaflet
+    - link
     - media_library
     - media_library_edit
     - paragraphs
@@ -40,6 +43,7 @@ third_party_settings:
         - group_content
         - group_tags
         - group_relations
+        - group_linked_data
         - group_metadata
       label: base_form
       region: content
@@ -277,6 +281,23 @@ third_party_settings:
       label: Metadata
       region: content
       parent_name: group_base_form
+      weight: 9
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_linked_data:
+      children:
+        - field_wikidata_entry
+        - field_external_reference
+      label: 'Linked data'
+      region: content
+      parent_name: group_base_form
       weight: 8
       format_type: tab
       format_settings:
@@ -507,6 +528,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_external_reference:
+    type: link_default
+    weight: 3
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
   field_geolocation:
     type: leaflet_widget_default
     weight: 10
@@ -634,6 +663,14 @@ content:
     weight: 23
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_wikidata_entry:
+    type: link_default
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   langcode:
     type: language_select
