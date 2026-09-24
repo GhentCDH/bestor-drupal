@@ -1,6 +1,6 @@
 .advanced-search-filters,
 .view-database-advanced-search-affiliations .view-header {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .database-filters {
@@ -16,7 +16,7 @@
 /* Subtle heading strip — present but not dominant */
 .database-filters__heading {
   margin: 0;
-  padding: .4rem 1rem;
+  padding: .3rem 1rem;
   font-family: var(--font-family-sans-serif);
   letter-spacing: .1em;
   color: var(--color-white, #fff);
@@ -42,7 +42,7 @@
   list-style: none;
   cursor: pointer;
   user-select: none;
-  padding: 10px 30px;
+  padding: 2px 30px;
   background: color-mix(in srgb, var(--color-grey-light, #f0f0f0) 100%, #000 10%);
   border-bottom: 1px solid transparent;
   transition: background .15s ease;
@@ -62,7 +62,7 @@
 
 /* Content zone: white, with unified padding */
 .database-filters-section[open] > *:not(summary) {
-  padding: 10px 30px;
+  padding: 5px 30px 15px;
   background: var(--color-white, #fff);
 }
 
@@ -151,7 +151,7 @@
 .database-filters-actions {
   display: flex;
   gap: .5rem;
-  margin-top: .75rem;
+  margin-top: 0;
 }
 
 /* ---------------------------------------------------------------------------
@@ -186,7 +186,7 @@
 }
 
 .database-filters-rel-tab {
-  padding: .375rem .75rem;
+  padding: .3rem .75rem;
   font-family: var(--font-family-sans-serif);
   font-size: .8125rem;
   color: var(--color-grey);
@@ -217,7 +217,7 @@
 }
 
 .database-filters-rel-forms {
-  padding: .75rem;
+  padding: .3rem .75rem;
 }
 
 .database-filters-rel-form {
@@ -294,4 +294,23 @@
   padding-left:1.5rem;
   background-color: var(--color-grey);
   clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
+}
+
+/* Input and select overrides */
+
+.advanced-search-filters input,
+.advanced-search-filters select {
+  padding: 0.35rem 1.6875rem !important;
+}
+
+.advanced-search-filters .form-item{
+  margin-bottom:4px !important
+}
+
+.advanced-search-filters  legend {
+  margin-bottom: 0px !important
+}
+
+.advanced-search-filters .date-range-filter {
+  margin-top:20px !important;
 }

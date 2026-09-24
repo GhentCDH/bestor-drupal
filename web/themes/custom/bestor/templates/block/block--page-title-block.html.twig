@@ -35,7 +35,6 @@
 ] %}
 
 {% set attr_variant = bestor('page_variant') %}
-
 {% if attr_variant == 'lemma' %}
   {% set author_names = bestor('field_values', node, 'field_author') %}
   {% if author_names %}

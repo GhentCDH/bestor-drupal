@@ -70,11 +70,19 @@ class CurrentPageAnalyzer {
     return TRUE;
   }
 
+
+  public function isDataAnalysisView(): bool {
+    $view_id = $this->routeMatch->getParameter('view_id');
+    return in_array($view_id, ['database_advanced_search', 'database_advanced_search_affiliations'], TRUE);
+  }
+
   public function getPageVariant(): string {
     if ($this->currentPageIsLemma()) {
       return 'lemma';
     } elseif ($this->isMainSearchView()) {
       return 'search';
+    } elseif ($this->isDataAnalysisView()) {
+      return 'data-analysis';
     }
     return 'default';
   }

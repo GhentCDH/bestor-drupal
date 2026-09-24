@@ -14,20 +14,6 @@
     }
   };
 
-  // Highlight active BEF checkbox facets immediately (no transition delay).
-  Drupal.behaviors.instantFacetHighlight = {
-    attach: function (context) {
-      once('instant-facet', '.bef-checkboxes input[type="checkbox"]', context).forEach(function(checkbox) {
-        const formItem = checkbox.closest('.js-form-type-checkbox');
-        if (!formItem) return;
-        formItem.classList.toggle('highlight', checkbox.checked);
-        checkbox.addEventListener('change', function() {
-          formItem.classList.toggle('highlight', this.checked);
-        }, true);
-      });
-    }
-  };
-
   // Trigger auto-submit after Selectize widget interactions.
   Drupal.behaviors.selectifyAutoSubmit = {
     attach: function (context) {

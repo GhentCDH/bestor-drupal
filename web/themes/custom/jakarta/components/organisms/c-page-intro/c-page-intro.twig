@@ -52,12 +52,23 @@
         </div>
       {% endif %}
     {% endif %}
-    {% if attr_variant is same as ('search') %}
-      {% if search %}
-        <div class="{{ component_name }}__search">
-          {{ search }}
-        </div>
-      {% endif %}
+    {% if attr_variant is same as ('search') or attr_variant is same as ('data-analysis') %}
+      <div class="{{ component_name }}__search">
+        {% if attr_variant is same as ('search') %}
+          {% if search %}
+            {{ search }}
+          {% endif %}
+          <a href="{{ path('view.database_advanced_search.page_6') }}" class="c-header-data-analysis-link" aria-label="{{ 'Go to the advanced data analysis page'|t }}" title="{{ 'Go to the advanced data analysis page'|t }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+          </a>
+        {% elseif attr_variant is same as ('data-analysis') %}
+          <a href="{{ path('view.database.page_1') }}" class="c-header-data-analysis-link" aria-label="{{ 'Go to the main search page'|t }}" title="{{ 'Go to the main search page'|t }}">
+            <i class="c-icon c-icon--search c-icon--search--before"></i>
+          </a>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
 {% endblock %}

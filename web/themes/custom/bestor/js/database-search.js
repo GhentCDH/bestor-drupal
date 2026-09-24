@@ -17,17 +17,20 @@
   // Highlight active BEF checkbox facets immediately (no transition delay).
   Drupal.behaviors.instantFacetHighlight = {
     attach: function (context) {
-      once('instant-facet', '.bef-checkboxes input[type="checkbox"]', context).forEach(function(checkbox) {
+      context.querySelectorAll('.bef-checkboxes input[type="checkbox"]').forEach(function(checkbox) {
         const formItem = checkbox.closest('.js-form-type-checkbox');
         if (!formItem) return;
         formItem.classList.toggle('highlight', checkbox.checked);
+      });
+      once('instant-facet', '.bef-checkboxes input[type="checkbox"]', context).forEach(function(checkbox) {
+        const formItem = checkbox.closest('.js-form-type-checkbox');
+        if (!formItem) return;
         checkbox.addEventListener('change', function() {
           formItem.classList.toggle('highlight', this.checked);
         }, true);
       });
     }
   };
-
   // Trigger auto-submit after Selectize widget interactions.
   Drupal.behaviors.selectifyAutoSubmit = {
     attach: function (context) {
@@ -139,15 +142,21 @@
       once('summary-fixes', 'body', context).forEach(() => {
         if (!Drupal.ViewsFiltersSummaryHandler) return;
 
-        // Fix 1: nested input names.
+        // Fix 1: nested input names (reset button).
         const origReset = Drupal.ViewsFiltersSummaryHandler.prototype.reset;
         Drupal.ViewsFiltersSummaryHandler.prototype.reset = function (exposedForm, filterIds) {
           origReset.call(this, exposedForm, filterIds);
           if (!filterIds || !filterIds.length) return;
           filterIds.forEach(id => {
             exposedForm.querySelectorAll(`select[name^="${id}["], input[name^="${id}["]`).forEach(el => {
-              if (el.tagName === 'SELECT') el.selectedIndex = -1;
-              else el.value = '';
+              if (el.tagName === 'SELECT') {
+                el.selectedIndex = -1;
+              } else if (el.type === 'checkbox' || el.type === 'radio') {
+                el.checked = false;
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+              } else {
+                el.value = '';
+              }
             });
           });
         };
@@ -157,6 +166,30 @@
         Drupal.ViewsFiltersSummaryHandler.prototype.getFilterSubmit = function (exposedForm) {
           return exposedForm.querySelector('[data-bef-auto-submit-click]')
             || origGetSubmit.call(this, exposedForm);
+        };
+
+        // Fix 3: individual facet removal (×-chip) doesn't dispatch 'change',
+        // so instantFacetHighlight's highlight class never updates.
+        const origOnRemoveClick = Drupal.ViewsFiltersSummaryHandler.prototype.onRemoveClick;
+        Drupal.ViewsFiltersSummaryHandler.prototype.onRemoveClick = function (event) {
+          const removeSelector = event.currentTarget.getAttribute('data-remove-selector');
+          const colonIndex = removeSelector.indexOf(':');
+          const selector = removeSelector.substring(0, colonIndex);
+          const exposedForm = this.getExposedForm();
+          const before = new Set();
+          exposedForm.querySelectorAll(`[name^="${selector}"]`).forEach(el => {
+            if ((el.type === 'checkbox' || el.type === 'radio') && el.checked) {
+              before.add(el);
+            }
+          });
+
+          origOnRemoveClick.call(this, event);
+
+          before.forEach(el => {
+            if (!el.checked) {
+              el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          });
         };
       });
     }

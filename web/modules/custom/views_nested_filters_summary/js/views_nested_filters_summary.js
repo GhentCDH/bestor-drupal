@@ -74,17 +74,21 @@
   function resetInput(input, value) {
     if (input.tagName === 'SELECT') {
       if (input.multiple) {
-        // Deselect only the matching option
         Array.from(input.options).forEach(opt => {
           if (opt.value === value) opt.selected = false;
         });
       } else {
         input.selectedIndex = -1;
       }
+      input.dispatchEvent(new Event('change', { bubbles: true }));
       return true;
     }
     if (input.type === 'checkbox' || input.type === 'radio') {
-      if (input.value === value) { input.checked = false; return true; }
+      if (input.value === value) {
+        input.checked = false;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        return true;
+      }
       return false;
     }
     if (input.type === 'hidden') {
@@ -93,6 +97,7 @@
     }
     // text, search, number, date, …
     input.value = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
     return true;
   }
 
