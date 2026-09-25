@@ -55,6 +55,10 @@ drush deploy:hook
 echo "Setting admin password"
 drush user:password admin "$DRUPAL_ADMIN_PW"
 
+drush search-api:reset-tracker 2>/dev/null || true
+drush search-api:rebuild-tracker 2>/dev/null || true
+drush search-api:index
+
 echo "Running supervisord!"
 # start the main container command
 exec supervisord
