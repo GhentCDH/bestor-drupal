@@ -13067,7 +13067,7 @@ display:
           exposed: true
           expose:
             operator_id: content_type_str_op
-            label: 'Content type'
+            label: Type
             description: ''
             use_operator: false
             operator: content_type_str_op

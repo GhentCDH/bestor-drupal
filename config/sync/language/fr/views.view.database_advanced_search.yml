@@ -645,4 +645,25 @@ display:
       title: 'Analyse des données – Critères de discipline'
       menu:
         title: 'Critères de discipline'
+      filters:
+        search_api_fulltext:
+          expose:
+            label: 'Recherche libre'
+        search_api_fulltext_1:
+          expose:
+            label: Titre
+        search_api_range_filter:
+          expose:
+            label: Période
+          from_label: De
+          to_label: À
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Spécialisation
+        sapi_language_fallback_filter:
+          expose:
+            label: Langue
 label: 'Analyse des données'

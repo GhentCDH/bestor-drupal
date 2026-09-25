@@ -678,4 +678,28 @@ display:
       title: 'Data-analyse – Disciplinecriteria'
       menu:
         title: Disciplinecriteria
+      filters:
+        search_api_fulltext:
+          expose:
+            label: 'Vrij zoeken'
+        search_api_fulltext_1:
+          expose:
+            label: Titel
+        search_api_range_filter:
+          expose:
+            label: Periode
+          from_label: Van
+          to_label: Tot
+        tax_author_int:
+          expose:
+            label: Auteur
+        tax_specialisation_int:
+          expose:
+            label: Specialisatie
+        sapi_language_fallback_filter:
+          expose:
+            label: Taal
+        content_type_str:
+          expose:
+            label: Type
 label: Data-analyse
