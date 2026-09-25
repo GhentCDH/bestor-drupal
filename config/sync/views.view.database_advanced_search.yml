@@ -14,15 +14,12 @@ dependencies:
     - taxonomy.vocabulary.place_type
     - taxonomy.vocabulary.profile
     - taxonomy.vocabulary.specialisation
-    - user.role.administrator
-    - user.role.web_manager
   module:
     - better_exposed_filters
     - relationship_nodes_search
     - sapi_language_fallback
     - search_api
     - search_api_range_filter
-    - user
     - views_filters_summary
 id: database_advanced_search
 label: 'Advanced search'
@@ -356,11 +353,8 @@ display:
                   hide_label: false
                   field_classes: ''
       access:
-        type: role
-        options:
-          role:
-            web_manager: web_manager
-            administrator: administrator
+        type: none
+        options: {  }
       cache:
         type: search_api_none
         options: {  }
@@ -3930,7 +3924,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -5140,7 +5133,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -6405,7 +6397,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -7670,7 +7661,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -9044,7 +9034,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -10308,7 +10297,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -11705,7 +11693,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -13007,7 +12994,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
@@ -13510,7 +13496,6 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_alternative_name'
         - 'config:search_api.index.bestor_main_search_index'
