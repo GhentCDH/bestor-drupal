@@ -58,14 +58,22 @@
           {% if search %}
             {{ search }}
           {% endif %}
-          <a href="{{ path('view.database_advanced_search.page_6') }}" class="c-header-data-analysis-link" aria-label="{{ 'Go to the advanced data analysis page'|t }}" title="{{ 'Go to the advanced data analysis page'|t }}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <a href="{{ path('view.database_advanced_search.page_6') }}" class="c-header-data-analysis-link c-header-data-analysis-link--labelled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <span>{{ 'Data analysis'|t }}</span>
+            <svg class="c-header-data-analysis-link__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 6 15 12 9 18"></polyline>
             </svg>
           </a>
         {% elseif attr_variant is same as ('data-analysis') %}
-          <a href="{{ path('view.database.page_1') }}" class="c-header-data-analysis-link" aria-label="{{ 'Go to the main search page'|t }}" title="{{ 'Go to the main search page'|t }}">
-            <i class="c-icon c-icon--search c-icon--search--before"></i>
+          <a href="{{ path('view.database.page_1') }}" class="c-header-data-analysis-link c-header-data-analysis-link--labelled">
+            <i class="c-icon c-icon--search c-icon--search--before" aria-hidden="true"></i>
+            <span>{{ 'Default search'|t }}</span>
+            <svg class="c-header-data-analysis-link__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 6 15 12 9 18"></polyline>
+            </svg>
           </a>
         {% endif %}
       </div>

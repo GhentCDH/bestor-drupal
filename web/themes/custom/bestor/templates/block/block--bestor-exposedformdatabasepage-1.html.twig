@@ -1,0 +1,9 @@
+{% extends "@jakarta/block/block.html.twig" %}
+
+{% block content %}
+  <details class="database-filters-section database-filters-toggle" id="database-filters" open>
+    <summary class="database-filters-section__title"><span><span class="filter-badge"></span>{{ 'Filters'|t }}</span></summary>
+    {{ parent() }}
+  </details>
+{% endblock %}
+

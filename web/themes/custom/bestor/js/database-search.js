@@ -195,4 +195,47 @@
     }
   };
 
+  // Mobile: collapse the filter panel; desktop: always open.
+  Drupal.behaviors.databaseFiltersToggle = {
+    attach(context) {
+      once('filters-toggle', '.database-filters-toggle', context).forEach(details => {
+        const mq = window.matchMedia('(max-width: 61.25em)');
+        const sync = () => { details.open = !mq.matches; };
+        sync();
+        mq.addEventListener('change', sync);
+      });
+    }
+  };
+
+  // Filter badge on the collapsible panel: primary colour when any filter is active.
+  Drupal.behaviors.databaseFiltersBadge = {
+    attach() {
+      const details = document.querySelector('.database-filters-toggle');
+      if (!details) return;
+
+      const update = () => {
+        const badge = details.querySelector(':scope > summary .filter-badge');
+        if (!badge) return;
+        let active = false;
+        details.querySelectorAll('input[name], select[name], textarea[name]').forEach(el => {
+          if (el.type === 'hidden' || el.type === 'submit') return;
+          if (el.type === 'checkbox' || el.type === 'radio') {
+            if (el.checked) active = true;
+          } else if (el.tagName === 'SELECT') {
+            if (el.value !== '' && el.value !== 'All') active = true;
+          } else if (el.value.trim() !== '') {
+            active = true;
+          }
+        });
+        badge.classList.toggle('is-active', active);
+      };
+
+      update();
+      once('filters-badge', details).forEach(el => {
+        el.addEventListener('change', update);
+        el.addEventListener('input', update);
+      });
+    }
+  };
+
 })(jQuery, Drupal, once);

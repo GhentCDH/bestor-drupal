@@ -1,0 +1,566 @@
+/* ===========================================================================
+ * SEARCH FILTERS
+ * Loaded only on the search pages (default search and data analysis).
+ * ===========================================================================
+ */
+
+
+/* ---------------------------------------------------------------------------
+ * 1. Shared: accordion sections
+ * Used by the data analysis form and the collapsible panel on /database.
+ * --------------------------------------------------------------------------- */
+
+.database-filters-section {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--color-border-grey-light);
+}
+
+.database-filters-section:last-of-type {
+  border-bottom: none;
+}
+
+.database-filters-section summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 2px 30px;
+  background: color-mix(in srgb, var(--color-grey-light, #f0f0f0) 100%, #000 10%);
+  border-bottom: 1px solid transparent;
+  transition: background .15s ease;
+}
+
+.database-filters-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.database-filters-section summary:hover {
+  filter: brightness(.95);
+}
+
+.database-filters-section[open] > summary {
+  border-bottom-color: var(--color-border-grey-light);
+}
+
+.database-filters-section[open] > *:not(summary) {
+  padding: 5px 30px 15px;
+  background: var(--color-white, #fff);
+}
+
+.database-filters-section__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  font-family: var(--font-family-sans-serif);
+  font-size: var(--font-h4-size);
+  font-weight: var(--font-weight-medium);
+}
+
+.database-filters-section__title > span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.database-filters-section__title::after {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: .625rem;
+  height: .625rem;
+  border-right: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  transform: rotate(45deg) translateY(-.2rem);
+  transition: transform .2s ease;
+}
+
+.database-filters-section[open] > .database-filters-section__title::after {
+  transform: translateY(.2rem) rotate(-135deg);
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 2. Shared: active filter badge
+ * --------------------------------------------------------------------------- */
+
+.filter-badge {
+  display: inline-block;
+  flex-shrink: 0;
+  width: .4rem;
+  height: .4rem;
+  margin-right: .4rem;
+  border-radius: 50%;
+  background: var(--color-grey, #aaa);
+  transition: background .15s ease;
+}
+
+.filter-badge.is-active {
+  background: var(--color-primary);
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 3. Shared: date range fields
+ * --------------------------------------------------------------------------- */
+
+.date-range-filter > .fieldset-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(5px, 2vw, 20px);
+}
+
+.date-range-filter > .fieldset-wrapper > * {
+  flex: 1 1 100px;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 4. Shared: views filter summary
+ * --------------------------------------------------------------------------- */
+
+.views-filters-summary .value-container {
+  display: inline-flex;
+  margin: 0 .3rem;
+  padding: .25rem;
+  border: 2px solid var(--color-grey-light);
+  border-radius: .25rem;
+  background-color: var(--color-grey-light);
+  color: var(--color-grey);
+  font-family: var(--font-family-sans-serif);
+  font-size: .8rem;
+  line-height: 1;
+}
+
+.views-filters-summary .value-container .value {
+  margin-bottom: unset;
+  border: unset;
+}
+
+.views-filters-summary a.remove-filter {
+  background-color: unset;
+  font-size: 12px;
+}
+
+.views-filters-summary .reset {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  padding: .2rem .4rem;
+  border: 2px solid var(--color-primary);
+  border-radius: .25rem;
+  background: var(--color-primary);
+  color: var(--color-light) !important;
+  font-family: var(--font-family-sans-serif);
+  font-size: .8rem;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: none;
+  transition: var(--transition-eased);
+}
+
+.views-filters-summary .reset:hover {
+  background: transparent;
+  color: var(--color-primary) !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 5. Shared: page intro search
+ * --------------------------------------------------------------------------- */
+
+.c-page-intro__search .block-database-full-text-search-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.c-page-intro__search .c-header-data-analysis-link--labelled .c-icon {
+  font-size: 1rem;
+}
+
+@media screen and (min-width: 61.25em) {
+  .c-page-intro--search .c-page-intro__search {
+    flex: 1 1 auto;
+    min-width: 20rem;
+    max-width: 36.875rem;
+    margin-inline-start: auto;
+  }
+}
+
+@media screen and (max-width: 61.1875em) {
+  .c-page-intro__search {
+    flex-wrap: wrap;
+  }
+
+  .c-page-intro--search .c-page-intro__search,
+  .c-page-intro--data-analysis .c-page-intro__search {
+    margin-block-start: 1.25rem;
+  }
+
+  .c-page-intro__search .block-database-full-text-search-block {
+    flex: 1 1 100%;
+  }
+
+  .c-page-intro__search .c-header-data-analysis-link--labelled {
+    height: auto;
+    gap: .375rem;
+    margin: .5rem 0 0 auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: .8125rem;
+  }
+
+  .c-page-intro__search .c-header-data-analysis-link--labelled svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .main .page-sidebar:has(.menu--advanced-search, #database-filters) {
+    margin-block-end: 1.5rem;
+  }
+
+  .c-grid {
+    padding-block: 1rem 2rem;
+  }
+
+  .main .page-content-wrapper:has(.menu--advanced-search, #database-filters) {
+    padding-block-start: 2.5rem;
+  }
+}
+
+
+/* ===========================================================================
+ * DATA ANALYSIS
+ * ===========================================================================
+ */
+
+
+/* ---------------------------------------------------------------------------
+ * 6. Filter container
+ * --------------------------------------------------------------------------- */
+
+.advanced-search-filters,
+.view-database-advanced-search-affiliations .view-header {
+  margin-bottom: 15px;
+}
+
+.database-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border-grey-light);
+  border-radius: .75rem;
+  background: var(--color-white, #fff);
+}
+
+.database-filters__heading {
+  margin: 0;
+  padding: .3rem 1rem;
+  background: var(--color-primary);
+  color: var(--color-white, #fff);
+  font-family: var(--font-family-sans-serif);
+  letter-spacing: .1em;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 7. Form fields
+ * --------------------------------------------------------------------------- */
+
+.database-filters-row {
+  display: grid;
+  gap: .5rem;
+}
+
+.database-filters-row--2 { grid-template-columns: 1fr 1fr; }
+.database-filters-row--3 { grid-template-columns: 1fr 1fr 1fr; }
+.database-filters-row--4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+.database-filters-field {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.database-filters-field label {
+  color: var(--color-grey, #888);
+  font-family: var(--font-family-sans-serif);
+  font-size: .75rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.database-filters .database-filters-section input,
+.database-filters .database-filters-section select,
+.database-filters .database-filters-section textarea {
+  border: 1px solid var(--color-border-grey-light);
+  background-color: var(--color-grey-light, #f0f0f0);
+}
+
+.advanced-search-filters input,
+.advanced-search-filters select {
+  padding: .35rem 1.6875rem !important;
+}
+
+.advanced-search-filters .form-item {
+  margin-bottom: 4px !important;
+}
+
+.advanced-search-filters legend {
+  margin-bottom: 0 !important;
+}
+
+.advanced-search-filters .date-range-filter {
+  margin-top: 20px !important;
+}
+
+@media screen and (max-width: 61.25em) {
+  .database-filters-row--2,
+  .database-filters-row--3,
+  .database-filters-row--4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 8. Period section
+ * --------------------------------------------------------------------------- */
+
+.database-filters-section--period fieldset > legend {
+  display: none;
+}
+
+.database-filters-section--period .fieldset-wrapper {
+  display: flex;
+  gap: .5rem;
+}
+
+.database-filters-section--period .fieldset-wrapper > .form-item {
+  flex: 1;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 9. Relations tab panel
+ * --------------------------------------------------------------------------- */
+
+.database-filters-rel-layout {
+  display: grid;
+  grid-template-columns: 11.25rem 1fr;
+  overflow: hidden;
+}
+
+.database-filters-rel-nav {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--color-border-grey-light);
+}
+
+.database-filters-rel-tab {
+  padding: .3rem .75rem;
+  border-top: none;
+  border-right: none;
+  border-bottom: 1px solid var(--color-border-grey-light);
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--color-grey);
+  font-family: var(--font-family-sans-serif);
+  font-size: .8125rem;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition-eased);
+}
+
+.database-filters-rel-tab:last-child {
+  border-bottom: none;
+}
+
+.database-filters-rel-tab:hover {
+  background: var(--color-grey-light);
+  color: var(--color-dark);
+}
+
+.database-filters-rel-tab.is-active {
+  border-left-color: var(--color-primary);
+  background: var(--color-grey-light);
+  color: var(--color-dark);
+  font-weight: var(--font-weight-medium);
+}
+
+.database-filters-rel-forms {
+  padding: .3rem .75rem;
+}
+
+.database-filters-rel-form {
+  display: none;
+}
+
+.database-filters-rel-form.is-active {
+  display: block;
+}
+
+.database-filters-rel-form fieldset.relationship-child-field-wrapper {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.database-filters-rel-form fieldset.relationship-child-field-wrapper > legend {
+  display: none;
+}
+
+@media screen and (max-width: 61.25em) {
+  .database-filters-rel-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .database-filters-rel-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-grey-light);
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 10. Actions row
+ * --------------------------------------------------------------------------- */
+
+.database-filters-actions {
+  display: flex;
+  gap: .5rem;
+  margin-top: 0;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * 11. Data analysis menu
+ * --------------------------------------------------------------------------- */
+
+.menu--advanced-search .menu__item a {
+  position: relative;
+  display: inline-block;
+  padding: .25rem 2.5rem .25rem .6rem;
+  color: var(--color-grey);
+  font-family: var(--font-family-sans-serif);
+  font-size: .875rem;
+  text-decoration: none;
+  transition: color .15s ease;
+}
+
+.menu--advanced-search .menu__item a:hover {
+  background-color: var(--color-grey-light);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
+}
+
+.menu--advanced-search .menu__item a.is-active {
+  padding-left: 1.5rem;
+  background-color: var(--color-grey);
+  color: #fff;
+  font-weight: var(--font-weight-medium);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
+}
+
+@media screen and (max-width: 61.25em) {
+  .menu--advanced-search > h3 {
+    margin: 0 0 .5rem;
+    font-size: var(--font-h4-size);
+  }
+
+  .menu--advanced-search ul.menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .375rem;
+    margin: 0 0 1.5rem;
+    padding: 0;
+  }
+
+  .menu--advanced-search .menu__item {
+    margin: 0;
+  }
+
+  .menu--advanced-search .menu__item a,
+  .menu--advanced-search .menu__item a:hover,
+  .menu--advanced-search .menu__item a.is-active {
+    padding: .3rem .75rem;
+    border: 1px solid var(--color-border-grey-light);
+    border-radius: 999px;
+    clip-path: none;
+  }
+
+  .menu--advanced-search .menu__item a.is-active {
+    border-color: var(--color-grey);
+  }
+}
+
+
+/* ===========================================================================
+ * DEFAULT SEARCH (/database)
+ * ===========================================================================
+ */
+
+
+/* ---------------------------------------------------------------------------
+ * 12. Collapsible filter panel, only when the sidebar stacks
+ * --------------------------------------------------------------------------- */
+
+.database-filters-toggle > summary {
+  display: none;
+}
+
+details.database-filters-toggle,
+details.database-filters-toggle[open] > *:not(summary) {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+@media screen and (max-width: 61.25em) {
+  .database-filters-toggle > summary {
+    display: flex;
+    min-height: 3rem;
+  }
+
+  details.database-filters-toggle.database-filters-section {
+    --filters-border: color-mix(in srgb, var(--color-border-grey-light), #000 15%);
+    overflow: hidden;
+    border: 1px solid var(--filters-border);
+    border-radius: .9rem;
+  }
+
+  details.database-filters-toggle[open] > *:not(summary) {
+    padding: 20px 30px 15px;
+    background: var(--color-white, #fff);
+  }
+
+  #database-filters .form-item {
+    margin-block: 0;
+  }
+
+  #database-filters fieldset.form-item,
+  #database-filters .form-item.form-item-author {
+    margin-block-end: 1.25rem;
+    padding: 0;
+  }
+
+  #database-filters legend {
+    margin-block-end: .5rem;
+    padding: 0;
+  }
+
+  #database-filters .fieldset-wrapper,
+  #database-filters .form-checkboxes {
+    margin: 0;
+    padding: 0;
+  }
+
+  #database-filters .bef-checkboxes {
+    row-gap: .5rem;
+  }
+}

@@ -12,6 +12,9 @@ global:
     - core/drupal.ajax
 
 database-search:
+  css:
+      theme:
+        css/search-filters.css: {}
   js:
     js/database-search.js: {}
   dependencies:
@@ -23,7 +26,7 @@ database-search:
 advanced-search-filters:
   css:
     theme:
-      css/advanced-search-filters.css: {}
+      css/search-filters.css: {}
   js:
     js/advanced-search-filters.js: {}
   dependencies:

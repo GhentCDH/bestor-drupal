@@ -1,5 +1,50 @@
 <?php
 
+/**
+ * @file
+ * Theme functions for the Bestor theme.
+ */
+
+/**
+ * Views that make up the data analysis interface.
+ */
+const BESTOR_DATA_ANALYSIS_VIEWS = [
+  'database_advanced_search',
+  'database_advanced_search_affiliations',
+];
+
+/**
+ * View of the default database search.
+ */
+const BESTOR_DEFAULT_SEARCH_VIEW = 'database';
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Hides the header search on the search pages themselves, where the page
+ * already provides its own search interface.
+ */
+function bestor_preprocess_page(array &$variables): void {
+  $view_id = bestor_current_view_id();
+  $variables['is_search_page'] = $view_id === BESTOR_DEFAULT_SEARCH_VIEW
+    || in_array($view_id, BESTOR_DATA_ANALYSIS_VIEWS, TRUE);
+  $variables['#cache']['contexts'][] = 'route';
+}
+
+
+/**
+ * Returns the view ID of the current page route, or NULL.
+ *
+ * Views page routes are named view.{view_id}.{display_id}.
+ */
+function bestor_current_view_id(): ?string {
+  $route = \Drupal::routeMatch()->getRouteName() ?? '';
+  if (!str_starts_with($route, 'view.')) {
+    return NULL;
+  }
+  return explode('.', $route)[1] ?? NULL;
+}
+
 
 function bestor_theme_suggestions_node_alter(array &$suggestions, array $variables) {
   $nodeContentHelper = \Drupal::service('bestor_content_helper.node_content_analyzer');
@@ -56,6 +101,18 @@ function bestor_preprocess_field__field_media_multiple(&$variables) {
 
 
 /**
+ * Implements hook_preprocess_HOOK() for block__page_title_block.
+ *
+ * Tells the page title template whether the current page is part of the
+ * data analysis, so it can show the right search switch.
+ */
+function bestor_preprocess_block__page_title_block(array &$variables): void {
+  $variables['is_data_analysis'] = in_array(bestor_current_view_id(), BESTOR_DATA_ANALYSIS_VIEWS, TRUE);
+  $variables['#cache']['contexts'][] = 'route';
+}
+
+
+/**
  * Implements hook_theme_suggestions_alter().
  */
 function bestor_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
@@ -76,11 +133,11 @@ function bestor_theme_suggestions_alter(array &$suggestions, array $variables, $
 function bestor_preprocess_views_view(&$variables): void {
   $view = $variables['view'];
 
-  if (in_array($view->id(), ['database'])) {
+  if ($view->id() === 'database') {
     $variables['#attached']['library'][] = 'bestor/database-search';
   }
 
-  if (in_array($view->id(), ['database_advanced_search', 'database_advanced_search_affiliations'])) {
+  if (in_array($view->id(), BESTOR_DATA_ANALYSIS_VIEWS, TRUE)) {
     $variables['#attached']['library'][] = 'bestor/database-search';
     $variables['#attached']['library'][] = 'bestor/advanced-search-filters';
   }

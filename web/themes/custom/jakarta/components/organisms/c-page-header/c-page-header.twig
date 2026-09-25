@@ -17,7 +17,7 @@
           {% if page.nav_left %}
             {{ page.nav_left }}
           {% endif %}
-          {% if page.nav %}
+          {% if page.nav and not is_search_page %}
             <div class="c-page-header__search-group">
             {{ page.nav }}
               <a href="{{ path('view.database_advanced_search.page_6') }}" class="c-header-data-analysis-link" aria-label="{{ 'Data analysis'|t }}" title="{{ 'Data analysis'|t }}">
