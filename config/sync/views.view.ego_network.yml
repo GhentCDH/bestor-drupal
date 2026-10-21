@@ -5,6 +5,7 @@ dependencies:
   module:
     - network_views
     - node
+    - relationship_nodes_networks
     - user
 id: ego_network
 label: 'Ego network'
