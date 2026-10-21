@@ -153,8 +153,8 @@
     {{ content.field_geolocation }}
   {% endif %}
 
-  {% if content.show_ego_network %}
-    {{ content.show_ego_network }}
+  {% if node.field_show_ego_network.value %}
+    {{ drupal_view('ego_network', 'embed_1', node.id) }}
   {% endif %}
 {% endset %}
 

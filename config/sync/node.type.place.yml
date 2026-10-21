@@ -48,9 +48,9 @@ third_party_settings:
     ajax_page_updates: 0
     observable_selector: ''
   relationship_nodes:
-    enabled: 0
-    typed_relation: 0
-    auto_title: 0
+    enabled: false
+    typed_relation: false
+    auto_title: false
 name: Place
 type: place
 description: 'Database: place entry'

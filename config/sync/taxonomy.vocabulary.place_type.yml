@@ -6,7 +6,7 @@ dependencies:
     - relationship_nodes
 third_party_settings:
   relationship_nodes:
-    enabled: 0
+    enabled: false
     referencing_type: none
 name: 'Place type'
 vid: place_type

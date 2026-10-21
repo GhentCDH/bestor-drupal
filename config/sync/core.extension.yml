@@ -27,7 +27,6 @@ module:
   crop: 0
   customize_admin_menu_per_role: 0
   customviewfilters: 0
-  cytoscape_egonetwork: 0
   datetime: 0
   datetime_range: 0
   dblog: 0
@@ -75,6 +74,7 @@ module:
   menu_ui: 0
   migrate: 0
   mysql: 0
+  network_views: 0
   node: 0
   options: 0
   page_cache: 0
@@ -89,6 +89,7 @@ module:
   purge_ui: 0
   rabbit_hole: 0
   relationship_nodes: 0
+  relationship_nodes_networks: 0
   relationship_nodes_search: 0
   rh_node: 0
   rh_taxonomy: 0

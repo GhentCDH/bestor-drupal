@@ -11,9 +11,9 @@ third_party_settings:
     available_menus: {  }
     parent: ''
   relationship_nodes:
-    enabled: 1
-    typed_relation: 1
-    auto_title: 1
+    enabled: true
+    typed_relation: true
+    auto_title: true
   toc_js:
     toc_js_active: false
     title: 'Table of contents'

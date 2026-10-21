@@ -1,0 +1,23 @@
+uuid: 21443f5e-1d79-4821-8c9f-978cb621374a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_show_ego_network
+    - node.type.person
+id: node.person.field_show_ego_network
+field_name: field_show_ego_network
+entity_type: node
+bundle: person
+label: 'Show ego network'
+description: 'Display the interactive network graph on this node.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

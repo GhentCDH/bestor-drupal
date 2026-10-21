@@ -10,9 +10,9 @@ third_party_settings:
     available_menus: {  }
     parent: ''
   relationship_nodes:
-    enabled: 1
-    typed_relation: 1
-    auto_title: 1
+    enabled: true
+    typed_relation: true
+    auto_title: true
 name: 'Relationship between a person and a document'
 type: relationnode__person_document
 description: 'This content type describes the relationship between an entity of the person type (related item 1) and an entity of the document type (related item 2).'

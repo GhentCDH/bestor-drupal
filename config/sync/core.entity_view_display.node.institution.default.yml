@@ -17,13 +17,13 @@ dependencies:
     - field.field.node.institution.field_image
     - field.field.node.institution.field_municipality
     - field.field.node.institution.field_references
+    - field.field.node.institution.field_show_ego_network
     - field.field.node.institution.field_specialisation
     - field.field.node.institution.field_summary
     - field.field.node.institution.field_typology
     - field.field.node.institution.field_wikidata_entry
     - node.type.institution
   module:
-    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - leaflet
@@ -268,14 +268,6 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  show_ego_network:
-    type: cytoscape_egonetwork
-    label: hidden
-    settings:
-      language_unavailable: fade
-    third_party_settings: {  }
-    weight: 100
-    region: content
   toc_js:
     settings: {  }
     third_party_settings: {  }
@@ -291,6 +283,8 @@ hidden:
   computed_relationshipfield__institution__story: true
   field_date_end_year_only: true
   field_references: true
+  field_show_ego_network: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
+  show_ego_network: true

@@ -11,9 +11,9 @@ third_party_settings:
     available_menus: {  }
     parent: ''
   relationship_nodes:
-    enabled: 0
-    typed_relation: 0
-    auto_title: 0
+    enabled: false
+    typed_relation: false
+    auto_title: false
   toc_js:
     toc_js_active: true
     title: ''

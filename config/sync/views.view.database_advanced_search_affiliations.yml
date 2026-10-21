@@ -273,7 +273,7 @@ display:
           click_sort_column: target_id
           type: relation_type_mirror_label
           settings:
-            link: 0
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true

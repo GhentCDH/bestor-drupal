@@ -15,12 +15,12 @@ dependencies:
     - field.field.node.story.field_external_reference
     - field.field.node.story.field_image
     - field.field.node.story.field_references
+    - field.field.node.story.field_show_ego_network
     - field.field.node.story.field_specialisation
     - field.field.node.story.field_summary
     - field.field.node.story.field_wikidata_entry
     - node.type.story
   module:
-    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - link
@@ -124,14 +124,6 @@ content:
     third_party_settings: {  }
     weight: 100
     region: content
-  show_ego_network:
-    type: cytoscape_egonetwork
-    label: hidden
-    settings:
-      language_unavailable: hide
-    third_party_settings: {  }
-    weight: 100
-    region: content
 hidden:
   computed_relationshipfield__story__concept: true
   computed_relationshipfield__story__document: true
@@ -144,7 +136,9 @@ hidden:
   field_date_start_year_only: true
   field_external_reference: true
   field_references: true
+  field_show_ego_network: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
+  show_ego_network: true
   toc_js: true

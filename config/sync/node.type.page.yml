@@ -11,9 +11,9 @@ third_party_settings:
       - main
     parent: 'main:'
   relationship_nodes:
-    enabled: 0
-    typed_relation: 0
-    auto_title: 0
+    enabled: false
+    typed_relation: false
+    auto_title: false
 _core:
   default_config_hash: i0snV8Wj--OkRW12UdachUiYiz3FbeMwHu_pZYfzKLc
 name: 'Basic page'

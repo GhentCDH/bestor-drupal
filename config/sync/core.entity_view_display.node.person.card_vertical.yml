@@ -20,13 +20,13 @@ dependencies:
     - field.field.node.person.field_municipality
     - field.field.node.person.field_publications
     - field.field.node.person.field_references
+    - field.field.node.person.field_show_ego_network
     - field.field.node.person.field_specialisation
     - field.field.node.person.field_summary
     - field.field.node.person.field_typology
     - field.field.node.person.field_wikidata_entry
     - node.type.person
   module:
-    - cytoscape_egonetwork
     - datetime
     - entity_reference_revisions
     - link
@@ -51,29 +51,29 @@ content:
     settings:
       field_settings:
         calculated_related_id:
-          enabled: '1'
-          display_mode: label
+          enabled: true
           label: 'Related id'
-          weight: '0'
-          hide_label: 0
-        calculated_relation_type_name:
-          enabled: '1'
-          label: 'Relation type name'
-          weight: '0'
-          hide_label: 0
-        field_location_text:
-          label: 'Location Text'
-          weight: '0'
-          multiple_separator: ', '
-          enabled: 0
-          hide_label: 0
-        field_municipality:
-          enabled: '1'
+          hide_label: false
           display_mode: label
-          label: Municipality
-          weight: '0'
+          weight: 0
+        calculated_relation_type_name:
+          enabled: true
+          label: 'Relation type name'
+          hide_label: false
+          weight: 0
+        field_location_text:
+          enabled: false
+          label: 'Location Text'
+          hide_label: false
           multiple_separator: ', '
-          hide_label: 0
+          weight: 0
+        field_municipality:
+          enabled: true
+          label: Municipality
+          hide_label: false
+          display_mode: label
+          multiple_separator: ', '
+          weight: 0
       sort_by_field: ''
       group_by_field: ''
     third_party_settings: {  }
@@ -221,14 +221,6 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  show_ego_network:
-    type: cytoscape_egonetwork
-    label: hidden
-    settings:
-      language_unavailable: hide
-    third_party_settings: {  }
-    weight: 100
-    region: content
 hidden:
   computed_relationshipfield__person__document: true
   computed_relationshipfield__person__institution: true
@@ -239,7 +231,9 @@ hidden:
   field_external_link: true
   field_external_reference: true
   field_references: true
+  field_show_ego_network: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
+  show_ego_network: true
   toc_js: true

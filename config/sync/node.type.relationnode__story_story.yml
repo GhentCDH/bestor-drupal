@@ -10,9 +10,9 @@ third_party_settings:
     available_menus: {  }
     parent: ''
   relationship_nodes:
-    enabled: 1
-    typed_relation: 1
-    auto_title: 1
+    enabled: true
+    typed_relation: true
+    auto_title: true
 name: 'Relationship between stories'
 type: relationnode__story_story
 description: 'This content type describes the relationship between an entities of the story type (related item 1 and 2).'

@@ -16,12 +16,12 @@ dependencies:
     - field.field.node.concept.field_image
     - field.field.node.concept.field_inventor
     - field.field.node.concept.field_references
+    - field.field.node.concept.field_show_ego_network
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
     - field.field.node.concept.field_wikidata_entry
     - node.type.concept
   module:
-    - cytoscape_egonetwork
     - entity_reference_revisions
     - link
     - user
@@ -96,14 +96,6 @@ content:
     third_party_settings: {  }
     weight: 100
     region: content
-  show_ego_network:
-    type: cytoscape_egonetwork
-    label: hidden
-    settings:
-      language_unavailable: hide
-    third_party_settings: {  }
-    weight: 100
-    region: content
 hidden:
   computed_relationshipfield__concept__concept: true
   computed_relationshipfield__concept__document: true
@@ -120,7 +112,9 @@ hidden:
   field_external_reference: true
   field_inventor: true
   field_references: true
+  field_show_ego_network: true
   footnotes_group: true
   langcode: true
   search_api_excerpt: true
+  show_ego_network: true
   toc_js: true

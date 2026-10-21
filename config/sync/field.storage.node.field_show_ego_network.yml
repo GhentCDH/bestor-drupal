@@ -1,0 +1,18 @@
+uuid: 0d336954-5e5e-4b68-b3a0-5c742337fd2d
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_show_ego_network
+field_name: field_show_ego_network
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

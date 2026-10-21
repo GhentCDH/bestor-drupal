@@ -6,7 +6,7 @@ dependencies:
     - relationship_nodes
 third_party_settings:
   relationship_nodes:
-    enabled: 1
+    enabled: true
     referencing_type: entity_reference
 name: 'Types of relationships between concepts'
 vid: relationtype_self__conc_conc

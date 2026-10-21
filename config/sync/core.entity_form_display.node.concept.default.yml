@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.concept.field_image
     - field.field.node.concept.field_inventor
     - field.field.node.concept.field_references
+    - field.field.node.concept.field_show_ego_network
     - field.field.node.concept.field_specialisation
     - field.field.node.concept.field_summary
     - field.field.node.concept.field_wikidata_entry
@@ -113,7 +114,7 @@ third_party_settings:
         required_fields: true
     group_relations:
       children:
-        - show_ego_network
+        - field_show_ego_network
         - group_relation_types
       label: Relations
       region: content
@@ -312,125 +313,125 @@ content:
     region: content
     settings:
       form_mode: default
+      override_labels: false
       label_singular: ''
       label_plural: ''
-      revision: 0
-      override_labels: 0
-      collapsible: 0
-      collapsed: 0
       allow_new: true
       allow_existing: false
-      removed_reference: delete
       match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
     third_party_settings: {  }
   computed_relationshipfield__concept__document:
     type: relation_extended_ief_complex_widget
     weight: 3
     region: content
     settings:
-      match_operator: CONTAINS
       form_mode: default
-      revision: false
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: false
       allow_new: true
       allow_existing: false
-      removed_reference: delete
+      match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
     third_party_settings: {  }
   computed_relationshipfield__concept__institution:
     type: relation_extended_ief_complex_widget
     weight: 7
     region: content
     settings:
-      match_operator: CONTAINS
       form_mode: default
-      revision: false
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: false
       allow_new: true
       allow_existing: false
-      removed_reference: delete
+      match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
     third_party_settings: {  }
   computed_relationshipfield__concept__instrument:
     type: relation_extended_ief_complex_widget
     weight: 4
     region: content
     settings:
-      match_operator: CONTAINS
       form_mode: default
-      revision: false
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: false
       allow_new: true
       allow_existing: false
-      removed_reference: delete
+      match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
     third_party_settings: {  }
   computed_relationshipfield__concept__person:
     type: relation_extended_ief_complex_widget
     weight: 2
     region: content
     settings:
-      match_operator: CONTAINS
       form_mode: default
-      revision: false
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: false
       allow_new: true
       allow_existing: false
-      removed_reference: delete
+      match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
     third_party_settings: {  }
   computed_relationshipfield__concept__place:
     type: relation_extended_ief_complex_widget
     weight: 5
     region: content
     settings:
-      match_operator: CONTAINS
       form_mode: default
-      revision: false
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: false
       allow_new: true
       allow_existing: false
-      removed_reference: delete
+      match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
     third_party_settings: {  }
   computed_relationshipfield__concept__story:
     type: relation_extended_ief_complex_widget
     weight: 6
     region: content
     settings:
-      match_operator: CONTAINS
       form_mode: default
-      revision: false
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: false
       allow_new: true
       allow_existing: false
-      removed_reference: delete
+      match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
     third_party_settings: {  }
   created:
     type: datetime_timestamp
@@ -549,6 +550,13 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_show_ego_network:
+    type: boolean_checkbox
+    weight: 100
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_specialisation:
     type: entity_reference_modal
     weight: 4
@@ -604,13 +612,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  show_ego_network:
-    type: boolean_checkbox
-    weight: 100
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 10
@@ -640,4 +641,5 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  show_ego_network: true
   uid: true

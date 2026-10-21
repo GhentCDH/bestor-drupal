@@ -6,7 +6,7 @@ dependencies:
     - relationship_nodes
 third_party_settings:
   relationship_nodes:
-    enabled: 1
+    enabled: true
     referencing_type: string
 name: 'Types of relationships between a document and a place'
 vid: relationtype_cross__docu_plac

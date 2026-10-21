@@ -1,0 +1,116 @@
+uuid: d3f82b78-4130-4063-bd69-c46ab8e7e999
+langcode: en
+status: true
+dependencies:
+  module:
+    - network_views
+    - node
+    - user
+id: ego_network
+label: 'Ego network'
+module: views
+description: 'The network of a node and its relations; embedded in node--lemma--full.html.twig.'
+tag: ''
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: Network
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ''
+          type: string
+          settings:
+            link_to_entity: false
+      pager:
+        type: none
+        options:
+          offset: 0
+      exposed_form:
+        type: basic
+        options: {  }
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+        options: {  }
+      arguments:
+        network_neighbourhood:
+          id: network_neighbourhood
+          table: node_field_data
+          field: network_neighbourhood
+          entity_type: node
+          plugin_id: network_neighbourhood
+          default_action: default
+          default_argument_type: node
+          depth: 1
+      filters:
+        default_langcode:
+          id: default_langcode
+          table: node_field_data
+          field: default_langcode
+          entity_type: node
+          entity_field: default_langcode
+          plugin_id: boolean
+          value: '1'
+      style:
+        type: network
+        options:
+          color_field: _bundle
+          edge_sources:
+            relation_nodes:
+              enabled: true
+              settings:
+                bundles: {  }
+                node_bundles: {  }
+          edge_labels: true
+          hide_isolated: true
+          language: fade
+          size: fixed
+          height: 500px
+      row:
+        type: fields
+      query:
+        type: views_query
+        options: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - node_list
+  embed_1:
+    id: embed_1
+    display_title: Embed
+    display_plugin: embed
+    position: 1
+    display_options:
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - node_list
