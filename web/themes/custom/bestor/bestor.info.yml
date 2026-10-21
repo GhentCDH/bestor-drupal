@@ -4,6 +4,11 @@ base theme: jakarta
 description: Custom theme for the Bestor website, based on the Jakarta parent theme.
 package: Custom
 core_version_requirement: ^8.8 || ^9 || ^10 || ^11
+# The templates call rn() (relationship_nodes) and drupal_view() (Twig Tweak):
+# these modules cannot be uninstalled while the theme is used.
+dependencies:
+  - relationship_nodes
+  - twig_tweak
 libraries:
   - jakarta/global-styling
   - bestor/global
