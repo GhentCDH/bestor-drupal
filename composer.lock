@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e4574225f3649268a7c358f7f20a5c5",
+    "content-hash": "85e56b89b48f56fa3691b9e21d68af3d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2515,13 +2515,20 @@
         },
         {
             "name": "drupal/elasticsearch_connector",
-            "version": "dev-3550775-close-and-reopen-index",
+            "version": "8.0.0-alpha7",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/issue/elasticsearch_connector-3550775.git",
-                "reference": "3f94a4881aa482c49259b7b87c74d2b1d50d7729"
+                "url": "https://git.drupalcode.org/project/elasticsearch_connector.git",
+                "reference": "8.0.0-alpha7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/elasticsearch_connector-8.0.0-alpha7.zip",
+                "reference": "8.0.0-alpha7",
+                "shasum": "70fc386ddc164dffdde8da57b479c3f6d959f18f"
             },
             "require": {
+                "drupal/core": "^10.2 || ^11",
                 "drupal/search_api": "^1.23",
                 "elasticsearch/elasticsearch": "^8",
                 "makinacorpus/php-lucene": "^1.1",
@@ -2530,6 +2537,7 @@
             "require-dev": {
                 "drupal/coder": "^8.3",
                 "drupal/devel": "^4.0|^5.0",
+                "drupal/facets": "^3",
                 "drupal/geofield": "^1",
                 "drupal/key": "^1",
                 "drush/drush": "^12.0 || ^13",
@@ -2543,8 +2551,47 @@
                 "drupal/search_api_spellcheck": "Provides spell checking and 'Did You Mean?'."
             },
             "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.0.0-alpha7",
+                    "datestamp": "1777393324",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "lachezar.valchev",
+                    "homepage": "https://www.drupal.org/user/1482368"
+                },
+                {
+                    "name": "mparker17",
+                    "homepage": "https://www.drupal.org/user/536298"
+                },
+                {
+                    "name": "skek",
+                    "homepage": "https://www.drupal.org/user/417078"
+                },
+                {
+                    "name": "sokru",
+                    "homepage": "https://www.drupal.org/user/388235"
+                },
+                {
+                    "name": "ygerasimov",
+                    "homepage": "https://www.drupal.org/user/257311"
+                }
+            ],
             "description": "Provides a Search API backend for Elasticsearch (a powerful, distributed, RESTful search and analytics engine), using the official Elasticsearch PHP Client.",
-            "time": "2025-10-16T17:27:11+00:00"
+            "homepage": "https://www.drupal.org/project/elasticsearch_connector",
+            "support": {
+                "source": "https://git.drupalcode.org/project/elasticsearch_connector"
+            }
         },
         {
             "name": "drupal/entity_events",
@@ -4069,6 +4116,53 @@
             }
         },
         {
+            "name": "drupal/network_views",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GhentCDH/network_views.git",
+                "reference": "09d6df03404ffbcb5bd292fe6d017b8e52e90f04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GhentCDH/network_views/zipball/09d6df03404ffbcb5bd292fe6d017b8e52e90f04",
+                "reference": "09d6df03404ffbcb5bd292fe6d017b8e52e90f04",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11"
+            },
+            "require-dev": {
+                "drupal/search_api": "^1.35"
+            },
+            "suggest": {
+                "drupal/search_api": "Network views of a Search API index (one entity type per index)."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Views style that displays the result rows as a network graph (Cytoscape.js).",
+            "keywords": [
+                "cytoscape",
+                "drupal",
+                "graph",
+                "network",
+                "views",
+                "visualization"
+            ],
+            "support": {
+                "source": "https://github.com/GhentCDH/network_views/tree/1.0.0-beta1",
+                "issues": "https://github.com/GhentCDH/network_views/issues"
+            },
+            "time": "2026-10-21T13:42:04+00:00"
+        },
+        {
             "name": "drupal/node_view_permissions",
             "version": "2.0.3",
             "source": {
@@ -4561,22 +4655,29 @@
         },
         {
             "name": "drupal/relationship_nodes",
-            "version": "1.0.0-beta2",
+            "version": "1.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GhentCDH/relationship_nodes.git",
-                "reference": "85ea4053c1d5af8d9b031016c0ecc75f9ce9c357"
+                "reference": "453962c2e408bcc69d4a5ba75623bd09afc94bc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GhentCDH/relationship_nodes/zipball/85ea4053c1d5af8d9b031016c0ecc75f9ce9c357",
-                "reference": "85ea4053c1d5af8d9b031016c0ecc75f9ce9c357",
+                "url": "https://api.github.com/repos/GhentCDH/relationship_nodes/zipball/453962c2e408bcc69d4a5ba75623bd09afc94bc0",
+                "reference": "453962c2e408bcc69d4a5ba75623bd09afc94bc0",
                 "shasum": ""
             },
             "require": {
-                "drupal/core": "^10 || ^11",
+                "drupal/core": "^10.3 || ^11.2",
                 "drupal/entity_events": "^2.0",
                 "drupal/inline_entity_form": "^3.0"
+            },
+            "suggest": {
+                "drupal/better_exposed_filters": "Required by the relationship_nodes_search submodule (^7.0).",
+                "drupal/elasticsearch_connector": "Required by the relationship_nodes_search submodule (^8.0@alpha, 8.0.0-alpha7 or later).",
+                "drupal/facets": "Required by the relationship_nodes_search submodule (^3.0).",
+                "drupal/network_views": "Required by the relationship_nodes_networks submodule (relations in network graphs).",
+                "drupal/search_api": "Required by the relationship_nodes_search submodule (^1.38)."
             },
             "type": "drupal-module",
             "license": [
@@ -4591,10 +4692,10 @@
                 "taxonomy"
             ],
             "support": {
-                "source": "https://github.com/GhentCDH/relationship_nodes/tree/1.0.0-beta2",
+                "source": "https://github.com/GhentCDH/relationship_nodes/tree/1.0.0-beta3",
                 "issues": "https://github.com/GhentCDH/relationship_nodes/issues"
             },
-            "time": "2026-09-17T21:28:21+00:00"
+            "time": "2026-10-21T13:42:04+00:00"
         },
         {
             "name": "drupal/ruhi",
@@ -11849,9 +11950,10 @@
     "aliases": [],
     "minimum-stability": "beta",
     "stability-flags": {
-        "drupal/elasticsearch_connector": 20,
+        "drupal/elasticsearch_connector": 15,
         "drupal/footnotes": 10,
         "drupal/inline_entity_form": 5,
+        "drupal/network_views": 10,
         "drupal/relationship_nodes": 10,
         "drupal/single_user_role": 10,
         "drupal/straw": 10,
@@ -11860,7 +11962,7 @@
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
 }

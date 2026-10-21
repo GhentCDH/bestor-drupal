@@ -10,12 +10,12 @@
     },
     "repositories": [
         {
-            "type":"vcs",
-            "url":"https://git.drupalcode.org/issue/elasticsearch_connector-3550775.git"
+            "type": "vcs",
+            "url": "https://github.com/GhentCDH/relationship_nodes"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/GhentCDH/relationship_nodes"
+            "url": "https://github.com/GhentCDH/network_views"
         },
         {
             "type": "vcs",
@@ -54,7 +54,7 @@
         "drupal/crop": "^2.5",
         "drupal/cytoscape_egonetwork": "^1.0",
         "drupal/ds": "^3.24",
-        "drupal/elasticsearch_connector": "dev-3550775-close-and-reopen-index",
+        "drupal/elasticsearch_connector": "^8.0@alpha",
         "drupal/entity_events": "^2.0",
         "drupal/entity_reference_modal": "^1.0",
         "drupal/entity_reference_unpublished": "^2.0",
@@ -74,13 +74,14 @@
         "drupal/memcache": "^2.7",
         "drupal/menu_perms_per_menu": "^1.0",
         "drupal/migrate_plus": "^6.0",
+        "drupal/network_views": "^1.0@beta",
         "drupal/node_view_permissions": "^2.0",
         "drupal/paragraphs": "^1.18",
         "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
         "drupal/pathauto": "^1.14",
         "drupal/purge": "^3.6",
         "drupal/rabbit_hole": "^1.0",
-        "drupal/relationship_nodes": "1.0.0-beta2",
+        "drupal/relationship_nodes": "^1.0@beta",
         "drupal/ruhi": "^10.2",
         "drupal/sdc_component_library": "^1.0",
         "drupal/search_api": "^1.38",
@@ -138,6 +139,9 @@
                 "https://www.drupal.org/project/search_api_glossary/issues/3492668":"https://www.drupal.org/files/issues/2025-01-13/search_api_glossary_type-error-3492668-8.patch",
                 "https://www.drupal.org/project/search_api_glossary/issues/3398948":"https://www.drupal.org/files/issues/2023-11-03/3398948-02.patch"
             
+            },
+            "drupal/elasticsearch_connector":{
+                "https://www.drupal.org/project/elasticsearch_connector/issues/3591016":"https://www.drupal.org/files/issues/2026-07-17/3591016-9.patch"
             },
             "drupal/focal_point":{
                 "https://www.drupal.org/project/focal_point/issues/3467462":"https://www.drupal.org/files/issues/2024-05-16/3094478-64.patch"
